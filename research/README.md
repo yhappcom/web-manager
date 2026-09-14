@@ -2,7 +2,29 @@
 
 This directory is the source-grounded learning and decision-support layer for the MintTap company website and `minttap.app` domain.
 
-The purpose is not to accumulate generic web articles. Each study must improve professional judgment for a real MintTap website/app launch, establish a reusable operating rule, expose an unresolved risk, or define a validation method. **The curriculum is knowledge-led, not POC-led.** Implementation experiments are used only when they materially validate a web decision; they are not the standing next step.
+The purpose is not to accumulate generic web articles. Each study must improve professional judgment for a real MintTap website/app launch, establish a reusable operating rule, expose an unresolved risk, or define a validation method.
+
+## Curriculum model
+
+The canonical curriculum is `../LEARNING_ROADMAP.md`.
+
+Learning now proceeds systematically from beginner fundamentals to advanced/expert judgment. Existing studies are retained as prior evidence but do not allow missing prerequisites to be skipped.
+
+Major stages:
+1. Web Foundations;
+2. Website Anatomy / Content / IA;
+3. UX & Interaction Foundations;
+4. Web Design Literacy;
+5. Accessibility;
+6. Search / Discovery / Content Quality;
+7. Performance / Browser Runtime;
+8. Security / Privacy / Trust;
+9. Analytics / Experimentation;
+10. App-Company Web Strategy / Growth;
+11. Web Operations / Platform Architecture;
+12. Advanced / Expert Web Management.
+
+Each major topic should mature through `FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT`.
 
 ## Evidence labels
 
@@ -14,7 +36,7 @@ The purpose is not to accumulate generic web articles. Each study must improve p
 - `VALIDATION` — practical proof needed before production confidence.
 - `CHANGE WATCH` — policy/standard/platform detail requiring later re-checking.
 
-## Completed studies
+## Completed prior studies
 
 - `001-app-launch-website-foundations.md` — Apple/Google launch web requirements.
 - `002-multi-app-information-architecture.md` — multi-app company/app/support/governance IA.
@@ -35,36 +57,48 @@ The purpose is not to accumulate generic web articles. Each study must improve p
 - `017-release-chain-semantic-integrity.md` — release/store, privacy/data, locale, legal trigger and operational-surface validation; 12/12 expected outcomes.
 - `018-semantic-fingerprint-dependency-impact.md` — semantic fingerprint comparison and dependency propagation; 5/5 expected outcomes.
 - `019-typed-dependency-approval-freshness.md` — typed impact severity, cycle detection and fingerprint-bound approval freshness; 6/6 expected outcomes.
-- `020-derived-release-manifest-gate-waivers.md` — derived `PASS / NEEDS_REVIEW / BLOCKED` gate plus scoped auditable waivers; 8/8 expected outcomes.
+- `020-derived-release-manifest-gate-waivers.md` — derived gate plus scoped auditable waivers; 8/8 expected outcomes.
 - `021-release-provenance-reviewer-authorization-ci.md` — source/tool/policy-bound provenance, reviewer authorization and fail-closed CI; 9/9 expected outcomes.
 - `022-protected-policy-quorum-revocation-workflow-trust.md` — protected policy ownership, quorum/revocation, break-glass and workflow trust boundaries; 10/10 expected outcomes.
-- `023-provider-neutral-active-workflow-trust-boundary.md` — four-zone PR validation/trusted build/deploy/rollback contract, artifact-digest binding and provider credential boundary; 12/12 expected outcomes.
-- `024-firebase-cloudflare-provider-edge-contract-mapping.md` — current Firebase Hosting vs Cloudflare Workers/Static Assets mapping for preview, exact-version promotion, rollback, credentials, routing and static response controls; 11/11 expected outcomes.
-- `025-identical-provider-poc-corpus-http-assertion.md` — deterministic synthetic provider-neutral corpus, artifact digest manifest and identical preview/production HTTP assertion contract; 8/8 controlled outcomes.
-- `026-app-company-web-strategy-information-hierarchy.md` — visitor intent, app landing-page information hierarchy, website→store message continuity, responsive hierarchy and performance-aware first-contact strategy.
+- `023-provider-neutral-active-workflow-trust-boundary.md` — four-zone workflow trust contract; 12/12 expected outcomes.
+- `024-firebase-cloudflare-provider-edge-contract-mapping.md` — Firebase vs Cloudflare provider-edge mapping; 11/11 expected outcomes.
+- `025-identical-provider-poc-corpus-http-assertion.md` — deterministic synthetic provider-neutral corpus and assertion contract; 8/8 controlled outcomes.
+- `026-app-company-web-strategy-information-hierarchy.md` — visitor intent, landing-page hierarchy, store continuity, responsive hierarchy and performance-aware first-contact strategy.
 
-## Practice artifacts
+These files are **prior knowledge**, not the curriculum order going forward.
 
-Studies 016–025 include synthetic validation artifacts. They remain useful implementation evidence, but are **not a mandatory sequence to continue** and are not actual MintTap product/legal/store facts.
+## Current curriculum position
 
-## Current research direction
+**Stage 1 — Web Foundations**.
 
-The highest-value gap is now visitor-facing web expertise. Continue across:
+Next studies:
+- `027` — Internet, Web, client/server, browser, origin and URL;
+- `028` — DNS, domains, resolution and hosting path;
+- `029` — HTTP request/response, methods, status codes, headers and cache basics;
+- `030` — HTTPS, TLS, certificates and browser trust basics;
+- `031` — HTML, CSS, JavaScript, DOM and accessibility tree;
+- `032` — static/dynamic, SSR/CSR/SSG, browser state/storage/navigation;
+- `033` — Stage 1 integration and competency review.
 
-1. app-company / multi-product website IA and navigation decision models;
-2. landing-page content strategy, evidence, conversion and CTA design without manipulative patterns;
-3. trust architecture for a small/unknown app developer;
-4. support/FAQ/self-service information architecture;
-5. responsive content hierarchy and mobile-first recomposition;
-6. performance-aware marketing design and Core Web Vitals;
-7. analytics/measurement framework for company and app pages;
-8. systematic precedent/critique of real app-company websites;
-9. SEO/discovery, localization, accessibility, privacy/legal and operations revisited when new evidence materially improves prior conclusions.
+The purpose of revisiting apparently familiar subjects is to establish a complete first-principles mental model rather than relying on isolated advanced knowledge.
 
-Provider POC/deployment-adapter work is **deferred until a real implementation decision requires it**. Firebase/Cloudflare knowledge from 012/014/024/025 remains retained for that future project.
+## Study quality standard
+
+A substantial study should normally include:
+- precise definitions and vocabulary;
+- first-principles explanation;
+- authoritative or high-quality evidence;
+- examples and counterexamples;
+- common misconceptions;
+- failure modes;
+- MintTap relevance;
+- boundaries between durable principles and changeable platform behavior;
+- a competency/application check when useful.
+
+Implementation experiments are used only when necessary to answer a material factual question. POC work is not the default learning path.
 
 ## Design Studio relationship
 
-Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy/content/operations stay here first.
+Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first.
 
-Study 026 begins a stronger visitor-facing handoff: Web Manager supplies page purpose, audience evidence, visitor intents, factual content hierarchy, actions, support/governance requirements and constraints. Design Studio owns visual expression through typography, color, layout, interaction and brand application. Future real-browser evidence can flow back to the relevant specialist.
+Web Manager should become design-literate enough to brief, critique and validate web work, while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
