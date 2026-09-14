@@ -76,13 +76,18 @@ Connects Studies 003–010 into a continuous operating loop. Establishes Policy 
 
 Converts Studies 002–011 into implementation hard gates and a weighted provider-selection method. Establishes static-first + Git-versioned + CDN-hosted architecture as the current default, compares Firebase Hosting, Cloudflare Workers + Static Assets, Vercel and Netlify using current official capabilities, identifies Firebase Hosting and Cloudflare Workers as the top preliminary shortlist, and requires an identical production-contract POC before final provider/framework selection.
 
+### 013 — Jurisdiction-Specific Legal / Compliance Trigger Map
+`013-jurisdiction-legal-compliance-trigger-map.md`
+
+Establishes a fact-driven Legal Trigger Registry rather than universal legal boilerplate. Maps conditional Korea PIPA privacy/rights/overseas-transfer and direct-commerce triggers, U.S. FTC/COPPA/California CCPA triggers, other-state change watch and conditional EU GDPR territorial scope. Integrates legal triggers with App Data Contract, Product Truth, Content Release Manifest, provider selection and Design Studio interaction/accessibility dependencies. Application remains conditional until MintTap entity, markets, audience, transaction model and actual data flows are known.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Highest-value next work is now:
 
-1. jurisdiction-specific legal/compliance web requirements once entity, launch regions and actual data practices are known;
-2. provider POC specification and eventual Firebase Hosting vs Cloudflare Workers transfer test when implementation work is authorized;
-3. real-browser Korean/English typography/localization/accessibility/search/social/marketing transfer validation on that POC;
+1. provider POC specification refinement for the identical Firebase Hosting vs Cloudflare Workers transfer test;
+2. real-browser Korean/English typography/localization/accessibility/search/social/marketing transfer validation on that POC;
+3. legal-trigger application once MintTap entity/market/audience/data/transaction facts are available;
 4. app-specific user/market evidence when actual product pages are assigned.
 
 ## Design Studio relationship
