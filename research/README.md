@@ -63,15 +63,20 @@ Establishes the primary technical search-discovery layer: explicit canonical URL
 
 Deliberately rechecks high-impact 008 assumptions against current Google sources, formalizes public/noindex/private indexability classes, clarifies robots.txt vs noindex vs access control, adds localized title/meta-description rules and establishes a Product-Truth-governed Open Graph social-preview baseline. It is an extension/verification companion to 008, not a competing SEO architecture.
 
+### 010 — Company / App Marketing Content Model
+`010-company-app-marketing-content-model.md`
+
+Establishes a Product-Truth-governed marketing model for company/app pages: claim classes, evidence/provenance, Claim Registry, hero/problem/capability/evidence/screenshot/trust/store-CTA content contracts, price/subscription disclosure, localization equivalence, marketing invalidation triggers, release blockers and Design Studio handoffs. It treats screenshots as evidence and rejects unsupported superlatives, fabricated proof, stale claims and roadmap items presented as current functionality.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Current high-value areas include:
 
-1. company/app marketing content model: proof, screenshots, feature hierarchy, trust and conversion without overclaiming;
-2. operational release and change-watch controls;
-3. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
-4. implementation/provider selection after the evidence baseline is mature enough to compare real options;
-5. real browser Korean/English typography, localization, accessibility and search/social transfer validation when production implementation exists.
+1. operational release and change-watch controls for policy, broken links, verification files, indexing, social previews, screenshots and marketing claims;
+2. jurisdiction-specific legal/compliance web requirements when launch regions and actual data practices are known;
+3. implementation/provider selection after the Foundation evidence baseline is mature enough to compare real hosting/CMS/framework options;
+4. real browser Korean/English typography, localization, accessibility, search/social and marketing transfer validation when production implementation exists;
+5. app-specific user/market evidence when actual product pages are assigned.
 
 ## Design Studio relationship
 
