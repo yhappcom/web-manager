@@ -29,8 +29,9 @@ The Web Manager owns MintTap company website content, app-launch web requirement
 16. **016** Control Artifact Validation Specimen
 17. **017** Release-Chain Semantic Integrity Validation
 18. **018** Semantic Fingerprints, Dependency Invalidation & Release Impact
+19. **019** Typed Dependency Edges, Cycle Detection & Approval Freshness
 
-Canonical details: `research/001...018`.
+Canonical details: `research/001...019`.
 
 ## Current maturity
 
@@ -43,45 +44,49 @@ Production PASS is not claimed. Provider POC, browser/device validation, actual 
 
 ### 016 first slice
 
-Implemented:
-
-**app → feature → evidence → claim**
+Implemented **app → feature → evidence → claim**.
 
 Result: **5 / 5 expected outcomes matched.**
 
 ### 017 release-chain extension
 
-Expanded validation through:
-
-**app → release → store destination → public CTA**  
-**app → data practice → processor → privacy surface**  
-**app → locale coverage → current locale claim**  
-**legal trigger → required operational surface**  
-**critical operational surface → monitoring + runbook**
+Expanded validation through release/store destination, data practice/processor/privacy, locale claims, legal triggers and critical operational surfaces.
 
 Controlled re-proof result: **12 / 12 expected outcomes matched.**
 
 ### 018 semantic fingerprint / dependency impact
 
-Implemented a separate PRACTICE tool that:
-- computes a semantic projection per record;
-- excludes selected operational metadata from fingerprint meaning;
-- hashes deterministic serialized projections with SHA-256;
-- compares before/after canonical snapshots;
-- discovers canonical dependencies through `depends_on`, `*_ref` and `*_refs` fields;
-- combines old and new graph edges so removals still invalidate prior dependents;
-- emits `added`, `removed`, `modified`, `direct_impact`, `transitive_impact` and a derived `review_set`.
+Implemented deterministic PRACTICE semantic fingerprints, before/after comparison, old+new dependency graphs and derived downstream review sets.
 
 Controlled result: **5 / 5 expected outcomes matched.**
 
-Validated behaviors:
-- metadata-only timestamp change does not trigger semantic invalidation;
-- JSON property-order change does not trigger semantic invalidation;
-- data-practice semantic change propagates to privacy surface and then legal trigger;
-- added upstream processor plus changed data-practice reference causes downstream review;
-- removed upstream record preserves old dependency impact so dependents still require review.
+Validated:
+- metadata-only timestamp changes do not trigger semantic invalidation;
+- JSON property-order changes do not trigger semantic invalidation;
+- semantic upstream changes propagate downstream;
+- removed upstream records retain old dependency impact.
 
-Important limitation: the current serializer is deterministic for the constrained synthetic corpus but is **not yet claimed as full RFC 8785 JCS conformance**. Production promotion requires official/conformance-vector testing for ECMAScript number serialization, UTF-16 property ordering and I-JSON constraints.
+### 019 typed dependency / approval freshness
+
+Implemented:
+- explicit typed dependency edges: `INFORMATIONAL`, `REVIEW_REQUIRED`, `BLOCKING`;
+- backward-compatible ordinary refs defaulting to `REVIEW_REQUIRED`;
+- severity-aware downstream propagation;
+- dependency-cycle detection;
+- `approval_bindings` that record the upstream semantic fingerprint actually reviewed;
+- stale-approval detection when the current upstream fingerprint differs.
+
+Controlled result: **6 / 6 expected outcomes matched.**
+
+Validated:
+- valid approval binding remains current;
+- semantic upstream change makes the approved dependent stale and blocking when edge policy is blocking;
+- metadata-only change does not stale approval;
+- informational impact stays informational;
+- review-required impact does not become release-blocking;
+- dependency cycles are mechanically detected.
+
+Professional implication: a downstream file being marked `APPROVED` is insufficient. Approval freshness must be validated against the semantic upstream state it actually reviewed.
 
 ## Current control architecture
 
@@ -93,7 +98,10 @@ Current direction:
 - stable immutable IDs;
 - repository semantic linter;
 - semantic fingerprints for meaningful change detection;
-- dependency graph and derived non-canonical release-impact reports;
+- typed dependency graph with explicit impact severity;
+- approval freshness bound to upstream semantic fingerprints;
+- cycle rejection for freshness/approval dependency graphs;
+- derived non-canonical release-impact reports;
 - human approval/waiver after impact derivation where required;
 - no secrets or customer personal data in this repository.
 
@@ -102,8 +110,12 @@ Practice artifacts:
 - synthetic records under `control/records/`
 - `control/tests/cases.json`
 - `control/tests/impact_cases.json`
+- `control/tests/dependency_governance_cases.json`
 - `tools/validate_control.py`
 - `tools/compute_impact.py`
+- `tools/validate_dependency_governance.py`
+
+Important limitation: current Python serialization is deterministic for the synthetic corpus but is **not yet claimed as full RFC 8785 JCS conformance**.
 
 ## Current public information architecture
 
@@ -129,7 +141,7 @@ HTTPS-only direction, TLS 1.2 minimum / TLS 1.3 where supported, exact no-redire
 WCAG 2.2 AA internal target; semantic HTML; full keyboard/focus path; 320 CSS px reflow; 200% text enlargement; accessible forms/errors/status; automated tests supplement rather than replace manual evaluation.
 
 ### Localization / search / marketing
-Korean/English locale-specific URLs; self-canonical + reciprocal hreflang; app UI/web/store localization tracked independently; sitemap/canonical/indexability controls; conservative structured data; Product-Truth-governed social previews and marketing claims; stale evidence invalidates dependent claims/content.
+Korean/English locale-specific URLs; self-canonical + reciprocal hreflang; app UI/web/store localization tracked independently; sitemap/canonical/indexability controls; conservative structured data; Product-Truth-governed social previews and marketing claims.
 
 ### Legal trigger model
 Legal compliance is **facts → trigger → obligation → public/control surface → backend process → validation**, not universal boilerplate. The validator checks consistency with a recorded applicability state; it does not determine legal applicability itself.
@@ -159,10 +171,10 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — still no substantive W### at latest check. Web Manager truth/control records and derived impact states are inputs only; Web Design owns page hierarchy, review-state presentation, CTA treatment, disclosure salience, responsive composition and browser/device validation.
-- **Layout / Interaction** — latest specialist status is through L003 and I003. I003 confirms that interaction-critical states must survive authored color-channel loss. Future web review states such as `STALE`, `NEEDS_REVIEW`, `BLOCKED`, direct impact and transitive impact must therefore have textual/structural/programmatic meaning rather than color-only encoding.
-- **Typography / Type** — generated Korean/English feature/legal/privacy/support/review-state strings remain useful fallback/wrapping/zoom stress inputs.
-- **Color** — semantic state exists before visual encoding; color is reinforcement, not sole meaning.
+- **Web Design** — still no substantive W### at latest check. Web Manager governance states are inputs only; Web Design owns review-state presentation, hierarchy, CTA treatment, disclosure salience, responsive composition and browser/device validation.
+- **Layout / Interaction** — current evidence requires critical state meaning to survive color-channel loss. `INFORMATIONAL`, `NEEDS_REVIEW`, `BLOCKED`, stale approval and cycle/error states therefore require textual/structural/programmatic meaning rather than color-only encoding.
+- **Typography / Type** — Korean/English governance labels and long release/control strings are useful fallback/wrapping/zoom stress inputs.
+- **Color** — severity color may reinforce but never define the governance state by itself.
 
 ## Important open items
 
@@ -172,13 +184,13 @@ The POC remains blocked on provider accounts/domain authority.
 - SDK/analytics/ads/auth/processors/data flows and processing locations;
 - legal applicability/signoff process;
 - full RFC 8785/JCS conformance validation;
-- record-type-specific semantic projections;
-- typed dependency edges and severity;
-- dependency-cycle detection;
-- downstream approval/freshness binding using recorded upstream fingerprints;
-- localization source-revision invalidation;
+- schema support for typed `dependencies` and `approval_bindings`;
+- record-type-specific allowed edge/severity policies;
+- reviewer identity/authorization and approval expiry;
+- multi-source approval policy;
+- real localization and claim approval binding;
 - screenshot-to-release compatibility invalidation;
-- derived release-manifest generation and approval/waiver flow;
+- derived release-manifest generation and auditable waiver flow;
 - Git commit-to-snapshot automation;
 - pinned validator/CI implementation;
 - provider accounts/domain authority and POC execution;
@@ -189,7 +201,7 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Next research queue
 
-1. **Cycle detection + typed dependency edges + approval/freshness binding.** Prove at least one downstream class (localization or claim) becomes stale/release-blocking when its recorded upstream fingerprint no longer matches, and distinguish informational impact from release-blocking impact.
+1. **Derived release manifest + gate decision + auditable waiver model.** Prove a synthetic release resolves to `PASS`, `NEEDS_REVIEW` or `BLOCKED` from semantic integrity, cycles, typed impacts and approval freshness, and prove a waiver cannot silently rewrite canonical truth.
 2. Execute Firebase Hosting vs Cloudflare Workers POC when accounts/domain authority are available.
 3. Use the POC for Design Studio real-browser Korean/English/accessibility/layout/type/color transfer validation.
 4. Apply Legal Trigger Registry when actual entity/market/audience/data/transaction facts are available.
@@ -198,7 +210,7 @@ The POC remains blocked on provider accounts/domain authority.
 ## Persistence state
 
 - `AGENTS.md` contains autonomous continuous-learning rules.
-- `research/README.md` indexes 001–018.
-- Studies 016–018 have executable PRACTICE artifacts under `control/` and `tools/`.
-- Study 018 adds `tools/compute_impact.py` and `control/tests/impact_cases.json`.
+- `research/README.md` indexes 001–019.
+- Studies 016–019 have executable PRACTICE artifacts under `control/` and `tools/`.
+- Study 019 adds `tools/validate_dependency_governance.py` and `control/tests/dependency_governance_cases.json`.
 - This file is the current operational checkpoint.

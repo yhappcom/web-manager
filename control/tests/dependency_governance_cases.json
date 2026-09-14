@@ -1,0 +1,74 @@
+[
+  {
+    "name": "valid-approved-binding",
+    "before_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio","state":"SHIPPED"},
+      {"id":"localization:example:portfolio:ko","record_type":"localization","status":"APPROVED","source_ref":"feature:example:portfolio","dependencies":[{"ref":"feature:example:portfolio","impact":"BLOCKING"}],"approval_bindings":[{"ref":"feature:example:portfolio","verified_against":"sha256:2584e1b35e6115dcb4af3645f918b0ecd2ab5c1704608098bffceaf09b0c1e5b","impact":"BLOCKING"}]}
+    ],
+    "after_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio","state":"SHIPPED"},
+      {"id":"localization:example:portfolio:ko","record_type":"localization","status":"APPROVED","source_ref":"feature:example:portfolio","dependencies":[{"ref":"feature:example:portfolio","impact":"BLOCKING"}],"approval_bindings":[{"ref":"feature:example:portfolio","verified_against":"sha256:2584e1b35e6115dcb4af3645f918b0ecd2ab5c1704608098bffceaf09b0c1e5b","impact":"BLOCKING"}]}
+    ],
+    "expected": {"changed":[],"blocking":[],"cycles_after":[],"approval_errors_after":[]}
+  },
+  {
+    "name": "semantic-change-stales-blocking-approval",
+    "before_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio","state":"SHIPPED"},
+      {"id":"localization:example:portfolio:ko","record_type":"localization","status":"APPROVED","source_ref":"feature:example:portfolio","dependencies":[{"ref":"feature:example:portfolio","impact":"BLOCKING"}],"approval_bindings":[{"ref":"feature:example:portfolio","verified_against":"sha256:2584e1b35e6115dcb4af3645f918b0ecd2ab5c1704608098bffceaf09b0c1e5b","impact":"BLOCKING"}]}
+    ],
+    "after_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio Tracking","state":"SHIPPED"},
+      {"id":"localization:example:portfolio:ko","record_type":"localization","status":"APPROVED","source_ref":"feature:example:portfolio","dependencies":[{"ref":"feature:example:portfolio","impact":"BLOCKING"}],"approval_bindings":[{"ref":"feature:example:portfolio","verified_against":"sha256:2584e1b35e6115dcb4af3645f918b0ecd2ab5c1704608098bffceaf09b0c1e5b","impact":"BLOCKING"}]}
+    ],
+    "expected": {"changed":["feature:example:portfolio"],"blocking":["localization:example:portfolio:ko"]}
+  },
+  {
+    "name": "metadata-only-change-does-not-stale-approval",
+    "before_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio","state":"SHIPPED"},
+      {"id":"localization:example:portfolio:ko","record_type":"localization","status":"APPROVED","source_ref":"feature:example:portfolio","dependencies":[{"ref":"feature:example:portfolio","impact":"BLOCKING"}],"approval_bindings":[{"ref":"feature:example:portfolio","verified_against":"sha256:2584e1b35e6115dcb4af3645f918b0ecd2ab5c1704608098bffceaf09b0c1e5b","impact":"BLOCKING"}]}
+    ],
+    "after_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio","state":"SHIPPED","updated_at":"2026-09-14T10:10:00Z"},
+      {"id":"localization:example:portfolio:ko","record_type":"localization","status":"APPROVED","source_ref":"feature:example:portfolio","dependencies":[{"ref":"feature:example:portfolio","impact":"BLOCKING"}],"approval_bindings":[{"ref":"feature:example:portfolio","verified_against":"sha256:2584e1b35e6115dcb4af3645f918b0ecd2ab5c1704608098bffceaf09b0c1e5b","impact":"BLOCKING"}]}
+    ],
+    "expected": {"changed":[],"blocking":[],"approval_errors_after":[]}
+  },
+  {
+    "name": "informational-impact-is-not-blocking",
+    "before_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio","state":"SHIPPED"},
+      {"id":"surface:example:note","record_type":"operational_surface","dependencies":[{"ref":"feature:example:portfolio","impact":"INFORMATIONAL"}]}
+    ],
+    "after_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio Tracking","state":"SHIPPED"},
+      {"id":"surface:example:note","record_type":"operational_surface","dependencies":[{"ref":"feature:example:portfolio","impact":"INFORMATIONAL"}]}
+    ],
+    "expected": {"informational":["surface:example:note"],"review_required":[],"blocking":[]}
+  },
+  {
+    "name": "review-required-impact-is-not-blocking",
+    "before_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio","state":"SHIPPED"},
+      {"id":"claim:example:portfolio","record_type":"claim","dependencies":[{"ref":"feature:example:portfolio","impact":"REVIEW_REQUIRED"}]}
+    ],
+    "after_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","name":"Portfolio Tracking","state":"SHIPPED"},
+      {"id":"claim:example:portfolio","record_type":"claim","dependencies":[{"ref":"feature:example:portfolio","impact":"REVIEW_REQUIRED"}]}
+    ],
+    "expected": {"informational":[],"review_required":["claim:example:portfolio"],"blocking":[]}
+  },
+  {
+    "name": "dependency-cycle-detected",
+    "before_records": [
+      {"id":"control:a","dependencies":[{"ref":"control:b","impact":"BLOCKING"}]},
+      {"id":"control:b","dependencies":[{"ref":"control:a","impact":"REVIEW_REQUIRED"}]}
+    ],
+    "after_records": [
+      {"id":"control:a","dependencies":[{"ref":"control:b","impact":"BLOCKING"}]},
+      {"id":"control:b","dependencies":[{"ref":"control:a","impact":"REVIEW_REQUIRED"}]}
+    ],
+    "expected": {"cycles_after":[["control:a","control:b","control:a"]]}
+  }
+]
