@@ -31,15 +31,16 @@ The Web Manager owns MintTap company website content, app-launch web requirement
 18. **018** Semantic Fingerprints, Dependency Invalidation & Release Impact
 19. **019** Typed Dependency Edges, Cycle Detection & Approval Freshness
 20. **020** Derived Release Manifest, Gate Decision & Auditable Waivers
+21. **021** Release Provenance, Reviewer Authorization & Fail-Closed CI
 
-Canonical details: `research/001...020`.
+Canonical details: `research/001...021`.
 
 ## Current maturity
 
 Stage: **Foundation**
 State: **IN STUDY with executable release-control PRACTICE evidence**
 
-Production PASS is not claimed. Provider POC, browser/device validation, actual MintTap facts, real store-console state, legal applicability, real release operations, reviewer authorization and CI enforcement remain incomplete.
+Production PASS is not claimed. Provider POC, browser/device validation, actual MintTap facts, real store-console state, legal applicability, real deployment operations, authenticated reviewer identities, protected policy ownership and active CI enforcement remain incomplete.
 
 ## Executable control validation
 
@@ -56,31 +57,38 @@ Implemented deterministic PRACTICE semantic fingerprints, before/after compariso
 Implemented typed dependency severity, cycle detection and upstream-fingerprint-bound approval freshness. Result: **6 / 6 expected outcomes matched.**
 
 ### 020 derived release manifest / gate / waiver
+Implemented `PASS / NEEDS_REVIEW / BLOCKED`, `PASS / CLEAN` vs `PASS / WITH_WAIVER`, exact issue-fingerprint waiver scope, expiry and non-waivable integrity failures. Result: **8 / 8 expected outcomes matched.**
 
-Implemented `tools/evaluate_release_gate.py` and `control/tests/release_gate_cases.json`.
+Critical 020 rule: a waiver never deletes or rewrites the canonical issue.
 
-The derived release manifest consumes governance findings and resolves a synthetic release to:
-- `PASS`;
-- `NEEDS_REVIEW`;
-- `BLOCKED`.
+### 021 release provenance / reviewer authorization / CI
 
-For `PASS`, it separately records:
-- `CLEAN`;
-- `WITH_WAIVER`.
+Implemented `tools/evaluate_release_provenance.py` and `control/tests/release_provenance_cases.json`.
 
-Controlled result: **8 / 8 expected outcomes matched.**
+Added:
+- issue-class-specific reviewer authorization policy;
+- policy version binding;
+- release-author vs approver separation of duties;
+- waiver binding to exact source commit and normalized source snapshot digest;
+- manifest provenance with evaluator name/version and evaluation-input digest;
+- stale supplied-attestation detection;
+- separate governance `decision` and deployment/CI `ci_state`;
+- command exit `0` only for `ci_state=ALLOW`.
+
+Controlled result: **9 / 9 expected outcomes matched.**
 
 Validated:
-- clean release → `PASS / CLEAN`;
-- informational-only impact → `PASS / CLEAN`;
-- unresolved review-required item → `NEEDS_REVIEW`;
-- stale blocking approval → `BLOCKED`;
-- dependency cycle → non-waivable `BLOCKED`;
-- valid, release-scoped, approved, reasoned and unexpired waiver over an explicitly waivable exact issue fingerprint → `PASS / WITH_WAIVER`;
-- expired waiver → remains `BLOCKED`;
-- semantic integrity failure → non-waivable `BLOCKED`.
+- authorized/current waiver → `PASS / WITH_WAIVER`, CI `ALLOW`;
+- unknown reviewer → `BLOCKED`, CI `FAIL`;
+- known reviewer without authority for that issue class → `BLOCKED`, CI `FAIL`;
+- waiver tied to old source commit → `BLOCKED`, CI `FAIL`;
+- waiver tied to old normalized snapshot → `BLOCKED`, CI `FAIL`;
+- self-approval by release author → rejected;
+- clean current release → `PASS / CLEAN`, CI `ALLOW`;
+- unresolved `NEEDS_REVIEW` → CI `FAIL`;
+- otherwise-clean release with stale evaluator-version attestation → canonical decision `PASS`, CI `FAIL`.
 
-Critical rule: **a waiver never deletes or rewrites the canonical issue.** The manifest retains `canonical_issues`, records `waivers_applied`, and derives `unresolved_issues` separately.
+Professional implication: **truth state and authority-to-release are separate dimensions.** A release can be semantically clean while still lacking current trusted provenance, and must then fail closed.
 
 ## Current control architecture
 
@@ -97,6 +105,11 @@ Current direction:
 - cycle rejection for freshness/approval dependency graphs;
 - derived release manifest and gate decision;
 - explicit waiver audit record bound to one release and one exact issue fingerprint;
+- reviewer authorization by issue class and versioned policy;
+- self-approval rejection for waiver-based release passage;
+- release/waiver binding to source commit + normalized snapshot digest;
+- evaluator/tool/input provenance in the manifest;
+- CI/deployment authorization separated from canonical truth;
 - canonical truth remains unchanged by waiver;
 - no secrets or customer personal data in this repository.
 
@@ -107,18 +120,33 @@ Practice artifacts:
 - `control/tests/impact_cases.json`
 - `control/tests/dependency_governance_cases.json`
 - `control/tests/release_gate_cases.json`
+- `control/tests/release_provenance_cases.json`
 - `tools/validate_control.py`
 - `tools/compute_impact.py`
 - `tools/validate_dependency_governance.py`
 - `tools/evaluate_release_gate.py`
+- `tools/evaluate_release_provenance.py`
 
 Important limitation: current Python serialization is deterministic for the synthetic corpus but is **not yet claimed as full RFC 8785 JCS conformance**.
 
-## Source/provenance note
+## Current GitHub capability reality
 
-SLSA 1.2 treats provenance as verifiable information connecting artifacts to where, when and how they were produced, and its build requirements use cryptographic digests to identify output packages.
+Verified 2026-09-14:
+- `yhappcom/web-manager` is **private**;
+- default branch is `main`;
+- repository creation time is `2026-09-14T07:34:58Z`;
+- repository rulesets endpoint currently returns an upgrade/public-repository requirement, so rulesets are not an evidenced enforcement mechanism for the present repository state;
+- branch-protection state could not be inspected with the installed GitHub integration because that endpoint is not accessible to the integration; this is not proof that branch protection itself is unavailable.
 
-MintTap uses that as useful provenance design evidence only. SLSA does **not** define MintTap's `PASS / NEEDS_REVIEW / BLOCKED` gate or waiver policy; those remain project-specific governance decisions.
+Current GitHub documentation also states:
+- rulesets can require status checks and can constrain a required status source to a specific GitHub App;
+- protected environments can require reviewers and can prevent self-review, with plan/repository-visibility restrictions;
+- artifact attestations include workflow/repository/environment/commit provenance and use Sigstore;
+- private/internal repository artifact attestations require Enterprise Cloud, so they are not assumed as the current baseline;
+- GitHub Actions OIDC exposes source/workflow claims, and repositories created after 2026-07-15 use immutable default subject claims containing owner/repository IDs;
+- full-length commit-SHA pinning is GitHub's documented immutable way to consume actions.
+
+Portable baseline: the repository's own evaluator must fail non-zero unless release authorization is current; GitHub-native required checks/environment approvals/attestations are additive hardening when actually supported and verified.
 
 ## Current public information architecture
 
@@ -174,10 +202,10 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — still no substantive W### at latest check. Release manifest states are semantic inputs only; Web Design owns how clean pass, pass-with-waiver, needs-review and blocked states are presented.
-- **Layout / Interaction** — `PASS / CLEAN`, `PASS / WITH_WAIVER`, `NEEDS_REVIEW`, `BLOCKED`, invalid waiver and non-waivable failure require textual/structural/programmatic distinction, not color-only encoding.
-- **Typography / Type** — long waiver reasons, release identifiers, issue codes and Korean/English governance strings should later be used as wrapping/zoom/fallback stress content.
-- **Color** — severity color may reinforce, but a waiver or blocker must remain understandable with authored color removed.
+- **Web Design** — still no substantive W### at latest check. Governance/release/provenance states are semantic inputs only; Web Design owns how they are presented.
+- **Layout / Interaction** — release decision, CI authorization, reviewer authorization, stale source/attestation, clean pass, waiver pass, review-needed and blocker states require textual/structural/programmatic distinction, not color-only encoding.
+- **Typography / Type** — reviewer names/roles, commit IDs, digest strings, issue codes and Korean/English audit reasons should later be used as wrapping/zoom/fallback stress content.
+- **Color** — severity/authority color may reinforce but never define release meaning by itself.
 
 ## Important open items
 
@@ -187,15 +215,20 @@ The POC remains blocked on provider accounts/domain authority.
 - SDK/analytics/ads/auth/processors/data flows and processing locations;
 - legal applicability/signoff process;
 - full RFC 8785/JCS conformance validation;
-- schema support for typed `dependencies`, `approval_bindings`, release manifests and waiver records;
-- record-type-specific allowed edge/severity/waiver policies;
-- reviewer identity, authorization, separation-of-duties and approval expiry;
-- cryptographic/authenticated attestation of manifest/waiver provenance;
+- schemas for typed dependencies, approvals, release manifests, waivers and reviewer policies;
+- protected ownership/change control for reviewer policy and gate code;
+- authenticated GitHub identity mapping for reviewers;
+- quorum/two-person approval for selected issue classes;
+- reviewer and waiver revocation;
+- break-glass/emergency exception model;
+- cryptographic signature/attestation for internal manifest;
+- actual GitHub Actions gate workflow and threat-model validation;
+- required status-check/branch-protection enforcement verification;
+- OIDC claim observation and deployment-provider trust configuration;
 - multi-source approval policy;
 - real localization and claim approval binding;
 - screenshot-to-release compatibility invalidation;
 - Git commit-to-snapshot automation;
-- pinned validator/CI implementation;
 - provider accounts/domain authority and POC execution;
 - final hosting/framework/CMS/monitoring choice;
 - real App Links/AASA/app-ads identifiers/routes;
@@ -204,7 +237,7 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Next research queue
 
-1. **Manifest/waiver provenance + reviewer authorization + CI enforcement model.** Define who may approve/waive which issue classes, bind decisions to source snapshot/commit and tool version, and prove unauthorized or stale attestations cannot produce a release `PASS`.
+1. **Protected policy ownership + reviewer quorum/revocation + workflow threat model.** Prove selected issue classes require independent authorized approvers, revoked authority becomes ineffective, emergency overrides are explicit/time-bounded, and untrusted PR code cannot alter the gate or obtain deployment authority.
 2. Execute Firebase Hosting vs Cloudflare Workers POC when accounts/domain authority are available.
 3. Use the POC for Design Studio real-browser Korean/English/accessibility/layout/type/color transfer validation.
 4. Apply Legal Trigger Registry when actual entity/market/audience/data/transaction facts are available.
@@ -213,7 +246,7 @@ The POC remains blocked on provider accounts/domain authority.
 ## Persistence state
 
 - `AGENTS.md` contains autonomous continuous-learning rules.
-- `research/README.md` indexes 001–020.
-- Studies 016–020 have executable PRACTICE artifacts under `control/` and `tools/`.
-- Study 020 adds `tools/evaluate_release_gate.py` and `control/tests/release_gate_cases.json`.
+- `research/README.md` indexes 001–021.
+- Studies 016–021 have executable PRACTICE artifacts under `control/` and `tools/`.
+- Study 021 adds `tools/evaluate_release_provenance.py` and `control/tests/release_provenance_cases.json`.
 - This file is the current operational checkpoint.
