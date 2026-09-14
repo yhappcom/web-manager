@@ -89,53 +89,85 @@ Retained judgment:
 - a critical-destination matrix now forms the project-level validation contract.
 
 Primary/current evidence checked 2026-09-15:
-- W3C WCAG 2.2 and current WAI Understanding guidance for Navigable, Page Titled, Focus Order, Headings/Labels, Consistent Navigation/Identification/Help, Resize Text and Reflow;
-- WAI Menu Structure/Menus guidance and ARIA APG breadcrumb/navigation landmark patterns;
-- Google Search Central breadcrumb documentation last updated 2026-09-08 and current mobile/desktop breadcrumb presentation guidance.
+- W3C WCAG 2.2 and current WAI Understanding guidance;
+- WAI menu/navigation/breadcrumb guidance and ARIA APG navigation landmarks;
+- Google Search Central breadcrumb guidance current to 2026-09-08.
+
+### 037 — Page systems, content hierarchy & scan/comprehension architecture
+`research/037-stage2-page-systems-content-hierarchy-scan-comprehension-architecture.md`
+
+**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**
+
+Retained judgment:
+- site IA and intra-page hierarchy are different layers;
+- a page is a task contract with audience/context, primary task, page promise, decision-critical prerequisites, action and recovery;
+- semantic, visual and interaction hierarchies should reinforce one another but are not identical;
+- choose page types according to prior context and task rather than force one universal template;
+- baseline page reasoning follows `identity → orientation → decision-critical information → evidence/explanation → action → depth` where applicable;
+- do not use a fixed “above the fold” architecture rule; specify semantic priority/sequence and discoverability instead;
+- headings are retrieval/navigation infrastructure, not decorative slogans;
+- no universal F/Z scan-path template is assumed; optimize for predictable retrieval structure;
+- information, visual, interaction and temporal/navigation density are distinct;
+- progressive disclosure exchanges simultaneous visibility for discovery/interaction/memory/state cost;
+- company landing, app detail, support hub/article, privacy/policy, account-control, release/known-issue and error/state pages require different semantic contracts;
+- list/detail/comparison are different information structures; comparison-critical information should not be unnecessarily hidden;
+- 404, unexpected failure, planned unavailability, empty, unsupported, retired and no-result states are distinct page anatomy with different recovery contracts;
+- responsive recomposition may change geometry but should preserve semantic priority, prerequisite/action relationships and meaningful order;
+- Korean/English localization and 200% text/reflow are page-architecture stress tests, not late polish;
+- a reusable Page Contract is now the preferred pre-design handoff to Design Studio.
+
+Primary/current evidence checked 2026-09-15:
+- W3C WCAG 2.2 and WAI Page Structure/Headings/Regions/Labeling guidance;
+- U.S. Web Design System landing/documentation/404/card/summary patterns;
+- GOV.UK Design System page patterns, headings, details/accordion/tabs and failure-state guidance;
+- Design Studio L002 density model, current Layout/Type/Web status.
 
 ## Highest-value next integrated topic
 
-Proceed to **Stage 2 Page Systems, Content Hierarchy & Scan/Comprehension Architecture**.
+Proceed to **Stage 2 Integration — Company/App/Support/Governance Page-System Matrix & Competency Review**.
 
-Focus:
-- page purpose and primary user task;
-- page title / heading / lead / evidence / condition / action hierarchy;
-- landing page vs app detail vs support article vs policy/account-control page;
-- prioritization and the limits of simplistic “above the fold” rules;
-- sectioning/headings and in-page navigation;
-- content density, scan paths and comprehension;
-- progressive disclosure at the information level;
-- list/detail/comparison structures where relevant;
-- empty/error/deprecated/unsupported states as part of page anatomy;
-- responsive semantic order and recomposition;
-- Korean/English localization expansion;
-- accessibility stress and Design Studio handoff.
+Purpose:
+- synthesize 034–037 rather than create another isolated model;
+- prove that task IA, canonical content, findability and page contracts work together across realistic entry paths;
+- identify any missing Stage 2 prerequisite before Stage 3 UX/Interaction.
 
-Do not prematurely drift into Stage 3 microinteraction or purely visual styling. This block remains about information architecture at page-system level.
+Required scenario families:
+- App Store/Google Play/search visitor → app detail → support/privacy;
+- direct search/shared-link visitor → support article → app context/escalation;
+- user → privacy/account-control destination;
+- release/known-issue direct entry;
+- missing/retired/unavailable resource → credible recovery;
+- bilingual long-content + narrow-width + 200% text/reflow stress;
+- direct-entry + heading/landmark + meaningful-order validation.
+
+Do not drift into Stage 3 microinteraction or visual styling during the integration gate.
 
 ## Design Studio relationship
 
-Latest Design Studio global/Web status re-read 2026-09-15:
-- Web Design remains **Stage 1 Foundation / NOT YET BASELINED**;
-- its canonical scope includes IA, navigation, wayfinding, page hierarchy, content flow, responsive composition, accessibility and actual browser/device validation;
-- Layout/Interaction has relevant hierarchy/navigation foundations but still reports unresolved real-browser multilingual/enlarged-text, keyboard/focus and running-navigation validation gaps.
+Latest Design Studio status re-read 2026-09-15:
+- Web Design remains **Stage 1 Foundation / NOT YET BASELINED** and has no substantive `W###` research yet;
+- its scope directly includes page hierarchy, content flow, scan paths, density, progressive disclosure, responsive composition and browser/device/accessibility validation;
+- Layout L002 provides a reusable density model and warns against universal sparse/whitespace rules;
+- current Layout/Type status still reports real-browser, localization, enlarged-text and human-validation gaps relevant to final page design.
 
 Outgoing Stage 2 handoff now includes:
 1. task/destination matrix from 034;
 2. semantic content-object relationships from 035;
 3. critical-destination findability matrix from 036;
-4. global vs local/context navigation scope;
-5. direct store/search/shared-link entry conditions;
-6. orientation/current-location and breadcrumb requirements;
-7. required vs optional semantic page content slots;
+4. Page Contract from 037;
+5. global vs local/context navigation scope;
+6. direct store/search/shared-link entry conditions;
+7. semantic page priority and prerequisite/action relationships;
 8. `claim → evidence → condition → action` hierarchy;
-9. long Korean/English labels/content and stale-translation cases;
-10. narrow-width + 200% text + reflow stress;
-11. DOM/visual/focus/accessibility-order constraints;
-12. multiple navigation-landmark labeling;
-13. Back/Forward/deep-link continuity;
-14. deprecated/missing/no-result recovery routes;
-15. requirement to return structural problems to Web Manager rather than mask them with styling.
+9. heading-outline and region/landmark requirements;
+10. simultaneous-comparison requirements and disclosure restrictions;
+11. long Korean/English labels/content and stale-translation cases;
+12. narrow-width + 200% text + reflow stress;
+13. DOM/visual/focus/accessibility-order constraints;
+14. multiple navigation-landmark labeling;
+15. Back/Forward/deep-link continuity;
+16. differentiated 404/error/unavailable/empty/unsupported/retired/no-result recovery;
+17. requirement to return structural problems to Web Manager rather than mask them with styling.
 
 No Design Studio canonical file was edited.
 
@@ -155,7 +187,9 @@ Real project decisions still require evidence for:
 - website framework/hosting/CDN/runtime;
 - analytics baseline and conversion definitions;
 - actual content ownership/update workflow;
-- expected support content volume and whether launch-time site search is justified.
+- expected support content volume and whether launch-time site search is justified;
+- actual privacy/policy complexity and versioning needs;
+- real human comprehension/usability evidence for future page systems.
 
 Do not infer these from generic app-company patterns.
 
@@ -164,6 +198,6 @@ Do not infer these from generic app-company patterns.
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
 - `research/README.md` indexes staged learning.
 - Stage 1 is complete at its intended foundation/practitioner level.
-- Stage 2 Studies 034–036 are complete at foundation/practitioner checkpoint level.
-- Current next major work: **Stage 2 Page Systems, Content Hierarchy & Scan/Comprehension Architecture**.
+- Stage 2 Studies 034–037 are complete at foundation/practitioner checkpoint level.
+- Current next major work: **Stage 2 Integration — Page-System Matrix & Competency Review**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
