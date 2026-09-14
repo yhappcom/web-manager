@@ -52,35 +52,48 @@ Studies 001–026 remain retained as prior knowledge spanning launch requirement
 **STAGE 1 HTTP CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
 Supporting/integrated artifacts:
-- `029-http-foundations-history-semantics-evolution.md` — historical/problem/semantic foundation;
-- `029a-http-message-anatomy-field-model-framing.md` — detailed message/framing support block retained from the earlier fine-grained cadence;
-- `029-http-deep-study-integrated-semantics-caching-negotiation-intermediaries.md` — integrated methods/status/representation/negotiation/cache/intermediary/HTTP2/HTTP3 study;
-- `029-http-operational-diagnosis-range-state-boundaries-competency.md` — range requests, cookie/auth boundaries, standardized cache/proxy diagnostics, browser evidence interpretation, living-registry awareness and final Stage 1 competency review.
+- `029-http-foundations-history-semantics-evolution.md`;
+- `029a-http-message-anatomy-field-model-framing.md`;
+- `029-http-deep-study-integrated-semantics-caching-negotiation-intermediaries.md`;
+- `029-http-operational-diagnosis-range-state-boundaries-competency.md`.
 
-HTTP Stage 1 competency now covers:
-- historical design pressures;
-- semantics vs version-specific framing/transport;
-- methods/statuses/redirect behavior;
-- resource vs representation;
-- media types, codings and negotiation;
-- caching, validators and conditional requests;
-- intermediaries/CDNs/proxies;
-- HTTP/1.1, HTTP/2, HTTP/3 and QUIC relationships at Web Manager depth;
-- range/partial transfer;
-- cookies and authentication as HTTP-boundary concepts;
-- operational diagnosis using browser/network/cache/proxy evidence;
-- current IANA registry awareness, including the 2026 standardized `QUERY` method.
+HTTP Stage 1 competency covers history/semantics, methods/statuses, representations and negotiation, caching/validators, intermediaries, HTTP/1.1–3, QUIC relationships, state/auth boundaries and operational diagnosis. It will be reopened in later SEO/performance/security/operations stages.
 
-HTTP will be revisited later in Stage 6/7/8/9/11 for advanced SEO, performance, security/privacy, analytics and operations depth.
+### 030 — HTTPS / TLS / Certificates / Browser Trust
+`030-https-tls-certificates-browser-trust-integrated-foundations.md`
+
+**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
+Integrated coverage:
+- confidentiality, integrity and authentication as distinct TLS goals;
+- SSL → TLS history and TLS 1.0/1.1 deprecation;
+- current TLS 1.3 authority moved from RFC 8446 to **RFC 9846 in July 2026**;
+- TLS 1.2 → 1.3 design changes, handshake and record roles;
+- asymmetric authentication/key establishment vs symmetric traffic protection;
+- X.509 root/intermediate/leaf and certification-path mental model;
+- trust anchors as relying-party policy, not a universal Internet list;
+- RFC 9525 SAN/service-identity verification and obsolete CN matching;
+- SNI and ALPN roles and their protocol-layer boundaries;
+- HSTS and preload behavior;
+- `minttap.app` consequence of the `.app` TLD being HSTS preloaded;
+- certificate expiration, revocation, chain, clock, hostname and trust-policy failure classes;
+- Certificate Transparency and browser/root-program policy as modern Web PKI layers;
+- CDN edge TLS vs origin TLS as separate connections/security boundaries;
+- current CA/B certificate-lifetime reduction schedule and the resulting need for automation;
+- integrated TLS failure diagnosis before HTTP/application analysis.
+
+Current policy-sensitive findings include CA/Browser Forum TLS BR v2.3.0 (7 Sep 2026), which limits publicly trusted subscriber certificates issued from 15 Mar 2026 through 14 Mar 2027 to 200 days and already schedules further reductions to 100 days in 2027 and 47 days in 2029.
+
+TLS/Web PKI will be revisited in Stage 8 and Stage 11 for advanced security/privacy and operations depth.
 
 ## Current curriculum position
 
 **Stage 1 — Web Foundations.**
 
 Next major domain:
-- HTTPS / TLS / certificates / browser trust.
+- **HTML / CSS / JavaScript / DOM / accessibility-tree foundations**, with browser parsing/rendering relationships at conceptual Web Manager depth.
 
-This next domain should be studied as one broad integrated professional subject rather than as a chain of micro-reports.
+The next domain should again be studied as one broad integrated professional subject rather than a chain of micro-reports.
 
 ## Study quality standard
 
@@ -102,4 +115,4 @@ Implementation experiments are used only when necessary to answer a material fac
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
 
-No Design Studio handoff was required to close the HTTP Stage 1 core because the work remained protocol/operations foundation. Reconnect when visual/interaction/performance-sensitive browser behavior becomes material.
+No immediate Design Studio handoff was required to close the HTTP or TLS Stage 1 protocol foundations. Reconnect when browser-visible loading/security states, HTML semantics, accessibility structure, responsive rendering or performance-sensitive design become material. The upcoming document/browser foundations will create materially stronger overlap with Web Design than the network-protocol blocks did.
