@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "record_type": "operational_surface",
+  "id": "surface:example:store-ios",
+  "status": "VERIFIED",
+  "owner": "role:release",
+  "app_ref": "app:example",
+  "surface_kind": "STORE_CTA",
+  "url": "https://minttap.app/en/apps/example/",
+  "severity": "P1",
+  "destination_ref": "store:example:ios",
+  "monitoring": "SYNTHETIC",
+  "runbook_ref": "runbook:store"
+}
