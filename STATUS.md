@@ -34,98 +34,94 @@ A Stage 1 core can close once the domain can be explained, diagnosed and applied
 ### 029 — HTTP
 **STAGE 1 HTTP CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-HTTP competency now covers history/semantics, messages, method/status contracts, representations/content negotiation, caching/conditional requests, intermediaries, HTTP/1.1–3/QUIC relationships, range/state/auth boundaries and evidence-led operational diagnosis.
-
-HTTP remains scheduled for spiral reintegration in later SEO/performance/security/analytics/operations stages.
+Competency covers history/semantics, message framing, methods/statuses, representations/content negotiation, caching/conditional requests, intermediaries, HTTP/1.1–3/QUIC relationships, range/state/auth boundaries and evidence-led diagnosis.
 
 ### 030 — HTTPS / TLS / Certificates / Browser Trust
 `research/030-https-tls-certificates-browser-trust-integrated-foundations.md`
 
 **STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
+Competency covers secure-channel goals, SSL→TLS evolution, current TLS 1.3 authority (RFC 9846), handshake/record reasoning, symmetric vs asymmetric roles, X.509 chain/trust anchors, SAN identity verification, SNI/ALPN, HSTS/preload, `.app` implications, CT/root-policy layers, edge/origin TLS separation and operational failure diagnosis.
+
+Policy-sensitive findings remain `CHANGE WATCH`, including public certificate lifetime rules and browser root-program requirements.
+
+### 031 — HTML / CSS / JavaScript / DOM / Accessibility Tree
+`research/031-browser-document-runtime-html-css-js-dom-accessibility-tree-foundations.md`
+
+**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
 Competency established:
-- confidentiality, integrity and authentication as distinct secure-channel goals;
-- plaintext HTTP threat model at Web Manager depth;
-- SSL → TLS evolution and why legacy versions were retired;
-- current TLS 1.3 authority: **RFC 9846 (July 2026), which obsoletes RFC 8446**;
-- TLS 1.2 → 1.3 simplification/security rationale;
-- handshake vs record protocol;
-- asymmetric authentication/key establishment vs symmetric traffic protection;
-- X.509 certificate/public/private-key roles;
-- root/intermediate/leaf and certification-path reasoning;
-- trust anchors as relying-party/browser policy rather than a universal Internet list;
-- RFC 9525 SAN-based service identity and obsolete Common Name matching;
-- SNI purpose and its distinction from HTTP Host/:authority;
-- ALPN and application-protocol selection;
-- HSTS vs redirect and preload bootstrap behavior;
-- **`.app` TLD HSTS preload** implications: HTTPS is a first-deploy prerequisite for `minttap.app`;
-- certificate expiry, clock, hostname, chain, trust-policy, CT and protocol failure categories;
-- Certificate Transparency/browser root-program policy as additional modern Web PKI layers;
-- edge/CDN TLS and origin TLS as separate connections/security boundaries;
-- certificate revocation vs expiration;
-- TLS confidentiality limits and metadata boundaries;
-- 0-RTT replay caveat and its cross-layer relationship to HTTP method semantics;
-- operational diagnosis from URL/DNS/network → TLS negotiation → certificate/service identity → browser policy → ALPN/HTTP → edge-origin hop.
+- historical reason for separating document structure, presentation and programmability;
+- HTML parser/tokenization/tree-construction mental model;
+- source HTML vs runtime DOM distinction;
+- semantic HTML vs visual appearance;
+- DOM as browser object/tree/event model rather than source text;
+- CSS cascade/inheritance/value resolution distinct from layout;
+- DOM order vs generated boxes/visual order distinctions;
+- ECMAScript language vs browser Web APIs;
+- parser-blocking/`defer`/`async`/module timing at conceptual level;
+- DOM event targets/propagation basics;
+- native-element behavior/semantics as browser-platform capabilities;
+- accessibility API mapping and why accessibility representation is not a DOM clone;
+- accessible name/role/state concepts and ARIA limits;
+- layered diagnosis across source/delivery, parsing/DOM, cascade, layout, runtime, events and accessibility exposure;
+- progressive-enhancement/native-first reasoning for public app-company pages.
 
-### Important current-policy findings
+Primary/current evidence checked 2026-09-14: WHATWG HTML and DOM Living Standards, TC39 ECMAScript, W3C CSS modules, Core-AAM/HTML-AAM and W3C APG.
 
-Authoritative sources checked on 2026-09-14:
-- RFC 9846 is now the current TLS 1.3 specification (published July 2026), replacing RFC 8446.
-- CA/Browser Forum TLS Baseline Requirements v2.3.0 dated 2026-09-07 limit publicly trusted subscriber certificates issued from 2026-03-15 through 2027-03-14 to **200 days**; the adopted schedule moves to 100 days in 2027 and 47 days in 2029.
-- Chrome Root Program Policy v1.8 (2026-02-05) and Mozilla Root Store Policy v3.1 (effective 2026-07-01) continue tightening public Web PKI lifecycle/automation/root-program requirements.
-- Google Registry confirms `.app` is included in the HSTS preload list.
+## Design Studio relationship — outgoing handoff now material
 
-These are `CHANGE WATCH` items for implementation time.
+Design Studio Web Design remains at **Stage 1 Foundation / not yet baselined**. Its canonical scope explicitly includes semantic HTML, CSS cascade/layout, DOM/events/focus, accessibility implementation and browser validation.
 
-## Stage decision
+Study 031 establishes several reusable constraints for future Design Studio Web work:
+1. native HTML semantics can be visually customized without discarding browser behavior;
+2. DOM order, visual order and focus/accessibility order can diverge;
+3. replacing native controls with custom widgets transfers keyboard/focus/accessibility implementation burden to the project;
+4. accessibility API exposure is not a raw DOM copy, so screenshot/DOM-only QA is insufficient;
+5. CSS cascade failure and layout failure are different diagnostic classes;
+6. script loading/runtime timing can affect when content/interaction becomes available.
 
-TLS/HTTPS is **closed only for Stage 1 progression**. It will be reopened in:
-- Stage 7 — connection/setup performance where material;
-- Stage 8 — advanced web security/privacy, HSTS/ECH/cookies/auth/security headers;
-- Stage 11 — certificate automation, CDN/origin termination, monitoring, incidents and provider architecture.
+These findings are recorded in Web Manager as an outgoing handoff. No Design Studio canonical file was edited.
 
 ## Next major domain
 
-Proceed to **HTML / CSS / JavaScript / DOM / Accessibility Tree — Browser Document & Runtime Foundations**.
+Proceed to **Application / Rendering / State / Navigation Foundations** as the remaining broad Stage 1 prerequisite block before final integration.
 
-The integrated study should cover, from first principles:
-- why the Web needed a document language, presentation system and programmable behavior layer;
-- HTML parsing and tree construction at conceptual level;
-- semantic elements vs visual appearance;
-- DOM as browser representation/API rather than the original source text itself;
-- CSS cascade/inheritance/box/layout concepts and why separation from markup emerged;
-- JavaScript runtime/event model at conceptual level;
-- parser-blocking/deferred/module script relationships only to the depth needed for Stage 1;
-- DOM mutation and dynamic pages;
-- accessibility tree relationship to DOM/semantics, without incorrectly treating it as a direct copy of DOM;
-- search engine/assistive technology consumption basics;
-- malformed HTML error recovery and browser interoperability concepts;
-- progressive enhancement / native semantics as architectural ideas;
-- failure diagnosis across HTML/CSS/JS rather than calling every visible defect a “frontend bug.”
+Integrated scope:
+- static vs dynamic website meanings;
+- server-side rendering, client-side rendering and static generation at conceptual level;
+- hydration and why server-rendered HTML can still require client runtime activation;
+- browser/server/application state boundaries;
+- cookie vs Web Storage vs server-session concepts;
+- browser navigation/history basics;
+- forms and basic input submission flow;
+- URL/navigation implications for public content;
+- CDN/edge/hosting/deployment vocabulary integration;
+- framework-neutral failure diagnosis;
+- relationship to SEO, accessibility, performance, offline behavior and operations without prematurely entering later stages.
 
-Do not split this into micro-reports. Reach a meaningful integrated browser/document checkpoint before reporting.
-
-## Design Studio relationship
-
-The completed TLS block remained primarily network/security foundation, so no immediate Design Studio handoff was necessary.
-
-The next HTML/CSS/JS/DOM/accessibility-tree block creates direct overlap with the Design Studio Web specialist's expected frontend literacy and accessibility implementation scope. Before closing that block, inspect current Web Design progress again and record any reusable implementation/design boundary findings. Do not edit Design Studio specialist canonical files without authorization.
+After that block, perform a **Stage 1 end-to-end competency review**: explain the entire path from entering `minttap.app` through DNS, TLS, HTTP, parsing, styling, runtime interaction, state/navigation and accessibility exposure, and identify the responsible layer for representative failures.
 
 ## Important unknown MintTap facts
 
-Do not infer current production state from generic research. Real project work must verify:
+Do not infer production implementation from generic research. Real project work must verify:
 - actual `minttap.app` DNS/hosting/CDN topology;
-- current public certificate issuer/chain/SAN inventory;
-- TLS/ALPN configuration;
-- actual renewal/monitoring ownership;
-- edge→origin transport/trust model;
-- real HTML/CSS/JS stack, framework, rendering strategy and accessibility implementation when the website project starts.
+- real framework/build system;
+- rendering strategy (static/SSR/CSR/hybrid);
+- component architecture;
+- browser/device support matrix;
+- cookie/storage/session usage;
+- localization implementation;
+- analytics/third-party runtime dependencies;
+- accessibility testing stack;
+- deployment/monitoring ownership.
 
 ## Persistence state
 
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
 - `research/README.md` indexes staged learning.
-- HTTP Stage 1 core competency is complete.
-- HTTPS/TLS/Certificate/Browser Trust Stage 1 core competency is complete.
-- Current next major study: **HTML / CSS / JavaScript / DOM / Accessibility Tree foundations**.
+- HTTP Stage 1 core competency complete.
+- HTTPS/TLS/Certificate/Browser Trust Stage 1 core competency complete.
+- Browser Document & Runtime Foundations Stage 1 core competency complete.
+- Current next major study: **Application / Rendering / State / Navigation Foundations**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
