@@ -9,8 +9,8 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `SOURCE` — authoritative source explicitly establishes the fact or requirement.
 - `SYNTHESIS` — conclusion derived from multiple sources or evidence.
 - `MINTTAP DECISION` — project-specific operating/design choice.
-- `OPEN` — unresolved question.
-- `DEPENDENCY` — external information or specialist work needed.
+- `OPEN` — unresolved or not yet validated.
+- `DEPENDENCY` — information or work needed elsewhere.
 - `VALIDATION` — practical proof needed before production confidence.
 - `CHANGE WATCH` — policy/standard/platform detail requiring later re-checking.
 
@@ -36,26 +36,15 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `018-semantic-fingerprint-dependency-impact.md` — semantic fingerprint comparison and dependency propagation; 5/5 expected outcomes.
 - `019-typed-dependency-approval-freshness.md` — typed impact severity, cycle detection and fingerprint-bound approval freshness; 6/6 expected outcomes.
 - `020-derived-release-manifest-gate-waivers.md` — derived `PASS / NEEDS_REVIEW / BLOCKED` gate plus scoped auditable waivers; 8/8 expected outcomes.
-- `021-release-provenance-reviewer-authorization-ci.md` — source/tool/policy-bound release provenance, issue-class reviewer authorization, self-approval rejection and fail-closed CI semantics; 9/9 expected outcomes.
-- `022-protected-policy-quorum-revocation-workflow-trust.md` — protected policy ownership, reviewer quorum/revocation, time-bounded break-glass and untrusted-workflow trust boundaries; 10/10 expected outcomes.
+- `021-release-provenance-reviewer-authorization-ci.md` — source/tool/policy-bound provenance, reviewer authorization and fail-closed CI; 9/9 expected outcomes.
+- `022-protected-policy-quorum-revocation-workflow-trust.md` — protected policy ownership, quorum/revocation, break-glass and workflow trust boundaries; 10/10 expected outcomes.
+- `023-provider-neutral-active-workflow-trust-boundary.md` — four-zone PR validation/trusted build/deploy/rollback contract, artifact-digest binding and provider credential boundary; 12/12 expected outcomes.
 
 ## Practice artifacts
 
-Current synthetic validation corpus includes:
-- `control/schemas/v1/record.schema.json`;
-- synthetic canonical records under `control/records/`;
-- `control/tests/cases.json`;
-- `control/tests/impact_cases.json`;
-- `control/tests/dependency_governance_cases.json`;
-- `control/tests/release_gate_cases.json`;
-- `control/tests/release_provenance_cases.json`;
-- `control/tests/policy_workflow_trust_cases.json`;
-- `tools/validate_control.py`;
-- `tools/compute_impact.py`;
-- `tools/validate_dependency_governance.py`;
-- `tools/evaluate_release_gate.py`;
-- `tools/evaluate_release_provenance.py`;
-- `tools/evaluate_policy_workflow_trust.py`.
+Current synthetic validation corpus includes the earlier 016–022 schemas/tests/tools plus:
+- `control/tests/active_workflow_contract_cases.json`;
+- `tools/validate_active_workflow_contract.py`.
 
 These are synthetic research fixtures, not actual MintTap product/legal/store facts.
 
@@ -63,8 +52,8 @@ These are synthetic research fixtures, not actual MintTap product/legal/store fa
 
 See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
-1. define the provider-neutral trust-boundary contract for a future active release workflow: exact trigger separation, token permission matrix, trusted workflow/policy ownership, fork behavior, artifact handoff, deployment credential boundary and rollback authority;
-2. execute the Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available;
+1. map current Firebase Hosting and Cloudflare Workers/Static Assets official authentication, preview/production deployment, rollback/version retention and static-routing/header behavior onto the 023 four-zone contract; execute only assertions that do not require provider accounts/domain authority;
+2. execute the live provider POC when provider accounts/domain authority are available;
 3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation on that POC;
 4. apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
 5. app-specific user/market evidence when actual product pages are assigned.
@@ -73,8 +62,6 @@ See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web decisions and production findings stay here first.
 
-Relevant domains: Typography / Type Design, Color, Layout / Spatial & Interaction, Web Design.
-
-Current transfer note: Web Design still has no substantive W### at latest check. Web Manager governance now distinguishes release decision, CI authorization, reviewer/quorum eligibility, source/attestation freshness, policy ownership, clean/waived/break-glass pass, needs-review and blocked states. These remain semantic/control states only; visual treatment is a Design Studio/Web Design responsibility and must not rely on color alone.
+Latest checked state: Web Design still has no substantive `W###`; Layout/Interaction is through `L005 / I004`. Web Manager governance states remain semantic/control inputs only. Validation/build/deploy/rollback, clean/waived/break-glass pass, needs-review, blocked, stale-artifact and credential-boundary states must later be expressed textually/structurally/programmatically rather than by color alone.
 
 When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record it here first and hand it back to the appropriate specialist when justified.
