@@ -28,8 +28,9 @@ The Web Manager owns MintTap company website content, app-launch web requirement
 15. **015** Machine-Readable Control Artifacts / Single Source of Truth
 16. **016** Control Artifact Validation Specimen
 17. **017** Release-Chain Semantic Integrity Validation
+18. **018** Semantic Fingerprints, Dependency Invalidation & Release Impact
 
-Canonical details: `research/001...017`.
+Canonical details: `research/001...018`.
 
 ## Current maturity
 
@@ -42,17 +43,15 @@ Production PASS is not claimed. Provider POC, browser/device validation, actual 
 
 ### 016 first slice
 
-Study 016 implemented:
+Implemented:
 
 **app → feature → evidence → claim**
-
-and documented schema failure → revision → re-proof.
 
 Result: **5 / 5 expected outcomes matched.**
 
 ### 017 release-chain extension
 
-Study 017 expanded the same validator through:
+Expanded validation through:
 
 **app → release → store destination → public CTA**  
 **app → data practice → processor → privacy surface**  
@@ -60,40 +59,51 @@ Study 017 expanded the same validator through:
 **legal trigger → required operational surface**  
 **critical operational surface → monitoring + runbook**
 
-Current synthetic record types:
-- `app`, `feature`, `evidence`, `claim`;
-- `release`, `store_destination`;
-- `processor`, `data_practice`;
-- `locale_coverage`;
-- `legal_trigger`;
-- `operational_surface`.
-
 Controlled re-proof result: **12 / 12 expected outcomes matched.**
 
-The current validator detects:
-- malformed records;
-- missing/wrong cross-record references;
-- current claim over non-shipped feature;
-- stale evidence supporting current claim;
-- store CTA to unavailable destination;
-- store destination without a verified live same-platform release;
-- app-UI locale claim contradicted by locale coverage;
-- verified privacy surface backed by stale data practice;
-- applicable legal trigger without required control surface;
-- P0/P1 operational surface without monitoring/runbook;
-- data practice referencing a missing processor.
+### 018 semantic fingerprint / dependency impact
 
-Professional implication: a public surface is not current merely because its own file is valid. Structural validity and repository-wide product/operational semantics remain separate validation layers.
+Implemented a separate PRACTICE tool that:
+- computes a semantic projection per record;
+- excludes selected operational metadata from fingerprint meaning;
+- hashes deterministic serialized projections with SHA-256;
+- compares before/after canonical snapshots;
+- discovers canonical dependencies through `depends_on`, `*_ref` and `*_refs` fields;
+- combines old and new graph edges so removals still invalidate prior dependents;
+- emits `added`, `removed`, `modified`, `direct_impact`, `transitive_impact` and a derived `review_set`.
 
-## Store-distribution evidence update
+Controlled result: **5 / 5 expected outcomes matched.**
 
-Current Apple App Store Connect and Google Play primary documentation confirms that app availability is a separate country/region-controlled operational fact. Therefore a stored store URL alone is not proof that a MintTap download CTA is currently valid.
+Validated behaviors:
+- metadata-only timestamp change does not trigger semantic invalidation;
+- JSON property-order change does not trigger semantic invalidation;
+- data-practice semantic change propagates to privacy surface and then legal trigger;
+- added upstream processor plus changed data-practice reference causes downstream review;
+- removed upstream record preserves old dependency impact so dependents still require review.
 
-Current simplified semantic rule:
+Important limitation: the current serializer is deterministic for the constrained synthetic corpus but is **not yet claimed as full RFC 8785 JCS conformance**. Production promotion requires official/conformance-vector testing for ECMAScript number serialization, UTF-16 property ordering and I-JSON constraints.
 
-**STORE_CTA → AVAILABLE destination + VERIFIED LIVE same-app/same-platform release.**
+## Current control architecture
 
-Production modeling must later add territory, track, device/account eligibility and external verification timestamp where materially needed.
+Principle: **each fact has one canonical owner/record; downstream surfaces reference or derive from it.**
+
+Current direction:
+- canonical structured data: JSON;
+- structural validation: JSON Schema Draft 2020-12;
+- stable immutable IDs;
+- repository semantic linter;
+- semantic fingerprints for meaningful change detection;
+- dependency graph and derived non-canonical release-impact reports;
+- human approval/waiver after impact derivation where required;
+- no secrets or customer personal data in this repository.
+
+Practice artifacts:
+- `control/schemas/v1/record.schema.json`
+- synthetic records under `control/records/`
+- `control/tests/cases.json`
+- `control/tests/impact_cases.json`
+- `tools/validate_control.py`
+- `tools/compute_impact.py`
 
 ## Current public information architecture
 
@@ -110,25 +120,6 @@ Machine endpoints:
 
 Root `/` strategy remains OPEN.
 
-## Internal truth / control model
-
-Principle: **each fact has one canonical owner/record; downstream surfaces reference or derive from it.**
-
-Direction:
-- canonical structured data: JSON;
-- structural validation: JSON Schema Draft 2020-12;
-- stable immutable IDs;
-- repository semantic linter;
-- semantic fingerprints + dependency invalidation for freshness;
-- generated release-impact reports, then human approvals;
-- no secrets or customer personal data in this repository.
-
-Practice artifacts:
-- `control/schemas/v1/record.schema.json`
-- synthetic records under `control/records/`
-- `control/tests/cases.json`
-- `tools/validate_control.py`
-
 ## Core product/site baselines retained
 
 ### Security
@@ -140,12 +131,8 @@ WCAG 2.2 AA internal target; semantic HTML; full keyboard/focus path; 320 CSS px
 ### Localization / search / marketing
 Korean/English locale-specific URLs; self-canonical + reciprocal hreflang; app UI/web/store localization tracked independently; sitemap/canonical/indexability controls; conservative structured data; Product-Truth-governed social previews and marketing claims; stale evidence invalidates dependent claims/content.
 
-The executable model now has a first guard against a website claim implying shipped app-UI locale support when canonical locale coverage says otherwise.
-
 ### Legal trigger model
-Legal compliance is **facts → trigger → obligation → public/control surface → backend process → validation**, not universal boilerplate. Korea PIPA/direct-commerce, U.S. FTC/COPPA/CCPA/other-state and conditional EU GDPR triggers remain dependent on actual MintTap facts.
-
-The validator checks consistency with a recorded `APPLIES` state; it does not determine legal applicability itself.
+Legal compliance is **facts → trigger → obligation → public/control surface → backend process → validation**, not universal boilerplate. The validator checks consistency with a recorded applicability state; it does not determine legal applicability itself.
 
 ### Operations
 Policy Change Register + Operational Surface Registry; deploy-time, scheduled, event-driven and human freshness checks; release does not close until production/store/web/control surfaces are revalidated.
@@ -172,10 +159,10 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — still no substantive W001 at latest check. Control records provide truthful states; Web Design owns page hierarchy, CTA treatment, disclosure salience, responsive composition and browser/device validation.
-- **Typography / Type** — use generated Korean/English feature/legal/privacy/support strings for fallback/wrapping/zoom stress.
-- **Layout / Interaction** — latest status has advanced through L003/I002. Consume canonical states such as store unavailable, privacy stale/blocked, locale unsupported/planned and P0 failure/recovery rather than disconnected mock states.
-- **Color** — semantic states exist before visual encoding; color cannot be the sole carrier of meaning.
+- **Web Design** — still no substantive W### at latest check. Web Manager truth/control records and derived impact states are inputs only; Web Design owns page hierarchy, review-state presentation, CTA treatment, disclosure salience, responsive composition and browser/device validation.
+- **Layout / Interaction** — latest specialist status is through L003 and I003. I003 confirms that interaction-critical states must survive authored color-channel loss. Future web review states such as `STALE`, `NEEDS_REVIEW`, `BLOCKED`, direct impact and transitive impact must therefore have textual/structural/programmatic meaning rather than color-only encoding.
+- **Typography / Type** — generated Korean/English feature/legal/privacy/support/review-state strings remain useful fallback/wrapping/zoom stress inputs.
+- **Color** — semantic state exists before visual encoding; color is reinforcement, not sole meaning.
 
 ## Important open items
 
@@ -184,11 +171,15 @@ The POC remains blocked on provider accounts/domain authority.
 - real App Store Connect / Play Console state ingestion and country/region granularity;
 - SDK/analytics/ads/auth/processors/data flows and processing locations;
 - legal applicability/signoff process;
-- semantic fingerprint implementation and deterministic canonicalization;
-- dependency graph / derived release-impact generation;
+- full RFC 8785/JCS conformance validation;
+- record-type-specific semantic projections;
+- typed dependency edges and severity;
+- dependency-cycle detection;
+- downstream approval/freshness binding using recorded upstream fingerprints;
 - localization source-revision invalidation;
-- screenshot-to-release compatibility;
-- dependency-cycle detection and schema migrations;
+- screenshot-to-release compatibility invalidation;
+- derived release-manifest generation and approval/waiver flow;
+- Git commit-to-snapshot automation;
 - pinned validator/CI implementation;
 - provider accounts/domain authority and POC execution;
 - final hosting/framework/CMS/monitoring choice;
@@ -198,7 +189,7 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Next research queue
 
-1. **Semantic fingerprint + dependency/invalidation + derived release-impact validation.** Change one upstream canonical record, distinguish semantic from formatting-only changes, compute downstream records needing review and emit a non-canonical impact report.
+1. **Cycle detection + typed dependency edges + approval/freshness binding.** Prove at least one downstream class (localization or claim) becomes stale/release-blocking when its recorded upstream fingerprint no longer matches, and distinguish informational impact from release-blocking impact.
 2. Execute Firebase Hosting vs Cloudflare Workers POC when accounts/domain authority are available.
 3. Use the POC for Design Studio real-browser Korean/English/accessibility/layout/type/color transfer validation.
 4. Apply Legal Trigger Registry when actual entity/market/audience/data/transaction facts are available.
@@ -207,6 +198,7 @@ The POC remains blocked on provider accounts/domain authority.
 ## Persistence state
 
 - `AGENTS.md` contains autonomous continuous-learning rules.
-- `research/README.md` indexes 001–017.
-- Studies 016–017 have executable practice artifacts under `control/` and `tools/`.
+- `research/README.md` indexes 001–018.
+- Studies 016–018 have executable PRACTICE artifacts under `control/` and `tools/`.
+- Study 018 adds `tools/compute_impact.py` and `control/tests/impact_cases.json`.
 - This file is the current operational checkpoint.

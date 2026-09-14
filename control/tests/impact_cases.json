@@ -1,0 +1,66 @@
+[
+  {
+    "name": "metadata-only-change-no-invalidation",
+    "before_records": [
+      {"id":"data:example:analytics","record_type":"data_practice","status":"VERIFIED","practice":"Product analytics","updated_at":"2026-09-14T01:00:00Z"},
+      {"id":"surface:example:privacy","record_type":"operational_surface","status":"VERIFIED","source_refs":["data:example:analytics"]},
+      {"id":"legal:example:privacy","record_type":"legal_trigger","status":"VERIFIED","required_surface_refs":["surface:example:privacy"]}
+    ],
+    "after_records": [
+      {"id":"data:example:analytics","record_type":"data_practice","status":"VERIFIED","practice":"Product analytics","updated_at":"2026-09-14T02:00:00Z"},
+      {"id":"surface:example:privacy","record_type":"operational_surface","status":"VERIFIED","source_refs":["data:example:analytics"]},
+      {"id":"legal:example:privacy","record_type":"legal_trigger","status":"VERIFIED","required_surface_refs":["surface:example:privacy"]}
+    ],
+    "expected": {"added":[],"removed":[],"modified":[],"direct_impact":[],"transitive_impact":[],"review_set":[]}
+  },
+  {
+    "name": "property-order-change-no-invalidation",
+    "before_records": [
+      {"id":"feature:example:portfolio","record_type":"feature","status":"VERIFIED","feature_state":"SHIPPED"}
+    ],
+    "after_records": [
+      {"feature_state":"SHIPPED","status":"VERIFIED","record_type":"feature","id":"feature:example:portfolio"}
+    ],
+    "expected": {"added":[],"removed":[],"modified":[],"direct_impact":[],"transitive_impact":[],"review_set":[]}
+  },
+  {
+    "name": "semantic-data-practice-change-propagates",
+    "before_records": [
+      {"id":"data:example:analytics","record_type":"data_practice","status":"VERIFIED","practice":"Product analytics"},
+      {"id":"surface:example:privacy","record_type":"operational_surface","status":"VERIFIED","source_refs":["data:example:analytics"]},
+      {"id":"legal:example:privacy","record_type":"legal_trigger","status":"VERIFIED","required_surface_refs":["surface:example:privacy"]}
+    ],
+    "after_records": [
+      {"id":"data:example:analytics","record_type":"data_practice","status":"VERIFIED","practice":"Product analytics and diagnostics"},
+      {"id":"surface:example:privacy","record_type":"operational_surface","status":"VERIFIED","source_refs":["data:example:analytics"]},
+      {"id":"legal:example:privacy","record_type":"legal_trigger","status":"VERIFIED","required_surface_refs":["surface:example:privacy"]}
+    ],
+    "expected": {"added":[],"removed":[],"modified":["data:example:analytics"],"direct_impact":["surface:example:privacy"],"transitive_impact":["legal:example:privacy"],"review_set":["data:example:analytics","legal:example:privacy","surface:example:privacy"]}
+  },
+  {
+    "name": "added-upstream-record-propagates",
+    "before_records": [
+      {"id":"data:example:analytics","record_type":"data_practice","status":"VERIFIED","processor_refs":[]},
+      {"id":"surface:example:privacy","record_type":"operational_surface","status":"VERIFIED","source_refs":["data:example:analytics"]}
+    ],
+    "after_records": [
+      {"id":"processor:example:cloud","record_type":"processor","status":"VERIFIED"},
+      {"id":"data:example:analytics","record_type":"data_practice","status":"VERIFIED","processor_refs":["processor:example:cloud"]},
+      {"id":"surface:example:privacy","record_type":"operational_surface","status":"VERIFIED","source_refs":["data:example:analytics"]}
+    ],
+    "expected": {"added":["processor:example:cloud"],"removed":[],"modified":["data:example:analytics"],"direct_impact":["surface:example:privacy"],"transitive_impact":[],"review_set":["data:example:analytics","processor:example:cloud","surface:example:privacy"]}
+  },
+  {
+    "name": "removed-upstream-record-preserves-old-edge-impact",
+    "before_records": [
+      {"id":"data:example:analytics","record_type":"data_practice","status":"VERIFIED","practice":"Product analytics"},
+      {"id":"surface:example:privacy","record_type":"operational_surface","status":"VERIFIED","source_refs":["data:example:analytics"]},
+      {"id":"legal:example:privacy","record_type":"legal_trigger","status":"VERIFIED","required_surface_refs":["surface:example:privacy"]}
+    ],
+    "after_records": [
+      {"id":"surface:example:privacy","record_type":"operational_surface","status":"VERIFIED","source_refs":["data:example:analytics"]},
+      {"id":"legal:example:privacy","record_type":"legal_trigger","status":"VERIFIED","required_surface_refs":["surface:example:privacy"]}
+    ],
+    "expected": {"added":[],"removed":["data:example:analytics"],"modified":[],"direct_impact":["surface:example:privacy"],"transitive_impact":["legal:example:privacy"],"review_set":["data:example:analytics","legal:example:privacy","surface:example:privacy"]}
+  }
+]
