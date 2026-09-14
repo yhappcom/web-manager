@@ -7,81 +7,40 @@ Platforms: iOS / App Store, Android / Google Play
 
 ## Mission state
 
-The Web Manager owns MintTap company website content, app-launch web requirements and the operational consistency of public web surfaces. Production implementation has not yet been assigned; the current priority is building a reliable professional baseline that can later drive provider selection and implementation.
+The Web Manager owns MintTap company website content, app-launch web requirements and the operational consistency of public web surfaces. Production implementation has not yet been assigned. Current priority is completing a defensible Foundation that can drive actual technology/provider selection and later production validation.
 
 When no live MintTap web task is pending, self-directed study continues. Every substantial block is saved in this repository and this status is updated before moving to a materially different topic.
 
 ## Completed foundation studies
 
-### 001 — App Launch Website Foundations
-Established Apple/Google launch requirements covering privacy, support, account deletion, app↔web association, advertising verification and launch-time policy revalidation.
+1. **001 App Launch Website Foundations** — privacy/support/account deletion, app↔web association, advertising verification and policy revalidation.
+2. **002 Multi-App Information Architecture** — company → apps → app → support/control/governance hierarchy and durable URL/navigation rules.
+3. **003 Privacy / Support / Account Deletion** — per-app surfaces and App Data Contract.
+4. **004 Store ↔ Website Synchronization** — Product Truth Record, Screenshot Evidence Set, Content Release Manifest.
+5. **005 Domain / Hosting / Security** — HTTPS/TLS, verification files, caching, security headers, DNS, secrets, rollback/monitoring contract.
+6. **006 Accessibility Production Baseline** — WCAG 2.2 AA internal target, semantic HTML, keyboard/focus, reflow, text enlargement, forms/status, manual validation.
+7. **007 Localization Architecture** — `/ko/` and `/en/`, HTML language, reciprocal hreflang, Locale Matrix, Localization Manifest.
+8. **008 SEO / Structured Data / Crawlability** — canonical, robots, sitemap, conservative schema and Search Console.
+9. **009 SEO Independent Verification / Social Preview** — route indexability classes, robots vs noindex, localized title/meta and Open Graph baseline.
+10. **010 Company / App Marketing Content Model** — Claim Registry, evidence/screenshots, feature hierarchy, trust/store CTA, price/subscription and stale-claim controls.
+11. **011 Operational Release & Change-Watch Controls** — continuous operational verification, Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, release gates, incident severity and ownership continuity.
 
-### 002 — Multi-App Company Website Information Architecture
-Established company → apps → support/control/governance hierarchy, durable per-app pages and baseline URL/navigation principles.
-
-### 003 — Privacy, Support & Account-Deletion Content Architecture
-Established per-app privacy/support/account-deletion surfaces and an **App Data Contract** that reconciles actual app/backend/SDK behavior with Apple App Privacy, Google Data safety and website disclosures.
-
-### 004 — Store ↔ Website Content Synchronization
-Established a **Product Truth Record**, **Screenshot Evidence Set** and **Content Release Manifest**. Store and website copy may differ in expression but may not contradict the same product truth.
-
-### 005 — Domain, Hosting & Security Baseline
-Established a provider-independent production contract: HTTPS/TLS baseline, staged HSTS, exact no-redirect Apple/Android association endpoints, cache classes, security-header direction, DNSSEC/CAA guidance, secret handling, rollback and monitoring requirements.
-
-### 006 — Accessibility Production Baseline
-Adopted WCAG 2.2 AA as the internal web production target and established semantic HTML, keyboard/focus, reflow, text enlargement, forms/errors/status, target geometry and automated+manual validation gates.
-
-### 007 — Localization Architecture
-- Preferred scalable locale paths: `/ko/...` and `/en/...` initially.
-- Localized pages self-canonicalize, declare the correct document language and connect through reciprocal `hreflang`.
-- Automatic locale redirection is not the primary architecture; explicit locale URLs remain reachable.
-- Established **Locale Matrix** and **Localization Manifest**.
-- Website/store/app UI localization remain separate facts.
-- Real Korean/English typography, fallback and long-label browser proof remains OPEN.
-- Canonical study: `research/007-localization-architecture.md`.
-
-### 008 — SEO, Structured Data, Sitemap, Canonical & Crawlability
-- Established final-HTTPS self-canonical rules and localized canonical/hreflang consistency.
-- Defined public crawlability contract and minimal `robots.txt` policy.
-- Defined XML sitemap inclusion/exclusion rules.
-- Established conservative `Organization`, conditional `SoftwareApplication` and visible-hierarchy `BreadcrumbList` direction.
-- Added Search Console ownership/continuity, indexing/canonical monitoring and structured-data change watch.
-- Canonical study: `research/008-seo-structured-data-crawlability.md`.
-
-### 009 — SEO Independent Verification & Social Preview Metadata
-- Formalized **A discoverable public / B public noindex / C private access-controlled** route classes.
-- Reconfirmed that robots is crawl management, not privacy or reliable de-indexing.
-- Established localized title/meta-description rules.
-- Established Product-Truth-governed Open Graph baseline and social-preview validation requirements.
-- Canonical companion study: `research/009-seo-independent-verification-social-preview.md`.
-
-### 010 — Company / App Marketing Content Model
-- Confirmed from current Apple and Google primary sources that app marketing/metadata must not misrepresent actual functionality; Apple explicitly treats misleading app marketing outside the App Store and false pricing as enforcement risks.
-- Established marketing as a **downstream presentation layer over Product Truth**, not an independent factual database.
-- Established a **Claim Registry** with claim classes: product fact, user-value interpretation, quantified claim, testimonial/review, comparative claim and future/roadmap claim.
-- Required evidence/provenance, verification date, locale/surface conditions and invalidation/review triggers for material claims.
-- Established an app-page content contract: identity/value → user problem/context → primary/supporting/conditional capabilities → evidence/screenshots → availability/purchase conditions → trust → official store CTA → support/privacy/account controls.
-- Screenshots are treated as evidence with app/platform/version/locale/feature/capture provenance and staleness triggers; concepts/future UI must be clearly labeled rather than passed off as current product.
-- Established company-home role as publisher/portfolio orientation rather than repetition of every app page.
-- Established price/subscription disclosure principles and high-risk-claim handling for security/privacy, quantified performance, rankings/awards, comparisons, absolutes and roadmap timing.
-- Marketing localization may adapt wording but may not strengthen claims, omit material conditions or imply app UI localization that is not shipped.
-- Added marketing-claim, screenshot, store-CTA and roadmap invalidation fields to the Content Release Manifest.
-- Canonical study: `research/010-company-app-marketing-content-model.md`.
+Canonical details remain in `research/001...011`.
 
 ## Current maturity
 
 Stage: **Foundation**
-State: **IN STUDY — architecture/evidence base expanding**
+State: **IN STUDY — architecture / policy / operations baseline substantially established**
 
-Reading alone is not PASS. Policy findings require freshness checks; architecture/security/accessibility/localization/search/social/marketing findings require implementation on real pages, browsers, devices, locales, search tools, social channels, store consoles and actual app releases before production confidence.
+Reading alone is not PASS. Policy, architecture, security, accessibility, localization, search/social, marketing and operational controls require implementation on real pages, stores, devices, browsers and production systems before production confidence.
 
 ## Current public information architecture
 
 Preferred localized human-facing pattern:
 - `/ko/`, `/en/` — localized company/home surfaces; final root strategy remains OPEN.
-- `/ko/apps/`, `/en/apps/` — localized app portfolio.
-- `/ko/apps/<app-slug>/`, `/en/apps/<app-slug>/` — localized durable app pages.
-- localized `support/`, `privacy/`, and `account-deletion/` child pages as applicable.
+- `/ko/apps/`, `/en/apps/` — app portfolio.
+- `/ko/apps/<app-slug>/`, `/en/apps/<app-slug>/` — durable app pages.
+- localized app `support/`, `privacy/`, `account-deletion/` child pages as applicable.
 - localized company support/privacy/contact/terms resources where substantively available.
 
 Language-neutral machine endpoints:
@@ -89,22 +48,19 @@ Language-neutral machine endpoints:
 - `/.well-known/assetlinks.json`
 - `/app-ads.txt`
 
-### Root `/` remains OPEN
-Acceptable candidates:
-1. language-neutral/x-default entry or selector; or
-2. a deliberate default-language home with explicit alternate-language links.
+Root `/` remains OPEN between a language-neutral/x-default entry and a deliberate default-language home.
 
-Do not finalize until primary audience/market strategy is known.
-
-## Internal truth/control artifacts
+## Internal truth / control artifacts
 
 - **App Data Contract** — actual data collection, SDK/processors, purposes, sharing, retention/deletion and account behavior.
-- **Product Truth Record** — current shipped capabilities, identity, availability, account/subscription behavior and destinations.
-- **Screenshot Evidence Set** — version/platform/locale/feature provenance.
-- **Claim Registry** — material marketing claim, class, evidence, approved locale expressions, conditions, owner, verification/expiry/invalidation state and surfaces using it.
+- **Product Truth Record** — shipped capabilities, identity, availability, account/subscription behavior and official destinations.
+- **Screenshot Evidence Set** — app/platform/version/locale/feature provenance and staleness.
+- **Claim Registry** — material marketing claims, evidence, approved locale expression, owner, expiry/invalidation state and surfaces using them.
 - **Content Release Manifest** — release impact across web/store/privacy/support/localization/assets/infrastructure/accessibility/search/social/marketing.
 - **Locale Matrix** — app UI vs website vs store metadata vs privacy/support/deletion/screenshot locale coverage.
-- **Localization Manifest** — source revision, target locale, glossary/reviewer, approval/staleness and surface coverage.
+- **Localization Manifest** — source revision, target locale, reviewer, approval/staleness and surface coverage.
+- **Policy Change Register** — policy source, announcement/effective dates, impact, owner, action, severity and verification status.
+- **Operational Surface Registry** — production URL/console surface, expected behavior, owner, monitoring method/cadence, last validation, severity and runbook.
 
 Exact machine-readable storage schemas remain OPEN.
 
@@ -122,126 +78,135 @@ Exact machine-readable storage schemas remain OPEN.
 
 - WCAG 2.2 AA internal target.
 - Native semantic HTML before custom ARIA widgets.
-- Logical page titles/headings/landmarks and bypass mechanism.
-- Required functionality keyboard-operable, visible logical focus and no traps/obscuration.
+- Logical page title/headings/landmarks and bypass mechanism.
+- Full keyboard operation, visible logical focus, no traps/obscuration.
 - 320 CSS px-equivalent reflow and 200% text enlargement without loss of content/functionality.
 - Persistent programmatic form labels; textual errors and programmatic dynamic status.
-- 24×24 CSS px target criterion treated as minimum floor, not preferred design size.
-- Correct page language metadata.
 - Automated scanners assist but cannot independently produce PASS.
 
-## Localization baseline
+## Localization / search / marketing baseline
 
-- Locale-specific crawlable URLs, not one URL whose language silently varies.
-- Initial architecture uses `ko` and `en`; region subtags only when real regional distinctions exist.
-- `<html lang>` uses BCP 47-compatible values.
-- Each translated page self-canonicalizes; language variants connect through reciprocal `hreflang`.
-- User-controlled language switching uses ordinary links and preserves the equivalent current task/page where possible.
-- Translation must preserve Product Truth, App Data Contract and Claim Registry meaning.
-- Privacy/account-control translation prioritizes substantive equivalence over marketing adaptation.
-- Support localization must correspond to the UI/version users actually see.
-- Korean/English text growth, fallback, wrapping, mixed-script metrics and 200%/320px behavior require real-browser proof.
+- Locale-specific crawlable URLs; `ko` and `en` initially.
+- Each translated page self-canonicalizes and uses reciprocal `hreflang`.
+- App UI, website and store localization remain separate facts.
+- Public pages default to discoverable/indexable unless a documented reason exists.
+- `robots.txt` is not secrecy/access control and is not a reliable de-indexing tool by itself.
+- Sitemap contains final canonical indexable URLs only.
+- Structured data describes only real visible facts; no fabricated ratings/reviews/pricing/entity data.
+- Social previews must align with Product Truth / Screenshot Evidence / locale support.
+- Marketing facts derive from Product Truth/App Data Contract/evidence; copy does not create facts.
+- High-risk claims require evidence/provenance and invalidation rules.
+- Screenshots/videos represent real current product or are clearly labeled as concept/future.
 
-## Search / discovery / social baseline
+## Operational release / change-watch baseline
 
-### Indexability classes
-- **A — discoverable public:** default for company/app/support/privacy/account-control pages intended to be found.
-- **B — public/noindex:** exceptional public utility pages with a documented reason.
-- **C — private:** staging/internal/admin/draft material protected through actual access control.
+### Policy watch
 
-### Search contract
-- Every indexable public page has one final HTTPS URL and explicit self-consistent canonical.
-- Localized pages keep their own canonical and reciprocal hreflang relationships.
-- Public pages expose meaningful visible content and crawlable links; metadata/JSON-LD cannot substitute for real content.
-- `robots.txt` is not secrecy/access control and is not the sole de-indexing mechanism.
-- XML sitemap contains final canonical indexable URLs only.
-- Each important indexable page gets a unique localized title/meta description aligned with visible content and Product Truth.
-- Structured data describes only visible/real facts; no fabricated ratings/reviews, pricing, legal identity or contact data.
-- Search Console ownership, sitemap submission, URL Inspection and canonical/indexing monitoring are production operations.
+- Apple App Review Guidelines, Developer News changes and Upcoming Requirements are watched sources.
+- Google Play Policy Announcements, Policy Deadlines and Policy Archive are watched sources.
+- Search Central documentation updates are a watched feed.
+- Applicable Android App Links / AdMob app-ads documentation becomes watched when those features are active.
 
-### Social preview contract
-- Share-worthy pages use localized Open Graph title/description.
-- `og:url` equals the final locale canonical URL.
-- `og:image` is a stable publicly fetchable HTTPS asset.
-- Social preview copy/images may not contradict Product Truth, Screenshot Evidence, Claim Registry or real locale support.
-- Platform-specific preview/card/cache behavior requires validation on actual channels adopted by MintTap.
+A source change triggers relevance assessment; it does not automatically create a product change.
 
-## Marketing content baseline
+### Monitoring layers
 
-- Marketing facts derive from Product Truth/App Data Contract/evidence; copy does not create new facts.
-- Every material/high-risk claim should have Claim Registry provenance.
-- High-risk claim classes include price/payment, privacy/security, quantified performance/accuracy, user count/ranking/award, comparison, outcome implications, absolutes and roadmap timing.
-- Feature hierarchy distinguishes primary, supporting and conditional/advanced capabilities.
-- Material purchase/account/platform/network/permission conditions appear near the relevant claim rather than being hidden far away.
-- Screenshots and videos must represent real current experience or be explicitly labeled as concept/future.
-- Store badges are official destination controls and must link to the correct current app; they are not the page's main value proposition.
-- Support, privacy and account controls are trust/product surfaces, not expendable footer clutter.
-- Korean/English marketing may differ editorially but may not differ materially in promise or qualification.
+1. **Deploy-time validation** — critical URL, redirect, Privacy/Support/Deletion, store destination, verification files, robots/noindex/canonical/hreflang, accessibility smoke and evidence approval.
+2. **Scheduled synthetic checks** — critical URLs/machine endpoints hourly-or-better when monitoring exists; TLS/certificate and store-link/site-metadata sanity on an appropriate recurring schedule.
+3. **Event-driven watches** — App Store Connect webhooks, Play policy communications, Search update feed, deployments/releases, SDK/data/auth/ads changes and claim/screenshot invalidation.
+4. **Human freshness review** — full affected-app review before every app release; weekly policy/deadline review; monthly evidence/content parity review; quarterly ownership/access/alert continuity review.
+
+These cadences are MintTap operating defaults, not platform-mandated intervals.
+
+### Propagation-aware validation
+
+- AASA origin success does not mean immediate Apple CDN/device convergence; Apple documents CDN request timing and roughly weekly device refresh after install.
+- Android App Links require actual domain verification, and Android tooling supports forced re-verification for testing.
+- app-ads.txt origin correctness is separate from AdMob recognition, which may take days and sometimes longer.
+- Search indexing/social preview cache delays are not automatically release blockers when production origin/configuration is correct and the propagation delay is understood.
+
+### Release close condition
+
+A release is not operationally complete merely because the deployment or store review succeeded.
+
+Post-release validation checks actual live store destinations, website CTA, released product/support/privacy/deletion alignment, changed deep links, production canonical/locale metadata, relevant social previews and monitoring/webhook health.
+
+## Incident severity
+
+### P0 — user / distribution critical
+Examples: domain/HTTPS outage; required Privacy/Support/Deletion unavailable; material privacy mismatch; wrong critical store destination; broken core deep-link verification; false account-deletion outcome.
+
+### P1 — high
+Examples: stale material price/subscription claim; misleading screenshot/claim; material locale contradiction; app-ads origin failure on monetized app; significant canonical/noindex/indexing configuration error; broken notification path with no fallback owner.
+
+### P2 — normal
+Examples: non-critical social preview stale; minor search title quality issue; non-material help article staleness with a correct current support route.
+
+Severity follows user/policy/distribution impact, not visual prominence.
 
 ## Current release blockers model
 
-Examples include:
+Includes:
 - privacy/data-disclosure mismatch;
 - required support/privacy/deletion URL broken;
-- non-existent feature presented as shipped;
-- materially incorrect account/subscription instructions;
-- misleading screenshots/social previews;
+- unshipped feature presented as current;
+- materially incorrect account/subscription/price instructions;
+- misleading/stale critical screenshots or claims;
 - inaccessible launch-critical support/account-control flow;
-- association files redirected/malformed when required;
-- localized content materially contradicting source product/data truth;
-- website/store/social content claiming app UI language support that is not shipped;
-- canonical/hreflang pointing to wrong app/locale/staging/redirect targets;
-- production accidentally retaining staging `noindex` or crawl blocks;
-- sitemap publishing staging/obsolete/wrong-host URLs;
-- private material protected only by robots/noindex;
-- fabricated ratings/reviews/pricing/entity facts in structured data;
-- material marketing claim with no evidence/provenance;
-- stale/false price or subscription condition;
-- unsupported ranking/award/quantified claim;
-- roadmap/concept presented as current functionality;
-- official store badge linking to the wrong/unavailable app;
-- Korean and English pages making materially different product promises.
+- required AASA/App Links broken or malformed;
+- DNS/TLS/production host failure;
+- localized content materially contradicting Product Truth;
+- website/store/social claim of app UI locale support that is not shipped;
+- canonical/hreflang pointing to wrong app/locale/staging target;
+- production staging `noindex`/crawl rules;
+- fabricated structured-data/marketing evidence;
+- wrong/unavailable official store destination.
+
+## Ownership / continuity principle
+
+No launch-critical operational capability may exist only in one person's memory/account.
+
+Production must eventually document ownership/recovery for registrar, DNS/CDN/hosting, Apple Developer/App Store Connect, Google Play Console, policy recipients, Search Console, monitoring alerts, CI/CD, support/privacy inboxes and P0/P1 escalation.
+
+Secrets are never stored in this repository.
 
 ## Important open items
 
-- Exact MintTap legal entity/public contact information.
-- Exact app inventory, released versions, account behavior, pricing and locale support.
-- Exact SDK/analytics/ads/auth/processors/data flows.
-- Internal artifact storage schemas and release ownership roles.
-- Hosting/CDN/DNS/SSL provider selection and real audit.
-- Universal/App Link route inventory.
-- app-ads.txt publisher/vendor lines.
-- Root `/` language/x-default behavior.
-- Source-authoring language per content stream.
-- Translation tooling/vendor/reviewer workflow and SLA.
-- Locale-aware date/number/currency implementation.
-- Real Korean/English browser/type/fallback validation.
-- Search Console organizational ownership/access model.
-- Actual app categories/pricing/store IDs and whether legitimate review/rating data suitable for structured markup exists.
-- Which support pages should be indexable vs selectively excluded based on value/risk.
-- Final social distribution channels and preview-image art direction/dimensions.
-- Per-app primary audience/problem evidence, legitimate quantified metrics/testimonials and screenshot approval workflow.
-- Final company positioning and current official Google Play badge/brand requirements at implementation time.
-- Jurisdiction-specific legal/compliance requirements once launch regions and data practices are fixed.
+- exact MintTap legal entity/public contact information;
+- exact app inventory, released versions, pricing, account behavior and locale support;
+- exact SDK/analytics/ads/auth/processors/data flows;
+- storage schemas for internal control artifacts;
+- release approval/console ownership roles;
+- hosting/CDN/DNS/CMS/framework/deployment/monitoring provider selection;
+- Universal/App Link route inventory;
+- actual app-ads.txt use and publisher/vendor lines;
+- root `/` locale strategy;
+- translation tooling/reviewer workflow;
+- locale-aware number/date/currency behavior;
+- real Korean/English browser/type/fallback validation;
+- Search Console organizational ownership;
+- company/group email addresses for policy/alerts;
+- App Store Connect webhook receiver/backend;
+- escalation SLA/on-call expectations;
+- jurisdiction-specific legal/compliance requirements once markets/data practices are fixed.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — turn the new app-page content contract into real scan paths, responsive hierarchy, evidence/screenshot composition, trust surfaces, badge placement and browser/device validation. Current Web Design state remains Foundation/not yet baselined, so this study does not dictate one visual template.
-- **Typography / Type** — validate Korean/English hero/title/feature/qualification lengths, mixed-script product names, annotation typography, wrapping and zoom/reflow.
-- **Layout / Interaction** — validate CTA priority, capability/evidence grouping, purchase/platform limitation disclosure, galleries/carousels when used, support/privacy routing and mobile recomposition.
-- **Color** — validate CTA/state hierarchy, screenshot framing, brand semantics, disabled/unavailable destinations and focus/hover behavior without fake trust-badge semantics.
+- **Web Design** — real responsive page systems, operational/error/maintenance states, metadata generation and browser/device production validation. Current Web Design remains Foundation/not yet baselined.
+- **Typography / Type** — Korean/English headings, qualifications, support/error/legal strings, wrapping/fallback and zoom/reflow.
+- **Layout / Interaction** — CTA priority, support/account-control recovery, maintenance/error/retry, modal/focus/navigation behavior and responsive recomposition.
+- **Color** — semantic state/focus/disabled/unavailable behavior and operational notices without mechanically mapping internal severity colors to user-facing semantics.
 
 ## Next research queue
 
-1. **Operational release / change-watch controls:** policy freshness, broken links, verification files, indexing, social previews, screenshots, Claim Registry staleness and store availability.
-2. Jurisdiction-specific legal/compliance web requirements when entity, markets and actual data practices are known.
-3. Implementation/provider comparison after the Foundation evidence baseline is mature enough to score hosting/CMS/framework candidates.
-4. Real-browser Korean/English localization/accessibility/type/search/social/marketing transfer validation once an implementation exists.
-5. App-specific user/market evidence when actual MintTap product pages are assigned.
+1. **Implementation/provider comparison methodology and candidate scoring** — evaluate hosting/CDN/CMS/framework/deployment/monitoring options against Studies 002–011 rather than popularity.
+2. Jurisdiction-specific legal/compliance web requirements when entity, launch regions and actual data practices are known.
+3. Real-browser Korean/English localization/accessibility/type/search/social/marketing transfer validation once an implementation exists.
+4. App-specific user/market evidence when actual product pages are assigned.
 
 ## Persistence state
 
 - `AGENTS.md` contains the autonomous continuous-learning directive.
-- `research/README.md` indexes studies 001–010.
+- `research/README.md` indexes studies 001–011.
 - Completed study details are canonical in `research/`.
 - This file is the current operational checkpoint.
