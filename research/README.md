@@ -10,7 +10,7 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `SYNTHESIS` — conclusion derived from multiple sources or evidence.
 - `MINTTAP DECISION` — project-specific operating/design choice.
 - `OPEN` — unresolved or not yet validated.
-- `DEPENDENCY` — information or work needed elsewhere.
+- `DEPENDENCY` — external information or specialist work needed.
 - `VALIDATION` — practical proof needed before production confidence.
 - `CHANGE WATCH` — policy/standard/platform detail requiring later re-checking.
 
@@ -40,12 +40,15 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `022-protected-policy-quorum-revocation-workflow-trust.md` — protected policy ownership, quorum/revocation, break-glass and workflow trust boundaries; 10/10 expected outcomes.
 - `023-provider-neutral-active-workflow-trust-boundary.md` — four-zone PR validation/trusted build/deploy/rollback contract, artifact-digest binding and provider credential boundary; 12/12 expected outcomes.
 - `024-firebase-cloudflare-provider-edge-contract-mapping.md` — current Firebase Hosting vs Cloudflare Workers/Static Assets mapping for preview, exact-version promotion, rollback, credentials, routing and static response controls; 11/11 expected outcomes.
+- `025-identical-provider-poc-corpus-http-assertion.md` — deterministic synthetic provider-neutral corpus, artifact digest manifest and identical preview/production HTTP assertion contract; 8/8 controlled outcomes.
 
 ## Practice artifacts
 
-Current synthetic validation corpus includes the earlier 016–023 schemas/tests/tools plus:
-- `control/tests/provider_edge_contract_cases.json`;
-- `tools/validate_provider_edge_contract.py`.
+Current synthetic validation corpus includes the earlier 016–024 schemas/tests/tools plus:
+- `control/poc/http_contract.json`;
+- `control/tests/poc_http_assert_cases.json`;
+- `tools/build_poc_corpus.py`;
+- `tools/poc_http_assert.py`.
 
 These are synthetic research fixtures, not actual MintTap product/legal/store facts.
 
@@ -53,16 +56,16 @@ These are synthetic research fixtures, not actual MintTap product/legal/store fa
 
 See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
-1. prepare an identical provider POC corpus + provider-neutral HTTP assertion runner locally: Korean/English pages, support/privacy/app routes, machine files, 404, canonical redirects, cache/security headers, sitemap/robots and release artifact digest manifest;
+1. prepare provider-specific **deployment adapters/configuration** for the exact 025 corpus without changing its bytes or HTTP contract: Firebase Hosting config/preview/live clone path and Cloudflare Workers Static Assets config/version upload/deploy path; keep credentials disabled and live deployment blocked until accounts/domain authority exist;
 2. execute the live Firebase Hosting vs Cloudflare Workers/Static Assets POC when provider accounts/domain authority are available;
-3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation on that POC;
-4. apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
-5. app-specific user/market evidence when actual product pages are assigned.
+3. run the same 025 HTTP assertion runner against both preview and production origins and compare only externally observable results;
+4. use the live POC for real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation;
+5. apply Legal Trigger Registry and app-specific evidence when real MintTap product facts are available.
 
 ## Design Studio relationship
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web decisions and production findings stay here first.
 
-Latest checked state: Web Design still has no substantive `W###`. Provider behavior is not a visual-design decision, but future browser validation must explicitly test canonical URLs, preview indexation, 404 recovery, cache/security headers, machine endpoints and the real provider routing behavior before design/accessibility transfer is considered complete.
+Latest checked state: Web Design still has no substantive `W###`. The 025 corpus is infrastructure/test evidence, not a visual template. Future Web validation should explicitly test real provider canonical redirects, preview indexation, true 404 recovery, localized routing, history/keyboard behavior, cache/security headers and machine endpoints before production design/accessibility transfer is considered complete.
 
 When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record it here first and hand it back to the appropriate specialist when justified.
