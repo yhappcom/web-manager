@@ -2,51 +2,47 @@
 
 This directory is the source-grounded learning and decision-support layer for the MintTap company website and `minttap.app` domain.
 
-The purpose is not to accumulate generic web articles. Each study must improve professional judgment for a real MintTap website/app launch, establish a reusable operating rule, expose an unresolved risk, or define a validation method.
+The objective is professional judgment for real Apple/Android app launches and website operations, not generic article accumulation.
 
 ## Curriculum model
 
-The canonical curriculum is `../LEARNING_ROADMAP.md`.
+Canonical curriculum: `../LEARNING_ROADMAP.md`.
 
-Learning proceeds systematically from beginner fundamentals to advanced/expert judgment. Existing studies are retained as prior evidence but do not allow missing prerequisites to be skipped.
-
-Each major topic matures through `FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT`.
-
-### Depth and cadence rule
-
-Large domains are not marked complete after one short survey. Study should follow:
+Learning proceeds `FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT` and normally follows:
 
 `history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`
 
-Depth remains high, but persistence/reporting is intentionally coarse. Several related learning sub-blocks should normally be integrated into one professional knowledge checkpoint instead of generating one file/report per small concept.
-
-A foundation core may close when it can be explained, diagnosed and applied at the level required by the curriculum; the same domain can and should be reopened later for advanced security, performance, SEO, accessibility, browser or operations depth.
+Depth remains high while persistence/reporting remains coarse.
 
 ## Evidence labels
 
-- `SOURCE` — authoritative source explicitly establishes the fact or requirement.
-- `SYNTHESIS` — conclusion derived from multiple sources or evidence.
+- `SOURCE` — authoritative evidence explicitly establishes the fact/requirement.
+- `SYNTHESIS` — transferable conclusion derived from evidence.
 - `MINTTAP DECISION/DIRECTION` — project-specific choice or provisional direction.
 - `OPEN` — unresolved or not yet validated.
-- `DEPENDENCY` — external information or specialist work needed.
+- `DEPENDENCY` — information/work needed elsewhere.
 - `VALIDATION` — practical proof needed before production confidence.
-- `CHANGE WATCH` — policy/standard/platform detail requiring later re-checking.
+- `CHANGE WATCH` — platform/policy/standard behavior requiring re-checking.
 
 ## Completed prior studies 001–026
 
-Studies 001–026 remain retained as prior knowledge spanning launch requirements, IA, privacy/support, content consistency, security, accessibility, localization, SEO, marketing, legal triggers, provider evaluation, release governance and app-company strategy. They are prior knowledge, not the curriculum order going forward.
+Studies 001–026 remain retained prior knowledge across launch requirements, IA, privacy/support, content consistency, security, accessibility, localization, SEO, marketing, legal triggers, provider evaluation, release governance and app-company strategy. They are evidence, not the curriculum order.
 
-## Sequential curriculum studies
+---
+
+# Sequential curriculum studies
+
+## Stage 1 — Web Foundations
 
 ### 027 — Web / Internet / URL / Origin
 `027-web-foundations-internet-web-client-server-url-origin.md`
 
-**FOUNDATION LAYER COMPLETE.** Internet ≠ Web; client/server roles; resource vs representation; URL; host/domain/origin; origin security significance; failure-layer model.
+**FOUNDATION LAYER COMPLETE.**
 
 ### 028 — DNS / Domain / Resolution
 `028-web-foundations-dns-domain-resolution-hosting-path.md`
 
-**FOUNDATION LAYER COMPLETE.** DNS hierarchy/delegation; resolver/authority; records; TTL/cache; registration/delegation/hosting separation; DNS failure diagnosis.
+**FOUNDATION LAYER COMPLETE.**
 
 ### 029 — HTTP
 **STAGE 1 HTTP CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
@@ -60,116 +56,160 @@ Supporting/integrated artifacts:
 ### 030 — HTTPS / TLS / Certificates / Browser Trust
 `030-https-tls-certificates-browser-trust-integrated-foundations.md`
 
-**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+**STAGE 1 CORE COMPLETE.**
 
 ### 031 — Browser Document & Runtime Foundations
 `031-browser-document-runtime-html-css-js-dom-accessibility-tree-foundations.md`
 
-**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+**STAGE 1 CORE COMPLETE.**
 
 ### 032 — Application / Rendering / State / Navigation Foundations
 `032-application-rendering-state-navigation-foundations.md`
 
-**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+**STAGE 1 CORE COMPLETE.**
 
 ### 033 — Stage 1 End-to-End Integration & Competency Review
 `033-stage1-end-to-end-integration-competency-review.md`
 
 **STAGE 1 INTEGRATION GATE PASSED.**
 
-The review reconstructs the full path from URL interpretation through DNS, TLS, HTTP/intermediaries/cache, rendering boundaries, HTML→DOM, CSS/resource/layout processing, JavaScript/Web APIs, application state, navigation/history/bfcache and accessibility exposure.
+Reconstructs URL → DNS → TLS → HTTP/cache/intermediaries → rendering → HTML/DOM → CSS/resources/layout → JS/Web APIs → state → navigation/history/bfcache → accessibility exposure.
 
-### 034 — Stage 2 Website Anatomy, Task-Based IA & Content Ownership
+---
+
+## Stage 2 — Website Anatomy / Content / Information Architecture
+
+### 034 — Website Anatomy, Task-Based IA & Content Ownership
 `034-stage2-website-anatomy-task-based-information-architecture-content-ownership.md`
 
-**STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-Establishes app-company websites as marketing + support + governance + store-linked operational surfaces; task-based IA; distinctions among sitemap/URL/navigation/page systems; app identity as a durable context boundary; external-entry contracts; and content ownership/change triggers.
-
-### 035 — Stage 2 Content Modeling, Hierarchy, Lifecycle & Cross-Channel Truth
+### 035 — Content Modeling, Hierarchy, Lifecycle & Cross-Channel Truth
 `035-stage2-content-modeling-hierarchy-lifecycle-cross-channel-truth.md`
 
-**STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-Separates durable content objects from pages/components/channel fields; models App/Feature/Claim/Support/Known Issue/Release/Policy objects; establishes `claim → evidence → condition → action`; distinguishes canonical truth from public/search canonical URLs; and defines change-trigger/localization/retirement governance.
-
-### 036 — Stage 2 Navigation, Wayfinding & Findability as an Operational System
+### 036 — Navigation, Wayfinding & Findability
 `036-stage2-navigation-wayfinding-findability-operational-system.md`
 
-**STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-Establishes navigation as orientation + movement, separates sitemap/hierarchy/URL/navigation/breadcrumb/search/history layers, treats findability as multi-route, defines direct-entry requirements, and provides a critical-destination/failure taxonomy for responsive and accessible navigation.
-
-### 037 — Stage 2 Page Systems, Content Hierarchy & Scan/Comprehension Architecture
+### 037 — Page Systems, Content Hierarchy & Scan/Comprehension Architecture
 `037-stage2-page-systems-content-hierarchy-scan-comprehension-architecture.md`
 
-**STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
-
-Establishes pages as task contracts; semantic/visual/interaction hierarchy separation; page-type selection by user context; decision-critical sequence; heading/scan/comprehension rules; task-dependent density/disclosure; differentiated non-happy states; responsive semantic invariants; localization/reflow stress; and the reusable Page Contract.
+**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
 ### 038 — Stage 2 Integration: Company/App/Support/Governance Page-System Matrix & Competency Review
 `038-stage2-integration-page-system-matrix-competency-review.md`
 
 **STAGE 2 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
-Study 038 does not add another isolated Stage 2 model. It integrates 034–037 across realistic external and internal journeys and establishes:
+Integrated Stage 2 contract:
 
-- one end-to-end contract: `entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`;
-- a company/app/support/governance/error-state page-system matrix;
-- App Store / Google Play / search → app/support/privacy direct-entry tests;
-- support-article → resolution → escalation tests;
-- privacy/account-control direct-entry and destructive-action scope tests;
+`entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`
+
+Key outputs:
+- company/app/support/governance/error-state page-system matrix;
+- direct-entry tests for stores/search/shared links;
+- support resolution→escalation contract;
+- privacy/account-control scope tests;
 - release/known-issue lifecycle tests;
-- differentiated 404/retired/unavailable/unsupported/empty/no-result recovery;
-- Korean/English + narrow-width + enlarged-text/reflow structural invariants;
+- differentiated non-happy-state recovery;
+- KO/EN + narrow-width + enlarged-text/reflow invariants;
 - heading/landmark/meaningful-order gate;
-- an integrated failure taxonomy spanning entry contract, identity/scope, truth, destination, label/scent, hierarchy/sequence, recovery, lifecycle, localization/reflow and semantic exposure;
-- a production handoff package for future Design Studio Web work;
-- explicit OPEN items for real MintTap app inventory, account creation, store URLs, support model, localization, acquisition channels and human usability evidence.
+- integrated failure taxonomy;
+- production Design Studio handoff package.
 
-Current primary evidence was revalidated 2026-09-15 against Apple App Store Connect, Google Play account-deletion/User Data guidance, W3C/WAI page-structure guidance and WCAG-related reflow guidance. Design Studio status and Layout L002 were also re-read; Web Design still has no substantive `W###` evidence, so browser/visual/human validation remains a downstream dependency.
+**Stage 2 COMPLETE at intended foundation/practitioner level.**
+
+---
+
+## Stage 3 — UX & Interaction Foundations
+
+### 039 — User Action, System State, Feedback, Error & Recovery Foundations
+`039-stage3-user-action-system-state-feedback-error-recovery-foundations.md`
+
+**STAGE 3 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
+Study 039 transfers and independently checks Design Studio Interaction evidence rather than duplicating it.
+
+Core model:
+
+`goal → action possibility/signifier → constraint → articulation → requested transition → accepted? → pending/working? → committed state → feedback → recovery/reversal → continuity`
+
+Established:
+- usability vs interaction design vs visual presentation separation;
+- affordance/action possibility vs signifier/discoverability distinction;
+- mapping/scope, availability and commitment truth as separate interaction gates;
+- severity-proportional feedback/interruption;
+- explicit user-facing state modeling before styling;
+- preview/local/persisted/queued/remote/external commitment distinctions;
+- forms as stateful tasks rather than field collections;
+- prevention/constraint/validation/error/suggestion/confirmation/undo/recovery separation;
+- consequence × reversibility protection strategy;
+- async `pending / confirmed / known failed / canceled / outcome unknown` distinctions;
+- retry safety as API/business-effect semantics rather than UI choice;
+- optimistic UI reconciliation/rollback requirement;
+- disabled/unavailable/pending distinction;
+- plural state continuity across navigation/reload/interruption;
+- pointer/touch/keyboard task-semantic equivalence;
+- browser-native forms/controls as the baseline to evaluate before custom replacement;
+- interaction failure taxonomy and reusable MintTap Interaction Contract;
+- explicit separation between standards/expert diagnosis and human usability proof.
+
+Primary/current evidence checked 2026-09-15:
+- ISO 9241-11:2018 current usability standard;
+- Don Norman author-published affordance/signifier clarification;
+- Apple HIG Feedback, Loading and Undo/Redo;
+- WHATWG HTML Living Standard forms/constraint behavior, current 2026-09-14;
+- W3C Forms Tutorial updated 2026-03-27, WCAG 2.2 and current techniques;
+- RFC 9110 idempotency semantics;
+- Design Studio Interaction 007/015/I001/I002;
+- current Design Studio Layout/Interaction and Web status;
+- Web Design `W001` — now substantive Practice/Critique evidence.
 
 ## Current curriculum position
 
-**Stage 1 — Web Foundations: COMPLETE at intended foundation/practitioner level.**
+**Stage 1 — COMPLETE at intended foundation/practitioner level.**
 
-**Stage 2 — Website Anatomy / Content / Information Architecture: COMPLETE at intended foundation/practitioner level.**
+**Stage 2 — COMPLETE at intended foundation/practitioner level.**
 
-Stage 2 completed sequence:
-1. 034 — task-based website anatomy and ownership;
-2. 035 — governed content objects/hierarchy/lifecycle;
-3. 036 — operational navigation/orientation/findability;
-4. 037 — page systems, hierarchy, scan/comprehension and states;
-5. 038 — integrated page-system matrix and competency review.
+**Stage 3 — ACTIVE.**
 
-No unresolved Stage 2 prerequisite currently blocks curriculum progression. Stage 2 should reopen later at advanced/expert depth when real MintTap analytics, support volume, localization, browser validation, production content and human usability evidence exist.
+Next highest-value integrated topic:
 
-**Next: Stage 3 — UX & Interaction Foundations.**
+**User Goals, Task/Journey Modeling, Cognitive Load, Recognition/Recall, Expectation & Friction.**
 
-The first Stage 3 integrated block should begin from first principles around:
+039 explains how an action-state loop should behave. The next prerequisite is determining which interactions/steps should exist at all, how sequences affect memory/decision burden, and how to distinguish necessary or protective friction from accidental or manipulative friction before later conversion work.
 
-`user goal → possible action/affordance → system state → feedback → error/prevention/recovery → continuity across interruption`.
+Expected scope:
+- goals vs system steps;
+- task decomposition/critical path;
+- journey as task/state sequence rather than marketing diagram;
+- recognition vs recall/externalized context;
+- attention/working-memory constraints without folklore magic numbers;
+- consistency/expectation and transfer learning;
+- decision complexity without blindly applying Hick-style formulas;
+- progressive disclosure/information timing;
+- interruption/resumption cues;
+- friction taxonomy and trust/uncertainty reduction;
+- ethical boundary before conversion optimization.
 
-It should incorporate existing Design Studio Interaction evidence without merely duplicating it, while keeping Web Manager's focus on transferable web/product management judgment.
+---
 
 ## Study quality standard
 
-A substantial study should normally include origin/problem where useful, precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, MintTap relevance without invented project facts, durable principles vs changeable behavior, and competency/application checks.
+A substantial study should normally include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, MintTap relevance without invented facts, durable vs changeable behavior, and competency/application checks.
 
 ## Design Studio relationship
 
-Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
+Reusable design expertise remains canonical in `yhappcom/design-studio`; MintTap-specific strategy, product/content/IA requirements, platform constraints, measurement and operations stay here first.
 
-Stage 2's completed handoff package now includes:
-- task/destination matrix;
-- semantic content-object/lifecycle relationships;
-- critical-destination findability matrix;
-- semantic Page Contracts and non-happy-state/recovery requirements;
-- integrated external-entry/company/app/support/governance page-system matrix;
-- direct-entry competency test;
-- global/local scope and heading/orientation requirements;
-- simultaneous-comparison/disclosure constraints;
-- long localized content, enlarged-text/reflow and DOM/visual/focus/AT-order stress;
-- instruction to return structural content/IA failures to Web Manager rather than mask them visually.
+Current Design Studio state relevant to Web Manager:
+- Web Design `W001` is complete at PRACTICE/CRITIQUE; previous Web Manager notes saying there was no substantive `W###` evidence are superseded;
+- Layout/Interaction has substantive I001–I006/L001–L006 evidence but remains Foundation/CRITIQUE, not production PASS;
+- human/project validation remains deferred rather than simulated.
 
-Design Studio Web remains pre-baseline with no substantive `W###` study at this checkpoint. Web Manager does not edit Design Studio canonical files without authorization.
+Current project handoff is now **Stage 2 Page Contract + Stage 3 Interaction Contract**, including action scope, state/commitment truth, async/retry/recovery behavior, input-mode equivalence, focus/history/restoration, localization/reflow, and browser-native-vs-custom validation.
+
+Web Manager does not edit Design Studio canonical files without authorization.
