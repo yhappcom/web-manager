@@ -81,14 +81,20 @@ Converts Studies 002–011 into implementation hard gates and a weighted provide
 
 Establishes a fact-driven Legal Trigger Registry rather than universal legal boilerplate. Maps conditional Korea PIPA privacy/rights/overseas-transfer and direct-commerce triggers, U.S. FTC/COPPA/California CCPA triggers, other-state change watch and conditional EU GDPR territorial scope. Integrates legal triggers with App Data Contract, Product Truth, Content Release Manifest, provider selection and Design Studio interaction/accessibility dependencies. Application remains conditional until MintTap entity, markets, audience, transaction model and actual data flows are known.
 
+### 014 — Provider POC Specification
+`014-provider-poc-specification.md`
+
+Defines the identical Firebase Hosting vs Cloudflare Workers experiment: one provider-neutral static corpus, deterministic file manifest, synthetic test data, localized pages, AASA/DAL/app-ads machine endpoints, URL/header/cache/search/social/404/a11y assertions, preview isolation, promote/rollback cycle, provider-neutral verification harness, evidence-adjusted scoring and Design Studio transfer hooks. No provider is selected until the POC is executed and hard gates pass.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Highest-value next work is now:
 
-1. provider POC specification refinement for the identical Firebase Hosting vs Cloudflare Workers transfer test;
-2. real-browser Korean/English typography/localization/accessibility/search/social/marketing transfer validation on that POC;
-3. legal-trigger application once MintTap entity/market/audience/data/transaction facts are available;
-4. app-specific user/market evidence when actual product pages are assigned.
+1. machine-readable internal control-artifact schemas so Product Truth, App Data Contract, Claim/Locale/Legal/Release registries can drive builds and validation without duplicating facts;
+2. execute the Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available;
+3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal-surface transfer validation on that POC;
+4. apply the Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
+5. app-specific user/market evidence when actual product pages are assigned.
 
 ## Design Studio relationship
 
