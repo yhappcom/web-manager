@@ -18,21 +18,22 @@ When no live MintTap web task is pending, self-directed study continues. Every s
 3. **003 Privacy / Support / Account Deletion** — per-app surfaces and App Data Contract.
 4. **004 Store ↔ Website Synchronization** — Product Truth Record, Screenshot Evidence Set, Content Release Manifest.
 5. **005 Domain / Hosting / Security** — HTTPS/TLS, verification files, caching, security headers, DNS, secrets, rollback/monitoring contract.
-6. **006 Accessibility Production Baseline** — WCAG 2.2 AA internal target, semantic HTML, keyboard/focus, reflow, text enlargement, forms/status, manual validation.
+6. **006 Accessibility Production Baseline** — WCAG 2.2 AA internal target, semantic HTML, keyboard/focus, reflow, text enlargement, forms/status and manual validation.
 7. **007 Localization Architecture** — `/ko/` and `/en/`, HTML language, reciprocal hreflang, Locale Matrix, Localization Manifest.
 8. **008 SEO / Structured Data / Crawlability** — canonical, robots, sitemap, conservative schema and Search Console.
 9. **009 SEO Independent Verification / Social Preview** — route indexability classes, robots vs noindex, localized title/meta and Open Graph baseline.
 10. **010 Company / App Marketing Content Model** — Claim Registry, evidence/screenshots, feature hierarchy, trust/store CTA, price/subscription and stale-claim controls.
-11. **011 Operational Release & Change-Watch Controls** — continuous operational verification, Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, release gates, incident severity and ownership continuity.
+11. **011 Operational Release & Change-Watch Controls** — continuous verification, Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, release gates, incident severity and ownership continuity.
+12. **012 Implementation / Hosting Provider Comparison Methodology** — static-first architecture, provider hard gates, weighted comparison, Firebase Hosting / Cloudflare Workers / Vercel / Netlify assessment and POC-before-selection rule.
 
-Canonical details remain in `research/001...011`.
+Canonical details remain in `research/001...012`.
 
 ## Current maturity
 
 Stage: **Foundation**
-State: **IN STUDY — architecture / policy / operations baseline substantially established**
+State: **IN STUDY — core architecture / policy / operations / implementation-selection baseline established**
 
-Reading alone is not PASS. Policy, architecture, security, accessibility, localization, search/social, marketing and operational controls require implementation on real pages, stores, devices, browsers and production systems before production confidence.
+Reading alone is not PASS. Policy, architecture, security, accessibility, localization, search/social, marketing, operational and provider-selection conclusions require real implementation and transfer validation before production confidence.
 
 ## Current public information architecture
 
@@ -93,7 +94,7 @@ Exact machine-readable storage schemas remain OPEN.
 - `robots.txt` is not secrecy/access control and is not a reliable de-indexing tool by itself.
 - Sitemap contains final canonical indexable URLs only.
 - Structured data describes only real visible facts; no fabricated ratings/reviews/pricing/entity data.
-- Social previews must align with Product Truth / Screenshot Evidence / locale support.
+- Social previews align with Product Truth / Screenshot Evidence / locale support.
 - Marketing facts derive from Product Truth/App Data Contract/evidence; copy does not create facts.
 - High-risk claims require evidence/provenance and invalidation rules.
 - Screenshots/videos represent real current product or are clearly labeled as concept/future.
@@ -101,48 +102,78 @@ Exact machine-readable storage schemas remain OPEN.
 ## Operational release / change-watch baseline
 
 ### Policy watch
-
-- Apple App Review Guidelines, Developer News changes and Upcoming Requirements are watched sources.
+- Apple App Review Guidelines, Developer News and Upcoming Requirements are watched sources.
 - Google Play Policy Announcements, Policy Deadlines and Policy Archive are watched sources.
 - Search Central documentation updates are a watched feed.
-- Applicable Android App Links / AdMob app-ads documentation becomes watched when those features are active.
-
-A source change triggers relevance assessment; it does not automatically create a product change.
+- Android App Links / AdMob app-ads documentation is watched when those features are active.
 
 ### Monitoring layers
-
-1. **Deploy-time validation** — critical URL, redirect, Privacy/Support/Deletion, store destination, verification files, robots/noindex/canonical/hreflang, accessibility smoke and evidence approval.
-2. **Scheduled synthetic checks** — critical URLs/machine endpoints hourly-or-better when monitoring exists; TLS/certificate and store-link/site-metadata sanity on an appropriate recurring schedule.
-3. **Event-driven watches** — App Store Connect webhooks, Play policy communications, Search update feed, deployments/releases, SDK/data/auth/ads changes and claim/screenshot invalidation.
-4. **Human freshness review** — full affected-app review before every app release; weekly policy/deadline review; monthly evidence/content parity review; quarterly ownership/access/alert continuity review.
-
-These cadences are MintTap operating defaults, not platform-mandated intervals.
-
-### Propagation-aware validation
-
-- AASA origin success does not mean immediate Apple CDN/device convergence; Apple documents CDN request timing and roughly weekly device refresh after install.
-- Android App Links require actual domain verification, and Android tooling supports forced re-verification for testing.
-- app-ads.txt origin correctness is separate from AdMob recognition, which may take days and sometimes longer.
-- Search indexing/social preview cache delays are not automatically release blockers when production origin/configuration is correct and the propagation delay is understood.
+1. deploy-time deterministic validation;
+2. scheduled synthetic checks for critical URLs/machine endpoints/TLS/store destinations/search configuration;
+3. event-driven watches such as App Store Connect webhooks, Play policy communications, Search update feed and product/data/provider changes;
+4. human freshness review before releases and on weekly/monthly/quarterly governance rhythms.
 
 ### Release close condition
-
-A release is not operationally complete merely because the deployment or store review succeeded.
-
-Post-release validation checks actual live store destinations, website CTA, released product/support/privacy/deletion alignment, changed deep links, production canonical/locale metadata, relevant social previews and monitoring/webhook health.
+A release is not operationally complete merely because deployment or store review succeeded. Post-release checks confirm live store destination, website CTA, current Product Truth/Privacy/Support/Deletion alignment, changed deep links, production metadata and monitoring health.
 
 ## Incident severity
 
-### P0 — user / distribution critical
-Examples: domain/HTTPS outage; required Privacy/Support/Deletion unavailable; material privacy mismatch; wrong critical store destination; broken core deep-link verification; false account-deletion outcome.
+- **P0 — user/distribution critical:** domain/HTTPS outage, required policy/control URL unavailable, material privacy mismatch, wrong critical store destination, broken core deep-link association, false deletion outcome.
+- **P1 — high:** stale material pricing/claim/screenshot, material locale contradiction, monetization verification failure, significant search/canonical/noindex error, broken notification path with no fallback.
+- **P2 — normal:** non-critical social preview/search-copy/help-content issue without material product/control impact.
 
-### P1 — high
-Examples: stale material price/subscription claim; misleading screenshot/claim; material locale contradiction; app-ads origin failure on monetized app; significant canonical/noindex/indexing configuration error; broken notification path with no fallback owner.
+## Current implementation architecture direction
 
-### P2 — normal
-Examples: non-critical social preview stale; minor search title quality issue; non-material help article staleness with a correct current support route.
+### Preferred architecture envelope
 
-Severity follows user/policy/distribution impact, not visual prominence.
+**Git-versioned content/data → build-time static generation → global HTTPS/CDN hosting → isolated dynamic functions only where a real workflow requires server execution.**
+
+Current content/legal/support/app-marketing surfaces do not justify universal SSR or a persistent application server.
+
+### Provider hard gates
+A production host must support:
+- apex custom domain + managed TLS;
+- exact direct `.well-known` and root machine files;
+- route-specific content type/cache/security headers;
+- redirects/rewrites without breaking verification paths;
+- preview/test deploys;
+- version traceability and fast rollback;
+- Git/CI workflow;
+- locale/static metadata/sitemap/robots output;
+- monitoring/log inspection and safe secret handling for optional dynamic functions.
+
+### Preliminary provider shortlist
+
+1. **Firebase Hosting** — current simplest strong static-first fit; managed CDN/TLS, custom headers/rewrites, preview channels, rollback, optional Functions/Cloud Run escape hatch.
+2. **Cloudflare Workers + Static Assets** — strongest control/flexibility alternative; excellent headers/routing/versioning/rollback, but Workers custom-domain adoption ties authoritative DNS to Cloudflare and increases platform surface.
+3. **Vercel** — fully capable; becomes more compelling if a justified Next.js/SSR/full-stack requirement appears.
+4. **Netlify** — mature viable static alternative, but no current MintTap requirement makes it clearly superior to the top two.
+
+No provider is selected yet.
+
+### POC-before-selection rule
+
+Firebase Hosting and Cloudflare Workers should host the same minimum specimen before final selection:
+- Korean/English home + app page;
+- privacy/support/account-deletion pages;
+- AASA / assetlinks / app-ads sample;
+- sitemap/robots;
+- custom 404;
+- security headers;
+- canonical/hreflang/Open Graph;
+- controlled redirect;
+- preview + rollback test.
+
+Selection follows transfer validation, not documentation comparison alone.
+
+### Framework/content direction
+
+- Prefer Git-reviewable content as canonical source.
+- Prefer static HTML/lightweight SSG or static-capable component framework.
+- Adopt full-stack SSR only after a concrete server-rendering requirement exists.
+- Do not choose Next.js/Nuxt/Remix/etc. solely because a hosting vendor optimizes for it.
+
+Exact static generator/framework/CMS remains OPEN pending Design Studio Web requirements and authoring needs.
 
 ## Current release blockers model
 
@@ -164,11 +195,7 @@ Includes:
 
 ## Ownership / continuity principle
 
-No launch-critical operational capability may exist only in one person's memory/account.
-
-Production must eventually document ownership/recovery for registrar, DNS/CDN/hosting, Apple Developer/App Store Connect, Google Play Console, policy recipients, Search Console, monitoring alerts, CI/CD, support/privacy inboxes and P0/P1 escalation.
-
-Secrets are never stored in this repository.
+No launch-critical operational capability may exist only in one person's memory/account. Production must eventually document ownership/recovery for registrar, DNS/CDN/hosting, Apple Developer/App Store Connect, Google Play Console, policy recipients, Search Console, monitoring, CI/CD, support/privacy inboxes and P0/P1 escalation. Secrets are never stored here.
 
 ## Important open items
 
@@ -177,7 +204,7 @@ Secrets are never stored in this repository.
 - exact SDK/analytics/ads/auth/processors/data flows;
 - storage schemas for internal control artifacts;
 - release approval/console ownership roles;
-- hosting/CDN/DNS/CMS/framework/deployment/monitoring provider selection;
+- final hosting/CDN/DNS/framework/CMS/deployment/monitoring selection;
 - Universal/App Link route inventory;
 - actual app-ads.txt use and publisher/vendor lines;
 - root `/` locale strategy;
@@ -188,25 +215,26 @@ Secrets are never stored in this repository.
 - company/group email addresses for policy/alerts;
 - App Store Connect webhook receiver/backend;
 - escalation SLA/on-call expectations;
+- provider pricing/plan/access-control assumptions at implementation time;
 - jurisdiction-specific legal/compliance requirements once markets/data practices are fixed.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — real responsive page systems, operational/error/maintenance states, metadata generation and browser/device production validation. Current Web Design remains Foundation/not yet baselined.
-- **Typography / Type** — Korean/English headings, qualifications, support/error/legal strings, wrapping/fallback and zoom/reflow.
-- **Layout / Interaction** — CTA priority, support/account-control recovery, maintenance/error/retry, modal/focus/navigation behavior and responsive recomposition.
-- **Color** — semantic state/focus/disabled/unavailable behavior and operational notices without mechanically mapping internal severity colors to user-facing semantics.
+- **Web Design** — actual page/component complexity, responsive states, interaction/runtime requirements and proof of whether any surface genuinely needs SSR; production browser/device validation.
+- **Typography / Type** — Korean/English headings, support/error/legal strings, mixed-script wrapping/fallback and zoom/reflow in the future POC.
+- **Layout / Interaction** — navigation, support/account-control recovery, maintenance/error/retry and responsive recomposition in the future POC.
+- **Color** — semantic state/focus/disabled/unavailable behavior and real browser surface validation.
 
 ## Next research queue
 
-1. **Implementation/provider comparison methodology and candidate scoring** — evaluate hosting/CDN/CMS/framework/deployment/monitoring options against Studies 002–011 rather than popularity.
-2. Jurisdiction-specific legal/compliance web requirements when entity, launch regions and actual data practices are known.
-3. Real-browser Korean/English localization/accessibility/type/search/social/marketing transfer validation once an implementation exists.
+1. **Jurisdiction-specific legal/compliance scope map** only to the extent it can be researched without inventing MintTap entity/market/data facts; mark application as conditional until those facts exist.
+2. Provider POC specification refinement and eventual Firebase Hosting vs Cloudflare Workers implementation when authorized.
+3. Real-browser Korean/English localization/accessibility/type/search/social/marketing transfer validation on that POC.
 4. App-specific user/market evidence when actual product pages are assigned.
 
 ## Persistence state
 
 - `AGENTS.md` contains the autonomous continuous-learning directive.
-- `research/README.md` indexes studies 001–011.
+- `research/README.md` indexes studies 001–012.
 - Completed study details are canonical in `research/`.
 - This file is the current operational checkpoint.
