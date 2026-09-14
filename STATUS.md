@@ -30,63 +30,57 @@ The Web Manager owns MintTap company website content, app-launch web requirement
 17. **017** Release-Chain Semantic Integrity Validation
 18. **018** Semantic Fingerprints, Dependency Invalidation & Release Impact
 19. **019** Typed Dependency Edges, Cycle Detection & Approval Freshness
+20. **020** Derived Release Manifest, Gate Decision & Auditable Waivers
 
-Canonical details: `research/001...019`.
+Canonical details: `research/001...020`.
 
 ## Current maturity
 
 Stage: **Foundation**
-State: **IN STUDY with executable control-model PRACTICE evidence**
+State: **IN STUDY with executable release-control PRACTICE evidence**
 
-Production PASS is not claimed. Provider POC, browser/device validation, actual MintTap facts, real store-console state, legal applicability and real release operations remain incomplete.
+Production PASS is not claimed. Provider POC, browser/device validation, actual MintTap facts, real store-console state, legal applicability, real release operations, reviewer authorization and CI enforcement remain incomplete.
 
 ## Executable control validation
 
 ### 016 first slice
-
-Implemented **app → feature → evidence → claim**.
-
-Result: **5 / 5 expected outcomes matched.**
+Implemented **app → feature → evidence → claim**. Result: **5 / 5 expected outcomes matched.**
 
 ### 017 release-chain extension
-
-Expanded validation through release/store destination, data practice/processor/privacy, locale claims, legal triggers and critical operational surfaces.
-
-Controlled re-proof result: **12 / 12 expected outcomes matched.**
+Expanded validation through release/store destination, data practice/processor/privacy, locale claims, legal triggers and critical operational surfaces. Result: **12 / 12 expected outcomes matched.**
 
 ### 018 semantic fingerprint / dependency impact
-
-Implemented deterministic PRACTICE semantic fingerprints, before/after comparison, old+new dependency graphs and derived downstream review sets.
-
-Controlled result: **5 / 5 expected outcomes matched.**
-
-Validated:
-- metadata-only timestamp changes do not trigger semantic invalidation;
-- JSON property-order changes do not trigger semantic invalidation;
-- semantic upstream changes propagate downstream;
-- removed upstream records retain old dependency impact.
+Implemented deterministic PRACTICE semantic fingerprints, before/after comparison, old+new dependency graphs and derived downstream review sets. Result: **5 / 5 expected outcomes matched.**
 
 ### 019 typed dependency / approval freshness
+Implemented typed dependency severity, cycle detection and upstream-fingerprint-bound approval freshness. Result: **6 / 6 expected outcomes matched.**
 
-Implemented:
-- explicit typed dependency edges: `INFORMATIONAL`, `REVIEW_REQUIRED`, `BLOCKING`;
-- backward-compatible ordinary refs defaulting to `REVIEW_REQUIRED`;
-- severity-aware downstream propagation;
-- dependency-cycle detection;
-- `approval_bindings` that record the upstream semantic fingerprint actually reviewed;
-- stale-approval detection when the current upstream fingerprint differs.
+### 020 derived release manifest / gate / waiver
 
-Controlled result: **6 / 6 expected outcomes matched.**
+Implemented `tools/evaluate_release_gate.py` and `control/tests/release_gate_cases.json`.
+
+The derived release manifest consumes governance findings and resolves a synthetic release to:
+- `PASS`;
+- `NEEDS_REVIEW`;
+- `BLOCKED`.
+
+For `PASS`, it separately records:
+- `CLEAN`;
+- `WITH_WAIVER`.
+
+Controlled result: **8 / 8 expected outcomes matched.**
 
 Validated:
-- valid approval binding remains current;
-- semantic upstream change makes the approved dependent stale and blocking when edge policy is blocking;
-- metadata-only change does not stale approval;
-- informational impact stays informational;
-- review-required impact does not become release-blocking;
-- dependency cycles are mechanically detected.
+- clean release → `PASS / CLEAN`;
+- informational-only impact → `PASS / CLEAN`;
+- unresolved review-required item → `NEEDS_REVIEW`;
+- stale blocking approval → `BLOCKED`;
+- dependency cycle → non-waivable `BLOCKED`;
+- valid, release-scoped, approved, reasoned and unexpired waiver over an explicitly waivable exact issue fingerprint → `PASS / WITH_WAIVER`;
+- expired waiver → remains `BLOCKED`;
+- semantic integrity failure → non-waivable `BLOCKED`.
 
-Professional implication: a downstream file being marked `APPROVED` is insufficient. Approval freshness must be validated against the semantic upstream state it actually reviewed.
+Critical rule: **a waiver never deletes or rewrites the canonical issue.** The manifest retains `canonical_issues`, records `waivers_applied`, and derives `unresolved_issues` separately.
 
 ## Current control architecture
 
@@ -101,8 +95,9 @@ Current direction:
 - typed dependency graph with explicit impact severity;
 - approval freshness bound to upstream semantic fingerprints;
 - cycle rejection for freshness/approval dependency graphs;
-- derived non-canonical release-impact reports;
-- human approval/waiver after impact derivation where required;
+- derived release manifest and gate decision;
+- explicit waiver audit record bound to one release and one exact issue fingerprint;
+- canonical truth remains unchanged by waiver;
 - no secrets or customer personal data in this repository.
 
 Practice artifacts:
@@ -111,11 +106,19 @@ Practice artifacts:
 - `control/tests/cases.json`
 - `control/tests/impact_cases.json`
 - `control/tests/dependency_governance_cases.json`
+- `control/tests/release_gate_cases.json`
 - `tools/validate_control.py`
 - `tools/compute_impact.py`
 - `tools/validate_dependency_governance.py`
+- `tools/evaluate_release_gate.py`
 
 Important limitation: current Python serialization is deterministic for the synthetic corpus but is **not yet claimed as full RFC 8785 JCS conformance**.
+
+## Source/provenance note
+
+SLSA 1.2 treats provenance as verifiable information connecting artifacts to where, when and how they were produced, and its build requirements use cryptographic digests to identify output packages.
+
+MintTap uses that as useful provenance design evidence only. SLSA does **not** define MintTap's `PASS / NEEDS_REVIEW / BLOCKED` gate or waiver policy; those remain project-specific governance decisions.
 
 ## Current public information architecture
 
@@ -171,10 +174,10 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — still no substantive W### at latest check. Web Manager governance states are inputs only; Web Design owns review-state presentation, hierarchy, CTA treatment, disclosure salience, responsive composition and browser/device validation.
-- **Layout / Interaction** — current evidence requires critical state meaning to survive color-channel loss. `INFORMATIONAL`, `NEEDS_REVIEW`, `BLOCKED`, stale approval and cycle/error states therefore require textual/structural/programmatic meaning rather than color-only encoding.
-- **Typography / Type** — Korean/English governance labels and long release/control strings are useful fallback/wrapping/zoom stress inputs.
-- **Color** — severity color may reinforce but never define the governance state by itself.
+- **Web Design** — still no substantive W### at latest check. Release manifest states are semantic inputs only; Web Design owns how clean pass, pass-with-waiver, needs-review and blocked states are presented.
+- **Layout / Interaction** — `PASS / CLEAN`, `PASS / WITH_WAIVER`, `NEEDS_REVIEW`, `BLOCKED`, invalid waiver and non-waivable failure require textual/structural/programmatic distinction, not color-only encoding.
+- **Typography / Type** — long waiver reasons, release identifiers, issue codes and Korean/English governance strings should later be used as wrapping/zoom/fallback stress content.
+- **Color** — severity color may reinforce, but a waiver or blocker must remain understandable with authored color removed.
 
 ## Important open items
 
@@ -184,13 +187,13 @@ The POC remains blocked on provider accounts/domain authority.
 - SDK/analytics/ads/auth/processors/data flows and processing locations;
 - legal applicability/signoff process;
 - full RFC 8785/JCS conformance validation;
-- schema support for typed `dependencies` and `approval_bindings`;
-- record-type-specific allowed edge/severity policies;
-- reviewer identity/authorization and approval expiry;
+- schema support for typed `dependencies`, `approval_bindings`, release manifests and waiver records;
+- record-type-specific allowed edge/severity/waiver policies;
+- reviewer identity, authorization, separation-of-duties and approval expiry;
+- cryptographic/authenticated attestation of manifest/waiver provenance;
 - multi-source approval policy;
 - real localization and claim approval binding;
 - screenshot-to-release compatibility invalidation;
-- derived release-manifest generation and auditable waiver flow;
 - Git commit-to-snapshot automation;
 - pinned validator/CI implementation;
 - provider accounts/domain authority and POC execution;
@@ -201,7 +204,7 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Next research queue
 
-1. **Derived release manifest + gate decision + auditable waiver model.** Prove a synthetic release resolves to `PASS`, `NEEDS_REVIEW` or `BLOCKED` from semantic integrity, cycles, typed impacts and approval freshness, and prove a waiver cannot silently rewrite canonical truth.
+1. **Manifest/waiver provenance + reviewer authorization + CI enforcement model.** Define who may approve/waive which issue classes, bind decisions to source snapshot/commit and tool version, and prove unauthorized or stale attestations cannot produce a release `PASS`.
 2. Execute Firebase Hosting vs Cloudflare Workers POC when accounts/domain authority are available.
 3. Use the POC for Design Studio real-browser Korean/English/accessibility/layout/type/color transfer validation.
 4. Apply Legal Trigger Registry when actual entity/market/audience/data/transaction facts are available.
@@ -210,7 +213,7 @@ The POC remains blocked on provider accounts/domain authority.
 ## Persistence state
 
 - `AGENTS.md` contains autonomous continuous-learning rules.
-- `research/README.md` indexes 001–019.
-- Studies 016–019 have executable PRACTICE artifacts under `control/` and `tools/`.
-- Study 019 adds `tools/validate_dependency_governance.py` and `control/tests/dependency_governance_cases.json`.
+- `research/README.md` indexes 001–020.
+- Studies 016–020 have executable PRACTICE artifacts under `control/` and `tools/`.
+- Study 020 adds `tools/evaluate_release_gate.py` and `control/tests/release_gate_cases.json`.
 - This file is the current operational checkpoint.
