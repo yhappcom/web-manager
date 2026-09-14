@@ -31,25 +31,27 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `013-jurisdiction-legal-compliance-trigger-map.md` — fact-driven Korea/U.S./EU legal trigger framework.
 - `014-provider-poc-specification.md` — identical Firebase vs Cloudflare provider-neutral POC and assertion contract.
 - `015-machine-readable-control-artifact-model.md` — canonical JSON truth records, JSON Schema, stable IDs, semantic fingerprints and dependency/invalidation model.
-- `016-control-artifact-validation-specimen.md` — executable structural + semantic validation specimen with documented failure→revision→re-proof; valid baseline and four intentional error cases produced 5/5 expected outcomes.
+- `016-control-artifact-validation-specimen.md` — executable structural + semantic validation specimen with documented failure→revision→re-proof; first vertical slice produced 5/5 expected outcomes.
+- `017-release-chain-semantic-integrity.md` — expands executable validation through release/store destination, processor/data practice, locale coverage, legal trigger and critical operational surfaces; expanded baseline and failure suite produced 12/12 expected outcomes.
 
-## Practice artifacts created by 016
+## Practice artifacts
 
-- `control/schemas/v1/record.schema.json`
-- `control/records/apps/example.json`
-- `control/records/features/portfolio.json`
-- `control/records/evidence/portfolio-release.json`
-- `control/records/claims/portfolio.json`
-- `control/tests/cases.json`
-- `tools/validate_control.py`
+Current synthetic validation corpus includes:
+- `control/schemas/v1/record.schema.json`;
+- `control/records/apps/`, `features/`, `evidence/`, `claims/`;
+- `control/records/releases/`, `store-destinations/`;
+- `control/records/processors/`, `data-practices/`;
+- `control/records/locales/`, `legal/`, `surfaces/`;
+- `control/tests/cases.json`;
+- `tools/validate_control.py`.
 
-These are synthetic research fixtures, not actual MintTap product facts.
+These are synthetic research fixtures, not actual MintTap product/legal/store facts.
 
 ## Current research queue
 
 See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
-1. extend the validation slice through release/store/data-practice/processor/locale/legal/operational-surface relationships and derived release impact;
+1. implement and validate semantic fingerprints, dependency edges and derived release-impact/staleness propagation;
 2. execute the Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available;
 3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation on that POC;
 4. apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
