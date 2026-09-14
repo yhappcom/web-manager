@@ -1,0 +1,83 @@
+[
+  {
+    "name": "firebase-official-map",
+    "provider_contract": {
+      "provider": "FIREBASE_HOSTING",
+      "preview_isolated": true,
+      "production_separate_from_preview": true,
+      "rollback_without_source_rebuild": true,
+      "static_headers_supported": true,
+      "redirects_supported": true,
+      "custom_404_supported": true,
+      "ci_credential_mode": "OIDC_SHORT_LIVED",
+      "preview_artifact_promotable_exactly": true,
+      "rollback_retention_bounded": true,
+      "dynamic_state_rollback_complete": false,
+      "live_account_validation_required": true
+    },
+    "expected": {"provider": "FIREBASE_HOSTING", "ok": true, "failures": []}
+  },
+  {
+    "name": "cloudflare-official-map",
+    "provider_contract": {
+      "provider": "CLOUDFLARE_WORKERS_STATIC_ASSETS",
+      "preview_isolated": true,
+      "production_separate_from_preview": true,
+      "rollback_without_source_rebuild": true,
+      "static_headers_supported": true,
+      "redirects_supported": true,
+      "custom_404_supported": true,
+      "ci_credential_mode": "SCOPED_API_TOKEN",
+      "preview_artifact_promotable_exactly": true,
+      "rollback_retention_bounded": true,
+      "dynamic_state_rollback_complete": false,
+      "live_account_validation_required": true
+    },
+    "expected": {"provider": "CLOUDFLARE_WORKERS_STATIC_ASSETS", "ok": true, "failures": []}
+  },
+  {
+    "name": "reject-no-preview-isolation",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":false,"production_separate_from_preview":true,"rollback_without_source_rebuild":true,"static_headers_supported":true,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"OIDC_SHORT_LIVED","preview_artifact_promotable_exactly":true,"rollback_retention_bounded":true,"dynamic_state_rollback_complete":false,"live_account_validation_required":true},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["REQUIRED_PREVIEW_ISOLATED"]}
+  },
+  {
+    "name": "reject-preview-prod-coupled",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":true,"production_separate_from_preview":false,"rollback_without_source_rebuild":true,"static_headers_supported":true,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"OIDC_SHORT_LIVED","preview_artifact_promotable_exactly":true,"rollback_retention_bounded":true,"dynamic_state_rollback_complete":false,"live_account_validation_required":true},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["REQUIRED_PRODUCTION_SEPARATE_FROM_PREVIEW"]}
+  },
+  {
+    "name": "reject-rebuild-only-rollback",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":true,"production_separate_from_preview":true,"rollback_without_source_rebuild":false,"static_headers_supported":true,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"OIDC_SHORT_LIVED","preview_artifact_promotable_exactly":true,"rollback_retention_bounded":true,"dynamic_state_rollback_complete":false,"live_account_validation_required":true},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["REQUIRED_ROLLBACK_WITHOUT_SOURCE_REBUILD"]}
+  },
+  {
+    "name": "reject-no-static-header-control",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":true,"production_separate_from_preview":true,"rollback_without_source_rebuild":true,"static_headers_supported":false,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"OIDC_SHORT_LIVED","preview_artifact_promotable_exactly":true,"rollback_retention_bounded":true,"dynamic_state_rollback_complete":false,"live_account_validation_required":true},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["REQUIRED_STATIC_HEADERS_SUPPORTED"]}
+  },
+  {
+    "name": "reject-unsupported-credential",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":true,"production_separate_from_preview":true,"rollback_without_source_rebuild":true,"static_headers_supported":true,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"LONG_LIVED_USER_TOKEN","preview_artifact_promotable_exactly":true,"rollback_retention_bounded":true,"dynamic_state_rollback_complete":false,"live_account_validation_required":true},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["UNACCEPTABLE_CI_CREDENTIAL_MODE"]}
+  },
+  {
+    "name": "reject-no-exact-promotion",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":true,"production_separate_from_preview":true,"rollback_without_source_rebuild":true,"static_headers_supported":true,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"OIDC_SHORT_LIVED","preview_artifact_promotable_exactly":false,"rollback_retention_bounded":true,"dynamic_state_rollback_complete":false,"live_account_validation_required":true},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["NO_EXACT_PREVIEW_TO_PROD_PROMOTION"]}
+  },
+  {
+    "name": "reject-unbounded-rollback-assumption",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":true,"production_separate_from_preview":true,"rollback_without_source_rebuild":true,"static_headers_supported":true,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"OIDC_SHORT_LIVED","preview_artifact_promotable_exactly":true,"rollback_retention_bounded":false,"dynamic_state_rollback_complete":false,"live_account_validation_required":true},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["ROLLBACK_RETENTION_NOT_EXPLICITLY_BOUNDED"]}
+  },
+  {
+    "name": "reject-dynamic-state-rollback-assumption",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":true,"production_separate_from_preview":true,"rollback_without_source_rebuild":true,"static_headers_supported":true,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"OIDC_SHORT_LIVED","preview_artifact_promotable_exactly":true,"rollback_retention_bounded":true,"dynamic_state_rollback_complete":true,"live_account_validation_required":true},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["DYNAMIC_STATE_ROLLBACK_ASSUMPTION_UNSAFE"]}
+  },
+  {
+    "name": "reject-live-validation-omission",
+    "provider_contract": {"provider":"FIREBASE_HOSTING","preview_isolated":true,"production_separate_from_preview":true,"rollback_without_source_rebuild":true,"static_headers_supported":true,"redirects_supported":true,"custom_404_supported":true,"ci_credential_mode":"OIDC_SHORT_LIVED","preview_artifact_promotable_exactly":true,"rollback_retention_bounded":true,"dynamic_state_rollback_complete":false,"live_account_validation_required":false},
+    "expected": {"provider":"FIREBASE_HOSTING","ok":false,"failures":["LIVE_VALIDATION_REQUIREMENT_MISSING"]}
+  }
+]
