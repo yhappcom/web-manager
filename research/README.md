@@ -38,17 +38,22 @@ Establishes Apple/Google policy-backed per-app privacy, support and account-dele
 
 Establishes a Product Truth Record, channel-specific copy model, screenshot evidence set, Content Release Manifest, localization synchronization, ownership boundaries and discrepancy severity so store metadata and `minttap.app` remain factually aligned without requiring identical wording.
 
+### 005 — Domain, Hosting & Security Baseline
+`005-domain-hosting-security-baseline.md`
+
+Defines a provider-independent production contract for `minttap.app`: modern TLS/HTTPS, staged HSTS, redirect strategy, exact Apple/Android association-file hosting, cache classes, browser security-header direction, DNSSEC/CAA, deployment/secrets requirements, observability and hosting/CDN acceptance gates.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Current high-value areas include:
 
-1. domain/hosting/security baseline for `minttap.app`;
-2. accessibility production baseline;
-3. localization architecture;
-4. SEO/social/structured-data/crawlability;
-5. company/app marketing content model;
-6. operational release and change-watch controls;
-7. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known.
+1. accessibility production baseline;
+2. localization architecture;
+3. SEO/social/structured-data/crawlability;
+4. company/app marketing content model;
+5. operational release and change-watch controls;
+6. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
+7. implementation/provider selection after the evidence baseline is mature enough to compare real options.
 
 ## Design Studio relationship
 
