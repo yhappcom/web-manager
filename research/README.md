@@ -71,13 +71,18 @@ Product-Truth-governed marketing, Claim Registry, content hierarchy, evidence/sc
 
 Connects Studies 003–010 into a continuous operating loop. Establishes Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, pre/post-release gates, P0/P1/P2 incident severity, AASA/App Links/app-ads propagation handling, policy notification continuity, ownership/bus-factor controls and freshness/invalidation dependencies.
 
+### 012 — Implementation / Hosting Provider Comparison Methodology
+`012-implementation-provider-comparison-methodology.md`
+
+Converts Studies 002–011 into implementation hard gates and a weighted provider-selection method. Establishes static-first + Git-versioned + CDN-hosted architecture as the current default, compares Firebase Hosting, Cloudflare Workers + Static Assets, Vercel and Netlify using current official capabilities, identifies Firebase Hosting and Cloudflare Workers as the top preliminary shortlist, and requires an identical production-contract POC before final provider/framework selection.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Highest-value next work is now:
 
-1. implementation/provider comparison methodology and candidate scoring for hosting/CDN/CMS/framework/deployment/monitoring;
-2. jurisdiction-specific legal/compliance web requirements once entity, launch regions and actual data practices are known;
-3. real-browser Korean/English typography/localization/accessibility/search/social/marketing transfer validation once production implementation exists;
+1. jurisdiction-specific legal/compliance web requirements once entity, launch regions and actual data practices are known;
+2. provider POC specification and eventual Firebase Hosting vs Cloudflare Workers transfer test when implementation work is authorized;
+3. real-browser Korean/English typography/localization/accessibility/search/social/marketing transfer validation on that POC;
 4. app-specific user/market evidence when actual product pages are assigned.
 
 ## Design Studio relationship
