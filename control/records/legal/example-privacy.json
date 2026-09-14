@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "record_type": "legal_trigger",
+  "id": "legal:example:privacy",
+  "status": "VERIFIED",
+  "owner": "role:legal",
+  "jurisdiction": "KR",
+  "law": "PIPA",
+  "applicability": "APPLIES",
+  "required_surface_refs": ["surface:example:privacy"]
+}
