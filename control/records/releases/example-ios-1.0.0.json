@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "record_type": "release",
+  "id": "release:example:ios:1.0.0",
+  "status": "VERIFIED",
+  "owner": "role:release",
+  "app_ref": "app:example",
+  "platform": "IOS",
+  "version": "1.0.0",
+  "release_state": "LIVE"
+}
