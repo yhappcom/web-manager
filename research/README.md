@@ -53,16 +53,21 @@ Adopts WCAG 2.2 AA as MintTap's internal production baseline and defines semanti
 
 Establishes Korean/English-first localization architecture with locale-specific URLs, HTML language declarations, reciprocal hreflang, self-canonical locale pages, a Locale Matrix and Localization Manifest, website/store/app-locale separation, translation invalidation triggers, language-switcher behavior and release gates. It explicitly leaves real Korean/English typography/browser proof open for Design Studio and production validation.
 
+### 008 — SEO, Structured Data, Sitemap, Canonical & Crawlability
+`008-seo-structured-data-crawlability.md`
+
+Establishes a truthful discovery layer over the site architecture: explicit canonical URLs, localized canonical/hreflang consistency, robots/sitemap policy, crawlability gates, conservative Organization/SoftwareApplication/Breadcrumb structured data, hostname-level favicon implications, Search Console validation and structured-data change watch.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Current high-value areas include:
 
-1. SEO/social/structured-data/crawlability;
-2. company/app marketing content model;
-3. operational release and change-watch controls;
-4. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
-5. implementation/provider selection after the evidence baseline is mature enough to compare real options;
-6. real browser Korean/English typography, localization and accessibility transfer validation when production implementation exists.
+1. company/app marketing content model: proof, screenshots, feature hierarchy, trust and conversion without overclaiming;
+2. operational release and change-watch controls;
+3. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
+4. implementation/provider selection after the evidence baseline is mature enough to compare real options;
+5. real browser Korean/English typography, localization and accessibility transfer validation when production implementation exists;
+6. social-preview metadata details when actual channels and campaign needs are known.
 
 ## Design Studio relationship
 
