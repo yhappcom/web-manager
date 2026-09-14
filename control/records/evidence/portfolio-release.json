@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "record_type": "evidence",
+  "id": "evidence:example:portfolio-release",
+  "status": "VERIFIED",
+  "owner": "role:qa",
+  "evidence_type": "RELEASE_OBSERVATION",
+  "summary": "Observed portfolio overview in released synthetic specimen."
+}
