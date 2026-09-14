@@ -25,48 +25,78 @@ When no live MintTap web task is pending, self-directed study continues. Every s
 10. **010 Company / App Marketing Content Model** — Claim Registry, evidence/screenshots, feature hierarchy, trust/store CTA, price/subscription and stale-claim controls.
 11. **011 Operational Release & Change-Watch Controls** — continuous verification, Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, release gates, incident severity and ownership continuity.
 12. **012 Implementation / Hosting Provider Comparison Methodology** — static-first architecture, provider hard gates, weighted comparison, Firebase Hosting / Cloudflare Workers / Vercel / Netlify assessment and POC-before-selection rule.
-13. **013 Jurisdiction-Specific Legal / Compliance Trigger Map** — fact-driven Legal Trigger Registry; Korea PIPA/privacy-rights/overseas-transfer and conditional direct-commerce triggers; U.S. FTC/COPPA/California CCPA; other-state change watch; conditional EU GDPR trigger; integration with App Data Contract/provider selection/release controls.
-14. **014 Provider POC Specification** — identical Firebase Hosting vs Cloudflare Workers test corpus, deterministic file manifest, synthetic data, AASA/DAL/app-ads endpoint assertions, HTTP/header/cache/search/social/404/a11y contracts, preview/promote/rollback experiment and provider-neutral verification harness.
+13. **013 Jurisdiction-Specific Legal / Compliance Trigger Map** — fact-driven Legal Trigger Registry; Korea PIPA/privacy-rights/overseas-transfer and conditional direct-commerce triggers; U.S. FTC/COPPA/California CCPA; other-state change watch; conditional EU GDPR trigger.
+14. **014 Provider POC Specification** — identical Firebase vs Cloudflare static corpus, deterministic manifest, machine-endpoint/HTTP/header/cache/search/social/404/a11y assertions, preview/promote/rollback and provider-neutral verification harness.
+15. **015 Machine-Readable Control Artifacts / Single Source of Truth** — canonical JSON records, JSON Schema Draft 2020-12 structural validation, immutable stable IDs, semantic fingerprints, dependency/invalidation graph, cross-record integrity linter and generated release-impact model.
 
-Canonical details remain in `research/001...014`.
+Canonical details remain in `research/001...015`.
 
 ## Current maturity
 
 Stage: **Foundation**
-State: **IN STUDY — core architecture / policy / operations / legal-trigger / implementation-selection / POC contract established**
+State: **IN STUDY — architecture / policy / operations / legal triggers / provider POC / internal truth model established**
 
-Reading alone is not PASS. Policy, legal applicability, architecture, security, accessibility, localization, search/social, marketing, operations, provider selection and POC conclusions require actual MintTap facts and real implementation/transfer validation before production confidence.
+Reading alone is not PASS. Current conclusions require actual MintTap facts, executable validation specimens, provider POC and real browser/device/store/legal/operational transfer validation before production confidence.
 
 ## Current public information architecture
 
-Preferred localized human-facing pattern:
-- `/ko/`, `/en/` — localized company/home surfaces; final root strategy remains OPEN.
+Preferred localized pattern:
+- `/ko/`, `/en/` — localized company/home surfaces; final root behavior remains OPEN.
 - `/ko/apps/`, `/en/apps/` — app portfolio.
 - `/ko/apps/<app-slug>/`, `/en/apps/<app-slug>/` — durable app pages.
 - localized app `support/`, `privacy/`, `account-deletion/` child pages as applicable.
-- localized company support/privacy/contact/terms resources only where substantively required.
+- company support/privacy/contact/terms only where substantively required.
 
 Language-neutral machine endpoints:
 - `/.well-known/apple-app-site-association`
 - `/.well-known/assetlinks.json`
 - `/app-ads.txt`
 
-Root `/` remains OPEN between a language-neutral/x-default entry and a deliberate default-language home.
+## Internal truth / control architecture
 
-## Internal truth / control artifacts
+### Canonical principle
 
-- **App Data Contract** — actual data collection, SDK/processors, purposes, sharing, retention/deletion, account behavior, controller/entity, processor location/cross-border transfer, sensitive-data/audience classifications and rights implementation.
-- **Product Truth Record** — shipped capabilities, identity, availability, account/subscription behavior, official destinations, intended markets/audience and transaction model.
-- **Screenshot Evidence Set** — app/platform/version/locale/feature provenance and staleness.
-- **Claim Registry** — material marketing claims, evidence, approved locale expression, owner, expiry/invalidation state and surfaces using them.
-- **Content Release Manifest** — release impact across web/store/privacy/support/localization/assets/infrastructure/accessibility/search/social/marketing/legal triggers.
-- **Locale Matrix** — app UI vs website vs store metadata vs privacy/support/deletion/screenshot locale coverage.
-- **Localization Manifest** — source revision, target locale, reviewer, approval/staleness and surface coverage.
-- **Policy Change Register** — policy/legal source, announcement/effective dates, impact, owner, action, severity and verification status.
-- **Operational Surface Registry** — production URL/console surface, expected behavior, owner, monitoring method/cadence, last validation, severity and runbook.
-- **Legal Trigger Registry** — jurisdiction, law, trigger facts, applicability state, required public/operational controls, source, dependencies, owner, legal review and freshness.
+Each fact has one canonical owner/record. Other surfaces reference or derive from it rather than retyping the fact independently.
 
-Exact machine-readable schemas remain OPEN and are now the highest-value non-blocked study topic.
+### Record families
+
+- **App / Release / Feature** — identity, lifecycle, platform availability and shipped capabilities.
+- **App Data Contract / Data Practice / Processor** — collection/use/share/retention/deletion, vendors, locations and account effects.
+- **Store Destination** — official public store URL/availability state.
+- **Evidence / Screenshot Evidence** — technical/store/test/visual proof with provenance and staleness.
+- **Claim Registry** — marketing assertions that reference Product Truth/features/evidence rather than becoming new facts.
+- **Locale Coverage / Localization Manifest** — app UI, web, store, privacy/support/deletion and translation review remain independent facts.
+- **Legal Trigger Registry** — jurisdiction/law/trigger facts/applicability/required controls/review freshness.
+- **Policy Change Register** — authority/source/effective dates/impact/actions.
+- **Operational Surface Registry** — production URL/console expectations, owner, monitoring, severity and runbook.
+- **Content Release Manifest** — increasingly derived from canonical record changes/dependencies, then completed with human approvals.
+
+### Machine-readable direction
+
+- canonical structured records: JSON;
+- structural validation: JSON Schema Draft 2020-12;
+- stable immutable logical IDs for cross-record references;
+- repository integrity linter for references and business rules that JSON Schema alone cannot express;
+- lifecycle/freshness states separated from domain states;
+- semantic fingerprints for selected upstream records, using deterministic canonicalization/hashing, so formatting-only changes need not invalidate downstream approvals;
+- dependency graph computes what must be reviewed when a fact changes;
+- generated files/reports never become canonical facts.
+
+### Key semantic validation examples
+
+A release/build must detect cases such as:
+- a current claim referencing only planned/removed features;
+- a store CTA pointing at unavailable destination;
+- a screenshot not matching compatible release/feature state;
+- a privacy surface approved against an obsolete App Data Contract;
+- translation approved against an old semantic source revision;
+- an `APPLIES` legal trigger without required surface/process mapping;
+- P0/P1 operational surface without owner/monitoring/runbook;
+- unknown/duplicate/retired record references or invalid dependency cycles.
+
+### Repository boundary
+
+This repository is not a secret manager or user database. Never store API/private keys, tokens, signing private keys, passwords, raw customer data, privacy-rights requests or sensitive support tickets. Secret references may be stored; secret values remain in provider/CI secret systems.
 
 ## Security / infrastructure baseline
 
@@ -75,174 +105,122 @@ Exact machine-readable schemas remain OPEN and are now the highest-value non-blo
 - Ordinary HTTP redirects to HTTPS.
 - HSTS only after complete HTTPS validation.
 - AASA and `assetlinks.json` served directly with correct route/content type and no redirect.
-- CSP should be inventoried/tested before enforcement; `nosniff`, explicit Referrer Policy and Permissions Policy are baseline directions.
+- CSP inventoried/tested before enforcement; `nosniff`, explicit Referrer Policy and Permissions Policy are baseline directions.
 - Deployment secrets stay outside Git; hosting must support auditable deployment, rollback and monitoring.
 
 ## Accessibility baseline
 
 - WCAG 2.2 AA internal target.
 - Native semantic HTML before custom ARIA widgets.
-- Logical page title/headings/landmarks and bypass mechanism.
+- Logical title/headings/landmarks and bypass mechanism.
 - Full keyboard operation, visible logical focus, no traps/obscuration.
-- 320 CSS px-equivalent reflow and 200% text enlargement without loss of content/functionality.
-- Persistent programmatic form labels; textual errors and programmatic dynamic status.
+- 320 CSS px-equivalent reflow and 200% text enlargement without loss.
+- Persistent programmatic form labels; textual errors and programmatic status.
 - Automated scanners assist but cannot independently produce PASS.
 
 ## Localization / search / marketing baseline
 
-- Locale-specific crawlable URLs; `ko` and `en` initially.
-- Each translated page self-canonicalizes and uses reciprocal `hreflang`.
-- App UI, website and store localization remain separate facts.
-- Public pages default to discoverable/indexable unless a documented reason exists.
-- `robots.txt` is not secrecy/access control and is not a reliable de-indexing tool by itself.
-- Sitemap contains final canonical indexable URLs only.
-- Structured data describes only real visible facts; no fabricated ratings/reviews/pricing/entity data.
-- Social previews align with Product Truth / Screenshot Evidence / locale support.
-- Marketing facts derive from Product Truth/App Data Contract/evidence; copy does not create facts.
-- High-risk claims require evidence/provenance and invalidation rules.
-- Screenshots/videos represent real current product or are clearly labeled as concept/future.
+- locale-specific crawlable URLs; `ko` and `en` initially;
+- self-canonical translated pages + reciprocal hreflang;
+- app UI, website and store localization remain separate facts;
+- public pages default to indexable unless documented otherwise;
+- robots is not secrecy/access control;
+- sitemap contains final canonical indexable URLs only;
+- structured data/social previews/marketing derive from real visible Product Truth;
+- high-risk claims require evidence/provenance and invalidation rules;
+- screenshots/videos represent current product or are explicitly labeled as concept/future.
 
 ## Legal / compliance trigger baseline
 
-Legal compliance is managed as **facts → trigger → obligation → web/control surface → backend process → validation**, not as universal Privacy/Terms/Cookie boilerplate.
+Legal compliance is managed as **facts → trigger → obligation → web/control surface → backend process → validation**.
 
-- **Korea:** PIPA privacy-policy/rights/overseas-transfer requirements depend on actual controller/data/vendor facts; direct website order/payment creates a separate e-commerce trigger review.
-- **United States:** FTC truth/privacy/security expectations reinforce Product Truth/Claim/App Data controls; COPPA depends on child/actual-knowledge facts; California CCPA is threshold/nexus based; other state laws remain change-watch/inventory work.
+- **Korea:** PIPA privacy/rights/overseas-transfer requirements depend on actual controller/data/vendor facts; direct web contracting/payment reopens e-commerce requirements.
+- **United States:** FTC truth/privacy/security baseline; COPPA depends on child/actual-knowledge triggers; CCPA is threshold/nexus based; other state laws require current inventory when U.S. scope is active.
 - **EU:** GDPR remains conditional on actual Article 3 establishment/offering/monitoring facts, not global reach alone.
-- **Terms:** `/terms/` remains conditional on a real service/account/licensing/direct-transaction contract.
+- **Terms:** `/terms/` remains conditional on an actual contractual relationship requiring it.
 
 ## Operational release / change-watch baseline
 
-### Policy watch
-- Apple App Review Guidelines, Developer News and Upcoming Requirements.
-- Google Play Policy Announcements, Policy Deadlines and Policy Archive.
-- Search Central documentation updates.
-- Android App Links / AdMob app-ads when active.
-- Korean PIPA / Enforcement Decree / PIPC guidance.
-- Korean e-commerce law if direct sales become relevant.
-- FTC privacy/security/advertising/COPPA.
-- CPPA CCPA regulations/thresholds.
-- Other U.S. states / EU when market triggers become active.
+Watched sources include Apple/Google platform policy, Search documentation, Android App Links/AdMob when active, Korean PIPA/e-commerce when applicable, FTC/COPPA, California and other activated jurisdictions.
 
-### Monitoring layers
+Monitoring layers:
 1. deploy-time deterministic validation;
 2. scheduled synthetic checks;
-3. event-driven policy/store/product/provider/data change watches;
-4. human freshness review before releases and on governance cadence.
+3. event-driven platform/product/provider/data changes;
+4. human freshness review.
 
-### Release close condition
-A release is not operationally complete merely because deployment or store review succeeded. Post-release checks confirm live store destination, website CTA, Product Truth/Privacy/Support/Deletion/legal-trigger alignment, deep links, production metadata and monitoring health.
-
-## Incident severity
-
-- **P0 — user/distribution critical:** domain/HTTPS outage, required policy/control URL unavailable, material privacy mismatch, wrong critical store destination, broken core deep-link association, false deletion outcome.
-- **P1 — high:** stale material pricing/claim/screenshot, material locale/legal disclosure contradiction, monetization verification failure, significant search/canonical/noindex error, broken notification path with no fallback.
-- **P2 — normal:** non-critical social preview/search-copy/help-content issue without material product/control impact.
+A release is not closed merely because deployment/store review succeeds; production destinations, policy/control surfaces, deep links, metadata, truth/legal alignment and monitoring health must be rechecked.
 
 ## Current implementation architecture direction
 
-Preferred envelope:
-
 **Git-versioned content/data → build-time static generation → global HTTPS/CDN hosting → isolated dynamic functions only where a real workflow requires server execution.**
 
-Current content/legal/support/app-marketing surfaces do not justify universal SSR or a persistent application server.
-
-### Preliminary shortlist
-1. **Firebase Hosting** — current simplest strong static-first fit.
-2. **Cloudflare Workers + Static Assets** — strongest control/flexibility alternative.
-3. **Vercel** — compelling if justified Next.js/SSR/full-stack needs appear.
-4. **Netlify** — mature viable static alternative without a current decisive advantage.
+Preliminary provider shortlist:
+1. Firebase Hosting;
+2. Cloudflare Workers + Static Assets;
+3. Vercel if justified SSR/full-stack needs appear;
+4. Netlify as viable static alternative.
 
 No provider is selected yet.
 
 ## Provider POC contract
 
-Before selection, Firebase Hosting and Cloudflare Workers run the same provider-neutral static corpus.
+Firebase Hosting and Cloudflare Workers must run the same provider-neutral static corpus and verification suite.
 
 Required proof includes:
 - identical common-file SHA-256 manifest;
-- localized home/app/privacy/support/account-deletion pages;
-- AASA, `assetlinks.json`, `app-ads.txt`, robots, sitemap and real 404 behavior;
-- deterministic status/MIME/redirect/cache/security-header assertions;
+- localized app/legal/support fixture;
+- exact AASA / assetlinks / app-ads / robots / sitemap / 404 behavior;
+- status/MIME/redirect/cache/security-header assertions;
 - canonical/hreflang/Open Graph/noindex separation;
 - keyboard/200%/320px accessibility smoke;
-- V1 live → V2 preview → V2 promote → provider-native rollback to V1;
-- rollback verification of content **and** headers/redirects/machine endpoints;
+- V1 live → V2 preview → V2 promote → native rollback V1;
+- rollback restoring content + headers + redirects + machine endpoints;
 - provider-neutral structured assertion report.
 
-POC PASS is not production PASS. Real domain/app identifiers, legal content, store associations, Design Studio browser/device validation and monitoring remain required.
+POC PASS is not production PASS.
 
-## Current release blockers model
+## Release blockers model
 
-Includes:
-- privacy/data-disclosure mismatch;
-- required support/privacy/deletion/rights URL broken where applicable;
-- unshipped feature presented as current;
-- materially incorrect account/subscription/price instructions;
-- misleading/stale critical screenshots or claims;
-- inaccessible launch-critical support/account-control flow;
-- required AASA/App Links broken or malformed;
-- DNS/TLS/production host failure;
-- localized content materially contradicting Product Truth;
-- canonical/hreflang pointing to wrong app/locale/staging target;
-- production staging `noindex`/crawl rules;
-- fabricated structured-data/marketing evidence;
-- wrong/unavailable official store destination;
-- applicable privacy policy materially contradicting processing;
-- applicable legal rights route missing/hidden/impractical;
-- unreviewed overseas transfer when Korean PIPA transfer requirements apply;
-- child-directed/known-under-13 collection without COPPA review where applicable;
-- direct web commerce introduced without reopening transaction-law triggers;
-- one jurisdiction's privacy template presented as universally compliant.
+Includes material privacy/data mismatch; broken required support/privacy/deletion/rights routes; unshipped feature claims; incorrect account/subscription/price instructions; stale misleading screenshots/claims; inaccessible launch-critical controls; broken AASA/App Links/DNS/TLS; locale/canonical/noindex errors; fabricated marketing/structured data; wrong store destination; missing applicable legal control; unreviewed applicable overseas transfer; COPPA trigger without review; direct web commerce without legal re-evaluation; and equivalent structural/semantic control-record validation failures.
 
 ## Ownership / continuity principle
 
-No launch-critical operational capability may exist only in one person's memory/account. Production must eventually document ownership/recovery for registrar, DNS/CDN/hosting, Apple Developer/App Store Connect, Google Play Console, policy/legal recipients, Search Console, monitoring, CI/CD, support/privacy inboxes and P0/P1 escalation. Secrets are never stored here.
+No launch-critical capability may exist only in one person's memory/account. Registrar, DNS/CDN/hosting, Apple/Google consoles, policy/legal recipients, Search Console, monitoring, CI/CD, support/privacy inboxes and incident escalation require documented ownership/recovery. Secrets are never stored here.
 
 ## Important open items
 
-- exact MintTap legal entity/place of establishment/public contact information;
-- contracting/publishing entity per app/store;
-- exact app inventory, released versions, pricing, account behavior and locale support;
-- intended launch countries/states;
-- direct web payment/subscription model;
-- intended audience/age classifications;
-- exact SDK/analytics/ads/auth/processors/data flows and processing/storage countries;
-- CCPA/state privacy threshold facts and sale/share/targeted-ad classifications;
-- EU targeting/monitoring facts;
-- legal reviewer/signoff process;
-- machine-readable schemas for internal truth/control artifacts;
-- release approval/console ownership roles;
-- final hosting/CDN/DNS/framework/CMS/deployment/monitoring selection;
-- actual POC provider accounts, permissions and domain authority;
-- Universal/App Link route inventory;
-- actual app-ads.txt use and publisher/vendor lines;
-- root `/` locale strategy;
-- translation tooling/reviewer workflow;
+- exact MintTap legal entity/place/public contact and contracting entity per app;
+- actual app inventory/releases/pricing/accounts/locales/markets/audience;
+- SDK/analytics/ads/auth/processors/data flows and processing locations;
+- U.S./EU legal-trigger facts and legal reviewer/signoff process;
+- actual JSON Schema files, validator implementation and schema `$id` namespace;
+- exact editorial format/CMS and CI/review tooling;
+- final hosting/CDN/DNS/framework/monitoring selection;
+- actual provider accounts, permissions and domain authority for POC;
+- Universal/App Link routes and app-ads use;
+- root locale strategy and translation workflow;
 - real Korean/English browser/type/fallback validation;
-- Search Console organizational ownership;
-- company/group email addresses for policy/alerts;
-- App Store Connect webhook receiver/backend;
-- escalation SLA/on-call expectations.
+- Search Console/policy-alert/webhook/escalation operational ownership.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — actual page/component complexity, legal notice placement, rights forms, responsive states and production browser/device validation. Current W### evidence is still not substantive, so neutral POC styling must not be mistaken for final design.
-- **Typography / Type** — Korean/English legal/support long-copy, processor names, contacts, mixed-script wrapping/fallback and zoom/reflow on the POC.
-- **Layout / Interaction** — navigation, locale switch, rights/withdrawal/account-delete flows, denial/recovery, focus and maintenance/error states on the POC.
-- **Color** — semantic state/focus/destructive/disabled behavior and forced-color/browser validation on the POC.
+- **Web Design** — structured truth is input, not page hierarchy; final component/page behavior and browser/device validation remain Web Design work. Neutral POC styling is not final design.
+- **Typography / Type** — structured records can generate repeatable Korean/English legal/support/feature stress strings for fallback/wrapping/zoom tests.
+- **Layout / Interaction** — canonical states can drive realistic unavailable/stale/blocked/delete/error/recovery scenarios rather than placeholder states.
+- **Color** — verified/stale/blocked/retired and warning/destructive/success are semantic states before visual encoding; color may not be the sole carrier.
 
 ## Next research queue
 
-1. **Machine-readable internal control-artifact schema / single-source-of-truth model.**
+1. **Controlled validation specimen for Study 015:** actual JSON Schemas + valid/invalid records + repository integrity validator + documented failure→revision→re-proof cycle.
 2. Execute Firebase Hosting vs Cloudflare Workers POC when accounts/domain authority are available.
 3. Real-browser Korean/English localization/accessibility/type/search/social/marketing/legal transfer validation on the POC.
-4. Apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available.
+4. Apply Legal Trigger Registry when entity/market/audience/data/transaction facts are available.
 5. App-specific user/market evidence when actual product pages are assigned.
 
 ## Persistence state
 
 - `AGENTS.md` contains the autonomous continuous-learning directive.
-- `research/README.md` indexes studies 001–014.
+- `research/README.md` indexes studies 001–015.
 - Completed study details are canonical in `research/`.
 - This file is the current operational checkpoint.
