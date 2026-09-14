@@ -69,28 +69,33 @@ Product-Truth-governed marketing, Claim Registry, content hierarchy, evidence/sc
 ### 011 — Operational Release & Change-Watch Controls
 `011-operational-release-change-watch-controls.md`
 
-Connects Studies 003–010 into a continuous operating loop. Establishes Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, pre/post-release gates, P0/P1/P2 incident severity, AASA/App Links/app-ads propagation handling, policy notification continuity, ownership/bus-factor controls and freshness/invalidation dependencies.
+Continuous operating loop: Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, pre/post-release gates, incident severity, verification-file propagation, notification continuity and ownership controls.
 
 ### 012 — Implementation / Hosting Provider Comparison Methodology
 `012-implementation-provider-comparison-methodology.md`
 
-Converts Studies 002–011 into implementation hard gates and a weighted provider-selection method. Establishes static-first + Git-versioned + CDN-hosted architecture as the current default, compares Firebase Hosting, Cloudflare Workers + Static Assets, Vercel and Netlify using current official capabilities, identifies Firebase Hosting and Cloudflare Workers as the top preliminary shortlist, and requires an identical production-contract POC before final provider/framework selection.
+Static-first architecture, provider hard gates, weighted comparison of Firebase Hosting / Cloudflare Workers / Vercel / Netlify, top-candidate shortlist and POC-before-selection rule.
 
 ### 013 — Jurisdiction-Specific Legal / Compliance Trigger Map
 `013-jurisdiction-legal-compliance-trigger-map.md`
 
-Establishes a fact-driven Legal Trigger Registry rather than universal legal boilerplate. Maps conditional Korea PIPA privacy/rights/overseas-transfer and direct-commerce triggers, U.S. FTC/COPPA/California CCPA triggers, other-state change watch and conditional EU GDPR territorial scope. Integrates legal triggers with App Data Contract, Product Truth, Content Release Manifest, provider selection and Design Studio interaction/accessibility dependencies. Application remains conditional until MintTap entity, markets, audience, transaction model and actual data flows are known.
+Fact-driven Legal Trigger Registry mapping conditional Korea PIPA/direct-commerce, U.S. FTC/COPPA/California CCPA, other-state watch and conditional EU GDPR scope to actual web/backend controls.
 
 ### 014 — Provider POC Specification
 `014-provider-poc-specification.md`
 
-Defines the identical Firebase Hosting vs Cloudflare Workers experiment: one provider-neutral static corpus, deterministic file manifest, synthetic test data, localized pages, AASA/DAL/app-ads machine endpoints, URL/header/cache/search/social/404/a11y assertions, preview isolation, promote/rollback cycle, provider-neutral verification harness, evidence-adjusted scoring and Design Studio transfer hooks. No provider is selected until the POC is executed and hard gates pass.
+Identical Firebase Hosting vs Cloudflare Workers experiment: one provider-neutral static corpus, deterministic manifest, synthetic data, machine-endpoint/HTTP/header/cache/search/social/404/a11y assertions, preview/promote/rollback cycle and provider-neutral verification harness.
+
+### 015 — Machine-Readable Control Artifacts / Single Source of Truth
+`015-machine-readable-control-artifact-model.md`
+
+Defines canonical JSON control records validated by JSON Schema Draft 2020-12 plus a repository-wide semantic linter. Normalizes app/release/feature/data-practice/processor/evidence/screenshot/claim/locale/localization/legal/surface/policy/release records, immutable IDs, semantic fingerprints, dependency invalidation, generated release impact and secret/PII boundaries. The core rule is one canonical owner per fact, not one giant file.
 
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Highest-value next work is now:
 
-1. machine-readable internal control-artifact schemas so Product Truth, App Data Contract, Claim/Locale/Legal/Release registries can drive builds and validation without duplicating facts;
+1. controlled validation specimen for the 015 model: real JSON Schemas, valid records, intentional failures and a repository integrity validator;
 2. execute the Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available;
 3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal-surface transfer validation on that POC;
 4. apply the Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
