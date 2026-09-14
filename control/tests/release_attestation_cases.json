@@ -6,7 +6,7 @@
     "current_tool_version":"release-attestation/0.1",
     "reviewers":[{"id":"reviewer:release","active":true,"permissions":["WAIVE"],"allowed_issue_codes":["APPROVAL_STALE"]}],
     "issues":[{"code":"APPROVAL_STALE","record_id":"localization:example:ko","source_ref":"feature:example","severity":"BLOCKING","message":"approval stale","waivable":true}],
-    "waivers":[{"id":"waiver:1","issue_fingerprint":"sha256:8308043871748547192c66089b84ad2a6c13258687b5d4322073ebfb630ca688","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.1","approved_by":"reviewer:release","requested_by":"author:content","status":"APPROVED","reason":"bounded launch exception","expires_on":"2026-09-15"}],
+    "waivers":[{"id":"waiver:1","issue_fingerprint":"sha256:fd7d04b80a9bd496df3097eebd1be8aba727d16d515cdc026a4de641268d3cff","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.1","approved_by":"reviewer:release","requested_by":"author:content","status":"APPROVED","reason":"bounded launch exception","expires_on":"2026-09-15"}],
     "expected":{"decision":"PASS","pass_mode":"WITH_WAIVER","ci_status":"PASS","waiver_count":1,"invalid_waiver_reasons":[]}
   },
   {
@@ -14,7 +14,7 @@
     "release_ref":"release:example:1","current_source_snapshot":"git:abc123","current_tool_version":"release-attestation/0.1",
     "reviewers":[],
     "issues":[{"code":"APPROVAL_STALE","record_id":"localization:example:ko","source_ref":"feature:example","severity":"BLOCKING","message":"approval stale","waivable":true}],
-    "waivers":[{"id":"waiver:2","issue_fingerprint":"sha256:8308043871748547192c66089b84ad2a6c13258687b5d4322073ebfb630ca688","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.1","approved_by":"reviewer:unknown","requested_by":"author:content","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
+    "waivers":[{"id":"waiver:2","issue_fingerprint":"sha256:fd7d04b80a9bd496df3097eebd1be8aba727d16d515cdc026a4de641268d3cff","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.1","approved_by":"reviewer:unknown","requested_by":"author:content","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
     "expected":{"decision":"BLOCKED","ci_status":"FAIL","waiver_count":0,"invalid_waiver_reasons":["REVIEWER_UNAUTHORIZED"]}
   },
   {
@@ -22,7 +22,7 @@
     "release_ref":"release:example:1","current_source_snapshot":"git:abc123","current_tool_version":"release-attestation/0.1",
     "reviewers":[{"id":"reviewer:release","active":true,"permissions":["WAIVE"],"allowed_issue_codes":["OTHER_CONTROL"]}],
     "issues":[{"code":"APPROVAL_STALE","record_id":"localization:example:ko","source_ref":"feature:example","severity":"BLOCKING","message":"approval stale","waivable":true}],
-    "waivers":[{"id":"waiver:3","issue_fingerprint":"sha256:8308043871748547192c66089b84ad2a6c13258687b5d4322073ebfb630ca688","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.1","approved_by":"reviewer:release","requested_by":"author:content","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
+    "waivers":[{"id":"waiver:3","issue_fingerprint":"sha256:fd7d04b80a9bd496df3097eebd1be8aba727d16d515cdc026a4de641268d3cff","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.1","approved_by":"reviewer:release","requested_by":"author:content","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
     "expected":{"decision":"BLOCKED","ci_status":"FAIL","invalid_waiver_reasons":["ISSUE_CLASS_NOT_AUTHORIZED"]}
   },
   {
@@ -30,7 +30,7 @@
     "release_ref":"release:example:1","current_source_snapshot":"git:abc123","current_tool_version":"release-attestation/0.1",
     "reviewers":[{"id":"reviewer:release","active":true,"permissions":["WAIVE"],"allowed_issue_codes":["APPROVAL_STALE"]}],
     "issues":[{"code":"APPROVAL_STALE","record_id":"localization:example:ko","source_ref":"feature:example","severity":"BLOCKING","message":"approval stale","waivable":true}],
-    "waivers":[{"id":"waiver:4","issue_fingerprint":"sha256:8308043871748547192c66089b84ad2a6c13258687b5d4322073ebfb630ca688","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.1","approved_by":"reviewer:release","requested_by":"reviewer:release","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
+    "waivers":[{"id":"waiver:4","issue_fingerprint":"sha256:fd7d04b80a9bd496df3097eebd1be8aba727d16d515cdc026a4de641268d3cff","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.1","approved_by":"reviewer:release","requested_by":"reviewer:release","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
     "expected":{"decision":"BLOCKED","ci_status":"FAIL","invalid_waiver_reasons":["SEPARATION_OF_DUTIES_VIOLATION"]}
   },
   {
@@ -38,7 +38,7 @@
     "release_ref":"release:example:1","current_source_snapshot":"git:abc123","current_tool_version":"release-attestation/0.1",
     "reviewers":[{"id":"reviewer:release","active":true,"permissions":["WAIVE"],"allowed_issue_codes":["APPROVAL_STALE"]}],
     "issues":[{"code":"APPROVAL_STALE","record_id":"localization:example:ko","source_ref":"feature:example","severity":"BLOCKING","message":"approval stale","waivable":true}],
-    "waivers":[{"id":"waiver:5","issue_fingerprint":"sha256:8308043871748547192c66089b84ad2a6c13258687b5d4322073ebfb630ca688","release_ref":"release:example:1","source_snapshot":"git:old000","tool_version":"release-attestation/0.1","approved_by":"reviewer:release","requested_by":"author:content","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
+    "waivers":[{"id":"waiver:5","issue_fingerprint":"sha256:fd7d04b80a9bd496df3097eebd1be8aba727d16d515cdc026a4de641268d3cff","release_ref":"release:example:1","source_snapshot":"git:old000","tool_version":"release-attestation/0.1","approved_by":"reviewer:release","requested_by":"author:content","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
     "expected":{"decision":"BLOCKED","ci_status":"FAIL","invalid_waiver_reasons":["WAIVER_STALE_SOURCE_SNAPSHOT"]}
   },
   {
@@ -46,7 +46,7 @@
     "release_ref":"release:example:1","current_source_snapshot":"git:abc123","current_tool_version":"release-attestation/0.1",
     "reviewers":[{"id":"reviewer:release","active":true,"permissions":["WAIVE"],"allowed_issue_codes":["APPROVAL_STALE"]}],
     "issues":[{"code":"APPROVAL_STALE","record_id":"localization:example:ko","source_ref":"feature:example","severity":"BLOCKING","message":"approval stale","waivable":true}],
-    "waivers":[{"id":"waiver:6","issue_fingerprint":"sha256:8308043871748547192c66089b84ad2a6c13258687b5d4322073ebfb630ca688","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.0","approved_by":"reviewer:release","requested_by":"author:content","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
+    "waivers":[{"id":"waiver:6","issue_fingerprint":"sha256:fd7d04b80a9bd496df3097eebd1be8aba727d16d515cdc026a4de641268d3cff","release_ref":"release:example:1","source_snapshot":"git:abc123","tool_version":"release-attestation/0.0","approved_by":"reviewer:release","requested_by":"author:content","status":"APPROVED","reason":"exception","expires_on":"2026-09-15"}],
     "expected":{"decision":"BLOCKED","ci_status":"FAIL","invalid_waiver_reasons":["WAIVER_STALE_TOOL_VERSION"]}
   },
   {
