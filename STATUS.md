@@ -13,13 +13,13 @@ Canonical curriculum: `LEARNING_ROADMAP.md`.
 
 ## Learning cadence rule
 
-Depth remains high, but reporting/file granularity is intentionally coarse.
-
-Do not create/report one artifact for every small concept. Study multiple related sub-blocks internally, then persist/report one coherent professional knowledge unit. The target is **more learning per checkpoint, fewer checkpoints**.
+Depth remains high, but reporting/file granularity is intentionally coarse. Study multiple related sub-blocks internally and persist one coherent professional knowledge unit.
 
 Large subjects follow:
 
 `history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`
+
+---
 
 ## Stage 1 — Web Foundations
 
@@ -34,194 +34,218 @@ Completed sequence:
 - 032 — Application / Rendering / State / Navigation;
 - 033 — End-to-End Integration & Competency Review.
 
-Stage 1 remains available for later advanced reopening in SEO, performance, security, accessibility and operations stages.
+Stage 1 remains available for advanced reopening in SEO, performance, security, accessibility and operations stages.
+
+---
 
 ## Stage 2 — Website Anatomy / Content / Information Architecture
 
 **COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.**
 
-### 034 — Website anatomy, task-based IA & content ownership
-`research/034-stage2-website-anatomy-task-based-information-architecture-content-ownership.md`
+Completed sequence:
+- 034 — Website anatomy, task-based IA & content ownership;
+- 035 — Content modeling, hierarchy, lifecycle & cross-channel truth;
+- 036 — Navigation, wayfinding & findability;
+- 037 — Page systems, hierarchy & scan/comprehension architecture;
+- 038 — Integration: Company/App/Support/Governance Page-System Matrix & Competency Review.
 
-**PASS.**
+### Retained integrated Stage 2 model
+
+`entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`
 
 Retained judgment:
 - app-company websites are marketing + support + governance + store-linked operational surfaces;
-- IA derives from `audience/context → intent → task → destination → content object → owner → lifecycle`;
-- sitemap, URL structure, navigation, page hierarchy and machine endpoints are different views of the system;
-- app identity is a durable context boundary;
-- store-linked destinations are external-entry contracts;
-- content objects require scope, ownership, triggers, localization state and retirement behavior.
-
-### 035 — Content modeling, hierarchy, lifecycle & cross-channel truth
-`research/035-stage2-content-modeling-hierarchy-lifecycle-cross-channel-truth.md`
-
-**PASS.**
-
-Retained judgment:
+- IA derives from audience/context → intent → task → destination → content object → owner → lifecycle;
 - content objects, pages, visual components and channel fields are separate layers;
-- canonical content models App/Feature/Claim/Support/Known Issue/Release/Policy objects with scope/evidence/ownership/lifecycle;
-- product communication preserves `claim → evidence → condition → action`;
-- single source of truth means no independent truth duplication, not zero public repetition;
-- freshness is change-trigger/dependency based;
-- localization is a dependency graph;
-- support is task/problem → scope → resolution → failure branch → escalation.
-
-### 036 — Navigation, wayfinding & findability
-`research/036-stage2-navigation-wayfinding-findability-operational-system.md`
-
-**PASS.**
-
-Retained judgment:
-- navigation has two jobs: orientation + movement;
-- sitemap, hierarchy, URL space, navigation, breadcrumbs, search, direct entry and browser history are distinct;
-- findability is multi-route;
-- labels are destination promises;
-- app/support local contexts can deepen while global navigation remains stable;
-- every critical destination requires direct-entry testing;
-- responsive navigation can change presentation but should preserve the information model;
-- DOM/visual/focus/accessibility orders require separate validation;
-- findability failures should be classified before redesign.
-
-### 037 — Page systems, hierarchy & scan/comprehension architecture
-`research/037-stage2-page-systems-content-hierarchy-scan-comprehension-architecture.md`
-
-**PASS.**
-
-Retained judgment:
-- site IA and intra-page hierarchy are different layers;
-- a page is a task contract;
-- semantic, visual and interaction hierarchies are related but not identical;
-- use `identity → orientation → decision-critical information → evidence/explanation → action → depth` where applicable;
-- no fixed “above the fold” architecture rule;
-- headings are retrieval/navigation infrastructure;
+- navigation provides orientation + movement and findability is multi-route;
+- labels are destination/action promises;
+- direct store/search/shared-link entry must preserve app/service identity and scope;
+- pages are task contracts, not content bins;
 - progressive disclosure has discovery/interaction/memory/state cost;
-- page types and non-happy states require distinct semantic contracts;
-- Korean/English localization and enlarged-text/reflow are architecture stress tests;
-- Page Contract is the preferred pre-design handoff.
+- support requires resolution plus escalation/recovery;
+- privacy/policy and account-control are distinct content/task objects;
+- 404, retired, unavailable, unsupported, empty and no-result states need different recovery contracts;
+- localization, narrow width, enlarged text and DOM/visual/focus/accessibility-order differences are structural stress cases;
+- Page Contract + task/destination + content lifecycle + findability matrix form the pre-design handoff.
 
-### 038 — Stage 2 Integration: Company/App/Support/Governance Page-System Matrix & Competency Review
-`research/038-stage2-integration-page-system-matrix-competency-review.md`
+No unresolved foundation/practitioner prerequisite blocks progression. Stage 2 should reopen when real MintTap analytics, support volume, localization, production content, browser/device or human-usability evidence exists.
 
-**INTEGRATION GATE: PASS.**
+---
 
-Retained judgment:
-- the integrated public-information contract is `entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`;
-- Apple/Google store-linked destinations must be treated as durable external-entry contracts;
-- app/service identity and scope must survive direct store/search/shared-link entry;
-- support flows require resolution plus escalation/recovery, not article existence alone;
-- privacy/policy and account-control are different content/task objects even when cross-linked;
-- known-issue/release pages are operational lifecycle content;
-- 404, retired, unavailable, unsupported, empty and no-result states require different recovery contracts;
-- localization, narrow width and enlarged text must preserve identity, prerequisites, action and meaningful sequence;
-- heading/landmark/focus/meaningful-order validation is independent from visual hierarchy;
-- integrated failures are now classified as entry-contract, identity/scope, truth, destination, label/scent, hierarchy/sequence, recovery, lifecycle, localization/reflow or semantic-exposure failures.
-
-Primary/current evidence revalidated 2026-09-15:
-- Apple App Store Connect Support URL and App Privacy documentation;
-- Google Play User Data/account-deletion guidance;
-- W3C/WAI page-structure, heading/region and reflow guidance;
-- Design Studio global/Web/Layout status and Layout L002 density research.
-
-### Stage 2 completion judgment
-
-No unresolved **foundation/practitioner prerequisite** currently blocks progression.
-
-Stage 2 should reopen later at advanced/expert depth when real MintTap evidence exists for:
-- analytics/acquisition paths;
-- support volume/search behavior;
-- localization markets and production text;
-- real browser/device behavior;
-- production content and lifecycle operations;
-- human usability/comprehension evidence.
-
-## Stage 3 — UX & Interaction Foundations
+# Stage 3 — UX & Interaction Foundations
 
 **CURRENT MAJOR CURRICULUM STAGE — ACTIVE.**
 
-### Highest-value next integrated block
+## 039 — User Action, System State, Feedback, Error & Recovery Foundations
 
-Begin Stage 3 from first principles with **User Action, System State, Feedback, Error & Recovery Foundations**.
+`research/039-stage3-user-action-system-state-feedback-error-recovery-foundations.md`
 
-Primary conceptual chain:
+**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**
 
-`user goal → possible action / affordance & signifier → constraint → system state → feedback → error/prevention → reversibility/recovery → continuity across interruption`.
+### Retained interaction model
 
-Required scope before the first Stage 3 checkpoint closes:
-- distinguish usability, interaction and visual presentation;
-- affordance vs signifier vs constraint vs mapping vs feedback;
-- state visibility and system-status communication;
-- mode/state confusion and hidden-state failure;
-- prevention vs validation vs error message vs recovery;
-- consequential/destructive actions and reversibility;
-- forms as interaction systems rather than field collections;
-- pending, asynchronous, retry and partial-failure states;
-- interruption and resume continuity;
-- mouse/touch/keyboard/mixed-input equivalence;
-- browser-native behavior where it materially affects UX;
-- transfer/independent validation of existing Design Studio Interaction evidence instead of blind duplication.
+`goal → action possibility/signifier → constraint → articulation → requested transition → accepted? → pending/working? → committed state → feedback → recovery/reversal → continuity`
 
-Do not drift immediately into animation polish, aesthetic microinteraction catalogues or provider/framework implementation.
+### Retained judgment
+
+- usability, interaction design and visual presentation are separate questions;
+- affordance/action possibility and signifier/discoverability are not synonyms;
+- action possibility, discoverability, mapping/scope, availability and commitment truth are separate gates;
+- feedback communicates state/result/warning/correction and its interruption level should match consequence;
+- significant interactions require an explicit user-facing state model before styling;
+- preview, local state, persisted/queued state, remote confirmation and irreversible/external commitment can be materially different;
+- forms are stateful tasks, not field collections;
+- prevention, constraint, validation, error identification, correction suggestion, review/confirmation, undo and recovery solve different problems;
+- destructive/high-consequence protection should be based on consequence × reversibility, not on a universal “show confirmation” rule;
+- asynchronous operations need pending/confirmed/known-failed/canceled/**outcome-unknown** distinctions where material;
+- timeout does not prove failure; retry safety depends on API/business-effect semantics;
+- optimistic UI requires pending evidence plus rollback/conflict/reconciliation policy;
+- disabled, unavailable and pending are not synonyms;
+- state preservation is plural: draft, filters, scroll, focus, pending operation and authoritative data may have different lifecycles;
+- pointer/touch/keyboard paths may differ physically while preserving essential task semantics;
+- browser-native forms/controls are the baseline to evaluate before custom replacement;
+- reading/standards review does not prove target-user usability; human validation remains a separate gate.
+
+### Primary/current evidence checked 2026-09-15
+
+- ISO 9241-11:2018 current usability definitions/concepts standard;
+- Don Norman author-published affordance/signifier clarification;
+- Apple HIG Feedback, Loading and Undo/Redo;
+- WHATWG HTML Living Standard forms/input/constraint-validation behavior, current 2026-09-14;
+- W3C Forms Tutorial updated 2026-03-27 and current WCAG 2.2 guidance/techniques;
+- RFC 9110 idempotent-method semantics;
+- Design Studio Interaction 007/015/I001/I002 and current Layout/Interaction status;
+- Design Studio Web **W001** and current Web status.
+
+### Stage 3 reusable Interaction Contract
+
+For consequential flows specify/review:
+1. user goal;
+2. object/scope;
+3. action promise/signifier;
+4. availability/constraints;
+5. input routes;
+6. state transitions;
+7. commitment level;
+8. feedback/announcement/interruption;
+9. validation;
+10. consequence;
+11. reversibility;
+12. async/retry/outcome-unknown policy;
+13. continuity across navigation/reload/interruption;
+14. focus/restoration;
+15. recovery/escalation;
+16. browser/API/human validation evidence required.
+
+### 039 failure taxonomy
+
+- discoverability/signifier;
+- mapping/scope;
+- constraint;
+- state visibility;
+- feedback;
+- commitment truth;
+- validation;
+- prevention/protection mismatch;
+- recovery;
+- continuity/restoration;
+- input-mode;
+- semantic-exposure failure.
+
+---
+
+## Highest-value next integrated block
+
+Proceed to **User Goals, Task/Journey Modeling, Cognitive Load, Recognition/Recall, Expectation & Friction**.
+
+Purpose:
+- 039 explains how a single interaction/action-state loop should behave;
+- the next prerequisite is deciding which steps/actions should exist at all and how a sequence affects comprehension, memory, decision cost and completion;
+- distinguish necessary friction/protection from accidental friction and manipulative obstruction;
+- deepen progressive disclosure from Stage 2 using task/cognitive evidence rather than visual preference;
+- establish journey/task requirements before later conversion optimization.
+
+Required scope:
+- user goals vs system steps;
+- task decomposition and critical path;
+- journeys as state/task sequences rather than marketing diagrams;
+- recognition vs recall and externalized context;
+- working-memory/attention limits without inventing magic numbers;
+- consistency/expectation and transfer learning;
+- choice/decision complexity without blindly applying Hick-style formulas;
+- progressive disclosure and information timing;
+- interruption/resumption cues;
+- friction taxonomy: necessary / protective / accidental / manipulative;
+- trust/uncertainty reduction at decision points;
+- ethical boundary before conversion work;
+- transfer of Design Studio interaction evidence without duplication.
+
+Do not drift yet into CRO, dark-pattern catalogues, animation polish or provider/framework implementation.
+
+---
 
 ## Design Studio relationship
 
 Latest Design Studio status re-read 2026-09-15:
-- Web Design remains **Stage 1 Foundation / NOT YET BASELINED** with no substantive `W###` research yet;
-- Layout/Interaction remains Stage 1 Foundation / CRITIQUE in studied modules;
-- current Interaction evidence includes navigation/history/focus restoration, pending/optimistic/retry, forced-colors state resilience and concurrent-edit/recovery studies;
-- Layout L002 gives a task-dependent density model and rejects universal whitespace/sparsity rules;
-- current studio status still reports real-browser, multilingual, enlarged-text, keyboard/focus/status and human-validation gaps relevant to future production work.
 
-### Completed Stage 2 outgoing handoff
+- **Web Design has advanced since the previous Web Manager checkpoint:** `W001` is complete at PRACTICE/CRITIQUE and establishes a Web-native medium/relationship/constraint baseline; W002 is next. Previous notes saying Web had no substantive `W###` evidence are superseded.
+- Layout/Interaction remains Stage 1 Foundation / CRITIQUE; I001–I006 now exist, with human/project validation deferred rather than simulated.
+- relevant Interaction evidence includes agency/feedback/errors, state/modes/reversibility, history/focus/restoration, latency/retry/outcome uncertainty, forced-color semantic resilience, concurrency/offline/idempotency and collaboration-boundary work.
+- W001 reinforces that Web Design should control relationships/priorities/constraints/states/adaptation more strongly than exact coordinates and that screenshot-only QA is insufficient.
 
-Future Design Studio/Web project work should receive:
-1. task/destination matrix;
-2. semantic content-object and lifecycle relationships;
-3. critical-destination findability matrix;
-4. Page Contracts;
-5. integrated company/app/support/governance/error-state page-system matrix;
-6. global vs local/context navigation scope;
-7. direct store/search/shared-link entry conditions;
-8. `claim → evidence → condition → action` hierarchy;
-9. heading/region/meaningful-order requirements;
-10. simultaneous-comparison/disclosure constraints;
-11. long Korean/English labels/content and stale-translation cases;
-12. narrow-width + enlarged-text/reflow stress;
-13. DOM/visual/focus/accessibility-order constraints;
-14. Back/Forward/deep-link continuity;
-15. differentiated error/retirement/recovery contracts;
-16. content owner/change-trigger/retirement metadata;
-17. instruction to return structural IA/content contradictions to Web Manager rather than mask them with styling.
+### Current outgoing handoff to Design Studio
+
+Use Stage 2 Page Contract together with 039 Interaction Contract.
+
+For consequential MintTap flows Design Studio Web/Interaction should validate:
+- action signifier/label vs actual operation;
+- scope through responsive recomposition;
+- visual vs programmatic vs operational state agreement;
+- pending/confirmed/failed/unknown distinctions;
+- unavailable/disabled reasons and paths forward;
+- validation/correction without unnecessary re-entry;
+- proportional destructive/high-consequence protection;
+- retry/undo/cancel labels against backend reality;
+- keyboard/pointer/touch task equivalence;
+- focus/history/restoration behavior;
+- long Korean/English feedback/error strings and reflow;
+- browser-native behavior before custom replacement.
 
 No Design Studio canonical file was edited.
+
+---
 
 ## Important unknown MintTap facts
 
 Real project decisions still require verified evidence for:
 - actual app inventory and launch priorities;
-- company/legal/developer identity used on Apple/Google storefronts;
-- current App Store Support/Marketing/Privacy URLs;
-- current Google Play website/contact/privacy/account-deletion URLs;
+- company/legal/developer identity and current Apple/Google storefront URLs;
 - which apps support account creation;
-- actual audience segments and acquisition channels;
-- pricing/account/subscription model;
-- support operating/escalation model;
+- whether any website surface performs authenticated/account-changing actions;
+- support/contact submission backend and duplicate semantics;
+- privacy/account-deletion execution model and service expectations;
+- authentication/session model;
+- payment/subscription/upload or other high-consequence web effects if any;
+- actual audience segments/acquisition channels;
 - localization target markets/languages;
-- verified trust signals;
-- website framework/hosting/CDN/runtime;
-- analytics baseline and conversion definitions;
-- actual content ownership/update workflow;
-- expected support content volume and whether launch-time site search is justified;
-- actual privacy/policy complexity and versioning needs;
-- real human comprehension/usability evidence.
+- support operating/escalation model;
+- website framework/router/form stack and hosting/CDN/runtime;
+- supported browser/device/input matrix;
+- analytics baseline/conversion definitions;
+- actual content ownership workflow;
+- real human comprehension/usability evidence;
+- screen-reader/cross-browser behavior of future implementation.
 
-Do not infer these from generic app-company patterns.
+Do not infer these from generic patterns.
+
+---
 
 ## Persistence state
 
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
 - `research/README.md` indexes staged learning.
-- Stage 1 is complete at its intended foundation/practitioner level.
-- Stage 2 Studies 034–038 are complete and the integration gate passed.
-- Current next major work: **Stage 3 — User Action, System State, Feedback, Error & Recovery Foundations**.
+- Stage 1: COMPLETE at intended foundation/practitioner level.
+- Stage 2: COMPLETE, Studies 034–038, integration gate passed.
+- Stage 3: ACTIVE; Study 039 first foundation/practitioner checkpoint passed.
+- Current next major work: **Stage 3 — User Goals, Task/Journey Modeling, Cognitive Load, Recognition/Recall, Expectation & Friction**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
