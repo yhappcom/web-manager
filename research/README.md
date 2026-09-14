@@ -78,35 +78,27 @@ Integrated coverage includes HTML parsing/DOM; semantic HTML; CSS cascade vs lay
 
 **STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-Integrated coverage:
-- build-time vs request-time vs client-time content production;
-- static/dynamic vs interactive/non-interactive distinctions;
-- SSR, CSR, SSG and hybrid rendering without framework lock-in;
-- hydration and visible-vs-interactive readiness;
-- progressive-enhancement reasoning;
-- browser/runtime, history, cookie, Web Storage and server-state boundaries;
-- **RFC 10025 (July 2026) as the current cookie standard, obsoleting RFC 6265**;
-- cross-document vs same-document navigation;
-- SPA vs rendering-strategy distinctions;
-- browser history and Back/Forward as application behavior;
-- bfcache vs HTTP cache vs DNS cache;
-- native form submission and enhancement;
-- CDN/edge/static/render-service/client responsibility boundaries;
-- rendering/state/navigation failure diagnosis;
-- explicit handoff to Design Studio Web for navigation/state/loading/resilience design.
+Integrated coverage includes build/request/client rendering boundaries; SSR/CSR/SSG/hybrid strategies; hydration; progressive enhancement; browser/runtime/history/cookie/Web Storage/server-state boundaries; RFC 10025 cookie authority; cross-document vs same-document navigation; SPA vs rendering-strategy distinctions; Back/Forward; bfcache; native forms; CDN/edge/static/render/client responsibility boundaries; and rendering/state/navigation failure diagnosis.
 
-Primary/current evidence checked 2026-09-15: WHATWG HTML Living Standard, IETF RFC 10025, MDN rendering/navigation references and web.dev rendering guidance.
+### 033 — Stage 1 End-to-End Integration & Competency Review
+`033-stage1-end-to-end-integration-competency-review.md`
+
+**STAGE 1 INTEGRATION GATE PASSED.**
+
+The review reconstructs the full path from URL interpretation through DNS, TLS, HTTP/intermediaries/cache, rendering boundaries, HTML→DOM, CSS/resource/layout processing, JavaScript/Web APIs, application state, navigation/history/bfcache and accessibility exposure. It tests representative failures by responsible layer rather than by vague symptom labels and establishes cross-layer invariants such as `DNS success ≠ TLS success`, `HTTP 200 ≠ correct representation`, and `visual correctness ≠ accessibility correctness`.
+
+Primary/current evidence rechecked 2026-09-15 includes WHATWG URL/HTML Living Standards, IETF RFC 9110, IETF RFC 9846, and W3C accessibility mapping guidance. Production MintTap infrastructure facts remain explicitly open until verified in a live project.
 
 ## Current curriculum position
 
-**Stage 1 — Web Foundations.**
+**Stage 1 — Web Foundations: COMPLETE at the intended foundation/practitioner curriculum level.**
 
-The major prerequisite blocks 027–032 are now established at Stage 1 foundation/practitioner level.
+Next major stage:
+- **Stage 2 — Website Anatomy / Content / Information Architecture.**
 
-Next major block:
-- **Stage 1 end-to-end integration & competency review** — reconstruct the path from entering `minttap.app` through URL/origin, DNS, TLS, HTTP, rendering/document parsing, CSS/JS runtime, state/navigation and accessibility exposure; diagnose representative failures by responsible layer; identify unresolved prerequisite gaps before Stage 2.
+The first Stage 2 integrated block should establish, from first principles, how a company that develops Apple/Android apps should structure a public website around visitor intent rather than internal organization. It should cover website purpose and archetypes, audience/intent/task modeling, page types, information hierarchy, navigation/wayfinding, labels/taxonomy, app-vs-company-vs-support/governance surfaces, content ownership/lifecycle and one-app→multi-app growth implications.
 
-Do not advance to Stage 2 until this integration gate is satisfactory.
+Existing 002 and 026 should be revisited only where they add validation or advanced synthesis; they should not substitute for a proper Stage 2 first-principles baseline.
 
 ## Study quality standard
 
@@ -128,4 +120,6 @@ Implementation experiments are used only when necessary to answer a material fac
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
 
-Studies 031–032 create an outgoing Web Design handoff covering native semantics, DOM/visual/focus-order divergence, accessibility-tree non-equivalence, script/hydration timing, same-document vs cross-document navigation, Back/Forward expectations, deep-link behavior, loading/error/partial states, bfcache restoration, native forms and progressive enhancement. Web Manager does not edit Design Studio canonical files without authorization.
+Studies 031–033 create an outgoing Web Design handoff covering native semantics, DOM/visual/focus-order divergence, accessibility-tree non-equivalence, script/hydration timing, same-document vs cross-document navigation, Back/Forward expectations, deep-link behavior, loading/error/partial states, bfcache restoration, native forms and progressive enhancement. The Stage 1 integration review adds an explicit requirement that future Web Design treat URL/history/navigation/accessibility behavior as product constraints rather than merely implementation details.
+
+Design Studio Web remains pre-baseline in its own canonical status; Web Manager does not edit Design Studio canonical files without authorization.
