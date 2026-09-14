@@ -16,99 +16,49 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 
 ## Completed studies
 
-### 001 — App Launch Website Foundations
-`001-app-launch-website-foundations.md`
+- `001-app-launch-website-foundations.md` — Apple/Google launch web requirements.
+- `002-multi-app-information-architecture.md` — multi-app company/app/support/governance IA.
+- `003-privacy-support-account-deletion-architecture.md` — per-app privacy/support/deletion and App Data Contract.
+- `004-store-website-content-synchronization.md` — Product Truth, screenshot evidence and release synchronization.
+- `005-domain-hosting-security-baseline.md` — HTTPS/TLS, machine files, headers, DNS, rollback and monitoring.
+- `006-accessibility-production-baseline.md` — WCAG 2.2 AA internal production baseline.
+- `007-localization-architecture.md` — Korean/English locale URLs, hreflang and localization controls.
+- `008-seo-structured-data-crawlability.md` — canonical, robots, sitemap, schema and Search Console.
+- `009-seo-independent-verification-social-preview.md` — indexability classes and Open Graph baseline.
+- `010-company-app-marketing-content-model.md` — Claim Registry, evidence, screenshots and truthful marketing.
+- `011-operational-release-change-watch-controls.md` — continuous release/change-watch operating loop.
+- `012-implementation-provider-comparison-methodology.md` — static-first architecture and hosting-provider comparison.
+- `013-jurisdiction-legal-compliance-trigger-map.md` — fact-driven Korea/U.S./EU legal trigger framework.
+- `014-provider-poc-specification.md` — identical Firebase vs Cloudflare provider-neutral POC and assertion contract.
+- `015-machine-readable-control-artifact-model.md` — canonical JSON truth records, JSON Schema, stable IDs, semantic fingerprints and dependency/invalidation model.
+- `016-control-artifact-validation-specimen.md` — executable structural + semantic validation specimen with documented failure→revision→re-proof; valid baseline and four intentional error cases produced 5/5 expected outcomes.
 
-Apple/Google launch web requirements: privacy, support, account deletion, app↔web association, advertising verification and policy revalidation.
+## Practice artifacts created by 016
 
-### 002 — Multi-App Company Website Information Architecture
-`002-multi-app-information-architecture.md`
+- `control/schemas/v1/record.schema.json`
+- `control/records/apps/example.json`
+- `control/records/features/portfolio.json`
+- `control/records/evidence/portfolio-release.json`
+- `control/records/claims/portfolio.json`
+- `control/tests/cases.json`
+- `tools/validate_control.py`
 
-Company → apps → app → support/control/governance hierarchy, canonical per-app paths, URL/navigation baseline.
-
-### 003 — Privacy, Support & Account-Deletion Content Architecture
-`003-privacy-support-account-deletion-architecture.md`
-
-Per-app privacy/support/account-deletion surfaces, App Data Contract and cross-surface disclosure consistency.
-
-### 004 — App Store / Google Play ↔ Website Content Synchronization
-`004-store-website-content-synchronization.md`
-
-Product Truth Record, Screenshot Evidence Set, Content Release Manifest and factual synchronization rules across stores/web.
-
-### 005 — Domain, Hosting & Security Baseline
-`005-domain-hosting-security-baseline.md`
-
-Provider-independent HTTPS/TLS, verification-file, caching, security-header, DNS, secret, rollback and monitoring contract.
-
-### 006 — Accessibility Production Baseline
-`006-accessibility-production-baseline.md`
-
-WCAG 2.2 AA internal target, semantic structure, keyboard/focus, reflow, text enlargement, forms/status and manual validation gates.
-
-### 007 — Localization Architecture
-`007-localization-architecture.md`
-
-Korean/English-first locale URLs, HTML language, reciprocal hreflang, Locale Matrix, Localization Manifest and translation invalidation controls.
-
-### 008 — SEO, Structured Data, Sitemap, Canonical & Crawlability
-`008-seo-structured-data-crawlability.md`
-
-Canonical/hreflang, robots/sitemap, crawlability, conservative structured data and Search Console production validation.
-
-### 009 — SEO Independent Verification & Social Preview Metadata
-`009-seo-independent-verification-social-preview.md`
-
-Independent check of 008, public/noindex/private classes, robots vs noindex, localized title/description and Product-Truth-governed Open Graph baseline.
-
-### 010 — Company / App Marketing Content Model
-`010-company-app-marketing-content-model.md`
-
-Product-Truth-governed marketing, Claim Registry, content hierarchy, evidence/screenshots, trust/store CTA, price/subscription and claim staleness controls.
-
-### 011 — Operational Release & Change-Watch Controls
-`011-operational-release-change-watch-controls.md`
-
-Continuous operating loop: Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, pre/post-release gates, incident severity, verification-file propagation, notification continuity and ownership controls.
-
-### 012 — Implementation / Hosting Provider Comparison Methodology
-`012-implementation-provider-comparison-methodology.md`
-
-Static-first architecture, provider hard gates, weighted comparison of Firebase Hosting / Cloudflare Workers / Vercel / Netlify, top-candidate shortlist and POC-before-selection rule.
-
-### 013 — Jurisdiction-Specific Legal / Compliance Trigger Map
-`013-jurisdiction-legal-compliance-trigger-map.md`
-
-Fact-driven Legal Trigger Registry mapping conditional Korea PIPA/direct-commerce, U.S. FTC/COPPA/California CCPA, other-state watch and conditional EU GDPR scope to actual web/backend controls.
-
-### 014 — Provider POC Specification
-`014-provider-poc-specification.md`
-
-Identical Firebase Hosting vs Cloudflare Workers experiment: one provider-neutral static corpus, deterministic manifest, synthetic data, machine-endpoint/HTTP/header/cache/search/social/404/a11y assertions, preview/promote/rollback cycle and provider-neutral verification harness.
-
-### 015 — Machine-Readable Control Artifacts / Single Source of Truth
-`015-machine-readable-control-artifact-model.md`
-
-Defines canonical JSON control records validated by JSON Schema Draft 2020-12 plus a repository-wide semantic linter. Normalizes app/release/feature/data-practice/processor/evidence/screenshot/claim/locale/localization/legal/surface/policy/release records, immutable IDs, semantic fingerprints, dependency invalidation, generated release impact and secret/PII boundaries. The core rule is one canonical owner per fact, not one giant file.
+These are synthetic research fixtures, not actual MintTap product facts.
 
 ## Current research queue
 
-See root `STATUS.md` for the authoritative next-work queue. Highest-value next work is now:
+See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
-1. controlled validation specimen for the 015 model: real JSON Schemas, valid records, intentional failures and a repository integrity validator;
+1. extend the validation slice through release/store/data-practice/processor/locale/legal/operational-surface relationships and derived release impact;
 2. execute the Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available;
-3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal-surface transfer validation on that POC;
-4. apply the Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
+3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation on that POC;
+4. apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
 5. app-specific user/market evidence when actual product pages are assigned.
 
 ## Design Studio relationship
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web decisions and production findings stay here first.
 
-Relevant Design Studio domains:
-- Typography / Type Design;
-- Color;
-- Layout / Spatial & Interaction;
-- Web Design.
+Relevant domains: Typography / Type Design, Color, Layout / Spatial & Interaction, Web Design.
 
-When MintTap production work confirms, limits or contradicts a reusable Design Studio claim, record the MintTap evidence here and hand it back to the appropriate specialist when justified.
+When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record the MintTap result here and hand it back to the appropriate specialist when justified.
