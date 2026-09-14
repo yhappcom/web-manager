@@ -53,12 +53,22 @@ Adopted WCAG 2.2 AA as the internal web production target and established semant
 - Added Search Console ownership/continuity, sitemap submission, URL Inspection, canonical/indexing checks and structured-data validation to post-launch operations.
 - Canonical study: `research/008-seo-structured-data-crawlability.md`.
 
+### 009 — SEO Independent Verification & Social Preview Metadata
+- Independently reconfirmed current Google indexability assumptions used in Study 008.
+- Formalized route classes: **A discoverable public / B public noindex / C private access-controlled**.
+- Clarified that `robots.txt` is crawl management, not privacy and not reliable de-indexing; confidential material requires access control and public noindex pages must remain crawlable for the directive to be seen.
+- Established localized, page-specific `<title>` and meta-description requirements aligned with visible content and Product Truth.
+- Established an Open Graph baseline for share-worthy pages: localized `og:title`, `og:description`, canonical locale `og:url`, stable HTTPS `og:image`, meaningful image alt and truthful brand/site identity.
+- Social preview imagery/copy consumes Product Truth and Screenshot Evidence; it must not imply unshipped features, ratings, prices or UI localization.
+- Platform-specific social-card behavior and preview caches remain implementation/channel validation work.
+- Canonical companion study: `research/009-seo-independent-verification-social-preview.md`.
+
 ## Current maturity
 
 Stage: **Foundation**
 State: **IN STUDY — architecture/evidence base expanding**
 
-Reading alone is not PASS. Policy findings require freshness checks; architecture/security/accessibility/localization/search findings require implementation on real pages, browsers, devices, locales, search tools and store consoles before production confidence.
+Reading alone is not PASS. Policy findings require freshness checks; architecture/security/accessibility/localization/search/social findings require implementation on real pages, browsers, devices, locales, search tools, target social channels and store consoles before production confidence.
 
 ## Current public information architecture
 
@@ -87,7 +97,7 @@ Do not finalize until primary audience/market strategy is known.
 - **App Data Contract** — actual data collection, SDK/processors, purposes, sharing, retention/deletion and account behavior.
 - **Product Truth Record** — current shipped capabilities, identity, availability, account/subscription behavior and destinations.
 - **Screenshot Evidence Set** — version/platform/locale/feature provenance.
-- **Content Release Manifest** — release impact across web/store/privacy/support/localization/assets/infrastructure/accessibility/search.
+- **Content Release Manifest** — release impact across web/store/privacy/support/localization/assets/infrastructure/accessibility/search/social.
 - **Locale Matrix** — app UI vs website vs store metadata vs privacy/support/deletion/screenshot locale coverage.
 - **Localization Manifest** — source revision, target locale, glossary/reviewer, approval/staleness and surface coverage.
 
@@ -127,18 +137,33 @@ Exact machine-readable storage schemas remain OPEN.
 - Support localization must correspond to the UI/version users actually see.
 - Korean/English text growth, fallback, wrapping, mixed-script metrics and 200%/320px behavior require real-browser proof.
 
-## Search / discovery baseline
+## Search / discovery / social baseline
 
-- Every indexable public page has one final HTTPS URL and an explicit self-consistent canonical.
+### Indexability classes
+- **A — discoverable public:** default for company/app/support/privacy/account-control pages intended to be found.
+- **B — public/noindex:** exceptional public utility pages with a documented reason.
+- **C — private:** staging/internal/admin/draft material protected through actual access control.
+
+### Search contract
+- Every indexable public page has one final HTTPS URL and explicit self-consistent canonical.
 - Localized pages keep their own canonical and reciprocal hreflang relationships.
-- Public app/company pages must expose meaningful visible content and crawlable links; metadata/JSON-LD cannot substitute for real content.
-- `robots.txt` remains minimal and is not a secrecy/access-control mechanism.
+- Public app/company/support pages expose meaningful visible content and crawlable links; metadata/JSON-LD cannot substitute for real content.
+- `robots.txt` remains minimal, is not secrecy/access control and is not the sole de-indexing mechanism.
+- Public pages intentionally excluded from Search use crawlable `noindex`; private material requires authentication/access control.
 - XML sitemap contains final canonical indexable URLs only.
+- Each important indexable page gets a unique localized title/meta description aligned with visible content and Product Truth.
 - Structured data describes only visible/real facts derived from Product Truth or confirmed company data.
 - Do not fabricate ratings/reviews, pricing, legal identity or contact data for schema eligibility.
 - Organization schema awaits confirmed company identity/contact data.
 - Search favicon is treated at hostname/company-brand level for the `minttap.app` host.
 - Search Console access, sitemap submission, URL Inspection and canonical/indexing monitoring are part of production operations.
+
+### Social preview contract
+- Share-worthy pages use localized Open Graph title/description.
+- `og:url` equals the final locale canonical URL.
+- `og:image` is a stable publicly fetchable HTTPS asset and includes meaningful alt text where supported by the protocol.
+- Social preview copy/images may not contradict Product Truth, Screenshot Evidence or real locale support.
+- Platform-specific card metadata and cache behavior require validation on actual channels adopted by MintTap.
 
 ## Current release blockers model
 
@@ -147,19 +172,21 @@ Examples include:
 - required support/privacy/deletion URL broken;
 - non-existent feature presented as shipped;
 - materially incorrect account/subscription instructions;
-- misleading screenshots;
+- misleading screenshots/social previews;
 - inaccessible launch-critical support/account-control flow;
 - association files redirected/malformed when required;
 - localized content materially contradicting source product/data truth;
-- website/store copy claiming app UI language support that is not shipped;
+- website/store/social content claiming app UI language support that is not shipped;
 - canonical/hreflang pointing to wrong app/locale/staging/redirect targets;
 - production accidentally retaining staging `noindex` or crawl blocks;
-- sitemap publishing staging/obsolete/wrong-host URLs.
+- sitemap publishing staging/obsolete/wrong-host URLs;
+- private material protected only by robots/noindex;
+- fabricated ratings/reviews/pricing/entity facts in structured data.
 
 ## Important open items
 
 - Exact MintTap legal entity/public contact information.
-- Exact app inventory, released versions, account behavior and locale support.
+- Exact app inventory, released versions, account behavior, pricing and locale support.
 - Exact SDK/analytics/ads/auth/processors/data flows.
 - Internal artifact storage schemas and release ownership roles.
 - Hosting/CDN/DNS/SSL provider selection and real audit.
@@ -173,27 +200,27 @@ Examples include:
 - Search Console organizational ownership/access model.
 - Actual app categories/pricing/store IDs and whether legitimate review/rating data suitable for structured markup exists.
 - Which support pages should be indexable vs selectively excluded based on value/risk.
+- Final social distribution channels and preview-image art direction/dimensions.
 - Jurisdiction-specific legal/compliance requirements once launch regions and data practices are fixed.
 
 ## Current Design Studio dependencies
 
-- **Web Design** — actual localized page systems, language switching, responsive/browser validation, metadata generation and implementation fidelity.
-- **Typography / Type** — Korean/English fallback, mixed-script metrics, long labels, wrapping, numerals and zoom/reflow validation.
+- **Web Design** — actual localized page systems, language switching, responsive/browser validation, metadata/social-preview generation and implementation fidelity.
+- **Typography / Type** — Korean/English fallback, mixed-script metrics, long labels/titles, wrapping, numerals and zoom/reflow validation.
 - **Layout / Interaction** — navigation, locale switching, task preservation, breadcrumbs, destructive/account-control flows and responsive recomposition.
-- **Color** — contrast/state/focus/theme validation in real localized pages.
+- **Color** — contrast/state/focus/theme and brand/social-image behavior in real pages.
 
 ## Next research queue
 
 1. **Company/app marketing content model:** positioning, feature hierarchy, proof, screenshots, trust and conversion without unsupported claims.
-2. Operational release / policy-change / broken-link / verification-file freshness monitoring.
+2. Operational release / policy-change / broken-link / verification-file / indexing / social-preview freshness monitoring.
 3. Jurisdiction-specific legal/compliance web requirements when entity, markets and data practices are known.
 4. Implementation/provider comparison after Foundation evidence is mature enough to score real hosting/CMS/framework candidates.
-5. Real-browser Korean/English localization/accessibility/type transfer validation once an implementation exists.
-6. Social-preview metadata details when actual distribution channels/campaign requirements are known.
+5. Real-browser Korean/English localization/accessibility/type/search/social transfer validation once an implementation exists.
 
 ## Persistence state
 
 - `AGENTS.md` contains the autonomous continuous-learning directive.
-- `research/README.md` indexes studies 001–008.
+- `research/README.md` indexes studies 001–009.
 - Completed study details are canonical in `research/`.
 - This file is the current operational checkpoint.
