@@ -11,7 +11,7 @@ The Web Manager owns MintTap company website content, app-launch web requirement
 
 ## Completed foundation / practice studies
 
-Studies **001–023** are complete at the documented Foundation/PRACTICE level. Canonical details are under `research/` and indexed in `research/README.md`.
+Studies **001–024** are complete at the documented Foundation/PRACTICE level. Canonical details are under `research/` and indexed in `research/README.md`.
 
 Latest sequence:
 - **016** Control Artifact Validation Specimen — 5/5;
@@ -21,33 +21,73 @@ Latest sequence:
 - **020** Derived Release Gate / Auditable Waivers — 8/8;
 - **021** Release Provenance / Reviewer Authorization / Fail-Closed CI — 9/9;
 - **022** Protected Policy Ownership / Quorum / Revocation / Workflow Threat Model — 10/10;
-- **023** Provider-Neutral Active Workflow Trust-Boundary Contract — 12/12.
+- **023** Provider-Neutral Active Workflow Trust-Boundary Contract — 12/12;
+- **024** Firebase Hosting vs Cloudflare Provider-Edge Contract Mapping — 11/11.
 
 Production PASS is not claimed. Actual MintTap facts, real store-console state, legal applicability, provider accounts/domain authority, live CI/deployment enforcement and browser/device production validation remain incomplete.
 
-## 023 — provider-neutral active workflow contract
+## 024 — Firebase vs Cloudflare provider-edge mapping
 
 New artifacts:
-- `research/023-provider-neutral-active-workflow-trust-boundary.md`
-- `tools/validate_active_workflow_contract.py`
-- `control/tests/active_workflow_contract_cases.json`
+- `research/024-firebase-cloudflare-provider-edge-contract-mapping.md`
+- `tools/validate_provider_edge_contract.py`
+- `control/tests/provider_edge_contract_cases.json`
 
-Controlled result: **12 / 12 expected outcomes matched.**
+Controlled result: **11 / 11 expected outcomes matched.**
 
-The future release workflow is divided into four trust zones:
+### Firebase Hosting mapping
 
-1. **PR_VALIDATE** — `pull_request`, may execute untrusted code, baseline `contents: read`, no secrets, no OIDC, no deployment authority.
-2. **TRUSTED_BUILD** — protected accepted source only; no untrusted PR checkout execution and no deployment credential; outputs digest-bound deployable artifact.
-3. **DEPLOY** — requires release manifest `ci_state=ALLOW`, protected workflow/policy source, trusted-build artifact origin and exact approved digest; deployment credential exists only here.
-4. **ROLLBACK** — trusted manual action selecting a previously approved immutable artifact digest; no rebuild of current source.
+Verified from current official Firebase/Google Cloud documentation:
+- permanent live channel plus temporary preview channels;
+- preview channels documented **beta**, default 7-day expiry, configurable up to 30 days;
+- deployed releases point to version objects;
+- `firebase hosting:clone` can promote an already tested version to another channel; same-site clone can preserve the exact version ID;
+- live rollback creates a new release serving a previous version;
+- release retention is configurable per channel and old retained content can be deleted;
+- Firebase CLI recommends Application Default Credentials for CI; legacy `FIREBASE_TOKEN` is less secure and no longer recommended;
+- Google Cloud Workload Identity Federation can exchange GitHub OIDC identity for short-lived Google credentials used through ADC;
+- `firebase.json` controls redirects, rewrites, headers, deploy directory and custom 404 behavior.
 
-Credential modes:
-- `OIDC_SHORT_LIVED` is preferred when the selected provider supports and validates it;
-- `ENVIRONMENT_SCOPED_SECRET` is the provider-neutral fallback and must remain deploy-job scoped.
+Preferred MintTap path:
 
-Critical rule: **PR workflow artifacts are test evidence, not deployable release artifacts.** Deployment must follow accepted source → trusted build → artifact digest → release manifest ALLOW → exact digest deployment.
+**GitHub OIDC → Google Cloud WIF → ADC → Firebase CLI → preview/tested Hosting version → exact-version clone to live.**
 
-GitHub's built-in artifact digest validation documents a mismatch as a warning. MintTap's release contract is intentionally stricter: an approved-manifest/artifact digest mismatch is release-blocking.
+Live validation is still required for exact IAM roles and CLI behavior.
+
+### Cloudflare Workers + Static Assets mapping
+
+Verified from current official Cloudflare documentation:
+- Worker versions include bundled code, static assets, bindings and compatibility settings;
+- external storage state such as KV/R2/D1/Durable Objects is not versioned with the Worker;
+- `wrangler versions upload` creates a version without immediately deploying it;
+- `wrangler versions deploy --version-id` can later promote the exact uploaded version;
+- version preview URLs are available when enabled and are public by default unless protected with Cloudflare Access;
+- external GitHub Actions deployment docs currently use scoped Cloudflare API token + account ID;
+- rollback creates a new deployment for a selected previous version and is limited to the 100 most recent published versions;
+- rollback does not restore external bound-resource state;
+- `_headers`, `_redirects`, `assets.html_handling` and static routing configuration control static response behavior.
+
+Preferred MintTap path:
+
+**trusted source → `wrangler versions upload` → capture version ID + preview → release manifest ALLOW → `wrangler versions deploy --version-id <approved>`**.
+
+Current evidenced credential baseline for external CI is **scoped API token**, not OIDC. OIDC-equivalent Cloudflare deployment auth remains OPEN.
+
+## 023/024 common provider contract
+
+A provider is acceptable for the live POC only if:
+1. preview is isolated from production traffic;
+2. production promotion is separate from preview creation;
+3. the exact reviewed provider version can be promoted without source rebuild;
+4. rollback can re-point to a prior retained provider version without rebuilding current source;
+5. rollback retention is explicitly bounded and monitored;
+6. static security/cache headers are configurable and verifiable;
+7. redirect/canonical URL behavior is explicit;
+8. custom 404 behavior is explicit;
+9. deployment credentials exist only in DEPLOY/ROLLBACK trust zones;
+10. dynamic/external state is not assumed to roll back with the provider version;
+11. provider version ID and MintTap artifact digest are both recorded in release provenance;
+12. real account/domain validation is required before production PASS.
 
 ## Current control architecture
 
@@ -63,29 +103,16 @@ Current direction includes:
 - exact-issue/release/source/tool/policy-bound waivers;
 - reviewer authorization, quorum, revocation and separation of duties;
 - protected governance ownership;
-- explicit time-bounded break-glass handling;
+- time-bounded break-glass handling;
 - source/tool/input provenance and fail-closed CI semantics;
 - four-zone workflow trust separation;
-- artifact-digest deployment binding;
+- provider version + artifact-digest deployment binding;
 - credential isolation to deploy/rollback;
+- provider-specific auth adapter without changing the provider-neutral trust model;
 - canonical truth remains unchanged by waiver/emergency disposition;
 - no secrets or customer personal data in this repository.
 
 Important limitation: current deterministic Python JSON serialization is still **not claimed as full RFC 8785 JCS conformance**.
-
-## Current GitHub/platform evidence
-
-Verified/retained current primary-source findings:
-- privileged `pull_request_target` and `workflow_run` flows must not execute untrusted PR content or blindly trust artifacts originating from untrusted workflows;
-- least-privilege `GITHUB_TOKEN` permissions are required;
-- CODEOWNERS/branch protection can protect sensitive workflow/policy changes when repository capability permits;
-- protected environments can gate deployment and secret access, subject to plan/repository visibility constraints;
-- OIDC with `id-token: write` can exchange GitHub identity for short-lived provider credentials when the provider trust policy is correctly constrained;
-- GitHub upload/download artifacts expose SHA-256 digest validation, but MintTap requires digest mismatch to fail closed;
-- full-length commit SHA pinning remains the documented immutable method for third-party actions;
-- current private-repository ruleset/environment/attestation capabilities must not be assumed without verification.
-
-No active GitHub Actions deployment workflow has been enabled yet.
 
 ## Current public information architecture
 
@@ -122,7 +149,7 @@ Preferred envelope:
 
 **Git-versioned content/data → build-time static generation → global HTTPS/CDN hosting → isolated dynamic functions only for genuine server workflows.**
 
-Provider shortlist:
+Provider shortlist remains:
 1. Firebase Hosting;
 2. Cloudflare Workers + Static Assets;
 3. Vercel if justified SSR/full-stack need appears;
@@ -130,18 +157,17 @@ Provider shortlist:
 
 No provider selected.
 
-The Firebase vs Cloudflare POC must use the same static corpus, release-control contract and assertion suite. Provider-specific tooling may implement the final credential/deploy/rollback edge but must not redefine the trust model.
+Firebase and Cloudflare both remain viable after 024. The provider POC must use the same content corpus, HTTP assertion suite and release-control contract. Provider-specific deployment tooling may implement only the final adapter edge.
 
 ## Current Design Studio dependencies / handoffs
 
-Latest checked Design Studio state:
-- **Web Design** — still no substantive `W###`;
-- **Layout / Interaction** — through `L005 / I004`.
+Latest checked Design Studio Web state still has no substantive `W###`.
 
 Handoff rules:
-- validation, trusted build, deploy, rollback, clean/waived/break-glass pass, needs-review, blocked, stale-artifact, quorum incomplete and credential-boundary states require textual/structural/programmatic meaning rather than color-only encoding;
-- long digests, release IDs, reviewer IDs, rollback reasons and Korean/English governance strings are future typography/reflow stress content;
-- Web Design owns production page/workflow presentation when substantive Web research exists.
+- provider behavior must be tested as part of real browser design QA, not treated as invisible infrastructure;
+- canonical/trailing-slash behavior, preview indexation, 404 recovery, cache/security headers and machine endpoints are explicit Web validation inputs;
+- localized Korean/English routes and long governance/release strings remain future layout/type/accessibility stress cases;
+- visual treatment remains Web Design ownership once substantive Web research exists.
 
 ## Important open items
 
@@ -151,32 +177,35 @@ Handoff rules:
 - SDK/analytics/ads/auth/processors/data flows and processing locations;
 - legal applicability/signoff process;
 - full RFC 8785/JCS conformance validation;
-- final schemas for dependencies/approvals/manifests/waivers/reviewer/quorum/break-glass/workflow contracts;
+- final schemas for dependencies/approvals/manifests/waivers/reviewer/quorum/break-glass/workflow/provider contracts;
 - authenticated reviewer identity mapping and repository enforcement;
 - exact GitHub branch protection/CODEOWNERS/environment capability verification;
-- exact Firebase Hosting auth/deploy/preview/rollback/version behavior;
-- exact Cloudflare Workers/Static Assets auth/deploy/preview/rollback/version behavior;
+- Firebase WIF/ADC minimum IAM roles and exact live Hosting CLI behavior;
+- Cloudflare minimum API-token permissions and external-CI short-lived credential alternatives;
+- Firebase preview-backend isolation policy because previews can reach real project resources;
+- Cloudflare preview visibility/Access policy;
+- exact custom-domain/DNS implications for `minttap.app`;
 - observed OIDC claims and provider trust policy;
-- GitHub artifact retention/immutability for long-term rollback;
 - deployment concurrency/serialization;
+- immutable release history / long-term rollback retention;
 - signed/cryptographic attestation where justified;
-- active CI/deployment workflow and immutable release history;
+- active CI/deployment workflow;
 - real App Links/AASA/app-ads identifiers/routes;
 - real-browser Korean/English design/accessibility transfer validation;
 - Search Console/policy-alert/webhook/escalation ownership.
 
 ## Next research queue
 
-1. **Firebase Hosting vs Cloudflare provider-edge contract mapping.** Verify current official authentication, preview/production deployment, rollback/version retention, headers/redirect/static-file behavior and constraints against the 023 four-zone contract. Execute only provider-neutral/local assertions that do not require accounts/domain authority; explicitly mark blocked live tests.
-2. Execute the live provider POC when provider accounts/domain authority are available.
-3. Use the POC for Design Studio real-browser Korean/English/accessibility/layout/type/color transfer validation.
+1. **Identical provider POC corpus + provider-neutral HTTP assertion runner.** Build the local corpus for `/ko/`, `/en/`, app/support/privacy routes, exact machine files, 404, canonical redirects, sitemap/robots, cache/security headers and artifact-digest manifest. This work must remain deploy-provider-neutral.
+2. Execute the live Firebase Hosting vs Cloudflare Workers/Static Assets POC when provider accounts/domain authority are available.
+3. Use the live POC for Design Studio real-browser Korean/English/accessibility/layout/type/color transfer validation.
 4. Apply Legal Trigger Registry when actual entity/market/audience/data/transaction facts are available.
-5. App-specific user/market evidence when real product pages are assigned.
+5. App-specific user/market evidence when actual product pages are assigned.
 
 ## Persistence state
 
 - `AGENTS.md` contains autonomous continuous-learning rules.
-- `research/README.md` indexes **001–023**.
-- Studies 016–023 have executable PRACTICE artifacts under `control/` and `tools/`.
-- Study 023 adds `tools/validate_active_workflow_contract.py` and `control/tests/active_workflow_contract_cases.json`.
+- `research/README.md` indexes **001–024**.
+- Studies 016–024 have executable PRACTICE artifacts under `control/` and `tools/`.
+- Study 024 adds `tools/validate_provider_edge_contract.py` and `control/tests/provider_edge_contract_cases.json`.
 - This file is the current operational checkpoint.
