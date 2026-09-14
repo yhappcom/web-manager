@@ -1,0 +1,94 @@
+[
+  {
+    "name": "schema-missing-evidence",
+    "record": {
+      "schema_version": 1,
+      "record_type": "claim",
+      "id": "claim:test:missing-evidence",
+      "status": "VERIFIED",
+      "owner": "role:web",
+      "app_ref": "app:example",
+      "claim_mode": "CURRENT",
+      "feature_refs": ["feature:example:portfolio"],
+      "text": "Invalid fixture."
+    },
+    "additional_records": [],
+    "expected_stage": "schema",
+    "expected_code": "SCHEMA_INVALID"
+  },
+  {
+    "name": "semantic-missing-feature",
+    "record": {
+      "schema_version": 1,
+      "record_type": "claim",
+      "id": "claim:test:missing-feature",
+      "status": "VERIFIED",
+      "owner": "role:web",
+      "app_ref": "app:example",
+      "claim_mode": "CURRENT",
+      "feature_refs": ["feature:example:not-real"],
+      "evidence_refs": ["evidence:example:portfolio-release"],
+      "text": "Invalid missing feature ref."
+    },
+    "additional_records": [],
+    "expected_stage": "semantic",
+    "expected_code": "MISSING_REF"
+  },
+  {
+    "name": "semantic-planned-current",
+    "record": {
+      "schema_version": 1,
+      "record_type": "claim",
+      "id": "claim:test:planned-current",
+      "status": "VERIFIED",
+      "owner": "role:web",
+      "app_ref": "app:example",
+      "claim_mode": "CURRENT",
+      "feature_refs": ["feature:example:planned"],
+      "evidence_refs": ["evidence:example:portfolio-release"],
+      "text": "Invalid current claim for planned feature."
+    },
+    "additional_records": [
+      {
+        "schema_version": 1,
+        "record_type": "feature",
+        "id": "feature:example:planned",
+        "status": "VERIFIED",
+        "owner": "role:product",
+        "app_ref": "app:example",
+        "name": "Planned feature",
+        "feature_state": "PLANNED"
+      }
+    ],
+    "expected_stage": "semantic",
+    "expected_code": "CURRENT_CLAIM_NOT_SHIPPED"
+  },
+  {
+    "name": "semantic-stale-evidence",
+    "record": {
+      "schema_version": 1,
+      "record_type": "claim",
+      "id": "claim:test:stale-evidence",
+      "status": "VERIFIED",
+      "owner": "role:web",
+      "app_ref": "app:example",
+      "claim_mode": "CURRENT",
+      "feature_refs": ["feature:example:portfolio"],
+      "evidence_refs": ["evidence:example:stale"],
+      "text": "Invalid claim supported only by stale evidence."
+    },
+    "additional_records": [
+      {
+        "schema_version": 1,
+        "record_type": "evidence",
+        "id": "evidence:example:stale",
+        "status": "STALE",
+        "owner": "role:qa",
+        "evidence_type": "TEST_REPORT",
+        "summary": "Intentionally stale test evidence."
+      }
+    ],
+    "expected_stage": "semantic",
+    "expected_code": "EVIDENCE_NOT_VERIFIED"
+  }
+]
