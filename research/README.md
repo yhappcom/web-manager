@@ -73,8 +73,6 @@ Supporting/integrated artifacts:
 
 **STAGE 1 INTEGRATION GATE PASSED.**
 
-Reconstructs URL → DNS → TLS → HTTP/cache/intermediaries → rendering → HTML/DOM → CSS/resources/layout → JS/Web APIs → state → navigation/history/bfcache → accessibility exposure.
-
 ---
 
 ## Stage 2 — Website Anatomy / Content / Information Architecture
@@ -104,21 +102,9 @@ Reconstructs URL → DNS → TLS → HTTP/cache/intermediaries → rendering →
 
 **STAGE 2 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
-Integrated Stage 2 contract:
+Integrated contract:
 
 `entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`
-
-Key outputs:
-- company/app/support/governance/error-state page-system matrix;
-- direct-entry tests for stores/search/shared links;
-- support resolution→escalation contract;
-- privacy/account-control scope tests;
-- release/known-issue lifecycle tests;
-- differentiated non-happy-state recovery;
-- KO/EN + narrow-width + enlarged-text/reflow invariants;
-- heading/landmark/meaningful-order gate;
-- integrated failure taxonomy;
-- production Design Studio handoff package.
 
 **Stage 2 COMPLETE at intended foundation/practitioner level.**
 
@@ -131,42 +117,71 @@ Key outputs:
 
 **STAGE 3 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-Study 039 transfers and independently checks Design Studio Interaction evidence rather than duplicating it.
-
 Core model:
 
 `goal → action possibility/signifier → constraint → articulation → requested transition → accepted? → pending/working? → committed state → feedback → recovery/reversal → continuity`
 
 Established:
 - usability vs interaction design vs visual presentation separation;
-- affordance/action possibility vs signifier/discoverability distinction;
-- mapping/scope, availability and commitment truth as separate interaction gates;
-- severity-proportional feedback/interruption;
-- explicit user-facing state modeling before styling;
-- preview/local/persisted/queued/remote/external commitment distinctions;
-- forms as stateful tasks rather than field collections;
-- prevention/constraint/validation/error/suggestion/confirmation/undo/recovery separation;
-- consequence × reversibility protection strategy;
-- async `pending / confirmed / known failed / canceled / outcome unknown` distinctions;
-- retry safety as API/business-effect semantics rather than UI choice;
-- optimistic UI reconciliation/rollback requirement;
-- disabled/unavailable/pending distinction;
-- plural state continuity across navigation/reload/interruption;
-- pointer/touch/keyboard task-semantic equivalence;
-- browser-native forms/controls as the baseline to evaluate before custom replacement;
-- interaction failure taxonomy and reusable MintTap Interaction Contract;
-- explicit separation between standards/expert diagnosis and human usability proof.
+- action possibility/signifier/mapping/availability/commitment-truth gates;
+- explicit state modeling;
+- forms as stateful tasks;
+- prevention/constraint/validation/error/correction/confirmation/undo/recovery separation;
+- async outcome-unknown and retry-safety semantics;
+- optimistic reconciliation/rollback;
+- state continuity and input-mode equivalence;
+- browser-native controls/forms baseline;
+- reusable Interaction Contract and failure taxonomy;
+- human usability proof as a separate validation gate.
 
-Primary/current evidence checked 2026-09-15:
-- ISO 9241-11:2018 current usability standard;
-- Don Norman author-published affordance/signifier clarification;
-- Apple HIG Feedback, Loading and Undo/Redo;
-- WHATWG HTML Living Standard forms/constraint behavior, current 2026-09-14;
-- W3C Forms Tutorial updated 2026-03-27, WCAG 2.2 and current techniques;
-- RFC 9110 idempotency semantics;
-- Design Studio Interaction 007/015/I001/I002;
-- current Design Studio Layout/Interaction and Web status;
-- Web Design `W001` — now substantive Practice/Critique evidence.
+### 040 — User Goals, Task/Journey Modeling, Cognition, Expectation & Friction Foundations
+`040-stage3-user-goals-task-journey-cognition-expectation-friction-foundations.md`
+
+**STAGE 3 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
+Core journey model:
+
+`entry/context → user goal → prerequisites → task/state sequence → decision/commitment → completion / unresolved / abandoned → recovery/escalation`
+
+Study 040 extends 039 rather than repeating local interaction mechanics. It establishes:
+- goal / task / step / action / control / system-operation separation;
+- journeys as user-work and state/commitment sequences rather than funnel diagrams;
+- a user critical path defined by smallest **justified work**, not fewest clicks/screens;
+- justification categories for necessary/protective steps;
+- working-memory evidence without magic UI item-count rules;
+- externalized/preserved context to reduce unnecessary recall;
+- recognition-vs-recall across entire journeys;
+- interruption/resumption reconstruction requirements;
+- Hick/Hyman choice-reaction evidence as bounded uncertainty evidence, not a universal menu-count formula;
+- progressive disclosure as decision-dependent information timing;
+- semantic expectation/transfer consistency rather than pixel sameness;
+- friction taxonomy: necessary / protective / accidental / manipulative-obstructive;
+- FTC and EU DSA Article 25 as current regulatory evidence with explicit applicability caveats;
+- uncertainty reduction before consequential commitments;
+- conversion metrics separated from usability, informed choice and task success;
+- reusable **Task/Journey Contract**;
+- journey failure taxonomy covering goal mismatch, fragmentation, redundant/premature work, recall dependency, choice structure, expectation, interruption, commitment, friction/asymmetry and evidence failures.
+
+Explicitly rejected as professional rules:
+- fixed “4±1” or “7±2” UI item limits;
+- “Hick's Law means always show fewer choices”;
+- “one question per page automatically reduces cognitive load”;
+- “fewer clicks/screens always means better UX”;
+- “all friction is bad”;
+- “higher conversion proves a better journey.”
+
+Primary/current evidence checked 2026-09-15 includes:
+- ISO 9241-210:2019, current after 2025 confirmation;
+- GOV.UK whole-problem/user-needs/service measurement guidance;
+- W3C Cognitive Accessibility memory/interruption guidance;
+- Cowan 2001 working-memory review;
+- Hick 1952 / Hyman 1953 choice-reaction research plus modern limitations review;
+- FTC 2022 dark-pattern report/enforcement;
+- Regulation (EU) 2022/2065 Article 25;
+- Design Studio Interaction 007, I001 and Web W001;
+- current Design Studio Web and Layout/Interaction statuses.
+
+---
 
 ## Current curriculum position
 
@@ -176,24 +191,25 @@ Primary/current evidence checked 2026-09-15:
 
 **Stage 3 — ACTIVE.**
 
+039 and 040 now establish the action/state layer and the goal/task/journey/cognition/friction layer.
+
 Next highest-value integrated topic:
 
-**User Goals, Task/Journey Modeling, Cognitive Load, Recognition/Recall, Expectation & Friction.**
-
-039 explains how an action-state loop should behave. The next prerequisite is determining which interactions/steps should exist at all, how sequences affect memory/decision burden, and how to distinguish necessary or protective friction from accidental or manipulative friction before later conversion work.
+**Forms, Input, Choice, Validation & Multi-Step Transaction Design.**
 
 Expected scope:
-- goals vs system steps;
-- task decomposition/critical path;
-- journey as task/state sequence rather than marketing diagram;
-- recognition vs recall/externalized context;
-- attention/working-memory constraints without folklore magic numbers;
-- consistency/expectation and transfer learning;
-- decision complexity without blindly applying Hick-style formulas;
-- progressive disclosure/information timing;
-- interruption/resumption cues;
-- friction taxonomy and trust/uncertainty reduction;
-- ethical boundary before conversion optimization.
+- deciding what information should be requested at all;
+- labels/instructions/grouping and field semantics;
+- native inputs and browser behavior;
+- required vs optional information;
+- defaults/prefill/known context;
+- client/server validation authority and timing;
+- inline errors, summaries and focus;
+- conditional questions;
+- multi-step sequence, review/commit and save/resume;
+- redundant-entry prevention;
+- accessibility and mixed input;
+- task completion rather than form completion as the outcome.
 
 ---
 
@@ -205,11 +221,12 @@ A substantial study should normally include precise vocabulary, first-principles
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`; MintTap-specific strategy, product/content/IA requirements, platform constraints, measurement and operations stay here first.
 
-Current Design Studio state relevant to Web Manager:
-- Web Design `W001` is complete at PRACTICE/CRITIQUE; previous Web Manager notes saying there was no substantive `W###` evidence are superseded;
-- Layout/Interaction has substantive I001–I006/L001–L006 evidence but remains Foundation/CRITIQUE, not production PASS;
-- human/project validation remains deferred rather than simulated.
+Current synchronized Design Studio state:
+- Layout/Interaction Stage 1 is **PASS** under its current curriculum, with Stage 2 entry audit next; this does not imply human/production/platform validation;
+- Web Design `W001` is Practice/Critique and W002 is next; Web Foundation is not passed;
+- Interaction 007 and I001 directly inform recognition/recall, familiarity, navigation, interruption and restoration;
+- W001 informs purpose/task/direct-entry and Web-native relationship constraints.
 
-Current project handoff is now **Stage 2 Page Contract + Stage 3 Interaction Contract**, including action scope, state/commitment truth, async/retry/recovery behavior, input-mode equivalence, focus/history/restoration, localization/reflow, and browser-native-vs-custom validation.
+Current project handoff is now **Stage 2 Page Contract + 039 Interaction Contract + 040 Task/Journey Contract**.
 
 Web Manager does not edit Design Studio canonical files without authorization.
