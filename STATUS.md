@@ -11,10 +11,15 @@ Build professional Web Manager judgment from first principles through advanced c
 
 Canonical curriculum: `LEARNING_ROADMAP.md`.
 
-### Depth rule now in force
-Large subjects are not completed by one survey file. Study follows:
+## Learning cadence rule
 
-`history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment`
+Depth remains high, but reporting/file granularity is intentionally coarse.
+
+Do not create/report one artifact for every small concept. Study roughly a collection of related sub-blocks internally, then persist/report one coherent professional knowledge unit. The target is **more learning per checkpoint, fewer checkpoints**.
+
+Large subjects follow:
+
+`history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`
 
 A topic remains active until it can be explained, diagnosed and applied—not merely defined.
 
@@ -26,84 +31,83 @@ A topic remains active until it can be explained, diagnosed and applied—not me
 ### 028 — DNS/Domain/Resolution
 **FOUNDATION LAYER COMPLETE**, retained for later practitioner/advanced reintegration.
 
-### 029 — HTTP historical/semantic foundation
-`research/029-http-foundations-history-semantics-evolution.md`
+### 029 — HTTP deep domain
 
-**Deep foundation history/semantics block complete; HTTP itself is NOT complete.**
+Current integrated artifacts:
+- `research/029-http-foundations-history-semantics-evolution.md` — historical/problem/semantic foundation;
+- `research/029a-http-message-anatomy-field-model-framing.md` — earlier message/framing deep block, retained but no longer the preferred granularity;
+- `research/029-http-deep-study-integrated-semantics-caching-negotiation-intermediaries.md` — current integrated checkpoint.
 
-Established the historical path from early Web/HTTP through HTTP/1.0, 1.1, 2 and 3; durable semantics vs protocol expression; safe/idempotent/cacheable separation; status/field semantics; first cache model; and transport/framing evolution.
+**HTTP is NOT yet closed.**
 
-### 029A — HTTP Message Anatomy, Field Model & Framing
-`research/029a-http-message-anatomy-field-model-framing.md`
+Integrated understanding now includes:
+- HTTP history and the separation of durable semantics from version-specific wire expression;
+- request/response message model and HTTP/1.1 framing;
+- methods as semantic contracts; safe vs idempotent vs cacheable;
+- status-code semantics and important outcome distinctions;
+- historical 301/302 ambiguity and why 303/307/308 exist;
+- resource vs representation;
+- media type, content coding and representation selection;
+- proactive content negotiation and `Vary` cache interaction;
+- HTTP cache lifecycle: storeability, matching, freshness, stale state, validation and reuse;
+- private vs shared caches;
+- ETag/Last-Modified conditional validation and 304 reuse;
+- `no-cache` vs `no-store` distinction;
+- proxy/gateway/CDN/intermediary path reasoning;
+- HTTP/1.1 persistent-connection/framing constraints;
+- HTTP/2 frames, streams, multiplexing and field compression;
+- HTTP/2-over-TCP cross-stream transport stall implications;
+- HTTP/3 mapping over QUIC and stream independence;
+- QPACK's redesign relative to HPACK because QUIC removes total cross-stream ordering;
+- protocol-generation-dependent performance implications;
+- cross-domain links to SEO, UX, accessibility boundaries, security, privacy, performance and operations.
 
-**DEEP FOUNDATION SUB-BLOCK COMPLETE; HTTP domain remains ACTIVE.**
+Primary current evidence: RFC 9110, 9111, 9112, 9113, 9114, RFC 9204 and BCP 56/RFC 9205. MDN is used only as implementation-oriented supplementary explanation.
 
-New understanding established:
-- conceptual HTTP message semantics must be separated from HTTP/1.1 textual wire syntax;
-- modern message model includes control data, header fields, optional content and optional trailer fields;
-- HTTP/1.1 uses request/status start-lines, field lines, an empty-line boundary and message-body-length rules;
-- HTTP/2 and HTTP/3 carry control data through pseudo-header fields rather than literal HTTP/1.x start-lines;
-- HTTP fields are behavioral metadata, not merely descriptive labels;
-- field semantics can affect routing, cache, negotiation, authentication, conditional requests and intermediary behavior even when content bytes are unchanged;
-- `Content-Type`, `Content-Encoding`, `Content-Length` and `Transfer-Encoding` answer different protocol questions;
-- persistent HTTP/1.1 connections made reliable message framing essential because connection close could no longer delimit every response;
-- chunked transfer coding historically enables unknown-length/dynamic HTTP/1.1 content to be transmitted without closing the reusable connection;
-- HTTP/2 represents messages with frames on multiplexed streams; HTTP/3 represents HTTP with frames carried on QUIC streams;
-- HTTP/2/3 lowercase field requirements illustrate semantic identity vs stricter wire representation;
-- HTTP/1.1 body-length precedence is security-significant; conflicting `Transfer-Encoding` and `Content-Length` can signal ambiguous parsing/request-smuggling risk;
-- framing disagreement between front-end intermediary and origin is a parser differential across a trust boundary;
-- one browser→edge→origin transaction can use different HTTP versions on different hops;
-- browser DevTools is an interpreted browser-observed representation, not proof of exact on-wire byte syntax.
+## Remaining HTTP work before closure
 
-Primary sources: RFC 9110, RFC 9112, RFC 9113 and RFC 9114.
+Keep the next work inside the same HTTP domain rather than creating a chain of micro-studies:
 
-No live MintTap test was needed; actual edge/origin protocol topology remains a project fact.
+1. representative real HTTP/network evidence interpretation;
+2. redirect/cache/representation/intermediary failure diagnosis exercises;
+3. range/partial-transfer concepts at appropriate depth;
+4. cookie/auth interaction only enough to establish HTTP boundaries before later security/privacy stages;
+5. integrated competency review;
+6. consolidate fragmented 029 artifacts if that improves long-term repository usability.
 
-## HTTP deep-study queue
+Only after this integration is satisfactory should dedicated TLS/HTTPS study begin.
 
-Completed deep sub-blocks:
-1. 029 — history / design pressure / semantic model / protocol evolution.
-2. 029A — message anatomy / fields / content vs framing / HTTP/1.1 vs 2 vs 3 / framing-security bridge.
+## HTTP competency gate
 
-Next:
+Before closure Web Manager must be able to:
+- reconstruct why major HTTP generations exist;
+- distinguish semantics from framing and transport;
+- reason about method safety/idempotence/retry;
+- choose/interpret redirects with historical method behavior in mind;
+- interpret important status outcomes without conflating them with UI copy;
+- explain resource/representation/negotiation/coding distinctions;
+- reason through cache matching, freshness, validation and reuse;
+- identify intermediary effects and per-hop protocol differences;
+- explain HTTP/2 vs HTTP/3 mechanics at Web Manager depth;
+- diagnose representative exchanges from evidence;
+- connect HTTP decisions to SEO, performance, security, privacy, accessibility and UX without conflating layers.
 
-3. **029B — Methods & Status Semantics in Depth**
-   - why methods exist as semantic verbs;
-   - GET/HEAD/POST/PUT/DELETE/OPTIONS/CONNECT/TRACE distinctions;
-   - safe/idempotent/cacheable matrices and retry consequences;
-   - status code classes as machine semantics;
-   - important 1xx/2xx/3xx/4xx/5xx codes;
-   - redirect history and 301/302 method ambiguity;
-   - 303 vs 307 vs 308;
-   - 401 vs 403, 404 vs 410, 409 vs 422, 429 vs 503;
-   - retryability must not be inferred from class alone;
-   - UI copy vs protocol status separation.
+## Existing prior strengths retained
 
-Then:
-4. 029C — Representations & content negotiation.
-5. 029D — Caching & conditional requests.
-6. 029E — Intermediaries & protocol evolution mechanics.
-7. 029F — Operational diagnosis.
-
-Do **not** move to TLS until the HTTP domain is integrated.
-
-## Competency requirement
-
-HTTP is not complete until the Web Manager can reconstruct its evolution, distinguish semantics from framing/transport, reason about methods/retries/statuses, explain representation selection and cache behavior, identify intermediary effects, and diagnose representative exchanges from evidence.
-
-029A adds the requirement to explain why framing is a security boundary and why DevTools views must not be confused with literal HTTP/2/3 wire syntax.
+Studies 001–026 remain prior evidence across launch requirements, IA, privacy/support, accessibility, localization, SEO, security, hosting, legal and release governance. They will be reintegrated at the appropriate curriculum stages.
 
 ## Design Studio relationship
 
-No Design Studio handoff required for 029A; this remains protocol/infrastructure foundation. Later browser/design/performance work will consume specialist evidence where appropriate.
+No Design Studio handoff is required for the current protocol block. Later browser/design/performance studies will consume Design Studio evidence where visual or interaction decisions matter.
 
 ## Next action
 
-Continue directly with **029B — HTTP Methods & Status Semantics in Depth**. Maintain the slower deep-study tempo: include historical rationale, semantic contracts, failure/retry implications, redirect evolution and operational judgment. Do not treat a method/status catalog as sufficient learning.
+Continue the **same HTTP domain** through operational evidence and integrated diagnosis. Do not report after each small subsection. Reach a meaningful domain checkpoint first; then decide whether HTTP competency is sufficient to advance to HTTPS/TLS.
 
 ## Persistence state
 
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
+- `research/README.md` records the staged learning index.
+- Integrated HTTP deep-study checkpoint has been persisted.
 - HTTP remains **ACTIVE / NOT COMPLETE**.
-- 029 and 029A are completed HTTP sub-blocks.
-- Current next sub-block: **029B**.
+- Reporting cadence is now deliberately coarse: deep internal study, consolidated persistence/reporting.
