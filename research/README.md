@@ -48,16 +48,21 @@ Defines a provider-independent production contract for `minttap.app`: modern TLS
 
 Adopts WCAG 2.2 AA as MintTap's internal production baseline and defines semantic structure, landmarks/headings, native controls, keyboard/focus behavior, 320px-equivalent reflow, 200% text enlargement, pointer-target floors, form/error/status behavior, language metadata and automated/manual/assistive-technology validation gates for launch-critical web surfaces.
 
+### 007 — Localization Architecture
+`007-localization-architecture.md`
+
+Establishes Korean/English-first localization architecture with locale-specific URLs, HTML language declarations, reciprocal hreflang, self-canonical locale pages, a Locale Matrix and Localization Manifest, website/store/app-locale separation, translation invalidation triggers, language-switcher behavior and release gates. It explicitly leaves real Korean/English typography/browser proof open for Design Studio and production validation.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Current high-value areas include:
 
-1. localization architecture for Korean/English first, with future-locale scalability;
-2. SEO/social/structured-data/crawlability;
-3. company/app marketing content model;
-4. operational release and change-watch controls;
-5. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
-6. implementation/provider selection after the evidence baseline is mature enough to compare real options.
+1. SEO/social/structured-data/crawlability;
+2. company/app marketing content model;
+3. operational release and change-watch controls;
+4. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
+5. implementation/provider selection after the evidence baseline is mature enough to compare real options;
+6. real browser Korean/English typography, localization and accessibility transfer validation when production implementation exists.
 
 ## Design Studio relationship
 
