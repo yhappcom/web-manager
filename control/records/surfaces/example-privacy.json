@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "record_type": "operational_surface",
+  "id": "surface:example:privacy",
+  "status": "VERIFIED",
+  "owner": "role:privacy",
+  "app_ref": "app:example",
+  "surface_kind": "PRIVACY",
+  "url": "https://minttap.app/en/apps/example/privacy/",
+  "severity": "P1",
+  "source_refs": ["data:example:analytics"],
+  "monitoring": "SYNTHETIC",
+  "runbook_ref": "runbook:privacy"
+}
