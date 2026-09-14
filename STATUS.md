@@ -36,22 +36,7 @@ Completed sequence:
 - 032 — Application / Rendering / State / Navigation;
 - 033 — End-to-End Integration & Competency Review.
 
-### 033 — Stage 1 integration review
-`research/033-stage1-end-to-end-integration-competency-review.md`
-
-**PASS.**
-
-Connected competency demonstrated:
-- reconstruct the path from URL entry through origin interpretation, DNS, TLS, HTTP/intermediaries/cache, rendering, HTML parsing/DOM, CSS/resources/layout, JavaScript/Web APIs, state/storage/session, navigation/history/bfcache and accessibility exposure;
-- distinguish one layer's success from the next layer's success;
-- distinguish DNS cache, HTTP cache and bfcache;
-- classify representative failures by earliest responsible layer instead of symptom labels;
-- distinguish server representation, DOM/runtime state, visual state and accessibility exposure;
-- identify client-router/server deep-link contract mismatches;
-- preserve browser-native URL/history/link/form/control behavior as product-quality concerns;
-- identify unknown MintTap production facts rather than inventing them.
-
-Current authoritative evidence rechecked 2026-09-15 includes WHATWG URL/HTML, IETF HTTP/TLS standards, W3C accessibility mapping and the DNS standards inherited from Study 028.
+Stage 1 remains available for later advanced reopening in SEO, performance, security, accessibility and operations stages.
 
 ## Stage 2 — Website Anatomy / Content / Information Architecture
 
@@ -62,61 +47,84 @@ Current authoritative evidence rechecked 2026-09-15 includes WHATWG URL/HTML, IE
 
 **FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**
 
-Study 034 deliberately extends rather than repeats 002/026. New retained judgment:
-- public app-company websites are operational surfaces as well as marketing surfaces because Apple/Google can depend on support, privacy, developer/contact and account-control web destinations;
-- IA should be derived from `audience/context → intent → task → destination → content object → owner → lifecycle`, not internal organization charts;
-- sitemap, URL structure, global navigation, contextual navigation, page hierarchy and machine endpoints are related but non-identical views;
-- app identity is a durable context boundary for app-specific product/support/governance information;
-- global navigation can remain shallow while the content system deepens within stable app/support contexts;
-- required or store-linked URLs should be treated as external-entry contracts with stable scope, ownership and validation;
-- page systems should be modeled as company/portfolio, app identity, support/self-service, governance/user-control and machine/infrastructure systems;
-- support IA must preserve app/task context and escalation, not stop at FAQ publication;
-- public content objects need scope, canonical source, owner, update trigger, store dependencies, localization state and retirement/redirect rules;
-- IA failure diagnosis should separate missing content, scope ambiguity, label failure, placement failure, orientation failure, external-entry failure, lifecycle failure and accessibility/responsive failure;
-- real MintTap sitemap decisions remain blocked on actual product/store/support/privacy facts rather than generic patterns.
+Retained judgment:
+- app-company websites are marketing + support + governance + store-linked operational surfaces;
+- IA derives from `audience/context → intent → task → destination → content object → owner → lifecycle`;
+- sitemap, URL structure, navigation, page hierarchy and machine endpoints are different views of the system;
+- app identity is a durable context boundary;
+- store-linked support/privacy/account-control destinations are external-entry contracts;
+- public content objects require scope, ownership, triggers, localization state and retirement behavior;
+- IA failures must be classified precisely rather than hidden with styling.
 
-Primary/current evidence checked 2026-09-15:
-- Apple App Store Connect Support URL / Marketing URL reference;
-- Apple App Store Connect Privacy Policy URL reference;
-- Google Play developer account/store contact information;
-- Google Play User Data/account deletion requirements;
-- W3C WAI navigation/findability/predictability guidance;
-- Google Search breadcrumb hierarchy guidance.
+### 035 — Content modeling, hierarchy, lifecycle & cross-channel truth
+`research/035-stage2-content-modeling-hierarchy-lifecycle-cross-channel-truth.md`
 
-### Highest-value next integrated topic
+**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**
 
-Proceed to **Stage 2 content modeling, hierarchy and lifecycle for app-company product/support/governance surfaces**.
+Study 035 deliberately reused Studies 004/010/011 rather than reproducing their Product Truth / Claim Registry / release-control mechanics.
+
+New retained judgment:
+- durable content objects, pages, visual components and channel fields are separate layers;
+- canonical content should model App, Feature, Claim, Support Topic, Support Article, Known Issue, Release Change and Governance/Policy objects with scope/evidence/ownership/lifecycle;
+- product communication should preserve `claim → evidence → condition → action`;
+- template contracts define semantic completeness, not one universal visual layout;
+- single source of truth does **not** require zero public duplication; the objective is no independent truth duplication;
+- canonical content truth, canonical public URL and search canonical URL are different concepts;
+- freshness is dependency/change-trigger based, not merely calendar-age based;
+- releases, data practice, account/auth, pricing, platform support, support process and rebrand events each trigger different content reviews;
+- localization is a dependency graph: material source changes make translations stale/needs-review until confirmed;
+- store-linked public resources require retirement/redirect/external-dependency control;
+- support should be organized as task/problem → scope → resolution → failure branch → escalation, not as an FAQ dump;
+- governance content requires stronger lifecycle control because store declarations and user-control flows depend on it;
+- content QA now distinguishes truth, scope, evidence, synchronization, localization, ownership, trigger, hierarchy, findability and retirement failures.
+
+Primary/current evidence rechecked 2026-09-15:
+- Apple App Store Connect app information/platform version/privacy references;
+- Google Play store listing, Data safety, User Data and account-deletion guidance;
+- W3C WCAG 2.2 and WAI page-structure/headings guidance;
+- Google Search canonicalization documentation.
+
+## Highest-value next integrated topic
+
+Proceed to **Stage 2 navigation, wayfinding and findability as an operational system**.
 
 Focus:
-- reusable content objects vs page-specific prose;
-- product claim → evidence → action structure;
-- page-template content contracts without making every app semantically identical;
-- support article/topic models and escalation metadata;
-- privacy/governance scope/version/freshness modeling;
-- canonical content vs duplication across website, App Store and Google Play;
-- content review/change triggers tied to product releases, data practice, pricing/account and support changes;
-- localization ownership and stale-translation risk;
-- failure modes such as orphan claims, contradictory store/web copy, generic FAQ dumping and unowned legal/support pages.
+- global vs local/context navigation;
+- navigation model vs sitemap/content hierarchy;
+- destination labels and information scent;
+- current-location/orientation cues;
+- breadcrumbs and hierarchical navigation;
+- browse vs search vs direct/deep-link/external-store entry;
+- support/privacy/account-control findability;
+- footer and utility navigation roles;
+- mobile/narrow-width navigation recomposition;
+- Back/deep-link/browser-native continuity from Stage 1;
+- keyboard, zoom, screen-reader and localized-label stress;
+- failure modes where correct content exists but users cannot locate or correctly identify it;
+- Design Studio handoff/validation boundary.
 
-Earlier Product Truth/release-governance studies may be reused when they add lifecycle/control value; do not repeat their implementation mechanics unnecessarily.
+Do not prematurely drift into Stage 3 interaction pattern study; this block is still about information finding and orientation.
 
 ## Design Studio relationship
 
 Latest Design Studio global/Web status re-read 2026-09-15:
 - Web Design remains **Stage 1 Foundation / NOT YET BASELINED**;
-- its declared scope includes IA, navigation, wayfinding, page hierarchy, responsive systems, content flow, component application and browser/device validation;
-- Layout research canonically covers perceptual grouping, hierarchy, responsive recomposition, regions and spatial ownership.
+- its canonical scope includes IA, navigation, wayfinding, page hierarchy, content flow, responsive composition, page/component systems, accessibility and actual browser/device validation;
+- Web Design is an integration/validation layer for Type, Color and Layout/Interaction evidence.
 
-Stage 2 outgoing handoff now includes:
-1. provide Design Studio with a task/destination matrix, not only a sitemap;
-2. distinguish page-system/content contracts from final visual layout;
-3. preserve direct external entry from App Store, Google Play, search and deep links;
-4. preserve app context across company → app → support/governance flows;
-5. treat support/privacy/account-control findability as constraints, not footer afterthoughts;
-6. validate global/local navigation and current-location cues under mobile, keyboard, zoom, screen-reader and localized-label stress;
-7. return weak grouping/label/hierarchy findings to Web Manager instead of masking IA problems with styling.
+Outgoing Stage 2 handoff now includes:
+1. task/destination matrix from Study 034;
+2. semantic content-object relationships from Study 035;
+3. App/Feature/Claim/Support/Policy object scopes;
+4. required vs optional page-template content contracts;
+5. `claim → evidence → condition → action` hierarchy;
+6. direct external-entry constraints from App Store, Google Play, search and deep links;
+7. current/deprecated/known-issue/error/empty content states;
+8. long Korean/English content and stale-translation test cases;
+9. requirement that semantic hierarchy and claim/evidence association survive responsive recomposition, zoom, keyboard and screen-reader use;
+10. return structural problems to Web Manager instead of masking them with styling.
 
-Prior Stage 1 browser/navigation handoffs remain valid. No Design Studio canonical file was edited.
+No Design Studio canonical file was edited.
 
 ## Important unknown MintTap facts
 
@@ -142,6 +150,6 @@ Do not infer these from generic app-company patterns.
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
 - `research/README.md` indexes staged learning.
 - Stage 1 is complete at its intended foundation/practitioner level.
-- Stage 2 Study 034 is complete at foundation/practitioner checkpoint level.
-- Current next major work: **Stage 2 content modeling, hierarchy and lifecycle**.
+- Stage 2 Studies 034–035 are complete at foundation/practitioner checkpoint level.
+- Current next major work: **Stage 2 navigation, wayfinding and findability**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
