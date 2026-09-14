@@ -12,7 +12,15 @@ Learning proceeds systematically from beginner fundamentals to advanced/expert j
 
 Each major topic matures through `FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT`.
 
-**Depth correction:** a large domain is no longer marked complete after one short survey. Study should follow `history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment`. A topic can remain active across multiple research blocks.
+### Depth and cadence rule
+
+Large domains are not marked complete after one short survey. Study should follow:
+
+`history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`
+
+Depth remains high, but persistence/reporting is intentionally coarse. Several related learning sub-blocks should normally be integrated into one professional knowledge checkpoint instead of generating one file/report per small concept.
+
+A Stage 1 core may close when it can be explained, diagnosed and applied at the level required by the curriculum; the same domain can and should be reopened later for advanced security, performance, SEO, browser or operations depth.
 
 ## Evidence labels
 
@@ -30,23 +38,49 @@ Studies 001–026 remain retained as prior knowledge spanning launch requirement
 
 ## Sequential curriculum studies
 
-- `027-web-foundations-internet-web-client-server-url-origin.md` — **FOUNDATION LAYER COMPLETE**. Internet ≠ Web; client/server roles; resource vs representation; URL; host/domain/origin; origin security significance; failure-layer model.
-- `028-web-foundations-dns-domain-resolution-hosting-path.md` — **FOUNDATION LAYER COMPLETE**. DNS hierarchy/delegation; resolver/authority; records; TTL/cache; registration/delegation/hosting separation; DNS failure diagnosis.
-- `029-http-foundations-history-semantics-evolution.md` — **HTTP DEEP STUDY ACTIVE — FOUNDATION HISTORY/SEMANTICS BLOCK COMPLETE**. Traces HTTP from early Web/HTTP/0.9 through 1.0/1.1/2/3; separates durable semantics from version-specific framing/transport; introduces statelessness, safe/idempotent/cacheable semantics, status/field meaning, caching/freshness/validation, intermediaries and version-evolution design pressures.
+### 027 — Web / Internet / URL / Origin
+`027-web-foundations-internet-web-client-server-url-origin.md`
+
+**FOUNDATION LAYER COMPLETE.** Internet ≠ Web; client/server roles; resource vs representation; URL; host/domain/origin; origin security significance; failure-layer model.
+
+### 028 — DNS / Domain / Resolution
+`028-web-foundations-dns-domain-resolution-hosting-path.md`
+
+**FOUNDATION LAYER COMPLETE.** DNS hierarchy/delegation; resolver/authority; records; TTL/cache; registration/delegation/hosting separation; DNS failure diagnosis.
+
+### 029 — HTTP
+**STAGE 1 HTTP CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
+Supporting/integrated artifacts:
+- `029-http-foundations-history-semantics-evolution.md` — historical/problem/semantic foundation;
+- `029a-http-message-anatomy-field-model-framing.md` — detailed message/framing support block retained from the earlier fine-grained cadence;
+- `029-http-deep-study-integrated-semantics-caching-negotiation-intermediaries.md` — integrated methods/status/representation/negotiation/cache/intermediary/HTTP2/HTTP3 study;
+- `029-http-operational-diagnosis-range-state-boundaries-competency.md` — range requests, cookie/auth boundaries, standardized cache/proxy diagnostics, browser evidence interpretation, living-registry awareness and final Stage 1 competency review.
+
+HTTP Stage 1 competency now covers:
+- historical design pressures;
+- semantics vs version-specific framing/transport;
+- methods/statuses/redirect behavior;
+- resource vs representation;
+- media types, codings and negotiation;
+- caching, validators and conditional requests;
+- intermediaries/CDNs/proxies;
+- HTTP/1.1, HTTP/2, HTTP/3 and QUIC relationships at Web Manager depth;
+- range/partial transfer;
+- cookies and authentication as HTTP-boundary concepts;
+- operational diagnosis using browser/network/cache/proxy evidence;
+- current IANA registry awareness, including the 2026 standardized `QUERY` method.
+
+HTTP will be revisited later in Stage 6/7/8/9/11 for advanced SEO, performance, security/privacy, analytics and operations depth.
 
 ## Current curriculum position
 
-**Stage 1 — Web Foundations / HTTP domain active.**
+**Stage 1 — Web Foundations.**
 
-Do not move directly to TLS merely because the first HTTP file exists. Required HTTP continuation:
-- **029A** message anatomy and field model;
-- **029B** methods and status semantics in depth;
-- **029C** representations, media types and content negotiation;
-- **029D** caching and conditional requests in depth;
-- **029E** intermediaries, persistent connections, HTTP/2 and HTTP/3 mechanics;
-- **029F** operational diagnosis using representative HTTP exchanges/network evidence.
+Next major domain:
+- HTTPS / TLS / certificates / browser trust.
 
-Then continue dedicated TLS/browser foundation blocks. Numbering may be normalized later; conceptual completeness matters more than file count.
+This next domain should be studied as one broad integrated professional subject rather than as a chain of micro-reports.
 
 ## Study quality standard
 
@@ -67,3 +101,5 @@ Implementation experiments are used only when necessary to answer a material fac
 ## Design Studio relationship
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
+
+No Design Studio handoff was required to close the HTTP Stage 1 core because the work remained protocol/operations foundation. Reconnect when visual/interaction/performance-sensitive browser behavior becomes material.
