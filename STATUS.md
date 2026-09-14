@@ -1,118 +1,136 @@
 # MintTap Web Manager Status
 
-Operating state: **ACTIVE — PROFESSIONAL WEB KNOWLEDGE BUILDING / AUTONOMOUS CONTINUATION ENABLED**
+Operating state: **ACTIVE — STRUCTURED BEGINNER→ADVANCED WEB CURRICULUM / AUTONOMOUS CONTINUATION ENABLED**
 Last sync: 2026-09-14
 Domain: `minttap.app`
 Platforms: iOS / App Store, Android / Google Play
 
 ## Mission state
 
-The Web Manager exists to build and apply professional knowledge for planning, evaluating, launching and operating MintTap's company/app websites. GitHub is canonical long-term memory; chat is temporary working context.
+The Web Manager exists to build and apply professional knowledge for planning, evaluating, launching, operating and improving MintTap's company/app websites. GitHub is canonical long-term memory; chat is temporary working context.
 
-**Curriculum correction (2026-09-14): knowledge accumulation is the objective; POC implementation is not.** Studies 024–025 remain useful provider/validation knowledge, but provider deployment adapters, live POCs and CI expansion are deferred until a real implementation decision requires them. Practical tests remain appropriate only when they materially validate a knowledge claim.
+## Curriculum correction — 2026-09-14
 
-## Completed studies
+The user requested that learning become deeper and more systematic, progressing from beginner fundamentals to advanced/expert web management.
 
-Studies **001–026** are complete at their documented Foundation/PRACTICE level. Production readiness is not implied.
+Canonical curriculum: `LEARNING_ROADMAP.md`.
 
-The existing body now covers two broad layers:
+The previous 001–026 studies remain valid evidence and useful partial prior coverage. They are **not treated as proof that all prerequisites were learned in order**. The curriculum now deliberately returns to first principles and fills foundational gaps before advancing.
 
-### A. Launch / governance / technical operations knowledge
-001–025 established Apple/Google launch web requirements, multi-app IA, privacy/support/deletion, store↔web consistency, security, accessibility, localization, SEO, marketing claims, legal triggers, hosting/provider evaluation, release governance and controlled implementation-validation methods.
+General progression:
+1. Web Foundations;
+2. Website Anatomy / Content / IA;
+3. UX & Interaction Foundations;
+4. Web Design Literacy;
+5. Accessibility;
+6. Search / Discovery / Content Quality;
+7. Performance / Browser Runtime;
+8. Security / Privacy / Trust;
+9. Analytics / Experimentation;
+10. App-Company Web Strategy / Growth;
+11. Web Operations / Platform Architecture;
+12. Advanced / Expert Web Management.
 
-### B. Visitor-facing web expertise — renewed priority
-**026 — App-Company Web Strategy, Information Hierarchy & Conversion Path** establishes the first focused visitor-facing study after the curriculum correction.
+Each major topic should mature through `FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT`.
 
-Key 026 conclusions:
-- website and store listing are different stages of one acquisition/support journey, not copies of each other;
-- page planning starts with **audience × intent × destination**;
-- provisional visitor-intent classes are `DISCOVER`, `EVALUATE`, `ACT`, `SUPPORT/GOVERNANCE` until real product evidence changes them;
-- an app page should establish identity/value, primary action, product evidence, differentiated capabilities, trust/uncertainty reduction and secondary support/governance paths in a coherent hierarchy;
-- website→store→installed-product promises must remain continuous and Product-Truth governed;
-- responsive work is hierarchy recomposition, not desktop scaling;
-- performance is a design/content constraint, not only an engineering cleanup task.
+## Existing body of work
 
-Primary current evidence used in 026 includes Apple App Store asset/product-page guidance, Google Play store-listing guidance, W3C WAI page-structure/design/writing guidance and Google web.dev Core Web Vitals guidance.
+Studies **001–026** are retained.
 
-## Current web-manager capability map
+They provide meaningful prior coverage in:
+- Apple/Google app-launch website requirements;
+- multi-app information architecture;
+- privacy/support/account deletion;
+- store↔website consistency;
+- accessibility baseline;
+- localization and SEO;
+- security/hosting/operations;
+- marketing claims and Product Truth;
+- legal-trigger modeling;
+- provider/release governance;
+- initial visitor-facing strategy and information hierarchy.
 
-### Relatively strong
-- app-launch web requirements;
-- privacy/support/account-deletion architecture;
-- store↔website factual consistency;
-- localization/search/accessibility foundations;
-- domain/hosting/security/release governance;
-- provider evaluation and operational controls.
+They are strongest in Stages 2, 5, 6, 8, 10 and 11 of the new roadmap, but coverage is uneven and often entered at an intermediate/advanced level before first-principles study.
 
-### Developing now
-- company/app website strategy;
-- visitor intent and information hierarchy;
-- landing-page content architecture;
-- conversion/action paths;
-- trust communication;
-- responsive content prioritization;
-- performance-aware marketing design;
-- support/self-service IA;
-- analytics and evidence-led improvement;
-- professional precedent critique.
+## Current curriculum position
 
-## 026 reusable planning model
+**Stage 1 — Web Foundations**
 
-Before visual design, a future MintTap page brief should identify:
-1. page purpose;
-2. target audience and evidence quality;
-3. visitor intents;
-4. primary and secondary actions;
-5. factual claims/evidence;
-6. required support/privacy/legal destinations;
-7. information hierarchy;
-8. localization/narrow-width stress content;
-9. store destination/platform conditions;
-10. accessibility/performance constraints.
+Current objective: build a clean mental model of what happens from entering `minttap.app` in a browser to receiving, rendering and interacting with a web page.
 
-This is input to Design Studio, not a visual template.
+Required Stage 1 topics:
+- Internet vs Web;
+- client/server model;
+- browser/server/origin/host/resource;
+- URL/URI anatomy;
+- DNS and domain hierarchy;
+- HTTP request/response;
+- methods, status codes and headers;
+- HTTPS/TLS/certificate basics;
+- HTML/CSS/JavaScript roles;
+- DOM and accessibility tree concepts;
+- static/dynamic and rendering-model basics;
+- cookies/local storage/session/cache basics;
+- CDN/edge basics;
+- browser navigation/history;
+- forms/input flow;
+- hosting/deployment vocabulary;
+- basic search-engine and assistive-technology consumption of web documents.
 
-## Current Design Studio dependency
+Stage 1 exit standard:
+- explain the full request→response→render→interaction path in plain language;
+- correctly identify which layer owns a given basic web problem;
+- distinguish network, document, browser, server, storage and hosting concerns;
+- diagnose representative beginner-level failures without guessing.
 
-Latest checked `yhappcom/design-studio/progress/WEB_STATUS.md` still shows Web Design at pre-W001 foundation state. Web Manager therefore should not invent a universal visual system. It supplies product/site strategy, content hierarchy, factual requirements and operational constraints; Web Design/Type/Color/Layout-Interaction own reusable visual/interaction expertise.
+## Study method
 
-When Design Studio Web research becomes substantive, Web Manager should consume it and test transfer to actual MintTap product contexts.
+Every substantial topic should include:
+- first-principles explanation;
+- precise vocabulary;
+- authoritative sources where applicable;
+- examples and counterexamples;
+- common misconceptions;
+- failure modes;
+- practical MintTap relevance;
+- short competency check or application exercise;
+- explicit boundary between durable principle and changeable platform behavior.
 
-## Retained technical knowledge, not current curriculum queue
+Implementation experiments are allowed only when they answer a material factual question. POC construction is not the learning objective.
 
-Firebase Hosting and Cloudflare Workers/Static Assets remain viable candidates from earlier studies. The synthetic 025 corpus/assertion tooling remains stored as validation evidence. No provider is selected, no production PASS is claimed, and no further provider POC work is required during general knowledge study.
+## Design Studio relationship
+
+Web Manager builds web-platform, site-strategy, content/IA, measurement and operations expertise. `yhappcom/design-studio` remains canonical for reusable Type/Color/Layout-Interaction/Web Design expertise.
+
+The current Design Studio Web specialist is still at early foundation state. Web Manager should learn enough web-design literacy to brief and critique work, but should not invent a universal visual system independently.
+
+## Next research queue — Stage 1
+
+1. **027 — Web Foundations I: Internet, Web, Client/Server, Browser, Origin and URL.** Build the conceptual map before HTTP details.
+2. **028 — Web Foundations II: DNS, Domains, Resolution and Hosting Path.** Follow `minttap.app` from name lookup to destination infrastructure.
+3. **029 — Web Foundations III: HTTP Request/Response, Methods, Status Codes, Headers and Caching Basics.**
+4. **030 — Web Foundations IV: HTTPS, TLS, Certificates and Browser Trust Basics.**
+5. **031 — Web Foundations V: HTML, CSS, JavaScript, DOM and Accessibility Tree.**
+6. **032 — Web Foundations VI: Static/Dynamic, SSR/CSR/SSG, State, Storage and Browser Navigation.**
+7. **033 — Stage 1 Integration & Competency Review.** Explain a complete page lifecycle, diagnose sample failures and identify the responsible layer.
+
+Do not skip to later-stage IA/conversion/provider work until the Stage 1 integration review is satisfactory, unless a real MintTap project requires an exception.
+
+## Retained but deferred implementation work
+
+Firebase Hosting / Cloudflare Workers research, synthetic POC artifacts and release-governance tooling remain retained as prior knowledge. No provider is selected. No additional provider POC/deployment work is part of the general curriculum until Stage 11 or a live project requires it.
 
 ## Important unknown MintTap facts
 
-Actual project work still requires real evidence for:
-- company/legal/public identity and contact details;
-- app inventory and release states;
-- audience/user research;
-- acquisition channels;
-- primary conversion goal per app;
-- pricing/account model;
-- actual store listings/assets;
-- verified trust signals;
-- analytics baseline;
-- SDK/data-flow/legal applicability facts;
-- real Apple/Android identifiers where machine association is needed.
+Real project decisions still require evidence for company/legal identity, real app inventory, audience research, acquisition channels, pricing/account model, store assets, verified trust signals, analytics baseline, data flows/legal applicability and actual Apple/Android identifiers.
 
 Do not invent these from generic patterns.
 
-## Next research queue — knowledge-led
-
-1. **027 — App-company / multi-product website IA & navigation decision models.** Study when company-first, product-first, app-directory, support-first and hybrid structures are appropriate; navigation depth, naming, wayfinding and multi-app growth implications.
-2. **028 — Landing-page persuasion/content architecture.** Value proposition, product evidence, feature→outcome explanation, CTA hierarchy, message continuity and non-manipulative conversion.
-3. **029 — Trust architecture for small/unknown app developers.** Identity, privacy/security/support, evidence, social proof and credibility without fake authority signals.
-4. **030 — Support / FAQ / self-service IA.** Findability, issue taxonomy, escalation and search-oriented support content.
-5. Responsive content hierarchy/mobile recomposition, performance-aware marketing design/Core Web Vitals, analytics/measurement, and systematic real-site precedent critique.
-
-The queue is not a rigid syllabus. Higher-value evidence or a real MintTap project may reorder it.
-
 ## Persistence state
 
-- `AGENTS.md` remains the standing governance instruction.
-- `research/README.md` indexes **001–026** and records the knowledge-led curriculum correction.
-- `research/026-app-company-web-strategy-information-hierarchy.md` is the latest completed study.
-- Earlier PRACTICE artifacts remain retained but do not force continued implementation work.
+- `AGENTS.md` now requires staged beginner→advanced progression.
+- `LEARNING_ROADMAP.md` is the canonical curriculum.
+- `research/README.md` indexes prior studies and should track new staged learning.
+- Studies 001–026 remain retained as prior evidence.
+- Current learning begins again at **Stage 1 — Web Foundations**.
 - This file is the current operational checkpoint.
