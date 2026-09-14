@@ -1,0 +1,30 @@
+{
+  "schema": "minttap-poc-http-contract-v1",
+  "canonical_origin": "https://minttap.app",
+  "html_paths": [
+    "/ko/", "/en/", "/ko/apps/example/", "/en/apps/example/",
+    "/ko/apps/example/support/", "/en/apps/example/support/",
+    "/ko/apps/example/privacy/", "/en/apps/example/privacy/"
+  ],
+  "canonical_redirects": [
+    ["/ko", "/ko/"], ["/en", "/en/"],
+    ["/ko/apps/example", "/ko/apps/example/"], ["/en/apps/example", "/en/apps/example/"]
+  ],
+  "machine_files": {
+    "/.well-known/apple-app-site-association": "application/json",
+    "/.well-known/assetlinks.json": "application/json",
+    "/app-ads.txt": "text/plain",
+    "/robots.txt": "text/plain",
+    "/sitemap.xml": "application/xml"
+  },
+  "required_html_headers": {
+    "x-content-type-options": "nosniff",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "content-security-policy": "default-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+  },
+  "html_cache_control": "public, max-age=0, must-revalidate",
+  "machine_cache_control": "public, max-age=300, must-revalidate",
+  "preview_required_header": ["x-robots-tag", "noindex"],
+  "not_found_path": "/__poc_missing__",
+  "not_found_marker": "Page not found."
+}
