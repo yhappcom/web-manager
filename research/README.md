@@ -45,13 +45,13 @@ See Git history and the individual files for canonical detail.
 ## Sequential curriculum studies
 
 - `027-web-foundations-internet-web-client-server-url-origin.md` — **FOUNDATION COMPLETE**. Establishes Internet ≠ Web; client/server as protocol roles; resource vs representation; URL components; host/domain/origin distinctions; scheme+host+port origin identity; same-origin security significance; first-pass navigation flow; and failure-layer diagnosis.
+- `028-web-foundations-dns-domain-resolution-hosting-path.md` — **FOUNDATION COMPLETE**. Establishes DNS as a distributed hierarchical typed naming system; root/TLD/domain hierarchy; domain vs zone vs host; delegation; recursive resolver vs authoritative server; recursive vs iterative resolution; root hints; A/AAAA/NS/CNAME/MX/TXT/SOA concepts; TTL/cache and negative caching; registrar/registry/DNS/hosting role separation; and DNS failure-layer diagnosis.
 
 ## Current curriculum position
 
 **Stage 1 — Web Foundations**.
 
-027 is complete. Next:
-- `028` — DNS, domains, resolution and hosting path;
+027–028 are complete. Next:
 - `029` — HTTP request/response, methods, status codes, headers and cache basics;
 - `030` — HTTPS, TLS, certificates and browser trust basics;
 - `031` — HTML, CSS, JavaScript, DOM and accessibility tree;
