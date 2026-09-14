@@ -21,27 +21,46 @@ Existing studies 001–026 remain valid prior evidence, but missing prerequisite
 `research/027-web-foundations-internet-web-client-server-url-origin.md`
 
 Foundation established:
-- Internet and Web are not synonyms: Internet is networking infrastructure; the Web is a service/system built on it;
-- HTTP client/server are roles, not reliable synonyms for physical user/server machines;
-- resource identity and returned representation are distinct from backend implementation;
-- meaningful public URLs should not be designed as accidental mirrors of framework/server internals;
-- URL components have distinct functions: scheme, host, port, path, query and fragment;
-- for HTTP(S), origin identity is based on scheme + host + port;
-- `http://minttap.app`, `https://minttap.app`, `https://www.minttap.app` and a non-default-port variant are distinct origins;
-- origin is security-significant because browser same-origin controls use it as an isolation boundary;
-- a page-load failure must first be separated into URL, DNS, network, TLS, HTTP, origin/application, representation or browser/runtime layers rather than generically called a server problem.
+- Internet vs Web;
+- client/server as protocol roles;
+- resource vs representation vs backend implementation;
+- URL anatomy;
+- host/domain/origin distinctions;
+- origin as scheme + host + port security boundary;
+- page-load failure layer separation.
 
-Primary evidence: IETF RFC 9110 HTTP Semantics and WHATWG URL Living Standard, supplemented by MDN instructional/security references.
+Primary evidence: IETF RFC 9110 and WHATWG URL Living Standard.
 
-No implementation experiment was necessary for 027 because the block establishes standards-based conceptual foundations.
+### 028 — COMPLETE
+`research/028-web-foundations-dns-domain-resolution-hosting-path.md`
+
+Foundation established:
+- DNS is a distributed, hierarchical, typed naming system rather than merely a domain→IP lookup table;
+- the namespace is a tree rooted at `.`, with TLD delegation below the root;
+- domain, DNS zone and URL host are related but distinct concepts;
+- authority is distributed through delegation and referrals;
+- recursive resolvers and authoritative servers perform different roles;
+- recursive service may answer from cache or pursue resolution, while iterative resolution follows referrals toward authority;
+- root hints provide a bootstrap path for recursive resolver operation;
+- A, AAAA, NS, CNAME, MX, TXT and SOA records represent different kinds of DNS data;
+- an A/AAAA result does not reveal the complete web-hosting topology;
+- TTL controls DNS cache lifetime, not a universal exact "propagation time";
+- negative answers may also be cached;
+- registrar, TLD registry, authoritative DNS operator and hosting provider are separate roles even when one vendor bundles them;
+- nameserver delegation changes have a broader potential blast radius than changing one ordinary web record;
+- successful DNS resolution does not prove TLS, HTTP, application or browser health.
+
+Primary evidence: RFC 1034, RFC 1035, current DNS terminology RFC 9499, RFC 3596 / STD 88 for AAAA, and IANA root-zone/root-hints material.
+
+No live `minttap.app` DNS inspection was performed or required for this foundation block; actual registrar, delegation, DNSSEC, authoritative provider and record inventory remain real-project facts to verify separately.
 
 ## Stage 1 learning chain
 
 Completed:
-- **027** Internet / Web / Client–Server / URL / Origin.
+- **027** Internet / Web / Client–Server / URL / Origin;
+- **028** DNS / Domains / Resolution / Hosting Path.
 
 Next:
-- **028** DNS / Domains / Resolution / Hosting Path;
 - **029** HTTP Request/Response / Methods / Status / Headers / Cache;
 - **030** HTTPS / TLS / Certificates / Browser Trust;
 - **031** HTML / CSS / JavaScript / DOM / Accessibility Tree;
@@ -50,17 +69,27 @@ Next:
 
 Do not skip to later-stage IA/conversion/provider work until the Stage 1 integration review is satisfactory unless a live MintTap project requires an exception.
 
-## 027 competency checkpoint
+## Stage 1 competency accumulation
 
-Before Stage 1 is ultimately closed, the Web Manager must retain the ability to explain:
+Before Stage 1 is closed, the Web Manager must retain the ability to explain and diagnose:
+
+From 027:
 1. Internet vs Web;
 2. client/server as roles;
 3. resource vs representation vs implementation;
 4. URL component anatomy;
 5. host/domain/origin distinctions;
-6. why scheme/host/port differences matter;
-7. why origin is a security boundary;
-8. why website failure diagnosis requires layer separation.
+6. why origin is a security boundary.
+
+From 028:
+7. DNS namespace hierarchy and delegation;
+8. domain vs zone vs host;
+9. recursive resolver vs authoritative server;
+10. root/TLD/authoritative resolution path;
+11. A/AAAA/NS/CNAME record concepts;
+12. TTL/caching and why observed DNS changes are not instant everywhere;
+13. registration vs delegation vs authoritative zone data vs hosting;
+14. why DNS success/failure must be separated from downstream TLS/HTTP/application behavior.
 
 ## Existing prior strengths retained
 
@@ -68,7 +97,7 @@ Studies 001–026 provide useful prior coverage in app-launch requirements, mult
 
 ## Design Studio relationship
 
-No Design Studio handoff was required for 027 because it is protocol/platform foundation. Web Manager continues to use `yhappcom/design-studio` as canonical reusable expertise for Type/Color/Layout-Interaction/Web Design when later stages become visual/interaction-specific.
+No Design Studio handoff was required for 027–028 because they are protocol/infrastructure foundations. Web Manager continues to use `yhappcom/design-studio` as canonical reusable expertise for Type/Color/Layout-Interaction/Web Design when later stages become visual/interaction-specific.
 
 ## Retained but deferred implementation work
 
@@ -76,16 +105,18 @@ Firebase Hosting / Cloudflare Workers research, synthetic POC artifacts and rele
 
 ## Important unknown MintTap facts
 
-Real project decisions still require evidence for company/legal identity, real app inventory, audience research, acquisition channels, pricing/account model, store assets, verified trust signals, analytics baseline, data flows/legal applicability and actual Apple/Android identifiers. Do not invent these from generic patterns.
+Real project decisions still require evidence for company/legal identity, real app inventory, audience research, acquisition channels, pricing/account model, store assets, verified trust signals, analytics baseline, data flows/legal applicability and actual Apple/Android identifiers. DNS-specific real facts also remain unknown here: current registrar, `.app` delegation details, authoritative DNS provider, record inventory, DNSSEC state and actual hosting mapping.
+
+Do not invent these from generic patterns.
 
 ## Next action
 
-Proceed to **028 — DNS, Domains, Resolution and Hosting Path** from first principles: namespace/hierarchy, labels/FQDN, resolver vs authoritative DNS, root/TLD/authoritative delegation, A/AAAA/CNAME and relevant record concepts, caching/TTL, DNS vs URL/origin, and how `minttap.app` resolution relates—but is not identical—to hosting.
+Proceed to **029 — HTTP Request/Response, Methods, Status Codes, Headers and Caching Basics** from first principles. Build the model of what an HTTP message represents after the client has a path to the target authority: request method/target/fields/content, response status/fields/content, safe/idempotent semantics, major status-code classes, redirects, content negotiation/media type basics, and HTTP caching distinct from DNS caching.
 
 ## Persistence state
 
 - `LEARNING_ROADMAP.md` is the canonical curriculum.
 - `research/README.md` indexes staged learning.
-- `027` is the first completed sequential Stage 1 study.
-- Current next study: **028**.
+- `027` and `028` are complete sequential Stage 1 studies.
+- Current next study: **029**.
 - This file is the current operational checkpoint.
