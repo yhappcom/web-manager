@@ -32,63 +32,38 @@ The Web Manager owns MintTap company website content, app-launch web requirement
 19. **019** Typed Dependency Edges, Cycle Detection & Approval Freshness
 20. **020** Derived Release Manifest, Gate Decision & Auditable Waivers
 21. **021** Release Provenance, Reviewer Authorization & Fail-Closed CI
+22. **022** Protected Policy Ownership, Reviewer Quorum, Revocation & Workflow Threat Model
 
-Canonical details: `research/001...021`.
+Canonical details: `research/001...022`.
 
 ## Current maturity
 
 Stage: **Foundation**
-State: **IN STUDY with executable release-control PRACTICE evidence**
+State: **IN STUDY with executable release-governance PRACTICE evidence**
 
-Production PASS is not claimed. Provider POC, browser/device validation, actual MintTap facts, real store-console state, legal applicability, real deployment operations, authenticated reviewer identities, protected policy ownership and active CI enforcement remain incomplete.
+Production PASS is not claimed. Provider POC, actual MintTap facts, real store-console state, legal applicability, real release operations and active CI/deployment enforcement remain incomplete.
 
 ## Executable control validation
 
-### 016 first slice
-Implemented **app → feature → evidence → claim**. Result: **5 / 5 expected outcomes matched.**
+- **016** app → feature → evidence → claim: **5/5**.
+- **017** release/store, privacy/data, locale, legal trigger and operational-surface semantics: **12/12**.
+- **018** semantic fingerprints and dependency impact: **5/5**.
+- **019** typed dependency severity, cycles and approval freshness: **6/6**.
+- **020** derived release gate + auditable waivers: **8/8**.
+- **021** source/tool/policy-bound provenance, issue-class reviewer authorization, self-approval rejection and fail-closed CI: **9/9**.
+- **022** protected policy ownership, reviewer quorum/revocation, time-bounded break-glass and workflow trust boundaries: **10/10**.
 
-### 017 release-chain extension
-Expanded validation through release/store destination, data practice/processor/privacy, locale claims, legal triggers and critical operational surfaces. Result: **12 / 12 expected outcomes matched.**
+### 022 validated behaviors
 
-### 018 semantic fingerprint / dependency impact
-Implemented deterministic PRACTICE semantic fingerprints, before/after comparison, old+new dependency graphs and derived downstream review sets. Result: **5 / 5 expected outcomes matched.**
-
-### 019 typed dependency / approval freshness
-Implemented typed dependency severity, cycle detection and upstream-fingerprint-bound approval freshness. Result: **6 / 6 expected outcomes matched.**
-
-### 020 derived release manifest / gate / waiver
-Implemented `PASS / NEEDS_REVIEW / BLOCKED`, `PASS / CLEAN` vs `PASS / WITH_WAIVER`, exact issue-fingerprint waiver scope, expiry and non-waivable integrity failures. Result: **8 / 8 expected outcomes matched.**
-
-Critical 020 rule: a waiver never deletes or rewrites the canonical issue.
-
-### 021 release provenance / reviewer authorization / CI
-
-Implemented `tools/evaluate_release_provenance.py` and `control/tests/release_provenance_cases.json`.
-
-Added:
-- issue-class-specific reviewer authorization policy;
-- policy version binding;
-- release-author vs approver separation of duties;
-- waiver binding to exact source commit and normalized source snapshot digest;
-- manifest provenance with evaluator name/version and evaluation-input digest;
-- stale supplied-attestation detection;
-- separate governance `decision` and deployment/CI `ci_state`;
-- command exit `0` only for `ci_state=ALLOW`.
-
-Controlled result: **9 / 9 expected outcomes matched.**
-
-Validated:
-- authorized/current waiver → `PASS / WITH_WAIVER`, CI `ALLOW`;
-- unknown reviewer → `BLOCKED`, CI `FAIL`;
-- known reviewer without authority for that issue class → `BLOCKED`, CI `FAIL`;
-- waiver tied to old source commit → `BLOCKED`, CI `FAIL`;
-- waiver tied to old normalized snapshot → `BLOCKED`, CI `FAIL`;
-- self-approval by release author → rejected;
-- clean current release → `PASS / CLEAN`, CI `ALLOW`;
-- unresolved `NEEDS_REVIEW` → CI `FAIL`;
-- otherwise-clean release with stale evaluator-version attestation → canonical decision `PASS`, CI `FAIL`.
-
-Professional implication: **truth state and authority-to-release are separate dimensions.** A release can be semantically clean while still lacking current trusted provenance, and must then fail closed.
+- policy changes without designated owner approval are blocked;
+- policy-owner-approved changes may proceed;
+- issue classes can require quorum 2;
+- inactive/revoked reviewers do not satisfy current quorum;
+- release-author self-approval does not count;
+- valid emergency override is separately classified `PASS / WITH_BREAK_GLASS`;
+- expired/unauthorized break-glass fails closed;
+- privileged `pull_request_target` or `workflow_run` paths may not execute untrusted checkout content;
+- ordinary pull-request validation may process untrusted code only in a read-only/no-secret/no-deploy trust zone.
 
 ## Current control architecture
 
@@ -98,55 +73,42 @@ Current direction:
 - canonical structured data: JSON;
 - structural validation: JSON Schema Draft 2020-12;
 - stable immutable IDs;
-- repository semantic linter;
-- semantic fingerprints for meaningful change detection;
-- typed dependency graph with explicit impact severity;
-- approval freshness bound to upstream semantic fingerprints;
+- semantic fingerprints and dependency invalidation;
+- typed dependency graph with impact severity;
+- fingerprint-bound approval freshness;
 - cycle rejection for freshness/approval dependency graphs;
 - derived release manifest and gate decision;
-- explicit waiver audit record bound to one release and one exact issue fingerprint;
-- reviewer authorization by issue class and versioned policy;
-- self-approval rejection for waiver-based release passage;
-- release/waiver binding to source commit + normalized snapshot digest;
-- evaluator/tool/input provenance in the manifest;
-- CI/deployment authorization separated from canonical truth;
-- canonical truth remains unchanged by waiver;
+- exact-issue/release/source/tool/policy-bound waivers;
+- issue-class reviewer authorization;
+- separation of duties;
+- policy-owner control over governance changes;
+- reviewer quorum and revocation-aware current authorization;
+- explicit time-bounded break-glass classification;
+- workflow trust-zone separation;
+- fail-closed release automation;
+- canonical truth remains unchanged by waiver/emergency disposition;
 - no secrets or customer personal data in this repository.
 
-Practice artifacts:
-- `control/schemas/v1/record.schema.json`
-- synthetic records under `control/records/`
-- `control/tests/cases.json`
-- `control/tests/impact_cases.json`
-- `control/tests/dependency_governance_cases.json`
-- `control/tests/release_gate_cases.json`
+Practice artifacts now include:
 - `control/tests/release_provenance_cases.json`
-- `tools/validate_control.py`
-- `tools/compute_impact.py`
-- `tools/validate_dependency_governance.py`
-- `tools/evaluate_release_gate.py`
+- `control/tests/policy_workflow_trust_cases.json`
 - `tools/evaluate_release_provenance.py`
+- `tools/evaluate_policy_workflow_trust.py`
+plus the earlier 016–020 schemas/tests/tools.
 
-Important limitation: current Python serialization is deterministic for the synthetic corpus but is **not yet claimed as full RFC 8785 JCS conformance**.
+Important limitation: current deterministic Python JSON serialization is still **not claimed as full RFC 8785 JCS conformance**.
 
-## Current GitHub capability reality
+## GitHub/platform evidence retained
 
-Verified 2026-09-14:
-- `yhappcom/web-manager` is **private**;
-- default branch is `main`;
-- repository creation time is `2026-09-14T07:34:58Z`;
-- repository rulesets endpoint currently returns an upgrade/public-repository requirement, so rulesets are not an evidenced enforcement mechanism for the present repository state;
-- branch-protection state could not be inspected with the installed GitHub integration because that endpoint is not accessible to the integration; this is not proof that branch protection itself is unavailable.
+Current primary-source findings:
+- required status checks can gate merge when repository capability permits;
+- CODEOWNERS can support protected path ownership but is not a substitute for issue-class authorization/quorum;
+- protected environments can require reviewers and optionally prevent self-review, subject to plan/visibility constraints;
+- GitHub secure-use guidance warns against privileged `pull_request_target` / `workflow_run` execution of untrusted PR content;
+- `GITHUB_TOKEN` and other credentials should use least privilege;
+- current private-repository capability constraints discovered in 021 mean rulesets/environment/artifact-attestation features must not be assumed available without verification.
 
-Current GitHub documentation also states:
-- rulesets can require status checks and can constrain a required status source to a specific GitHub App;
-- protected environments can require reviewers and can prevent self-review, with plan/repository-visibility restrictions;
-- artifact attestations include workflow/repository/environment/commit provenance and use Sigstore;
-- private/internal repository artifact attestations require Enterprise Cloud, so they are not assumed as the current baseline;
-- GitHub Actions OIDC exposes source/workflow claims, and repositories created after 2026-07-15 use immutable default subject claims containing owner/repository IDs;
-- full-length commit-SHA pinning is GitHub's documented immutable way to consume actions.
-
-Portable baseline: the repository's own evaluator must fail non-zero unless release authorization is current; GitHub-native required checks/environment approvals/attestations are additive hardening when actually supported and verified.
+No active GitHub Actions deployment workflow has been enabled yet.
 
 ## Current public information architecture
 
@@ -175,10 +137,7 @@ WCAG 2.2 AA internal target; semantic HTML; full keyboard/focus path; 320 CSS px
 Korean/English locale-specific URLs; self-canonical + reciprocal hreflang; app UI/web/store localization tracked independently; sitemap/canonical/indexability controls; conservative structured data; Product-Truth-governed social previews and marketing claims.
 
 ### Legal trigger model
-Legal compliance is **facts → trigger → obligation → public/control surface → backend process → validation**, not universal boilerplate. The validator checks consistency with a recorded applicability state; it does not determine legal applicability itself.
-
-### Operations
-Policy Change Register + Operational Surface Registry; deploy-time, scheduled, event-driven and human freshness checks; release does not close until production/store/web/control surfaces are revalidated.
+Legal compliance is **facts → trigger → obligation → public/control surface → backend process → validation**, not universal boilerplate. The validator checks consistency with recorded applicability; it does not determine legal applicability itself.
 
 ## Current implementation direction
 
@@ -196,39 +155,37 @@ No provider selected.
 
 ### Provider POC gate
 
-Firebase and Cloudflare must run the same static corpus and assertion suite, including file hashes, localized pages, AASA/assetlinks/app-ads/sitemap/robots/404, response headers/routing/search/social/accessibility smoke, preview/promote and provider-native rollback.
+Firebase and Cloudflare must run the same static corpus and assertion suite, including file hashes, localized pages, AASA/assetlinks/app-ads/sitemap/robots/404, headers/routing/search/social/accessibility smoke, preview/promote and provider-native rollback.
 
 The POC remains blocked on provider accounts/domain authority.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — still no substantive W### at latest check. Governance/release/provenance states are semantic inputs only; Web Design owns how they are presented.
-- **Layout / Interaction** — release decision, CI authorization, reviewer authorization, stale source/attestation, clean pass, waiver pass, review-needed and blocker states require textual/structural/programmatic distinction, not color-only encoding.
-- **Typography / Type** — reviewer names/roles, commit IDs, digest strings, issue codes and Korean/English audit reasons should later be used as wrapping/zoom/fallback stress content.
-- **Color** — severity/authority color may reinforce but never define release meaning by itself.
+- **Web Design** — still no substantive W### at latest check. Governance states are semantic inputs only; Web Design owns release/review UI hierarchy and presentation.
+- **Layout / Interaction** — clean pass, pass-with-waiver, pass-with-break-glass, needs-review, blocked, stale provenance, quorum incomplete and workflow-security blocks require textual/structural/programmatic distinction, not color-only encoding.
+- **Typography / Type** — long reviewer IDs, issue codes, incident references and Korean/English governance strings are stress inputs for wrapping/zoom/fallback testing.
+- **Color** — severity/emergency color may reinforce but never define the state alone.
 
 ## Important open items
 
 - actual MintTap entity/public contact/contracting entity;
 - real app inventory/releases/pricing/accounts/locales/markets/audience;
-- real App Store Connect / Play Console state ingestion and country/region granularity;
+- real App Store Connect / Play Console state ingestion;
 - SDK/analytics/ads/auth/processors/data flows and processing locations;
 - legal applicability/signoff process;
 - full RFC 8785/JCS conformance validation;
-- schemas for typed dependencies, approvals, release manifests, waivers and reviewer policies;
-- protected ownership/change control for reviewer policy and gate code;
-- authenticated GitHub identity mapping for reviewers;
-- quorum/two-person approval for selected issue classes;
-- reviewer and waiver revocation;
-- break-glass/emergency exception model;
-- cryptographic signature/attestation for internal manifest;
-- actual GitHub Actions gate workflow and threat-model validation;
-- required status-check/branch-protection enforcement verification;
-- OIDC claim observation and deployment-provider trust configuration;
-- multi-source approval policy;
-- real localization and claim approval binding;
-- screenshot-to-release compatibility invalidation;
-- Git commit-to-snapshot automation;
+- final schemas for dependencies/approvals/manifests/waivers/reviewer policy/quorum/break-glass;
+- authenticated reviewer identity mapping from GitHub/SSO;
+- protected policy ownership enforcement in actual repository settings;
+- revocation history/effective-time semantics;
+- quorum policy ownership;
+- signed/cryptographic attestation of internal manifests where justified;
+- exact Git source/tree and runtime/dependency identity binding;
+- trusted workflow source/pinning and reusable-workflow ownership;
+- exact GitHub Actions permission matrix and fork approval behavior;
+- deployment provider/OIDC credential boundary;
+- rollback authorization and emergency deployment policy;
+- active CI enforcement and immutable release history;
 - provider accounts/domain authority and POC execution;
 - final hosting/framework/CMS/monitoring choice;
 - real App Links/AASA/app-ads identifiers/routes;
@@ -237,8 +194,8 @@ The POC remains blocked on provider accounts/domain authority.
 
 ## Next research queue
 
-1. **Protected policy ownership + reviewer quorum/revocation + workflow threat model.** Prove selected issue classes require independent authorized approvers, revoked authority becomes ineffective, emergency overrides are explicit/time-bounded, and untrusted PR code cannot alter the gate or obtain deployment authority.
-2. Execute Firebase Hosting vs Cloudflare Workers POC when accounts/domain authority are available.
+1. **Provider-neutral active-workflow trust-boundary contract.** Define exact trigger separation, token permission matrix, trusted workflow/policy ownership, fork behavior, artifact handoff, deployment credential boundary and rollback authority so it can be applied during Firebase vs Cloudflare POC without prematurely enabling deployment automation.
+2. Execute Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available.
 3. Use the POC for Design Studio real-browser Korean/English/accessibility/layout/type/color transfer validation.
 4. Apply Legal Trigger Registry when actual entity/market/audience/data/transaction facts are available.
 5. App-specific user/market evidence when real product pages are assigned.
@@ -246,7 +203,8 @@ The POC remains blocked on provider accounts/domain authority.
 ## Persistence state
 
 - `AGENTS.md` contains autonomous continuous-learning rules.
-- `research/README.md` indexes 001–021.
-- Studies 016–021 have executable PRACTICE artifacts under `control/` and `tools/`.
-- Study 021 adds `tools/evaluate_release_provenance.py` and `control/tests/release_provenance_cases.json`.
+- `research/README.md` indexes 001–022.
+- Studies 016–022 have executable PRACTICE artifacts under `control/` and `tools/`.
+- 021 canonical artifacts: `tools/evaluate_release_provenance.py`, `control/tests/release_provenance_cases.json`.
+- 022 adds `tools/evaluate_policy_workflow_trust.py`, `control/tests/policy_workflow_trust_cases.json`.
 - This file is the current operational checkpoint.

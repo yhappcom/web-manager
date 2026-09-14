@@ -37,6 +37,7 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `019-typed-dependency-approval-freshness.md` — typed impact severity, cycle detection and fingerprint-bound approval freshness; 6/6 expected outcomes.
 - `020-derived-release-manifest-gate-waivers.md` — derived `PASS / NEEDS_REVIEW / BLOCKED` gate plus scoped auditable waivers; 8/8 expected outcomes.
 - `021-release-provenance-reviewer-authorization-ci.md` — source/tool/policy-bound release provenance, issue-class reviewer authorization, self-approval rejection and fail-closed CI semantics; 9/9 expected outcomes.
+- `022-protected-policy-quorum-revocation-workflow-trust.md` — protected policy ownership, reviewer quorum/revocation, time-bounded break-glass and untrusted-workflow trust boundaries; 10/10 expected outcomes.
 
 ## Practice artifacts
 
@@ -48,11 +49,13 @@ Current synthetic validation corpus includes:
 - `control/tests/dependency_governance_cases.json`;
 - `control/tests/release_gate_cases.json`;
 - `control/tests/release_provenance_cases.json`;
+- `control/tests/policy_workflow_trust_cases.json`;
 - `tools/validate_control.py`;
 - `tools/compute_impact.py`;
 - `tools/validate_dependency_governance.py`;
 - `tools/evaluate_release_gate.py`;
-- `tools/evaluate_release_provenance.py`.
+- `tools/evaluate_release_provenance.py`;
+- `tools/evaluate_policy_workflow_trust.py`.
 
 These are synthetic research fixtures, not actual MintTap product/legal/store facts.
 
@@ -60,7 +63,7 @@ These are synthetic research fixtures, not actual MintTap product/legal/store fa
 
 See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
-1. protected policy ownership + reviewer quorum/revocation + workflow threat model, including controls preventing untrusted PR code from altering the gate or obtaining deployment authority;
+1. define the provider-neutral trust-boundary contract for a future active release workflow: exact trigger separation, token permission matrix, trusted workflow/policy ownership, fork behavior, artifact handoff, deployment credential boundary and rollback authority;
 2. execute the Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available;
 3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation on that POC;
 4. apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
@@ -72,6 +75,6 @@ Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap
 
 Relevant domains: Typography / Type Design, Color, Layout / Spatial & Interaction, Web Design.
 
-Current transfer note: Web Design still has no substantive W### at latest check. Web Manager governance now distinguishes release decision, CI authorization, reviewer authorization, source/attestation freshness, clean pass, pass-with-waiver, needs-review and blocked states. These remain semantic/control states only; visual treatment is a Design Studio/Web Design responsibility and must not rely on color alone.
+Current transfer note: Web Design still has no substantive W### at latest check. Web Manager governance now distinguishes release decision, CI authorization, reviewer/quorum eligibility, source/attestation freshness, policy ownership, clean/waived/break-glass pass, needs-review and blocked states. These remain semantic/control states only; visual treatment is a Design Studio/Web Design responsibility and must not rely on color alone.
 
 When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record it here first and hand it back to the appropriate specialist when justified.
