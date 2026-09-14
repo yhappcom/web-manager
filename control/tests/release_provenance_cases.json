@@ -1,0 +1,71 @@
+[
+  {
+    "name": "authorized-current-waiver-allows-ci",
+    "release_ref": "release:minttap:1.0.20",
+    "source_commit": "abc123def456",
+    "source_snapshot_digest": "sha256:snapshot-v1",
+    "evaluation_date": "2026-09-14",
+    "release_author": "dev:alice",
+    "reviewer_policy": {"version":"review-policy:v1","reviewers":[{"identity":"reviewer:bob","role":"release-manager","allowed_issue_codes":["APPROVAL_STALE","REQUIRED_CONTROL_FAILURE"]},{"identity":"reviewer:legal","role":"legal","allowed_issue_codes":["LEGAL_REVIEW_REQUIRED"]}]},
+    "canonical_issues": [{"code":"APPROVAL_STALE","record_id":"localization:minttap:ko","source_ref":"feature:minttap:portfolio","severity":"BLOCKING","message":"approval binding is not current","waivable":true}],
+    "waivers": [{"id":"waiver:1","issue_fingerprint":"sha256:75c76370ad232c614b958668eb6744927612d458530b99f600487af18bb7e3a8","release_ref":"release:minttap:1.0.20","status":"APPROVED","approved_by":"reviewer:bob","reason":"Controlled synthetic exception","expires_on":"2026-09-15","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","policy_version":"review-policy:v1"}],
+    "expected": {"decision":"PASS","pass_mode":"WITH_WAIVER","ci_state":"ALLOW","waiver_count":1,"invalid_waiver_reasons":[]}
+  },
+  {
+    "name": "unauthorized-reviewer-fails-closed",
+    "release_ref": "release:minttap:1.0.20", "source_commit": "abc123def456", "source_snapshot_digest": "sha256:snapshot-v1", "evaluation_date": "2026-09-14", "release_author": "dev:alice",
+    "reviewer_policy": {"version":"review-policy:v1","reviewers":[{"identity":"reviewer:bob","role":"release-manager","allowed_issue_codes":["APPROVAL_STALE","REQUIRED_CONTROL_FAILURE"]},{"identity":"reviewer:legal","role":"legal","allowed_issue_codes":["LEGAL_REVIEW_REQUIRED"]}]},
+    "canonical_issues": [{"code":"APPROVAL_STALE","record_id":"localization:minttap:ko","source_ref":"feature:minttap:portfolio","severity":"BLOCKING","message":"approval binding is not current","waivable":true}],
+    "waivers": [{"id":"waiver:1","issue_fingerprint":"sha256:75c76370ad232c614b958668eb6744927612d458530b99f600487af18bb7e3a8","release_ref":"release:minttap:1.0.20","status":"APPROVED","approved_by":"reviewer:mallory","reason":"Controlled synthetic exception","expires_on":"2026-09-15","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","policy_version":"review-policy:v1"}],
+    "expected": {"decision":"BLOCKED","ci_state":"FAIL","invalid_waiver_reasons":["WAIVER_REVIEWER_UNAUTHORIZED"]}
+  },
+  {
+    "name": "authorized-person-wrong-issue-class-fails",
+    "release_ref": "release:minttap:1.0.20", "source_commit": "abc123def456", "source_snapshot_digest": "sha256:snapshot-v1", "evaluation_date": "2026-09-14", "release_author": "dev:alice",
+    "reviewer_policy": {"version":"review-policy:v1","reviewers":[{"identity":"reviewer:bob","role":"release-manager","allowed_issue_codes":["APPROVAL_STALE","REQUIRED_CONTROL_FAILURE"]},{"identity":"reviewer:legal","role":"legal","allowed_issue_codes":["LEGAL_REVIEW_REQUIRED"]}]},
+    "canonical_issues": [{"code":"APPROVAL_STALE","record_id":"localization:minttap:ko","source_ref":"feature:minttap:portfolio","severity":"BLOCKING","message":"approval binding is not current","waivable":true}],
+    "waivers": [{"id":"waiver:1","issue_fingerprint":"sha256:75c76370ad232c614b958668eb6744927612d458530b99f600487af18bb7e3a8","release_ref":"release:minttap:1.0.20","status":"APPROVED","approved_by":"reviewer:legal","reason":"Controlled synthetic exception","expires_on":"2026-09-15","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","policy_version":"review-policy:v1"}],
+    "expected": {"decision":"BLOCKED","ci_state":"FAIL","invalid_waiver_reasons":["WAIVER_REVIEWER_UNAUTHORIZED"]}
+  },
+  {
+    "name": "stale-source-commit-waiver-fails",
+    "release_ref":"release:minttap:1.0.20","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","evaluation_date":"2026-09-14","release_author":"dev:alice",
+    "reviewer_policy":{"version":"review-policy:v1","reviewers":[{"identity":"reviewer:bob","role":"release-manager","allowed_issue_codes":["APPROVAL_STALE","REQUIRED_CONTROL_FAILURE"]}]},
+    "canonical_issues":[{"code":"APPROVAL_STALE","record_id":"localization:minttap:ko","source_ref":"feature:minttap:portfolio","severity":"BLOCKING","message":"approval binding is not current","waivable":true}],
+    "waivers":[{"id":"waiver:1","issue_fingerprint":"sha256:75c76370ad232c614b958668eb6744927612d458530b99f600487af18bb7e3a8","release_ref":"release:minttap:1.0.20","status":"APPROVED","approved_by":"reviewer:bob","reason":"Controlled synthetic exception","expires_on":"2026-09-15","source_commit":"oldercommit","source_snapshot_digest":"sha256:snapshot-v1","policy_version":"review-policy:v1"}],
+    "expected":{"decision":"BLOCKED","ci_state":"FAIL","invalid_waiver_reasons":["WAIVER_STALE_SOURCE_COMMIT"]}
+  },
+  {
+    "name": "stale-source-snapshot-waiver-fails",
+    "release_ref":"release:minttap:1.0.20","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","evaluation_date":"2026-09-14","release_author":"dev:alice",
+    "reviewer_policy":{"version":"review-policy:v1","reviewers":[{"identity":"reviewer:bob","role":"release-manager","allowed_issue_codes":["APPROVAL_STALE","REQUIRED_CONTROL_FAILURE"]}]},
+    "canonical_issues":[{"code":"APPROVAL_STALE","record_id":"localization:minttap:ko","source_ref":"feature:minttap:portfolio","severity":"BLOCKING","message":"approval binding is not current","waivable":true}],
+    "waivers":[{"id":"waiver:1","issue_fingerprint":"sha256:75c76370ad232c614b958668eb6744927612d458530b99f600487af18bb7e3a8","release_ref":"release:minttap:1.0.20","status":"APPROVED","approved_by":"reviewer:bob","reason":"Controlled synthetic exception","expires_on":"2026-09-15","source_commit":"abc123def456","source_snapshot_digest":"sha256:old","policy_version":"review-policy:v1"}],
+    "expected":{"decision":"BLOCKED","ci_state":"FAIL","invalid_waiver_reasons":["WAIVER_STALE_SOURCE_SNAPSHOT"]}
+  },
+  {
+    "name": "separation-of-duty-self-approval-fails",
+    "release_ref":"release:minttap:1.0.20","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","evaluation_date":"2026-09-14","release_author":"dev:alice",
+    "reviewer_policy":{"version":"review-policy:v1","reviewers":[{"identity":"dev:alice","role":"release-manager","allowed_issue_codes":["APPROVAL_STALE"]}]},
+    "canonical_issues":[{"code":"APPROVAL_STALE","record_id":"localization:minttap:ko","source_ref":"feature:minttap:portfolio","severity":"BLOCKING","message":"approval binding is not current","waivable":true}],
+    "waivers":[{"id":"waiver:1","issue_fingerprint":"sha256:75c76370ad232c614b958668eb6744927612d458530b99f600487af18bb7e3a8","release_ref":"release:minttap:1.0.20","status":"APPROVED","approved_by":"dev:alice","reason":"Controlled synthetic exception","expires_on":"2026-09-15","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","policy_version":"review-policy:v1"}],
+    "expected":{"decision":"BLOCKED","ci_state":"FAIL","invalid_waiver_reasons":["WAIVER_SELF_APPROVAL_FORBIDDEN"]}
+  },
+  {
+    "name":"clean-current-release-allows-ci","release_ref":"release:minttap:1.0.20","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","evaluation_date":"2026-09-14","release_author":"dev:alice",
+    "reviewer_policy":{"version":"review-policy:v1","reviewers":[]},"canonical_issues":[],"waivers":[],
+    "expected":{"decision":"PASS","pass_mode":"CLEAN","ci_state":"ALLOW"}
+  },
+  {
+    "name":"needs-review-fails-release-ci","release_ref":"release:minttap:1.0.20","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","evaluation_date":"2026-09-14","release_author":"dev:alice",
+    "reviewer_policy":{"version":"review-policy:v1","reviewers":[]},
+    "canonical_issues":[{"code":"CONTENT_REVIEW","record_id":"claim:x","severity":"REVIEW_REQUIRED","message":"human review required","waivable":false}],"waivers":[],
+    "expected":{"decision":"NEEDS_REVIEW","ci_state":"FAIL","unresolved_issue_codes":["CONTENT_REVIEW"]}
+  },
+  {
+    "name":"stale-tool-attestation-fails-ci","release_ref":"release:minttap:1.0.20","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","evaluation_date":"2026-09-14","release_author":"dev:alice",
+    "reviewer_policy":{"version":"review-policy:v1","reviewers":[]},"canonical_issues":[],"waivers":[],
+    "manifest_attestation":{"release_ref":"release:minttap:1.0.20","source_commit":"abc123def456","source_snapshot_digest":"sha256:snapshot-v1","policy_version":"review-policy:v1","evaluator_name":"minttap-release-provenance-gate","evaluator_version":"0.0.9","input_digest":"sha256:126a0df2f516d4b7568f0ccb5ea2afd5876898191f8d3b2b71de297f50f421b8"},
+    "expected":{"decision":"PASS","ci_state":"FAIL","attestation_errors":["ATTESTATION_EVALUATOR_VERSION_MISMATCH"]}
+  }
+]
