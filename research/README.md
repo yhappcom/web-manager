@@ -64,63 +64,49 @@ HTTP Stage 1 competency covers history/semantics, methods/statuses, representati
 
 **STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-Integrated coverage:
-- confidentiality, integrity and authentication as distinct TLS goals;
-- SSL → TLS history and TLS 1.0/1.1 deprecation;
-- current TLS 1.3 authority moved from RFC 8446 to **RFC 9846 in July 2026**;
-- TLS 1.2 → 1.3 design changes, handshake and record roles;
-- asymmetric authentication/key establishment vs symmetric traffic protection;
-- X.509 root/intermediate/leaf and certification-path mental model;
-- trust anchors as relying-party policy, not a universal Internet list;
-- RFC 9525 SAN/service-identity verification and obsolete CN matching;
-- SNI and ALPN roles and their protocol-layer boundaries;
-- HSTS and preload behavior;
-- `minttap.app` consequence of the `.app` TLD being HSTS preloaded;
-- certificate expiration, revocation, chain, clock, hostname and trust-policy failure classes;
-- Certificate Transparency and browser/root-program policy as modern Web PKI layers;
-- CDN edge TLS vs origin TLS as separate connections/security boundaries;
-- current CA/B certificate-lifetime reduction schedule and the resulting need for automation;
-- integrated TLS failure diagnosis before HTTP/application analysis.
-
-Current policy-sensitive findings include CA/Browser Forum TLS BR v2.3.0 (7 Sep 2026), which limits publicly trusted subscriber certificates issued from 15 Mar 2026 through 14 Mar 2027 to 200 days and already schedules further reductions to 100 days in 2027 and 47 days in 2029.
-
-TLS/Web PKI will be revisited in Stage 8 and Stage 11 for advanced security/privacy and operations depth.
+Integrated coverage includes secure-channel goals; SSL→TLS history; current TLS 1.3 authority; handshake/record reasoning; symmetric/asymmetric roles; X.509 chain/trust anchors; SAN service identity; SNI/ALPN; HSTS/preload; `.app` implications; CT/root-program policy; edge/origin TLS separation; certificate lifetime automation; and failure diagnosis.
 
 ### 031 — Browser Document & Runtime Foundations
 `031-browser-document-runtime-html-css-js-dom-accessibility-tree-foundations.md`
 
 **STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
+Integrated coverage includes HTML parsing/DOM; semantic HTML; CSS cascade vs layout; ECMAScript vs Web APIs; script timing; events; native controls; accessibility API mapping; DOM/visual/focus-order distinctions; and layered browser-runtime diagnosis.
+
+### 032 — Application / Rendering / State / Navigation Foundations
+`032-application-rendering-state-navigation-foundations.md`
+
+**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
 Integrated coverage:
-- why HTML, CSS and JavaScript evolved as separate but interacting layers;
-- WHATWG HTML parsing: tokenization/tree construction into the runtime DOM;
-- source HTML vs parsed/mutated DOM;
-- semantic HTML vs visual appearance;
-- DOM as browser object/tree/event model rather than source text;
-- CSS cascade/inheritance as value-resolution systems distinct from layout;
-- DOM order vs generated boxes/visual order distinctions;
-- ECMAScript language vs browser Web APIs;
-- script blocking/`defer`/`async`/module timing at Stage 1 depth;
-- DOM event targets and propagation concepts;
-- native element semantics/interaction as browser-platform capabilities;
-- accessibility API exposure and why the accessibility representation is not a direct DOM clone;
-- accessible name/role/state concepts and ARIA's limits;
-- layered diagnosis across delivery, parser/DOM, cascade, layout, JS runtime, events and accessibility exposure;
-- progressive-enhancement/native-first reasoning for resilient public app-company pages;
-- explicit handoff boundaries with Design Studio Web Design.
+- build-time vs request-time vs client-time content production;
+- static/dynamic vs interactive/non-interactive distinctions;
+- SSR, CSR, SSG and hybrid rendering without framework lock-in;
+- hydration and visible-vs-interactive readiness;
+- progressive-enhancement reasoning;
+- browser/runtime, history, cookie, Web Storage and server-state boundaries;
+- **RFC 10025 (July 2026) as the current cookie standard, obsoleting RFC 6265**;
+- cross-document vs same-document navigation;
+- SPA vs rendering-strategy distinctions;
+- browser history and Back/Forward as application behavior;
+- bfcache vs HTTP cache vs DNS cache;
+- native form submission and enhancement;
+- CDN/edge/static/render-service/client responsibility boundaries;
+- rendering/state/navigation failure diagnosis;
+- explicit handoff to Design Studio Web for navigation/state/loading/resilience design.
 
-Current standards/evidence checked 2026-09-14 include WHATWG HTML/DOM Living Standards, TC39 ECMAScript, W3C CSS modules, Core-AAM 1.2 and HTML-AAM 1.0 drafts, and W3C APG guidance.
-
-This domain will be reopened later for deeper responsive CSS/layout, accessibility, browser-runtime performance and framework/component implementation.
+Primary/current evidence checked 2026-09-15: WHATWG HTML Living Standard, IETF RFC 10025, MDN rendering/navigation references and web.dev rendering guidance.
 
 ## Current curriculum position
 
 **Stage 1 — Web Foundations.**
 
-Next major domain:
-- **application/rendering/state/navigation foundations**: static vs dynamic, SSR/CSR/SSG, hydration, browser/server state boundaries, cookies/Web Storage/session concepts, forms/navigation/history, CDN/edge/hosting vocabulary integration, followed by Stage 1 end-to-end competency review.
+The major prerequisite blocks 027–032 are now established at Stage 1 foundation/practitioner level.
 
-The next domain should again be studied as one broad integrated professional subject rather than a chain of micro-reports.
+Next major block:
+- **Stage 1 end-to-end integration & competency review** — reconstruct the path from entering `minttap.app` through URL/origin, DNS, TLS, HTTP, rendering/document parsing, CSS/JS runtime, state/navigation and accessibility exposure; diagnose representative failures by responsible layer; identify unresolved prerequisite gaps before Stage 2.
+
+Do not advance to Stage 2 until this integration gate is satisfactory.
 
 ## Study quality standard
 
@@ -142,4 +128,4 @@ Implementation experiments are used only when necessary to answer a material fac
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
 
-No immediate Design Studio handoff was required to close HTTP or TLS foundations. Study 031 now creates an explicit outgoing handoff for future Web Design work: native semantics, DOM/visual/focus-order divergence, accessibility-tree non-equivalence, native-vs-custom control costs, cascade-vs-layout diagnosis and script-timing consequences should be integrated when Design Studio begins real web implementation/design validation. Web Manager does not edit Design Studio canonical files without authorization.
+Studies 031–032 create an outgoing Web Design handoff covering native semantics, DOM/visual/focus-order divergence, accessibility-tree non-equivalence, script/hydration timing, same-document vs cross-document navigation, Back/Forward expectations, deep-link behavior, loading/error/partial states, bfcache restoration, native forms and progressive enhancement. Web Manager does not edit Design Studio canonical files without authorization.
