@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "record_type": "feature",
+  "id": "feature:example:portfolio",
+  "status": "VERIFIED",
+  "owner": "role:product",
+  "app_ref": "app:example",
+  "name": "Portfolio overview",
+  "feature_state": "SHIPPED"
+}
