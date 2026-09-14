@@ -7,128 +7,129 @@ Platforms: iOS / App Store, Android / Google Play
 
 ## Mission state
 
-The web manager has been appointed as the owner of MintTap's company website content and app-launch web requirements. Production site work has not yet been assigned; current priority is building a reliable professional foundation.
+The web manager owns MintTap company website content and app-launch web requirements. Production site work has not yet been assigned; current priority is building a reliable professional foundation.
 
 When no live MintTap web task is pending, self-directed professional study continues without a separate order. Each substantial completed block must be saved here, with `STATUS.md` updated before moving to a materially different topic.
 
 ## Completed foundation work
 
 ### 001 — App Launch Website Foundations
-- Confirmed Design Studio governance and the Web Design specialist's integration role.
-- Confirmed that MintTap-specific website decisions belong here while reusable design research remains in `yhappcom/design-studio`.
-- Established the first app-launch requirement map covering Apple, Google Play, privacy, support, account deletion, app↔web association and advertising verification.
+- Established the first Apple/Google app-launch requirement map covering privacy, support, account deletion, app↔web association, advertising verification and release-time revalidation.
 - Canonical study: `research/001-app-launch-website-foundations.md`.
 
 ### 002 — Multi-App Company Website Information Architecture
 - Established a scalable company → app → support/control/governance hierarchy for `minttap.app`.
-- Adopted stable first-class per-app canonical pages instead of unrelated landing pages.
-- Established provisional path patterns such as `/apps/<app-slug>/`, app support/privacy/account-deletion child resources when needed, plus company-level support/privacy/contact layers.
-- Established shallow primary-navigation guidance: Apps, Support and Company/About only when meaningful; legal/utility resources do not automatically belong in primary navigation.
-- Added baseline URL rules: lowercase, readable semantic slugs, hyphens, no public opaque IDs, no version numbers in permanent app URLs, and deliberate redirects for renamed/retired paths.
-- Integrated current W3C/WAI navigation/page-structure guidance and Google Search URL/site-structure/SoftwareApplication guidance.
+- Adopted durable first-class per-app pages and baseline URL/navigation rules.
 - Canonical study: `research/002-multi-app-information-architecture.md`.
 
 ### 003 — Privacy, Support & Account-Deletion Content Architecture
-- Revalidated current Apple App Store and Google Play policy requirements from primary platform sources.
-- Confirmed per-app privacy-policy requirements and the need to synchronize policy content with actual data/SDK behavior and store disclosures.
-- Established `/apps/<app-slug>/privacy/` as MintTap's preferred canonical app privacy-policy pattern, separate from website/company privacy scope.
-- Confirmed that Google requires an external web account-deletion resource for account-creating apps and that Apple requires in-app account deletion while allowing/expecting a direct web completion path when the workflow goes to the web.
-- Established `/apps/<app-slug>/account-deletion/` as a durable first-class resource for every MintTap app that enables account creation.
-- Established `/apps/<app-slug>/support/` as the preferred Apple Support URL / Google website-support destination for each app.
-- Defined a single internal **App Data Contract** to reconcile app/client behavior, backend behavior, SDKs/processors, privacy policy, Apple App Privacy, Google Data safety, account deletion and support metadata.
-- Defined privacy-impact release triggers and production validation gates.
-- Jurisdiction-specific privacy law remains a separate dependency and must not be inferred from platform policy alone.
+- Revalidated current Apple App Store and Google Play policy requirements from primary sources.
+- Established per-app canonical privacy, support and account-deletion URL patterns.
+- Defined an internal **App Data Contract** to reconcile client/backend/SDK behavior with web privacy content, Apple App Privacy, Google Data safety and deletion/support surfaces.
+- Defined disclosure-review triggers and production validation gates.
 - Canonical study: `research/003-privacy-support-account-deletion-architecture.md`.
+
+### 004 — App Store / Google Play ↔ Website Content Synchronization
+- Confirmed Apple and Google requirements that store metadata, screenshots and descriptions accurately reflect the real app.
+- Established a **Product Truth Record** as the upstream source for app identity, shipped capabilities, account/subscription behavior, availability, privacy/support URLs and screenshot evidence.
+- Separated **product truth** from **channel-specific expression** and **temporary campaign content** so copy may differ without factual contradiction.
+- Defined a version-linked **Screenshot Evidence Set** and **Content Release Manifest**.
+- Established localization synchronization rules and release discrepancy severity (`BLOCKER`, `HIGH`, `NORMAL`).
+- Clarified responsibility: Product/Engineering confirms technical truth; Web Manager owns `minttap.app` content/freshness and cross-surface discrepancy detection; store-console publication remains with the assigned console owner unless separately delegated.
+- Canonical study: `research/004-store-website-content-synchronization.md`.
 
 ## Current maturity
 
 Stage: **Foundation**
 State: **IN STUDY — evidence base expanding**
 
-Reading alone does not constitute completion. Policy findings require source tracking and launch-time revalidation. Design/IA findings require representative browser, accessibility, responsive and localization validation before production PASS. The privacy/support/deletion architecture remains below PASS until applied to at least one real MintTap app and reconciled against actual client/backend/SDK behavior.
+Reading alone does not constitute completion. Policy findings require launch-time revalidation. IA/content models require application to a real MintTap app, browser/accessibility/localization validation and post-publication verification before PASS.
 
-## Current requirement map
+## Current operating model
 
-### Launch-critical / policy-facing
-- Company/product website on `minttap.app`.
-- Public per-app privacy policy URL for every released app.
-- Privacy-policy link/content accessible from inside each app as required by Apple/Google policy.
-- Apple Support URL with real, operational contact information.
-- Google Play app support email; app-specific support website strongly preferred by MintTap and recommended by Google.
-- External account-deletion web resource for Google Play when an app allows account creation.
-- In-app account deletion for Apple apps that support account creation.
-- Privacy disclosures synchronized with Apple App Privacy and Google Play Data safety declarations.
-
-### Platform/domain infrastructure when used
-- Apple `apple-app-site-association` for Universal Links / associated domains.
-- Android `/.well-known/assetlinks.json` for verified App Links.
-- Root `app-ads.txt` when app advertising inventory requires it; not universally mandatory, but strongly recommended by Google AdMob.
-
-### Baseline information architecture
+### Public website structure
 - `/` — company/home.
 - `/apps/` — app portfolio/index.
 - `/apps/<app-slug>/` — durable canonical app page.
 - `/apps/<app-slug>/support/` — preferred app-specific support destination.
-- `/apps/<app-slug>/privacy/` — canonical app-specific privacy policy.
+- `/apps/<app-slug>/privacy/` — canonical app privacy policy.
 - `/apps/<app-slug>/account-deletion/` — account-creating apps.
-- `/support/` — company support hub/routing.
-- `/privacy/` — website/company privacy surface when applicable; not a substitute for clearly scoped per-app policies.
-- `/contact/` — stable company contact route.
+- `/support/` — company support routing hub.
+- `/privacy/` — website/company privacy scope when applicable.
+- `/contact/` — company contact route.
 - `/terms/` — when applicable.
-- Infrastructure endpoints remain outside ordinary user navigation.
 
-### Internal operating model now established
-- Maintain one App Data Contract per app.
-- Reconcile technical behavior, SDK/processors, web privacy policy, Apple App Privacy, Google Data safety, deletion flow and support metadata before release.
-- Treat new SDKs, analytics/ads, authentication, data fields/permissions, processing/sharing, retention/deletion, subscriptions and contact changes as disclosure-review triggers.
-- Store-policy requirements are CHANGE WATCH items and must be rechecked at launch.
+### Internal truth/control artifacts
+- **App Data Contract** — actual data collection, SDK/processors, purposes, sharing, retention/deletion and account behavior.
+- **Product Truth Record** — current public product capabilities, availability, identity, support/privacy/store destinations and technical confirmation.
+- **Screenshot Evidence Set** — version/platform/locale/feature provenance for public screenshots.
+- **Content Release Manifest** — release-by-release impact checklist for web/store/privacy/support/localization/assets.
 
-### Company/product web surfaces still to study deeply
-- Home/company positioning and trust signals.
-- Per-app product/marketing content model.
-- Support/help/FAQ taxonomy and operational escalation.
-- Contact and support response model.
-- Jurisdiction-specific privacy/terms/legal content architecture.
-- App Store / Google Play download destinations.
-- Localization architecture and language routing.
-- Accessibility production requirements.
-- SEO/search previews/social metadata.
-- Release/update/freshness ownership.
+Exact machine-readable formats are still OPEN.
+
+### Cross-surface rule
+
+Website, App Store and Google Play copy do **not** need identical wording. They must not contradict the same underlying product truth.
+
+BLOCKER examples:
+- privacy/data disclosure mismatch;
+- non-existent feature claimed as shipped;
+- broken required support/privacy/deletion URL;
+- materially wrong account/subscription explanation;
+- wrong store destination;
+- misleading screenshot of core functionality.
+
+## Current requirement map
+
+### Launch-critical / policy-facing
+- Public privacy policy for every released app.
+- Required in-app privacy access/disclosures.
+- Apple Support URL with operational contact information.
+- Google Play support email; app-specific website preferred.
+- Google external account-deletion resource for account-creating apps.
+- Apple in-app account deletion for apps supporting account creation.
+- Apple App Privacy / Google Data safety / website policy aligned to actual technical behavior.
+- Store descriptions, screenshots and claims aligned to actual released functionality.
+
+### Platform/domain infrastructure when used
+- Apple `apple-app-site-association`.
+- Android `/.well-known/assetlinks.json`.
+- Root `app-ads.txt` when advertising inventory requires it.
 
 ## Important open items
 
-- Exact MintTap legal entity/public contact details are not yet established in this repository.
-- Exact app inventory and which apps create accounts are not yet mapped here.
-- Exact analytics, advertising SDKs, authentication providers, data collection and third-party processors are not yet mapped.
-- App Data Contract storage format is not yet selected.
+- Exact MintTap legal entity/public contact details are not yet recorded.
+- Exact app inventory, versions and account-creation behavior are not yet mapped.
+- Exact SDKs, analytics, ads, authentication providers, processors and data flows are not yet mapped.
+- App Data Contract / Product Truth Record / Release Manifest storage schemas are not yet selected.
+- Store-console ownership and release approval roles are not yet documented.
 - Hosting/CDN/SSL/DNS implementation has not yet been selected or audited.
 - Universal/App Link routes are not yet defined.
 - `app-ads.txt` publisher/vendor lines cannot be finalized until monetization vendors and IDs are known.
-- Jurisdiction-specific legal pages beyond store/platform requirements need separate legal/compliance review when launch regions and app data practices are fixed.
-- Locale architecture for Korean/English and future languages is not yet selected.
-- Final primary-navigation labels and product naming/slugs depend on actual app portfolio and Design Studio validation.
-- Support SLA/escalation and account-deletion backend workflows remain app-specific and undefined.
+- Jurisdiction-specific legal requirements need separate review once launch regions and app data practices are known.
+- Korean/English locale architecture and localization owner/reviewer roles are not yet selected.
+- Screenshot capture/approval workflow is not yet defined.
+- Support SLA/escalation and deletion backend workflows remain app-specific and undefined.
 
 ## Next research queue
 
-1. Apple/Google store metadata ↔ website content synchronization and release ownership.
-2. Domain/hosting/security baseline for `minttap.app`.
-3. Accessibility production baseline: semantic HTML, keyboard/focus, zoom/reflow, landmarks, forms and status/error behavior.
-4. Localization architecture for Korean/English first, with future-locale scalability.
-5. SEO, social sharing, structured data, sitemaps, canonicalization and crawlability for app/company pages.
-6. Company/app marketing content model: proof, screenshots, feature hierarchy, trust and conversion without overclaiming.
-7. Operational checklist for release, policy change watch, broken links, verification files and freshness monitoring.
-8. Jurisdiction-specific legal/compliance web requirements when actual launch regions, entity information and app data practices are known.
+1. **Domain/hosting/security baseline for `minttap.app`.**
+2. Accessibility production baseline: semantic HTML, keyboard/focus, zoom/reflow, landmarks, forms and status/error behavior.
+3. Localization architecture for Korean/English first, with future-locale scalability.
+4. SEO, social sharing, structured data, sitemaps, canonicalization and crawlability.
+5. Company/app marketing content model: proof, screenshots, feature hierarchy, trust and conversion without overclaiming.
+6. Operational checklist for release, policy change watch, broken links, verification files and freshness monitoring.
+7. Jurisdiction-specific legal/compliance web requirements when entity information, launch regions and actual app data practices are known.
 
 ## Current Design Studio dependencies
 
 - **Web Design**: complete page systems, responsive navigation, browser/device validation and implementation-aware specification.
-- **Layout/Interaction**: navigation/wayfinding, state, focus, destructive confirmation, errors/recovery, responsive recomposition and support/account-control flows.
-- **Typography/Type**: real browser hierarchy, Korean/English line wrapping, fallback, legal/support density, zoom and enlarged text.
-- **Color**: focus/current-state/destructive-state semantics, surface hierarchy, contrast, themes and device/browser behavior.
+- **Layout/Interaction**: navigation/wayfinding, state, focus, destructive confirmation, errors/recovery and responsive recomposition.
+- **Typography/Type**: Korean/English hierarchy, legal/support reading density, line wrapping, fallback, zoom and enlarged text.
+- **Color**: focus/current/destructive-state semantics, contrast, surface hierarchy, themes and browser/device behavior.
 
 ## Persistence state
 
 - `AGENTS.md` contains the autonomous continuous-learning directive.
-- `research/README.md` indexes studies 001–003.
-- Future completed studies must update this file before the manager advances to a materially different research block.
+- `research/README.md` indexes studies 001–004.
+- Future completed studies must update this file before moving to a materially different research block.
