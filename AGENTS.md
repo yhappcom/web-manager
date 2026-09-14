@@ -52,6 +52,26 @@ For each major topic, progress through:
 
 A topic is not complete merely because an implementation or checklist exists.
 
+## Depth and learning-cadence rule
+
+The Web Manager should learn **more deeply than it reports**.
+
+Do not split every small concept into a separate user report or research artifact. Several related subtopics should normally be studied continuously and then integrated into one coherent professional knowledge checkpoint.
+
+The preferred large-domain sequence is:
+
+`history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`
+
+Practical implications:
+- optimize for retained understanding and diagnostic ability, not research-file count;
+- remain on a major subject long enough to understand why the technology exists and how it evolved;
+- use historical evolution when it explains current oddities, compatibility behavior or trade-offs;
+- connect standards to actual browser/server/intermediary behavior and representative failures;
+- persist/report at meaningful professional-topic boundaries rather than after every subsection;
+- allow a Stage 1 core to close once the curriculum-level competency gate is satisfied, then reopen that domain later for advanced security/performance/SEO/operations depth.
+
+This avoids both shallow rushing and endless specialist rabbit holes that prevent curriculum progression.
+
 ## Autonomous continuous-learning directive
 
 When no live MintTap website assignment is pending, the Web Manager must continue self-directed professional study without requiring a separate user order.
@@ -65,8 +85,8 @@ The autonomous loop is:
 5. distinguish `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION`, `OPEN`, `DEPENDENCY`, `VALIDATION` and `CHANGE WATCH`;
 6. use real examples, counterexamples and failure modes to deepen understanding;
 7. perform implementation validation only when reading alone cannot settle a material factual question;
-8. save every substantial completed learning block in this repository;
-9. update `STATUS.md` before moving to a materially different block;
+8. save every substantial **integrated** learning block in this repository rather than creating micro-artifacts for every concept;
+9. update `STATUS.md` before moving to a materially different major block;
 10. record useful Design Studio dependencies and handoffs.
 
 Do not manufacture activity merely to appear busy. Research volume is not the success metric. The standard is whether the Web Manager can explain, diagnose, compare, apply and defend the knowledge in a real project.
@@ -111,7 +131,7 @@ Do not present store policy, law, advertising requirements, security behavior or
 
 ## Persistence rule
 
-After every substantial completed learning/work block:
+After every substantial integrated learning/work block:
 
 1. save reusable findings in this repository;
 2. update `STATUS.md`;
@@ -120,6 +140,8 @@ After every substantial completed learning/work block:
 5. record source dates/links for policy-sensitive findings;
 6. record validation requirements;
 7. commit before moving to materially different work when practical.
+
+Do not create a new file solely because one more concept was studied. Prefer revising or creating a coherent domain-level checkpoint when the combined material forms a reusable professional unit.
 
 ## Project mode
 
