@@ -98,73 +98,59 @@ Separates durable content objects from pages/components/channel fields; models A
 
 **STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-Study 036 extends 034–035 rather than repeating their IA/content work. It establishes:
-- navigation as both **orientation + movement**;
-- separation among sitemap, hierarchy, URL space, global/local/utility/footer navigation, breadcrumbs, search, direct entry and browser history;
-- findability as a multi-route system across browse/search/contextual/direct/store/search-engine entry;
-- destination labels as promises that create or destroy information scent;
-- stable global navigation plus deeper app/support-local contexts for multi-app scaling;
-- current-location support through page title, heading, current state, context and breadcrumbs where useful;
-- breadcrumbs as hierarchy rather than personal browser history, with Google guidance favoring representative user paths over URL mirroring;
-- direct-entry requirements for support/privacy/account-control/release resources;
-- search and browse as complementary retrieval modes;
-- responsive navigation as presentation/disclosure recomposition that preserves the information model;
-- accessibility constraints across keyboard/focus order, navigation landmarks, current state, zoom/reflow and localized labels;
-- a navigation failure taxonomy covering coverage, label/scent, scope, placement, orientation, consistency, external entry, responsive, semantic/accessibility, search/retrieval, recovery and history/deep-link continuity;
-- a critical-destination evaluation matrix for real MintTap projects;
-- explicit Design Studio handoff for semantic navigation requirements and stress cases.
-
-Primary/current evidence checked 2026-09-15 includes WCAG 2.2 normative criteria/current WAI Understanding guidance, WAI menu/navigation/breadcrumb guidance, ARIA APG navigation landmarks, and Google Search Central breadcrumb documentation updated 2026-09-08.
+Establishes navigation as orientation + movement, separates sitemap/hierarchy/URL/navigation/breadcrumb/search/history layers, treats findability as multi-route, defines direct-entry requirements, and provides a critical-destination/failure taxonomy for responsive and accessible navigation.
 
 ### 037 — Stage 2 Page Systems, Content Hierarchy & Scan/Comprehension Architecture
 `037-stage2-page-systems-content-hierarchy-scan-comprehension-architecture.md`
 
 **STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
 
-Study 037 moves from site-level findability to the information architecture *inside* a destination. It establishes:
-- pages as task contracts rather than content bins;
-- semantic, visual and interaction hierarchy as related but distinct;
-- page-type selection based on visitor context/task rather than one universal template;
-- a reusable semantic sequence of `identity → orientation → decision-critical information → evidence/explanation → action → depth` where applicable;
-- rejection of fixed “above the fold” architecture in favor of priority, sequence and discoverability;
-- headings as retrieval/navigation infrastructure and heading-only outline testing;
-- rejection of universal F/Z scan-path templates in favor of predictable retrieval structure;
-- transfer of Design Studio L002’s information/visual/interaction/temporal density model to page systems;
-- progressive disclosure as a cost exchange rather than free simplification;
-- semantic contracts for company landing, app detail, support hub/article, policy, account control, release/known issue and non-happy states;
-- list/detail/comparison as different information structures;
-- separate anatomy for 404, unexpected failure, planned unavailability, empty, unsupported, retired and no-result states;
-- responsive recomposition that preserves semantic priority, prerequisites and meaningful sequence;
-- Korean/English localization, long strings and 200% text/reflow as architecture stress tests;
-- a reusable **Page Contract** as the preferred pre-design handoff to Design Studio;
-- a page-comprehension failure taxonomy covering identity, purpose, priority, dependency, hierarchy, heading, density, disclosure, sequence, state/recovery, localization and accessibility-exposure failures.
+Establishes pages as task contracts; semantic/visual/interaction hierarchy separation; page-type selection by user context; decision-critical sequence; heading/scan/comprehension rules; task-dependent density/disclosure; differentiated non-happy states; responsive semantic invariants; localization/reflow stress; and the reusable Page Contract.
 
-Primary/current evidence checked 2026-09-15 includes WCAG 2.2, updated WAI Page Structure/Headings/Regions guidance, USWDS landing/documentation/404/card/summary patterns, GOV.UK headings/details/accordion/tabs and failure-state patterns, plus current Design Studio Web/Layout/Type evidence.
+### 038 — Stage 2 Integration: Company/App/Support/Governance Page-System Matrix & Competency Review
+`038-stage2-integration-page-system-matrix-competency-review.md`
+
+**STAGE 2 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
+
+Study 038 does not add another isolated Stage 2 model. It integrates 034–037 across realistic external and internal journeys and establishes:
+
+- one end-to-end contract: `entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`;
+- a company/app/support/governance/error-state page-system matrix;
+- App Store / Google Play / search → app/support/privacy direct-entry tests;
+- support-article → resolution → escalation tests;
+- privacy/account-control direct-entry and destructive-action scope tests;
+- release/known-issue lifecycle tests;
+- differentiated 404/retired/unavailable/unsupported/empty/no-result recovery;
+- Korean/English + narrow-width + enlarged-text/reflow structural invariants;
+- heading/landmark/meaningful-order gate;
+- an integrated failure taxonomy spanning entry contract, identity/scope, truth, destination, label/scent, hierarchy/sequence, recovery, lifecycle, localization/reflow and semantic exposure;
+- a production handoff package for future Design Studio Web work;
+- explicit OPEN items for real MintTap app inventory, account creation, store URLs, support model, localization, acquisition channels and human usability evidence.
+
+Current primary evidence was revalidated 2026-09-15 against Apple App Store Connect, Google Play account-deletion/User Data guidance, W3C/WAI page-structure guidance and WCAG-related reflow guidance. Design Studio status and Layout L002 were also re-read; Web Design still has no substantive `W###` evidence, so browser/visual/human validation remains a downstream dependency.
 
 ## Current curriculum position
 
 **Stage 1 — Web Foundations: COMPLETE at intended foundation/practitioner level.**
 
-**Stage 2 — Website Anatomy / Content / Information Architecture: ACTIVE.**
+**Stage 2 — Website Anatomy / Content / Information Architecture: COMPLETE at intended foundation/practitioner level.**
 
-Studies 034–037 now establish:
-1. task-based website anatomy and ownership;
-2. governed content objects/hierarchy/lifecycle;
-3. operational navigation, orientation and findability;
-4. page-type, intra-page hierarchy, scan/comprehension and state contracts.
+Stage 2 completed sequence:
+1. 034 — task-based website anatomy and ownership;
+2. 035 — governed content objects/hierarchy/lifecycle;
+3. 036 — operational navigation/orientation/findability;
+4. 037 — page systems, hierarchy, scan/comprehension and states;
+5. 038 — integrated page-system matrix and competency review.
 
-The highest-value unresolved prerequisite is now **Stage 2 Integration — Company/App/Support/Governance Page-System Matrix & Competency Review**.
+No unresolved Stage 2 prerequisite currently blocks curriculum progression. Stage 2 should reopen later at advanced/expert depth when real MintTap analytics, support volume, localization, browser validation, production content and human usability evidence exist.
 
-The integration gate should not re-teach 034–037. It should test whether the four models work together across realistic scenarios:
-- store/search visitor → app detail → support/privacy;
-- direct support-article visitor → app context/escalation;
-- privacy/account-control entry;
-- release/known-issue entry;
-- missing/retired/unavailable content recovery;
-- Korean/English long-content + narrow-width + 200% text/reflow;
-- heading/landmark/meaningful-order and direct-entry validation.
+**Next: Stage 3 — UX & Interaction Foundations.**
 
-If the integration gate exposes no material Stage 2 prerequisite, advance to Stage 3 UX & Interaction Foundations.
+The first Stage 3 integrated block should begin from first principles around:
+
+`user goal → possible action/affordance → system state → feedback → error/prevention/recovery → continuity across interruption`.
+
+It should incorporate existing Design Studio Interaction evidence without merely duplicating it, while keeping Web Manager's focus on transferable web/product management judgment.
 
 ## Study quality standard
 
@@ -174,14 +160,16 @@ A substantial study should normally include origin/problem where useful, precise
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
 
-Stage 2 handoff now includes:
-- task/destination matrix (034);
-- semantic content-object/lifecycle relationships (035);
-- critical-destination findability matrix (036);
-- semantic Page Contract and non-happy-state/recovery requirements (037);
-- global/local scope, direct-entry conditions and heading/orientation requirements;
+Stage 2's completed handoff package now includes:
+- task/destination matrix;
+- semantic content-object/lifecycle relationships;
+- critical-destination findability matrix;
+- semantic Page Contracts and non-happy-state/recovery requirements;
+- integrated external-entry/company/app/support/governance page-system matrix;
+- direct-entry competency test;
+- global/local scope and heading/orientation requirements;
 - simultaneous-comparison/disclosure constraints;
-- long localized content, 200% text/reflow and DOM/visual/focus/AT-order stress;
+- long localized content, enlarged-text/reflow and DOM/visual/focus/AT-order stress;
 - instruction to return structural content/IA failures to Web Manager rather than mask them visually.
 
 Design Studio Web remains pre-baseline with no substantive `W###` study at this checkpoint. Web Manager does not edit Design Studio canonical files without authorization.
