@@ -1,0 +1,8 @@
+[
+  {"name":"production-clean","profile":"production","fault":null,"expected_ok":true},
+  {"name":"preview-clean","profile":"preview","fault":null,"expected_ok":true},
+  {"name":"preview-missing-noindex","profile":"preview","fault":"missing-preview-noindex","expected_ok":false},
+  {"name":"bad-assetlinks-mime","profile":"production","fault":"bad-assetlinks-mime","expected_ok":false},
+  {"name":"missing-csp","profile":"production","fault":"missing-csp","expected_ok":false},
+  {"name":"wrong-canonical","profile":"production","fault":"wrong-canonical","expected_ok":false}
+]
