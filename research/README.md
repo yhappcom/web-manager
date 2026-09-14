@@ -33,18 +33,22 @@ Establishes the scalable company/app/support/governance hierarchy, canonical per
 
 Establishes Apple/Google policy-backed per-app privacy, support and account-deletion surfaces; required content models; a shared internal App Data Contract; release consistency triggers; and validation gates. It deliberately separates platform policy from later jurisdiction-specific legal analysis.
 
+### 004 — App Store / Google Play ↔ Website Content Synchronization
+`004-store-website-content-synchronization.md`
+
+Establishes a Product Truth Record, channel-specific copy model, screenshot evidence set, Content Release Manifest, localization synchronization, ownership boundaries and discrepancy severity so store metadata and `minttap.app` remain factually aligned without requiring identical wording.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Current high-value areas include:
 
-1. store metadata ↔ website synchronization and release ownership;
-2. domain/hosting/security;
-3. accessibility production baseline;
-4. localization architecture;
-5. SEO/social/structured-data/crawlability;
-6. company/app marketing content model;
-7. operational release and change-watch controls;
-8. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known.
+1. domain/hosting/security baseline for `minttap.app`;
+2. accessibility production baseline;
+3. localization architecture;
+4. SEO/social/structured-data/crawlability;
+5. company/app marketing content model;
+6. operational release and change-watch controls;
+7. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known.
 
 ## Design Studio relationship
 
