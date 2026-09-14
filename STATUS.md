@@ -7,174 +7,164 @@ Platforms: iOS / App Store, Android / Google Play
 
 ## Mission state
 
-The web manager owns MintTap company website content and app-launch web requirements. Production site work has not yet been assigned; current priority is building a reliable professional foundation.
+The Web Manager owns MintTap company website content, app-launch web requirements and the operational consistency of public web surfaces. Production implementation has not yet been assigned; the current priority is building a reliable professional baseline that can later drive provider selection and implementation.
 
-When no live MintTap web task is pending, self-directed professional study continues without a separate order. Each substantial completed block must be saved here, with `STATUS.md` updated before moving to a materially different topic.
+When no live MintTap web task is pending, self-directed study continues. Every substantial block is saved in this repository and this status is updated before moving to a materially different topic.
 
-## Completed foundation work
+## Completed foundation studies
 
 ### 001 — App Launch Website Foundations
-- Established the first Apple/Google app-launch requirement map covering privacy, support, account deletion, app↔web association, advertising verification and release-time revalidation.
-- Canonical study: `research/001-app-launch-website-foundations.md`.
+Established Apple/Google launch requirements covering privacy, support, account deletion, app↔web association, advertising verification and launch-time policy revalidation.
 
 ### 002 — Multi-App Company Website Information Architecture
-- Established a scalable company → app → support/control/governance hierarchy for `minttap.app`.
-- Adopted durable first-class per-app pages and baseline URL/navigation rules.
-- Canonical study: `research/002-multi-app-information-architecture.md`.
+Established company → apps → support/control/governance hierarchy, durable per-app pages and baseline URL/navigation principles.
 
 ### 003 — Privacy, Support & Account-Deletion Content Architecture
-- Revalidated current Apple App Store and Google Play policy requirements from primary sources.
-- Established per-app canonical privacy, support and account-deletion URL patterns.
-- Defined an internal **App Data Contract** to reconcile client/backend/SDK behavior with web privacy content, Apple App Privacy, Google Data safety and deletion/support surfaces.
-- Defined disclosure-review triggers and production validation gates.
-- Canonical study: `research/003-privacy-support-account-deletion-architecture.md`.
+Established per-app privacy/support/account-deletion surfaces and an **App Data Contract** that reconciles actual app/backend/SDK behavior with Apple App Privacy, Google Data safety and website disclosures.
 
-### 004 — App Store / Google Play ↔ Website Content Synchronization
-- Established a **Product Truth Record**, **Screenshot Evidence Set** and **Content Release Manifest**.
-- Separated product truth from channel-specific expression so website/store copy may differ without factual contradiction.
-- Defined localization synchronization and release discrepancy severity (`BLOCKER`, `HIGH`, `NORMAL`).
-- Canonical study: `research/004-store-website-content-synchronization.md`.
+### 004 — Store ↔ Website Content Synchronization
+Established a **Product Truth Record**, **Screenshot Evidence Set** and **Content Release Manifest**. Store and website copy may differ in expression but may not contradict the same product truth.
 
 ### 005 — Domain, Hosting & Security Baseline
-- Established a provider-independent production contract before choosing hosting/CDN.
-- Set HTTPS-only transport direction, TLS 1.2 minimum, TLS 1.3 where supported and staged HSTS.
-- Established exact no-redirect handling for Apple AASA and Android `assetlinks.json` endpoints.
-- Classified `.well-known` and `app-ads.txt` as launch-critical operational surfaces requiring exact route/MIME/cache/monitoring control.
-- Defined cache classes, browser security-header direction, DNSSEC/CAA guidance, CI/CD secret rules, rollback/observability requirements and hosting/CDN acceptance gates.
-- Canonical study: `research/005-domain-hosting-security-baseline.md`.
+Established a provider-independent production contract: HTTPS/TLS baseline, staged HSTS, exact no-redirect Apple/Android association endpoints, cache classes, security-header direction, DNSSEC/CAA guidance, secret handling, rollback and monitoring requirements.
 
 ### 006 — Accessibility Production Baseline
-- Adopted **WCAG 2.2 AA** as MintTap's internal web production target, without treating it as a substitute for jurisdiction-specific legal review.
-- Established semantic HTML/native-control first principles, logical headings/landmarks and skip/bypass behavior.
-- Made complete keyboard operation, logical focus order, visible focus and focus-not-obscured behavior production requirements.
-- Added 320 CSS px-equivalent reflow and 200% text enlargement stress tests.
-- Treated 24×24 CSS px pointer targets as a minimum floor, not a preferred compact design size.
-- Defined accessible form labeling, instructions, grouping, text-based errors, success/failure feedback and programmatic status-message rules.
-- Added special destructive-confirmation requirements for account deletion/data-control flows.
-- Added correct page language metadata (`ko`, `en` initially) and consistent support/help location requirements.
-- Established automated + manual keyboard/zoom/reflow + assistive-technology validation; automated scans alone cannot produce PASS.
-- Classified inaccessible launch-critical support/privacy/account-control behavior as release blockers.
-- Canonical study: `research/006-accessibility-production-baseline.md`.
+Adopted WCAG 2.2 AA as the internal web production target and established semantic HTML, keyboard/focus, reflow, text enlargement, forms/errors/status, target geometry and automated+manual validation gates.
+
+### 007 — Localization Architecture
+- Established stable language-specific URLs as the preferred scalable pattern: `/ko/...` and `/en/...` initially.
+- Each localized page declares its real HTML language, self-canonicalizes and is reciprocally connected using `hreflang`.
+- Automatic IP/browser-language redirection is rejected as the primary architecture; users must be able to reach and remain on explicitly selected locale URLs.
+- Established a **Locale Matrix** separating app UI support, website localization, Apple metadata, Google metadata, screenshots, privacy/support/deletion coverage and human review state.
+- Established a **Localization Manifest** linked to Product Truth / App Data Contract revisions so translations become stale when product/data/support facts change.
+- Store-listing localization, website localization and app-binary/UI localization are tracked as separate facts; none implies the others.
+- Localized screenshots must not falsely imply that the app UI itself is translated.
+- Real Korean/English typography, fallback and long-label browser proof remains OPEN and must use Design Studio Type/Web validation.
+- Canonical study: `research/007-localization-architecture.md`.
 
 ## Current maturity
 
 Stage: **Foundation**
-State: **IN STUDY — evidence base expanding**
+State: **IN STUDY — architecture/evidence base expanding**
 
-Reading alone does not constitute completion. Policy findings require launch-time revalidation. Architecture, security and accessibility findings require implementation against real pages/providers, browser/device/assistive-technology validation, and tested operational procedures before production PASS.
+Reading alone is not PASS. Policy findings require freshness checks; architecture/security/accessibility/localization findings require implementation on real pages, browsers, devices, locales and store consoles before production confidence.
 
-## Current operating model
+## Current public information architecture
 
-### Public website structure
-- `/` — company/home.
-- `/apps/` — app portfolio/index.
-- `/apps/<app-slug>/` — durable canonical app page.
-- `/apps/<app-slug>/support/` — preferred app-specific support destination.
-- `/apps/<app-slug>/privacy/` — canonical app privacy policy.
-- `/apps/<app-slug>/account-deletion/` — account-creating apps.
-- `/support/` — company support routing hub.
-- `/privacy/` — website/company privacy scope when applicable.
-- `/contact/` — company contact route.
-- `/terms/` — when applicable.
+Preferred localized human-facing pattern:
 
-### Machine-readable launch infrastructure
-- `/.well-known/apple-app-site-association` — when Apple associated domains are used; direct HTTPS 200/no redirect.
-- `/.well-known/assetlinks.json` — when Android App Links are used; direct HTTPS JSON 200/no redirect.
-- `/app-ads.txt` — when advertising verification is used.
+- `/ko/`, `/en/` — localized company/home surfaces, final root strategy still OPEN.
+- `/ko/apps/`, `/en/apps/` — localized app portfolio.
+- `/ko/apps/<app-slug>/`, `/en/apps/<app-slug>/` — localized durable app pages.
+- localized `support/`, `privacy/`, and `account-deletion/` child pages as applicable.
+- localized company support/privacy/contact/terms resources where substantively available.
 
-### Internal truth/control artifacts
+Language-neutral machine endpoints:
+- `/.well-known/apple-app-site-association`
+- `/.well-known/assetlinks.json`
+- `/app-ads.txt`
+
+### Root `/` remains OPEN
+Acceptable candidates:
+1. language-neutral/x-default entry or selector; or
+2. a deliberate default-language home with explicit alternate-language links.
+
+Do not finalize until primary audience/market strategy is known.
+
+## Internal truth/control artifacts
+
 - **App Data Contract** — actual data collection, SDK/processors, purposes, sharing, retention/deletion and account behavior.
-- **Product Truth Record** — current public product capabilities, availability, identity, support/privacy/store destinations and technical confirmation.
-- **Screenshot Evidence Set** — version/platform/locale/feature provenance for public screenshots.
-- **Content Release Manifest** — release-by-release impact checklist for web/store/privacy/support/localization/assets/infrastructure/accessibility.
+- **Product Truth Record** — current shipped capabilities, identity, availability, account/subscription behavior and destinations.
+- **Screenshot Evidence Set** — version/platform/locale/feature provenance.
+- **Content Release Manifest** — release impact across web/store/privacy/support/localization/assets/infrastructure/accessibility.
+- **Locale Matrix** — app UI vs website vs store metadata vs privacy/support/deletion/screenshot locale coverage.
+- **Localization Manifest** — source revision, target locale, glossary/reviewer, approval/staleness and surface coverage.
 
-Exact machine-readable storage formats remain OPEN.
+Exact machine-readable storage schemas remain OPEN.
 
 ## Security / infrastructure baseline
 
 - Canonical origin direction: `https://minttap.app/`.
-- TLS 1.0/1.1 prohibited; TLS 1.2 minimum; TLS 1.3 enabled where supported.
-- Ordinary HTTP routes redirect to HTTPS.
-- HSTS introduced only after HTTPS coverage is verified; `includeSubDomains`/preload are later operational decisions.
-- AASA and `assetlinks.json` are served directly at every associated hostname and never satisfied through canonical-host redirects.
-- CSP should be tested/report-only where needed, then enforced after dependency inventory.
-- `X-Content-Type-Options: nosniff`, explicit Referrer Policy and Permissions Policy are baseline controls.
-- DNSSEC is recommended when registrar/DNS ownership and rollover procedures are mature; CAA follows certificate-provider selection.
-- Deployment secrets do not belong in Git; CI/CD must use least privilege and auditable secret storage.
-- Production host selection must support exact `.well-known` paths, custom headers/status/cache control, rollback and monitoring.
+- TLS 1.0/1.1 prohibited; TLS 1.2 minimum; TLS 1.3 where supported.
+- Ordinary HTTP redirects to HTTPS.
+- HSTS only after complete HTTPS validation.
+- AASA and `assetlinks.json` served directly with correct route/content type and no redirect.
+- CSP should be inventoried/tested before enforcement; `nosniff`, explicit Referrer Policy and Permissions Policy are baseline directions.
+- Deployment secrets stay outside Git; hosting must support auditable deployment, rollback and monitoring.
 
 ## Accessibility baseline
 
-- WCAG 2.2 AA is the internal default target.
+- WCAG 2.2 AA internal target.
 - Native semantic HTML before custom ARIA widgets.
-- Meaningful page title, one primary main landmark, coherent heading outline, bypass repeated navigation.
-- All required functionality keyboard-operable with no keyboard traps.
-- Focus order preserves meaning; visible focus cannot be removed or obscured by sticky/overlay UI.
-- Normal vertically scrolling content must survive 320 CSS px-equivalent reflow; text must survive 200% enlargement without loss of content/functionality.
-- Form labels are persistent/programmatically associated; placeholder-only labeling is rejected.
-- Errors must identify the field/problem in text and provide useful correction guidance when possible.
-- Dynamic result/progress/error status must be programmatically exposed without unnecessary focus movement.
-- Localized pages declare correct page language.
-- Repeated help/support mechanisms stay predictably located.
-- Automated accessibility tooling assists testing but does not substitute for human/manual evaluation.
+- Logical page titles/headings/landmarks and bypass mechanism.
+- Required functionality keyboard-operable, visible logical focus and no traps/obscuration.
+- 320 CSS px-equivalent reflow and 200% text enlargement without loss of content/functionality.
+- Persistent programmatic form labels; textual errors and programmatic dynamic status.
+- 24×24 CSS px target criterion treated as minimum floor, not preferred design size.
+- Correct page language metadata.
+- Automated scanners assist but cannot independently produce PASS.
 
-## Cross-surface / release BLOCKER examples
+## Localization baseline
 
-- privacy/data disclosure mismatch;
-- non-existent feature claimed as shipped;
-- broken required support/privacy/deletion URL;
-- materially wrong account/subscription explanation;
-- wrong store destination;
-- misleading screenshot of core functionality;
-- broken AASA / `assetlinks.json` when app routing depends on them;
-- expired/invalid production TLS certificate;
-- deployment that cannot be safely rolled back after a launch-critical regression;
-- launch-critical function cannot be completed by keyboard;
-- keyboard trap;
-- invisible/fully obscured focus in required flow;
-- unlabeled account-deletion/support controls;
-- errors only communicated by color or not exposed in text;
-- critical status/progress/failure unavailable to assistive technology;
-- essential content/function lost at required text enlargement/reflow;
-- inaccessible destructive confirmation creating account-deletion risk.
+- Locale-specific crawlable URLs, not one URL whose language silently varies.
+- Initial architecture uses `ko` and `en`; region subtags only when real regional distinctions exist.
+- `<html lang>` uses BCP 47-compatible values.
+- Each translated page self-canonicalizes; language variants connect through reciprocal `hreflang`.
+- User-controlled language switching uses ordinary links and preserves the equivalent current task/page where possible.
+- Translation must preserve Product Truth and App Data Contract meaning.
+- Privacy/account-control translation prioritizes substantive equivalence over marketing adaptation.
+- Support localization must correspond to the UI/version users actually see.
+- Korean/English text growth, fallback, wrapping, mixed-script metrics and 200%/320px behavior require real-browser proof.
+
+## Current release blockers model
+
+Examples include:
+- privacy/data-disclosure mismatch;
+- required support/privacy/deletion URL broken;
+- non-existent feature presented as shipped;
+- materially incorrect account/subscription instructions;
+- misleading screenshots;
+- inaccessible launch-critical support/account-control flow;
+- association files redirected/malformed when required;
+- localized content materially contradicting source product/data truth;
+- website/store copy claiming app UI language support that is not shipped;
+- broken canonical/hreflang locale relationships on launch-critical localized pages.
 
 ## Important open items
 
-- Exact MintTap legal entity/public contact details are not yet recorded.
-- Exact app inventory, versions and account-creation behavior are not yet mapped.
-- Exact SDKs, analytics, ads, authentication providers, processors and data flows are not yet mapped.
-- App Data Contract / Product Truth Record / Release Manifest storage schemas are not yet selected.
-- Store-console ownership and release approval roles are not yet documented.
-- Registrar, authoritative DNS, hosting/CDN and certificate issuer are not yet documented/selected.
-- Current DNSSEC/CAA state of `minttap.app` is not yet audited.
-- Universal/App Link route sets are not yet defined.
-- Final CSP and cache TTLs depend on implementation/provider choices.
-- Monitoring/incident-response provider and alert owner remain undefined.
-- Exact browser/assistive-technology accessibility test matrix is not yet selected.
-- Korean/English locale architecture and localization owner/reviewer roles are not yet selected.
-- Final accessible contrast tokens and typography/fallback behavior require Design Studio Color/Type/Web validation.
-- Screenshot capture/approval workflow is not yet defined.
-- Support SLA/escalation and deletion backend workflows remain app-specific and undefined.
-
-## Next research queue
-
-1. **Localization architecture for Korean/English first, with future-locale scalability.**
-2. SEO, social sharing, structured data, sitemaps, canonicalization and crawlability.
-3. Company/app marketing content model: proof, screenshots, feature hierarchy, trust and conversion without overclaiming.
-4. Operational checklist for release, policy change watch, broken links, verification files and freshness monitoring.
-5. Jurisdiction-specific legal/compliance web requirements when entity information, launch regions and actual app data practices are known.
-6. Compare real hosting/DNS/CDN implementation options after the baseline is sufficient to evaluate options against explicit gates.
-7. Define concrete browser/assistive-technology test matrix when implementation stack and audience support policy are chosen.
+- Exact MintTap legal entity/public contact information.
+- Exact app inventory, released versions, account behavior and locale support.
+- Exact SDK/analytics/ads/auth/processors/data flows.
+- Internal artifact storage schemas and release ownership roles.
+- Hosting/CDN/DNS/SSL provider selection and real audit.
+- Universal/App Link route inventory.
+- app-ads.txt publisher/vendor lines.
+- Root `/` language/x-default behavior.
+- Source-authoring language per content stream.
+- Translation tooling/vendor/reviewer workflow and SLA.
+- Locale-aware date/number/currency implementation.
+- Real Korean/English browser/type/fallback validation.
+- Jurisdiction-specific legal/compliance requirements once launch regions and data practices are fixed.
 
 ## Current Design Studio dependencies
 
-- **Web Design**: complete page systems, semantic implementation, responsive navigation, real-browser validation, CSP/resource implications and implementation-aware specification.
-- **Layout/Interaction**: navigation/wayfinding, target geometry, focus, destructive confirmation, status/errors/recovery and responsive recomposition.
-- **Typography/Type**: Korean/English hierarchy, legal/support reading density, line wrapping, font loading/fallback, zoom and enlarged text.
-- **Color**: text/non-text/focus contrast, state semantics, color-independent feedback, themes and forced-color/browser/device behavior.
+- **Web Design** — actual localized page systems, language switching, responsive/browser validation and implementation fidelity.
+- **Typography / Type** — Korean/English fallback, mixed-script metrics, long labels, wrapping, numerals and zoom/reflow validation.
+- **Layout / Interaction** — navigation, locale switching, task preservation, destructive/account-control flows and responsive recomposition.
+- **Color** — contrast/state/focus/theme validation in real localized pages.
+
+## Next research queue
+
+1. **SEO / social sharing / structured data / canonical / sitemap / crawlability baseline.**
+2. Company/app marketing content model: positioning, feature hierarchy, proof, screenshots, trust and conversion without unsupported claims.
+3. Operational release / policy-change / broken-link / verification-file freshness monitoring.
+4. Jurisdiction-specific legal/compliance web requirements when entity, markets and data practices are known.
+5. Implementation/provider comparison after Foundation evidence is mature enough to score real hosting/CMS/framework candidates.
+6. Real-browser Korean/English localization/accessibility/type transfer validation once an implementation exists.
 
 ## Persistence state
 
 - `AGENTS.md` contains the autonomous continuous-learning directive.
-- `research/README.md` indexes studies 001–006.
-- Future completed studies must update this file before moving to a materially different research block.
+- `research/README.md` indexes studies 001–007.
+- Completed study details are canonical in `research/`.
+- This file is the current operational checkpoint.
