@@ -56,7 +56,12 @@ Establishes Korean/English-first localization architecture with locale-specific 
 ### 008 — SEO, Structured Data, Sitemap, Canonical & Crawlability
 `008-seo-structured-data-crawlability.md`
 
-Establishes a truthful discovery layer over the site architecture: explicit canonical URLs, localized canonical/hreflang consistency, robots/sitemap policy, crawlability gates, conservative Organization/SoftwareApplication/Breadcrumb structured data, hostname-level favicon implications, Search Console validation and structured-data change watch.
+Establishes the primary technical search-discovery layer: explicit canonical URLs, localized canonical/hreflang consistency, robots/sitemap policy, crawlability gates, conservative Organization/SoftwareApplication/Breadcrumb structured data, hostname-level favicon implications, Search Console validation and structured-data change watch.
+
+### 009 — SEO Independent Verification & Social Preview Metadata
+`009-seo-independent-verification-social-preview.md`
+
+Deliberately rechecks high-impact 008 assumptions against current Google sources, formalizes public/noindex/private indexability classes, clarifies robots.txt vs noindex vs access control, adds localized title/meta-description rules and establishes a Product-Truth-governed Open Graph social-preview baseline. It is an extension/verification companion to 008, not a competing SEO architecture.
 
 ## Current research queue
 
@@ -66,8 +71,7 @@ See root `STATUS.md` for the authoritative next-work queue. Current high-value a
 2. operational release and change-watch controls;
 3. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
 4. implementation/provider selection after the evidence baseline is mature enough to compare real options;
-5. real browser Korean/English typography, localization and accessibility transfer validation when production implementation exists;
-6. social-preview metadata details when actual channels and campaign needs are known.
+5. real browser Korean/English typography, localization, accessibility and search/social transfer validation when production implementation exists.
 
 ## Design Studio relationship
 
