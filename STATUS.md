@@ -1,241 +1,118 @@
 # MintTap Web Manager Status
 
-Operating state: **ACTIVE — FOUNDATION RESEARCH / AUTONOMOUS CONTINUATION ENABLED**
+Operating state: **ACTIVE — PROFESSIONAL WEB KNOWLEDGE BUILDING / AUTONOMOUS CONTINUATION ENABLED**
 Last sync: 2026-09-14
 Domain: `minttap.app`
 Platforms: iOS / App Store, Android / Google Play
 
 ## Mission state
 
-The Web Manager owns MintTap company website content, app-launch web requirements and operational consistency. GitHub is canonical long-term memory; chat is temporary working context. Self-directed study continues when no live assignment takes priority.
+The Web Manager exists to build and apply professional knowledge for planning, evaluating, launching and operating MintTap's company/app websites. GitHub is canonical long-term memory; chat is temporary working context.
 
-## Completed foundation / practice studies
+**Curriculum correction (2026-09-14): knowledge accumulation is the objective; POC implementation is not.** Studies 024–025 remain useful provider/validation knowledge, but provider deployment adapters, live POCs and CI expansion are deferred until a real implementation decision requires them. Practical tests remain appropriate only when they materially validate a knowledge claim.
 
-Studies **001–025** are complete at the documented Foundation/PRACTICE level. Canonical details are under `research/` and indexed in `research/README.md`.
+## Completed studies
 
-Latest executable sequence:
-- **016** Control Artifact Validation Specimen — 5/5;
-- **017** Release-Chain Semantic Integrity — 12/12;
-- **018** Semantic Fingerprints / Dependency Impact — 5/5;
-- **019** Typed Dependency / Approval Freshness — 6/6;
-- **020** Derived Release Gate / Auditable Waivers — 8/8;
-- **021** Release Provenance / Reviewer Authorization / Fail-Closed CI — 9/9;
-- **022** Protected Policy Ownership / Quorum / Revocation / Workflow Threat Model — 10/10;
-- **023** Provider-Neutral Active Workflow Trust-Boundary Contract — 12/12;
-- **024** Firebase Hosting vs Cloudflare Provider-Edge Contract Mapping — 11/11;
-- **025** Identical Provider POC Corpus + Provider-Neutral HTTP Assertion Runner — 8/8.
+Studies **001–026** are complete at their documented Foundation/PRACTICE level. Production readiness is not implied.
 
-Production PASS is not claimed. Actual MintTap facts, real store-console state, legal applicability, provider accounts/domain authority, live CI/deployment enforcement and browser/device production validation remain incomplete.
+The existing body now covers two broad layers:
 
-## 025 — identical POC corpus + HTTP assertion runner
+### A. Launch / governance / technical operations knowledge
+001–025 established Apple/Google launch web requirements, multi-app IA, privacy/support/deletion, store↔web consistency, security, accessibility, localization, SEO, marketing claims, legal triggers, hosting/provider evaluation, release governance and controlled implementation-validation methods.
 
-New canonical artifacts:
-- `research/025-identical-provider-poc-corpus-http-assertion.md`
-- `tools/build_poc_corpus.py`
-- `tools/poc_http_assert.py`
-- `control/poc/http_contract.json`
-- `control/tests/poc_http_assert_cases.json`
+### B. Visitor-facing web expertise — renewed priority
+**026 — App-Company Web Strategy, Information Hierarchy & Conversion Path** establishes the first focused visitor-facing study after the curriculum correction.
 
-Controlled local result: **8 / 8 expected outcomes matched.**
+Key 026 conclusions:
+- website and store listing are different stages of one acquisition/support journey, not copies of each other;
+- page planning starts with **audience × intent × destination**;
+- provisional visitor-intent classes are `DISCOVER`, `EVALUATE`, `ACT`, `SUPPORT/GOVERNANCE` until real product evidence changes them;
+- an app page should establish identity/value, primary action, product evidence, differentiated capabilities, trust/uncertainty reduction and secondary support/governance paths in a coherent hierarchy;
+- website→store→installed-product promises must remain continuous and Product-Truth governed;
+- responsive work is hierarchy recomposition, not desktop scaling;
+- performance is a design/content constraint, not only an engineering cleanup task.
 
-The deterministic generator currently produces a **14-file synthetic corpus** containing:
-- Korean/English home routes;
-- synthetic localized app/support/privacy routes;
-- `/.well-known/apple-app-site-association`;
-- `/.well-known/assetlinks.json`;
-- `/app-ads.txt`;
-- `/robots.txt`;
-- `/sitemap.xml`;
-- `/404.html`.
+Primary current evidence used in 026 includes Apple App Store asset/product-page guidance, Google Play store-listing guidance, W3C WAI page-structure/design/writing guidance and Google web.dev Core Web Vitals guidance.
 
-Current fixture artifact digest:
+## Current web-manager capability map
 
-`sha256:3476b92117ff46aebe44721505f81d9b679b81237234a5e99449f92d03717f7f`
+### Relatively strong
+- app-launch web requirements;
+- privacy/support/account-deletion architecture;
+- store↔website factual consistency;
+- localization/search/accessibility foundations;
+- domain/hosting/security/release governance;
+- provider evaluation and operational controls.
 
-This digest is fixture evidence only. Intentional corpus changes must produce a new digest.
+### Developing now
+- company/app website strategy;
+- visitor intent and information hierarchy;
+- landing-page content architecture;
+- conversion/action paths;
+- trust communication;
+- responsive content prioritization;
+- performance-aware marketing design;
+- support/self-service IA;
+- analytics and evidence-led improvement;
+- professional precedent critique.
 
-### HTTP contract
+## 026 reusable planning model
 
-The same runner is intended for local reference, Firebase preview/live and Cloudflare preview/production.
+Before visual design, a future MintTap page brief should identify:
+1. page purpose;
+2. target audience and evidence quality;
+3. visitor intents;
+4. primary and secondary actions;
+5. factual claims/evidence;
+6. required support/privacy/legal destinations;
+7. information hierarchy;
+8. localization/narrow-width stress content;
+9. store destination/platform conditions;
+10. accessibility/performance constraints.
 
-Production assertions include:
-- canonical routes return 200;
-- canonical non-slash aliases redirect to the slash form;
-- localized pages contain exact `https://minttap.app/...` canonical URLs and expected `lang`;
-- required CSP / `X-Content-Type-Options` / `Referrer-Policy` values are present;
-- HTML and machine-file cache policy matches the contract;
-- AASA and Asset Links are direct, parseable JSON with the expected MIME type;
-- robots/sitemap/app-ads endpoints are directly reachable with expected MIME types;
-- unknown routes produce a real `404`, not a soft-404.
+This is input to Design Studio, not a visual template.
 
-Preview uses the **same corpus bytes** and adds an edge/deployment requirement:
-- HTML responses must include `X-Robots-Tag` containing `noindex`.
+## Current Design Studio dependency
 
-This keeps preview indexation control out of the production HTML artifact.
+Latest checked `yhappcom/design-studio/progress/WEB_STATUS.md` still shows Web Design at pre-W001 foundation state. Web Manager therefore should not invent a universal visual system. It supplies product/site strategy, content hierarchy, factual requirements and operational constraints; Web Design/Type/Color/Layout-Interaction own reusable visual/interaction expertise.
 
-### Negative detection proved
+When Design Studio Web research becomes substantive, Web Manager should consume it and test transfer to actual MintTap product contexts.
 
-The local self-test correctly rejected:
-- preview without `noindex`;
-- wrong `assetlinks.json` MIME type;
-- missing CSP;
-- wrong localized canonical URL;
-- post-build artifact mutation.
+## Retained technical knowledge, not current curriculum queue
 
-Critical boundary: the local reference server validates the **contract and runner**, not Firebase or Cloudflare. Provider PASS still requires the exact generated bytes to be deployed and tested over real provider URLs.
+Firebase Hosting and Cloudflare Workers/Static Assets remain viable candidates from earlier studies. The synthetic 025 corpus/assertion tooling remains stored as validation evidence. No provider is selected, no production PASS is claimed, and no further provider POC work is required during general knowledge study.
 
-## Current provider direction retained from 024
+## Important unknown MintTap facts
 
-### Firebase Hosting
+Actual project work still requires real evidence for:
+- company/legal/public identity and contact details;
+- app inventory and release states;
+- audience/user research;
+- acquisition channels;
+- primary conversion goal per app;
+- pricing/account model;
+- actual store listings/assets;
+- verified trust signals;
+- analytics baseline;
+- SDK/data-flow/legal applicability facts;
+- real Apple/Android identifiers where machine association is needed.
 
-Current preferred path:
+Do not invent these from generic patterns.
 
-**GitHub OIDC → Google Cloud WIF → ADC → Firebase CLI → preview/tested Hosting version → exact-version clone to live.**
+## Next research queue — knowledge-led
 
-Firebase remains attractive because an already tested Hosting version can be cloned/promoted without rebuilding source. Live validation is still required for IAM, preview/live response behavior and custom domain.
+1. **027 — App-company / multi-product website IA & navigation decision models.** Study when company-first, product-first, app-directory, support-first and hybrid structures are appropriate; navigation depth, naming, wayfinding and multi-app growth implications.
+2. **028 — Landing-page persuasion/content architecture.** Value proposition, product evidence, feature→outcome explanation, CTA hierarchy, message continuity and non-manipulative conversion.
+3. **029 — Trust architecture for small/unknown app developers.** Identity, privacy/security/support, evidence, social proof and credibility without fake authority signals.
+4. **030 — Support / FAQ / self-service IA.** Findability, issue taxonomy, escalation and search-oriented support content.
+5. Responsive content hierarchy/mobile recomposition, performance-aware marketing design/Core Web Vitals, analytics/measurement, and systematic real-site precedent critique.
 
-### Cloudflare Workers + Static Assets
-
-Current preferred path:
-
-**trusted source → `wrangler versions upload` → provider version ID + preview → release manifest ALLOW → `wrangler versions deploy --version-id <approved>`**.
-
-Current evidenced external-CI credential baseline remains scoped API token + account ID. Short-lived/OIDC-equivalent Cloudflare deployment auth remains OPEN.
-
-Both providers remain viable. Neither is selected.
-
-## Current control architecture
-
-Principle: **each fact has one canonical owner/record; downstream surfaces reference or derive from it.**
-
-Current direction includes:
-- canonical JSON + JSON Schema;
-- stable immutable IDs;
-- semantic fingerprints and dependency invalidation;
-- typed impact severity and cycle rejection;
-- fingerprint-bound approvals;
-- derived release manifest and `PASS / NEEDS_REVIEW / BLOCKED` gate;
-- exact-issue/release/source/tool/policy-bound waivers;
-- reviewer authorization, quorum, revocation and separation of duties;
-- protected governance ownership;
-- time-bounded break-glass handling;
-- source/tool/input provenance and fail-closed CI semantics;
-- four-zone workflow trust separation;
-- provider version + artifact-digest deployment binding;
-- credential isolation to deploy/rollback;
-- deterministic provider-neutral deploy corpus;
-- provider-neutral externally observable HTTP contract;
-- preview indexation policy separated from production artifact bytes;
-- canonical truth remains unchanged by waiver/emergency disposition;
-- no secrets or customer personal data in this repository.
-
-Important limitation: current deterministic Python JSON serialization used in earlier governance studies is still **not claimed as full RFC 8785 JCS conformance**.
-
-## Authoritative platform constraints retained / refreshed in 025
-
-Current primary-source findings used by the POC:
-- Apple requires AASA under `/.well-known/`, HTTPS with a valid certificate and no redirects;
-- Android requires `/.well-known/assetlinks.json`, HTTPS, `application/json`, and no redirects;
-- Google Search treats redirects, sitemaps and canonical annotations as canonicalization signals; canonical declaration remains a hint rather than an absolute command;
-- `robots.txt` belongs at the site top level and can declare an absolute Sitemap URL;
-- Firebase and Cloudflare expose different configuration mechanisms, so the POC compares response behavior rather than config syntax.
-
-## Current public information architecture
-
-Preferred localized pattern remains:
-- `/ko/`, `/en/`
-- `/ko/apps/`, `/en/apps/`
-- `/ko/apps/<app-slug>/`, `/en/apps/<app-slug>/`
-- localized app `support/`, `privacy/`, `account-deletion/` where applicable.
-
-Machine endpoints:
-- `/.well-known/apple-app-site-association`
-- `/.well-known/assetlinks.json`
-- `/app-ads.txt`
-
-Root `/` strategy remains OPEN.
-
-## Product/site baselines retained
-
-### Security
-HTTPS-only direction, TLS 1.2 minimum / TLS 1.3 where supported, exact no-redirect association files, deliberate cache/security headers, secrets outside Git, auditable deployment and rollback.
-
-### Accessibility
-WCAG 2.2 AA internal target; semantic HTML; keyboard/focus path; 320 CSS px reflow; 200% text enlargement; accessible forms/errors/status; automation supplements manual evaluation.
-
-### Localization / search / marketing
-Korean/English locale-specific URLs; self-canonical + reciprocal hreflang; app UI/web/store localization tracked independently; sitemap/canonical/indexability controls; conservative structured data; Product-Truth-governed social previews and claims.
-
-### Legal trigger model
-Compliance remains **facts → trigger → obligation → public/control surface → backend process → validation**. The validator checks consistency with recorded applicability; it does not determine legal applicability itself.
-
-## Current implementation direction
-
-Preferred envelope:
-
-**Git-versioned content/data → build-time static generation → global HTTPS/CDN hosting → isolated dynamic functions only for genuine server workflows.**
-
-Provider shortlist remains:
-1. Firebase Hosting;
-2. Cloudflare Workers + Static Assets;
-3. Vercel if justified SSR/full-stack need appears;
-4. Netlify as viable static alternative.
-
-No provider selected.
-
-The live Firebase vs Cloudflare POC must consume the exact same generated corpus and the same `control/poc/http_contract.json`. Provider-specific adapters may translate this contract into provider configuration but may not weaken or redefine it.
-
-## Current Design Studio dependencies / handoffs
-
-Latest checked Design Studio Web state still has no substantive `W###`.
-
-Handoff rules:
-- the 025 corpus is infrastructure/test evidence, not a visual template;
-- real provider canonical redirects, preview indexation, true 404 recovery, localized routing, cache/security headers and machine endpoints become explicit Web QA inputs;
-- future Web/Layout validation should test redirect/history/keyboard behavior, 404 recovery comprehension and Korean/English reflow on the deployed POC;
-- preview/staging/release states must be textually/structurally/programmatically distinguishable rather than color-only;
-- production page hierarchy, typography, color and interaction remain Design Studio-owned questions.
-
-## Important open items
-
-- actual MintTap entity/public contact/contracting entity;
-- real app inventory/releases/pricing/accounts/locales/markets/audience;
-- real App Store Connect / Play Console state ingestion;
-- real Apple Team ID / bundle IDs / Associated Domains routes;
-- real Android application IDs / Play signing certificate fingerprints / App Link scopes;
-- applicability and verified contents of `app-ads.txt`;
-- SDK/analytics/ads/auth/processors/data flows and processing locations;
-- legal applicability/signoff process;
-- full RFC 8785/JCS conformance validation;
-- final schemas for governance/release/provider contracts;
-- authenticated reviewer identity mapping and repository enforcement;
-- exact GitHub branch protection/CODEOWNERS/environment capability verification;
-- Firebase WIF/ADC minimum IAM roles and live Hosting behavior;
-- Cloudflare minimum API-token permissions and short-lived credential alternatives;
-- Firebase preview-backend isolation policy;
-- Cloudflare preview visibility/Access policy;
-- exact custom-domain/DNS implications for `minttap.app`;
-- live TLS/certificate/HSTS assertions;
-- production CSP after real scripts/fonts/analytics are known;
-- deployment concurrency/serialization;
-- immutable release history / long-term rollback retention;
-- signed/cryptographic attestation where justified;
-- active CI/deployment workflow;
-- real-browser Korean/English design/accessibility transfer validation;
-- Search Console/policy-alert/webhook/escalation ownership.
-
-## Next research queue
-
-1. **Provider deployment adapters for the exact 025 corpus.** Prepare Firebase Hosting and Cloudflare Workers Static Assets configuration that implements the same canonical redirects, machine-file MIME/cache behavior, security headers, 404 behavior and preview `noindex` policy. Do not enable credentials or perform live deployment without provider accounts/domain authority.
-2. Validate both adapter configurations locally or through provider-local emulation where authoritative tooling permits, and prove they do not change the generated corpus bytes.
-3. Execute the live Firebase Hosting vs Cloudflare Workers/Static Assets POC when provider accounts/domain authority are available, recording provider version IDs plus the 025 artifact digest.
-4. Run the identical 025 assertion runner against preview and production origins, then use the live POC for Design Studio browser/accessibility transfer validation.
-5. Apply Legal Trigger Registry and app-specific evidence when actual MintTap product facts are available.
+The queue is not a rigid syllabus. Higher-value evidence or a real MintTap project may reorder it.
 
 ## Persistence state
 
-- `AGENTS.md` contains autonomous continuous-learning rules.
-- `research/README.md` indexes **001–025**.
-- Studies 016–025 have executable PRACTICE artifacts under `control/` and `tools/`.
-- Study 025 adds `tools/build_poc_corpus.py`, `tools/poc_http_assert.py`, `control/poc/http_contract.json`, and `control/tests/poc_http_assert_cases.json`.
+- `AGENTS.md` remains the standing governance instruction.
+- `research/README.md` indexes **001–026** and records the knowledge-led curriculum correction.
+- `research/026-app-company-web-strategy-information-hierarchy.md` is the latest completed study.
+- Earlier PRACTICE artifacts remain retained but do not force continued implementation work.
 - This file is the current operational checkpoint.
