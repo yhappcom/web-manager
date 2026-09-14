@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "record_type": "locale_coverage",
+  "id": "locale:example:ko",
+  "status": "VERIFIED",
+  "owner": "role:localization",
+  "app_ref": "app:example",
+  "locale": "ko",
+  "app_ui": "SUPPORTED",
+  "web": "SUPPORTED"
+}
