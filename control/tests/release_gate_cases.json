@@ -1,0 +1,183 @@
+[
+  {
+    "name": "clean-release-pass",
+    "release_ref": "release:example:ios:1.0.1",
+    "integrity_errors": [],
+    "cycles": [],
+    "informational": [],
+    "review_required": [],
+    "blocking": [],
+    "approval_errors": [],
+    "control_failures": [],
+    "waivers": [],
+    "expected": {
+      "decision": "PASS",
+      "canonical_issue_codes": [],
+      "unresolved_issue_codes": [],
+      "waiver_count": 0,
+      "invalid_waiver_reasons": [],
+      "pass_mode": "CLEAN"
+    }
+  },
+  {
+    "name": "informational-only-pass",
+    "release_ref": "release:example:ios:1.0.1",
+    "informational": ["surface:example:note"],
+    "expected": {
+      "decision": "PASS",
+      "canonical_issue_codes": [],
+      "unresolved_issue_codes": [],
+      "waiver_count": 0,
+      "pass_mode": "CLEAN"
+    }
+  },
+  {
+    "name": "review-item-needs-review",
+    "release_ref": "release:example:ios:1.0.1",
+    "review_required": ["claim:example:portfolio"],
+    "expected": {
+      "decision": "NEEDS_REVIEW",
+      "canonical_issue_codes": ["REVIEW_REQUIRED_DEPENDENCY_IMPACT"],
+      "unresolved_issue_codes": ["REVIEW_REQUIRED_DEPENDENCY_IMPACT"],
+      "waiver_count": 0
+    }
+  },
+  {
+    "name": "stale-blocking-approval-blocks",
+    "release_ref": "release:example:ios:1.0.1",
+    "approval_errors": [
+      {
+        "code": "APPROVAL_STALE",
+        "record_id": "localization:example:portfolio:ko",
+        "source_ref": "feature:example:portfolio",
+        "severity": "BLOCKING",
+        "message": "approval binding is not current",
+        "waivable": true
+      }
+    ],
+    "expected": {
+      "decision": "BLOCKED",
+      "canonical_issue_codes": ["APPROVAL_STALE"],
+      "unresolved_issue_codes": ["APPROVAL_STALE"],
+      "waiver_count": 0
+    }
+  },
+  {
+    "name": "cycle-is-nonwaivable-blocker",
+    "release_ref": "release:example:ios:1.0.1",
+    "cycles": [["control:a", "control:b", "control:a"]],
+    "waivers": [
+      {
+        "id": "waiver:test:cycle",
+        "release_ref": "release:example:ios:1.0.1",
+        "issue_fingerprint": "sha256:c0d554397674031a1f4766626baf60bfab63620f85d5bac24ee348b26330952d",
+        "status": "APPROVED",
+        "approved_by": "role:release-owner",
+        "reason": "test",
+        "expires_on": "2026-09-15"
+      }
+    ],
+    "expected": {
+      "decision": "BLOCKED",
+      "canonical_issue_codes": ["DEPENDENCY_CYCLE"],
+      "unresolved_issue_codes": ["DEPENDENCY_CYCLE"],
+      "waiver_count": 0,
+      "invalid_waiver_reasons": ["ISSUE_NON_WAIVABLE"]
+    }
+  },
+  {
+    "name": "valid-scoped-waiver-allows-pass-but-preserves-issue",
+    "release_ref": "release:example:ios:1.0.1",
+    "approval_errors": [
+      {
+        "code": "APPROVAL_STALE",
+        "record_id": "localization:example:portfolio:ko",
+        "source_ref": "feature:example:portfolio",
+        "severity": "BLOCKING",
+        "message": "approval binding is not current",
+        "waivable": true
+      }
+    ],
+    "waivers": [
+      {
+        "id": "waiver:example:localization",
+        "release_ref": "release:example:ios:1.0.1",
+        "issue_fingerprint": "sha256:5fa3b976c9859f519d387e2f94d5a2cef80cbbed06e1e023fd196dd95d0ad3f5",
+        "status": "APPROVED",
+        "approved_by": "role:release-owner",
+        "reason": "Known wording-only source update; localization owner approved temporary release exception.",
+        "expires_on": "2026-09-15"
+      }
+    ],
+    "expected": {
+      "decision": "PASS",
+      "canonical_issue_codes": ["APPROVAL_STALE"],
+      "unresolved_issue_codes": [],
+      "waiver_count": 1,
+      "invalid_waiver_reasons": [],
+      "pass_mode": "WITH_WAIVER"
+    }
+  },
+  {
+    "name": "expired-waiver-does-not-unblock",
+    "release_ref": "release:example:ios:1.0.1",
+    "evaluation_date": "2026-09-14",
+    "approval_errors": [
+      {
+        "code": "APPROVAL_STALE",
+        "record_id": "localization:example:portfolio:ko",
+        "source_ref": "feature:example:portfolio",
+        "severity": "BLOCKING",
+        "message": "approval binding is not current",
+        "waivable": true
+      }
+    ],
+    "waivers": [
+      {
+        "id": "waiver:example:expired",
+        "release_ref": "release:example:ios:1.0.1",
+        "issue_fingerprint": "sha256:5fa3b976c9859f519d387e2f94d5a2cef80cbbed06e1e023fd196dd95d0ad3f5",
+        "status": "APPROVED",
+        "approved_by": "role:release-owner",
+        "reason": "Expired exception.",
+        "expires_on": "2026-09-13"
+      }
+    ],
+    "expected": {
+      "decision": "BLOCKED",
+      "canonical_issue_codes": ["APPROVAL_STALE"],
+      "unresolved_issue_codes": ["APPROVAL_STALE"],
+      "waiver_count": 0,
+      "invalid_waiver_reasons": ["WAIVER_EXPIRED"]
+    }
+  },
+  {
+    "name": "semantic-integrity-failure-remains-blocked",
+    "release_ref": "release:example:ios:1.0.1",
+    "integrity_errors": [
+      {
+        "code": "STORE_DESTINATION_NO_LIVE_RELEASE",
+        "record_id": "surface:example:store-ios",
+        "message": "store destination lacks verified live release"
+      }
+    ],
+    "waivers": [
+      {
+        "id": "waiver:example:integrity",
+        "release_ref": "release:example:ios:1.0.1",
+        "issue_fingerprint": "sha256:3d5f1463938d0ddc5f090204961d171ee812482ff1460896e21ee007e866ae85",
+        "status": "APPROVED",
+        "approved_by": "role:release-owner",
+        "reason": "Attempted exception.",
+        "expires_on": "2026-09-15"
+      }
+    ],
+    "expected": {
+      "decision": "BLOCKED",
+      "canonical_issue_codes": ["STORE_DESTINATION_NO_LIVE_RELEASE"],
+      "unresolved_issue_codes": ["STORE_DESTINATION_NO_LIVE_RELEASE"],
+      "waiver_count": 0,
+      "invalid_waiver_reasons": ["ISSUE_NON_WAIVABLE"]
+    }
+  }
+]
