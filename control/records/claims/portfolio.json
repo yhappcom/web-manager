@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "record_type": "claim",
+  "id": "claim:example:portfolio-overview",
+  "status": "VERIFIED",
+  "owner": "role:web",
+  "app_ref": "app:example",
+  "claim_mode": "CURRENT",
+  "feature_refs": ["feature:example:portfolio"],
+  "evidence_refs": ["evidence:example:portfolio-release"],
+  "text": "See your portfolio overview in one place."
+}
