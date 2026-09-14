@@ -2,7 +2,7 @@
 
 This directory is the source-grounded learning and decision-support layer for the MintTap company website and `minttap.app` domain.
 
-The purpose is not to accumulate generic web articles. Each study must improve a real MintTap decision, establish a reusable operating rule, expose an unresolved risk, or define a validation method.
+The purpose is not to accumulate generic web articles. Each study must improve professional judgment for a real MintTap website/app launch, establish a reusable operating rule, expose an unresolved risk, or define a validation method. **The curriculum is knowledge-led, not POC-led.** Implementation experiments are used only when they materially validate a web decision; they are not the standing next step.
 
 ## Evidence labels
 
@@ -41,31 +41,30 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `023-provider-neutral-active-workflow-trust-boundary.md` — four-zone PR validation/trusted build/deploy/rollback contract, artifact-digest binding and provider credential boundary; 12/12 expected outcomes.
 - `024-firebase-cloudflare-provider-edge-contract-mapping.md` — current Firebase Hosting vs Cloudflare Workers/Static Assets mapping for preview, exact-version promotion, rollback, credentials, routing and static response controls; 11/11 expected outcomes.
 - `025-identical-provider-poc-corpus-http-assertion.md` — deterministic synthetic provider-neutral corpus, artifact digest manifest and identical preview/production HTTP assertion contract; 8/8 controlled outcomes.
+- `026-app-company-web-strategy-information-hierarchy.md` — visitor intent, app landing-page information hierarchy, website→store message continuity, responsive hierarchy and performance-aware first-contact strategy.
 
 ## Practice artifacts
 
-Current synthetic validation corpus includes the earlier 016–024 schemas/tests/tools plus:
-- `control/poc/http_contract.json`;
-- `control/tests/poc_http_assert_cases.json`;
-- `tools/build_poc_corpus.py`;
-- `tools/poc_http_assert.py`.
+Studies 016–025 include synthetic validation artifacts. They remain useful implementation evidence, but are **not a mandatory sequence to continue** and are not actual MintTap product/legal/store facts.
 
-These are synthetic research fixtures, not actual MintTap product/legal/store facts.
+## Current research direction
 
-## Current research queue
+The highest-value gap is now visitor-facing web expertise. Continue across:
 
-See root `STATUS.md` for the authoritative queue. Highest-value next work:
+1. app-company / multi-product website IA and navigation decision models;
+2. landing-page content strategy, evidence, conversion and CTA design without manipulative patterns;
+3. trust architecture for a small/unknown app developer;
+4. support/FAQ/self-service information architecture;
+5. responsive content hierarchy and mobile-first recomposition;
+6. performance-aware marketing design and Core Web Vitals;
+7. analytics/measurement framework for company and app pages;
+8. systematic precedent/critique of real app-company websites;
+9. SEO/discovery, localization, accessibility, privacy/legal and operations revisited when new evidence materially improves prior conclusions.
 
-1. prepare provider-specific **deployment adapters/configuration** for the exact 025 corpus without changing its bytes or HTTP contract: Firebase Hosting config/preview/live clone path and Cloudflare Workers Static Assets config/version upload/deploy path; keep credentials disabled and live deployment blocked until accounts/domain authority exist;
-2. execute the live Firebase Hosting vs Cloudflare Workers/Static Assets POC when provider accounts/domain authority are available;
-3. run the same 025 HTTP assertion runner against both preview and production origins and compare only externally observable results;
-4. use the live POC for real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation;
-5. apply Legal Trigger Registry and app-specific evidence when real MintTap product facts are available.
+Provider POC/deployment-adapter work is **deferred until a real implementation decision requires it**. Firebase/Cloudflare knowledge from 012/014/024/025 remains retained for that future project.
 
 ## Design Studio relationship
 
-Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web decisions and production findings stay here first.
+Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy/content/operations stay here first.
 
-Latest checked state: Web Design still has no substantive `W###`. The 025 corpus is infrastructure/test evidence, not a visual template. Future Web validation should explicitly test real provider canonical redirects, preview indexation, true 404 recovery, localized routing, history/keyboard behavior, cache/security headers and machine endpoints before production design/accessibility transfer is considered complete.
-
-When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record it here first and hand it back to the appropriate specialist when justified.
+Study 026 begins a stronger visitor-facing handoff: Web Manager supplies page purpose, audience evidence, visitor intents, factual content hierarchy, actions, support/governance requirements and constraints. Design Studio owns visual expression through typography, color, layout, interaction and brand application. Future real-browser evidence can flow back to the relevant specialist.
