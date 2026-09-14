@@ -8,7 +8,7 @@ The purpose is not to accumulate generic web articles. Each study must improve p
 
 The canonical curriculum is `../LEARNING_ROADMAP.md`.
 
-Learning now proceeds systematically from beginner fundamentals to advanced/expert judgment. Existing studies are retained as prior evidence but do not allow missing prerequisites to be skipped.
+Learning proceeds systematically from beginner fundamentals to advanced/expert judgment. Existing studies are retained as prior evidence but do not allow missing prerequisites to be skipped.
 
 Major stages:
 1. Web Foundations;
@@ -36,43 +36,21 @@ Each major topic should mature through `FOUNDATION → PRACTITIONER → ADVANCED
 - `VALIDATION` — practical proof needed before production confidence.
 - `CHANGE WATCH` — policy/standard/platform detail requiring later re-checking.
 
-## Completed prior studies
+## Completed prior studies 001–026
 
-- `001-app-launch-website-foundations.md` — Apple/Google launch web requirements.
-- `002-multi-app-information-architecture.md` — multi-app company/app/support/governance IA.
-- `003-privacy-support-account-deletion-architecture.md` — per-app privacy/support/deletion and App Data Contract.
-- `004-store-website-content-synchronization.md` — Product Truth, screenshot evidence and release synchronization.
-- `005-domain-hosting-security-baseline.md` — HTTPS/TLS, machine files, headers, DNS, rollback and monitoring.
-- `006-accessibility-production-baseline.md` — WCAG 2.2 AA internal production baseline.
-- `007-localization-architecture.md` — Korean/English locale URLs, hreflang and localization controls.
-- `008-seo-structured-data-crawlability.md` — canonical, robots, sitemap, schema and Search Console.
-- `009-seo-independent-verification-social-preview.md` — indexability classes and Open Graph baseline.
-- `010-company-app-marketing-content-model.md` — Claim Registry, evidence, screenshots and truthful marketing.
-- `011-operational-release-change-watch-controls.md` — continuous release/change-watch operating loop.
-- `012-implementation-provider-comparison-methodology.md` — static-first architecture and hosting-provider comparison.
-- `013-jurisdiction-legal-compliance-trigger-map.md` — fact-driven Korea/U.S./EU legal trigger framework.
-- `014-provider-poc-specification.md` — identical Firebase vs Cloudflare provider-neutral POC and assertion contract.
-- `015-machine-readable-control-artifact-model.md` — canonical JSON truth records, JSON Schema, stable IDs, semantic fingerprints and dependency/invalidation model.
-- `016-control-artifact-validation-specimen.md` — executable structural + semantic validation specimen; 5/5 expected outcomes.
-- `017-release-chain-semantic-integrity.md` — release/store, privacy/data, locale, legal trigger and operational-surface validation; 12/12 expected outcomes.
-- `018-semantic-fingerprint-dependency-impact.md` — semantic fingerprint comparison and dependency propagation; 5/5 expected outcomes.
-- `019-typed-dependency-approval-freshness.md` — typed impact severity, cycle detection and fingerprint-bound approval freshness; 6/6 expected outcomes.
-- `020-derived-release-manifest-gate-waivers.md` — derived gate plus scoped auditable waivers; 8/8 expected outcomes.
-- `021-release-provenance-reviewer-authorization-ci.md` — source/tool/policy-bound provenance, reviewer authorization and fail-closed CI; 9/9 expected outcomes.
-- `022-protected-policy-quorum-revocation-workflow-trust.md` — protected policy ownership, quorum/revocation, break-glass and workflow trust boundaries; 10/10 expected outcomes.
-- `023-provider-neutral-active-workflow-trust-boundary.md` — four-zone workflow trust contract; 12/12 expected outcomes.
-- `024-firebase-cloudflare-provider-edge-contract-mapping.md` — Firebase vs Cloudflare provider-edge mapping; 11/11 expected outcomes.
-- `025-identical-provider-poc-corpus-http-assertion.md` — deterministic synthetic provider-neutral corpus and assertion contract; 8/8 controlled outcomes.
-- `026-app-company-web-strategy-information-hierarchy.md` — visitor intent, landing-page hierarchy, store continuity, responsive hierarchy and performance-aware first-contact strategy.
+Studies 001–026 remain retained as prior knowledge spanning launch requirements, IA, privacy/support, content consistency, security, accessibility, localization, SEO, marketing, legal triggers, provider evaluation, release governance and app-company strategy. They are **prior knowledge, not the curriculum order going forward**.
 
-These files are **prior knowledge**, not the curriculum order going forward.
+See Git history and the individual files for canonical detail.
+
+## Sequential curriculum studies
+
+- `027-web-foundations-internet-web-client-server-url-origin.md` — **FOUNDATION COMPLETE**. Establishes Internet ≠ Web; client/server as protocol roles; resource vs representation; URL components; host/domain/origin distinctions; scheme+host+port origin identity; same-origin security significance; first-pass navigation flow; and failure-layer diagnosis.
 
 ## Current curriculum position
 
 **Stage 1 — Web Foundations**.
 
-Next studies:
-- `027` — Internet, Web, client/server, browser, origin and URL;
+027 is complete. Next:
 - `028` — DNS, domains, resolution and hosting path;
 - `029` — HTTP request/response, methods, status codes, headers and cache basics;
 - `030` — HTTPS, TLS, certificates and browser trust basics;
