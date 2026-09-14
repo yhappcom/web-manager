@@ -1,0 +1,79 @@
+[
+  {
+    "name": "valid-four-zone-contract",
+    "manifest": {"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":["sha256:artifact-v0","sha256:artifact-v1"]},
+    "jobs": [
+      {"name":"pr","kind":"PR_VALIDATE","trigger":"pull_request","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","permissions":{"contents":"read"},"secrets_available":false,"id_token":false,"deployment_authority":false,"executes_untrusted_code":true},
+      {"name":"build","kind":"TRUSTED_BUILD","trigger":"push","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","source_trust":"PROTECTED_MAIN","executes_untrusted_code":false,"secrets_available":false,"id_token":false,"deployment_authority":false,"artifact_digest":"sha256:artifact-v1"},
+      {"name":"deploy","kind":"DEPLOY","trigger":"push","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","source_trust":"PROTECTED_MAIN","executes_untrusted_code":false,"artifact_origin":"TRUSTED_BUILD","artifact_digest":"sha256:artifact-v1","digest_mismatch_fails_closed":true,"deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED","id_token":true,"secrets_available":false,"long_lived_provider_secret":false,"artifact_from_untrusted_pr":false},
+      {"name":"rollback","kind":"ROLLBACK","trigger":"workflow_dispatch","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","authorized":true,"reason":"restore known-good release","rebuilds_source":false,"artifact_digest":"sha256:artifact-v0","deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED"}
+    ],
+    "expected": {"contract_state":"PASS","error_codes":[]}
+  },
+  {
+    "name":"pr-id-token-forbidden",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"pr","kind":"PR_VALIDATE","trigger":"pull_request","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","permissions":{"contents":"read","id-token":"write"},"secrets_available":false,"id_token":true,"deployment_authority":false,"executes_untrusted_code":true}],
+    "expected":{"contract_state":"FAIL","error_codes":["PR_VALIDATE_EXCESS_TOKEN_PERMISSION","PR_VALIDATE_ID_TOKEN_FORBIDDEN"]}
+  },
+  {
+    "name":"pr-secret-forbidden",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"pr","kind":"PR_VALIDATE","trigger":"pull_request","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","permissions":{"contents":"read"},"secrets_available":true,"id_token":false,"deployment_authority":false,"executes_untrusted_code":true}],
+    "expected":{"contract_state":"FAIL","error_codes":["PR_VALIDATE_SECRETS_FORBIDDEN"]}
+  },
+  {
+    "name":"trusted-build-cannot-use-pr-source",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"build","kind":"TRUSTED_BUILD","trigger":"push","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","source_trust":"UNTRUSTED_PR","executes_untrusted_code":false,"secrets_available":false,"id_token":false,"deployment_authority":false,"artifact_digest":"sha256:artifact-v1"}],
+    "expected":{"contract_state":"FAIL","error_codes":["BUILD_SOURCE_NOT_TRUSTED"]}
+  },
+  {
+    "name":"deploy-digest-mismatch",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"deploy","kind":"DEPLOY","trigger":"push","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","source_trust":"PROTECTED_MAIN","executes_untrusted_code":false,"artifact_origin":"TRUSTED_BUILD","artifact_digest":"sha256:other","digest_mismatch_fails_closed":true,"deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED","id_token":true,"secrets_available":false,"long_lived_provider_secret":false,"artifact_from_untrusted_pr":false}],
+    "expected":{"contract_state":"FAIL","error_codes":["DEPLOY_ARTIFACT_DIGEST_MISMATCH"]}
+  },
+  {
+    "name":"deploy-rejects-pr-artifact",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"deploy","kind":"DEPLOY","trigger":"push","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","source_trust":"PROTECTED_MAIN","executes_untrusted_code":false,"artifact_origin":"PR_VALIDATE","artifact_digest":"sha256:artifact-v1","digest_mismatch_fails_closed":true,"deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED","id_token":true,"secrets_available":false,"long_lived_provider_secret":false,"artifact_from_untrusted_pr":false}],
+    "expected":{"contract_state":"FAIL","error_codes":["DEPLOY_ARTIFACT_ORIGIN_UNTRUSTED"]}
+  },
+  {
+    "name":"scoped-secret-fallback-allowed",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"deploy","kind":"DEPLOY","trigger":"push","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","source_trust":"PROTECTED_MAIN","executes_untrusted_code":false,"artifact_origin":"TRUSTED_BUILD","artifact_digest":"sha256:artifact-v1","digest_mismatch_fails_closed":true,"deployment_authority":true,"credential_mode":"ENVIRONMENT_SCOPED_SECRET","id_token":false,"secrets_available":true,"secret_scope":"DEPLOY_JOB_ONLY","artifact_from_untrusted_pr":false}],
+    "expected":{"contract_state":"PASS","error_codes":[]}
+  },
+  {
+    "name":"pull-request-target-pwn-boundary",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"deploy","kind":"DEPLOY","trigger":"pull_request_target","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","source_trust":"PROTECTED_MAIN","executes_untrusted_code":true,"artifact_origin":"TRUSTED_BUILD","artifact_digest":"sha256:artifact-v1","digest_mismatch_fails_closed":true,"deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED","id_token":true,"secrets_available":false,"long_lived_provider_secret":false,"artifact_from_untrusted_pr":false}],
+    "expected":{"contract_state":"FAIL","error_codes":["DEPLOY_EXECUTES_UNTRUSTED_CODE","PULL_REQUEST_TARGET_EXECUTES_UNTRUSTED_CODE"]}
+  },
+  {
+    "name":"workflow-run-untrusted-artifact",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"deploy","kind":"DEPLOY","trigger":"workflow_run","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","source_trust":"PROTECTED_MAIN","executes_untrusted_code":false,"executes_untrusted_artifact":true,"artifact_origin":"TRUSTED_BUILD","artifact_digest":"sha256:artifact-v1","digest_mismatch_fails_closed":true,"deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED","id_token":true,"secrets_available":false,"artifact_from_untrusted_pr":true}],
+    "expected":{"contract_state":"FAIL","error_codes":["PRIVILEGED_TRIGGER_CONSUMES_UNTRUSTED_ARTIFACT","WORKFLOW_RUN_EXECUTES_UNTRUSTED_ARTIFACT"]}
+  },
+  {
+    "name":"rollback-must-not-rebuild",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":["sha256:artifact-v0"]},
+    "jobs":[{"name":"rollback","kind":"ROLLBACK","trigger":"workflow_dispatch","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","authorized":true,"reason":"restore known-good release","rebuilds_source":true,"artifact_digest":"sha256:artifact-v0","deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED"}],
+    "expected":{"contract_state":"FAIL","error_codes":["ROLLBACK_REBUILD_FORBIDDEN"]}
+  },
+  {
+    "name":"rollback-known-good-only",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":["sha256:artifact-v0"]},
+    "jobs":[{"name":"rollback","kind":"ROLLBACK","trigger":"workflow_dispatch","workflow_source":"PROTECTED_BASE","policy_source":"PROTECTED_BASE","authorized":true,"reason":"restore known-good release","rebuilds_source":false,"artifact_digest":"sha256:not-approved","deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED"}],
+    "expected":{"contract_state":"FAIL","error_codes":["ROLLBACK_ARTIFACT_NOT_PREVIOUSLY_APPROVED"]}
+  },
+  {
+    "name":"deploy-workflow-must-be-protected",
+    "manifest":{"ci_state":"ALLOW","artifact_digest":"sha256:artifact-v1","previously_approved_artifact_digests":[]},
+    "jobs":[{"name":"deploy","kind":"DEPLOY","trigger":"push","workflow_source":"PR_HEAD","policy_source":"PROTECTED_BASE","source_trust":"PROTECTED_MAIN","executes_untrusted_code":false,"artifact_origin":"TRUSTED_BUILD","artifact_digest":"sha256:artifact-v1","digest_mismatch_fails_closed":true,"deployment_authority":true,"credential_mode":"OIDC_SHORT_LIVED","id_token":true,"secrets_available":false,"artifact_from_untrusted_pr":false}],
+    "expected":{"contract_state":"FAIL","error_codes":["WORKFLOW_SOURCE_NOT_PROTECTED"]}
+  }
+]
