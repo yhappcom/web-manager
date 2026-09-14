@@ -43,17 +43,21 @@ Establishes a Product Truth Record, channel-specific copy model, screenshot evid
 
 Defines a provider-independent production contract for `minttap.app`: modern TLS/HTTPS, staged HSTS, redirect strategy, exact Apple/Android association-file hosting, cache classes, browser security-header direction, DNSSEC/CAA, deployment/secrets requirements, observability and hosting/CDN acceptance gates.
 
+### 006 — Accessibility Production Baseline
+`006-accessibility-production-baseline.md`
+
+Adopts WCAG 2.2 AA as MintTap's internal production baseline and defines semantic structure, landmarks/headings, native controls, keyboard/focus behavior, 320px-equivalent reflow, 200% text enlargement, pointer-target floors, form/error/status behavior, language metadata and automated/manual/assistive-technology validation gates for launch-critical web surfaces.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Current high-value areas include:
 
-1. accessibility production baseline;
-2. localization architecture;
-3. SEO/social/structured-data/crawlability;
-4. company/app marketing content model;
-5. operational release and change-watch controls;
-6. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
-7. implementation/provider selection after the evidence baseline is mature enough to compare real options.
+1. localization architecture for Korean/English first, with future-locale scalability;
+2. SEO/social/structured-data/crawlability;
+3. company/app marketing content model;
+4. operational release and change-watch controls;
+5. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known;
+6. implementation/provider selection after the evidence baseline is mature enough to compare real options.
 
 ## Design Studio relationship
 
