@@ -105,7 +105,26 @@ This study deliberately extends studies 002 and 026 rather than repeating them. 
 - failure diagnosis across missing content, scope ambiguity, labels, placement, orientation, external entry, lifecycle and accessibility/responsive operation;
 - a reusable task/destination matrix for real MintTap sitemap work.
 
-Primary evidence checked 2026-09-15 includes Apple App Store Connect Support/Marketing/Privacy URL references, Google Play developer contact and User Data/account deletion requirements, W3C WAI navigation/predictability guidance and Google Search breadcrumb hierarchy guidance.
+### 035 — Stage 2 Content Modeling, Hierarchy, Lifecycle & Cross-Channel Truth
+`035-stage2-content-modeling-hierarchy-lifecycle-cross-channel-truth.md`
+
+**STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
+Study 035 reuses the Product Truth / Claim Registry / release-governance work from 004, 010 and 011 rather than duplicating it, then formalizes a reusable content operating model:
+- separates durable content objects from pages, visual components and channel-specific metadata fields;
+- models App, Feature, Product Claim, Support Topic, Support Article, Known Issue, Release Change and Governance/Policy objects with scope, ownership, evidence and lifecycle;
+- establishes `claim → evidence → condition → action` as a product-content hierarchy;
+- defines semantic page-template content contracts without forcing identical visual layouts or identical app prose;
+- distinguishes governed public duplication from independent truth duplication;
+- distinguishes canonical content truth, canonical public URL and search canonical URL;
+- ties freshness to release/data/account/pricing/platform/support/rebrand change triggers rather than calendar age alone;
+- treats localization as a dependency graph with explicit stale/needs-review state;
+- adds retirement/redirect/external-dependency checks for store-linked resources;
+- treats support as a task-resolution/escalation system rather than an FAQ dump;
+- defines a content-failure taxonomy covering truth, scope, evidence, synchronization, localization, ownership, triggers, hierarchy, findability and retirement;
+- defines Design Studio handoff as semantic content contracts and stress cases rather than premature visual hierarchy.
+
+Primary/current evidence checked 2026-09-15 includes Apple App Store Connect app/version/privacy references, Google Play store listing/Data safety/User Data/account-deletion guidance, W3C WCAG 2.2/page-structure guidance and Google Search canonicalization documentation.
 
 ## Current curriculum position
 
@@ -113,17 +132,18 @@ Primary evidence checked 2026-09-15 includes Apple App Store Connect Support/Mar
 
 **Stage 2 — Website Anatomy / Content / Information Architecture: ACTIVE.**
 
-Study 034 establishes the Stage 2 IA operating model. The next integrated block should address **content modeling, content hierarchy and lifecycle** for product, support and governance surfaces:
-- reusable content objects vs page-specific prose;
-- product claim/evidence/action models;
-- page-template content contracts;
-- support topic/article/escalation models;
-- policy/governance scope, version and freshness;
-- canonical content vs deliberate duplication across website and stores;
-- release/data/pricing/account/support change triggers;
-- localization ownership and stale-translation risk.
+Studies 034–035 now establish the Stage 2 information/content foundation. The highest-value unresolved block is **navigation, wayfinding and findability as an operational system**:
+- global vs local/context navigation;
+- information scent and destination labels;
+- location/orientation cues and breadcrumbs;
+- search vs browse vs direct/external entry;
+- support/privacy/account-control findability;
+- mobile navigation recomposition;
+- localization, zoom, keyboard and screen-reader stress;
+- deep-link/store/search entry behavior;
+- failure modes where correct content exists but cannot be found.
 
-Earlier Product Truth and release-governance work should be reused where it adds lifecycle/control value, not repeated mechanically.
+This should be completed before moving into Stage 3 interaction design.
 
 ## Study quality standard
 
@@ -145,6 +165,6 @@ Implementation experiments are used only when necessary to answer a material fac
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
 
-Studies 031–033 provide browser/runtime/navigation constraints. Study 034 adds a direct Stage 2 handoff: future Web Design work should receive task/destination matrices, page-system/content contracts, direct-entry/store-link requirements, app-context preservation rules, content ownership/lifecycle constraints and accessibility/localization stress cases rather than only a sitemap.
+Studies 031–033 provide browser/runtime/navigation constraints. Study 034 adds task/destination and page-system contracts. Study 035 adds semantic content-object/page-contract/lifecycle inputs: App/Feature/Claim/Support/Policy relationships, `claim → evidence → condition → action`, direct-entry constraints, localized-content stress cases, and current/deprecated/known-issue states.
 
-Design Studio Web remains pre-baseline in its own canonical status. Its scope explicitly includes IA, navigation, page hierarchy, responsive composition and browser validation, so later Stage 2 project work should use it as a cross-validation layer. Web Manager does not edit Design Studio canonical files without authorization.
+Design Studio Web remains pre-baseline in its own canonical status. Its scope explicitly includes IA, navigation, page hierarchy, content flow, responsive composition and browser validation, so later Stage 2 project work should use it as a cross-validation layer. Web Manager does not edit Design Studio canonical files without authorization.
