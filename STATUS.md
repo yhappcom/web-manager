@@ -26,15 +26,16 @@ When no live MintTap web task is pending, self-directed study continues. Every s
 11. **011 Operational Release & Change-Watch Controls** — continuous verification, Policy Change Register, Operational Surface Registry, deploy/scheduled/event/human watch layers, release gates, incident severity and ownership continuity.
 12. **012 Implementation / Hosting Provider Comparison Methodology** — static-first architecture, provider hard gates, weighted comparison, Firebase Hosting / Cloudflare Workers / Vercel / Netlify assessment and POC-before-selection rule.
 13. **013 Jurisdiction-Specific Legal / Compliance Trigger Map** — fact-driven Legal Trigger Registry; Korea PIPA/privacy-rights/overseas-transfer and conditional direct-commerce triggers; U.S. FTC/COPPA/California CCPA; other-state change watch; conditional EU GDPR trigger; integration with App Data Contract/provider selection/release controls.
+14. **014 Provider POC Specification** — identical Firebase Hosting vs Cloudflare Workers test corpus, deterministic file manifest, synthetic data, AASA/DAL/app-ads endpoint assertions, HTTP/header/cache/search/social/404/a11y contracts, preview/promote/rollback experiment and provider-neutral verification harness.
 
-Canonical details remain in `research/001...013`.
+Canonical details remain in `research/001...014`.
 
 ## Current maturity
 
 Stage: **Foundation**
-State: **IN STUDY — core architecture / policy / operations / legal-trigger / implementation-selection baseline established**
+State: **IN STUDY — core architecture / policy / operations / legal-trigger / implementation-selection / POC contract established**
 
-Reading alone is not PASS. Policy, legal applicability, architecture, security, accessibility, localization, search/social, marketing, operations and provider-selection conclusions require actual MintTap facts and real implementation/transfer validation before production confidence.
+Reading alone is not PASS. Policy, legal applicability, architecture, security, accessibility, localization, search/social, marketing, operations, provider selection and POC conclusions require actual MintTap facts and real implementation/transfer validation before production confidence.
 
 ## Current public information architecture
 
@@ -65,7 +66,7 @@ Root `/` remains OPEN between a language-neutral/x-default entry and a deliberat
 - **Operational Surface Registry** — production URL/console surface, expected behavior, owner, monitoring method/cadence, last validation, severity and runbook.
 - **Legal Trigger Registry** — jurisdiction, law, trigger facts, applicability state, required public/operational controls, source, dependencies, owner, legal review and freshness.
 
-Exact machine-readable schemas remain OPEN.
+Exact machine-readable schemas remain OPEN and are now the highest-value non-blocked study topic.
 
 ## Security / infrastructure baseline
 
@@ -103,27 +104,12 @@ Exact machine-readable schemas remain OPEN.
 
 ## Legal / compliance trigger baseline
 
-### Operating rule
+Legal compliance is managed as **facts → trigger → obligation → web/control surface → backend process → validation**, not as universal Privacy/Terms/Cookie boilerplate.
 
-Legal compliance is managed as **facts → trigger → obligation → web/control surface → backend process → validation**, not as a universal collection of Privacy/Terms/Cookie boilerplate.
-
-### Korea
-- PIPA Article 30 privacy-policy requirements become relevant when MintTap is a regulated personal-information controller; policy must match actual App Data Contract.
-- PIPA rights procedures must be publicly explained and, where Article 38 applies, may not be more difficult than the collection method.
-- Overseas provision/processing outsourcing/storage is a separate legal trigger; cloud/SDK provider location and legal role are now provider-selection inputs.
-- Direct website order/payment/subscription would trigger a separate Korean electronic-commerce review; current known plan does not justify assuming a direct-commerce footer/checkout regime.
-
-### United States
-- FTC truth-in-advertising/privacy/security expectations reinforce Product Truth, Claim Registry and App Data Contract controls.
-- COPPA requires a dedicated review when an app is child-directed under 13 or MintTap has actual knowledge of under-13 collection.
-- California CCPA applicability is threshold- and nexus-based; it must be computed from entity/revenue/data-volume/sale-share facts rather than inferred from California availability.
-- Other U.S. state privacy laws remain launch-time inventory/change-watch work; California controls are not assumed to satisfy every state.
-
-### European Union
-- GDPR remains CONDITIONAL; global website reach alone does not establish applicability. Re-open if EU establishment or intentional goods/services/behavior-monitoring triggers under Article 3 become real.
-
-### Terms
-- `/terms/` remains conditional. Do not publish generic boilerplate merely for footer completeness; create terms when a real service/account/licensing/direct-transaction contract requires them.
+- **Korea:** PIPA privacy-policy/rights/overseas-transfer requirements depend on actual controller/data/vendor facts; direct website order/payment creates a separate e-commerce trigger review.
+- **United States:** FTC truth/privacy/security expectations reinforce Product Truth/Claim/App Data controls; COPPA depends on child/actual-knowledge facts; California CCPA is threshold/nexus based; other state laws remain change-watch/inventory work.
+- **EU:** GDPR remains conditional on actual Article 3 establishment/offering/monitoring facts, not global reach alone.
+- **Terms:** `/terms/` remains conditional on a real service/account/licensing/direct-transaction contract.
 
 ## Operational release / change-watch baseline
 
@@ -136,7 +122,7 @@ Legal compliance is managed as **facts → trigger → obligation → web/contro
 - Korean e-commerce law if direct sales become relevant.
 - FTC privacy/security/advertising/COPPA.
 - CPPA CCPA regulations/thresholds.
-- Other U.S. states / EU only when market triggers become active.
+- Other U.S. states / EU when market triggers become active.
 
 ### Monitoring layers
 1. deploy-time deterministic validation;
@@ -161,19 +147,6 @@ Preferred envelope:
 
 Current content/legal/support/app-marketing surfaces do not justify universal SSR or a persistent application server.
 
-### Provider hard gates
-A production host must support:
-- apex custom domain + managed TLS;
-- exact direct `.well-known` and root machine files;
-- route-specific content type/cache/security headers;
-- redirects/rewrites without breaking verification paths;
-- preview/test deploys;
-- version traceability and fast rollback;
-- Git/CI workflow;
-- locale/static metadata/sitemap/robots output;
-- monitoring/log inspection and safe secret handling for optional dynamic functions;
-- enough provider/data-location transparency for legal cross-border review when personal data is processed.
-
 ### Preliminary shortlist
 1. **Firebase Hosting** — current simplest strong static-first fit.
 2. **Cloudflare Workers + Static Assets** — strongest control/flexibility alternative.
@@ -182,8 +155,22 @@ A production host must support:
 
 No provider is selected yet.
 
-### POC-before-selection rule
-Firebase Hosting and Cloudflare Workers should host the same minimum specimen before final selection, including localized pages, legal/support surfaces, verification files, metadata, security headers, redirect behavior, preview and rollback. Selection follows transfer validation, not documentation comparison alone.
+## Provider POC contract
+
+Before selection, Firebase Hosting and Cloudflare Workers run the same provider-neutral static corpus.
+
+Required proof includes:
+- identical common-file SHA-256 manifest;
+- localized home/app/privacy/support/account-deletion pages;
+- AASA, `assetlinks.json`, `app-ads.txt`, robots, sitemap and real 404 behavior;
+- deterministic status/MIME/redirect/cache/security-header assertions;
+- canonical/hreflang/Open Graph/noindex separation;
+- keyboard/200%/320px accessibility smoke;
+- V1 live → V2 preview → V2 promote → provider-native rollback to V1;
+- rollback verification of content **and** headers/redirects/machine endpoints;
+- provider-neutral structured assertion report.
+
+POC PASS is not production PASS. Real domain/app identifiers, legal content, store associations, Design Studio browser/device validation and monitoring remain required.
 
 ## Current release blockers model
 
@@ -224,9 +211,10 @@ No launch-critical operational capability may exist only in one person's memory/
 - CCPA/state privacy threshold facts and sale/share/targeted-ad classifications;
 - EU targeting/monitoring facts;
 - legal reviewer/signoff process;
-- storage schemas for internal control artifacts;
+- machine-readable schemas for internal truth/control artifacts;
 - release approval/console ownership roles;
 - final hosting/CDN/DNS/framework/CMS/deployment/monitoring selection;
+- actual POC provider accounts, permissions and domain authority;
 - Universal/App Link route inventory;
 - actual app-ads.txt use and publisher/vendor lines;
 - root `/` locale strategy;
@@ -239,21 +227,22 @@ No launch-critical operational capability may exist only in one person's memory/
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — actual page/component complexity, legal notice placement, rights forms, contextual disclosures, responsive states and production browser/device validation.
-- **Typography / Type** — Korean/English legal/support long-copy, processor names, contacts, tables, mixed-script wrapping/fallback and zoom/reflow.
-- **Layout / Interaction** — navigation, rights/withdrawal/account-delete flows, denial/appeal/recovery, material disclosure salience and maintenance/error states.
-- **Color** — semantic state/focus/destructive/disabled behavior; legal choices/rights may not rely on color alone.
+- **Web Design** — actual page/component complexity, legal notice placement, rights forms, responsive states and production browser/device validation. Current W### evidence is still not substantive, so neutral POC styling must not be mistaken for final design.
+- **Typography / Type** — Korean/English legal/support long-copy, processor names, contacts, mixed-script wrapping/fallback and zoom/reflow on the POC.
+- **Layout / Interaction** — navigation, locale switch, rights/withdrawal/account-delete flows, denial/recovery, focus and maintenance/error states on the POC.
+- **Color** — semantic state/focus/destructive/disabled behavior and forced-color/browser validation on the POC.
 
 ## Next research queue
 
-1. **Provider POC specification refinement** for an identical Firebase Hosting vs Cloudflare Workers transfer test.
-2. Real-browser Korean/English localization/accessibility/type/search/social/marketing/legal-surface transfer validation on that POC.
-3. Apply the Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available.
-4. App-specific user/market evidence when actual product pages are assigned.
+1. **Machine-readable internal control-artifact schema / single-source-of-truth model.**
+2. Execute Firebase Hosting vs Cloudflare Workers POC when accounts/domain authority are available.
+3. Real-browser Korean/English localization/accessibility/type/search/social/marketing/legal transfer validation on the POC.
+4. Apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available.
+5. App-specific user/market evidence when actual product pages are assigned.
 
 ## Persistence state
 
 - `AGENTS.md` contains the autonomous continuous-learning directive.
-- `research/README.md` indexes studies 001–013.
+- `research/README.md` indexes studies 001–014.
 - Completed study details are canonical in `research/`.
 - This file is the current operational checkpoint.
