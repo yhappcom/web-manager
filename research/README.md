@@ -39,12 +39,13 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `021-release-provenance-reviewer-authorization-ci.md` — source/tool/policy-bound provenance, reviewer authorization and fail-closed CI; 9/9 expected outcomes.
 - `022-protected-policy-quorum-revocation-workflow-trust.md` — protected policy ownership, quorum/revocation, break-glass and workflow trust boundaries; 10/10 expected outcomes.
 - `023-provider-neutral-active-workflow-trust-boundary.md` — four-zone PR validation/trusted build/deploy/rollback contract, artifact-digest binding and provider credential boundary; 12/12 expected outcomes.
+- `024-firebase-cloudflare-provider-edge-contract-mapping.md` — current Firebase Hosting vs Cloudflare Workers/Static Assets mapping for preview, exact-version promotion, rollback, credentials, routing and static response controls; 11/11 expected outcomes.
 
 ## Practice artifacts
 
-Current synthetic validation corpus includes the earlier 016–022 schemas/tests/tools plus:
-- `control/tests/active_workflow_contract_cases.json`;
-- `tools/validate_active_workflow_contract.py`.
+Current synthetic validation corpus includes the earlier 016–023 schemas/tests/tools plus:
+- `control/tests/provider_edge_contract_cases.json`;
+- `tools/validate_provider_edge_contract.py`.
 
 These are synthetic research fixtures, not actual MintTap product/legal/store facts.
 
@@ -52,8 +53,8 @@ These are synthetic research fixtures, not actual MintTap product/legal/store fa
 
 See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
-1. map current Firebase Hosting and Cloudflare Workers/Static Assets official authentication, preview/production deployment, rollback/version retention and static-routing/header behavior onto the 023 four-zone contract; execute only assertions that do not require provider accounts/domain authority;
-2. execute the live provider POC when provider accounts/domain authority are available;
+1. prepare an identical provider POC corpus + provider-neutral HTTP assertion runner locally: Korean/English pages, support/privacy/app routes, machine files, 404, canonical redirects, cache/security headers, sitemap/robots and release artifact digest manifest;
+2. execute the live Firebase Hosting vs Cloudflare Workers/Static Assets POC when provider accounts/domain authority are available;
 3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation on that POC;
 4. apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
 5. app-specific user/market evidence when actual product pages are assigned.
@@ -62,6 +63,6 @@ See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web decisions and production findings stay here first.
 
-Latest checked state: Web Design still has no substantive `W###`; Layout/Interaction is through `L005 / I004`. Web Manager governance states remain semantic/control inputs only. Validation/build/deploy/rollback, clean/waived/break-glass pass, needs-review, blocked, stale-artifact and credential-boundary states must later be expressed textually/structurally/programmatically rather than by color alone.
+Latest checked state: Web Design still has no substantive `W###`. Provider behavior is not a visual-design decision, but future browser validation must explicitly test canonical URLs, preview indexation, 404 recovery, cache/security headers, machine endpoints and the real provider routing behavior before design/accessibility transfer is considered complete.
 
 When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record it here first and hand it back to the appropriate specialist when justified.
