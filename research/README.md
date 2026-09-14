@@ -35,6 +35,7 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `017-release-chain-semantic-integrity.md` — release/store destination, processor/data practice, locale, legal trigger and critical operational-surface validation; 12/12 expected outcomes.
 - `018-semantic-fingerprint-dependency-impact.md` — executable semantic fingerprint comparison, dependency propagation and derived review-set validation; 5/5 expected outcomes.
 - `019-typed-dependency-approval-freshness.md` — typed impact severity, cycle detection and upstream-fingerprint-bound approval freshness; 6/6 expected outcomes.
+- `020-derived-release-manifest-gate-waivers.md` — derived `PASS` / `NEEDS_REVIEW` / `BLOCKED` release gate plus scoped, fingerprint-bound, auditable waiver handling; 8/8 expected outcomes.
 
 ## Practice artifacts
 
@@ -44,9 +45,11 @@ Current synthetic validation corpus includes:
 - `control/tests/cases.json`;
 - `control/tests/impact_cases.json`;
 - `control/tests/dependency_governance_cases.json`;
+- `control/tests/release_gate_cases.json`;
 - `tools/validate_control.py`;
 - `tools/compute_impact.py`;
-- `tools/validate_dependency_governance.py`.
+- `tools/validate_dependency_governance.py`;
+- `tools/evaluate_release_gate.py`.
 
 These are synthetic research fixtures, not actual MintTap product/legal/store facts.
 
@@ -54,7 +57,7 @@ These are synthetic research fixtures, not actual MintTap product/legal/store fa
 
 See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
-1. implement a derived release-manifest/gate decision model (`PASS` / `NEEDS_REVIEW` / `BLOCKED`) and auditable waiver handling without rewriting canonical truth;
+1. bind release manifests/waivers to source snapshot or commit, reviewer authorization and tool/runtime provenance, then define CI enforcement so unauthorized or stale attestations cannot produce `PASS`;
 2. execute the Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available;
 3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation on that POC;
 4. apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
@@ -66,6 +69,6 @@ Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap
 
 Relevant domains: Typography / Type Design, Color, Layout / Spatial & Interaction, Web Design.
 
-Current transfer note: Web Design still has no substantive W### at latest check. Web Manager governance states (`INFORMATIONAL`, `NEEDS_REVIEW`, `BLOCKED`, stale approval, cycle error) are semantic inputs only. Their visual treatment remains a Design Studio/Web Design responsibility and must not rely on color alone.
+Current transfer note: Web Design still has no substantive W### at latest check. Web Manager now distinguishes `PASS / CLEAN`, `PASS / WITH_WAIVER`, `NEEDS_REVIEW`, `BLOCKED`, invalid waiver and non-waivable failure. These are semantic/control states only. Their visual treatment remains a Design Studio/Web Design responsibility and must not rely on color alone.
 
 When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record the MintTap result here and hand it back to the appropriate specialist when justified.
