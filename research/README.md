@@ -116,32 +116,55 @@ Study 036 extends 034–035 rather than repeating their IA/content work. It esta
 
 Primary/current evidence checked 2026-09-15 includes WCAG 2.2 normative criteria/current WAI Understanding guidance, WAI menu/navigation/breadcrumb guidance, ARIA APG navigation landmarks, and Google Search Central breadcrumb documentation updated 2026-09-08.
 
+### 037 — Stage 2 Page Systems, Content Hierarchy & Scan/Comprehension Architecture
+`037-stage2-page-systems-content-hierarchy-scan-comprehension-architecture.md`
+
+**STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
+Study 037 moves from site-level findability to the information architecture *inside* a destination. It establishes:
+- pages as task contracts rather than content bins;
+- semantic, visual and interaction hierarchy as related but distinct;
+- page-type selection based on visitor context/task rather than one universal template;
+- a reusable semantic sequence of `identity → orientation → decision-critical information → evidence/explanation → action → depth` where applicable;
+- rejection of fixed “above the fold” architecture in favor of priority, sequence and discoverability;
+- headings as retrieval/navigation infrastructure and heading-only outline testing;
+- rejection of universal F/Z scan-path templates in favor of predictable retrieval structure;
+- transfer of Design Studio L002’s information/visual/interaction/temporal density model to page systems;
+- progressive disclosure as a cost exchange rather than free simplification;
+- semantic contracts for company landing, app detail, support hub/article, policy, account control, release/known issue and non-happy states;
+- list/detail/comparison as different information structures;
+- separate anatomy for 404, unexpected failure, planned unavailability, empty, unsupported, retired and no-result states;
+- responsive recomposition that preserves semantic priority, prerequisites and meaningful sequence;
+- Korean/English localization, long strings and 200% text/reflow as architecture stress tests;
+- a reusable **Page Contract** as the preferred pre-design handoff to Design Studio;
+- a page-comprehension failure taxonomy covering identity, purpose, priority, dependency, hierarchy, heading, density, disclosure, sequence, state/recovery, localization and accessibility-exposure failures.
+
+Primary/current evidence checked 2026-09-15 includes WCAG 2.2, updated WAI Page Structure/Headings/Regions guidance, USWDS landing/documentation/404/card/summary patterns, GOV.UK headings/details/accordion/tabs and failure-state patterns, plus current Design Studio Web/Layout/Type evidence.
+
 ## Current curriculum position
 
 **Stage 1 — Web Foundations: COMPLETE at intended foundation/practitioner level.**
 
 **Stage 2 — Website Anatomy / Content / Information Architecture: ACTIVE.**
 
-Studies 034–036 now establish:
+Studies 034–037 now establish:
 1. task-based website anatomy and ownership;
 2. governed content objects/hierarchy/lifecycle;
-3. operational navigation, orientation and findability.
+3. operational navigation, orientation and findability;
+4. page-type, intra-page hierarchy, scan/comprehension and state contracts.
 
-The highest-value unresolved prerequisite is **Page Systems, Content Hierarchy & Scan/Comprehension Architecture**:
-- page purpose and primary task;
-- page-title/heading/lead/evidence/action hierarchy;
-- landing/detail/support/policy-control page types;
-- prioritization vs the simplistic “above the fold” rule;
-- sectioning, headings and in-page navigation;
-- information density and scan paths;
-- progressive disclosure at the information level;
-- list/detail/comparison structures where relevant;
-- empty/error/deprecated states as page anatomy;
-- mobile semantic order/recomposition;
-- localization expansion and accessibility stress;
-- Design Studio handoff as semantic page contracts rather than premature visual templates.
+The highest-value unresolved prerequisite is now **Stage 2 Integration — Company/App/Support/Governance Page-System Matrix & Competency Review**.
 
-This should be completed before moving into Stage 3 interaction design.
+The integration gate should not re-teach 034–037. It should test whether the four models work together across realistic scenarios:
+- store/search visitor → app detail → support/privacy;
+- direct support-article visitor → app context/escalation;
+- privacy/account-control entry;
+- release/known-issue entry;
+- missing/retired/unavailable content recovery;
+- Korean/English long-content + narrow-width + 200% text/reflow;
+- heading/landmark/meaningful-order and direct-entry validation.
+
+If the integration gate exposes no material Stage 2 prerequisite, advance to Stage 3 UX & Interaction Foundations.
 
 ## Study quality standard
 
@@ -151,6 +174,14 @@ A substantial study should normally include origin/problem where useful, precise
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
 
-Study 036 adds a concrete Web Design handoff: critical-destination findability matrix, global/local scope, direct-entry cases, orientation/breadcrumb requirements, long localized labels, narrow-width/zoom/reflow stress, multiple navigation-landmark labeling, DOM/visual/focus/accessibility-order constraints, browser history/deep-link continuity and recovery cases.
+Stage 2 handoff now includes:
+- task/destination matrix (034);
+- semantic content-object/lifecycle relationships (035);
+- critical-destination findability matrix (036);
+- semantic Page Contract and non-happy-state/recovery requirements (037);
+- global/local scope, direct-entry conditions and heading/orientation requirements;
+- simultaneous-comparison/disclosure constraints;
+- long localized content, 200% text/reflow and DOM/visual/focus/AT-order stress;
+- instruction to return structural content/IA failures to Web Manager rather than mask them visually.
 
-Design Studio Web remains pre-baseline in its own canonical status. Web Manager does not edit Design Studio canonical files without authorization.
+Design Studio Web remains pre-baseline with no substantive `W###` study at this checkpoint. Web Manager does not edit Design Studio canonical files without authorization.
