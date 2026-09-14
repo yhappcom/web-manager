@@ -31,11 +31,12 @@ The purpose is not to accumulate generic web articles. Each study must improve a
 - `013-jurisdiction-legal-compliance-trigger-map.md` — fact-driven Korea/U.S./EU legal trigger framework.
 - `014-provider-poc-specification.md` — identical Firebase vs Cloudflare provider-neutral POC and assertion contract.
 - `015-machine-readable-control-artifact-model.md` — canonical JSON truth records, JSON Schema, stable IDs, semantic fingerprints and dependency/invalidation model.
-- `016-control-artifact-validation-specimen.md` — executable structural + semantic validation specimen; first vertical slice produced 5/5 expected outcomes.
-- `017-release-chain-semantic-integrity.md` — release/store destination, processor/data practice, locale, legal trigger and critical operational-surface validation; 12/12 expected outcomes.
-- `018-semantic-fingerprint-dependency-impact.md` — executable semantic fingerprint comparison, dependency propagation and derived review-set validation; 5/5 expected outcomes.
-- `019-typed-dependency-approval-freshness.md` — typed impact severity, cycle detection and upstream-fingerprint-bound approval freshness; 6/6 expected outcomes.
-- `020-derived-release-manifest-gate-waivers.md` — derived `PASS` / `NEEDS_REVIEW` / `BLOCKED` release gate plus scoped, fingerprint-bound, auditable waiver handling; 8/8 expected outcomes.
+- `016-control-artifact-validation-specimen.md` — executable structural + semantic validation specimen; 5/5 expected outcomes.
+- `017-release-chain-semantic-integrity.md` — release/store, privacy/data, locale, legal trigger and operational-surface validation; 12/12 expected outcomes.
+- `018-semantic-fingerprint-dependency-impact.md` — semantic fingerprint comparison and dependency propagation; 5/5 expected outcomes.
+- `019-typed-dependency-approval-freshness.md` — typed impact severity, cycle detection and fingerprint-bound approval freshness; 6/6 expected outcomes.
+- `020-derived-release-manifest-gate-waivers.md` — derived `PASS / NEEDS_REVIEW / BLOCKED` gate plus scoped auditable waivers; 8/8 expected outcomes.
+- `021-release-provenance-reviewer-authorization-ci.md` — source/tool/policy-bound release provenance, issue-class reviewer authorization, self-approval rejection and fail-closed CI semantics; 9/9 expected outcomes.
 
 ## Practice artifacts
 
@@ -46,10 +47,12 @@ Current synthetic validation corpus includes:
 - `control/tests/impact_cases.json`;
 - `control/tests/dependency_governance_cases.json`;
 - `control/tests/release_gate_cases.json`;
+- `control/tests/release_provenance_cases.json`;
 - `tools/validate_control.py`;
 - `tools/compute_impact.py`;
 - `tools/validate_dependency_governance.py`;
-- `tools/evaluate_release_gate.py`.
+- `tools/evaluate_release_gate.py`;
+- `tools/evaluate_release_provenance.py`.
 
 These are synthetic research fixtures, not actual MintTap product/legal/store facts.
 
@@ -57,7 +60,7 @@ These are synthetic research fixtures, not actual MintTap product/legal/store fa
 
 See root `STATUS.md` for the authoritative queue. Highest-value next work:
 
-1. bind release manifests/waivers to source snapshot or commit, reviewer authorization and tool/runtime provenance, then define CI enforcement so unauthorized or stale attestations cannot produce `PASS`;
+1. protected policy ownership + reviewer quorum/revocation + workflow threat model, including controls preventing untrusted PR code from altering the gate or obtaining deployment authority;
 2. execute the Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available;
 3. real-browser Korean/English typography/localization/accessibility/search/social/marketing/legal transfer validation on that POC;
 4. apply Legal Trigger Registry when MintTap entity/market/audience/data/transaction facts are available;
@@ -69,6 +72,6 @@ Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap
 
 Relevant domains: Typography / Type Design, Color, Layout / Spatial & Interaction, Web Design.
 
-Current transfer note: Web Design still has no substantive W### at latest check. Web Manager now distinguishes `PASS / CLEAN`, `PASS / WITH_WAIVER`, `NEEDS_REVIEW`, `BLOCKED`, invalid waiver and non-waivable failure. These are semantic/control states only. Their visual treatment remains a Design Studio/Web Design responsibility and must not rely on color alone.
+Current transfer note: Web Design still has no substantive W### at latest check. Web Manager governance now distinguishes release decision, CI authorization, reviewer authorization, source/attestation freshness, clean pass, pass-with-waiver, needs-review and blocked states. These remain semantic/control states only; visual treatment is a Design Studio/Web Design responsibility and must not rely on color alone.
 
-When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record the MintTap result here and hand it back to the appropriate specialist when justified.
+When MintTap implementation confirms, limits or contradicts reusable Design Studio evidence, record it here first and hand it back to the appropriate specialist when justified.
