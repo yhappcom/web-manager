@@ -86,12 +86,39 @@ Current policy-sensitive findings include CA/Browser Forum TLS BR v2.3.0 (7 Sep 
 
 TLS/Web PKI will be revisited in Stage 8 and Stage 11 for advanced security/privacy and operations depth.
 
+### 031 — Browser Document & Runtime Foundations
+`031-browser-document-runtime-html-css-js-dom-accessibility-tree-foundations.md`
+
+**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
+Integrated coverage:
+- why HTML, CSS and JavaScript evolved as separate but interacting layers;
+- WHATWG HTML parsing: tokenization/tree construction into the runtime DOM;
+- source HTML vs parsed/mutated DOM;
+- semantic HTML vs visual appearance;
+- DOM as browser object/tree/event model rather than source text;
+- CSS cascade/inheritance as value-resolution systems distinct from layout;
+- DOM order vs generated boxes/visual order distinctions;
+- ECMAScript language vs browser Web APIs;
+- script blocking/`defer`/`async`/module timing at Stage 1 depth;
+- DOM event targets and propagation concepts;
+- native element semantics/interaction as browser-platform capabilities;
+- accessibility API exposure and why the accessibility representation is not a direct DOM clone;
+- accessible name/role/state concepts and ARIA's limits;
+- layered diagnosis across delivery, parser/DOM, cascade, layout, JS runtime, events and accessibility exposure;
+- progressive-enhancement/native-first reasoning for resilient public app-company pages;
+- explicit handoff boundaries with Design Studio Web Design.
+
+Current standards/evidence checked 2026-09-14 include WHATWG HTML/DOM Living Standards, TC39 ECMAScript, W3C CSS modules, Core-AAM 1.2 and HTML-AAM 1.0 drafts, and W3C APG guidance.
+
+This domain will be reopened later for deeper responsive CSS/layout, accessibility, browser-runtime performance and framework/component implementation.
+
 ## Current curriculum position
 
 **Stage 1 — Web Foundations.**
 
 Next major domain:
-- **HTML / CSS / JavaScript / DOM / accessibility-tree foundations**, with browser parsing/rendering relationships at conceptual Web Manager depth.
+- **application/rendering/state/navigation foundations**: static vs dynamic, SSR/CSR/SSG, hydration, browser/server state boundaries, cookies/Web Storage/session concepts, forms/navigation/history, CDN/edge/hosting vocabulary integration, followed by Stage 1 end-to-end competency review.
 
 The next domain should again be studied as one broad integrated professional subject rather than a chain of micro-reports.
 
@@ -115,4 +142,4 @@ Implementation experiments are used only when necessary to answer a material fac
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
 
-No immediate Design Studio handoff was required to close the HTTP or TLS Stage 1 protocol foundations. Reconnect when browser-visible loading/security states, HTML semantics, accessibility structure, responsive rendering or performance-sensitive design become material. The upcoming document/browser foundations will create materially stronger overlap with Web Design than the network-protocol blocks did.
+No immediate Design Studio handoff was required to close HTTP or TLS foundations. Study 031 now creates an explicit outgoing handoff for future Web Design work: native semantics, DOM/visual/focus-order divergence, accessibility-tree non-equivalence, native-vs-custom control costs, cascade-vs-layout diagnosis and script-timing consequences should be integrated when Design Studio begins real web implementation/design validation. Web Manager does not edit Design Studio canonical files without authorization.
