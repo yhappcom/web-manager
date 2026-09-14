@@ -20,6 +20,25 @@ The manager must be able to convert research into concrete MintTap decisions abo
 - hosting, security, monitoring, release and freshness controls;
 - design application using evidence from `yhappcom/design-studio`.
 
+## Autonomous continuous-learning directive
+
+When no live MintTap website assignment is pending, the Web Manager must continue self-directed professional study without requiring a separate user order.
+
+The autonomous loop is:
+
+1. read the latest `AGENTS.md`, `STATUS.md`, research index and relevant studies;
+2. check applicable `yhappcom/design-studio` status/research;
+3. select the highest-value unresolved topic for a company developing Apple and Android apps under `minttap.app`;
+4. prioritize current authoritative primary sources for policy, standards, security and platform behavior;
+5. distinguish `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION`, `OPEN`, `DEPENDENCY`, `VALIDATION` and `CHANGE WATCH`;
+6. perform practical or implementation validation when reading alone is insufficient;
+7. save every substantial completed learning block in this repository;
+8. update `STATUS.md` before moving to a materially different block;
+9. record useful Design Studio dependencies and handoffs;
+10. continue through the next highest-value gap unless a live project request takes priority.
+
+Do not manufacture activity merely to appear busy. Repeated research is allowed when it adds replication, contradiction review, transfer validation, implementation proof or policy freshness. Research volume is not the success metric; project usefulness and reliability are.
+
 ## Relationship with Design Studio
 
 Before substantial MintTap web design work, inspect the latest applicable Design Studio governance and specialist status, especially Web Design plus related Type, Color and Layout/Interaction evidence.
