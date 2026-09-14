@@ -20,7 +20,7 @@ Large domains are not marked complete after one short survey. Study should follo
 
 Depth remains high, but persistence/reporting is intentionally coarse. Several related learning sub-blocks should normally be integrated into one professional knowledge checkpoint instead of generating one file/report per small concept.
 
-A Stage 1 core may close when it can be explained, diagnosed and applied at the level required by the curriculum; the same domain can and should be reopened later for advanced security, performance, SEO, browser or operations depth.
+A foundation core may close when it can be explained, diagnosed and applied at the level required by the curriculum; the same domain can and should be reopened later for advanced security, performance, SEO, accessibility, browser or operations depth.
 
 ## Evidence labels
 
@@ -85,20 +85,45 @@ Integrated coverage includes build/request/client rendering boundaries; SSR/CSR/
 
 **STAGE 1 INTEGRATION GATE PASSED.**
 
-The review reconstructs the full path from URL interpretation through DNS, TLS, HTTP/intermediaries/cache, rendering boundaries, HTML→DOM, CSS/resource/layout processing, JavaScript/Web APIs, application state, navigation/history/bfcache and accessibility exposure. It tests representative failures by responsible layer rather than by vague symptom labels and establishes cross-layer invariants such as `DNS success ≠ TLS success`, `HTTP 200 ≠ correct representation`, and `visual correctness ≠ accessibility correctness`.
+The review reconstructs the full path from URL interpretation through DNS, TLS, HTTP/intermediaries/cache, rendering boundaries, HTML→DOM, CSS/resource/layout processing, JavaScript/Web APIs, application state, navigation/history/bfcache and accessibility exposure. It tests representative failures by responsible layer rather than vague symptom labels and establishes cross-layer invariants such as `DNS success ≠ TLS success`, `HTTP 200 ≠ correct representation`, and `visual correctness ≠ accessibility correctness`.
 
-Primary/current evidence rechecked 2026-09-15 includes WHATWG URL/HTML Living Standards, IETF RFC 9110, IETF RFC 9846, and W3C accessibility mapping guidance. Production MintTap infrastructure facts remain explicitly open until verified in a live project.
+### 034 — Stage 2 Website Anatomy, Task-Based IA & Content Ownership
+`034-stage2-website-anatomy-task-based-information-architecture-content-ownership.md`
+
+**STAGE 2 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+
+This study deliberately extends studies 002 and 026 rather than repeating them. It establishes:
+- public app-company websites as marketing + support + governance + store-linked operational surfaces;
+- task-based IA modeled as `audience/context → intent → task → destination → content object → owner → lifecycle`;
+- distinction between sitemap, URL structure, global navigation, contextual navigation, page hierarchy and machine endpoint space;
+- company/portfolio, app identity, support/self-service, governance/user-control and machine/infrastructure page systems;
+- app identity as a durable context boundary;
+- shallow global navigation with deeper stable app/support contexts;
+- support context + escalation requirements;
+- store-linked URLs as stable external-entry contracts;
+- content ownership/change-trigger metadata as part of IA;
+- failure diagnosis across missing content, scope ambiguity, labels, placement, orientation, external entry, lifecycle and accessibility/responsive operation;
+- a reusable task/destination matrix for real MintTap sitemap work.
+
+Primary evidence checked 2026-09-15 includes Apple App Store Connect Support/Marketing/Privacy URL references, Google Play developer contact and User Data/account deletion requirements, W3C WAI navigation/predictability guidance and Google Search breadcrumb hierarchy guidance.
 
 ## Current curriculum position
 
-**Stage 1 — Web Foundations: COMPLETE at the intended foundation/practitioner curriculum level.**
+**Stage 1 — Web Foundations: COMPLETE at intended foundation/practitioner level.**
 
-Next major stage:
-- **Stage 2 — Website Anatomy / Content / Information Architecture.**
+**Stage 2 — Website Anatomy / Content / Information Architecture: ACTIVE.**
 
-The first Stage 2 integrated block should establish, from first principles, how a company that develops Apple/Android apps should structure a public website around visitor intent rather than internal organization. It should cover website purpose and archetypes, audience/intent/task modeling, page types, information hierarchy, navigation/wayfinding, labels/taxonomy, app-vs-company-vs-support/governance surfaces, content ownership/lifecycle and one-app→multi-app growth implications.
+Study 034 establishes the Stage 2 IA operating model. The next integrated block should address **content modeling, content hierarchy and lifecycle** for product, support and governance surfaces:
+- reusable content objects vs page-specific prose;
+- product claim/evidence/action models;
+- page-template content contracts;
+- support topic/article/escalation models;
+- policy/governance scope, version and freshness;
+- canonical content vs deliberate duplication across website and stores;
+- release/data/pricing/account/support change triggers;
+- localization ownership and stale-translation risk.
 
-Existing 002 and 026 should be revisited only where they add validation or advanced synthesis; they should not substitute for a proper Stage 2 first-principles baseline.
+Earlier Product Truth and release-governance work should be reused where it adds lifecycle/control value, not repeated mechanically.
 
 ## Study quality standard
 
@@ -120,6 +145,6 @@ Implementation experiments are used only when necessary to answer a material fac
 
 Reusable design expertise remains canonical in `yhappcom/design-studio`. MintTap-specific web strategy, platform knowledge, content/IA, measurement and operations stay here first. Web Manager should become design-literate enough to brief, critique and validate work while Design Studio remains the reusable authority for Type, Color, Layout/Interaction and Web Design expertise.
 
-Studies 031–033 create an outgoing Web Design handoff covering native semantics, DOM/visual/focus-order divergence, accessibility-tree non-equivalence, script/hydration timing, same-document vs cross-document navigation, Back/Forward expectations, deep-link behavior, loading/error/partial states, bfcache restoration, native forms and progressive enhancement. The Stage 1 integration review adds an explicit requirement that future Web Design treat URL/history/navigation/accessibility behavior as product constraints rather than merely implementation details.
+Studies 031–033 provide browser/runtime/navigation constraints. Study 034 adds a direct Stage 2 handoff: future Web Design work should receive task/destination matrices, page-system/content contracts, direct-entry/store-link requirements, app-context preservation rules, content ownership/lifecycle constraints and accessibility/localization stress cases rather than only a sitemap.
 
-Design Studio Web remains pre-baseline in its own canonical status; Web Manager does not edit Design Studio canonical files without authorization.
+Design Studio Web remains pre-baseline in its own canonical status. Its scope explicitly includes IA, navigation, page hierarchy, responsive composition and browser validation, so later Stage 2 project work should use it as a cross-validation layer. Web Manager does not edit Design Studio canonical files without authorization.
