@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "record_type": "store_destination",
+  "id": "store:example:ios",
+  "status": "VERIFIED",
+  "owner": "role:release",
+  "app_ref": "app:example",
+  "platform": "IOS",
+  "url": "https://apps.apple.com/app/id0000000000",
+  "availability_state": "AVAILABLE"
+}
