@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "record_type": "data_practice",
+  "id": "data:example:analytics",
+  "status": "VERIFIED",
+  "owner": "role:privacy",
+  "app_ref": "app:example",
+  "practice": "Product analytics",
+  "processor_refs": ["processor:example:cloud"]
+}
