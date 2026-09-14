@@ -21,112 +21,113 @@ Large subjects follow:
 
 `history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`
 
-A Stage 1 core can close once the domain can be explained, diagnosed and applied at the curriculum's required level. It is then deliberately reopened in later stages for advanced security, performance, browser, SEO or operations depth.
+A foundation core can close once the domain can be explained, diagnosed and applied at the curriculum's required level, then reopen later for deeper security, performance, SEO, accessibility or operations treatment.
 
-## Current position — Stage 1 Web Foundations
+## Stage 1 — Web Foundations
 
-### 027 — Web/Internet/URL/Origin
-**FOUNDATION LAYER COMPLETE**, retained for later reintegration.
+**COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.**
 
-### 028 — DNS/Domain/Resolution
-**FOUNDATION LAYER COMPLETE**, retained for later practitioner/advanced reintegration.
+Completed sequence:
+- 027 — Web / Internet / URL / Origin;
+- 028 — DNS / Domain / Resolution;
+- 029 — HTTP;
+- 030 — HTTPS / TLS / Certificates / Browser Trust;
+- 031 — HTML / CSS / JavaScript / DOM / Accessibility Tree;
+- 032 — Application / Rendering / State / Navigation;
+- 033 — End-to-End Integration & Competency Review.
 
-### 029 — HTTP
-**STAGE 1 HTTP CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+### 033 — Stage 1 integration review
+`research/033-stage1-end-to-end-integration-competency-review.md`
 
-### 030 — HTTPS / TLS / Certificates / Browser Trust
-`research/030-https-tls-certificates-browser-trust-integrated-foundations.md`
+**PASS.**
 
-**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+Connected competency demonstrated:
+- reconstruct the path from URL entry through origin interpretation, DNS, TLS, HTTP/intermediaries/cache, rendering, HTML parsing/DOM, CSS/resources/layout, JavaScript/Web APIs, state/storage/session, navigation/history/bfcache and accessibility exposure;
+- distinguish one layer's success from the next layer's success;
+- distinguish DNS cache, HTTP cache and bfcache;
+- classify representative failures by earliest responsible layer instead of symptom labels;
+- distinguish server representation, DOM/runtime state, visual state and accessibility exposure;
+- identify client-router/server deep-link contract mismatches;
+- preserve browser-native URL/history/link/form/control behavior as product-quality concerns;
+- identify unknown MintTap production facts rather than inventing them.
 
-### 031 — HTML / CSS / JavaScript / DOM / Accessibility Tree
-`research/031-browser-document-runtime-html-css-js-dom-accessibility-tree-foundations.md`
+Current authoritative evidence rechecked 2026-09-15 includes:
+- WHATWG URL Living Standard;
+- WHATWG HTML Living Standard;
+- IETF RFC 9110 HTTP Semantics;
+- IETF RFC 9846 TLS 1.3;
+- W3C accessibility API mapping framework;
+- DNS primary standards inherited from Study 028.
 
-**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+## Stage 2 — Website Anatomy / Content / Information Architecture
 
-### 032 — Application / Rendering / State / Navigation
-`research/032-application-rendering-state-navigation-foundations.md`
+**CURRENT MAJOR CURRICULUM STAGE.**
 
-**STAGE 1 CORE COMPLETE — FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+Highest-value next integrated topic:
 
-Competency established:
-- build-time, request-time and client-time rendering as separate production points;
-- static/dynamic distinct from interactive/non-interactive;
-- SSR/CSR/SSG/hybrid strategies without framework dependence;
-- hydration and visible-vs-interactive readiness;
-- progressive-enhancement reasoning for resilient public surfaces;
-- DOM/runtime, session-history, cookie, Web Storage, server-session and persistent backend state boundaries;
-- cookie standard authority updated: **RFC 10025 (July 2026) obsoletes RFC 6265**;
-- cross-document vs same-document navigation;
-- SPA vs rendering-strategy distinction;
-- Back/Forward/session history as application correctness;
-- bfcache vs HTTP cache vs DNS cache;
-- native forms/submission as browser capability;
-- CDN/edge/static artifact/render service/client responsibility separation;
-- rendering/state/navigation failure diagnosis.
+### Website anatomy, audience intent and information architecture foundations
 
-Primary/current evidence checked 2026-09-15: WHATWG HTML Living Standard, IETF RFC 10025, MDN rendering/navigation references and web.dev rendering guidance.
+Study from first principles:
+- why public company/app websites exist and which visitor problems they solve;
+- company site vs product/app landing page vs support/governance/help surfaces;
+- audience × intent × task/destination modeling;
+- page types and page systems;
+- information hierarchy and content priority;
+- navigation, wayfinding and information scent;
+- labels, taxonomy and classification;
+- shallow vs deep IA trade-offs;
+- one-app vs multi-app architecture;
+- company/app/support/privacy/legal relationships;
+- content ownership, source of truth and lifecycle;
+- localization/market expansion effects on IA;
+- store↔website continuity for Apple/Android app companies;
+- failure modes such as organization-chart IA, duplicate product truth, dead-end pages and unsupported navigation depth.
 
-## Design Studio relationship — outgoing handoff expanded
+Existing studies `002` and `026` are prior evidence. Revisit them only when they add validation, comparison or more advanced synthesis; do not merely repeat them.
 
-Design Studio Web Design remains at **Stage 1 Foundation / not yet baselined** and explicitly owns web navigation, responsive systems, state presentation, forms, browser-native behavior and accessibility implementation.
+## Design Studio relationship
 
-Studies 031–032 create reusable constraints for future Web Design work:
+Latest Design Studio Web status read 2026-09-15:
+- **Stage 1 Foundation / NOT YET BASELINED**;
+- its scope includes website/web-app IA, page hierarchy, navigation/wayfinding, responsive composition, component/state systems, browser-native behavior and accessibility implementation.
+
+Outgoing handoff from Stage 1 remains:
 1. native semantics can be styled without discarding browser behavior;
 2. DOM, visual, focus and accessibility order can diverge;
 3. visible server-rendered content can precede hydrated/interactable state;
 4. same-document navigation still needs coherent URL/history/Back behavior;
-5. deep-link behavior is a product/design constraint, not just routing configuration;
-6. server/client boundaries create distinct loading, partial and error states;
-7. bfcache can restore prior runtime/page state independently of ordinary HTTP caching;
-8. native forms/navigation should be considered before replacing them with client-only behavior;
-9. storage/session expiry or disagreement can generate user-visible state transitions;
-10. progressive enhancement/resilience should be part of app-company public web design judgment.
+5. deep-link behavior is a product/design constraint, not only routing configuration;
+6. server/client boundaries create distinct loading/partial/error states;
+7. bfcache can restore prior runtime/page state independently of HTTP cache;
+8. native forms/navigation/controls should be considered before custom replacement;
+9. progressive enhancement/resilience should be part of app-company public web design judgment;
+10. URL/history/navigation/accessibility correctness is part of product quality, not merely frontend implementation detail.
 
-These are recorded as outgoing handoff evidence. No Design Studio canonical file was edited.
+Stage 2 will overlap more directly with Design Studio Web around IA/navigation/page systems. Web Manager owns MintTap/app-company structure, content requirements and product truth; Design Studio Web owns reusable web-design expertise and visual/interaction application. Overlap should be used for cross-validation.
 
-## Stage 1 remaining gate
-
-The broad prerequisite blocks 027–032 are now established. **Do not start Stage 2 yet.**
-
-Next perform a single end-to-end Stage 1 integration & competency review covering:
-
-1. user enters `https://minttap.app/...`;
-2. URL/origin interpretation;
-3. DNS resolution/delegation;
-4. network/TLS establishment and certificate/service identity;
-5. HTTP request/response, intermediaries, cache and status semantics;
-6. build/request/client rendering boundary;
-7. HTML parsing → DOM;
-8. CSS cascade/layout and resource loading;
-9. JavaScript/Web API/runtime interaction;
-10. state/cookie/storage/session boundaries;
-11. navigation/history/bfcache;
-12. accessibility exposure;
-13. representative failure diagnosis across those layers;
-14. identification of any Stage 1 gaps before promotion to Stage 2.
-
-The review must demonstrate connected reasoning, not a glossary recap.
+No Design Studio canonical file was edited.
 
 ## Important unknown MintTap facts
 
-Do not infer production implementation from generic research. Real project work must verify:
-- actual `minttap.app` DNS/hosting/CDN topology;
-- real framework/build system;
-- rendering strategy by route;
-- component architecture;
-- browser/device support matrix;
-- cookie/storage/session usage;
-- whether website authentication/account functionality exists;
-- localization implementation;
-- analytics/third-party runtime dependencies;
-- accessibility testing stack;
-- deployment/monitoring ownership.
+Real project decisions still require evidence for:
+- actual app inventory and launch priorities;
+- company/legal identity and governance needs;
+- real audience segments and acquisition channels;
+- app-store identifiers and store destinations;
+- pricing/account/subscription model;
+- support operating model;
+- localization target markets/languages;
+- verified trust signals;
+- website framework/hosting/CDN/runtime;
+- analytics baseline and conversion definitions;
+- actual content ownership and update workflow.
+
+Do not infer these from generic app-company patterns.
 
 ## Persistence state
 
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
 - `research/README.md` indexes staged learning.
-- Stage 1 cores complete: 027–032.
-- Current next major work: **Stage 1 end-to-end integration & competency review**.
+- Stage 1 is complete at its intended foundation/practitioner level.
+- Current next major work: **Stage 2 — Website Anatomy / Content / Information Architecture foundations**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
