@@ -11,102 +11,79 @@ The Web Manager owns MintTap company website content, app-launch web requirement
 
 ## Completed foundation / practice studies
 
-1. **001** App Launch Website Foundations
-2. **002** Multi-App Information Architecture
-3. **003** Privacy / Support / Account Deletion
-4. **004** Store ↔ Website Synchronization
-5. **005** Domain / Hosting / Security
-6. **006** Accessibility Production Baseline
-7. **007** Localization Architecture
-8. **008** SEO / Structured Data / Crawlability
-9. **009** SEO Independent Verification / Social Preview
-10. **010** Company / App Marketing Content Model
-11. **011** Operational Release & Change-Watch Controls
-12. **012** Implementation / Hosting Provider Comparison Methodology
-13. **013** Jurisdiction-Specific Legal / Compliance Trigger Map
-14. **014** Provider POC Specification
-15. **015** Machine-Readable Control Artifacts / Single Source of Truth
-16. **016** Control Artifact Validation Specimen
-17. **017** Release-Chain Semantic Integrity Validation
-18. **018** Semantic Fingerprints, Dependency Invalidation & Release Impact
-19. **019** Typed Dependency Edges, Cycle Detection & Approval Freshness
-20. **020** Derived Release Manifest, Gate Decision & Auditable Waivers
-21. **021** Release Provenance, Reviewer Authorization & Fail-Closed CI
-22. **022** Protected Policy Ownership, Reviewer Quorum, Revocation & Workflow Threat Model
+Studies **001–023** are complete at the documented Foundation/PRACTICE level. Canonical details are under `research/` and indexed in `research/README.md`.
 
-Canonical details: `research/001...022`.
+Latest sequence:
+- **016** Control Artifact Validation Specimen — 5/5;
+- **017** Release-Chain Semantic Integrity — 12/12;
+- **018** Semantic Fingerprints / Dependency Impact — 5/5;
+- **019** Typed Dependency / Approval Freshness — 6/6;
+- **020** Derived Release Gate / Auditable Waivers — 8/8;
+- **021** Release Provenance / Reviewer Authorization / Fail-Closed CI — 9/9;
+- **022** Protected Policy Ownership / Quorum / Revocation / Workflow Threat Model — 10/10;
+- **023** Provider-Neutral Active Workflow Trust-Boundary Contract — 12/12.
 
-## Current maturity
+Production PASS is not claimed. Actual MintTap facts, real store-console state, legal applicability, provider accounts/domain authority, live CI/deployment enforcement and browser/device production validation remain incomplete.
 
-Stage: **Foundation**
-State: **IN STUDY with executable release-governance PRACTICE evidence**
+## 023 — provider-neutral active workflow contract
 
-Production PASS is not claimed. Provider POC, actual MintTap facts, real store-console state, legal applicability, real release operations and active CI/deployment enforcement remain incomplete.
+New artifacts:
+- `research/023-provider-neutral-active-workflow-trust-boundary.md`
+- `tools/validate_active_workflow_contract.py`
+- `control/tests/active_workflow_contract_cases.json`
 
-## Executable control validation
+Controlled result: **12 / 12 expected outcomes matched.**
 
-- **016** app → feature → evidence → claim: **5/5**.
-- **017** release/store, privacy/data, locale, legal trigger and operational-surface semantics: **12/12**.
-- **018** semantic fingerprints and dependency impact: **5/5**.
-- **019** typed dependency severity, cycles and approval freshness: **6/6**.
-- **020** derived release gate + auditable waivers: **8/8**.
-- **021** source/tool/policy-bound provenance, issue-class reviewer authorization, self-approval rejection and fail-closed CI: **9/9**.
-- **022** protected policy ownership, reviewer quorum/revocation, time-bounded break-glass and workflow trust boundaries: **10/10**.
+The future release workflow is divided into four trust zones:
 
-### 022 validated behaviors
+1. **PR_VALIDATE** — `pull_request`, may execute untrusted code, baseline `contents: read`, no secrets, no OIDC, no deployment authority.
+2. **TRUSTED_BUILD** — protected accepted source only; no untrusted PR checkout execution and no deployment credential; outputs digest-bound deployable artifact.
+3. **DEPLOY** — requires release manifest `ci_state=ALLOW`, protected workflow/policy source, trusted-build artifact origin and exact approved digest; deployment credential exists only here.
+4. **ROLLBACK** — trusted manual action selecting a previously approved immutable artifact digest; no rebuild of current source.
 
-- policy changes without designated owner approval are blocked;
-- policy-owner-approved changes may proceed;
-- issue classes can require quorum 2;
-- inactive/revoked reviewers do not satisfy current quorum;
-- release-author self-approval does not count;
-- valid emergency override is separately classified `PASS / WITH_BREAK_GLASS`;
-- expired/unauthorized break-glass fails closed;
-- privileged `pull_request_target` or `workflow_run` paths may not execute untrusted checkout content;
-- ordinary pull-request validation may process untrusted code only in a read-only/no-secret/no-deploy trust zone.
+Credential modes:
+- `OIDC_SHORT_LIVED` is preferred when the selected provider supports and validates it;
+- `ENVIRONMENT_SCOPED_SECRET` is the provider-neutral fallback and must remain deploy-job scoped.
+
+Critical rule: **PR workflow artifacts are test evidence, not deployable release artifacts.** Deployment must follow accepted source → trusted build → artifact digest → release manifest ALLOW → exact digest deployment.
+
+GitHub's built-in artifact digest validation documents a mismatch as a warning. MintTap's release contract is intentionally stricter: an approved-manifest/artifact digest mismatch is release-blocking.
 
 ## Current control architecture
 
 Principle: **each fact has one canonical owner/record; downstream surfaces reference or derive from it.**
 
-Current direction:
-- canonical structured data: JSON;
-- structural validation: JSON Schema Draft 2020-12;
+Current direction includes:
+- canonical JSON + JSON Schema;
 - stable immutable IDs;
 - semantic fingerprints and dependency invalidation;
-- typed dependency graph with impact severity;
-- fingerprint-bound approval freshness;
-- cycle rejection for freshness/approval dependency graphs;
-- derived release manifest and gate decision;
+- typed impact severity and cycle rejection;
+- fingerprint-bound approvals;
+- derived release manifest and `PASS / NEEDS_REVIEW / BLOCKED` gate;
 - exact-issue/release/source/tool/policy-bound waivers;
-- issue-class reviewer authorization;
-- separation of duties;
-- policy-owner control over governance changes;
-- reviewer quorum and revocation-aware current authorization;
-- explicit time-bounded break-glass classification;
-- workflow trust-zone separation;
-- fail-closed release automation;
+- reviewer authorization, quorum, revocation and separation of duties;
+- protected governance ownership;
+- explicit time-bounded break-glass handling;
+- source/tool/input provenance and fail-closed CI semantics;
+- four-zone workflow trust separation;
+- artifact-digest deployment binding;
+- credential isolation to deploy/rollback;
 - canonical truth remains unchanged by waiver/emergency disposition;
 - no secrets or customer personal data in this repository.
 
-Practice artifacts now include:
-- `control/tests/release_provenance_cases.json`
-- `control/tests/policy_workflow_trust_cases.json`
-- `tools/evaluate_release_provenance.py`
-- `tools/evaluate_policy_workflow_trust.py`
-plus the earlier 016–020 schemas/tests/tools.
-
 Important limitation: current deterministic Python JSON serialization is still **not claimed as full RFC 8785 JCS conformance**.
 
-## GitHub/platform evidence retained
+## Current GitHub/platform evidence
 
-Current primary-source findings:
-- required status checks can gate merge when repository capability permits;
-- CODEOWNERS can support protected path ownership but is not a substitute for issue-class authorization/quorum;
-- protected environments can require reviewers and optionally prevent self-review, subject to plan/visibility constraints;
-- GitHub secure-use guidance warns against privileged `pull_request_target` / `workflow_run` execution of untrusted PR content;
-- `GITHUB_TOKEN` and other credentials should use least privilege;
-- current private-repository capability constraints discovered in 021 mean rulesets/environment/artifact-attestation features must not be assumed available without verification.
+Verified/retained current primary-source findings:
+- privileged `pull_request_target` and `workflow_run` flows must not execute untrusted PR content or blindly trust artifacts originating from untrusted workflows;
+- least-privilege `GITHUB_TOKEN` permissions are required;
+- CODEOWNERS/branch protection can protect sensitive workflow/policy changes when repository capability permits;
+- protected environments can gate deployment and secret access, subject to plan/repository visibility constraints;
+- OIDC with `id-token: write` can exchange GitHub identity for short-lived provider credentials when the provider trust policy is correctly constrained;
+- GitHub upload/download artifacts expose SHA-256 digest validation, but MintTap requires digest mismatch to fail closed;
+- full-length commit SHA pinning remains the documented immutable method for third-party actions;
+- current private-repository ruleset/environment/attestation capabilities must not be assumed without verification.
 
 No active GitHub Actions deployment workflow has been enabled yet.
 
@@ -125,19 +102,19 @@ Machine endpoints:
 
 Root `/` strategy remains OPEN.
 
-## Core product/site baselines retained
+## Product/site baselines retained
 
 ### Security
 HTTPS-only direction, TLS 1.2 minimum / TLS 1.3 where supported, exact no-redirect association files, deliberate cache/security headers, secrets outside Git, auditable deployment and rollback.
 
 ### Accessibility
-WCAG 2.2 AA internal target; semantic HTML; full keyboard/focus path; 320 CSS px reflow; 200% text enlargement; accessible forms/errors/status; automated tests supplement rather than replace manual evaluation.
+WCAG 2.2 AA internal target; semantic HTML; keyboard/focus path; 320 CSS px reflow; 200% text enlargement; accessible forms/errors/status; automation supplements manual evaluation.
 
 ### Localization / search / marketing
-Korean/English locale-specific URLs; self-canonical + reciprocal hreflang; app UI/web/store localization tracked independently; sitemap/canonical/indexability controls; conservative structured data; Product-Truth-governed social previews and marketing claims.
+Korean/English locale-specific URLs; self-canonical + reciprocal hreflang; app UI/web/store localization tracked independently; sitemap/canonical/indexability controls; conservative structured data; Product-Truth-governed social previews and claims.
 
 ### Legal trigger model
-Legal compliance is **facts → trigger → obligation → public/control surface → backend process → validation**, not universal boilerplate. The validator checks consistency with recorded applicability; it does not determine legal applicability itself.
+Compliance remains **facts → trigger → obligation → public/control surface → backend process → validation**. The validator checks consistency with recorded applicability; it does not determine legal applicability itself.
 
 ## Current implementation direction
 
@@ -153,18 +130,18 @@ Provider shortlist:
 
 No provider selected.
 
-### Provider POC gate
-
-Firebase and Cloudflare must run the same static corpus and assertion suite, including file hashes, localized pages, AASA/assetlinks/app-ads/sitemap/robots/404, headers/routing/search/social/accessibility smoke, preview/promote and provider-native rollback.
-
-The POC remains blocked on provider accounts/domain authority.
+The Firebase vs Cloudflare POC must use the same static corpus, release-control contract and assertion suite. Provider-specific tooling may implement the final credential/deploy/rollback edge but must not redefine the trust model.
 
 ## Current Design Studio dependencies / handoffs
 
-- **Web Design** — still no substantive W### at latest check. Governance states are semantic inputs only; Web Design owns release/review UI hierarchy and presentation.
-- **Layout / Interaction** — clean pass, pass-with-waiver, pass-with-break-glass, needs-review, blocked, stale provenance, quorum incomplete and workflow-security blocks require textual/structural/programmatic distinction, not color-only encoding.
-- **Typography / Type** — long reviewer IDs, issue codes, incident references and Korean/English governance strings are stress inputs for wrapping/zoom/fallback testing.
-- **Color** — severity/emergency color may reinforce but never define the state alone.
+Latest checked Design Studio state:
+- **Web Design** — still no substantive `W###`;
+- **Layout / Interaction** — through `L005 / I004`.
+
+Handoff rules:
+- validation, trusted build, deploy, rollback, clean/waived/break-glass pass, needs-review, blocked, stale-artifact, quorum incomplete and credential-boundary states require textual/structural/programmatic meaning rather than color-only encoding;
+- long digests, release IDs, reviewer IDs, rollback reasons and Korean/English governance strings are future typography/reflow stress content;
+- Web Design owns production page/workflow presentation when substantive Web research exists.
 
 ## Important open items
 
@@ -174,28 +151,24 @@ The POC remains blocked on provider accounts/domain authority.
 - SDK/analytics/ads/auth/processors/data flows and processing locations;
 - legal applicability/signoff process;
 - full RFC 8785/JCS conformance validation;
-- final schemas for dependencies/approvals/manifests/waivers/reviewer policy/quorum/break-glass;
-- authenticated reviewer identity mapping from GitHub/SSO;
-- protected policy ownership enforcement in actual repository settings;
-- revocation history/effective-time semantics;
-- quorum policy ownership;
-- signed/cryptographic attestation of internal manifests where justified;
-- exact Git source/tree and runtime/dependency identity binding;
-- trusted workflow source/pinning and reusable-workflow ownership;
-- exact GitHub Actions permission matrix and fork approval behavior;
-- deployment provider/OIDC credential boundary;
-- rollback authorization and emergency deployment policy;
-- active CI enforcement and immutable release history;
-- provider accounts/domain authority and POC execution;
-- final hosting/framework/CMS/monitoring choice;
+- final schemas for dependencies/approvals/manifests/waivers/reviewer/quorum/break-glass/workflow contracts;
+- authenticated reviewer identity mapping and repository enforcement;
+- exact GitHub branch protection/CODEOWNERS/environment capability verification;
+- exact Firebase Hosting auth/deploy/preview/rollback/version behavior;
+- exact Cloudflare Workers/Static Assets auth/deploy/preview/rollback/version behavior;
+- observed OIDC claims and provider trust policy;
+- GitHub artifact retention/immutability for long-term rollback;
+- deployment concurrency/serialization;
+- signed/cryptographic attestation where justified;
+- active CI/deployment workflow and immutable release history;
 - real App Links/AASA/app-ads identifiers/routes;
 - real-browser Korean/English design/accessibility transfer validation;
 - Search Console/policy-alert/webhook/escalation ownership.
 
 ## Next research queue
 
-1. **Provider-neutral active-workflow trust-boundary contract.** Define exact trigger separation, token permission matrix, trusted workflow/policy ownership, fork behavior, artifact handoff, deployment credential boundary and rollback authority so it can be applied during Firebase vs Cloudflare POC without prematurely enabling deployment automation.
-2. Execute Firebase Hosting vs Cloudflare Workers POC when provider accounts/domain authority are available.
+1. **Firebase Hosting vs Cloudflare provider-edge contract mapping.** Verify current official authentication, preview/production deployment, rollback/version retention, headers/redirect/static-file behavior and constraints against the 023 four-zone contract. Execute only provider-neutral/local assertions that do not require accounts/domain authority; explicitly mark blocked live tests.
+2. Execute the live provider POC when provider accounts/domain authority are available.
 3. Use the POC for Design Studio real-browser Korean/English/accessibility/layout/type/color transfer validation.
 4. Apply Legal Trigger Registry when actual entity/market/audience/data/transaction facts are available.
 5. App-specific user/market evidence when real product pages are assigned.
@@ -203,8 +176,7 @@ The POC remains blocked on provider accounts/domain authority.
 ## Persistence state
 
 - `AGENTS.md` contains autonomous continuous-learning rules.
-- `research/README.md` indexes 001–022.
-- Studies 016–022 have executable PRACTICE artifacts under `control/` and `tools/`.
-- 021 canonical artifacts: `tools/evaluate_release_provenance.py`, `control/tests/release_provenance_cases.json`.
-- 022 adds `tools/evaluate_policy_workflow_trust.py`, `control/tests/policy_workflow_trust_cases.json`.
+- `research/README.md` indexes **001–023**.
+- Studies 016–023 have executable PRACTICE artifacts under `control/` and `tools/`.
+- Study 023 adds `tools/validate_active_workflow_contract.py` and `control/tests/active_workflow_contract_cases.json`.
 - This file is the current operational checkpoint.
