@@ -9,7 +9,9 @@
       "owner": "role:web",
       "app_ref": "app:example",
       "claim_mode": "CURRENT",
-      "feature_refs": ["feature:example:portfolio"],
+      "feature_refs": [
+        "feature:example:portfolio"
+      ],
       "text": "Invalid fixture."
     },
     "additional_records": [],
@@ -26,8 +28,12 @@
       "owner": "role:web",
       "app_ref": "app:example",
       "claim_mode": "CURRENT",
-      "feature_refs": ["feature:example:not-real"],
-      "evidence_refs": ["evidence:example:portfolio-release"],
+      "feature_refs": [
+        "feature:example:not-real"
+      ],
+      "evidence_refs": [
+        "evidence:example:portfolio-release"
+      ],
       "text": "Invalid missing feature ref."
     },
     "additional_records": [],
@@ -44,8 +50,12 @@
       "owner": "role:web",
       "app_ref": "app:example",
       "claim_mode": "CURRENT",
-      "feature_refs": ["feature:example:planned"],
-      "evidence_refs": ["evidence:example:portfolio-release"],
+      "feature_refs": [
+        "feature:example:planned"
+      ],
+      "evidence_refs": [
+        "evidence:example:portfolio-release"
+      ],
       "text": "Invalid current claim for planned feature."
     },
     "additional_records": [
@@ -73,8 +83,12 @@
       "owner": "role:web",
       "app_ref": "app:example",
       "claim_mode": "CURRENT",
-      "feature_refs": ["feature:example:portfolio"],
-      "evidence_refs": ["evidence:example:stale"],
+      "feature_refs": [
+        "feature:example:portfolio"
+      ],
+      "evidence_refs": [
+        "evidence:example:stale"
+      ],
       "text": "Invalid claim supported only by stale evidence."
     },
     "additional_records": [
@@ -90,5 +104,194 @@
     ],
     "expected_stage": "semantic",
     "expected_code": "EVIDENCE_NOT_VERIFIED"
+  },
+  {
+    "name": "semantic-store-unavailable",
+    "record": {
+      "schema_version": 1,
+      "record_type": "operational_surface",
+      "id": "surface:test:store-unavailable",
+      "status": "VERIFIED",
+      "owner": "role:web",
+      "app_ref": "app:example",
+      "surface_kind": "STORE_CTA",
+      "url": "https://minttap.app/en/apps/example/",
+      "severity": "P1",
+      "destination_ref": "store:test:ios-unavailable",
+      "monitoring": "SYNTHETIC",
+      "runbook_ref": "runbook:store"
+    },
+    "additional_records": [
+      {
+        "schema_version": 1,
+        "record_type": "store_destination",
+        "id": "store:test:ios-unavailable",
+        "status": "VERIFIED",
+        "owner": "role:release",
+        "app_ref": "app:example",
+        "platform": "IOS",
+        "url": "https://apps.apple.com/app/id1111111111",
+        "availability_state": "UNAVAILABLE"
+      }
+    ],
+    "expected_stage": "semantic",
+    "expected_code": "STORE_DESTINATION_UNAVAILABLE"
+  },
+  {
+    "name": "semantic-store-no-live-release",
+    "record": {
+      "schema_version": 1,
+      "record_type": "operational_surface",
+      "id": "surface:test:store-android",
+      "status": "VERIFIED",
+      "owner": "role:web",
+      "app_ref": "app:example",
+      "surface_kind": "STORE_CTA",
+      "url": "https://minttap.app/en/apps/example/",
+      "severity": "P1",
+      "destination_ref": "store:test:android",
+      "monitoring": "SYNTHETIC",
+      "runbook_ref": "runbook:store"
+    },
+    "additional_records": [
+      {
+        "schema_version": 1,
+        "record_type": "store_destination",
+        "id": "store:test:android",
+        "status": "VERIFIED",
+        "owner": "role:release",
+        "app_ref": "app:example",
+        "platform": "ANDROID",
+        "url": "https://play.google.com/store/apps/details?id=app.example",
+        "availability_state": "AVAILABLE"
+      }
+    ],
+    "expected_stage": "semantic",
+    "expected_code": "STORE_DESTINATION_NO_LIVE_RELEASE"
+  },
+  {
+    "name": "semantic-locale-unsupported",
+    "record": {
+      "schema_version": 1,
+      "record_type": "claim",
+      "id": "claim:test:korean-ui",
+      "status": "VERIFIED",
+      "owner": "role:web",
+      "app_ref": "app:example",
+      "claim_mode": "CURRENT",
+      "feature_refs": [
+        "feature:example:portfolio"
+      ],
+      "evidence_refs": [
+        "evidence:example:portfolio-release"
+      ],
+      "locale_coverage_refs": [
+        "locale:test:ko-unsupported"
+      ],
+      "text": "Korean UI supported."
+    },
+    "additional_records": [
+      {
+        "schema_version": 1,
+        "record_type": "locale_coverage",
+        "id": "locale:test:ko-unsupported",
+        "status": "VERIFIED",
+        "owner": "role:localization",
+        "app_ref": "app:example",
+        "locale": "ko",
+        "app_ui": "UNSUPPORTED",
+        "web": "SUPPORTED"
+      }
+    ],
+    "expected_stage": "semantic",
+    "expected_code": "CURRENT_LOCALE_CLAIM_UNSUPPORTED"
+  },
+  {
+    "name": "semantic-stale-privacy-source",
+    "record": {
+      "schema_version": 1,
+      "record_type": "operational_surface",
+      "id": "surface:test:privacy-stale",
+      "status": "VERIFIED",
+      "owner": "role:privacy",
+      "app_ref": "app:example",
+      "surface_kind": "PRIVACY",
+      "url": "https://minttap.app/en/apps/example/privacy/",
+      "severity": "P1",
+      "source_refs": [
+        "data:test:stale"
+      ],
+      "monitoring": "SYNTHETIC",
+      "runbook_ref": "runbook:privacy"
+    },
+    "additional_records": [
+      {
+        "schema_version": 1,
+        "record_type": "data_practice",
+        "id": "data:test:stale",
+        "status": "STALE",
+        "owner": "role:privacy",
+        "app_ref": "app:example",
+        "practice": "Analytics",
+        "processor_refs": [
+          "processor:example:cloud"
+        ]
+      }
+    ],
+    "expected_stage": "semantic",
+    "expected_code": "SURFACE_SOURCE_NOT_VERIFIED"
+  },
+  {
+    "name": "semantic-legal-no-surface",
+    "record": {
+      "schema_version": 1,
+      "record_type": "legal_trigger",
+      "id": "legal:test:no-surface",
+      "status": "VERIFIED",
+      "owner": "role:legal",
+      "jurisdiction": "KR",
+      "law": "PIPA",
+      "applicability": "APPLIES",
+      "required_surface_refs": []
+    },
+    "additional_records": [],
+    "expected_stage": "semantic",
+    "expected_code": "LEGAL_TRIGGER_MISSING_SURFACE"
+  },
+  {
+    "name": "semantic-critical-uncontrolled",
+    "record": {
+      "schema_version": 1,
+      "record_type": "operational_surface",
+      "id": "surface:test:uncontrolled",
+      "status": "VERIFIED",
+      "owner": "role:web",
+      "app_ref": "app:example",
+      "surface_kind": "SUPPORT",
+      "url": "https://minttap.app/en/apps/example/support/",
+      "severity": "P0",
+      "monitoring": "NONE"
+    },
+    "additional_records": [],
+    "expected_stage": "semantic",
+    "expected_code": "CRITICAL_SURFACE_UNCONTROLLED"
+  },
+  {
+    "name": "semantic-missing-processor",
+    "record": {
+      "schema_version": 1,
+      "record_type": "data_practice",
+      "id": "data:test:missing-processor",
+      "status": "VERIFIED",
+      "owner": "role:privacy",
+      "app_ref": "app:example",
+      "practice": "Analytics",
+      "processor_refs": [
+        "processor:not-real"
+      ]
+    },
+    "additional_records": [],
+    "expected_stage": "semantic",
+    "expected_code": "MISSING_REF"
   }
 ]
