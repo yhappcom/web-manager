@@ -28,18 +28,23 @@ Establishes the website's role in Apple/Google app launch operations: privacy, s
 
 Establishes the scalable company/app/support/governance hierarchy, canonical per-app paths, URL rules, navigation baseline, accessibility/wayfinding consequences and app-page search/structured-data direction.
 
+### 003 — Privacy, Support & Account-Deletion Content Architecture
+`003-privacy-support-account-deletion-architecture.md`
+
+Establishes Apple/Google policy-backed per-app privacy, support and account-deletion surfaces; required content models; a shared internal App Data Contract; release consistency triggers; and validation gates. It deliberately separates platform policy from later jurisdiction-specific legal analysis.
+
 ## Current research queue
 
 See root `STATUS.md` for the authoritative next-work queue. Current high-value areas include:
 
-1. privacy/support/account-deletion content architecture;
-2. store metadata ↔ website synchronization;
-3. domain/hosting/security;
-4. accessibility production baseline;
-5. localization architecture;
-6. SEO/social/structured-data/crawlability;
-7. company/app marketing content model;
-8. operational release and change-watch controls.
+1. store metadata ↔ website synchronization and release ownership;
+2. domain/hosting/security;
+3. accessibility production baseline;
+4. localization architecture;
+5. SEO/social/structured-data/crawlability;
+6. company/app marketing content model;
+7. operational release and change-watch controls;
+8. jurisdiction-specific legal/compliance web requirements when launch regions and app data practices are known.
 
 ## Design Studio relationship
 
