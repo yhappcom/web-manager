@@ -1,12 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:minttap:web-manager:schema:control-record:v1",
-  "title": "MintTap control record specimen",
+  "title": "MintTap control record validation specimen",
   "oneOf": [
     { "$ref": "#/$defs/app" },
     { "$ref": "#/$defs/feature" },
     { "$ref": "#/$defs/evidence" },
-    { "$ref": "#/$defs/claim" }
+    { "$ref": "#/$defs/claim" },
+    { "$ref": "#/$defs/release" },
+    { "$ref": "#/$defs/store_destination" },
+    { "$ref": "#/$defs/processor" },
+    { "$ref": "#/$defs/data_practice" },
+    { "$ref": "#/$defs/locale_coverage" },
+    { "$ref": "#/$defs/legal_trigger" },
+    { "$ref": "#/$defs/operational_surface" }
   ],
   "$defs": {
     "status": {
@@ -18,11 +25,7 @@
       "properties": {
         "schema_version": { "const": 1 },
         "record_type": { "type": "string" },
-        "id": {
-          "type": "string",
-          "minLength": 3,
-          "pattern": "^[a-z0-9][a-z0-9:._-]+$"
-        },
+        "id": { "type": "string", "minLength": 3, "pattern": "^[a-z0-9][a-z0-9:._-]+$" },
         "status": { "$ref": "#/$defs/status" },
         "owner": { "type": "string", "minLength": 3 }
       }
@@ -30,74 +33,141 @@
     "app": {
       "allOf": [
         { "$ref": "#/$defs/base" },
-        {
-          "type": "object",
-          "required": ["record_type", "public_name", "lifecycle"],
-          "properties": {
-            "record_type": { "const": "app" },
-            "public_name": { "type": "string", "minLength": 1 },
-            "lifecycle": { "enum": ["PLANNED", "ACTIVE", "RETIRED"] }
-          }
-        }
+        { "type": "object", "required": ["record_type", "public_name", "lifecycle"], "properties": {
+          "record_type": { "const": "app" },
+          "public_name": { "type": "string", "minLength": 1 },
+          "lifecycle": { "enum": ["PLANNED", "ACTIVE", "RETIRED"] }
+        }}
       ],
       "unevaluatedProperties": false
     },
     "feature": {
       "allOf": [
         { "$ref": "#/$defs/base" },
-        {
-          "type": "object",
-          "required": ["record_type", "app_ref", "name", "feature_state"],
-          "properties": {
-            "record_type": { "const": "feature" },
-            "app_ref": { "type": "string" },
-            "name": { "type": "string", "minLength": 1 },
-            "feature_state": { "enum": ["PLANNED", "BETA", "SHIPPED", "DEPRECATED", "REMOVED"] }
-          }
-        }
+        { "type": "object", "required": ["record_type", "app_ref", "name", "feature_state"], "properties": {
+          "record_type": { "const": "feature" },
+          "app_ref": { "type": "string" },
+          "name": { "type": "string", "minLength": 1 },
+          "feature_state": { "enum": ["PLANNED", "BETA", "SHIPPED", "DEPRECATED", "REMOVED"] }
+        }}
       ],
       "unevaluatedProperties": false
     },
     "evidence": {
       "allOf": [
         { "$ref": "#/$defs/base" },
-        {
-          "type": "object",
-          "required": ["record_type", "evidence_type", "summary"],
-          "properties": {
-            "record_type": { "const": "evidence" },
-            "evidence_type": { "enum": ["RELEASE_OBSERVATION", "TEST_REPORT", "STORE_STATE", "SCREENSHOT", "AUTHORITATIVE_SOURCE"] },
-            "summary": { "type": "string", "minLength": 1 }
-          }
-        }
+        { "type": "object", "required": ["record_type", "evidence_type", "summary"], "properties": {
+          "record_type": { "const": "evidence" },
+          "evidence_type": { "enum": ["RELEASE_OBSERVATION", "TEST_REPORT", "STORE_STATE", "SCREENSHOT", "AUTHORITATIVE_SOURCE"] },
+          "summary": { "type": "string", "minLength": 1 }
+        }}
       ],
       "unevaluatedProperties": false
     },
     "claim": {
       "allOf": [
         { "$ref": "#/$defs/base" },
-        {
-          "type": "object",
-          "required": ["record_type", "app_ref", "claim_mode", "feature_refs", "evidence_refs", "text"],
-          "properties": {
-            "record_type": { "const": "claim" },
-            "app_ref": { "type": "string" },
-            "claim_mode": { "enum": ["CURRENT", "ROADMAP"] },
-            "feature_refs": {
-              "type": "array",
-              "minItems": 1,
-              "uniqueItems": true,
-              "items": { "type": "string" }
-            },
-            "evidence_refs": {
-              "type": "array",
-              "minItems": 1,
-              "uniqueItems": true,
-              "items": { "type": "string" }
-            },
-            "text": { "type": "string", "minLength": 1 }
-          }
-        }
+        { "type": "object", "required": ["record_type", "app_ref", "claim_mode", "feature_refs", "evidence_refs", "text"], "properties": {
+          "record_type": { "const": "claim" },
+          "app_ref": { "type": "string" },
+          "claim_mode": { "enum": ["CURRENT", "ROADMAP"] },
+          "feature_refs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+          "evidence_refs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+          "locale_coverage_refs": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "text": { "type": "string", "minLength": 1 }
+        }}
+      ],
+      "unevaluatedProperties": false
+    },
+    "release": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        { "type": "object", "required": ["record_type", "app_ref", "platform", "version", "release_state"], "properties": {
+          "record_type": { "const": "release" },
+          "app_ref": { "type": "string" },
+          "platform": { "enum": ["IOS", "ANDROID"] },
+          "version": { "type": "string", "minLength": 1 },
+          "release_state": { "enum": ["PLANNED", "REVIEW", "LIVE", "RETIRED"] }
+        }}
+      ],
+      "unevaluatedProperties": false
+    },
+    "store_destination": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        { "type": "object", "required": ["record_type", "app_ref", "platform", "url", "availability_state"], "properties": {
+          "record_type": { "const": "store_destination" },
+          "app_ref": { "type": "string" },
+          "platform": { "enum": ["IOS", "ANDROID"] },
+          "url": { "type": "string", "pattern": "^https://" },
+          "availability_state": { "enum": ["AVAILABLE", "UNAVAILABLE", "PREORDER", "PRIVATE", "UNKNOWN"] }
+        }}
+      ],
+      "unevaluatedProperties": false
+    },
+    "processor": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        { "type": "object", "required": ["record_type", "name", "processing_countries"], "properties": {
+          "record_type": { "const": "processor" },
+          "name": { "type": "string", "minLength": 1 },
+          "processing_countries": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 2 } }
+        }}
+      ],
+      "unevaluatedProperties": false
+    },
+    "data_practice": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        { "type": "object", "required": ["record_type", "app_ref", "practice", "processor_refs"], "properties": {
+          "record_type": { "const": "data_practice" },
+          "app_ref": { "type": "string" },
+          "practice": { "type": "string", "minLength": 1 },
+          "processor_refs": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+        }}
+      ],
+      "unevaluatedProperties": false
+    },
+    "locale_coverage": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        { "type": "object", "required": ["record_type", "app_ref", "locale", "app_ui", "web"], "properties": {
+          "record_type": { "const": "locale_coverage" },
+          "app_ref": { "type": "string" },
+          "locale": { "type": "string", "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$" },
+          "app_ui": { "enum": ["SUPPORTED", "UNSUPPORTED", "PLANNED"] },
+          "web": { "enum": ["SUPPORTED", "UNSUPPORTED", "PLANNED"] }
+        }}
+      ],
+      "unevaluatedProperties": false
+    },
+    "legal_trigger": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        { "type": "object", "required": ["record_type", "jurisdiction", "law", "applicability", "required_surface_refs"], "properties": {
+          "record_type": { "const": "legal_trigger" },
+          "jurisdiction": { "type": "string", "minLength": 2 },
+          "law": { "type": "string", "minLength": 2 },
+          "applicability": { "enum": ["APPLIES", "DOES_NOT_APPLY", "CONDITIONAL", "REVIEW_REQUIRED"] },
+          "required_surface_refs": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+        }}
+      ],
+      "unevaluatedProperties": false
+    },
+    "operational_surface": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        { "type": "object", "required": ["record_type", "surface_kind", "url", "severity"], "properties": {
+          "record_type": { "const": "operational_surface" },
+          "app_ref": { "type": "string" },
+          "surface_kind": { "enum": ["PRIVACY", "SUPPORT", "ACCOUNT_DELETION", "RIGHTS", "STORE_CTA", "OTHER"] },
+          "url": { "type": "string", "pattern": "^https://" },
+          "severity": { "enum": ["P0", "P1", "P2"] },
+          "destination_ref": { "type": "string" },
+          "source_refs": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "monitoring": { "enum": ["SYNTHETIC", "MANUAL", "EVENT", "NONE"] },
+          "runbook_ref": { "type": "string", "minLength": 3 }
+        }}
       ],
       "unevaluatedProperties": false
     }
