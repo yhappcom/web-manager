@@ -2,7 +2,7 @@
 
 This directory is the source-grounded learning and decision-support layer for the MintTap company website and `minttap.app` domain. The objective is professional judgment for real Apple/Android app launches and website operations, not generic article accumulation.
 
-Canonical curriculum: `../LEARNING_ROADMAP.md`. Learning proceeds `FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT` and normally follows `history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`.
+Canonical curriculum: `../LEARNING_ROADMAP.md`. Learning proceeds `FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT`.
 
 Evidence labels: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`, `DEPENDENCY`, `VALIDATION`, `CHANGE WATCH`.
 
@@ -30,8 +30,6 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 
 **STAGE 2 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
-Integrated contract: `entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`.
-
 ## Stage 3 — UX & Interaction Foundations
 
 039 — User Action, System State, Feedback, Error & Recovery — **Interaction Contract**  
@@ -49,9 +47,13 @@ Integrated contract: `entry context → identity/orientation → destination pro
 `045-stage4-web-visual-hierarchy-composition-design-system-integration-literacy.md`  
 Reusable output: **Visual/Web Design Review Contract**.
 
-045 establishes the Web Manager decision boundary between product/task/content obligations and specialist design authorship. It integrates semantic versus visual hierarchy, relationship-preserving composition, runtime typography, semantic color obligations, component contract consistency, truthful app imagery/product evidence and browser-validation boundaries without inventing a universal MintTap visual style.
+046 — Web Typography, Reading, Localization & Content Presentation Literacy  
+`046-stage4-web-typography-reading-localization-content-presentation-literacy.md`  
+Reusable output: **Web Typography / Reading Contract**.
 
-**STAGE 4 ACTIVE — 045 FOUNDATION/PRACTITIONER CHECKPOINT PASSED.**
+046 establishes runtime reading judgment across document language, font selection/fallback/loading, Korean/English line breaking, hierarchy, wrapping, user text adaptation and localization stress. It explicitly separates WCAG resilience evidence from human readability proof and routes exact type authorship/validation to Design Studio Type/Web specialists.
+
+**STAGE 4 ACTIVE — 045–046 FOUNDATION/PRACTITIONER CHECKPOINTS PASSED.**
 
 ---
 
@@ -60,19 +62,19 @@ Reusable output: **Visual/Web Design Review Contract**.
 **Stage 1 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 4 — ACTIVE; 045 checkpoint PASS.**
+**Stage 4 — ACTIVE; 045–046 checkpoints PASS.**
 
 Next highest-value integrated topic:
 
-**046 — Web Typography, Reading, Localization & Content Presentation Literacy.**
+**047 — Web Color, Surfaces, State & Brand Application Literacy.**
 
-Focus on real browser reading systems—headings/body/support/policy/data text, wrapping and hierarchy, Korean/English mixed content, font loading/fallback, zoom/reflow and content presentation. Reuse Design Studio Type evidence rather than duplicating font construction/type-design research.
+Focus on real browser/page application of brand color, text/surface hierarchy, links/actions, semantic state, contrast, themes/forced colors and imagery interaction. Reuse Design Studio Color evidence rather than duplicating color-science research.
 
 ## Design Studio relationship
 
-Latest specialist state checked 2026-09-15: Web Design has advanced to **W001–W008 PRACTICE/CRITIQUE + integrated capstone; Foundation NOT YET PASSED pending W009 closure audit**. Type is through T016 and Foundation NOT PASSED. Color and Layout/Interaction have Stage 1 PASS with later production/device/human gates still separate.
+Latest specialist state checked 2026-09-15: Web Design **Stage 1 PASS; Stage 2 entry accepted/not passed (W010), W011 next**. Type **Stage 1 PASS; Stage 2 entry audit next (T020)**. These specialist files supersede stale global/older Web Manager summaries. Color and Layout/Interaction remain relevant peer authorities and must be rechecked before their next material handoff.
 
-045 hands Design Studio a Visual/Web Design Review Contract layered on the Stage 2/3 contract stack. Web Manager does not edit Design Studio canonical files without authorization.
+045 hands Design Studio a Visual/Web Design Review Contract; 046 adds the Web Typography/Reading Contract with exact language, corpus, fallback, wrapping and adaptation conditions. Web Manager does not edit Design Studio canonical files without authorization.
 
 ## Study quality standard
 
