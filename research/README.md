@@ -44,23 +44,25 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 ## Stage 4 — Web Design Literacy
 
 045 — Web Visual Hierarchy, Composition & Design-System Integration Literacy — **Visual/Web Design Review Contract**  
-`045-stage4-web-visual-hierarchy-composition-design-system-integration-literacy.md`
-
 046 — Web Typography, Reading, Localization & Content Presentation Literacy — **Web Typography / Reading Contract**  
-`046-stage4-web-typography-reading-localization-content-presentation-literacy.md`
-
 047 — Web Color, Surfaces, State & Brand Application Literacy — **Web Color / Surface / State Contract**  
-`047-stage4-web-color-surfaces-state-brand-application-literacy.md`
-
 048 — Web Imagery, Iconography, App Screenshots & Product Demonstration Literacy — **Product Media / Non-Text Contract**  
-`048-stage4-web-imagery-iconography-app-screenshots-product-demonstration-literacy.md`
-
 049 — Components, Page Systems, Visual Consistency & Responsive Design-System Governance — **Component / Page-System Governance Contract**  
-`049-stage4-components-page-systems-visual-consistency-responsive-design-system-governance.md`
+050 — Stage 4 Integration: App-Company Web Design Literacy Competency Review
 
-049 integrates 045–048 into system governance. It treats reuse as a shared semantic/state/interaction contract rather than pixel sameness; separates semantic, behavioral, visual-role, responsive and cross-channel consistency; distinguishes legitimate variants from drift; treats tokens as value/decision interchange infrastructure rather than proof of design quality; and defines responsive state/invariant migration plus multi-product governance boundaries. DTCG Format Module 2025.10 is used with its exact status: stable Final Community Group Report intended for implementation, not a W3C Recommendation.
+050 integrates the full Stage 4 stack across representative company/home, app/product, support and governance/account-control page families. Its diagnostic sequence is task → truth → structure → attention → reading → state → evidence → system → responsive transformation → validation. It explicitly keeps production browser/device/AT/human proof outside the literacy gate.
 
-**STAGE 4 ACTIVE — 045–049 FOUNDATION/PRACTITIONER CHECKPOINTS PASSED.**
+**STAGE 4 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
+
+## Stage 5 — Accessibility
+
+**READY TO START.**
+
+Next integrated study:
+
+051 — **Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility**.
+
+Start from disability/access needs and barrier mechanisms rather than mechanically enumerating WCAG criteria. Establish WCAG 2.2 structure/conformance, semantic/keyboard/focus/non-text/visual/responsive relationships, automated-testing limits, and the distinction between technical conformance evidence and actual accessibility/usability. Reuse prior evidence only where it adds validation or transfer value.
 
 ---
 
@@ -69,19 +71,14 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 **Stage 1 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 4 — ACTIVE; 045–049 checkpoints PASS.**
-
-Next highest-value integrated topic:
-
-**050 — Stage 4 Integration: App-Company Web Design Literacy Competency Review.**
-
-Apply 045–049 together to representative company/app/support/governance page families. Test whether hierarchy, reading, color/state, product evidence, component reuse and responsive governance can be reasoned about as one system, then close Stage 4 only if the Foundation/Practitioner competency gate is satisfied. Avoid adding another isolated visual topic unless integration exposes a prerequisite gap.
+**Stage 4 — COMPLETE at intended foundation/practitioner level.**  
+**Stage 5 — READY TO START.**
 
 ## Design Studio relationship
 
-Latest Web specialist state checked 2026-09-15: **Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED**. W012 adds executed Chromium responsive transfer and W013 adds partial navigation/history runtime transfer. Component systems are conceptually strong, while integrated runtime coverage remains uneven. True HTTP direct-entry/reload, integrated task-state execution, icon runtime, readiness/performance, broader browsers/devices/AT and human evidence remain open. Specialist files supersede stale coordinator summaries.
+Latest specialist state checked 2026-09-15: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED; Type Stage 1 PASS / Stage 2 PRACTICE; Color Stage 1 PASS / Stage 2 entry audit next. Specialist files supersede stale coordinator summaries.
 
-045–049 now provide a complete Web Manager design-handoff stack: Visual/Web Design Review, Typography/Reading, Color/Surface/State, Product Media/Non-Text, and Component/Page-System Governance contracts. For real work, Web Manager supplies task/page semantics, real content/evidence, state/variant matrices and responsive invariants; Design Studio owns specialist visual/interaction judgment and execution validation. Web Manager does not edit Design Studio canonical files without authorization.
+045–050 provide the Web Manager design-handoff stack: Visual/Web Design Review, Typography/Reading, Color/Surface/State, Product Media/Non-Text, Component/Page-System Governance, plus integrated app-company diagnosis. For real work, Web Manager supplies task/page semantics, real content/product evidence, state/variant matrices, responsive invariants and validation boundaries; Design Studio owns specialist visual/interaction judgment and execution validation. Web Manager does not edit Design Studio canonical files without authorization.
 
 ## Study quality standard
 
