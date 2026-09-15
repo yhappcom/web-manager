@@ -64,27 +64,33 @@ Integrated contract: `entry context → identity/orientation → destination pro
 
 039 — User Action, System State, Feedback, Error & Recovery Foundations  
 `039-stage3-user-action-system-state-feedback-error-recovery-foundations.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.** Reusable output: **Interaction Contract**.
+Reusable output: **Interaction Contract**.
 
 040 — User Goals, Task/Journey Modeling, Cognition, Expectation & Friction Foundations  
 `040-stage3-user-goals-task-journey-cognition-expectation-friction-foundations.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.** Reusable output: **Task/Journey Contract**.
+Reusable output: **Task/Journey Contract**.
 
 041 — Forms, Input, Choice, Validation & Multi-Step Transaction Design  
 `041-stage3-forms-input-choice-validation-multistep-transactions.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.** Reusable output: **Form / Transaction Contract**.
+Reusable output: **Form / Transaction Contract**.
 
 042 — Search, Filtering, Selection, Results & List/Detail Interaction Foundations  
 `042-stage3-search-filter-selection-results-list-detail-foundations.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.** Reusable output: **Retrieval Contract**.
+Reusable output: **Retrieval Contract**.
 
 043 — Responsive Web Interaction, Input Modality & Cross-Device Continuity  
 `043-stage3-responsive-input-modality-cross-device-continuity.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.** Reusable output: **Responsive/Input Continuity Contract**.
+Reusable output: **Responsive/Input Continuity Contract**.
 
-043 establishes that viewport geometry and input capability are independent dimensions; distinguishes primary/all pointer and hover capabilities without treating them as keyboard/device detectors; requires hover-independent essential tasks; connects WCAG pointer/drag/target constraints; separates layout vs visual viewport and dynamic browser UI; treats VirtualKeyboard as progressive enhancement unless target evidence supports it; separates browser zoom/pinch/text enlargement/localization/reflow; preserves source/focus/task sequence; and defines responsive/cross-device continuity as task/state persistence rather than pixel identity.
+044 — Stage 3 Integration: Complete-Task Usability & Interaction Competency Review  
+`044-stage3-integration-complete-task-usability-interaction-competency-review.md`  
+**STAGE 3 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
-Primary/current evidence checked 2026-09-15: W3C Media Queries Level 5, WCAG 2.2/current WAI Understanding documents, WHATWG HTML sequential focus navigation, CSSOM View/VisualViewport, current viewport-unit/VirtualKeyboard references, and Design Studio Web W003 status.
+044 integrates representative app-evaluation/store, support/escalation, privacy/account-control, form/transaction and retrieval/list-detail tasks under narrow/KO-EN/zoom/keyboard/touch/mixed-input/OSK/orientation/async/interruption stress. It preserves the evidence boundary that standards and structural review do not prove measured usability, WCAG conformance, AT behavior or browser/device parity.
+
+Integrated Stage 3 contract stack:
+
+**Stage 2 Page Contract + 039 Interaction Contract + 040 Task/Journey Contract + 041 Form/Transaction Contract + 042 Retrieval Contract + 043 Responsive/Input Continuity Contract.**
 
 ---
 
@@ -92,23 +98,20 @@ Primary/current evidence checked 2026-09-15: W3C Media Queries Level 5, WCAG 2.2
 
 **Stage 1 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 3 — ACTIVE; 039–043 checkpoints passed.**
-
-Current contract stack:
-
-**Stage 2 Page Contract + 039 Interaction Contract + 040 Task/Journey Contract + 041 Form/Transaction Contract + 042 Retrieval Contract + 043 Responsive/Input Continuity Contract.**
+**Stage 3 — COMPLETE at intended foundation/practitioner level.**  
+**Stage 4 — READY TO BEGIN.**
 
 Next highest-value integrated topic:
 
-**Stage 3 Integration Gate — complete-task usability and interaction competency.**
+**Stage 4 Web Design Literacy — visual hierarchy, composition, typography, color, imagery/product demonstration and component/page-system integration.**
 
-Expected scope: representative app-evaluation/store, support/escalation, privacy/account-control, form/transaction and retrieval/list-detail tasks; integrate action/state/cognition/form/retrieval/responsive contracts; stress keyboard/touch/mixed input, zoom/reflow, orientation, on-screen keyboard and recovery; distinguish source-grounded structural competency from still-open browser/device/AT/human validation.
+The first Stage 4 block should map current Design Studio evidence into the Web Manager decision boundary rather than duplicate specialist study. It should establish how product/content/task priority becomes web visual hierarchy, how browser typography/color/imagery/component choices preserve truth and usability, what remains a Design Studio decision, and what browser/device/accessibility validation is required before production. Do not invent a universal MintTap visual style.
 
 ## Design Studio relationship
 
-Latest specialist state checked 2026-09-15: Web Design W001–W003 are PRACTICE/CRITIQUE and Foundation NOT PASSED. W003 contributes `task → relationship → stress signal → owner → adaptation → invariant → validation`, but measured harness results remain OPEN. 043 hands back hybrid-input, hover-independent, actual-zoom, virtual-keyboard, orientation, focus-continuity and in-progress state-migration challenge cases.
+Latest specialist state checked 2026-09-15: Web Design has advanced to **W001–W005 PRACTICE/CRITIQUE; Foundation NOT PASSED; W006 next**. W004 covers IA/URL/navigation/history/direct entry and W005 covers component/page systems/native semantics/state contracts. Layout/Interaction is Stage 1 PASS / Stage 2 entry audit next, with production/browser/device/AT/human validation still bounded.
 
-Web Manager does not edit Design Studio canonical files without authorization.
+044 hands Design Studio Web W006 complete-task scenario matrices and the full Web Manager contract stack for browser-rendered task-surface validation. Web Manager does not edit Design Studio canonical files without authorization.
 
 ## Study quality standard
 
