@@ -56,7 +56,8 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 
 051 — **Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility** — **PASS**.  
 052 — **Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
-053 — **Keyboard, Focus, Input Modality & Operable Interaction Accessibility** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+053 — **Keyboard, Focus, Input Modality & Operable Interaction Accessibility** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
+054 — **Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
 
 051 establishes the barrier-first model, accessibility/usability/inclusion distinction, web accessibility ecosystem, WCAG 2.2 normative/conformance structure, full-page/complete-process scope, automation limits, lifecycle evaluation and the reusable **Accessibility Evidence Contract**.
 
@@ -64,11 +65,13 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 
 053 establishes operability as a complete task/focus/state path rather than a tabbability inventory; distinguishes sequential focus, composite internal navigation, focus visibility/obscuration/restoration and focus-vs-selection; separates keyboard equivalence from pointer cancellation, non-drag alternatives and target-size obligations; extends responsive continuity with focus/input invariants; and adds the reusable **Operability / Focus Contract**.
 
+054 integrates field semantics into complete transaction accessibility: labels/instructions, validation, textual error identification and correction, error discovery/focus/recovery, async/status exposure, same-process redundant-entry reduction, cognitively accessible authentication, consequential-action error prevention and completion feedback. It adds the reusable **Accessible Transaction Contract** and preserves the claim boundary `accessible fields < accessible form state < accessible transaction < accessible complete process`.
+
 Next integrated study:
 
-054 — **Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion**.
+055 — **Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State**.
 
-Integrate labels/instructions, error identification/suggestion, status announcements, async/pending states, redundant entry, accessible authentication and recovery into complete support/account/governance transactions. Reuse Stage 3 form/transaction UX rather than repeating generic form theory.
+Integrate live/dynamic state, dialogs/transient layers, disclosure and composite-widget semantics/keyboard/focus behavior. Reuse 052–054 and Stage 3 interaction evidence rather than repeating generic component theory; connect directly to Design Studio W005/W006 runtime gaps.
 
 ---
 
@@ -78,15 +81,15 @@ Integrate labels/instructions, error identification/suggestion, status announcem
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 5 — ACTIVE; 051–053 PASS.**
+**Stage 5 — ACTIVE; 051–054 PASS.**
 
 ## Design Studio relationship
 
-Latest Web specialist state checked 2026-09-15: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W012/W013 provide executed Chromium responsive/navigation transfer. Highest-value executable gaps include W005 native/custom keyboard/focus/semantic behavior and W011 icon accessible-name/target/enlargement/forced-color runtime; true HTTP direct-entry/reload, integrated task-state, broader browser/device/AT and human evidence remain OPEN. These gaps are direct inputs to Stage 5 rather than evidence to duplicate.
+Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W012/W013 provide executed Chromium responsive/navigation transfer. Highest-value executable gaps include W005 native/custom keyboard/focus/semantic behavior, W006 integrated search/filter/table/edit async/recovery execution and W011 icon accessible-name/target/enlargement/forced-color runtime; true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN. These gaps are direct inputs to Stage 5 rather than evidence to duplicate.
 
-053 specifically hands W005 an execution matrix for Tab entry/exit, activation, visible focus, semantics/state synchronization and post-transition focus; W011 should add target/input-path checks. Responsive specimens should check sticky/overlay focus obscuration and hidden-variant focus leakage.
+054 specifically hands W006 an accessible-transaction runtime slice: native labels, invalid submission, error summary/field association, focus after error, pending/recoverable-error/success states and status exposure. Authentication specimens should test paste/autofill, not merely visual OTP layout. Layout/Interaction should model transaction states and focus/input retention explicitly; Type should stress KO/EN error/help strings; Color should keep error/success/required/disabled/pending distinguishable without hue-only meaning.
 
-For accessibility work, Web Manager supplies page/process scope, real task/content evidence, functional-need/barrier map, semantic/native-vs-custom contract, input/focus/state/recovery requirements, responsive/user-preference conditions and validation/claim boundaries. Design Studio specialists own their execution domains; their exercise PASS statuses do not establish MintTap production accessibility. No Design Studio canonical file is edited by Web Manager without authorization.
+For accessibility work, Web Manager supplies page/process scope, real task/content evidence, functional-need/barrier map, semantic/native-vs-custom contract, input/focus/state/recovery requirements, transaction/re-entry/authentication/error-prevention requirements, responsive/user-preference conditions and validation/claim boundaries. Design Studio specialists own their execution domains; their exercise PASS statuses do not establish MintTap production accessibility. No Design Studio canonical file is edited by Web Manager without authorization.
 
 ## Study quality standard
 
