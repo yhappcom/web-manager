@@ -59,7 +59,8 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 053 — **Keyboard, Focus, Input Modality & Operable Interaction Accessibility** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
 054 — **Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
 055 — **Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
-056 — **Reading, Reflow, Zoom, Motion, Timing & User-Preference Accessibility** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+056 — **Reading, Reflow, Zoom, Motion, Timing & User-Preference Accessibility** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
+057 — **Media Accessibility, Captions, Transcripts, Audio Description & Product-Demo Communication** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
 
 051 establishes the barrier-first model, accessibility/usability/inclusion distinction, WCAG 2.2 normative/conformance structure, full-page/complete-process scope, automation limits, lifecycle evaluation and the reusable **Accessibility Evidence Contract**.
 
@@ -73,11 +74,13 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 
 056 integrates user-driven adaptation across 200% text enlargement, 320 CSS-px-equivalent reflow, text-spacing overrides, orientation, motion/flash regimes, reduced-motion preferences and content-controlled timing. It separates mobile responsiveness from zoom evidence, local intrinsic 2-D overflow from whole-page overflow, normative AA/A motion obligations from AAA interaction-animation guidance, and temporary presentation from genuine time-limited tasks. It adds the reusable **Adaptation / User-Preference Accessibility Contract** and a browser→preference→complete-task validation ladder.
 
+057 classifies time-based media before selecting techniques; distinguishes captions, transcripts, audio description and media alternatives; preserves WCAG A/AA boundaries; plans important visual information into narration where appropriate; separates media-content accessibility from player accessibility; and extends 048's Product Evidence Ledger so video plus captions/transcript/description/source app build are versioned as one communication unit. It adds the reusable **Product-Demo Media Accessibility Contract**.
+
 Next integrated study:
 
-057 — **Media Accessibility, Captions, Transcripts, Audio Description & Product-Demo Communication**.
+058 — **Stage 5 Integration: Accessibility Conformance, Complete-Process Evidence & App-Company Competency Review**.
 
-Establish time-based-media accessibility for app previews, tutorials, support media and product demonstrations. Reuse 048 static product-media evidence rather than repeating image accessibility. Distinguish normative WCAG media alternatives from optional communication improvements and platform/store-specific media policy. After 057, perform a Stage 5 integration/conformance competency review unless a prerequisite gap emerges.
+Integrate 051–057 across Company, Product, Support and Governance/account-control page/process families. Test whether the seven contracts form a coherent accessibility evidence system and whether any prerequisite gap remains. Production conformance remains OPEN until real implementation/browser/AT/complete-process evidence exists. If integration reveals no prerequisite gap, use 058 as the Stage 5 Foundation/Practitioner gate.
 
 ---
 
@@ -87,15 +90,15 @@ Establish time-based-media accessibility for app previews, tutorials, support me
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 5 — ACTIVE; 051–056 PASS.**
+**Stage 5 — ACTIVE; 051–057 PASS.**
 
 ## Design Studio relationship
 
-Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W012/W013 provide executed Chromium responsive/navigation transfer. W003 establishes page/component/intrinsic-artifact adaptation ownership. Actual browser-UI zoom, W005 native/custom semantic execution, W006 integrated task-state execution, W011 icon runtime, true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
+Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W014 now directly treats native vs custom button semantics/behavior but executable runtime remains open. W012/W013 provide executed Chromium responsive/navigation transfer. W003 establishes page/component/intrinsic-artifact adaptation ownership. Actual browser-UI zoom, W006 integrated task-state execution, W011 icon runtime, true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
 
-056 specifically hands Web Design actual browser zoom/reflow/text-spacing execution rather than viewport-emulation inference, and future motion/timing state execution. Layout/Interaction owns adaptation and alternate motion-state presentation; Type stresses real KO/EN content under enlargement/spacing overrides; Color evidence for forced/user color environments is reused rather than duplicated. Specialist exercise PASS statuses do not establish MintTap production accessibility.
+057 adds media-specific handoff: Web Design owns actual player hierarchy/control/focus/discoverability/reflow validation; Layout/Interaction preserves essential controls and state when media is embedded in responsive/modal/carousel structures; Type validates real caption/subtitle legibility including KO/EN; Color validates caption/control contrast and non-color state cues. Web Manager retains media classification, normative level mapping, equivalence, product provenance/lifecycle and store-vs-web claim boundaries.
 
-For accessibility work, Web Manager supplies page/process scope, functional-need/barrier map, semantic/native-vs-custom contract, input/focus/state/recovery requirements, transaction requirements, dynamic-state/announcement classification, adaptation/user-preference invariants and validation/claim boundaries. No Design Studio canonical file is edited by Web Manager without authorization.
+For accessibility work, Web Manager supplies page/process scope, functional-need/barrier map, semantic/native-vs-custom contract, input/focus/state/recovery requirements, transaction requirements, dynamic-state/announcement classification, adaptation/user-preference invariants, media-equivalence contract and validation/claim boundaries. No Design Studio canonical file is edited by Web Manager without authorization.
 
 ## Study quality standard
 
