@@ -46,30 +46,32 @@ Retained boundary: standards/structural review do not prove measured usability, 
 **CURRENT MAJOR CURRICULUM STAGE — ACTIVE.**
 
 051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility — **PASS**.  
-052 — Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+052 — Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
+053 — Keyboard, Focus, Input Modality & Operable Interaction Accessibility — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
 
-Current semantic-accessibility model:
+Current operability model:
 
-`user/task meaning → native HTML semantics → DOM → user-agent accessibility mapping → role/name/state/property → platform accessibility API → AT presentation/action → task outcome`
+`task/function → available input paths → focusability/reachability → activation/navigation → visible/predictable focus → state transition → focus continuation/restoration → task outcome → runtime/AT/human evidence`
 
 Retained judgments:
-- native HTML is the baseline when it provides the required semantics and behavior;
-- semantic equivalence, behavioral equivalence and accessibility equivalence are not interchangeable;
-- role, accessible name, description, state/property, behavior and relationship/context are separate obligations;
-- ARIA augments or supplies semantics; it does not automatically implement native keyboard/focus/form/disabled behavior;
-- explicit ARIA requires a concrete semantic delta and conformance/runtime justification rather than being a routine accessibility patch;
-- accessible-name computation has precedence and role constraints; `aria-label` is not a harmless universal annotation;
-- responsive visual transformations must preserve semantic/name/state invariants;
-- valid HTML/ARIA does not prove computed accessibility exposure, runtime interaction, AT behavior, complete-process accessibility or human usability;
-- AccName 1.2 remains a Working Draft; AccName 1.1 is the current Recommendation baseline used for stable status claims.
+- keyboard accessibility concerns complete functionality, not merely whether controls can receive Tab focus;
+- focusability, operability and successful task completion are separate claims;
+- DOM/reading order, visual order and sequential focus order should reinforce the same task model; positive `tabindex` is not a preferred repair for structural order problems;
+- focus existence, visibility, non-obscuration, predictability and post-transition continuation/restoration are separate obligations;
+- focus and selected/current/pressed/disabled state are distinct;
+- ARIA widget semantics do not supply custom keyboard behavior; composite widgets add focus/state/runtime burden;
+- keyboard equivalence does not by itself satisfy pointer cancellation, non-drag single-pointer alternatives or target-size obligations;
+- responsive transformations must preserve task, semantic, focus and input-modality invariants;
+- WCAG 2.4.13 Focus Appearance remains AAA; do not misstate its stronger geometry/contrast requirements as AA;
+- static conformance does not prove browser/AT/device or disability-informed human outcomes.
 
-Reusable artifacts now include **Accessibility Evidence Contract** (051) and **Semantic Accessibility Contract** (052).
+Reusable artifacts now include **Accessibility Evidence Contract** (051), **Semantic Accessibility Contract** (052) and **Operability / Focus Contract** (053).
 
 ## Highest-value next integrated block
 
-053 — **Keyboard, Focus, Input Modality & Operable Interaction Accessibility**.
+054 — **Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion**.
 
-Study native keyboard behavior, sequential focus navigation, focus order/visibility/management, modal/transient focus, custom/composite-widget boundary, pointer/target considerations and responsive/input continuity. Reuse Stage 3 and Design Studio runtime evidence rather than repeating generic interaction theory.
+Integrate labels/instructions, error identification/suggestion, status announcements, async/pending states, redundant entry, accessible authentication and recovery into complete support/account/governance transactions. Reuse Stage 3 form/transaction UX rather than repeating it.
 
 ---
 
@@ -86,20 +88,20 @@ Specialist files supersede stale coordinator summaries.
 
 ### Current outgoing accessibility handoff
 
-For real MintTap work, provide Design Studio the Accessibility Evidence Contract + Semantic Accessibility Contract plus page/process task model and real KO/EN content.
+For real MintTap work, provide Design Studio the Accessibility Evidence + Semantic Accessibility + Operability/Focus contracts, page/process task model and real KO/EN content.
 
-Web Design: compare native vs custom controls using computed role/name/state, keyboard/focus and state synchronization; preserve names across icon-only responsive variants.  
-Layout/Interaction: bind semantic state to task-state transitions, disabled/pending/error/success behavior and focus restoration.  
-Type: flag responsive/truncation/icon substitutions that alter visible-label comprehension or naming.  
-Color: programmatic state never replaces visible/non-color cues for selected/error/disabled/focus.
+Web Design: execute W005 native-vs-custom controls across Tab entry/exit, activation, visible focus, computed semantics, state synchronization and post-transition focus; extend W011 with target/input-path checks; test sticky/overlay obscuration and hidden responsive variants.  
+Layout/Interaction: make focus destination/restoration an explicit state transition; distinguish focus from selected/current/pressed and define transient-layer entry/exit.  
+Type: use real KO/EN labels when responsive truncation/removal could change discoverability.  
+Color: keep focus visibly distinguishable from selected/current/error/disabled and validate relevant user color environments.
 
-Web Manager retains accessibility scope, native-vs-custom justification, semantic contract, cross-channel process requirements, evidence/claim boundaries and release governance. No Design Studio canonical file was edited.
+Web Manager retains accessibility scope, input-equivalence obligations, native-vs-custom justification, semantic/focus contracts, cross-channel process requirements, evidence/claim boundaries and release governance. No Design Studio canonical file was edited.
 
 ---
 
 # Important unknown MintTap facts
 
-Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library, custom controls, launch priorities, applicable jurisdictions/legal accessibility duties, company conformance policy, production brand/fonts/components/media, third-party widgets, support/contact/account/deletion/privacy-control behavior, supported locales, target browser/OS/AT/input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
+Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, custom controls, focus-management behavior, sticky/overlay/dialog/carousel/drag interactions, launch priorities, applicable jurisdictions/legal accessibility duties, company conformance policy, production brand/fonts/components/media, third-party widgets, support/contact/account/deletion/privacy-control behavior, supported locales, target browser/OS/AT/keyboard/touch/speech-input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
 
 Do not infer these from generic app-company patterns or specialist exercises.
 
@@ -113,6 +115,6 @@ Do not infer these from generic app-company patterns or specialist exercises.
 - Stage 2: COMPLETE at intended foundation/practitioner level.
 - Stage 3: COMPLETE at intended foundation/practitioner level.
 - Stage 4: COMPLETE at intended foundation/practitioner level.
-- Stage 5: ACTIVE; 051–052 PASS.
-- Current next work: **053 — Keyboard, Focus, Input Modality & Operable Interaction Accessibility**.
+- Stage 5: ACTIVE; 051–053 PASS.
+- Current next work: **054 — Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
