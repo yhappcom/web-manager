@@ -59,7 +59,13 @@ Reusable output: **Web Color / Surface / State Contract**.
 
 047 treats color as a semantic/page/runtime system rather than a palette exercise: brand versus action/state roles, foreground/surface relationships, color-independent meaning, text/non-text contrast boundaries, light/dark negotiation, forced colors, user contrast preferences, product imagery interaction and modern/wide-gamut CSS color adoption criteria. Exact palette authorship remains a Design Studio Color/Web responsibility.
 
-**STAGE 4 ACTIVE — 045–047 FOUNDATION/PRACTITIONER CHECKPOINTS PASSED.**
+048 — Web Imagery, Iconography, App Screenshots & Product Demonstration Literacy  
+`048-stage4-web-imagery-iconography-app-screenshots-product-demonstration-literacy.md`  
+Reusable output: **Product Media / Non-Text Contract**.
+
+048 treats app screenshots and demonstrations as governed product evidence rather than decoration. It separates responsive resource selection from art direction; classifies non-text content by purpose; preserves real text for website copy; adds screenshot provenance/presentation/claim-integrity and lifecycle rules; separates icon glyph/meaning/control/accessibility/state layers; and establishes truthful website↔store continuity without requiring identical compositions. Image delivery/performance depth remains deferred to Stage 7.
+
+**STAGE 4 ACTIVE — 045–048 FOUNDATION/PRACTITIONER CHECKPOINTS PASSED.**
 
 ---
 
@@ -68,19 +74,19 @@ Reusable output: **Web Color / Surface / State Contract**.
 **Stage 1 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 4 — ACTIVE; 045–047 checkpoints PASS.**
+**Stage 4 — ACTIVE; 045–048 checkpoints PASS.**
 
 Next highest-value integrated topic:
 
-**048 — Web Imagery, Iconography, App Screenshots & Product Demonstration Literacy.**
+**049 — Components, Page Systems, Visual Consistency & Responsive Design-System Governance.**
 
-Focus on truthful product evidence, responsive media, image semantics, non-text signals, screenshot framing and store↔web visual continuity. Reuse Design Studio specialist evidence; defer image-delivery/performance depth to the later Performance stage.
+Integrate hierarchy, typography, color/state and product media into reusable semantic component/page systems. Focus on role/state contracts, variants, responsive composition, token/handoff governance, multi-product reuse and drift detection. Avoid duplicating frontend engineering and later accessibility/performance depth.
 
 ## Design Studio relationship
 
-Latest Color specialist state checked 2026-09-15: **Stage 1 PASS; Stage 2 entry audit next (C016)**. Its PASS explicitly excludes production Web integration, physical-device and human-observer validation. Relevant bridge evidence includes C001 user overrides, C002 semantic tokens, C006 context transfer, C010 gamut work, C011 forced-colors resilience and C015 perceptual-context capstone. Latest previously checked Web Design and Type specialist files are also Stage 1 PASS with Stage 2 not yet passed. Specialist files supersede stale global summaries.
+Latest Web specialist state checked 2026-09-15: **Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED**. W011 establishes iconography/non-text direct practice; W012 adds executed Chromium responsive transfer. Icon accessible-name/target/enlargement/forced-color runtime, broader browser/device/AT evidence and human recognition remain open. Latest Color specialist state: **Stage 1 PASS; Stage 2 entry audit next (C016)** and explicitly excludes production Web integration/physical-device/human-observer validation. Specialist files supersede stale global summaries.
 
-045 hands Design Studio a Visual/Web Design Review Contract; 046 adds the Web Typography/Reading Contract; 047 adds the Web Color/Surface/State Contract with exact semantic roles and runtime environment obligations. Web Manager does not edit Design Studio canonical files without authorization.
+045 hands Design Studio a Visual/Web Design Review Contract; 046 adds the Web Typography/Reading Contract; 047 adds the Web Color/Surface/State Contract; 048 adds the Product Media/Non-Text Contract with evidence provenance, crop invariants, accessible-equivalent and icon-label obligations. Web Manager does not edit Design Studio canonical files without authorization.
 
 ## Study quality standard
 
