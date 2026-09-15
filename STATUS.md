@@ -47,31 +47,32 @@ Learning sequence: `history/problem → design principle → standard → curren
 052 — Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
 053 — Keyboard, Focus, Input Modality & Operable Interaction Accessibility — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
 054 — Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
-055 — Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+055 — Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
+056 — Reading, Reflow, Zoom, Motion, Timing & User-Preference Accessibility — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
 
-Current accessible-application-state model:
+Current adaptation-resilience model:
 
-`task state → visible state → DOM/semantic state → focus state → selection/active state → announcement state → input behavior → recovery/continuation → complete-task validation`
+`user need/preference → user-agent/platform transformation → effective presentation/state → layout/content adaptation → task invariant → failure/recovery → validation`
 
-Retained judgments:
-- dynamic accessibility is a synchronization problem across visual, semantic, focus, selection/value, announcement and task/data state;
-- `modal appearance != modal behavior != modal semantics`; a backdrop or `aria-modal` alone does not establish an accessible modal interaction;
-- disclosure requires trigger operability + truthful expanded state + controlled-content visibility; a chevron animation is not the state contract;
-- status/live updates, deliberate focus movement and modal interruption are different communication mechanisms and should be selected by task consequence;
-- composite roles such as tabs, grids, menus, toolbars and comboboxes create keyboard/focus/state commitments and should not be applied merely because a layout resembles the pattern;
-- `DOM focus != active descendant != selection != current value`; these dimensions require separate ownership where applicable;
-- APG Tabs ties automatic activation to low latency, establishing a direct accessibility↔performance dependency;
-- responsive recomposition that changes interaction pattern requires explicit state migration and must not leave hidden duplicate controls focusable;
-- APG Tooltip remains work-in-progress guidance without task-force consensus; do not elevate it to normative implementation law;
-- static/DOM/accessibility-tree evidence does not prove actual screen-reader announcement or complete-task accessibility.
+Retained judgments added by 056:
+- responsive/mobile layout is not sufficient evidence for low-vision zoom/reflow accessibility;
+- Resize Text (AA), Reflow (AA) and Text Spacing (AA) are related but distinct obligations; WCAG text-spacing metrics are stress conditions, not required default typography;
+- 2-D reflow exceptions belong to bounded intrinsic artifacts such as genuine data tables, not automatically to the whole page shell;
+- actual browser zoom must not be inferred from viewport emulation; breakpoint changes still have to preserve required enlargement and content/functionality;
+- Orientation (AA) protects user/device orientation choice unless a particular orientation is genuinely essential;
+- auto-starting motion/update, interaction-triggered motion and flashing are different accessibility regimes; SC 2.3.3 Animation from Interactions is AAA, while Pause/Stop/Hide and flash obligations include Level A criteria;
+- `prefers-reduced-motion` is a useful preference signal/sufficient technique for a specific criterion, not a complete motion policy;
+- `temporary presentation != time-limited task`; durable alternative access can change whether disappearing feedback creates a time limit;
+- security/session rationale does not automatically exempt content-controlled time limits; timing, warning, extension, retained state and recovery require explicit analysis;
+- user-controlled presentation changes should preserve semantic/task invariants rather than author defaults being treated as the only valid rendering.
 
-Reusable artifacts now include **Accessibility Evidence Contract** (051), **Semantic Accessibility Contract** (052), **Operability / Focus Contract** (053), **Accessible Transaction Contract** (054), and **Accessible Application-State Contract** (055).
+Reusable artifacts now include **Accessibility Evidence Contract** (051), **Semantic Accessibility Contract** (052), **Operability / Focus Contract** (053), **Accessible Transaction Contract** (054), **Accessible Application-State Contract** (055), and **Adaptation / User-Preference Accessibility Contract** (056).
 
 ## Highest-value next integrated block
 
-056 — **Reading, Reflow, Zoom, Motion, Timing & User-Preference Accessibility**.
+057 — **Media Accessibility, Captions, Transcripts, Audio Description & Product-Demo Communication**.
 
-Integrate low-vision, cognitive and vestibular resilience across resize/zoom/reflow/text spacing/orientation, animation/motion, timing and user preferences. Reuse Stage 4 typography/color/responsive evidence rather than repeating visual-design theory. Preserve the distinction between normative WCAG obligations, browser/runtime behavior and human usability evidence.
+Establish time-based-media accessibility for app previews, tutorials, support media and product demonstrations. Reuse 048 static product-media evidence rather than repeating image accessibility. Distinguish normative WCAG media alternatives from optional communication improvements and platform/store-specific media policy. After 057, perform a Stage 5 integration/conformance competency review unless a prerequisite gap emerges.
 
 ---
 
@@ -79,29 +80,28 @@ Integrate low-vision, cognitive and vestibular resilience across resize/zoom/ref
 
 Latest relevant specialist-file state checked 2026-09-16:
 
-- **Web Design:** `progress/WEB_STATUS.md` governance sync 2026-09-15: Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. Highest-value executable gaps remain W005 native/custom keyboard/focus/semantic behavior, W006 integrated search/filter/table/edit async/recovery execution and W011 icon runtime; true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
-- **W005:** component/page-system practice already defines native-first semantic/state contracts and composite-widget distinctions; runtime transfer remains OPEN.
-- **W006:** complete-task surface practice already separates loading/empty/partial/pending/error/recovery state ownership; integrated runtime remains OPEN.
+- **Web Design:** `progress/WEB_STATUS.md`: Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. Highest-value executable gaps remain W005 native/custom keyboard/focus/semantic behavior, W006 integrated search/filter/table/edit async/recovery execution and W011 icon runtime; actual browser-UI zoom, true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
+- **W003:** responsive/adaptive practice establishes adaptation ownership across page, component and intrinsic artifact; 056 reuses this directly for accessibility reflow rather than duplicating responsive theory.
 - **Type/Color/Layout:** specialist evidence is reusable but does not establish MintTap production accessibility.
 
 Specialist files supersede stale coordinator summaries.
 
 ### Current outgoing accessibility handoff
 
-For real MintTap work, provide Design Studio the Accessibility Evidence, Semantic Accessibility, Operability/Focus, Accessible Transaction and Accessible Application-State contracts plus real page/process task models and KO/EN content.
+For real MintTap work, provide Design Studio all six current accessibility contracts plus real page/process task models and KO/EN content.
 
-Web Design: execute W005 with at least disclosure plus one true composite (tabs or combobox), asserting keyboard model, computed role/name/state, focus-vs-selection and visual/programmatic synchronization. Extend W006 runtime with dynamic status, pending/recoverable state and a modal/transient task layer; assert background inoperability, initial/return focus and state retention. Do not infer screen-reader announcement from DOM/accessibility-tree presence.  
-Layout/Interaction: model modal/transient layers, composite selection and responsive pattern changes as explicit state transitions; preserve `focus != selection != current != expanded != pending`.  
-Type: stress dialog/disclosure/status KO/EN strings and ensure wrapping does not hide close/cancel/recovery actions.  
-Color: focus, selected/current, expanded, disabled, pending and error states need distinguishable channels without hue-only meaning.
+Web Design: add actual browser-UI zoom/reflow/text-spacing execution when environment permits; do not substitute viewport emulation for zoom. Extend future integrated state execution with timeout/recovery and durable status where applicable. Inventory auto-motion/update and reduced-motion variants in product-media work.  
+Layout/Interaction: reuse adaptation ownership; define motion removal as alternate transition presentation while preserving state change, focus and task continuity.  
+Type: stress actual KO/EN/mixed-script strings under 200% enlargement and WCAG text-spacing overrides; diagnose clipping/wrapping without treating the spacing metrics as default typography.  
+Color: reuse forced-colors/user-environment evidence and ensure reduced-motion alternatives do not collapse state meaning to color alone.
 
-Web Manager retains accessibility scope, task semantics, state/announcement classification, responsive state migration, complete-process requirements and evidence/claim boundaries. No Design Studio canonical file was edited.
+Web Manager retains accessibility scope, normative level classification, timing/motion essentiality claim boundaries, user-preference/task invariants, complete-process requirements and evidence/claim boundaries. No Design Studio canonical file was edited.
 
 ---
 
 # Important unknown MintTap facts
 
-Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, dynamic components/dialogs/disclosures/tabs/comboboxes/search suggestions, use of native `<dialog>`/`inert`/custom focus traps, forms/server validation, custom controls, focus management, live-region/toast behavior, authentication/MFA/password-manager/autofill behavior, account/deletion/support/privacy-control processes, third-party process boundaries, launch priorities, applicable jurisdictions/legal accessibility duties, company conformance policy, production brand/fonts/components/media, supported locales, target browser/OS/AT/keyboard/touch/speech-input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
+Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, dynamic components/dialogs/disclosures/tabs/comboboxes/search suggestions, use of native `<dialog>`/`inert`/custom focus traps, forms/server validation, custom controls, focus management, live-region/toast behavior, authentication/MFA/password-manager/autofill behavior, session/OTP/time-limit behavior, account/deletion/support/privacy-control processes, third-party process boundaries, viewport/zoom configuration, real zoom/reflow/text-spacing behavior, orientation restrictions, animation/carousel/parallax/auto-update/flashing inventory, reduced-motion handling, production brand/fonts/components/media, supported locales, target browser/OS/AT/keyboard/touch/speech-input/screen-magnifier matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
 
 Do not infer these from generic app-company patterns or specialist exercises.
 
@@ -115,6 +115,6 @@ Do not infer these from generic app-company patterns or specialist exercises.
 - Stage 2: COMPLETE at intended foundation/practitioner level.
 - Stage 3: COMPLETE at intended foundation/practitioner level.
 - Stage 4: COMPLETE at intended foundation/practitioner level.
-- Stage 5: ACTIVE; 051–055 PASS.
-- Current next work: **056 — Reading, Reflow, Zoom, Motion, Timing & User-Preference Accessibility**.
+- Stage 5: ACTIVE; 051–056 PASS.
+- Current next work: **057 — Media Accessibility, Captions, Transcripts, Audio Description & Product-Demo Communication**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
