@@ -45,30 +45,31 @@ Retained boundary: standards/structural review do not prove measured usability, 
 
 **CURRENT MAJOR CURRICULUM STAGE — ACTIVE.**
 
-051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility — **PASS**.  
+052 — Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
 
-Core model:
+Current semantic-accessibility model:
 
-`user goal → functional need → environment/tool → barrier → consequence → accessible path → validation`
+`user/task meaning → native HTML semantics → DOM → user-agent accessibility mapping → role/name/state/property → platform accessibility API → AT presentation/action → task outcome`
 
 Retained judgments:
-- accessibility begins with functional needs/barriers, not disability stereotypes or a checklist;
-- accessibility, usability and inclusion overlap but are not interchangeable evidence claims;
-- accessible web use is a system spanning authored content, user agents, assistive technologies, user configuration and input modality;
-- WCAG 2.2 is the current W3C Recommendation baseline selected for new MintTap web engineering unless verified requirements dictate otherwise;
-- WCAG conformance requires level-in-full, full pages, complete processes, accessibility-supported reliance and non-interference;
-- responsive variants are part of the full-page conformance scope;
-- automated tools assist evaluation but cannot determine accessibility or conformance alone;
-- evidence must distinguish automated/static checks, manual browser checks, AT/input/device behavior, complete-process evaluation and human disability-informed evaluation;
-- app-company web accessibility includes discovery, product evidence, support, governance/account-control and cross-channel continuity, while native-app legal/standards applicability remains separately scoped.
+- native HTML is the baseline when it provides the required semantics and behavior;
+- semantic equivalence, behavioral equivalence and accessibility equivalence are not interchangeable;
+- role, accessible name, description, state/property, behavior and relationship/context are separate obligations;
+- ARIA augments or supplies semantics; it does not automatically implement native keyboard/focus/form/disabled behavior;
+- explicit ARIA requires a concrete semantic delta and conformance/runtime justification rather than being a routine accessibility patch;
+- accessible-name computation has precedence and role constraints; `aria-label` is not a harmless universal annotation;
+- responsive visual transformations must preserve semantic/name/state invariants;
+- valid HTML/ARIA does not prove computed accessibility exposure, runtime interaction, AT behavior, complete-process accessibility or human usability;
+- AccName 1.2 remains a Working Draft; AccName 1.1 is the current Recommendation baseline used for stable status claims.
 
-Reusable artifact: **Accessibility Evidence Contract** covering scope, barriers, semantics, input/focus, visual/non-text, responsive/user-preference, recovery, relied-upon technologies, validation layers, residual risks and claim authorization.
+Reusable artifacts now include **Accessibility Evidence Contract** (051) and **Semantic Accessibility Contract** (052).
 
 ## Highest-value next integrated block
 
-052 — **Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary**.
+053 — **Keyboard, Focus, Input Modality & Operable Interaction Accessibility**.
 
-Study how authored HTML becomes programmatic structure and controls, why native semantics are the baseline, accessible-name/role/state mechanics, ARIA's legitimate boundary and failure modes. Connect directly to Design Studio Web W005/W011 runtime gaps rather than repeating generic HTML foundations.
+Study native keyboard behavior, sequential focus navigation, focus order/visibility/management, modal/transient focus, custom/composite-widget boundary, pointer/target considerations and responsive/input continuity. Reuse Stage 3 and Design Studio runtime evidence rather than repeating generic interaction theory.
 
 ---
 
@@ -76,24 +77,29 @@ Study how authored HTML becomes programmatic structure and controls, why native 
 
 Latest relevant specialist-file state checked 2026-09-15:
 
-- **Web Design:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. Native/custom control semantics, integrated task-state execution, icon runtime, true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
+- **Web Design:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. Highest-value executable gaps explicitly include W005 native/custom keyboard/focus/semantic behavior and W011 icon accessible-name/target/enlargement/forced-color runtime; true HTTP direct-entry/reload, integrated task-state, broader browser/device/AT and human evidence remain OPEN.
 - **Type:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. Existing runtime evidence does not establish MintTap production reading/accessibility behavior.
-- **Color:** Stage 1 PASS; Stage 2 entry audit pending in last checked specialist state; existing evidence does not establish MintTap production accessibility.
-- **Layout/Interaction:** Stage 1 PASS with substantial runtime/state evidence; exact specialist status must be re-read before live handoff.
+- **Color:** Stage 1 PASS; existing evidence does not establish MintTap production accessibility.
+- **Layout/Interaction:** Stage 1 PASS with substantial runtime/state evidence; specialist file must be re-read before live handoff.
 
 Specialist files supersede stale coordinator summaries.
 
 ### Current outgoing accessibility handoff
 
-For real MintTap work, provide Design Studio the Accessibility Evidence Contract plus page/process task model, real KO/EN content, functional-need/barrier map, semantics, keyboard/input/focus/state/recovery requirements, responsive/user-preference conditions and explicit validation matrix.
+For real MintTap work, provide Design Studio the Accessibility Evidence Contract + Semantic Accessibility Contract plus page/process task model and real KO/EN content.
 
-Web Design owns component/browser execution; Layout/Interaction owns complete-task state/focus/recovery modeling; Type owns actual reading/wrapping/fallback behavior; Color owns contrast and non-color resilience. Web Manager retains accessibility scope, cross-channel process requirements, evidence/claim boundaries and release governance. No Design Studio canonical file was edited.
+Web Design: compare native vs custom controls using computed role/name/state, keyboard/focus and state synchronization; preserve names across icon-only responsive variants.  
+Layout/Interaction: bind semantic state to task-state transitions, disabled/pending/error/success behavior and focus restoration.  
+Type: flag responsive/truncation/icon substitutions that alter visible-label comprehension or naming.  
+Color: programmatic state never replaces visible/non-color cues for selected/error/disabled/focus.
+
+Web Manager retains accessibility scope, native-vs-custom justification, semantic contract, cross-channel process requirements, evidence/claim boundaries and release governance. No Design Studio canonical file was edited.
 
 ---
 
 # Important unknown MintTap facts
 
-Real project decisions still require verified evidence for actual app/page/process inventory, launch priorities, applicable jurisdictions/legal accessibility duties, company conformance policy, production brand/fonts/components/media, frontend/third-party widgets, support/contact/account/deletion/privacy-control behavior, supported locales, target browser/OS/AT/input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
+Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library, custom controls, launch priorities, applicable jurisdictions/legal accessibility duties, company conformance policy, production brand/fonts/components/media, third-party widgets, support/contact/account/deletion/privacy-control behavior, supported locales, target browser/OS/AT/input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
 
 Do not infer these from generic app-company patterns or specialist exercises.
 
@@ -107,6 +113,6 @@ Do not infer these from generic app-company patterns or specialist exercises.
 - Stage 2: COMPLETE at intended foundation/practitioner level.
 - Stage 3: COMPLETE at intended foundation/practitioner level.
 - Stage 4: COMPLETE at intended foundation/practitioner level.
-- Stage 5: ACTIVE; 051 PASS.
-- Current next work: **052 — Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary**.
+- Stage 5: ACTIVE; 051–052 PASS.
+- Current next work: **053 — Keyboard, Focus, Input Modality & Operable Interaction Accessibility**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
