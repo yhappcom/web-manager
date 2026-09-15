@@ -36,23 +36,23 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 
 ## Stage 6 — Search / Discovery / Content Quality
 
-059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization & App-Company Findability — PASS.**
+059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization & App-Company Findability — PASS.**  
+Establishes the search pipeline and Search Discovery Evidence Contract.
 
-Establishes the search pipeline from stable URL/discovery through crawl/fetch, rendering, indexing/deduplication, canonical selection and serving; creates a Search Discovery Evidence Contract.
+060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent — PASS.**  
+Establishes truthful page meaning and Search Content Intent Contract.
 
-060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent — PASS.**
+061 — **Structured Data, Entity/Site Identity, Software-App Representation & Search Appearance Boundaries — PASS.**  
+Separates vocabulary, engine support, validity, eligibility, display and ranking; establishes Structured Data Evidence Contract.
 
-Establishes truthful page meaning after discovery; separates title/H1/search title link and meta-description/snippet; maps distinct needs to authoritative pages; treats internal links as navigation/discovery/context; creates a Search Content Intent Contract.
-
-061 — **Structured Data, Entity/Site Identity, Software-App Representation & Search Appearance Boundaries — PASS.**
-
-Separates Schema.org vocabulary from engine-supported search features and separates syntax validity, eligibility, actual display and ranking. Treats structured data as an assertion about existing page/entity truth, not a content substitute. Distinguishes Organization, app/product, platform instance and store listing; examines current Google SoftwareApplication requirements without inventing ratings/reviews; creates a **Structured Data Evidence Contract** spanning truth source, markup, validator, crawler observation, Search Console, observed appearance and lifecycle.
+062 — **Localization & International Search: Language/Locale URLs, hreflang, Canonical Interaction, App-Store Locale Continuity & Multilingual Content Quality — PASS.**  
+Treats locale as resource architecture rather than translation decoration; separates hreflang, language detection, canonicalization and redirects; coordinates locale URLs/canonical/hreflang; distinguishes web, app-binary, App Store and Google Play localization systems; establishes an **International Search / Locale Contract** and cross-channel Locale Continuity Matrix.
 
 Next integrated study:
 
-062 — **Localization & International Search: Language/Locale URLs, hreflang, Canonical Interaction, App-Store Locale Continuity & Multilingual Content Quality**.
+063 — **Search Measurement & Webmaster Operations: Search Console/Bing Webmaster Tools, Index Coverage, URL Inspection, Sitemaps, Query/Page Evidence & Diagnostic Workflow.**
 
-Study locale architecture before keyword tooling or performance optimization because language/region URLs, canonicalization and store/web continuity are structural and expensive to retrofit.
+059–062 now define intended search resources, meaning, entity classification and locale relationships. Study observation/diagnostics next so later optimization is based on crawler/index/query evidence rather than assumptions.
 
 ---
 
@@ -63,13 +63,12 @@ Study locale architecture before keyword tooling or performance optimization bec
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 5 — COMPLETE at intended foundation/practitioner level; 051–058 PASS.**  
-**Stage 6 — ACTIVE; 059–061 PASS.**
+**Stage 6 — ACTIVE; 059–062 PASS.**
 
 ## Design Studio relationship
+Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W016 provides actual Chromium native/custom control transfer 14/14. W015 real Fetch/DOM/network transfer, true HTTP direct-entry/reload/404, W011 icon runtime, actual browser-UI zoom and broader browser/device/AT/human evidence remain OPEN.
 
-Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W016 now provides actual Chromium native/custom control transfer 14/14. W015 real Fetch/DOM/network transfer, true HTTP direct-entry/reload/404, W011 icon runtime, actual browser-UI zoom and broader browser/device/AT/human evidence remain OPEN.
-
-059–061 extend the true-HTTP/IA handoff: future runtime transfer should verify representative route direct entry, status/redirect/404 semantics, initial-vs-rendered content identity, crawlable links, title/H1, metadata/canonical/index directives, deep-entry orientation and crawler-visible structured data on the same canonical resources. Organization/app/store markup must derive from verified product/company truth. User-visible breadcrumb orientation and BreadcrumbList should share the same intended IA. Web Manager retains search/query intent, entity/content truth, index/canonical strategy, structured-data applicability and crawler/search-result evidence ownership. No Design Studio canonical file is edited without authorization.
+059–062 extend the true-HTTP/IA handoff: future runtime transfer should verify representative route direct entry/status/redirect/404, initial-vs-rendered identity, crawlable links, title/H1, metadata/canonical/index directives, crawler-visible structured data and, when real locales exist, stable locale URLs, reciprocal hreflang, localized main content, language-switch deep-entry continuity and fallback behavior. Type owns production typography evidence for Korean/Latin/fallback/expansion; Layout/Interaction owns language-switch/fallback task continuity; Web Manager owns search/content/entity/localization truth and crawler/index/result evidence. No Design Studio canonical file is edited without authorization.
 
 ## Study quality standard
 A substantial study should include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, MintTap relevance without invented facts, durable vs changeable behavior, and competency/application checks.
