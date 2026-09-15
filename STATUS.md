@@ -32,66 +32,62 @@ Learning sequence: `history/problem → design principle → standard → curren
 # Stage 5 — Accessibility
 **COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.**
 
-051–057 establish seven reusable contracts: Accessibility Evidence; Semantic Accessibility; Operability/Focus; Accessible Transaction; Accessible Application-State; Adaptation/User-Preference; Product-Demo Media Accessibility.
-
-058 — **Stage 5 Integration: Accessibility Conformance, Complete-Process Evidence & App-Company Competency Review — PASS.**
-
-Integrated model:
-
-`user goal → functional need/barrier → page/process scope → semantic exposure → operability/focus → transaction/recovery → dynamic application state → adaptation/user preference → media equivalence → accessibility-supported implementation → complete-process evidence → bounded conformance statement → lifecycle regression control`
-
-Retained judgments from 058:
-- individual success-criterion/component evidence does not equal page/process/site conformance;
-- WCAG 2.2 conformance requires level + full pages + complete processes + accessibility-supported ways + non-interference;
-- responsive variations presented automatically belong to full-page conformance scope;
-- WCAG-EM 2.0, published 2026-07-23 as a W3C Group Note, provides evaluation scope/exploration/sampling/evaluation/reporting methodology but does not replace WCAG or lifecycle QA;
-- representative sampling is evidence strategy, not permission to omit known states, variants or complete-process steps;
-- Company, Product, Support and Governance/account-control families require different risk-weighted contract combinations;
-- automation, browser/manual, accessibility representation, AT/device, complete-process and disability-informed human evidence must remain distinguishable;
-- accessibility-supported implementation must be tied to an actual support matrix rather than inferred from valid syntax;
-- conformance claims are scoped/date/version/level claims, not an unbounded marketing adjective;
-- accessibility regression governance belongs throughout design/development/release.
-
-Production `minttap.app` conformance remains **OPEN** pending real implementation/browser/AT/device/complete-process/human evidence.
+051–057 establish seven reusable contracts; 058 integrates them across Company, Product, Support and Governance/account-control families. Production `minttap.app` conformance remains **OPEN** pending real implementation/browser/AT/device/complete-process/human evidence.
 
 ---
 
 # Stage 6 — Search / Discovery / Content Quality
 
-**READY TO START — CURRENT MAJOR CURRICULUM STAGE.**
+**ACTIVE — FOUNDATION/PRACTITIONER STUDY.**
 
-Highest-value opening block:
+059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization & App-Company Findability — PASS.**
 
-059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization and App-Company Findability**.
+Established model:
 
-Start from how search engines discover, fetch, render, index and select representations of web resources before keyword tactics, structured data or growth optimization. Connect Company/Product/Support/Governance IA to discovery without assuming search-engine behavior from marketing folklore.
+`publish resource → expose stable URL → discover → crawl/fetch → parse → render when applicable → extract content/links/signals → index/deduplicate → canonical selection → serve/rank → revisit after change`
+
+Retained judgments from 059:
+- discovery, crawling, rendering, indexing, canonical selection and serving are separate diagnostic stages;
+- sitemap inclusion and recrawl/submission are discovery/freshness mechanisms, not indexing guarantees;
+- robots crawl control, `noindex` and authentication/access control solve different problems;
+- JavaScript rendering is supported by Google but does not make rendering architecture search-neutral;
+- HTTP status/direct-entry behavior remains machine-visible search meaning, not merely a browser UX detail;
+- canonicalization selects a representative among duplicate/similar URLs and site-declared canonical preference is not an absolute command;
+- external search turns deep Product/Support/Governance URLs into possible entry surfaces, linking Stage 6 back to Stage 2 wayfinding;
+- search operations require crawler-observed evidence, not source-code intention alone;
+- a reusable **Search Discovery Evidence Contract** now separates content identity, intended URL, discovery path, fetch/status, crawl/index directives, initial/rendered content, canonical intent/observation, sitemap, lifecycle and index evidence.
+
+Production `minttap.app` search state remains **OPEN** pending actual route inventory, rendering/deployment architecture, robots/sitemap/canonical/redirect inspection, Google/Bing webmaster evidence and locale strategy.
+
+Highest-value next block:
+
+060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent**.
+
+Proceed from machine discovery to page meaning and searcher usefulness before structured data, keyword tooling or growth optimization.
 
 ---
 
 # Design Studio relationship
 
 Latest relevant specialist state checked 2026-09-16:
-- **Web Design:** `progress/WEB_STATUS.md`: Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W014 establishes native-vs-custom button source-grounded contract but executable runtime remains open. W006 integrated task-state execution, W011 icon runtime, actual browser-UI zoom, true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
-- **Type/Color/Layout:** specialist evidence is reusable but does not establish MintTap production accessibility. Current specialist status reports Color and Layout/Interaction Stage 2 PASS; Type Stage 2 PRACTICE; Web Stage 2 PRACTICE.
+- **Web Design:** `progress/WEB_STATUS.md`: Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W015 now provides 17/17 deterministic integrated task-state/recovery execution, but real Fetch/DOM/network transfer remains OPEN. W014 native/custom control browser execution, W011 icon runtime, actual browser-UI zoom, true HTTP direct-entry/reload/404, broader browser/device/AT and human evidence remain OPEN.
+- coordinator `progress/STATUS.md` is stale relative to the specialist status; `WEB_STATUS.md` is the more current Web evidence.
 
-### Current outgoing accessibility handoff
+### Current Stage 6 handoff
 
-For live MintTap work, Web Manager supplies page/process scope, functional barriers, all seven Stage 5 contracts, actual content/task models and evidence/claim boundaries.
+059 adds search-discovery reasons to the existing true-HTTP runtime gap. When Web Design can execute a real HTTP route harness, representative Company/Product/Support/Governance routes should verify direct entry, `200`/redirect/`404`, initial-vs-rendered content identity, crawlable links and route-specific metadata/canonical/index directives where applicable. Web Manager retains search intent, canonical/index strategy and crawler/index evidence ownership.
 
-Web Design: execute integrated slices rather than isolated visual components; preserve computed semantics, keyboard/focus, dynamic state and responsive/zoom evidence.  
-Layout/Interaction: validate complete task/state models, focus destinations, modal/background behavior, responsive state migration and recovery.  
-Type: validate actual KO/EN/mixed strings under enlargement/spacing/wrapping plus errors/status/media captions.  
-Color: validate semantic-state contrast and user-environment behavior without color-only meaning.
+Layout/Interaction should treat externally discovered deep pages as entry surfaces that retain identity/wayfinding/recovery. Type should preserve actual KO/EN/mixed text rendering but styling cannot substitute for DOM-visible textual meaning. No new Color-specific dependency was introduced by 059.
 
-Web Manager retains evaluation scope, WCAG level classification, complete-process boundaries, accessibility-supported technology assumptions, cross-contract integration, conformance wording and lifecycle governance. No Design Studio canonical file was edited.
+No Design Studio canonical file was edited.
 
 ---
 
 # Important unknown MintTap facts
 
-Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, dynamic controls, forms/server validation, focus/live-region behavior, authentication/MFA/session/OTP/account-deletion processes, third-party boundaries, viewport/zoom/reflow behavior, motion/media inventory, production brand/fonts/components, supported locales, target browser/OS/AT/input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
+Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, production brand/fonts/components, supported locales, analytics/privacy constraints and all prior accessibility production evidence.
 
-Stage 6 will additionally require actual robots directives, sitemap/canonical strategy, rendering architecture, deployment URLs, Search Console access/state, structured-data usage and content/index inventory when project mode begins. Do not infer these from generic app-company patterns.
+Stage 6 additionally requires actual URL/route inventory, rendering/deployment architecture, robots directives, sitemap/canonical/redirect strategy, HTTP direct-entry/404 behavior, Google Search Console/Bing Webmaster ownership and reports, indexed/canonical coverage, locale URL strategy, staging/demo exposure and content/index inventory. Do not infer these from generic app-company patterns.
 
 ---
 
@@ -103,6 +99,7 @@ Stage 6 will additionally require actual robots directives, sitemap/canonical st
 - Stage 2: COMPLETE at intended foundation/practitioner level.
 - Stage 3: COMPLETE at intended foundation/practitioner level.
 - Stage 4: COMPLETE at intended foundation/practitioner level.
-- Stage 5: **COMPLETE at intended foundation/practitioner level; 051–058 PASS.**
-- Current next work: **059 — Stage 6 Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization and App-Company Findability**.
+- Stage 5: COMPLETE at intended foundation/practitioner level; 051–058 PASS.
+- Stage 6: **ACTIVE; 059 PASS.**
+- Current next work: **060 — Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
