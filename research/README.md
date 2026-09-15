@@ -78,9 +78,13 @@ Integrated contract: `entry context → identity/orientation → destination pro
 `042-stage3-search-filter-selection-results-list-detail-foundations.md`  
 **FOUNDATION/PRACTITIONER CHECKPOINT PASSED.** Reusable output: **Retrieval Contract**.
 
-042 establishes browse/search/filter/sort/ranking separation; explicit draft/submitted query and filter state; immediate-vs-explicit apply semantics; safe URL/history/shareability boundaries; result identity; loading/empty/partial/stale/error/canceled differentiation; `0 results ≠ retrieval failure`; stale-response protection; accessible status exposure; list/detail return continuity; suggestion/autocomplete as a separate surface; and a deliberate decision not to require launch-time site search without evidence.
+043 — Responsive Web Interaction, Input Modality & Cross-Device Continuity  
+`043-stage3-responsive-input-modality-cross-device-continuity.md`  
+**FOUNDATION/PRACTITIONER CHECKPOINT PASSED.** Reusable output: **Responsive/Input Continuity Contract**.
 
-Primary/current evidence checked 2026-09-15: WHATWG HTML Living Standard, WHATWG URL Standard, WAI-ARIA 1.2/APG Search Landmark, WCAG 2.2/Understanding 4.1.3, and Design Studio Web W003 status.
+043 establishes that viewport geometry and input capability are independent dimensions; distinguishes primary/all pointer and hover capabilities without treating them as keyboard/device detectors; requires hover-independent essential tasks; connects WCAG pointer/drag/target constraints; separates layout vs visual viewport and dynamic browser UI; treats VirtualKeyboard as progressive enhancement unless target evidence supports it; separates browser zoom/pinch/text enlargement/localization/reflow; preserves source/focus/task sequence; and defines responsive/cross-device continuity as task/state persistence rather than pixel identity.
+
+Primary/current evidence checked 2026-09-15: W3C Media Queries Level 5, WCAG 2.2/current WAI Understanding documents, WHATWG HTML sequential focus navigation, CSSOM View/VisualViewport, current viewport-unit/VirtualKeyboard references, and Design Studio Web W003 status.
 
 ---
 
@@ -88,21 +92,21 @@ Primary/current evidence checked 2026-09-15: WHATWG HTML Living Standard, WHATWG
 
 **Stage 1 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 3 — ACTIVE; 039–042 checkpoints passed.**
+**Stage 3 — ACTIVE; 039–043 checkpoints passed.**
 
 Current contract stack:
 
-**Stage 2 Page Contract + 039 Interaction Contract + 040 Task/Journey Contract + 041 Form/Transaction Contract + 042 Retrieval Contract.**
+**Stage 2 Page Contract + 039 Interaction Contract + 040 Task/Journey Contract + 041 Form/Transaction Contract + 042 Retrieval Contract + 043 Responsive/Input Continuity Contract.**
 
 Next highest-value integrated topic:
 
-**Responsive Web Interaction, Input Modality & Cross-Device Continuity.**
+**Stage 3 Integration Gate — complete-task usability and interaction competency.**
 
-Expected scope: viewport vs input capability; pointer/touch/keyboard/mixed input; hover/no-hover and coarse/fine pointer; focus continuity through recomposition; virtual keyboard; orientation/dynamic viewport; zoom/reflow/text enlargement distinctions; target/gesture implications; cross-device continuity; and preservation of 039–042 contracts across responsive states.
+Expected scope: representative app-evaluation/store, support/escalation, privacy/account-control, form/transaction and retrieval/list-detail tasks; integrate action/state/cognition/form/retrieval/responsive contracts; stress keyboard/touch/mixed input, zoom/reflow, orientation, on-screen keyboard and recovery; distinguish source-grounded structural competency from still-open browser/device/AT/human validation.
 
 ## Design Studio relationship
 
-Latest specialist state checked 2026-09-15: Web Design W001–W003 are PRACTICE/CRITIQUE and Foundation NOT PASSED. W003 contributes `task → relationship → stress signal → owner → adaptation → invariant → validation`, but its executable harness has not yet produced measured browser results in its environment. Use it as design evidence/model, not production browser proof.
+Latest specialist state checked 2026-09-15: Web Design W001–W003 are PRACTICE/CRITIQUE and Foundation NOT PASSED. W003 contributes `task → relationship → stress signal → owner → adaptation → invariant → validation`, but measured harness results remain OPEN. 043 hands back hybrid-input, hover-independent, actual-zoom, virtual-keyboard, orientation, focus-continuity and in-progress state-migration challenge cases.
 
 Web Manager does not edit Design Studio canonical files without authorization.
 
