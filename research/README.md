@@ -50,19 +50,19 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 049 — Components, Page Systems, Visual Consistency & Responsive Design-System Governance — **Component / Page-System Governance Contract**  
 050 — Stage 4 Integration: App-Company Web Design Literacy Competency Review
 
-050 integrates the full Stage 4 stack across representative company/home, app/product, support and governance/account-control page families. Its diagnostic sequence is task → truth → structure → attention → reading → state → evidence → system → responsive transformation → validation. It explicitly keeps production browser/device/AT/human proof outside the literacy gate.
-
 **STAGE 4 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 5 — Accessibility
 
-**READY TO START.**
+051 — **Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+
+051 establishes the barrier-first model, accessibility/usability/inclusion distinction, web accessibility ecosystem, WCAG 2.2 normative/conformance structure, full-page/complete-process scope, automation limits, lifecycle evaluation and the reusable **Accessibility Evidence Contract**. It explicitly prevents automated/static checks or specialist exercises from being promoted into unsupported production accessibility/conformance claims.
 
 Next integrated study:
 
-051 — **Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility**.
+052 — **Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary**.
 
-Start from disability/access needs and barrier mechanisms rather than mechanically enumerating WCAG criteria. Establish WCAG 2.2 structure/conformance, semantic/keyboard/focus/non-text/visual/responsive relationships, automated-testing limits, and the distinction between technical conformance evidence and actual accessibility/usability. Reuse prior evidence only where it adds validation or transfer value.
+Study how authored HTML becomes programmatic structure and controls, why native semantics are the baseline, accessible-name/role/state mechanics, ARIA's legitimate boundary and failure modes. Connect to Design Studio Web W005/W011 execution gaps rather than repeating generic HTML foundations.
 
 ---
 
@@ -72,13 +72,13 @@ Start from disability/access needs and barrier mechanisms rather than mechanical
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 5 — READY TO START.**
+**Stage 5 — ACTIVE; 051 PASS.**
 
 ## Design Studio relationship
 
-Latest specialist state checked 2026-09-15: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED; Type Stage 1 PASS / Stage 2 PRACTICE; Color Stage 1 PASS / Stage 2 entry audit next. Specialist files supersede stale coordinator summaries.
+Latest Web specialist state checked 2026-09-15: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W012/W013 provide executed Chromium responsive/navigation transfer, while native/custom semantic controls, integrated task-state, icon runtime, broader browser/device/AT and human evidence remain OPEN. These gaps are direct inputs to Stage 5 rather than evidence to duplicate.
 
-045–050 provide the Web Manager design-handoff stack: Visual/Web Design Review, Typography/Reading, Color/Surface/State, Product Media/Non-Text, Component/Page-System Governance, plus integrated app-company diagnosis. For real work, Web Manager supplies task/page semantics, real content/product evidence, state/variant matrices, responsive invariants and validation boundaries; Design Studio owns specialist visual/interaction judgment and execution validation. Web Manager does not edit Design Studio canonical files without authorization.
+For accessibility work, Web Manager supplies page/process scope, real task/content evidence, functional-need/barrier map, semantics/input/focus/state/recovery requirements, responsive/user-preference conditions and validation/claim boundaries. Design Studio specialists own their execution domains; their exercise PASS statuses do not establish MintTap production accessibility. No Design Studio canonical file is edited by Web Manager without authorization.
 
 ## Study quality standard
 
