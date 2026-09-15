@@ -55,17 +55,20 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 ## Stage 5 — Accessibility
 
 051 — **Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility** — **PASS**.  
-052 — **Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+052 — **Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
+053 — **Keyboard, Focus, Input Modality & Operable Interaction Accessibility** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
 
 051 establishes the barrier-first model, accessibility/usability/inclusion distinction, web accessibility ecosystem, WCAG 2.2 normative/conformance structure, full-page/complete-process scope, automation limits, lifecycle evaluation and the reusable **Accessibility Evidence Contract**.
 
-052 establishes the semantic exposure model from native HTML through accessibility APIs/AT; separates role/name/description/state/property from behavior; defines native HTML as the baseline; treats ARIA as a semantic augmentation/missing-semantics layer rather than a behavior polyfill; distinguishes static conformance from computed/runtime/AT/process evidence; and adds the reusable **Semantic Accessibility Contract**. It records the standards-status boundary that WAI-ARIA 1.2 and ARIA in HTML are Recommendations while AccName 1.2 remains a Working Draft and AccName 1.1 remains the stable Recommendation baseline.
+052 establishes semantic exposure from native HTML through accessibility APIs/AT; separates role/name/description/state/property from behavior; defines native HTML as the baseline; treats ARIA as augmentation/missing-semantics rather than a behavior polyfill; and adds the reusable **Semantic Accessibility Contract**.
+
+053 establishes operability as a complete task/focus/state path rather than a tabbability inventory; distinguishes sequential focus, composite internal navigation, focus visibility/obscuration/restoration and focus-vs-selection; separates keyboard equivalence from pointer cancellation, non-drag alternatives and target-size obligations; extends responsive continuity with focus/input invariants; and adds the reusable **Operability / Focus Contract**.
 
 Next integrated study:
 
-053 — **Keyboard, Focus, Input Modality & Operable Interaction Accessibility**.
+054 — **Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion**.
 
-Study native keyboard behavior, sequential focus navigation, focus order/visibility/management, modal/transient focus, custom/composite-widget boundary, pointer/target considerations and responsive/input continuity. Reuse Stage 3 and Design Studio runtime evidence rather than repeating generic interaction theory.
+Integrate labels/instructions, error identification/suggestion, status announcements, async/pending states, redundant entry, accessible authentication and recovery into complete support/account/governance transactions. Reuse Stage 3 form/transaction UX rather than repeating generic form theory.
 
 ---
 
@@ -75,11 +78,13 @@ Study native keyboard behavior, sequential focus navigation, focus order/visibil
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 5 — ACTIVE; 051–052 PASS.**
+**Stage 5 — ACTIVE; 051–053 PASS.**
 
 ## Design Studio relationship
 
 Latest Web specialist state checked 2026-09-15: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W012/W013 provide executed Chromium responsive/navigation transfer. Highest-value executable gaps include W005 native/custom keyboard/focus/semantic behavior and W011 icon accessible-name/target/enlargement/forced-color runtime; true HTTP direct-entry/reload, integrated task-state, broader browser/device/AT and human evidence remain OPEN. These gaps are direct inputs to Stage 5 rather than evidence to duplicate.
+
+053 specifically hands W005 an execution matrix for Tab entry/exit, activation, visible focus, semantics/state synchronization and post-transition focus; W011 should add target/input-path checks. Responsive specimens should check sticky/overlay focus obscuration and hidden-variant focus leakage.
 
 For accessibility work, Web Manager supplies page/process scope, real task/content evidence, functional-need/barrier map, semantic/native-vs-custom contract, input/focus/state/recovery requirements, responsive/user-preference conditions and validation/claim boundaries. Design Studio specialists own their execution domains; their exercise PASS statuses do not establish MintTap production accessibility. No Design Studio canonical file is edited by Web Manager without authorization.
 
