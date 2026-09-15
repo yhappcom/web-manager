@@ -33,47 +33,42 @@ Learning sequence: `history/problem → design principle → standard → curren
 
 Retained boundary: standards/structural review do not prove measured usability, WCAG conformance, AT behavior or browser/device parity.
 
----
-
 # Stage 4 — Web Design Literacy
 
 **COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.**
 
-045 — Web Visual Hierarchy, Composition & Design-System Integration Literacy — **Visual/Web Design Review Contract**.  
-046 — Web Typography, Reading, Localization & Content Presentation Literacy — **Web Typography / Reading Contract**.  
-047 — Web Color, Surfaces, State & Brand Application Literacy — **Web Color / Surface / State Contract**.  
-048 — Web Imagery, Iconography, App Screenshots & Product Demonstration Literacy — **Product Media / Non-Text Contract**.  
-049 — Components, Page Systems, Visual Consistency & Responsive Design-System Governance — **Component / Page-System Governance Contract**.  
-050 — Stage 4 Integration: App-Company Web Design Literacy Competency Review — **INTEGRATION GATE PASS**.
-
-Integrated model:
-
-`user task → page semantic structure → attention hierarchy → reading system → state/color obligations → product evidence → component/page contracts → responsive transformation → cross-channel truth → runtime/human validation`
-
-Retained judgments:
-- visual hierarchy must preserve semantic/task hierarchy rather than substitute for it;
-- typography is a runtime reading system involving language, fallback, shaping/line breaking, wrapping and user adaptation;
-- semantic color obligations precede exact palette values and color cannot carry required meaning alone;
-- screenshots/demos are governed product evidence, not decoration;
-- component reuse is justified by shared semantic/state/interaction contracts, not silhouette;
-- responsive visual variants require explicit task/state/evidence invariants;
-- design tokens transport decisions but do not prove correct semantics or design quality;
-- visual consistency is subordinate to semantic/behavioral/cross-channel truth;
-- static/standards review does not prove WCAG conformance, measured usability, browser/device/AT parity or human comprehension.
-
-Primary/current evidence rechecked 2026-09-15 includes WCAG 2.2 W3C Recommendation, current Apple App Review Guidelines and current Google Play deceptive-behaviour/store-listing guidance.
+045–050 cover visual hierarchy/composition, typography/reading/localization, color/surface/state, product media/non-text, component/page-system governance and integrated app-company web-design literacy.
 
 ---
 
 # Stage 5 — Accessibility
 
-**CURRENT MAJOR CURRICULUM STAGE — READY TO START.**
+**CURRENT MAJOR CURRICULUM STAGE — ACTIVE.**
+
+051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+
+Core model:
+
+`user goal → functional need → environment/tool → barrier → consequence → accessible path → validation`
+
+Retained judgments:
+- accessibility begins with functional needs/barriers, not disability stereotypes or a checklist;
+- accessibility, usability and inclusion overlap but are not interchangeable evidence claims;
+- accessible web use is a system spanning authored content, user agents, assistive technologies, user configuration and input modality;
+- WCAG 2.2 is the current W3C Recommendation baseline selected for new MintTap web engineering unless verified requirements dictate otherwise;
+- WCAG conformance requires level-in-full, full pages, complete processes, accessibility-supported reliance and non-interference;
+- responsive variants are part of the full-page conformance scope;
+- automated tools assist evaluation but cannot determine accessibility or conformance alone;
+- evidence must distinguish automated/static checks, manual browser checks, AT/input/device behavior, complete-process evaluation and human disability-informed evaluation;
+- app-company web accessibility includes discovery, product evidence, support, governance/account-control and cross-channel continuity, while native-app legal/standards applicability remains separately scoped.
+
+Reusable artifact: **Accessibility Evidence Contract** covering scope, barriers, semantics, input/focus, visual/non-text, responsive/user-preference, recovery, relied-upon technologies, validation layers, residual risks and claim authorization.
 
 ## Highest-value next integrated block
 
-**051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility.**
+052 — **Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary**.
 
-Start from disability/access needs and barrier mechanisms rather than a WCAG checklist. Establish WCAG 2.2 structure and conformance, semantic/keyboard/focus/non-text/visual/responsive relationships, automated-testing limits, and the distinction between technical conformance evidence and actual accessibility/usability. Reuse earlier accessibility findings where they add validation; do not repeat them mechanically.
+Study how authored HTML becomes programmatic structure and controls, why native semantics are the baseline, accessible-name/role/state mechanics, ARIA's legitimate boundary and failure modes. Connect directly to Design Studio Web W005/W011 runtime gaps rather than repeating generic HTML foundations.
 
 ---
 
@@ -81,24 +76,24 @@ Start from disability/access needs and barrier mechanisms rather than a WCAG che
 
 Latest relevant specialist-file state checked 2026-09-15:
 
-- **Web Design:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. True HTTP direct-entry/reload, integrated task-state execution, icon runtime, readiness/performance, broader browser/device/AT and human evidence remain OPEN.
-- **Type:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. T021 has actual raster evidence and an identified lowercase drawing defect; browser/product transfer remains open.
-- **Color:** Stage 1 PASS; Stage 2 entry audit next. Existing quantitative/browser exercises do not establish production web/device/human validation.
-- **Layout/Interaction:** Stage 1 PASS with substantial runtime/state evidence; re-read exact specialist status before a live handoff.
+- **Web Design:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. Native/custom control semantics, integrated task-state execution, icon runtime, true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
+- **Type:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. Existing runtime evidence does not establish MintTap production reading/accessibility behavior.
+- **Color:** Stage 1 PASS; Stage 2 entry audit pending in last checked specialist state; existing evidence does not establish MintTap production accessibility.
+- **Layout/Interaction:** Stage 1 PASS with substantial runtime/state evidence; exact specialist status must be re-read before live handoff.
 
 Specialist files supersede stale coordinator summaries.
 
-### Current outgoing handoff
+### Current outgoing accessibility handoff
 
-For real MintTap work, provide Design Studio a single evidence package: page family + task, semantic/content hierarchy, real KO/EN stress content, product claims/evidence ledger, component role/state/variant matrix, semantic color obligations, typography constraints, responsive transformations/state migration, browser/device/input validation matrix, and explicit OPEN/forbidden claims.
+For real MintTap work, provide Design Studio the Accessibility Evidence Contract plus page/process task model, real KO/EN content, functional-need/barrier map, semantics, keyboard/input/focus/state/recovery requirements, responsive/user-preference conditions and explicit validation matrix.
 
-Web Manager retains product/site truth, content/task requirements, cross-channel governance and release/operations accountability. Design Studio owns specialist visual/interaction exploration and execution validation. No Design Studio canonical file was edited.
+Web Design owns component/browser execution; Layout/Interaction owns complete-task state/focus/recovery modeling; Type owns actual reading/wrapping/fallback behavior; Color owns contrast and non-color resilience. Web Manager retains accessibility scope, cross-channel process requirements, evidence/claim boundaries and release governance. No Design Studio canonical file was edited.
 
 ---
 
 # Important unknown MintTap facts
 
-Real project decisions still require verified evidence for actual app inventory/launch priorities, current approved brand system/palette/logo rules, production fonts, shipped screenshots/assets and source builds/color profiles, production component inventory, shared-vs-product-specific design ownership, frontend framework/token pipeline, user goals, store-linked URLs, support/contact/account/deletion behavior, subscription/payment model, privacy/data-control procedures, supported locales and terminology, target browsers/devices/inputs, light/dark requirements, analytics/privacy constraints, authenticated persistence and human usability/accessibility/reading/color/icon/screenshot-comprehension evidence.
+Real project decisions still require verified evidence for actual app/page/process inventory, launch priorities, applicable jurisdictions/legal accessibility duties, company conformance policy, production brand/fonts/components/media, frontend/third-party widgets, support/contact/account/deletion/privacy-control behavior, supported locales, target browser/OS/AT/input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
 
 Do not infer these from generic app-company patterns or specialist exercises.
 
@@ -111,7 +106,7 @@ Do not infer these from generic app-company patterns or specialist exercises.
 - Stage 1: COMPLETE at intended foundation/practitioner level.
 - Stage 2: COMPLETE at intended foundation/practitioner level.
 - Stage 3: COMPLETE at intended foundation/practitioner level.
-- Stage 4: COMPLETE at intended foundation/practitioner level; 045–050 PASS.
-- Stage 5: READY TO START.
-- Current next work: **051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility**.
+- Stage 4: COMPLETE at intended foundation/practitioner level.
+- Stage 5: ACTIVE; 051 PASS.
+- Current next work: **052 — Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
