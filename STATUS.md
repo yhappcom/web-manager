@@ -1,7 +1,7 @@
 # MintTap Web Manager Status
 
 Operating state: **ACTIVE — STRUCTURED BEGINNER→ADVANCED / DEEP-DOMAIN STUDY**  
-Last sync: 2026-09-15  
+Last sync: 2026-09-16  
 Domain: `minttap.app`  
 Platforms: iOS / App Store, Android / Google Play
 
@@ -31,8 +31,6 @@ Learning sequence: `history/problem → design principle → standard → curren
 
 039–044 establish Interaction, Task/Journey, Form/Transaction, Retrieval and Responsive/Input Continuity contracts and integrate them under complete-task usability review.
 
-Retained boundary: standards/structural review do not prove measured usability, WCAG conformance, AT behavior or browser/device parity.
-
 # Stage 4 — Web Design Literacy
 
 **COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.**
@@ -47,61 +45,64 @@ Retained boundary: standards/structural review do not prove measured usability, 
 
 051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility — **PASS**.  
 052 — Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
-053 — Keyboard, Focus, Input Modality & Operable Interaction Accessibility — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+053 — Keyboard, Focus, Input Modality & Operable Interaction Accessibility — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
+054 — Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
 
-Current operability model:
+Current transaction-accessibility model:
 
-`task/function → available input paths → focusability/reachability → activation/navigation → visible/predictable focus → state transition → focus continuation/restoration → task outcome → runtime/AT/human evidence`
+`task/process → input meaning → label/instruction → entry → validation → error identification/suggestion → correction/recovery → async/status communication → authentication → review/error prevention → completion confirmation → complete-process evidence`
 
 Retained judgments:
-- keyboard accessibility concerns complete functionality, not merely whether controls can receive Tab focus;
-- focusability, operability and successful task completion are separate claims;
-- DOM/reading order, visual order and sequential focus order should reinforce the same task model; positive `tabindex` is not a preferred repair for structural order problems;
-- focus existence, visibility, non-obscuration, predictability and post-transition continuation/restoration are separate obligations;
-- focus and selected/current/pressed/disabled state are distinct;
-- ARIA widget semantics do not supply custom keyboard behavior; composite widgets add focus/state/runtime burden;
-- keyboard equivalence does not by itself satisfy pointer cancellation, non-drag single-pointer alternatives or target-size obligations;
-- responsive transformations must preserve task, semantic, focus and input-modality invariants;
-- WCAG 2.4.13 Focus Appearance remains AAA; do not misstate its stronger geometry/contrast requirements as AA;
-- static conformance does not prove browser/AT/device or disability-informed human outcomes.
+- accessible controls do not by themselves establish an accessible form, transaction or complete process;
+- labels, instructions, required/format constraints and contextual help are separate information obligations;
+- validation should prevent avoidable errors, identify errors in text and suggest correction when known/safe;
+- error handling requires existence, discovery, association and recovery; preserve valid user input across retry unless security/validity requires otherwise;
+- status messages and focus changes solve different problems; DOM presence does not prove AT announcement;
+- async work needs explicit pending/success/recoverable-error/terminal-error states with appropriate user-visible and programmatic consequences;
+- WCAG 2.2 SC 3.3.7 makes redundant entry a same-process accessibility concern; browser autocomplete alone is not sufficient;
+- accessible authentication includes cognitive burden: preserve password-manager/autofill/paste paths and evaluate every MFA/recovery step; do not equate forced transcription with security;
+- consequential legal/financial/stored-data actions require reversibility, checking/correction, or review/confirmation/correction under SC 3.3.4 scope;
+- client-side UX validation and server-side security validation are complementary but not interchangeable evidence;
+- successful server response is not sufficient completion feedback;
+- static review does not prove browser/AT/device or disability-informed human outcomes.
 
-Reusable artifacts now include **Accessibility Evidence Contract** (051), **Semantic Accessibility Contract** (052) and **Operability / Focus Contract** (053).
+Reusable artifacts now include **Accessibility Evidence Contract** (051), **Semantic Accessibility Contract** (052), **Operability / Focus Contract** (053), and **Accessible Transaction Contract** (054).
 
 ## Highest-value next integrated block
 
-054 — **Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion**.
+055 — **Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State**.
 
-Integrate labels/instructions, error identification/suggestion, status announcements, async/pending states, redundant entry, accessible authentication and recovery into complete support/account/governance transactions. Reuse Stage 3 form/transaction UX rather than repeating it.
+Integrate dynamic/live state, dialogs/transient layers, disclosure and composite-widget state/keyboard/focus behavior. Reuse 052–054 and Stage 3 interaction work rather than repeating generic component theory. Explicitly connect to Design Studio W005/W006 runtime gaps.
 
 ---
 
 # Design Studio relationship
 
-Latest relevant specialist-file state checked 2026-09-15:
+Latest relevant specialist-file state checked 2026-09-16:
 
-- **Web Design:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. Highest-value executable gaps explicitly include W005 native/custom keyboard/focus/semantic behavior and W011 icon accessible-name/target/enlargement/forced-color runtime; true HTTP direct-entry/reload, integrated task-state, broader browser/device/AT and human evidence remain OPEN.
-- **Type:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. Existing runtime evidence does not establish MintTap production reading/accessibility behavior.
-- **Color:** Stage 1 PASS; existing evidence does not establish MintTap production accessibility.
+- **Web Design:** `progress/WEB_STATUS.md` governance sync 2026-09-15: Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. Highest-value executable gaps include W005 native/custom keyboard/focus/semantic behavior, W006 integrated search/filter/table/edit async/recovery execution and W011 icon accessible-name/target/enlargement/forced-color runtime; true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
+- **Type:** existing specialist status/evidence does not establish MintTap production reading/accessibility behavior.
+- **Color:** existing specialist evidence does not establish MintTap production accessibility.
 - **Layout/Interaction:** Stage 1 PASS with substantial runtime/state evidence; specialist file must be re-read before live handoff.
 
 Specialist files supersede stale coordinator summaries.
 
 ### Current outgoing accessibility handoff
 
-For real MintTap work, provide Design Studio the Accessibility Evidence + Semantic Accessibility + Operability/Focus contracts, page/process task model and real KO/EN content.
+For real MintTap work, provide Design Studio the Accessibility Evidence + Semantic Accessibility + Operability/Focus + Accessible Transaction contracts, page/process task model and real KO/EN content.
 
-Web Design: execute W005 native-vs-custom controls across Tab entry/exit, activation, visible focus, computed semantics, state synchronization and post-transition focus; extend W011 with target/input-path checks; test sticky/overlay obscuration and hidden responsive variants.  
-Layout/Interaction: make focus destination/restoration an explicit state transition; distinguish focus from selected/current/pressed and define transient-layer entry/exit.  
-Type: use real KO/EN labels when responsive truncation/removal could change discoverability.  
-Color: keep focus visibly distinguishable from selected/current/error/disabled and validate relevant user color environments.
+Web Design: W006 or successor should execute an accessible transaction slice with native labels, invalid submission, error summary/field association, focus after error, pending state, recoverable failure, success state and status exposure; W005 remains relevant for native/custom semantic-control execution. Authentication specimens should verify paste/autofill behavior rather than only visual OTP layout.  
+Layout/Interaction: model failed submit, pending, recoverable error, success and destructive confirmation/reversal as explicit states; define focus destination and retained input.  
+Type: stress long KO/EN validation/help/authentication strings; correction instructions must survive reflow.  
+Color: error/success/required/disabled/pending states must not rely on hue alone and focus remains semantically distinct.
 
-Web Manager retains accessibility scope, input-equivalence obligations, native-vs-custom justification, semantic/focus contracts, cross-channel process requirements, evidence/claim boundaries and release governance. No Design Studio canonical file was edited.
+Web Manager retains accessibility scope, data/re-entry requirements, authentication/accessibility policy, consequential-action safeguards, complete-process requirements and evidence/claim boundaries. No Design Studio canonical file was edited.
 
 ---
 
 # Important unknown MintTap facts
 
-Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, custom controls, focus-management behavior, sticky/overlay/dialog/carousel/drag interactions, launch priorities, applicable jurisdictions/legal accessibility duties, company conformance policy, production brand/fonts/components/media, third-party widgets, support/contact/account/deletion/privacy-control behavior, supported locales, target browser/OS/AT/keyboard/touch/speech-input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
+Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, forms and server validation, custom controls, focus management, live-region/toast behavior, authentication/MFA/password-manager/autofill behavior, account/deletion/support/privacy-control processes, third-party process boundaries, launch priorities, applicable jurisdictions/legal accessibility duties, company conformance policy, production brand/fonts/components/media, supported locales, target browser/OS/AT/keyboard/touch/speech-input matrix, analytics/privacy constraints, native-app accessibility program, disability-informed human evaluation and accessibility-statement/feedback ownership.
 
 Do not infer these from generic app-company patterns or specialist exercises.
 
@@ -115,6 +116,6 @@ Do not infer these from generic app-company patterns or specialist exercises.
 - Stage 2: COMPLETE at intended foundation/practitioner level.
 - Stage 3: COMPLETE at intended foundation/practitioner level.
 - Stage 4: COMPLETE at intended foundation/practitioner level.
-- Stage 5: ACTIVE; 051–053 PASS.
-- Current next work: **054 — Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion**.
+- Stage 5: ACTIVE; 051–054 PASS.
+- Current next work: **055 — Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
