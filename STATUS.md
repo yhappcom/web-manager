@@ -37,68 +37,43 @@ Retained boundary: standards/structural review do not prove measured usability, 
 
 # Stage 4 — Web Design Literacy
 
-**CURRENT MAJOR CURRICULUM STAGE — ACTIVE.**
+**COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.**
 
-## 045 — Web Visual Hierarchy, Composition & Design-System Integration Literacy
+045 — Web Visual Hierarchy, Composition & Design-System Integration Literacy — **Visual/Web Design Review Contract**.  
+046 — Web Typography, Reading, Localization & Content Presentation Literacy — **Web Typography / Reading Contract**.  
+047 — Web Color, Surfaces, State & Brand Application Literacy — **Web Color / Surface / State Contract**.  
+048 — Web Imagery, Iconography, App Screenshots & Product Demonstration Literacy — **Product Media / Non-Text Contract**.  
+049 — Components, Page Systems, Visual Consistency & Responsive Design-System Governance — **Component / Page-System Governance Contract**.  
+050 — Stage 4 Integration: App-Company Web Design Literacy Competency Review — **INTEGRATION GATE PASS**.
 
-`research/045-stage4-web-visual-hierarchy-composition-design-system-integration-literacy.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**  
-Reusable output: **Visual/Web Design Review Contract**.
+Integrated model:
 
-## 046 — Web Typography, Reading, Localization & Content Presentation Literacy
+`user task → page semantic structure → attention hierarchy → reading system → state/color obligations → product evidence → component/page contracts → responsive transformation → cross-channel truth → runtime/human validation`
 
-`research/046-stage4-web-typography-reading-localization-content-presentation-literacy.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**  
-Reusable output: **Web Typography / Reading Contract**.
+Retained judgments:
+- visual hierarchy must preserve semantic/task hierarchy rather than substitute for it;
+- typography is a runtime reading system involving language, fallback, shaping/line breaking, wrapping and user adaptation;
+- semantic color obligations precede exact palette values and color cannot carry required meaning alone;
+- screenshots/demos are governed product evidence, not decoration;
+- component reuse is justified by shared semantic/state/interaction contracts, not silhouette;
+- responsive visual variants require explicit task/state/evidence invariants;
+- design tokens transport decisions but do not prove correct semantics or design quality;
+- visual consistency is subordinate to semantic/behavioral/cross-channel truth;
+- static/standards review does not prove WCAG conformance, measured usability, browser/device/AT parity or human comprehension.
 
-Retained judgment: typography is a runtime reading system; language, fallback, Korean/English line breaking, wrapping and user text adaptation must be validated rather than inferred from a static design.
+Primary/current evidence rechecked 2026-09-15 includes WCAG 2.2 W3C Recommendation, current Apple App Review Guidelines and current Google Play deceptive-behaviour/store-listing guidance.
 
-## 047 — Web Color, Surfaces, State & Brand Application Literacy
+---
 
-`research/047-stage4-web-color-surfaces-state-brand-application-literacy.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**  
-Reusable output: **Web Color / Surface / State Contract**.
+# Stage 5 — Accessibility
 
-Retained judgment: semantic color obligations precede exact palette values; brand/action/state roles are distinct; color cannot carry required meaning alone; light/dark, forced colors, contrast and actual product imagery require separate runtime validation.
-
-## 048 — Web Imagery, Iconography, App Screenshots & Product Demonstration Literacy
-
-`research/048-stage4-web-imagery-iconography-app-screenshots-product-demonstration-literacy.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**  
-Reusable output: **Product Media / Non-Text Contract**.
-
-Retained judgment: app screenshots/demos are governed product evidence; responsive resource selection differs from art direction; accessible treatment follows purpose/context; icon glyph/meaning/control/name/state are separate layers; web↔store continuity requires truthful product representation rather than identical composition.
-
-## 049 — Components, Page Systems, Visual Consistency & Responsive Design-System Governance
-
-`research/049-stage4-components-page-systems-visual-consistency-responsive-design-system-governance.md`  
-**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**  
-Reusable output: **Component / Page-System Governance Contract**.
-
-Core model:
-
-`task/semantic role → component contract → states/variants → content/media slots → responsive transformations → token relationships → implementation mapping → evidence/validation → version/change governance`
-
-Retained judgment:
-- component reuse is justified by shared semantic/state/interaction contracts, not shared silhouette;
-- consistency must be evaluated separately across semantic, behavioral, visual-role, responsive and cross-channel layers;
-- named variants should correspond to real task/semantic differences rather than arbitrary appearance flags;
-- token systems transport and relate design decisions but do not prove correct semantics or system quality;
-- DTCG Format Module 2025.10 is a stable Final Community Group Report intended for implementation, **not a W3C Recommendation**;
-- responsive variants require explicit state/invariant migration, not just alternate geometry;
-- multi-product governance should suppress accidental drift without erasing justified product/platform differences;
-- drift review must include role, token, variant, state, content, responsive, product-evidence and implementation drift.
-
-### Primary/current evidence rechecked 2026-09-15
-
-- W3C-hosted Design Tokens Community Group and Design Tokens Format Module 2025.10 Final Community Group Report;
-- latest Design Studio Web specialist status and W012/W013 runtime-transfer state.
+**CURRENT MAJOR CURRICULUM STAGE — READY TO START.**
 
 ## Highest-value next integrated block
 
-**050 — Stage 4 Integration: App-Company Web Design Literacy Competency Review.**
+**051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility.**
 
-Apply 045–049 simultaneously to representative company/app/support/governance page families. Determine whether the Web Manager can diagnose and govern hierarchy, typography/reading, color/state, product evidence, component reuse and responsive transformations as one system. Close Stage 4 only if the Foundation/Practitioner competency gate is satisfied; if integration exposes a missing prerequisite, study that gap before closure.
+Start from disability/access needs and barrier mechanisms rather than a WCAG checklist. Establish WCAG 2.2 structure and conformance, semantic/keyboard/focus/non-text/visual/responsive relationships, automated-testing limits, and the distinction between technical conformance evidence and actual accessibility/usability. Reuse earlier accessibility findings where they add validation; do not repeat them mechanically.
 
 ---
 
@@ -106,26 +81,24 @@ Apply 045–049 simultaneously to representative company/app/support/governance 
 
 Latest relevant specialist-file state checked 2026-09-15:
 
-- **Web Design:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012 executed Chromium responsive transfer; W013 executed partial navigation/history runtime transfer and corrected a real event-binding defect. True HTTP direct-entry/reload, integrated task-state execution, icon runtime, readiness/performance, broader browser/device/AT and human evidence remain OPEN. Component systems are strong conceptual practice but runtime coverage is uneven.
-- **Color:** latest checked state remains Stage 1 PASS with Stage 2 entry work pending/active; recheck exact specialist file before material color handoff.
-- **Type:** latest checked state remains Stage 1 PASS with Stage 2 practice active; recheck exact specialist file before material type handoff.
-- **Layout/Interaction:** Stage 1 PASS; repository contains newer Stage 2 entry evidence than some status summaries; recheck exact specialist evidence before material interaction handoff.
+- **Web Design:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W012/W013 provide executed Chromium responsive and partial navigation/history runtime transfer. True HTTP direct-entry/reload, integrated task-state execution, icon runtime, readiness/performance, broader browser/device/AT and human evidence remain OPEN.
+- **Type:** Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. T021 has actual raster evidence and an identified lowercase drawing defect; browser/product transfer remains open.
+- **Color:** Stage 1 PASS; Stage 2 entry audit next. Existing quantitative/browser exercises do not establish production web/device/human validation.
+- **Layout/Interaction:** Stage 1 PASS with substantial runtime/state evidence; re-read exact specialist status before a live handoff.
 
 Specialist files supersede stale coordinator summaries.
 
 ### Current outgoing handoff
 
-Provide Design Studio with the Stage 2/3 contract stack plus the full Stage 4 stack: Visual/Web Design Review, Typography/Reading, Color/Surface/State, Product Media/Non-Text, and Component/Page-System Governance contracts.
+For real MintTap work, provide Design Studio a single evidence package: page family + task, semantic/content hierarchy, real KO/EN stress content, product claims/evidence ledger, component role/state/variant matrix, semantic color obligations, typography constraints, responsive transformations/state migration, browser/device/input validation matrix, and explicit OPEN/forbidden claims.
 
-For a real MintTap project, Web Design should receive the page-family/task matrix, component role inventory, state/variant matrix, responsive invariants/state-migration rules, candidate semantic-token map, real KO/EN stress content, product-media evidence and drift cases. Type/Color/Layout receive only exact specialist dependencies arising from those contracts.
-
-No Design Studio canonical file was edited.
+Web Manager retains product/site truth, content/task requirements, cross-channel governance and release/operations accountability. Design Studio owns specialist visual/interaction exploration and execution validation. No Design Studio canonical file was edited.
 
 ---
 
 # Important unknown MintTap facts
 
-Real project decisions still require verified evidence for actual app inventory/launch priorities, current approved brand system/palette/logo rules, production fonts, shipped screenshots/assets and their source builds/color profiles, production component inventory, shared-vs-product-specific design ownership, frontend framework/token pipeline, user goals, store-linked URLs, support/contact/account/deletion behavior, subscription/payment model, privacy/data-control procedures, supported locales and terminology, target browsers/devices/inputs, light/dark scheme requirements, analytics/privacy constraints, authenticated persistence and human usability/reading/color/icon/screenshot-comprehension evidence.
+Real project decisions still require verified evidence for actual app inventory/launch priorities, current approved brand system/palette/logo rules, production fonts, shipped screenshots/assets and source builds/color profiles, production component inventory, shared-vs-product-specific design ownership, frontend framework/token pipeline, user goals, store-linked URLs, support/contact/account/deletion behavior, subscription/payment model, privacy/data-control procedures, supported locales and terminology, target browsers/devices/inputs, light/dark requirements, analytics/privacy constraints, authenticated persistence and human usability/accessibility/reading/color/icon/screenshot-comprehension evidence.
 
 Do not infer these from generic app-company patterns or specialist exercises.
 
@@ -138,6 +111,7 @@ Do not infer these from generic app-company patterns or specialist exercises.
 - Stage 1: COMPLETE at intended foundation/practitioner level.
 - Stage 2: COMPLETE at intended foundation/practitioner level.
 - Stage 3: COMPLETE at intended foundation/practitioner level.
-- Stage 4: ACTIVE; 045–049 checkpoints PASS.
-- Current next work: **050 — Stage 4 Integration: App-Company Web Design Literacy Competency Review**.
+- Stage 4: COMPLETE at intended foundation/practitioner level; 045–050 PASS.
+- Stage 5: READY TO START.
+- Current next work: **051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
