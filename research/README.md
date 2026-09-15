@@ -57,21 +57,24 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 051 — **Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility** — **PASS**.  
 052 — **Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
 053 — **Keyboard, Focus, Input Modality & Operable Interaction Accessibility** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
-054 — **Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
+054 — **Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.  
+055 — **Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State** — **FOUNDATION/PRACTITIONER CHECKPOINT PASS**.
 
-051 establishes the barrier-first model, accessibility/usability/inclusion distinction, web accessibility ecosystem, WCAG 2.2 normative/conformance structure, full-page/complete-process scope, automation limits, lifecycle evaluation and the reusable **Accessibility Evidence Contract**.
+051 establishes the barrier-first model, accessibility/usability/inclusion distinction, WCAG 2.2 normative/conformance structure, full-page/complete-process scope, automation limits, lifecycle evaluation and the reusable **Accessibility Evidence Contract**.
 
 052 establishes semantic exposure from native HTML through accessibility APIs/AT; separates role/name/description/state/property from behavior; defines native HTML as the baseline; treats ARIA as augmentation/missing-semantics rather than a behavior polyfill; and adds the reusable **Semantic Accessibility Contract**.
 
-053 establishes operability as a complete task/focus/state path rather than a tabbability inventory; distinguishes sequential focus, composite internal navigation, focus visibility/obscuration/restoration and focus-vs-selection; separates keyboard equivalence from pointer cancellation, non-drag alternatives and target-size obligations; extends responsive continuity with focus/input invariants; and adds the reusable **Operability / Focus Contract**.
+053 establishes operability as a complete task/focus/state path rather than a tabbability inventory; distinguishes sequential focus, composite internal navigation, focus visibility/obscuration/restoration and focus-vs-selection; separates keyboard equivalence from pointer cancellation, non-drag alternatives and target-size obligations; and adds the reusable **Operability / Focus Contract**.
 
-054 integrates field semantics into complete transaction accessibility: labels/instructions, validation, textual error identification and correction, error discovery/focus/recovery, async/status exposure, same-process redundant-entry reduction, cognitively accessible authentication, consequential-action error prevention and completion feedback. It adds the reusable **Accessible Transaction Contract** and preserves the claim boundary `accessible fields < accessible form state < accessible transaction < accessible complete process`.
+054 integrates field semantics into complete transaction accessibility: labels/instructions, validation, textual error identification and correction, error discovery/focus/recovery, async/status exposure, same-process redundant-entry reduction, cognitively accessible authentication, consequential-action error prevention and completion feedback. It adds the reusable **Accessible Transaction Contract**.
+
+055 integrates dynamic application state across visible/semantic/focus/selection/announcement representations. It distinguishes disclosure from icon animation, modal appearance from modal behavior/semantics, status updates from focus movement and modal interruption, and composite-widget semantics from flat controls. It establishes `DOM focus != active descendant != selection != current value`, adds latency as an accessibility interaction dependency, requires responsive state migration when patterns recompose, and adds the reusable **Accessible Application-State Contract**.
 
 Next integrated study:
 
-055 — **Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State**.
+056 — **Reading, Reflow, Zoom, Motion, Timing & User-Preference Accessibility**.
 
-Integrate live/dynamic state, dialogs/transient layers, disclosure and composite-widget semantics/keyboard/focus behavior. Reuse 052–054 and Stage 3 interaction evidence rather than repeating generic component theory; connect directly to Design Studio W005/W006 runtime gaps.
+Integrate low-vision, cognitive and vestibular resilience across resize/zoom/reflow/text spacing/orientation, motion/animation, timing and user preferences. Reuse Stage 4 typography/color/responsive work rather than repeating design theory; distinguish normative WCAG requirements from browser behavior and human evidence.
 
 ---
 
@@ -81,15 +84,15 @@ Integrate live/dynamic state, dialogs/transient layers, disclosure and composite
 **Stage 2 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 5 — ACTIVE; 051–054 PASS.**
+**Stage 5 — ACTIVE; 051–055 PASS.**
 
 ## Design Studio relationship
 
-Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W012/W013 provide executed Chromium responsive/navigation transfer. Highest-value executable gaps include W005 native/custom keyboard/focus/semantic behavior, W006 integrated search/filter/table/edit async/recovery execution and W011 icon accessible-name/target/enlargement/forced-color runtime; true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN. These gaps are direct inputs to Stage 5 rather than evidence to duplicate.
+Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W012/W013 provide executed Chromium responsive/navigation transfer. W005 already defines native-first component/composite state contracts and W006 complete task-surface state/recovery contracts, but their integrated browser execution remains OPEN. W011 icon runtime, true HTTP direct-entry/reload, broader browser/device/AT and human evidence also remain OPEN.
 
-054 specifically hands W006 an accessible-transaction runtime slice: native labels, invalid submission, error summary/field association, focus after error, pending/recoverable-error/success states and status exposure. Authentication specimens should test paste/autofill, not merely visual OTP layout. Layout/Interaction should model transaction states and focus/input retention explicitly; Type should stress KO/EN error/help strings; Color should keep error/success/required/disabled/pending distinguishable without hue-only meaning.
+055 specifically hands Web Design an execution target: disclosure plus one true composite (tabs or combobox) with keyboard/computed-semantics/focus-selection/state synchronization assertions, and a W006 extension with dynamic status plus modal/transient-layer initial/return-focus and background-inoperability assertions. Layout/Interaction owns explicit transient/composite/responsive state transitions; Type stresses KO/EN dynamic text; Color preserves distinct focus/selection/current/expanded/pending/error channels without hue-only meaning.
 
-For accessibility work, Web Manager supplies page/process scope, real task/content evidence, functional-need/barrier map, semantic/native-vs-custom contract, input/focus/state/recovery requirements, transaction/re-entry/authentication/error-prevention requirements, responsive/user-preference conditions and validation/claim boundaries. Design Studio specialists own their execution domains; their exercise PASS statuses do not establish MintTap production accessibility. No Design Studio canonical file is edited by Web Manager without authorization.
+For accessibility work, Web Manager supplies page/process scope, functional-need/barrier map, semantic/native-vs-custom contract, input/focus/state/recovery requirements, transaction requirements, dynamic-state/announcement classification, responsive state migration and validation/claim boundaries. Design Studio specialist exercise PASS statuses do not establish MintTap production accessibility. No Design Studio canonical file is edited by Web Manager without authorization.
 
 ## Study quality standard
 
