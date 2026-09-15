@@ -30,7 +30,7 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 **STAGE 4 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 5 — Accessibility
-051–057 — Accessibility Evidence; Semantic Accessibility; Operability/Focus; Accessible Transaction; Accessible Application-State; Adaptation/User-Preference; Product-Demo Media Accessibility contracts.  
+051–057 — seven reusable accessibility contracts.  
 058 — Stage 5 Integration: Accessibility Conformance, Complete-Process Evidence & App-Company Competency Review — **PASS**.  
 **STAGE 5 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
@@ -38,17 +38,21 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 
 059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization & App-Company Findability — PASS.**
 
-059 establishes the search pipeline from stable URL/discovery through crawl/fetch, rendering, indexing/deduplication, canonical selection and serving. It separates crawl control, index control and access control; rejects sitemap/submission as indexing guarantees; treats JavaScript rendering as supported but not architecture-neutral; connects HTTP direct-entry/status behavior to crawler meaning; and creates a Search Discovery Evidence Contract for live Company/Product/Support/Governance URLs.
+Establishes the search pipeline from stable URL/discovery through crawl/fetch, rendering, indexing/deduplication, canonical selection and serving; creates a Search Discovery Evidence Contract.
 
 060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent — PASS.**
 
-060 establishes page meaning after discovery. It separates `<title>`, visible main heading and engine-generated title link; treats meta description as a possible snippet source rather than a guaranteed result; maps materially distinct user/search needs to authoritative page ownership rather than query-variant URL proliferation; treats crawlable contextual internal links as both navigation and semantic evidence; connects helpful content to product/support/governance truth and lifecycle ownership; rejects arbitrary word-count/keyword-density/content-volume folklore; and creates a **Search Content Intent Contract**. Current Google AI-feature guidance is retained as a change-watched extension of foundational Search rather than a separate `AI SEO` doctrine.
+Establishes truthful page meaning after discovery; separates title/H1/search title link and meta-description/snippet; maps distinct needs to authoritative pages; treats internal links as navigation/discovery/context; creates a Search Content Intent Contract.
+
+061 — **Structured Data, Entity/Site Identity, Software-App Representation & Search Appearance Boundaries — PASS.**
+
+Separates Schema.org vocabulary from engine-supported search features and separates syntax validity, eligibility, actual display and ranking. Treats structured data as an assertion about existing page/entity truth, not a content substitute. Distinguishes Organization, app/product, platform instance and store listing; examines current Google SoftwareApplication requirements without inventing ratings/reviews; creates a **Structured Data Evidence Contract** spanning truth source, markup, validator, crawler observation, Search Console, observed appearance and lifecycle.
 
 Next integrated study:
 
-061 — **Structured Data, Entity/Site Identity, Software-App Representation & Search Appearance Boundaries**.
+062 — **Localization & International Search: Language/Locale URLs, hreflang, Canonical Interaction, App-Store Locale Continuity & Multilingual Content Quality**.
 
-Study explicit machine classification only after discovery/indexability and truthful page meaning. Distinguish schema vocabulary from engine-supported features, eligibility from guaranteed rich-result display, and valid markup from truthful/applicable content. Evaluate Organization/WebSite/SoftwareApplication applicability and cross-channel app identity without inventing MintTap production facts.
+Study locale architecture before keyword tooling or performance optimization because language/region URLs, canonicalization and store/web continuity are structural and expensive to retrofit.
 
 ---
 
@@ -59,14 +63,13 @@ Study explicit machine classification only after discovery/indexability and trut
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 5 — COMPLETE at intended foundation/practitioner level; 051–058 PASS.**  
-**Stage 6 — ACTIVE; 059–060 PASS.**
+**Stage 6 — ACTIVE; 059–061 PASS.**
 
 ## Design Studio relationship
 
-Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W015 provides deterministic integrated state/recovery execution, while real browser/network transfer remains open. W014 browser execution, W011 icon runtime, actual browser-UI zoom, true HTTP direct-entry/reload/404 and broader browser/device/AT/human evidence remain OPEN.
+Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W016 now provides actual Chromium native/custom control transfer 14/14. W015 real Fetch/DOM/network transfer, true HTTP direct-entry/reload/404, W011 icon runtime, actual browser-UI zoom and broader browser/device/AT/human evidence remain OPEN.
 
-059–060 add search-discovery/content handoffs to the true-HTTP/IA gaps: future runtime transfer should verify representative route direct entry, HTTP status/redirect/404 semantics, initial-vs-rendered content identity, crawlable links, route metadata/canonical/index directives, title/main-heading agreement and deep-entry orientation. Visual navigation patterns should preserve real link semantics when navigation is the action. Type hierarchy should reinforce rather than contradict document identity. Web Manager retains search/query intent, content ownership, index/canonical strategy and crawler/search-result evidence ownership. No Design Studio canonical file is edited by Web Manager without authorization.
+059–061 extend the true-HTTP/IA handoff: future runtime transfer should verify representative route direct entry, status/redirect/404 semantics, initial-vs-rendered content identity, crawlable links, title/H1, metadata/canonical/index directives, deep-entry orientation and crawler-visible structured data on the same canonical resources. Organization/app/store markup must derive from verified product/company truth. User-visible breadcrumb orientation and BreadcrumbList should share the same intended IA. Web Manager retains search/query intent, entity/content truth, index/canonical strategy, structured-data applicability and crawler/search-result evidence ownership. No Design Studio canonical file is edited without authorization.
 
 ## Study quality standard
-
 A substantial study should include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, MintTap relevance without invented facts, durable vs changeable behavior, and competency/application checks.
