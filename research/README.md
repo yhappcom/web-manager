@@ -18,52 +18,33 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 **STAGE 1 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 2 — Website Anatomy / Content / Information Architecture
-034 — Website Anatomy, Task-Based IA & Content Ownership  
-035 — Content Modeling, Hierarchy, Lifecycle & Cross-Channel Truth  
-036 — Navigation, Wayfinding & Findability  
-037 — Page Systems, Content Hierarchy & Scan/Comprehension Architecture  
-038 — Stage 2 Integration: Company/App/Support/Governance Page-System Matrix & Competency Review  
+034–038 — task-based anatomy/content ownership; content modeling/lifecycle/cross-channel truth; navigation/findability; page systems/comprehension; Company/App/Support/Governance integration.  
 **STAGE 2 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 3 — UX & Interaction Foundations
-039 — User Action, System State, Feedback, Error & Recovery — **Interaction Contract**  
-040 — User Goals, Task/Journey Modeling, Cognition, Expectation & Friction — **Task/Journey Contract**  
-041 — Forms, Input, Choice, Validation & Multi-Step Transaction Design — **Form / Transaction Contract**  
-042 — Search, Filtering, Selection, Results & List/Detail Interaction — **Retrieval Contract**  
-043 — Responsive Web Interaction, Input Modality & Cross-Device Continuity — **Responsive/Input Continuity Contract**  
-044 — Stage 3 Integration: Complete-Task Usability & Interaction Competency Review  
+039–044 — Interaction, Task/Journey, Form/Transaction, Retrieval, Responsive/Input Continuity and complete-task integration.  
 **STAGE 3 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 4 — Web Design Literacy
-045 — Web Visual Hierarchy, Composition & Design-System Integration Literacy — **Visual/Web Design Review Contract**  
-046 — Web Typography, Reading, Localization & Content Presentation Literacy — **Web Typography / Reading Contract**  
-047 — Web Color, Surfaces, State & Brand Application Literacy — **Web Color / Surface / State Contract**  
-048 — Web Imagery, Iconography, App Screenshots & Product Demonstration Literacy — **Product Media / Non-Text Contract**  
-049 — Components, Page Systems, Visual Consistency & Responsive Design-System Governance — **Component / Page-System Governance Contract**  
-050 — Stage 4 Integration: App-Company Web Design Literacy Competency Review  
+045–050 — visual hierarchy/composition; typography/reading/localization; color/surface/state; product media/non-text; component/page-system governance; integrated app-company web-design literacy.  
 **STAGE 4 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 5 — Accessibility
-051 — Accessibility Foundations: Disability, Barriers, Standards, Conformance & App-Company Web Responsibility — **Accessibility Evidence Contract**  
-052 — Semantic Structure, Native HTML, Accessible Names/Roles/States & ARIA Boundary — **Semantic Accessibility Contract**  
-053 — Keyboard, Focus, Input Modality & Operable Interaction Accessibility — **Operability / Focus Contract**  
-054 — Forms, Errors, Status Messages, Authentication & Accessible Transaction Completion — **Accessible Transaction Contract**  
-055 — Dynamic Content, Dialogs, Disclosure, Composite Widgets & Accessible Application State — **Accessible Application-State Contract**  
-056 — Reading, Reflow, Zoom, Motion, Timing & User-Preference Accessibility — **Adaptation / User-Preference Accessibility Contract**  
-057 — Media Accessibility, Captions, Transcripts, Audio Description & Product-Demo Communication — **Product-Demo Media Accessibility Contract**  
-058 — Stage 5 Integration: Accessibility Conformance, Complete-Process Evidence & App-Company Competency Review — **PASS**
-
-058 integrates the seven contracts across Company, Product, Support and Governance/account-control families. It preserves WCAG 2.2's five conformance requirements, separates representative evaluation from normative conformance, incorporates the newly published WCAG-EM 2.0 evaluation methodology, establishes a layered evidence model from static/automated checks through browser/AT/complete-process/human evaluation, and defines scoped conformance/lifecycle governance. Production `minttap.app` conformance remains OPEN until real implementation evidence exists.
-
+051–057 — Accessibility Evidence; Semantic Accessibility; Operability/Focus; Accessible Transaction; Accessible Application-State; Adaptation/User-Preference; Product-Demo Media Accessibility contracts.  
+058 — Stage 5 Integration: Accessibility Conformance, Complete-Process Evidence & App-Company Competency Review — **PASS**.  
 **STAGE 5 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 6 — Search / Discovery / Content Quality
 
+059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization & App-Company Findability — PASS.**
+
+059 establishes the search pipeline from stable URL/discovery through crawl/fetch, rendering, indexing/deduplication, canonical selection and serving. It separates crawl control, index control and access control; rejects sitemap/submission as indexing guarantees; treats JavaScript rendering as supported but not architecture-neutral; connects HTTP direct-entry/status behavior to crawler meaning; and creates a Search Discovery Evidence Contract for live Company/Product/Support/Governance URLs.
+
 Next integrated study:
 
-059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization and App-Company Findability**.
+060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent**.
 
-Begin with how search engines discover, fetch, render, index and choose representations of web resources. Establish crawl/index/canonical boundaries and connect Company/Product/Support/Governance IA to external discovery before keyword tactics, structured data or growth optimization.
+Move from URL discovery/indexability to how machines and humans understand a page's purpose. Establish content semantics, search-result representation, internal context and useful query-to-page fit before structured data, keyword tooling or growth optimization.
 
 ---
 
@@ -74,13 +55,13 @@ Begin with how search engines discover, fetch, render, index and choose represen
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 5 — COMPLETE at intended foundation/practitioner level; 051–058 PASS.**  
-**Stage 6 — READY TO START.**
+**Stage 6 — ACTIVE; 059 PASS.**
 
 ## Design Studio relationship
 
-Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W014 establishes native-vs-custom button source-grounded behavior but runtime remains open. W006 integrated task-state execution, W011 icon runtime, actual browser-UI zoom, true HTTP direct-entry/reload, broader browser/device/AT and human evidence remain OPEN.
+Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W015 provides deterministic integrated state/recovery execution, while real browser/network transfer remains open. W014 browser execution, W011 icon runtime, actual browser-UI zoom, true HTTP direct-entry/reload/404 and broader browser/device/AT/human evidence remain OPEN.
 
-058's outgoing handoff is integration-oriented: Web Design should execute representative complete slices; Layout/Interaction should validate task/state/focus/adaptation continuity; Type should stress actual KO/EN/mixed production strings; Color should validate semantic-state contrast/user-environment behavior. Web Manager retains evaluation scope, WCAG level/process boundaries, accessibility-supported technology assumptions, evidence sufficiency, conformance wording and lifecycle governance. No Design Studio canonical file is edited by Web Manager without authorization.
+059 adds a search-discovery handoff to the true-HTTP gap: future runtime transfer should verify representative route direct entry, HTTP status/redirect/404 semantics, initial-vs-rendered content identity, crawlable links and route metadata/canonical/index directives. Web Manager retains search intent/index/canonical strategy and crawler/index-system evidence ownership. No Design Studio canonical file is edited by Web Manager without authorization.
 
 ## Study quality standard
 
