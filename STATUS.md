@@ -9,9 +9,7 @@ Platforms: iOS / App Store, Android / Google Play
 
 Build professional Web Manager judgment from first principles through advanced cross-domain reasoning. GitHub is canonical memory; chat is temporary context. Canonical curriculum: `LEARNING_ROADMAP.md`.
 
-Learning remains coarse-grained and evidence-led:
-
-`history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`
+Learning sequence: `history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`.
 
 ---
 
@@ -27,103 +25,59 @@ Learning remains coarse-grained and evidence-led:
 
 034–038 cover task-based anatomy/content ownership, content modeling/lifecycle/cross-channel truth, navigation/findability, page systems/comprehension and integrated Company/App/Support/Governance competency.
 
-Integrated model:
-
-`entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`
-
-Reusable output: task/destination matrix + content-object/lifecycle model + critical-destination findability matrix + Page Contract.
-
----
+Integrated model: `entry context → identity/orientation → destination promise → canonical content → task completion → escalation/recovery → lifecycle`.
 
 # Stage 3 — UX & Interaction Foundations
 
 **COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.**
 
-## 039 — User Action, System State, Feedback, Error & Recovery
+039–044 establish Interaction, Task/Journey, Form/Transaction, Retrieval and Responsive/Input Continuity contracts and integrate them under complete-task usability review.
 
-`research/039-stage3-user-action-system-state-feedback-error-recovery-foundations.md`  
-Reusable output: **Interaction Contract**.
+Integrated model: `entry context → goal/orientation → available action → prerequisite/input → transition → pending/validation → authoritative outcome → next task or recovery → continuity`.
 
-## 040 — User Goals, Task/Journey Modeling, Cognition, Expectation & Friction
-
-`research/040-stage3-user-goals-task-journey-cognition-expectation-friction-foundations.md`  
-Reusable output: **Task/Journey Contract**.
-
-## 041 — Forms, Input, Choice, Validation & Multi-Step Transaction Design
-
-`research/041-stage3-forms-input-choice-validation-multistep-transactions.md`  
-Reusable output: **Form / Transaction Contract**.
-
-## 042 — Search, Filtering, Selection, Results & List/Detail Interaction
-
-`research/042-stage3-search-filter-selection-results-list-detail-foundations.md`  
-Reusable output: **Retrieval Contract**.
-
-## 043 — Responsive Web Interaction, Input Modality & Cross-Device Continuity
-
-`research/043-stage3-responsive-input-modality-cross-device-continuity.md`  
-Reusable output: **Responsive/Input Continuity Contract**.
-
-## 044 — Stage 3 Integration: Complete-Task Usability & Interaction Competency Review
-
-`research/044-stage3-integration-complete-task-usability-interaction-competency-review.md`  
-**INTEGRATION GATE: PASS at intended Foundation/Practitioner level.**
-
-Integrated complete-task model:
-
-`entry context → goal/orientation → available action → prerequisite/input → transition → pending/validation → authoritative outcome → next task or recovery → continuity`
-
-Representative integration scenarios:
-- app evaluation → correct store action;
-- support direct entry → resolution → escalation;
-- privacy/account-control direct entry;
-- form/transaction → validation/pending/known failure/outcome unknown/recovery;
-- retrieval → filter/results → detail → Back/resume;
-- narrow/KO-EN/zoom/keyboard/touch/mixed-input/OSK/orientation/async/interruption stress.
-
-### Stage 3 retained judgment
-
-- usability is an outcome of use; standards/source conformance does not prove measured usability;
-- review the complete task/state path, not isolated components;
-- diagnose failures by owning contract rather than calling everything “bad UX”;
-- visual polish cannot substitute for task completion, truthful state or recovery;
-- trust is emergent from truthful scope/state/consequence/evidence/recovery, not a decorative badge layer;
-- production usability, WCAG conformance, AT behavior, browser/device parity and conversion optimization remain separate validation claims.
-
-### Stage 3 reusable contract stack
-
-**Stage 2 Page Contract + 039 Interaction Contract + 040 Task/Journey Contract + 041 Form/Transaction Contract + 042 Retrieval Contract + 043 Responsive/Input Continuity Contract.**
-
-### Primary/current evidence rechecked 2026-09-15
-
-- ISO 9241-11:2018 current status and usability-as-outcome framing;
-- WCAG 2.2/current WAI Forms guidance;
-- Apple App Privacy current requirements;
-- Google Play current external account-deletion policy boundary;
-- latest Design Studio Web and Layout/Interaction specialist status.
+Retained boundary: standards/structural review do not prove measured usability, WCAG conformance, AT behavior or browser/device parity.
 
 ---
 
 # Stage 4 — Web Design Literacy
 
-**CURRENT MAJOR CURRICULUM STAGE — READY TO BEGIN.**
+**CURRENT MAJOR CURRICULUM STAGE — ACTIVE.**
 
-Goal: develop Web Manager judgment about web-specific visual/design quality while using Design Studio as reusable specialist authority rather than duplicating its research.
+## 045 — Web Visual Hierarchy, Composition & Design-System Integration Literacy
+
+`research/045-stage4-web-visual-hierarchy-composition-design-system-integration-literacy.md`  
+**FOUNDATION/PRACTITIONER CHECKPOINT: PASS.**
+
+Core model:
+
+`task importance → semantic structure → attention order → grouping → typographic hierarchy → color/surface hierarchy → responsive recomposition → component/system consistency → product evidence → browser validation`
+
+Reusable output: **Visual/Web Design Review Contract**.
+
+Retained judgment:
+- semantic/task hierarchy and visual attention hierarchy are distinct but must agree;
+- prominence is task/state-relative and is not a universal size ladder;
+- responsive composition preserves relationships rather than coordinates;
+- web typography is a runtime font/fallback/loading system, not a static mockup;
+- color supports structure/state and must not become the only carrier of meaning;
+- component consistency is semantic/state/behavioral consistency, not identical rectangles;
+- app screenshots/demos are product evidence and must not imply unshipped functionality;
+- visual polish cannot repair product-truth, task, state or recovery failures;
+- Web Manager specifies obligations/acceptance criteria and uses Design Studio for specialist authorship and validation.
+
+### Primary/current evidence rechecked 2026-09-15
+
+- WCAG 2.2 structural/sequence/color/contrast requirements;
+- CSS Fonts Level 4 font matching/fallback/loading behavior;
+- Apple current App Review Guidelines and App Store asset guidance;
+- Google Play current store-listing/publishing guidance;
+- latest Design Studio Web, Type, Color and Layout/Interaction specialist status.
 
 ## Highest-value next integrated block
 
-Begin **Stage 4 Web Design Literacy — visual hierarchy, composition, typography, color, imagery/product demonstration and component/page-system integration**.
+**046 — Web Typography, Reading, Localization & Content Presentation Literacy.**
 
-Start by mapping the latest Design Studio Web W001–W005 (and W006 if completed by then), Type, Color and Layout evidence to the Web Manager's decision boundary:
-- what a Web Manager must specify versus leave to Design Studio;
-- how content/task priority becomes visual hierarchy without confusing prominence with importance;
-- how browser typography/fallback/loading/localization affect hierarchy and layout;
-- how color/contrast/state semantics support rather than replace structure;
-- how screenshots/imagery demonstrate real app value without making unsupported claims;
-- how page/component consistency trades against local task optimization;
-- what must be browser/device/accessibility validated before production.
-
-Do not invent a universal MintTap visual style.
+Study real web reading systems—headings/body/support/policy/data text, line length/wrapping, mixed Korean/English, font loading/fallback, zoom/reflow and content presentation—while reusing Type evidence rather than repeating type-design construction research.
 
 ---
 
@@ -131,13 +85,14 @@ Do not invent a universal MintTap visual style.
 
 Latest specialist-file state checked 2026-09-15:
 
-- **Web Design W001–W005: PRACTICE/CRITIQUE; Foundation NOT PASSED; W006 next.** W004 now covers IA/URL/navigation/history/direct entry and W005 covers component/page systems/native semantics/state contracts.
-- **Layout/Interaction Stage 1 PASS / Stage 2 entry audit next**, explicitly without production/browser/device/AT/human completion.
-- Web W006 is queued for complete task surfaces, making 044's scenario matrix a direct incoming handoff.
+- **Web Design:** W001–W008 complete at PRACTICE/CRITIQUE + integrated capstone; Foundation **NOT YET PASSED** pending W009 closure audit. This supersedes older Web Manager notes that said W001–W005/W006 next.
+- **Type:** through T016; Foundation NOT PASSED. Downloadable-webfont loading/failure/fallback geometry is controlled evidence; broader production Korean/complex-script/cross-browser/human reading remains open.
+- **Color:** Stage 1 PASS; Stage 2 entry audit next. Production/device/human/Web integration remains separate.
+- **Layout/Interaction:** Stage 1 PASS; Stage 2 entry audit next. Production/browser/device/AT/human completion is not implied.
 
 ### Current outgoing handoff
 
-Provide Design Studio Web W006/project work with the Stage 3 complete-task scenarios and full contract stack. Ask Web Design to return browser-rendered evidence for complete task surfaces, responsive disclosure/focus/history, native-vs-custom behavior, long bilingual/zoom conditions, async state and list/detail continuity. Layout/Interaction should challenge pending/invalid/filtered/focused/interrupted mode transitions.
+Provide Design Studio with the Stage 2/3 contract stack plus 045 Visual/Web Design Review Contract. Web Design should return complete page directions and browser evidence; Type should receive exact fonts/KO-EN/numeric/loading conditions; Color should receive semantic state/surface/brand constraints; Layout/Interaction should challenge relationship invariants, density, focus/layer ownership and responsive state transfer.
 
 No Design Studio canonical file was edited.
 
@@ -145,7 +100,7 @@ No Design Studio canonical file was edited.
 
 # Important unknown MintTap facts
 
-Real project decisions still require verified evidence for actual app inventory/launch priorities, user goals, store-linked URLs, support/contact/account/deletion behavior, subscription/payment model, privacy/data-control procedures, support backend/corpus, search need/query patterns, backend/index freshness, analytics/privacy constraints, authenticated persistence/cross-device resume, target browsers/devices/inputs/locales and human usability evidence.
+Real project decisions still require verified evidence for actual app inventory/launch priorities, brand system, shipped screenshots/assets, user goals, store-linked URLs, support/contact/account/deletion behavior, subscription/payment model, privacy/data-control procedures, supported locales, target browsers/devices/inputs, analytics/privacy constraints, authenticated persistence and human usability evidence.
 
 Do not infer these from generic app-company patterns.
 
@@ -157,6 +112,7 @@ Do not infer these from generic app-company patterns.
 - `research/README.md` indexes staged learning.
 - Stage 1: COMPLETE at intended foundation/practitioner level.
 - Stage 2: COMPLETE at intended foundation/practitioner level.
-- Stage 3: COMPLETE, 039–044, integration gate passed.
-- Current next major work: **Stage 4 — Web Design Literacy**.
+- Stage 3: COMPLETE at intended foundation/practitioner level.
+- Stage 4: ACTIVE; 045 checkpoint PASS.
+- Current next work: **046 — Web Typography, Reading, Localization & Content Presentation Literacy**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
