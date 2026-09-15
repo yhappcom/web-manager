@@ -42,44 +42,49 @@ Learning sequence: `history/problem → design principle → standard → curren
 
 059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization & App-Company Findability — PASS.**
 
-Established model:
+060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent — PASS.**
 
-`publish resource → expose stable URL → discover → crawl/fetch → parse → render when applicable → extract content/links/signals → index/deduplicate → canonical selection → serve/rank → revisit after change`
+Established progression:
 
-Retained judgments from 059:
-- discovery, crawling, rendering, indexing, canonical selection and serving are separate diagnostic stages;
-- sitemap inclusion and recrawl/submission are discovery/freshness mechanisms, not indexing guarantees;
+`stable truthful resource → discovery/fetch/render/index/canonicalization → distinct page purpose → searcher need/query → title/heading/content/internal context → engine interpretation/result representation → deep entry → task satisfaction → lifecycle maintenance`
+
+Retained judgments through 060:
+- discovery, crawling, rendering, indexing, canonical selection, page meaning, result representation and task satisfaction are separate diagnostic layers;
 - robots crawl control, `noindex` and authentication/access control solve different problems;
-- JavaScript rendering is supported by Google but does not make rendering architecture search-neutral;
-- HTTP status/direct-entry behavior remains machine-visible search meaning, not merely a browser UX detail;
-- canonicalization selects a representative among duplicate/similar URLs and site-declared canonical preference is not an absolute command;
-- external search turns deep Product/Support/Governance URLs into possible entry surfaces, linking Stage 6 back to Stage 2 wayfinding;
-- search operations require crawler-observed evidence, not source-code intention alone;
-- a reusable **Search Discovery Evidence Contract** now separates content identity, intended URL, discovery path, fetch/status, crawl/index directives, initial/rendered content, canonical intent/observation, sitemap, lifecycle and index evidence.
+- JavaScript rendering support does not make rendering architecture search-neutral;
+- HTTP status/direct-entry behavior remains machine-visible search meaning;
+- canonical preference is not an absolute command;
+- `<title>`, visible main heading and engine-generated title link are related but not identical;
+- meta description is an influence/source candidate, not a guaranteed snippet; Google primarily derives snippets from page content;
+- query-to-page design should map materially distinct user needs to authoritative resources, not multiply URLs for keyword/query variants;
+- internal links simultaneously support discovery, navigation, relationship/context and architecture; important destinations should use crawlable links and useful anchor context;
+- helpful content for an app company depends on product/support/governance truth and lifecycle ownership, not editorial volume or arbitrary word counts;
+- no separate `AI SEO` content doctrine is justified by current Google guidance: indexed/eligible pages and foundational people-first SEO remain the basis for AI features;
+- a reusable **Search Content Intent Contract** now complements 059's Search Discovery Evidence Contract.
 
-Production `minttap.app` search state remains **OPEN** pending actual route inventory, rendering/deployment architecture, robots/sitemap/canonical/redirect inspection, Google/Bing webmaster evidence and locale strategy.
+Production `minttap.app` search/content state remains **OPEN** pending actual route/content inventory, titles/headings/meta descriptions, internal-link graph, rendering/deployment architecture, robots/sitemap/canonical/redirect inspection, Google/Bing webmaster evidence, indexed/query data, locale strategy and editorial ownership.
 
 Highest-value next block:
 
-060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent**.
+061 — **Structured Data, Entity/Site Identity, Software-App Representation & Search Appearance Boundaries**.
 
-Proceed from machine discovery to page meaning and searcher usefulness before structured data, keyword tooling or growth optimization.
+Proceed to explicit machine classification only after discovery/indexability and truthful page meaning are established. Distinguish schema vocabulary from engine-supported search features, eligibility from guaranteed display, and actual content from unsupported markup.
 
 ---
 
 # Design Studio relationship
 
 Latest relevant specialist state checked 2026-09-16:
-- **Web Design:** `progress/WEB_STATUS.md`: Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W015 now provides 17/17 deterministic integrated task-state/recovery execution, but real Fetch/DOM/network transfer remains OPEN. W014 native/custom control browser execution, W011 icon runtime, actual browser-UI zoom, true HTTP direct-entry/reload/404, broader browser/device/AT and human evidence remain OPEN.
+- **Web Design:** `progress/WEB_STATUS.md`: Stage 1 PASS; Stage 2 PRACTICE / NOT PASSED. W015 provides 17/17 deterministic integrated task-state/recovery execution, but real Fetch/DOM/network transfer remains OPEN. W014 native/custom control browser execution, W011 icon runtime, actual browser-UI zoom, true HTTP direct-entry/reload/404, broader browser/device/AT and human evidence remain OPEN.
 - coordinator `progress/STATUS.md` is stale relative to the specialist status; `WEB_STATUS.md` is the more current Web evidence.
 
 ### Current Stage 6 handoff
 
-059 adds search-discovery reasons to the existing true-HTTP runtime gap. When Web Design can execute a real HTTP route harness, representative Company/Product/Support/Governance routes should verify direct entry, `200`/redirect/`404`, initial-vs-rendered content identity, crawlable links and route-specific metadata/canonical/index directives where applicable. Web Manager retains search intent, canonical/index strategy and crawler/index evidence ownership.
+059–060 strengthen the existing true-HTTP/runtime/IA handoff. Future Web Design runtime transfer for representative Company/Product/Support/Governance routes should verify direct entry, `200`/redirect/`404`, initial-vs-rendered content identity, real crawlable `<a href>` navigation, route-specific title/main-heading consistency, metadata/canonical/index directives and useful deep-entry orientation. Visual card/button navigation must preserve real link semantics when navigation is the action.
 
-Layout/Interaction should treat externally discovered deep pages as entry surfaces that retain identity/wayfinding/recovery. Type should preserve actual KO/EN/mixed text rendering but styling cannot substitute for DOM-visible textual meaning. No new Color-specific dependency was introduced by 059.
+Layout/Interaction should treat externally discovered deep pages as entry surfaces that retain identity, wayfinding and recovery. Type should ensure visual heading hierarchy reinforces rather than contradicts document/page identity and preserve actual KO/EN/mixed rendering. Styling cannot substitute for DOM-visible textual meaning. No new Color-specific dependency was introduced by 060.
 
-No Design Studio canonical file was edited.
+Web Manager retains search/query intent, content ownership, canonical/index strategy, title/snippet observation and crawler/index-system evidence ownership. No Design Studio canonical file was edited.
 
 ---
 
@@ -87,7 +92,7 @@ No Design Studio canonical file was edited.
 
 Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, production brand/fonts/components, supported locales, analytics/privacy constraints and all prior accessibility production evidence.
 
-Stage 6 additionally requires actual URL/route inventory, rendering/deployment architecture, robots directives, sitemap/canonical/redirect strategy, HTTP direct-entry/404 behavior, Google Search Console/Bing Webmaster ownership and reports, indexed/canonical coverage, locale URL strategy, staging/demo exposure and content/index inventory. Do not infer these from generic app-company patterns.
+Stage 6 additionally requires actual URL/route/content inventory, rendering/deployment architecture, robots directives, sitemap/canonical/redirect strategy, HTTP direct-entry/404 behavior, title/heading/meta-description inventory, internal-link graph, Google Search Console/Bing Webmaster ownership and reports, indexed/canonical/query coverage, locale URL strategy, staging/demo exposure, content authorship/ownership and lifecycle state. Do not infer these from generic app-company patterns.
 
 ---
 
@@ -100,6 +105,6 @@ Stage 6 additionally requires actual URL/route inventory, rendering/deployment a
 - Stage 3: COMPLETE at intended foundation/practitioner level.
 - Stage 4: COMPLETE at intended foundation/practitioner level.
 - Stage 5: COMPLETE at intended foundation/practitioner level; 051–058 PASS.
-- Stage 6: **ACTIVE; 059 PASS.**
-- Current next work: **060 — Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent**.
+- Stage 6: **ACTIVE; 059–060 PASS.**
+- Current next work: **061 — Structured Data, Entity/Site Identity, Software-App Representation & Search Appearance Boundaries**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
