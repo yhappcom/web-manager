@@ -2,7 +2,7 @@
 
 This directory is the source-grounded learning and decision-support layer for the MintTap company website and `minttap.app` domain. Canonical curriculum: `../LEARNING_ROADMAP.md`; horizontal ownership: `../SPECIALIST_TRACKS.md`. Learning proceeds FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT.
 
-Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`, `DEPENDENCY`, `VALIDATION`, `CHANGE WATCH`, and where useful `TRANSFER VALIDATION` / `CONTRADICTION`.
+Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`, `DEPENDENCY`, `VALIDATION`, `CHANGE WATCH`, `TRANSFER VALIDATION`, `CONTRADICTION`.
 
 ## Completed curriculum
 - Stage 1 Web Foundations: 027–033 — **PASS**
@@ -12,33 +12,37 @@ Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`
 - Stage 5 Accessibility: 051–058 — **PASS**
 - Stage 6 Search / Discovery / Content Quality: 059–065 — **PASS**
 - Stage 7 Performance / Browser Runtime: 066–070 — **PASS**
+- Stage 8 Security / Privacy / Trust: 071–072 — **PASS**
 
 All passes are foundation/practitioner curriculum gates, not production validation.
 
 ## Stage 8 — Security / Privacy / Trust
-071 — **Integrated Security / Privacy / Trust Foundations — PASS (core body).**  
-Track E-owned consolidated study covering threat models/trust boundaries, same-origin/CORS transfer, TLS properties/limits, cookies/session/auth boundaries, defensive XSS/CSRF/injection/clickjacking distinctions, CSP/security headers derived from threats, third-party/supply-chain/secrets risk, privacy/data minimization, analytics/ad implications, support/phishing/trust communication, defense in depth/residual risk, cross-track handoffs and integrated diagnostic cases.
+071 — **Integrated Security / Privacy / Trust Foundations — PASS.**  
+Track E-owned consolidated body: threat models/trust boundaries; origin/CORS/TLS/cookie/session/auth transfer; defensive XSS/CSRF/injection/clickjacking; CSP/security headers derived from threats; third-party/supply-chain/secrets; privacy/data minimization; analytics/ad implications; support/phishing/trust; defense in depth/residual risk; cross-track handoffs and diagnostic cases.
 
-Key operating model:
+072 — **Stage 8 Integration & Security/Privacy Release-Readiness Operating System — PASS.**  
+Adds release evidence/negative-testing/residual-risk governance, incident/recovery lifecycle, RFC 9116 vulnerability-reporting boundary, specialist/legal escalation, contradiction checks and six representative app-company architecture stress tests.
+
+Core security model:
 `asset → actor → data flow → trust boundary → attacker capability → abuse/failure → impact → preventive control → detective/recovery control → residual risk`.
 
-Key boundary:
-`network security ≠ browser isolation ≠ application authorization ≠ input/output safety ≠ deployment/dependency integrity ≠ privacy ≠ human trust`.
+Release model:
+`inventory → threat model → controls → implementation evidence → negative testing → privacy/third-party review → recovery/rollback → residual-risk decision → release → monitoring → incident learning`.
 
-071 deliberately consumes Track A's existing platform mechanics rather than duplicating HTTP/TLS/origin/cookie primers. It also records Marketing transfer evidence: native MintTap 1.0.29 implementation contains Firebase Analytics/Google Mobile Ads, but that does not establish website analytics/ads or Store production state.
+**STAGE 8 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
-Next integrated study:
-072 — **Stage 8 Integration & Security/Privacy Release-Readiness Operating System.**  
-Use representative app-company architecture/data-flow scenarios to test threat-model/control derivation, evidence/release gates, incident/recovery, trust communication and specialist escalation. Close Stage 8 only if the roadmap exit capability is demonstrated.
+Production `minttap.app` security/privacy remains OPEN pending actual architecture/runtime/configuration/data-flow evidence and specialist/legal review where required.
 
-## Current curriculum position
-**Stages 1–7 COMPLETE at intended foundation/practitioner level.**  
-**Stage 8 ACTIVE; 071 core body PASS; integration gate OPEN.**
+## Next integrated study — Stage 9 Analytics / Experimentation
+Track D becomes the highest-value bottleneck. Begin from:
+`business/user decision → task/behavior semantics → observable event → privacy/minimization gate → instrumentation contract → aggregation/segmentation → attribution/inference limits → experiment/qualitative evidence → decision threshold → change → re-observation`.
+
+Stage 8 privacy/minimization is a mandatory dependency; Track B supplies task semantics; Track C supplies performance/accessibility/quality guardrails. Marketing owns broader acquisition/channel/community strategy and provides cross-surface evidence without being duplicated.
 
 ## Specialist relationships
-A Platform/Browser owns reusable web mechanics; B UX/IA/Content consumes security task/trust requirements; C Performance/Accessibility/Quality consumes security-control/third-party regression requirements; D Search/Discovery/Analytics consumes privacy/minimization constraints; E Architecture/Security/Operations owns Stage 8 threat/control/residual-risk evidence.
+A Platform/Browser owns reusable mechanics; B UX/IA/Content owns web task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability and measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates.
 
-Design Studio remains canonical for reusable visual/interaction evidence. Latest checked Web status: Stage 1/2 PASS, Stage 3 PRACTICE; W021 browser/HTTP/cross-browser/AT/device/field/human evidence remains open. Marketing owns acquisition/community strategy; its native-app evidence is not website evidence. Software Engineering Studio exists but no canonical STATUS was available at the checked path, so no general engineering conclusions were imported.
+Design Studio remains canonical for reusable visual/interaction evidence. Latest checked Web status: Stage 1/2 PASS, Stage 3 PRACTICE; W021 browser/HTTP/cross-browser/AT/device/field/human evidence remains open. Marketing's native-app analytics/ad evidence does not establish website instrumentation. Software Engineering Studio exists but no canonical STATUS was available at the checked path, so no maturity was inferred.
 
 ## Study quality standard
-Substantial studies should include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, MintTap relevance without invented production facts, durable vs changeable behavior, and competency/application checks.
+Substantial studies include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, MintTap relevance without invented production facts, durable vs changeable behavior, and competency/application checks.
