@@ -1,7 +1,7 @@
 # MintTap Web Manager Status
 
 Operating state: **ACTIVE — CONTINUOUS EXPERT MAINTENANCE / APPLICATION + FIVE-TRACK COORDINATION + PWA SPECIALIZATION**  
-Last sync: 2026-09-16  
+Last sync: 2026-09-17  
 Domain: `minttap.app`  
 Platforms: iOS / App Store, Android / Google Play, strategic PWA/Web App capability
 
@@ -13,23 +13,29 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Fu
 084 — **iOS/iPadOS PWA Install, Background & Authentication Reality — PASS.**  
 085 — **PWA Irreplaceable Data Recovery, Offline Authorization & Device-Loss Security — PASS.**  
 086 — **PWA Direct Transport, Discovery, Pairing & Security Boundaries — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
-087 — **PWA WebRTC Establishment, Managed-Network Reality & Fallback Experiment Contract — PASS (generic) / PRODUCT FEASIBILITY OPEN.**
+087 — **PWA WebRTC Establishment, Managed-Network Reality & Fallback Experiment Contract — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
+088 — **PWA Offline Navigation, Service-Worker Update Recovery & Observability — PASS (generic) / PRODUCT VALIDATION OPEN.**
 
-## 087 material findings
-- WebRTC establishment is a system: intended peer identity → signaling → offer/answer → ICE candidate gathering/exchange → connectivity checks → selected candidate pair → encrypted DataChannel → application authentication/acknowledgement/reconciliation.
-- Persistent pairing identity is not a persistent network route. Fresh signaling/ICE can be required after network change, suspension/process restart or ICE restart.
-- STUN can expose NAT-mapped reachability information; it is not a relay and does not guarantee peer reachability. TURN supplies relay candidates when direct paths are unavailable.
-- `P2P payload path ≠ infrastructure-free system`; signaling and STUN/TURN may still be required. `TURN relay ≠ application-record authority`, but relay use still has privacy, cost, availability and metadata consequences.
-- Same LAN and Internet availability are not sufficient feasibility evidence. Client isolation, firewall, NAT, VPN, proxy/content filtering, MDM/network policy and browser/container behavior are independent axes.
-- Apple documents local-network privacy/management controls for native/managed apps, but those controls do not establish equivalent Safari/Home-Screen PWA behavior. Exact managed-PWA behavior remains target-device evidence.
-- A successful connection once does not establish durable reconnect. `restartIce()` itself still requires renegotiation/signaling.
-- Direct WebRTC remains an opportunistic transport inside the durability contract, not the durability foundation.
-- Candidate architecture classes now distinguish server application sync, server signaling + STUN/direct WebRTC, signaling + STUN/TURN direct-or-relayed WebRTC, and explicit export/import recovery.
-- A target-device experiment matrix is now defined for same LAN, isolated LAN, separate networks, cellular/managed Wi-Fi, VPN/proxy/content-filter, offline/reconnect, airplane-mode transitions, STUN-only, TURN fallback, signaling loss, suspension/process restart, network change and long-offline return.
+## 088 material findings
+- navigation readiness is a state machine: network signal, usable transport, worker presence/boot, route cache, shell/data availability, schema compatibility and fetch-handler correctness are independent axes;
+- `online ≠ usable network ≠ successful navigation ≠ task-ready application`;
+- service-worker update states remain distinct: update detected/installed/waiting/activated/controlling/compatible;
+- `skipWaiting()`/`Clients.claim()` can accelerate takeover but do not establish shell/cache/schema/protocol compatibility;
+- navigation preload can reduce worker-start navigation latency but does not provide offline fallback or update correctness;
+- cache ownership now separates immutable assets, shell/navigation, reconstructible reference data, irreplaceable user records and durable outbox state;
+- routine recovery must never use destructive site-data clearing when unsynchronized authoritative records may exist;
+- long-offline N→N+k recovery requires version identification, data/outbox preservation, bounded migration, compatible activation, idempotent replay/reconciliation and delayed obsolete-cache retirement;
+- recovery observability must distinguish worker/shell/schema generations and navigation/recovery outcomes while minimizing record content/identifiers;
+- accessible degraded/update/recovery states are a data-safety control, not cosmetic messaging;
+- Safari 26.6 (2026-07-27) still shipped service-worker fixes, so exact WebKit behavior remains CHANGE WATCH and target-device validation is mandatory.
 
 # Persistent PWA guards
 `public website ≠ installable web experience ≠ offline-capable task ≠ synchronized product`.
+`online signal ≠ usable network ≠ successful navigation ≠ task-ready application`.
 `local save ≠ persistent storage ≠ sync queued ≠ transport attempt ≠ remote acknowledgement ≠ reconciliation ≠ backup ≠ tested restore`.
+`worker update found ≠ installed ≠ activated ≠ controlling ≠ application-compatible`.
+`navigation preload ≠ offline fallback ≠ cache correctness`.
+`reconstructible cache ≠ authoritative user records/outbox`.
 `Home Screen installed ≠ background synchronization available`.
 `push event execution ≠ arbitrary background execution`.
 `previously authenticated ≠ currently server-authorized ≠ authorized indefinitely offline`.
@@ -45,29 +51,29 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Fu
 
 # Five-track state
 All tracks have integrated foundation/practitioner coverage; allocation is risk/evidence-gap driven.
-- **A Platform/Browser:** strong; 087 closes the generic ICE/STUN/TURN/signaling/restart prerequisite needed to interpret direct-peer claims.
-- **B UX/IA/Content:** consumes pairing/connection/pending/retry/recovery semantics; invisible-sync claims remain prohibited without runtime evidence.
-- **C Performance/Accessibility/Quality:** exact browser/device, degraded-network, suspension/reconnect and accessible recovery evidence remains OPEN.
-- **D Search/Discovery/Analytics:** strong; may measure connection/candidate/ack states with minimized metadata but analytics cannot certify durability.
-- **E Architecture/Security/Operations:** highest-consequence PWA owner; 087 now converts remaining direct-sync uncertainty into managed-network and fallback acceptance tests rather than more generic transport theory.
+- **A Platform/Browser:** strong; 088 refreshes worker lifecycle/update/cache/navigation-preload mechanics and current standards/WebKit change-watch.
+- **B UX/IA/Content:** consumes explicit offline/cached/local-only/sync/update/recovery state semantics; generic `Offline` or `Saved` labels are insufficient for data-safety tasks.
+- **C Performance/Accessibility/Quality:** now has a canonical failure-injection matrix; exact Safari/device, AT, degraded-network and recovery execution remains OPEN.
+- **D Search/Discovery/Analytics:** consumes minimized navigation/update/recovery telemetry; absence of offline telemetry cannot prove absence of failures and analytics cannot certify durability.
+- **E Architecture/Security/Operations:** highest-consequence PWA owner; 088 defines compatibility/recovery hierarchy, cache ownership, observability and acceptance invariants. Remaining closure is implementation/device evidence.
 
 # Cross-repository evidence
-Design Studio Web Design latest checked 2026-09-16: Stage 1/2 PASS, Stage 3 PRACTICE / NOT PASSED; W038 compensation-race transfer contract ready but execution OPEN. No Safari, cross-browser, screen-reader, physical-device, field-CWV or human-UX PASS may be inferred.
+Design Studio Web Design checked 2026-09-17: Stage 1/2 PASS, Stage 3 PRACTICE / NOT PASSED; W039 bounded correction-chain contract ready but execution OPEN. No Safari, cross-browser, screen-reader, physical-device, field-CWV or human-UX PASS may be inferred.
 
-Software Engineering owns executable signaling/ICE/TURN/STUN implementation, native peer behavior, credential/key design, protocol/idempotency/reconnect, schema/outbox/reconciliation, backup/import and target-device experiments. Web Manager now supplies the 087 experiment/acceptance contract rather than duplicating implementation research.
+Software Engineering checked 2026-09-17: global Foundation still IN STUDY; current data evidence distinguishes serialization/publication/transactions/indexes and explicitly does not transfer Linux process-level evidence to iOS/Android durability. This reinforces 088's requirement that schema/outbox/cache recovery and interruption behavior be executed on target platforms rather than inferred.
 
 # Production OPEN register
 Actual `minttap.app` production state remains OPEN unless verified from project evidence.
 
-PWA/EFB OPEN includes exact managed-iPad OS/WebKit/MDM policy, Home Screen retention, network isolation/VPN/proxy/content filtering, actual local-network permission behavior for the PWA container, signaling reachability, selected ICE candidate behavior, TURN requirement/cost/privacy, pairing credential persistence/revocation, foreground/background/suspension behavior, native-phone counterpart behavior, LogMate schema/outbox/protocol, independent backup/restore and direct unattended PWA↔native transport.
+PWA/EFB OPEN includes exact managed-iPad OS/WebKit/MDM policy, Home Screen retention, worker/cache behavior, offline/deep-link navigation, update waiting/activation/takeover, schema migration/interruption, long-offline skipped-version recovery, storage pressure, accessible degraded/recovery UX, network isolation/VPN/proxy/content filtering, signaling/ICE/TURN behavior, pairing credential persistence/revocation, foreground/background/suspension behavior, LogMate outbox/protocol, independent backup/restore and direct unattended PWA↔native transport.
 
 # Next learning mode
-The generic direct-transport primer is no longer the bottleneck. **Highest-value next step for LogMate direct sync is implementation/target-device evidence from Software Engineering using the 087 matrix.** Until that evidence exists, do not manufacture feasibility conclusions.
+Generic direct-transport and generic offline/update/recovery theory are now sufficient for handoff. Highest-value product evidence requires Software Engineering + exact managed-iPad execution using 087/088 matrices.
 
-For autonomous Web Manager study without new implementation evidence, rotate to the next high-value PWA cross-track gap rather than repeating WebRTC: **offline/cache navigation failure architecture + service-worker update/recovery observability and accessible degraded-state UX**, with current Safari/WebKit vs Chromium evidence and long-offline EFB failure cases. Preserve the transport-agnostic durability contract.
+Without new implementation evidence, next autonomous PWA block should avoid repeating service-worker primers and examine **PWA testing/diagnostic architecture across browser devtools, automated browser tests, offline/network fault injection, storage/schema fixtures, release acceptance and support-safe diagnostics**, then connect it to privacy-minimized observability and Design Studio degraded-state evidence. Continue current Safari/WebKit change-watch.
 
 # Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–087 PASS**.
-- PWA direct-sync generic establishment knowledge: sufficient for handoff; product/device validation OPEN.
+- Continuous maintenance: **083–088 PASS**.
+- PWA generic direct-sync establishment and offline/update/recovery architecture: sufficient for implementation handoff; product/device validation OPEN.
 - Reporting remains coarse/checkpoint-based.
