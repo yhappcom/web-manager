@@ -20,50 +20,34 @@ Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`
 
 Curriculum passes are competency gates, not production certification.
 
+## Continuous expert maintenance/application
+083 — **PWA Storage Durability & Service-Worker Standards Change Watch — PASS (2026-09-16).**  
+Updates the PWA durability evidence base using current W3C/WebKit/Storage API evidence. Establishes that persistence grant/state/quota diagnostics, independent backup and tested restore are distinct; replaces historical fixed WebKit quota folklore with current disk-relative quota/eviction policy; adds a durability acceptance contract and LogMate/EFB transfer boundaries.
+
+Key 083 guards:
+- `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
+- larger quota ≠ recovery guarantee;
+- reconstructible cache assets ≠ irreplaceable local user records;
+- historical browser implementation limits ≠ current platform policy;
+- generic platform evidence ≠ managed-EFB product validation.
+
+Next PWA maintenance targets: iOS/iPadOS Home Screen install/update/background capability reality; authentication/session/offline interaction; backup/export/recovery UX + privacy; authoritative capability matrix where consequential.
+
 ## Stage 12 — Advanced / Expert Web Management — COMPLETE
 081 — **Expert Web Management Decision Governance — PASS.**  
-Builds Decision Record Contract, Evidence Confidence Record, Reversibility Frame, Debt Record, Migration Decision Gate and Expert Web Decision Packet. Establishes decision ownership, evidence scope/confidence, uncertainty, reversibility, TCO, specialist conflict resolution, governance lifecycle and migration judgment.
+Builds Decision Record Contract, Evidence Confidence Record, Reversibility Frame, Debt Record, Migration Decision Gate and Expert Web Decision Packet.
 
 082 — **Portfolio Governance, Learning & Platform Evolution — PASS / FINAL GATE.**  
-Adds Portfolio Ownership Matrix, Localization Governance Record, Postmortem Learning Record, Precedent Transfer Test, Change-Watch Register and Specialist Handoff Contract. Stress-tests accessibility/privacy/security/analytics conflicts, multi-app ownership, localization scale, incidents, competitor transfer, platform evolution and MintTap/LogMate/PWA cases.
+Adds Portfolio Ownership Matrix, Localization Governance Record, Postmortem Learning Record, Precedent Transfer Test, Change-Watch Register and Specialist Handoff Contract.
 
 Stage 12 expert model:
 `portfolio intent → product/task ownership → canonical truth → constraints/guardrails → specialist evidence → decision rights/escalation → release/operation → observed outcome → incident/feedback → learning → debt/change-watch → review/supersession`.
-
-Key guards:
-- specialist evidence ownership ≠ authority to accept every residual risk;
-- consensus ≠ correctness;
-- point-in-time conformance ≠ organizational maturity;
-- translation complete ≠ locale/region/product readiness;
-- competitor pattern ≠ demonstrated outcome or transferability;
-- incident trigger ≠ complete root/system explanation;
-- current platform behavior ≠ durable company principle;
-- migration deploy complete ≠ migration lifecycle complete;
-- low provider bill ≠ low TCO;
-- curriculum complete ≠ production certified.
-
-## Stage 11 — Web Operations & Platform Architecture — COMPLETE
-079 — Web Operations & Platform Architecture: Deployment, Recovery & PWA Lifecycle — **PASS**.  
-080 — Reliability, Observability, DR & Supply-Chain Integration — **PASS / STAGE 11 GATE**.
-
-## Stage 10 — App-Company Web Strategy & Growth — COMPLETE
-077 — App-Company Web Portfolio & Lifecycle Strategy — **PASS**.  
-078 — Release Governance, Portfolio Growth & Lifecycle Integration — **PASS / STAGE 10 GATE**.
-
-## Stage 9 — Analytics / Experimentation — COMPLETE
-075 — Analytics, Measurement & Experimentation Evidence Foundations — **PASS**.  
-076 — Measurement Reliability, Causal Inference & Pre-Launch Integration — **PASS / STAGE 9 GATE**.
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–082 transfer measurement, portfolio, release, operations and expert governance. PWA production/device validation remains OPEN and implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link evidence remains a Software Engineering/product dependency.
-
-## Continuous expert maintenance/application mode
-There is no automatic Stage 13. Future work is selected from live assignments, OPEN blockers, contradictory/weak evidence, change-watch, incidents, cross-repository dependencies and periodic portfolio governance review.
-
-When idle, prioritize high-consequence or fast-changing evidence: browser/PWA behavior, accessibility standards/guidance, privacy/security, search/store integration, provider/runtime operations and new cross-product lifecycle risks. Persist only meaningful integrated findings.
+075–083 transfer measurement, portfolio, release, operations, expert governance and current durability/change-watch evidence. PWA production/device validation remains OPEN and implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link evidence remains a Software Engineering/product dependency.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
