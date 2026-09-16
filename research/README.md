@@ -40,27 +40,30 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 **STAGE 6 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 7 — Web Performance / Browser Runtime
-066 — **Web Performance Foundations: Navigation Lifecycle, Critical Rendering Path, Resource Loading, Main-Thread/Rendering Work & Perceived Readiness — PASS.**  
-Separates navigation/network, parsing/resource discovery, parser/script/render blocking, style/layout/paint/composite, main-thread availability and task-relative readiness. Establishes a causal diagnostic chain and Primary Readiness Contract before metric/tool optimization.
+066 — **Web Performance Foundations — PASS.**  
+Browser-work phases, critical rendering/resource dependencies, main-thread availability and Primary Readiness Contract.
 
-067 — **Core Web Vitals from First Principles: LCP, INP, CLS, Field/Lab Evidence & Diagnostic Boundaries — PASS.**  
-Treats LCP/INP/CLS as bounded observation models rather than generic speed scores; separates metric symptom from browser-phase root cause; preserves field-vs-lab, percentile/population, lifecycle/bfcache and threshold/version boundaries; adds a Performance Evidence Contract joined to, but separate from, the Primary Readiness Contract.
+067 — **Core Web Vitals from First Principles — PASS.**  
+LCP/INP/CLS as bounded observation models; field/lab and lifecycle boundaries; Performance Evidence Contract.
+
+068 — **Performance Causality: Delivery, Resource Priority, Caching, Media, Fonts, JavaScript & Third-Party Cost — PASS.**  
+Separates bytes/transfer/discovery/dependency/CPU/render/task impact; treats preload/priority as scarce ordering signals; distinguishes caching/compression; analyzes media/font/CSS/JS/third-party causal families; establishes a Resource Criticality Matrix and cross-specialist performance handoffs.
 
 Next integrated study:
-068 — **Performance Causality: Network/Server/Resource Prioritization, Caching/Compression, Images/Fonts/JavaScript & Third-Party Cost.**
+069 — **Performance Budgets, Page-Family Targets, Measurement Toolchain & Release Regression Governance.**
 
-066 establishes browser-work mechanics and 067 establishes what current user-centric metrics observe and omit. 068 will study the causal delivery/resource families before budgets and Stage 7 integration.
+066–068 establish browser mechanics, metric evidence and causal resource families. 069 will convert them into task/page-specific performance governance before Stage 7 integration.
 
 ---
 
 ## Current curriculum position
 **Stages 1–6 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 7 — ACTIVE; 066–067 PASS.**
+**Stage 7 — ACTIVE; 066–068 PASS.**
 
 ## Design Studio relationship
-Latest `design-studio/progress/WEB_STATUS.md` checked 2026-09-16. Web Stage 1 PASS / Stage 2 PRACTICE NOT PASSED; W017 icon/non-text Chromium transfer is 12/12, while real Fetch/DOM/network and true HTTP navigation remain OPEN/BLOCKED. W007 request/paint/readiness/stability measurement remains a direct Stage 7 dependency.
+Latest relevant Web Design state checked 2026-09-16. Web Stage 1 PASS / Stage 2 PRACTICE NOT PASSED; W007 request/paint/readiness/stability remains OPEN and real HTTP/network breadth remains blocked in the current environment.
 
-066 hands Web Design a phase-specific runtime model. 067 adds the requirement to preserve LCP candidate/dependency evidence, representative INP interaction/latency phases, CLS shift sources/session context, navigation/cache/bfcache context and task-relative readiness rather than only final scores. Type later owns actual shipped-font/fallback/load transfer; Layout/Interaction owns async geometry/task continuity. Content Design/UX remain user-managed and receive evidence handoffs only when performance work changes information priority/loading language or actual interaction/shift evidence suggests task harm.
+Stage 7 handoff now requires future runtime evidence to preserve browser phase, Core Web Vital candidate/interaction/shift context, waterfall initiator chains, resource discovery/priority, media geometry/source selection, font swap/layout effects, JS/third-party main-thread work, cache/navigation context and task-relative readiness. Type owns typography requirements while Web Manager/engineering return measured delivery effects; Layout/Interaction owns async geometry/task continuity; visual media optimization requires fidelity review. Content Design/UX remain user-managed.
 
 No Design Studio canonical file is edited without authorization.
 
