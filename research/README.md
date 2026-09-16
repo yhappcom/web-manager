@@ -18,49 +18,49 @@ Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`
 
 All passes are foundation/practitioner curriculum gates, not production validation.
 
-## Stage 10 — App-Company Web Strategy & Growth — COMPLETE
-077 — **App-Company Web Portfolio & Lifecycle Strategy — PASS.**  
-Establishes company/product/resource/store/support/governance/PWA/localization/retirement portfolio responsibilities plus Resource Identity Record, Locale Readiness Contract and Portfolio Consistency Matrix.
+## Stage 11 — Web Operations & Platform Architecture — ACTIVE
+079 — **Web Operations & Platform Architecture: Deployment, Recovery & PWA Lifecycle — PASS.**  
+Establishes requirements-led architecture, environment contracts, release lineage, distributed deployment compatibility, cache ownership/invalidation, PWA update lifecycle, multi-layer rollback/recovery, observability context, dependency governance and provider portability.
 
-078 — **Release Governance, Portfolio Growth & Lifecycle Integration — PASS / STAGE 10 GATE.**  
-Stress-tests asynchronous review/release/rollout/region states, mixed-version populations, default/custom store variants, proof freshness, multi-product truth ownership, localization lineage, retirement, URL migration and PWA client-version lifecycle. Adds Release Truth Record, Availability Contract, Variant Governance Record, Proof Asset Ledger, Product Truth Registry, Surface Compatibility Matrix, Cross-Surface Release Gate and URL Migration Table.
-
-Stage 10 integrated model:
-`company identity → product identity → resource/proof truth → store/distribution state → support/governance → release/rollout population → locale/region → measurement → maintenance/retirement → URL/data continuity`.
+Stage 11 current model:
+`requirements → rendering/execution model → origin/backend → edge/CDN/cache → DNS/TLS → deployment/version → browser/service-worker/client state → observation → recovery`.
 
 Key guards:
-- release approval/upload ≠ universal user availability;
-- product capability ≠ store presentation ≠ web claim;
-- language ≠ region ≠ store availability;
-- custom listing/campaign variant ≠ independent product truth;
-- screenshot/proof freshness ≠ visual polish;
-- distribution removal ≠ existing-user/support/data lifecycle completion;
-- no 404s ≠ healthy migration;
-- origin deployment complete ≠ all installed PWA clients updated.
+- provider choice ≠ architecture;
+- build ≠ deployment ≠ healthy release;
+- preview URL ≠ isolated environment;
+- origin version ≠ edge/browser/worker/open-client version;
+- cache purge ≠ rollback;
+- rollback button ≠ rollback safety;
+- origin rollback ≠ installed-PWA recovery;
+- monitoring signal ≠ root cause;
+- backup ≠ rollback ≠ disaster recovery.
 
-Current platform release/store behavior is CHANGE WATCH. Actual MintTap store/web/runtime state remains OPEN.
+Reusable controls: Environment Contract, Release Lineage Record, Deployment Compatibility Window, Cache Ownership Map, PWA Safe Update Contract, Recovery Decision Record and Portability Ledger.
+
+Next Stage 11 block: DNS/domain/TLS operations, origin/CDN failure domains, CI/CD promotion and secret/config governance, SLO/monitoring/incident evidence, backup/RPO/RTO/disaster recovery, dependency/supply-chain operations and provider portability/cost stress tests. PWA cases: bad-worker recovery, schema migration, stale offline clients and Safari/iPad validation.
+
+## Stage 10 — App-Company Web Strategy & Growth — COMPLETE
+077 — App-Company Web Portfolio & Lifecycle Strategy — PASS.  
+078 — Release Governance, Portfolio Growth & Lifecycle Integration — PASS / STAGE 10 GATE.
+
+Stage 10 model:
+`company identity → product identity → resource/proof truth → store/distribution state → support/governance → release/rollout population → locale/region → measurement → maintenance/retirement → URL/data continuity`.
 
 ## Stage 9 — Analytics / Experimentation — COMPLETE
-075 — **Analytics, Measurement & Experimentation Evidence Foundations — PASS.**
-076 — **Measurement Reliability, Causal Inference & Pre-Launch Integration — PASS / STAGE 9 GATE.**
-
-Stage 9 model:
-`decision → population/task → product truth → observable signal → collection → missingness/selection → transformation/modeling → metric/uncertainty → alternatives → causal design if needed → guardrails → decision → intervention → re-observation`.
+075 — Analytics, Measurement & Experimentation Evidence Foundations — PASS.  
+076 — Measurement Reliability, Causal Inference & Pre-Launch Integration — PASS / STAGE 9 GATE.
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
-Service workers, offline, install, storage, updates and platform reality.
+074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**  
-Separates local transaction, durable outbox, transport, remote idempotent apply, acknowledgement, reconciliation/conflict and independent backup.
+075–079 transfer measurement, portfolio, release and operations knowledge without changing product-state authority. PWA production/device validation remains OPEN. Implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link/CI-CD validation is a Software Engineering dependency.
 
-075–078 add measurement, portfolio and release-lifecycle transfer without changing product-state authority. PWA production/device validation remains OPEN. Implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link validation is a Software Engineering dependency.
-
-## Next vertical curriculum study — Stage 11 Web Operations & Platform Architecture
-Highest-value integrated start:
-`requirements → rendering/hosting model → DNS/CDN/origin topology → environments/CI-CD → deployment atomicity/cache invalidation → observability → rollback/recovery → dependency/update governance → provider cost/lock-in/portability`.
-
-PWA remains elevated as a Stage 11 application case: service-worker deployment, cache generations, offline clients, schema migration and rollback/forward-fix boundaries.
+PWA operational guards:
+`local save ≠ synchronization ≠ backup`.
+`origin deployment complete ≠ all installed clients updated`.
+`origin rollback complete ≠ installed client recovered`.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns web task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability and measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates.
