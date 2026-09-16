@@ -247,7 +247,42 @@ Treat as skipped-version compatibility and data reconciliation, not “network f
 - backup/RPO/RTO requirements;
 - EFB physical iPad behavior and management restrictions.
 
-## 15. Competency gate
+## 15. PROJECT TRANSFER — LogMate EFB offline preview regression and artifact provenance
+
+**Evidence date:** 2026-09-16.  
+**Product authority:** `yhappcom/logmate`; Web Manager does not own the product fix or current product PASS/FAIL state.
+
+A current LogMate EFB Safari acceptance attempt exposed a reusable operations failure class: the tested preview artifact was created through a direct generic Flutter Web build path while the product repository already contained a canonical PWA build path with additional offline requirements. The direct preview rendered online but produced a white screen on physical EFB Safari after termination and offline re-entry. Historical LogMate POC evidence had already recorded similar white-screen iterations and a successful offline path using CDN-free web resources, bundled local fonts, full generated-resource precache, fresh preview origin, and actual readable first-frame validation.
+
+The current product source separately shows a first-frame-safe startup pattern (`runApp()` before asynchronous Firebase restoration), so the historical pre-first-frame Firebase-blocking failure should be compared but not assumed to be the current cause. The failed preview remains valid evidence **for that exact artifact and scenario**; root cause remains OPEN until the canonical product PWA build/deploy path is reproduced.
+
+### Transfer classification
+- historical POC white-screen evidence: **TRANSFER CANDIDATE**, not current-product PASS;
+- current direct-build EFB white screen: **VALIDATION FAILURE for the tested artifact**;
+- generic attribution to IndexedDB, Safari support, or LogMate application logic: **NOT ESTABLISHED**;
+- canonical PWA rebuild on a fresh origin: **REQUIRED next isolation step** before speculative product-code changes.
+
+### Reusable Web Operations rule — canonical artifact provenance
+For PWA/offline acceptance, a source commit is insufficient identity. Record:
+
+`source ref → canonical build target/command → toolchain/lock → required build flags → post-build service-worker/asset transforms → artifact/deployment ID → fresh/reused origin → browser/device/OS → observed first-frame/data result`.
+
+If a repository defines required offline build/post-build steps, a direct framework build that bypasses them is a **different artifact class**. Its failure must not be promoted to a failure of the canonical PWA path until reproduced there.
+
+### PWA acceptance guard
+Before physical offline acceptance:
+1. verify the artifact was produced by the canonical PWA target or a proven equivalent;
+2. verify required local renderer/font/static assets are present and no prohibited runtime CDN dependency remains;
+3. verify the generated service worker contains the intended precache/navigation behavior after all post-build transforms;
+4. use a fresh or explicitly version-isolated preview origin when stale worker/cache state would confound the result;
+5. validate the **actual readable application first frame**, not merely HTML DOM, runtime bootstrap, worker activation or cache presence;
+6. only after shell/readability PASS, evaluate IndexedDB/data persistence and higher-level task behavior;
+7. preserve failed artifacts and their provenance rather than erasing them after a later PASS.
+
+### Handoff — Web Manager → Software Engineering / LogMate
+Software Engineering should convert this from a human-memory rule into executable build/release checks where practical: canonical build target enforcement, artifact provenance capture, post-build worker/asset assertions, prohibited remote-runtime dependency checks, and offline fresh-navigation regression coverage. LogMate remains the authority for exact commands, code, CI and physical EFB acceptance evidence.
+
+## 16. Competency gate
 PASS this checkpoint if Web Manager can:
 1. derive architecture from requirements instead of provider preference;
 2. separate origin/edge/browser/service-worker/client/data versions;
@@ -263,4 +298,4 @@ PASS this checkpoint if Web Manager can:
 **Result: PASS — Stage 11 first integrated foundation/practitioner checkpoint.**
 
 ## Next adjacent work
-Continue Stage 11 with **operational reliability and architecture stress testing**: DNS/domain/TLS operations, origin/CDN failure domains, CI/CD promotion and secret/config governance, monitoring/SLO/incident evidence, backup/RPO/RTO/disaster recovery, dependency/supply-chain release operations, and provider portability/cost scenarios. Deepen PWA recovery with bad-worker kill/recovery patterns, schema migrations, stale offline clients and physical Safari/iPad validation requirements before Stage 11 closure.
+Continue Stage 11 with **operational reliability and architecture stress testing**: DNS/domain/TLS operations, origin/CDN failure domains, CI/CD promotion and secret/config governance, monitoring/SLO/incident evidence, backup/RPO/RTO/disaster recovery, dependency/supply-chain release operations, and provider portability/cost scenarios. Deepen PWA recovery with bad-worker kill/recovery patterns, schema migrations, stale offline clients and physical Safari/iPad validation requirements before Stage 11 closure. Carry the LogMate artifact-provenance incident into future release-gate examples so canonical PWA build equivalence is tested rather than assumed.
