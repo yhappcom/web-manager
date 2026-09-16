@@ -31,37 +31,33 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 
 ## Stage 5 — Accessibility
 051–057 — seven reusable accessibility contracts.  
-058 — Stage 5 Integration: Accessibility Conformance, Complete-Process Evidence & App-Company Competency Review — **PASS**.  
+058 — Stage 5 Integration — **PASS**.  
 **STAGE 5 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 6 — Search / Discovery / Content Quality
-059 — **Search & Discovery Foundations — PASS.** Search pipeline and Search Discovery Evidence Contract.  
-060 — **Search Content Semantics / Intent — PASS.** Truthful page meaning and Search Content Intent Contract.  
-061 — **Structured Data / Entity Representation — PASS.** Structured Data Evidence Contract and search-appearance boundaries.  
-062 — **Localization & International Search — PASS.** International Search / Locale Contract and Locale Continuity Matrix.  
-063 — **Search Measurement & Webmaster Operations — PASS.** Three-clock diagnostics and Search Operations Evidence Ledger.  
-064 — **Search Demand / Query Research / Niche Opportunity — PASS.** Search Opportunity Record and evidence-bounded create/improve/merge/observe/reject discipline.  
-065 — **Stage 6 Integration: Search/Discovery/Content-Quality Competency Review & Niche App Search Operating System — PASS.** Integrates public resource identity, crawler/index/content/entity/locale evidence, webmaster observation, niche demand and cross-platform URL continuation. Adds foundation-level iOS Universal Link / Android App Link boundaries and treats social previews as representation rather than product truth.
-
-**STAGE 6 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.** Production `minttap.app` search quality remains OPEN until real deployment/crawler/store/task evidence exists.
+059–064 — discovery/index mechanics; content intent; structured/entity representation; international search; webmaster observation; niche demand/opportunity.  
+065 — Stage 6 Integration / Niche App Search Operating System — **PASS**.  
+**STAGE 6 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
 
 ## Stage 7 — Web Performance / Browser Runtime
+066 — **Web Performance Foundations: Navigation Lifecycle, Critical Rendering Path, Resource Loading, Main-Thread/Rendering Work & Perceived Readiness — PASS.**  
+Separates navigation/network, parsing/resource discovery, parser/script/render blocking, style/layout/paint/composite, main-thread availability and task-relative readiness. Establishes a causal diagnostic chain and Primary Readiness Contract before metric/tool optimization.
 
 Next integrated study:
-066 — **Web Performance Foundations: Navigation Lifecycle, Critical Rendering Path, Resource Loading, Main-Thread/Rendering Work & Perceived Readiness.**
+067 — **Core Web Vitals from First Principles: LCP, INP, CLS, Metric Windows, Field vs Lab Evidence & Diagnostic Boundaries.**
 
-Start with mechanics before Core Web Vitals optimization, tooling or provider tuning.
+066 establishes browser-work mechanics first; 067 will study what current user-centric metrics observe and omit, how field and lab evidence differ, and how to avoid score chasing.
 
 ---
 
 ## Current curriculum position
 **Stages 1–6 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 7 — READY / NOT STARTED.**
+**Stage 7 — ACTIVE; 066 PASS.**
 
 ## Design Studio relationship
-Latest relevant Design Studio state checked 2026-09-16. Web runtime/true-HTTP evidence remains relevant to production search and upcoming performance validation. Content Design and UX remain user-managed.
+Latest `design-studio/progress/WEB_STATUS.md` checked 2026-09-16. Web Stage 1 PASS / Stage 2 PRACTICE NOT PASSED; W017 icon/non-text Chromium transfer is 12/12, while real Fetch/DOM/network and true HTTP navigation remain OPEN/BLOCKED. W007 request/paint/readiness/stability measurement remains a direct Stage 7 dependency.
 
-Stage 6 handoff now includes representative route HTTP/rendering/crawlable-link/title/H1/canonical/index/sitemap evidence plus locale/hreflang where applicable. If native continuation is implemented, validate installed/uninstalled Universal Link/App Link mapping, browser fallback, parameter/auth safety and association state. Content receives privacy-safe query/task/representation evidence; UX receives observed direct-entry continuation/task evidence. Search metrics alone do not dictate wording or prove UX defects.
+066 hands Web Design a phase-specific runtime model: request/navigation → resource discovery/transfer → parser/render blocking → style/layout/paint/composite → main-thread availability → task-relative readiness → stability. Type later owns actual font-file/fallback/load transfer; Layout/Interaction owns pending-state task continuity and layout stability. Content Design/UX remain user-managed and receive evidence handoffs only when performance changes information priority, loading language, perceived readiness or task continuity.
 
 No Design Studio canonical file is edited without authorization.
 
