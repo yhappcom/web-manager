@@ -36,9 +36,15 @@ Separates WebSocket/WebTransport server transport from WebRTC peer data transpor
 087 — **PWA WebRTC Establishment, Managed-Network Reality & Fallback Experiment Contract — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
 Deepens signaling/offer-answer/ICE candidate exchange, STUN vs TURN, NAT/firewall/network-isolation failure, ICE restart/re-signaling, managed local-network policy boundaries and direct-vs-relayed-vs-server fallback architecture. Converts remaining LogMate uncertainty into a canonical managed-iPad/native-phone experiment matrix for Software Engineering.
 
+088 — **PWA Offline Navigation, Service-Worker Update Recovery & Observability — PASS (generic) / PRODUCT VALIDATION OPEN.**  
+Integrates navigation failure states, worker update/waiting/activation/control boundaries, update-script cache semantics, navigation preload, cache ownership, long-offline skipped-version recovery, recovery hierarchy, privacy-minimized observability, accessible degraded/update/recovery UX and a failure-injection/acceptance matrix for exact managed-iPad validation.
+
 Key guards:
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
 - reconstructible cache assets ≠ irreplaceable user records;
+- `online signal ≠ usable network ≠ successful navigation ≠ task-ready application`;
+- `worker update found ≠ installed ≠ activated ≠ controlling ≠ application-compatible`;
+- `navigation preload ≠ offline fallback ≠ cache correctness`;
 - `Home Screen installed ≠ offline-capable ≠ background-sync capable`;
 - `push event execution ≠ arbitrary background execution`;
 - `previously authenticated ≠ currently server-authorized ≠ indefinitely authorized offline`;
@@ -53,7 +59,7 @@ Key guards:
 - `same LAN ≠ peer reachability`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Direct-sync generic theory is now sufficient for handoff. Product feasibility requires executable evidence using 087's topology/establishment/lifecycle matrix. Without that evidence, autonomous PWA research should move to offline navigation/cache/update/recovery observability rather than repeat WebRTC primers.
+Direct-sync establishment and generic offline/update/recovery theory are sufficient for implementation handoff. Product feasibility requires executable evidence using 087/088 topology, lifecycle, failure and recovery matrices. Autonomous research should now prioritize testing/diagnostic architecture and current platform change-watch rather than repeat WebRTC or service-worker primers.
 
 ## Stage 12 — Advanced / Expert Web Management — COMPLETE
 081 — **Expert Web Management Decision Governance — PASS.**  
@@ -63,7 +69,7 @@ Direct-sync generic theory is now sufficient for handoff. Product feasibility re
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–087 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct-transport and managed-network establishment evidence. Production/device validation remains OPEN.
+075–088 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct-transport, managed-network establishment and offline/update/recovery evidence. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
