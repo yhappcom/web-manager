@@ -22,41 +22,39 @@ Curriculum passes are competency gates, not production certification.
 
 ## Continuous expert maintenance/application
 083 — **PWA Storage Durability & Service-Worker Standards Change Watch — PASS (2026-09-16).**  
-Updates the PWA durability evidence base using current W3C/WebKit/Storage API evidence. Establishes that persistence grant/state/quota diagnostics, independent backup and tested restore are distinct; replaces historical fixed WebKit quota folklore with current disk-relative quota/eviction policy; adds a durability acceptance contract and LogMate/EFB transfer boundaries.
+Current W3C/WebKit/Storage evidence; persistence, quota, eviction, independent backup and restore boundaries.
 
 084 — **iOS/iPadOS PWA Install, Background & Authentication Reality — PASS (2026-09-16).**  
-Updates Home Screen installability for iOS/iPadOS 26, separates installability from offline/background/sync capability, bounds Web Push/Badging as event-driven rather than general background execution, rejects non-Baseline Background Sync as an EFB correctness dependency, records iOS/iPadOS 17.2 installation-time cookie-copy semantics, and defines offline-auth/session and managed-EFB acceptance boundaries.
+Current Home Screen/install behavior, Push/Badging vs general background execution, Background Sync limits, cookie-copy semantics and offline-auth state separation.
 
-Key 083–084 guards:
+085 — **PWA Irreplaceable Data Recovery, Offline Authorization & Device-Loss Security — PASS (2026-09-16).**  
+Integrates Recovery Contract, offline identity/session/local-unlock/authorization boundaries, WebAuthn Level 3 current standard, Web Crypto/key-management limits, XSS/client-storage risk, device-loss/logout/revocation conflicts, export→restore lifecycle, long-offline migration and safety-critical Saved/Sync/Backup state semantics.
+
+Key 083–085 guards:
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
-- larger quota ≠ recovery guarantee;
-- reconstructible cache assets ≠ irreplaceable local user records;
+- reconstructible cache assets ≠ irreplaceable user records;
 - `Home Screen installed ≠ offline-capable ≠ background-sync capable`;
 - `push event execution ≠ arbitrary background execution`;
-- `browser login ≠ continuously shared Home Screen app state`;
-- historical browser implementation limits ≠ current platform policy;
+- `previously authenticated ≠ currently server-authorized ≠ indefinitely authorized offline`;
+- `HTTPS + same-origin storage ≠ complete device-loss/XSS/data-at-rest security`;
+- `Web Crypto available ≠ safe encryption/key-recovery architecture established`;
+- `saved locally ≠ synchronized ≠ backed up ≠ restorable`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Next PWA maintenance target: backup/export/recovery UX + privacy/security/device-loss handling, integrated with offline authorization, user-visible durability states and long-offline/skipped-version recovery. Direct PWA↔native transport remains a separate evidence problem.
+Next PWA maintenance target: direct PWA↔native transport feasibility/security, decomposed into discovery, local-network policy, signaling/addressing, transport capability, background/suspension, pairing/authentication and managed-iPad constraints. Software Engineering target-device evidence is required before product architecture selection.
 
 ## Stage 12 — Advanced / Expert Web Management — COMPLETE
 081 — **Expert Web Management Decision Governance — PASS.**  
-Builds Decision Record Contract, Evidence Confidence Record, Reversibility Frame, Debt Record, Migration Decision Gate and Expert Web Decision Packet.
-
-082 — **Portfolio Governance, Learning & Platform Evolution — PASS / FINAL GATE.**  
-Adds Portfolio Ownership Matrix, Localization Governance Record, Postmortem Learning Record, Precedent Transfer Test, Change-Watch Register and Specialist Handoff Contract.
-
-Stage 12 expert model:
-`portfolio intent → product/task ownership → canonical truth → constraints/guardrails → specialist evidence → decision rights/escalation → release/operation → observed outcome → incident/feedback → learning → debt/change-watch → review/supersession`.
+082 — **Portfolio Governance, Learning & Platform Evolution — PASS / FINAL GATE.**
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–084 transfer measurement, portfolio, release, operations, expert governance, durability and current iOS/iPadOS capability evidence. PWA production/device validation remains OPEN and implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link evidence remains a Software Engineering/product dependency.
+075–085 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability and recovery/offline-auth evidence. Production/device validation remains OPEN.
 
 ## Specialist relationships
-A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
+A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
 
 Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Use explicit handoffs and evidence boundaries.
 
