@@ -6,18 +6,9 @@ Domain: `minttap.app`
 Platforms: iOS / App Store, Android / Google Play
 
 ## Operating model
-GitHub is canonical memory. `LEARNING_ROADMAP.md` is the vertical beginner→expert curriculum; `SPECIALIST_TRACKS.md` is the horizontal expertise model.
+GitHub is canonical memory. `LEARNING_ROADMAP.md` is the vertical beginner→expert curriculum; `SPECIALIST_TRACKS.md` is the horizontal five-track expertise model. Web Manager coordinates rather than acting as a sixth specialist. Work is allocated by prerequisite gap, evidence maturity, risk, dependency pressure and live-project value.
 
-Five cooperating tracks are active:
-A. Web Platform & Browser  
-B. Web UX, IA & Content Architecture  
-C. Web Performance, Accessibility & Quality  
-D. Search, Discovery & Analytics  
-E. Web Architecture, Security & Operations
-
-Web Manager coordinates the tracks and allocates work by prerequisite gap, evidence maturity, risk, dependency pressure and live-project value rather than equal file/research counts.
-
-Hourly cadence is a trigger, not a small syllabus unit. Each run should use the available execution window for a substantial integrated bundle—normally roughly 8–12 former micro-blocks where responsible—and continue into adjacent high-value work when this avoids an unnecessary idle gap. No filler is created merely to consume time. Reporting/persistence remains coarse and checkpoint-based.
+Tracks: A Web Platform & Browser; B Web UX/IA/Content Architecture; C Web Performance/Accessibility/Quality; D Search/Discovery/Analytics; E Web Architecture/Security/Operations.
 
 Learning sequence: `history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`.
 
@@ -33,63 +24,68 @@ Stages 1–7: **COMPLETE — FOUNDATION/PRACTITIONER GATES PASSED.**
 - Stage 6 Search / Discovery / Content Quality: 059–065
 - Stage 7 Web Performance / Browser Runtime: 066–070
 
-These passes do not imply production validation. Real `minttap.app` browser, AT, crawler, runtime, field and task evidence remain OPEN where applicable.
+These passes do not imply production validation.
 
-## Current specialist maturity interpretation
-- **A Platform & Browser:** strongest current foundation; supplies HTTP/DNS/browser/runtime mechanics to other tracks. Advanced depth remains intentionally reopenable later.
-- **B UX/IA/Content Architecture:** foundation/practitioner curriculum coverage exists; production MintTap information/task evidence remains OPEN.
-- **C Performance/Accessibility/Quality:** substantial foundation/practitioner coverage; production field/AT/cross-browser evidence remains OPEN.
-- **D Search/Discovery/Analytics:** search/discovery foundation exists; analytics/experimentation depth is a later major gap in Stage 9.
-- **E Architecture/Security/Operations:** operations prior research exists, but security first-principles curriculum is now the highest-value bottleneck.
+# Stage 8 — Security / Privacy / Trust
+Status: **ACTIVE — CORE FOUNDATION/PRACTITIONER BODY PASS; INTEGRATION GATE OPEN.**
 
----
+071 — **Integrated Security / Privacy / Trust Foundations — PASS.**
 
-# Current major block — Stage 8 Security / Privacy / Trust
-Status: **ACTIVE / FOUNDATION→PRACTITIONER**
+Track E owned the body and consumed Track A platform/browser foundations rather than duplicating HTTP/TLS/origin/cookie primers.
 
-Highest-value integrated bundle begins with Web Architecture, Security & Operations ownership and consumes Platform & Browser foundations rather than rewriting them.
+Established security model:
+`asset → actor → data flow → trust boundary → attacker capability → abuse/failure → impact → preventive control → detective/recovery control → residual risk`.
 
-Next learning body should cover, in a consolidated sequence:
-- why web/browser trust boundaries evolved;
-- assets, actors, threats, trust assumptions and threat-model method;
-- origin/security boundary relationship;
-- HTTPS/TLS security properties and limits;
-- cookies/session/authentication boundaries where relevant;
-- XSS, CSRF, injection and clickjacking mechanisms at defensive conceptual depth;
-- CSP and security headers as controls derived from threat models rather than header checklists;
-- third-party/dependency/supply-chain and deployment-secret risk;
-- privacy/data minimization/storage/analytics-advertising implications;
-- phishing/support abuse and trust communication;
-- defense-in-depth, residual risk and specialist escalation boundaries;
-- cross-track transfer to UX, performance, discovery and operations;
-- integrated diagnosis/competency cases before Stage 8 closure.
+Retained judgments through 071:
+- network-channel security, browser isolation, application authorization, input/output safety, deployment/dependency integrity, privacy and human trust are distinct layers;
+- same-origin, same-site, same-domain and CORS permission are not synonyms; CORS is not authentication/authorization;
+- HTTPS/TLS provides authenticated-channel confidentiality/integrity properties but does not prove application, dependency, endpoint or human trustworthiness;
+- cookie, session, authentication and authorization are separate concepts; Secure/HttpOnly/SameSite/Domain/Path attributes solve different problems;
+- XSS, CSRF, injection and clickjacking require mechanism-specific defenses rather than attack-name checklists;
+- CSP/security headers are policies derived from actual threats and dependencies, not scanner badges; report/observe/enforce/regression is preferred to copied header sets;
+- third-party scripts create runtime-authority, supply-chain, privacy, performance and incident-response risk simultaneously;
+- privileged secrets do not belong in public browser bundles; secrets need controlled storage/provisioning/access/rotation/audit boundaries;
+- secure collection does not imply justified collection: privacy starts with purpose and data minimization before confidentiality controls;
+- support/phishing defense includes consistent official identity and safe support habits; generic security badges/claims are trust theater without evidence;
+- defense in depth records the failure contained by each control and the residual risk rather than assuming more controls always means more safety.
 
-Do not split these into a user report for every small subtopic. Continue until a substantial checkpoint or real blocker.
+Reusable artifacts inside 071:
+- Web Threat Model Record;
+- Third-Party Trust Record;
+- privacy/data-minimization question set;
+- cross-track transfer matrix;
+- seven integrated diagnostic cases.
 
----
+## Balanced track interpretation
+- **A Platform & Browser:** strongest foundation and direct dependency provider for Stage 8. No need to repeat platform primers; production contradictions should return as transfer validation.
+- **B UX/IA/Content:** consumes recovery/support/privacy/external-link/destructive-action/trust requirements; production task evidence OPEN.
+- **C Performance/Accessibility/Quality:** mature foundation/practitioner; consumes CSP/consent/auth/warning/third-party regression requirements; production cross-browser/AT/field evidence OPEN.
+- **D Search/Discovery/Analytics:** search foundation mature, analytics depth remains Stage 9; Stage 8 establishes a privacy/minimization gate before instrumentation.
+- **E Architecture/Security/Operations:** 071 closes the largest first-principles gap. Highest-value remaining Stage 8 work is integration/release-readiness and incident/escalation competency, not another attack primer.
 
-# Cross-domain relationships
-Design Studio remains canonical for reusable visual/interaction expertise. Current latest known Web Design evidence includes Stage 1/2 passes with later production/browser/human evidence still constrained by actual runtime/project validation.
+## Cross-repository evidence
+Design Studio latest checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE; W021 execution matrix exists but integrated browser runtime, true HTTP/network, cross-browser, screen-reader, physical-device, field and human evidence remain OPEN. Security handoffs must preserve those evidence boundaries.
 
-Marketing Manager owns broader acquisition/community/market strategy; Track D owns web/search/measurement mechanics.
+Marketing Manager latest checked 2026-09-16: MintTap release branch `1.0.29` evidence includes Firebase Analytics and Google Mobile Ads in the native app implementation, but Store production availability remains UNKNOWN. This is transfer evidence only and **does not prove `minttap.app` uses analytics/ads**.
 
-Software Engineering / Code Specialist may be connected later as a separate canonical discipline. Track E should hand implementation requirements/evidence across that boundary rather than becoming a general coding curriculum.
+Software Engineering Studio repository exists but no `STATUS.md` was available at the checked path; no software-engineering evidence was inferred.
 
----
+## Stage 8 production OPEN register
+Actual `minttap.app` hosting/CDN/origin topology, TLS/HSTS/redirects, headers/CSP, CORS, forms/endpoints, auth/session, cookies/storage/service worker, web analytics/ads, third parties, personal-data flows/processors/retention, dependencies/build/deployment pipeline, secrets, DNS/registrar controls, logging/monitoring, incident/rollback/security communication and vulnerability contact process remain OPEN.
 
-# Important unknown MintTap facts
-Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component/router architecture, production brand/fonts/components, supported locales, analytics/privacy constraints, data flows, forms/support/contact surfaces, authentication/account behavior if any, third parties, cookies/storage, advertising, deployment topology, secrets model, security headers, dependencies, incident process, and production accessibility/search/performance evidence.
+Do not infer these from generic patterns or native-app code.
 
-Do not infer these from generic app-company patterns.
+Highest-value next block:
+072 — **Stage 8 Integration & Security/Privacy Release-Readiness Operating System.** Stress-test 071 against representative app-company architecture/data-flow cases; derive evidence/release gates, incident/recovery and escalation boundaries; close Stage 8 only if the curriculum exit capability is demonstrated without inventing production facts.
 
 ---
 
 # Persistence state
-- `AGENTS.md`: specialist-track + large-bundle governance active.
-- `SPECIALIST_TRACKS.md`: canonical horizontal expertise model active.
-- `LEARNING_ROADMAP.md`: canonical 12-stage vertical curriculum remains active.
-- `research/README.md`: staged research index remains canonical.
-- Stages 1–7: curriculum gates passed at intended foundation/practitioner level.
-- Stage 8: ACTIVE.
-- Reporting cadence: deep internal work, consolidated persistence/reporting.
-- Next work: substantial Stage 8 security/privacy/trust bundle led by Track E with Track A dependency transfer.
+- `AGENTS.md`: five-track + large-bundle governance active.
+- `SPECIALIST_TRACKS.md`: canonical horizontal model active.
+- `LEARNING_ROADMAP.md`: canonical vertical curriculum active.
+- `research/README.md`: staged research index canonical.
+- Stages 1–7: complete at intended foundation/practitioner level.
+- Stage 8: **ACTIVE; 071 PASS; integration gate OPEN.**
+- Reporting: coarse checkpoint-based.
+- Next: **072 Stage 8 integration/release-readiness gate**.
