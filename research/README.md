@@ -1,10 +1,10 @@
 # MintTap Web Manager Research Index
 
-This directory is the source-grounded learning and decision-support layer for the MintTap company website and related strategic web-app capability. Canonical curriculum: `../LEARNING_ROADMAP.md`; horizontal ownership: `../SPECIALIST_TRACKS.md`. Learning proceeds FOUNDATION → PRACTITIONER → ADVANCED → EXPERT JUDGMENT.
+This directory is the source-grounded learning and decision-support layer for the MintTap company website and related strategic web-app capability. Canonical curriculum: `../LEARNING_ROADMAP.md`; horizontal ownership: `../SPECIALIST_TRACKS.md`.
 
 Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`, `DEPENDENCY`, `VALIDATION`, `CHANGE WATCH`, `TRANSFER VALIDATION`, `CONTRADICTION`.
 
-## Completed curriculum
+## Sequential curriculum — COMPLETE
 - Stage 1 Web Foundations: 027–033 — **PASS**
 - Stage 2 Website Anatomy / Content / IA: 034–038 — **PASS**
 - Stage 3 UX & Interaction: 039–044 — **PASS**
@@ -16,46 +16,59 @@ Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`
 - Stage 9 Analytics / Experimentation: 075–076 — **PASS**
 - Stage 10 App-Company Web Strategy & Growth: 077–078 — **PASS**
 - Stage 11 Web Operations & Platform Architecture: 079–080 — **PASS**
+- Stage 12 Advanced / Expert Web Management: 081–082 — **PASS / FINAL CURRICULUM GATE**
 
-All passes are foundation/practitioner curriculum gates, not production validation.
+Curriculum passes are competency gates, not production certification.
 
-## Stage 12 — Advanced / Expert Web Management — ACTIVE
-081 — **Expert Web Management Decision Governance — PASS / integrated block 1.**  
-Builds decision ownership, ADR/evidence-confidence contracts, uncertainty and reversibility framing, specialist-conflict resolution, lifecycle governance, technical/content/operational/governance debt, migration/replatforming gates, TCO, durable-principle vs change-watch classification and an Expert Web Decision Packet.
+## Stage 12 — Advanced / Expert Web Management — COMPLETE
+081 — **Expert Web Management Decision Governance — PASS.**  
+Builds Decision Record Contract, Evidence Confidence Record, Reversibility Frame, Debt Record, Migration Decision Gate and Expert Web Decision Packet. Establishes decision ownership, evidence scope/confidence, uncertainty, reversibility, TCO, specialist conflict resolution, governance lifecycle and migration judgment.
 
-Stage 12 model:
-`decision trigger → owner → affected tasks → constraints → alternatives → evidence/confidence → uncertainty → risk/impact → reversibility/TCO → specialist conflict → decision → validation/guardrails → review/supersession`.
+082 — **Portfolio Governance, Learning & Platform Evolution — PASS / FINAL GATE.**  
+Adds Portfolio Ownership Matrix, Localization Governance Record, Postmortem Learning Record, Precedent Transfer Test, Change-Watch Register and Specialist Handoff Contract. Stress-tests accessibility/privacy/security/analytics conflicts, multi-app ownership, localization scale, incidents, competitor transfer, platform evolution and MintTap/LogMate/PWA cases.
+
+Stage 12 expert model:
+`portfolio intent → product/task ownership → canonical truth → constraints/guardrails → specialist evidence → decision rights/escalation → release/operation → observed outcome → incident/feedback → learning → debt/change-watch → review/supersession`.
 
 Key guards:
-- fact ≠ observation ≠ inference ≠ forecast ≠ preference ≠ decision;
-- technical evidence ≠ authority to accept residual risk;
+- specialist evidence ownership ≠ authority to accept every residual risk;
 - consensus ≠ correctness;
-- WCAG conformance ≠ accessibility maturity;
-- launch gate ≠ continuing governance;
-- framework novelty ≠ migration justification;
-- provider bill ≠ TCO;
-- current platform behavior ≠ durable web principle;
-- project observation ≠ universal platform truth.
-
-Next Stage 12 block: portfolio ownership/escalation, localization at scale, governance conflicts, postmortems, competitor/precedent analysis, platform evolution/change-watch, organizational ownership and final expert stress tests.
+- point-in-time conformance ≠ organizational maturity;
+- translation complete ≠ locale/region/product readiness;
+- competitor pattern ≠ demonstrated outcome or transferability;
+- incident trigger ≠ complete root/system explanation;
+- current platform behavior ≠ durable company principle;
+- migration deploy complete ≠ migration lifecycle complete;
+- low provider bill ≠ low TCO;
+- curriculum complete ≠ production certified.
 
 ## Stage 11 — Web Operations & Platform Architecture — COMPLETE
 079 — Web Operations & Platform Architecture: Deployment, Recovery & PWA Lifecycle — **PASS**.  
 080 — Reliability, Observability, DR & Supply-Chain Integration — **PASS / STAGE 11 GATE**.
 
-Stage 11 model:
-`critical user task → architecture/failure domains → source/artifact provenance → environment/promotion → DNS/TLS/edge/origin/backend/data → client/worker versions → observation/SLO → incident/recovery → tested restore/RTO/RPO → learning/portability`.
+## Stage 10 — App-Company Web Strategy & Growth — COMPLETE
+077 — App-Company Web Portfolio & Lifecycle Strategy — **PASS**.  
+078 — Release Governance, Portfolio Growth & Lifecycle Integration — **PASS / STAGE 10 GATE**.
+
+## Stage 9 — Analytics / Experimentation — COMPLETE
+075 — Analytics, Measurement & Experimentation Evidence Foundations — **PASS**.  
+076 — Measurement Reliability, Causal Inference & Pre-Launch Integration — **PASS / STAGE 9 GATE**.
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–081 add measurement, portfolio, release, operations and expert-governance transfer. PWA production/device validation remains OPEN. Implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link validation is a Software Engineering dependency.
+075–082 transfer measurement, portfolio, release, operations and expert governance. PWA production/device validation remains OPEN and implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link evidence remains a Software Engineering/product dependency.
+
+## Continuous expert maintenance/application mode
+There is no automatic Stage 13. Future work is selected from live assignments, OPEN blockers, contradictory/weak evidence, change-watch, incidents, cross-repository dependencies and periodic portfolio governance review.
+
+When idle, prioritize high-consequence or fast-changing evidence: browser/PWA behavior, accessibility standards/guidance, privacy/security, search/store integration, provider/runtime operations and new cross-product lifecycle risks. Persist only meaningful integrated findings.
 
 ## Specialist relationships
-A Platform/Browser owns reusable mechanics; B UX/IA/Content owns web task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability and measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates their evidence and decisions rather than replacing them.
+A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
 
-Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation.
+Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Use explicit handoffs and evidence boundaries.
 
 ## Study quality standard
-Substantial studies include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, project relevance without invented production facts, durable vs changeable behavior, and competency/application checks.
+Substantial work includes precise vocabulary, first-principles mechanics, authoritative evidence, counterexamples/failure analysis, cross-domain effects, bounded project relevance, durable-vs-changeable classification, validation requirements and explicit decision ownership.
