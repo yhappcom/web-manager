@@ -43,21 +43,24 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 066 — **Web Performance Foundations: Navigation Lifecycle, Critical Rendering Path, Resource Loading, Main-Thread/Rendering Work & Perceived Readiness — PASS.**  
 Separates navigation/network, parsing/resource discovery, parser/script/render blocking, style/layout/paint/composite, main-thread availability and task-relative readiness. Establishes a causal diagnostic chain and Primary Readiness Contract before metric/tool optimization.
 
-Next integrated study:
-067 — **Core Web Vitals from First Principles: LCP, INP, CLS, Metric Windows, Field vs Lab Evidence & Diagnostic Boundaries.**
+067 — **Core Web Vitals from First Principles: LCP, INP, CLS, Field/Lab Evidence & Diagnostic Boundaries — PASS.**  
+Treats LCP/INP/CLS as bounded observation models rather than generic speed scores; separates metric symptom from browser-phase root cause; preserves field-vs-lab, percentile/population, lifecycle/bfcache and threshold/version boundaries; adds a Performance Evidence Contract joined to, but separate from, the Primary Readiness Contract.
 
-066 establishes browser-work mechanics first; 067 will study what current user-centric metrics observe and omit, how field and lab evidence differ, and how to avoid score chasing.
+Next integrated study:
+068 — **Performance Causality: Network/Server/Resource Prioritization, Caching/Compression, Images/Fonts/JavaScript & Third-Party Cost.**
+
+066 establishes browser-work mechanics and 067 establishes what current user-centric metrics observe and omit. 068 will study the causal delivery/resource families before budgets and Stage 7 integration.
 
 ---
 
 ## Current curriculum position
 **Stages 1–6 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 7 — ACTIVE; 066 PASS.**
+**Stage 7 — ACTIVE; 066–067 PASS.**
 
 ## Design Studio relationship
 Latest `design-studio/progress/WEB_STATUS.md` checked 2026-09-16. Web Stage 1 PASS / Stage 2 PRACTICE NOT PASSED; W017 icon/non-text Chromium transfer is 12/12, while real Fetch/DOM/network and true HTTP navigation remain OPEN/BLOCKED. W007 request/paint/readiness/stability measurement remains a direct Stage 7 dependency.
 
-066 hands Web Design a phase-specific runtime model: request/navigation → resource discovery/transfer → parser/render blocking → style/layout/paint/composite → main-thread availability → task-relative readiness → stability. Type later owns actual font-file/fallback/load transfer; Layout/Interaction owns pending-state task continuity and layout stability. Content Design/UX remain user-managed and receive evidence handoffs only when performance changes information priority, loading language, perceived readiness or task continuity.
+066 hands Web Design a phase-specific runtime model. 067 adds the requirement to preserve LCP candidate/dependency evidence, representative INP interaction/latency phases, CLS shift sources/session context, navigation/cache/bfcache context and task-relative readiness rather than only final scores. Type later owns actual shipped-font/fallback/load transfer; Layout/Interaction owns async geometry/task continuity. Content Design/UX remain user-managed and receive evidence handoffs only when performance work changes information priority/loading language or actual interaction/shift evidence suggests task harm.
 
 No Design Studio canonical file is edited without authorization.
 
