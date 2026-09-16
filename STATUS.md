@@ -21,58 +21,52 @@ Learning sequence: `history/problem → design principle → standard → curren
 - Stage 5 Accessibility: 051–058.
 - Stage 6 Search / Discovery / Content Quality: 059–065.
 
-Production accessibility/search quality remain OPEN pending real `minttap.app` implementation/browser/AT/crawler/store/task evidence.
+Production accessibility/search quality remain OPEN pending real `minttap.app` evidence.
 
 ---
 
 # Stage 7 — Web Performance / Browser Runtime
 **ACTIVE — FOUNDATION/PRACTITIONER STUDY.**
 
-066 — **Web Performance Foundations: Navigation Lifecycle, Critical Rendering Path, Resource Loading, Main-Thread/Rendering Work & Perceived Readiness — PASS.**
-
-067 — **Core Web Vitals from First Principles: LCP, INP, CLS, Field/Lab Evidence & Diagnostic Boundaries — PASS.**
+066 — **Web Performance Foundations — PASS.**  
+067 — **Core Web Vitals from First Principles — PASS.**  
+068 — **Performance Causality: Delivery, Resource Priority, Caching, Media, Fonts, JavaScript & Third-Party Cost — PASS.**
 
 Established progression:
-`navigation/network → resource discovery/dependencies → parse/style/layout/paint/main-thread work → task-relative readiness → bounded user-centric metric observation → field/lab population/context → causal diagnosis → intervention → re-measurement`.
+`navigation/network → resource discovery/dependencies → parse/style/layout/paint/main-thread work → task-relative readiness → bounded metric observation → causal resource/delivery diagnosis → intervention → regression/re-observation`.
 
-Retained judgments through 067:
-- performance is not one duration and browser `load` is not synonymous with user readiness;
-- navigation timing and resource timing observe different scopes;
-- bytes alone do not determine readiness: dependency depth, discovery order, priority, execution and render cost matter;
-- parser blocking, script-blocking stylesheet behavior and render blocking are distinct concepts;
-- event loops coordinate work but are not specified as one-to-one implementation threads;
-- resource criticality is task/context-specific;
-- LCP is a heuristic largest eligible content-paint observation, not proof of full page/task readiness;
-- INP observes interaction-to-next-paint responsiveness over a visit and should be decomposed into input delay, processing and presentation/render causes rather than reduced to “slow JavaScript”;
-- CLS is bounded unexpected-layout-instability evidence, not a visual-design quality score;
-- Core Web Vitals are observation models, not root causes and not substitutes for accessibility/correctness/task completion;
-- field evidence describes heterogeneous real-user populations while lab/trace evidence provides controlled reproducibility and causal detail; neither replaces the other;
-- percentile/aggregate classifications do not mean every visit passed and must retain population/sample/segment context;
-- metric lifecycle matters for bfcache, same-document/SPA navigation and long-lived sessions;
-- current thresholds/tool/report behavior are CHANGE WATCH, not timeless standards laws;
-- the **Primary Readiness Contract** remains separate from a new **Performance Evidence Contract** joining vitals, candidates/interactions/shifts, lower-level traces, release identity and re-observation;
-- diagnosis remains `user/field symptom → metric/context → browser-phase hypothesis → timing/trace evidence → bounded intervention → lab regression → field re-observation`.
+Retained judgments through 068:
+- performance is not one duration and `load` is not synonymous with readiness;
+- LCP/INP/CLS are bounded observations, not root causes or general quality scores;
+- field and lab evidence answer different questions and should be joined rather than substituted;
+- resource bytes, transfer time, discovery time, dependency delay, CPU/decode/render cost and task impact are distinct;
+- critical dependency path matters more than undifferentiated page weight;
+- preload/preconnect/fetch priority are selective ordering tools; overuse can waste bandwidth/connections or displace more important work;
+- compression and caching solve different costs; cache policy is also correctness/lifecycle governance;
+- images/product media require source sizing, format/quality, discovery priority, decode/paint and geometry reservation analysis;
+- web fonts are a network + text-rendering + geometry system; fallback metrics and script/weight coverage matter alongside file size;
+- CSS criticality depends on rendering dependency and late asset discovery, not minification alone;
+- JavaScript has transfer plus parse/compile/execute/init/interaction/render costs; cached JS can remain CPU-expensive;
+- async third-party code is not free: origins, bytes, CPU, DOM/layout, privacy and failure behavior remain;
+- a reusable **Resource Criticality Matrix** now classifies primary-task necessity, discovery, network/CPU/render/layout risk, cache reuse and deferrability;
+- diagnosis remains `task/readiness symptom → metric/context → request/dependency/trace evidence → resource/cause family → bounded intervention → correctness/accessibility/design check → lab regression → field re-observation`.
 
-Production `minttap.app` performance remains **OPEN** pending actual runtime architecture, route inventory, field data/RUM, device/network population, LCP candidates, INP interactions, layout-shift sources, cache/navigation behavior and real readiness definitions.
+Production `minttap.app` performance remains **OPEN** pending actual hosting/CDN, cache/compression headers, framework/hydration, waterfall/initiator chains, image/video/font/third-party inventory, device/network population and field causal evidence.
 
 Highest-value next block:
-068 — **Performance Causality: Network/Server/Resource Prioritization, Caching/Compression, Images/Fonts/JavaScript & Third-Party Cost.**
+069 — **Performance Budgets, Page-Family Targets, Measurement Toolchain & Release Regression Governance.**
 
-066 explains browser work and 067 explains current user-centric metric symptoms. 068 should now study the causal delivery/resource families and their trade-offs before performance budgets/integration.
+066–068 establish browser work, bounded user-centric observations and causal resource families. 069 should convert them into task/page-specific performance governance before Stage 7 integration.
 
 ---
 
 # Design Studio relationship
-Latest `design-studio/progress/WEB_STATUS.md` checked 2026-09-16:
-- Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED;
-- W017 icon/non-text Chromium transfer 12/12 after preserved failure/revision;
-- real Fetch/DOM/network and true HTTP navigation remain OPEN/BLOCKED in the current environment;
-- W007 request/paint/readiness/stability measurement remains an explicit Web gap.
+Latest relevant Web Design state checked 2026-09-16: Stage 1 PASS / Stage 2 PRACTICE NOT PASSED; W007 request/paint/readiness/stability measurement remains OPEN and real HTTP/network breadth is blocked in the current environment.
 
 ### Stage 7 handoff
-066 provides the browser-phase contract. 067 adds metric evidence requirements for eventual W007/runtime work: preserve actual LCP candidate/dependencies, representative INP interaction and latency phases where tooling permits, CLS shift sources/session context, navigation/cache/bfcache context and the Primary Readiness Contract alongside final metric values.
+066 supplies browser phases; 067 supplies metric-evidence boundaries; 068 adds resource-causality evidence. Future W007/live-project validation should preserve waterfall initiator chains, discovery/priority, media source/dimensions, font discovery/swap/layout effects, JS/third-party main-thread work, navigation/cache context and task-relative readiness rather than only final scores.
 
-Type should later validate actual shipped font loading/fallback/layout effects. Layout/Interaction should preserve geometry and task continuity through async/pending states and provide truthful immediate feedback without faking completion. Content Design and UX remain user-managed; Web Manager records evidence handoffs if performance work changes information priority/loading language or if actual interaction/shift evidence suggests task harm.
+Type owns typographic suitability/production family requirements; Web Manager/engineering return measured font delivery/layout evidence. Layout/Interaction should reserve async geometry and preserve primary task continuity. Visual media compression/format changes require Design Studio fidelity review. Content Design and UX remain user-managed and receive evidence handoffs only when performance interventions change information priority/loading language/task continuity.
 
 No Design Studio canonical file was edited.
 
@@ -81,7 +75,7 @@ No Design Studio canonical file was edited.
 # Important unknown MintTap facts
 Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, production brand/fonts/components, supported locales, analytics/privacy constraints and accessibility/search production evidence.
 
-Stage 7 additionally requires actual rendering/deployment architecture, HTTP/navigation/resource timing, waterfall/cache behavior, JS/CSS dependency graph, image/video/font inventory, third-party scripts, service-worker behavior, page-family readiness definitions, device/network population, field Core Web Vitals/RUM, metric/tool versions, candidate/interaction/shift evidence and performance release gates. Do not infer these from generic app-company patterns.
+Stage 7 additionally requires actual rendering/deployment architecture, hosting/CDN/origin topology, HTTP/cache/compression headers, waterfall/dependency graph, JS/CSS framework and hydration, media/font/third-party inventory, service-worker behavior, page-family readiness definitions, device/network population, field Core Web Vitals/RUM and performance release gates. Do not infer these from generic app-company patterns.
 
 ---
 
@@ -89,6 +83,6 @@ Stage 7 additionally requires actual rendering/deployment architecture, HTTP/nav
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
 - `research/README.md` indexes staged learning.
 - Stages 1–6: COMPLETE at intended foundation/practitioner level.
-- Stage 7: **ACTIVE; 066–067 PASS.**
-- Current next work: **068 — Performance Causality / Resource & Delivery Costs**.
+- Stage 7: **ACTIVE; 066–068 PASS.**
+- Current next work: **069 — Performance Budgets / Measurement / Release Governance**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
