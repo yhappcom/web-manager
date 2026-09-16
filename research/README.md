@@ -43,7 +43,10 @@ Navigation failure states, worker update/control boundaries, cache ownership, sk
 Four-tier evidence system, Chromium-vs-Safari worker-test boundaries, fault injection, state/data release invariants, privacy-minimized diagnostic bundles and implementation handoff.
 
 090 — **PWA Release, Support & Incident Evidence + Accessible Recovery Contract — PASS (generic) / TARGET-DEVICE & AT EXECUTION OPEN.**  
-Connects exact-artifact release acceptance to Safari/Home-Screen inspection boundaries, privacy-safe support diagnostics, correlation-ID minimization, accessible saved/sync/update/recovery state requirements, telemetry blind spots, incident evidence preservation and rollback-schema compatibility. Consumes Design Studio W040 boundary and Software Engineering D003 compatibility evidence without duplicating their disciplines.
+Connects exact-artifact release acceptance to Safari/Home-Screen inspection boundaries, privacy-safe support diagnostics, correlation-ID minimization, accessible saved/sync/update/recovery state requirements, telemetry blind spots, incident evidence preservation and rollback-schema compatibility.
+
+091 — **PWA Long-Offline Release Coexistence, API Retirement & Incident Containment — PASS (generic) / PRODUCT EXECUTION OPEN.**  
+Defines multi-generation compatibility envelopes across client/worker/schema/protocol/outbox/server; separates RFC 9745 deprecation from RFC 8594 sunset/retirement; establishes offline-safe retirement gates, capability-scoped unsupported-client states, narrow kill-switch containment, rollback-vs-forward-fix rules, diagnostic-schema evolution and generation-diverse staged-rollout acceptance. Consumes Design Studio W042 and Software Engineering D005 boundaries without duplicating their disciplines.
 
 Key guards:
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -67,10 +70,13 @@ Key guards:
 - `STUN reachable ≠ peer reachable`;
 - `TURN success ≠ direct P2P`;
 - `same LAN ≠ peer reachability`;
+- `deprecation signal delivered ≠ every installed client informed ≠ migration completed`;
+- `remote kill switch configured ≠ offline client contained`;
+- `server compatible ≠ local schema compatible ≠ queued operation replayable`;
 - `cannot diagnose ≠ user should clear storage`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Generic direct-sync establishment, offline/update/recovery, testing/diagnostic and release/support/incident architecture are sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
+Generic direct-sync establishment, offline/update/recovery, testing/diagnostic, release/support/incident and long-offline coexistence/retirement architecture are sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
 
 ## Stage 12 — Advanced / Expert Web Management — COMPLETE
 081 — **Expert Web Management Decision Governance — PASS.**  
@@ -80,7 +86,7 @@ Generic direct-sync establishment, offline/update/recovery, testing/diagnostic a
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–090 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics and release/support/incident governance. Production/device validation remains OPEN.
+075–091 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident and long-offline compatibility/retirement governance. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
