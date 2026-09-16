@@ -27,79 +27,73 @@ Learning sequence: `history/problem → design principle → standard → curren
 # Stage 5 — Accessibility
 **COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.** 051–058. Production `minttap.app` conformance remains **OPEN** pending real implementation/browser/AT/device/complete-process/human evidence.
 
+# Stage 6 — Search / Discovery / Content Quality
+**COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.** 059–065.
+
+059 — Search & Discovery Foundations — PASS.  
+060 — Search Content Semantics / Intent — PASS.  
+061 — Structured Data / Entity Representation — PASS.  
+062 — Localization & International Search — PASS.  
+063 — Search Measurement & Webmaster Operations — PASS.  
+064 — Search Demand / Query Research / Niche Opportunity — PASS.  
+065 — **Stage 6 Integration / Niche App Search Operating System — PASS.**
+
+Integrated operating model:
+`need → public resource/URL → discovery/fetch/render → index/canonical/locale → truthful page/entity representation → search/store/social exposure → deep entry/web-or-native continuation → task outcome → observation/diagnosis → intervention → re-observation`.
+
+Retained Stage 6 judgments:
+- crawlable, indexable, indexed, canonical and served/ranked are separate states;
+- crawl control, index control and access control are different mechanisms;
+- JavaScript support does not make rendering architecture search-neutral;
+- title/H1/search title link and meta description/snippet are related but non-identical;
+- materially distinct needs, not keyword variants, justify resources;
+- schema vocabulary/validity, engine support, eligibility and display are separate;
+- stable locale resources, canonical and hreflang require coordinated but distinct reasoning;
+- intended/live/crawled/indexed/result/user-success evidence must not be collapsed;
+- query/search-volume tools are bounded evidence, especially in niche markets;
+- web search, App Store and Google Play are separate discovery surfaces;
+- public HTTPS resource identity can be associated with native destinations using iOS Universal Links / Android App Links, but implementation requires verified association, safe route mapping and browser fallback;
+- social/share previews are representation layers, not independent product-truth sources;
+- reusable contracts/ledgers now connect resource truth, search observation, demand opportunity and cross-platform continuation.
+
+Production `minttap.app` search quality remains **OPEN** pending actual deployed route/content/locale inventory, crawler/webmaster/store evidence, association files/app identifiers, social target platforms and downstream task measurement.
+
 ---
 
-# Stage 6 — Search / Discovery / Content Quality
-**ACTIVE — FOUNDATION/PRACTITIONER STUDY.**
-
-059 — **Search & Discovery Foundations — PASS.**  
-060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent — PASS.**  
-061 — **Structured Data, Entity/Site Identity, Software-App Representation & Search Appearance Boundaries — PASS.**  
-062 — **Localization & International Search — PASS.**  
-063 — **Search Measurement & Webmaster Operations — PASS.**  
-064 — **Search Demand, Query Research, Content Opportunity & Niche App Discovery Strategy — PASS.**
-
-Established progression:
-
-`stable truthful resource → discovery/fetch/render/index/canonicalization → distinct page purpose → truthful content/internal context → entity/locale representation → crawler/index/result observation → observed query/demand evidence → intent/task hypothesis → content opportunity decision → cross-surface outcome → re-observation`
-
-Retained judgments through 064:
-- discovery, crawling, rendering, indexing, canonical selection, page meaning, structured classification, localization, observation, demand evidence and result representation are separate layers;
-- crawl control, index control and access control solve different problems;
-- JavaScript rendering support does not make rendering architecture search-neutral;
-- canonical preference is not an absolute command;
-- title, visible heading and engine-generated title link are related but not identical; meta description is not a guaranteed snippet;
-- materially distinct user needs, not keyword variants, justify distinct resources;
-- Schema.org vocabulary, engine support, syntax validity, eligibility, display and ranking are different layers;
-- localized resources should normally have stable URLs; hreflang and canonical solve different problems;
-- web/app-binary/App Store/Google Play locale systems share product truth but have separate publication/fallback state;
-- implementation intent, deployed response, crawler observation, indexed state, search appearance, traffic and user success must not be collapsed;
-- sitemap/index requests aid discovery/processing but do not guarantee crawl/index/appearance;
-- query metrics are bounded evidence: Search Console omits anonymized queries and truncates table rows;
-- Google Trends is sampled, normalized relative interest; low-volume searches may show `0`, so `0` is not proof of zero niche demand;
-- Keyword Planner is advertising-planning evidence, not exact organic-search truth;
-- web search, App Store search/browse and Google Play search/explore are separate discovery surfaces and must retain separate evidence;
-- query intent is a task hypothesis, not proof of a user's private motive;
-- high search volume alone does not justify content; product truth, unique usefulness, user need and lifecycle ownership matter;
-- a reusable **Search Opportunity Record** now joins query/need evidence to create/improve/merge/observe/reject decisions without pseudo-scientific scoring.
-
-Production `minttap.app` search state remains **OPEN** pending actual route/content/locale inventory, HTTP/rendering architecture, robots/sitemap/canonical/redirect inspection, verified Search Console/Bing ownership, indexed/canonical/query data, App Store/Play acquisition/search evidence, deployment/change timestamps, web→store attribution and downstream analytics/task evidence.
+# Stage 7 — Web Performance / Browser Runtime
+**READY — NOT STARTED.**
 
 Highest-value next block:
+066 — **Web Performance Foundations: Navigation Lifecycle, Critical Rendering Path, Resource Loading, Main-Thread/Rendering Work & Perceived Readiness.**
 
-065 — **Stage 6 Integration: Search/Discovery/Content-Quality Competency Review & Niche App Search Operating System.**
-
-059–064 now cover the Stage 6 foundations from resource discovery through demand/opportunity. Integrate and test the competency gate before advancing to Stage 7 Performance / Browser Runtime.
+Begin from first principles before Core Web Vitals optimization or provider/tool tuning.
 
 ---
 
 # Design Studio relationship
-Latest relevant repository state checked 2026-09-16:
-- **Web Design:** latest specialist evidence previously checked at Stage 1 PASS / Stage 2 PRACTICE; true HTTP/direct-entry/network breadth remains an important Stage 6 production dependency.
-- **Content Design:** repository HEAD now includes CD006 foundation/history/source-literacy work. Content Design and UX are currently user-managed; Web Manager does not assume management of those specialists.
+Latest relevant state checked 2026-09-16. Web Design retains Stage 1 PASS / Stage 2 practice evidence; true HTTP/direct-entry/network breadth remains relevant production validation. Content Design and UX are currently user-managed; Web Manager records dependencies/handoffs without assuming management.
 
-### Current Stage 6 handoff
-Future representative Company/Product/Support/Governance runtime validation should expose actual HTTP status/direct entry/redirect/404, initial-vs-rendered identity, crawlable links, title/H1, metadata/canonical/index directives, sitemap membership and timestamped deployment identity so Web Manager can join runtime truth to webmaster observations. Add locale/hreflang checks when production locales exist.
+### Current handoff
+Future representative routes should expose actual HTTP/direct-entry/redirect/404, initial-vs-rendered identity, crawlable links, title/H1/canonical/index/sitemap state, locale/hreflang where applicable, and timestamped deployment identity. If native continuation is implemented, add installed/uninstalled Universal Link/App Link behavior, safe parameter/auth handling and browser fallback.
 
-064 adds two handoffs:
-- **Content Design:** when real query families exist, provide aggregated/privacy-safe query language plus page/task context as evidence for terminology/information needs; search volume must not dictate interface wording.
-- **UX:** when qualified search landings show downstream task/orientation problems, provide the observed landing/task evidence; search metrics alone do not establish a UX defect.
+Content Design receives privacy-safe observed query language/page-task context and representation evidence; search volume does not dictate interface wording. UX receives evidence when direct search/social/deep-link arrivals show orientation/continuation/task problems; search metrics alone do not prove a UX defect.
 
-Web Manager retains search/query intent hypotheses, content/entity/localization truth requirements, canonical/index/hreflang strategy, structured-data applicability, cross-surface search evidence and opportunity governance. No Design Studio canonical file was edited.
+No Design Studio canonical file was edited.
 
 ---
 
 # Important unknown MintTap facts
 Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, production brand/fonts/components, supported locales, analytics/privacy constraints and accessibility production evidence.
 
-Stage 6 additionally requires actual URL/route/content inventory, rendering/deployment architecture, robots directives, sitemap/canonical/redirect strategy, HTTP direct-entry/404 behavior, title/heading/meta inventory, internal-link graph, verified Google Search Console/Bing ownership/reports, indexed/canonical/query coverage, App Store Connect/Google Play acquisition and search-term evidence, locale URL/fallback strategy, translation/review owner, app/store localizations and exact store URLs, staging/demo exposure, content lifecycle, legal/public organization identity, deployment/change log, web→store referral instrumentation and downstream task evidence. Do not infer these from generic app-company patterns.
+Search additionally requires actual URL/content inventory, rendering/deployment architecture, robots/sitemap/canonical/redirect state, Search Console/Bing/store evidence, locale and translation ownership, exact store URLs, deployment log, social target platforms, Universal/App Link identifiers/association files/mappings, web→store/app attribution and downstream task evidence. Do not infer these from generic app-company patterns.
 
 ---
 
 # Persistence state
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
 - `research/README.md` indexes staged learning.
-- Stages 1–5: COMPLETE at intended foundation/practitioner level.
-- Stage 6: **ACTIVE; 059–064 PASS.**
-- Current next work: **065 — Stage 6 Integration / competency gate**.
+- Stages 1–6: COMPLETE at intended foundation/practitioner level.
+- Stage 6: **059–065 PASS; integration gate PASSED.**
+- Stage 7: **READY / NOT STARTED.**
+- Current next work: **066 — Web Performance Foundations**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
