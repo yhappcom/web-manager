@@ -39,11 +39,16 @@ Deepens signaling/offer-answer/ICE candidate exchange, STUN vs TURN, NAT/firewal
 088 — **PWA Offline Navigation, Service-Worker Update Recovery & Observability — PASS (generic) / PRODUCT VALIDATION OPEN.**  
 Integrates navigation failure states, worker update/waiting/activation/control boundaries, update-script cache semantics, navigation preload, cache ownership, long-offline skipped-version recovery, recovery hierarchy, privacy-minimized observability, accessible degraded/update/recovery UX and a failure-injection/acceptance matrix for exact managed-iPad validation.
 
+089 — **PWA Testing, Diagnostics & Release Evidence Architecture — PASS (generic) / TARGET-DEVICE EXECUTION OPEN.**  
+Converts 083–088 into a four-tier evidence system: deterministic logic/protocol tests → browser automation → engine/device diagnostics → exact managed-device acceptance. Establishes Chromium-vs-Safari worker-test boundaries, canonical fault injection, state/data release invariants, privacy-minimized diagnostic bundles and implementation handoff requirements.
+
 Key guards:
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
 - reconstructible cache assets ≠ irreplaceable user records;
 - `online signal ≠ usable network ≠ successful navigation ≠ task-ready application`;
 - `worker update found ≠ installed ≠ activated ≠ controlling ≠ application-compatible`;
+- `automated browser PASS ≠ Safari PASS ≠ physical iPad PASS ≠ managed-EFB product PASS`;
+- `rendered page/HTTP 200 ≠ PWA state/data invariant satisfied`;
 - `navigation preload ≠ offline fallback ≠ cache correctness`;
 - `Home Screen installed ≠ offline-capable ≠ background-sync capable`;
 - `push event execution ≠ arbitrary background execution`;
@@ -59,7 +64,7 @@ Key guards:
 - `same LAN ≠ peer reachability`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Direct-sync establishment and generic offline/update/recovery theory are sufficient for implementation handoff. Product feasibility requires executable evidence using 087/088 topology, lifecycle, failure and recovery matrices. Autonomous research should now prioritize testing/diagnostic architecture and current platform change-watch rather than repeat WebRTC or service-worker primers.
+Generic direct-sync establishment, offline/update/recovery and testing/diagnostic architecture are sufficient for implementation handoff. Product feasibility requires executable evidence using 087–089 topology, lifecycle, fault, recovery and evidence-tier contracts. Autonomous research should consume new runtime evidence or address adjacent release/support/change-watch gaps rather than repeat WebRTC/service-worker/testing primers.
 
 ## Stage 12 — Advanced / Expert Web Management — COMPLETE
 081 — **Expert Web Management Decision Governance — PASS.**  
@@ -69,7 +74,7 @@ Direct-sync establishment and generic offline/update/recovery theory are suffici
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–088 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct-transport, managed-network establishment and offline/update/recovery evidence. Production/device validation remains OPEN.
+075–089 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery and validation/diagnostic evidence. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
