@@ -52,21 +52,26 @@ Separates bytes/transfer/discovery/dependency/CPU/render/task impact; analyzes m
 069 — **Performance Budgets, Measurement Toolchain & Release Regression Governance — PASS.**  
 Defines budgets as task/risk-linked evidence boundaries rather than universal scores; separates deterministic, lab/trace, field/RUM and task evidence; establishes page-family budget hierarchy, baseline-variance discipline, release gates and governed exceptions without inventing MintTap numeric targets.
 
-Next integrated study:
-070 — **Stage 7 Integration: Performance Diagnostic & Release Operating System.**
+070 — **Stage 7 Integration: Performance Diagnostic & Release Operating System — PASS.**  
+Integrates symptom/context → metric → browser phase → causal dependency → bounded intervention → regression gate → release → field/task re-observation. Tests representative LCP, interaction-readiness, layout-shift, noisy-lab and cache/navigation scenarios and establishes an auditable performance release record.
 
-066–069 now cover browser mechanics, metric evidence, causal resource families and regression governance. 070 will test the integrated Stage 7 competency gate before Stage 8.
+**STAGE 7 INTEGRATION GATE PASSED — FOUNDATION/PRACTITIONER LEVEL.**
+
+Next integrated study:
+071 — **Web Security Foundations: Threat Model, Origin/Trust Boundaries, Browser Security Model, Assets/Actors & Defense-in-Depth.**
+
+Stage 8 begins from security first principles rather than jumping directly to headers/CSP configuration.
 
 ---
 
 ## Current curriculum position
-**Stages 1–6 — COMPLETE at intended foundation/practitioner level.**  
-**Stage 7 — ACTIVE; 066–069 PASS.**
+**Stages 1–7 — COMPLETE at intended foundation/practitioner level.**  
+**Stage 8 — READY.**
 
 ## Design Studio relationship
-Latest relevant Web Design state checked 2026-09-16. W018 progressive readiness/stability Chromium transfer is 8/8 after measurement-method correction; Web remains Stage 2 PRACTICE / NOT PASSED, real HTTP/network integration and production LCP/INP/CLS remain OPEN.
+Latest `design-studio/progress/WEB_STATUS.md` checked 2026-09-16. Web Design is now Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE. W021 integrated executable specimen exists but browser execution remains next; real HTTP/network, cross-browser, screen-reader, physical-device, field-performance and human-UX evidence remain OPEN.
 
-Stage 7 handoff requires future runtime evidence to preserve page-family/task identity, browser phase, vital candidate/interaction/shift context, direct geometry when instrumentation is silent, waterfall initiator chains, media/font/JS/third-party causes, cache/navigation context, baseline variance and release identity. W018's measured milliseconds are bounded specimen evidence, not production targets. Type owns typography requirements while Web/engineering return measured delivery effects; Layout/Interaction owns async geometry/task continuity; visual media optimization requires fidelity review. Content Design/UX remain user-managed.
+Stage 7's completed handoff requires future runtime evidence to preserve page-family/task identity, browser phase, vital candidate/interaction/shift context, direct geometry when instrumentation is silent, waterfall initiator chains, media/font/JS/third-party causes, cache/navigation context, baseline variance and release identity. Local specimen timings are not production targets. Type owns typography requirements while Web/engineering return measured delivery effects; Layout/Interaction owns async geometry/task continuity; visual media optimization requires fidelity review. Content Design/UX remain user-managed.
 
 No Design Studio canonical file is edited without authorization.
 
