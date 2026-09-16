@@ -46,7 +46,10 @@ Four-tier evidence system, Chromium-vs-Safari worker-test boundaries, fault inje
 Connects exact-artifact release acceptance to Safari/Home-Screen inspection boundaries, privacy-safe support diagnostics, correlation-ID minimization, accessible saved/sync/update/recovery state requirements, telemetry blind spots, incident evidence preservation and rollback-schema compatibility.
 
 091 — **PWA Long-Offline Release Coexistence, API Retirement & Incident Containment — PASS (generic) / PRODUCT EXECUTION OPEN.**  
-Defines multi-generation compatibility envelopes across client/worker/schema/protocol/outbox/server; separates RFC 9745 deprecation from RFC 8594 sunset/retirement; establishes offline-safe retirement gates, capability-scoped unsupported-client states, narrow kill-switch containment, rollback-vs-forward-fix rules, diagnostic-schema evolution and generation-diverse staged-rollout acceptance. Consumes Design Studio W042 and Software Engineering D005 boundaries without duplicating their disciplines.
+Defines multi-generation compatibility envelopes across client/worker/schema/protocol/outbox/server; separates RFC 9745 deprecation from RFC 8594 sunset/retirement; establishes offline-safe retirement gates, capability-scoped unsupported-client states, narrow kill-switch containment, rollback-vs-forward-fix rules, diagnostic-schema evolution and generation-diverse staged-rollout acceptance.
+
+092 — **PWA Release/Update Supply-Chain Integrity & Secure Deployment Trust — PASS (generic) / PRODUCT IMPLEMENTATION VALIDATION OPEN.**  
+Treats the worker/update channel as privileged deployment; separates HTTPS from release authorization; defines source→dependency→build→immutable artifact→authorized publication evidence, worker/page CSP boundaries, Trusted Types limits, deployment-IAM/credential separation, SBOM use, staged security containment and non-destructive compromised-worker recovery. Consumes Design Studio W043 and Software Engineering D005 boundaries without duplicating their disciplines.
 
 Key guards:
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -74,9 +77,15 @@ Key guards:
 - `remote kill switch configured ≠ offline client contained`;
 - `server compatible ≠ local schema compatible ≠ queued operation replayable`;
 - `cannot diagnose ≠ user should clear storage`;
+- `HTTPS delivered ≠ intended artifact delivered ≠ authorized artifact built ≠ dependency graph uncompromised`;
+- `service-worker byte change detected ≠ legitimate release authorized`;
+- `page CSP strong ≠ service-worker CSP strong`;
+- `commit SHA known ≠ deployed bytes proven`;
+- `valid certificate ≠ trustworthy publisher state`;
+- `origin repaired ≠ installed fleet clean`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Generic direct-sync establishment, offline/update/recovery, testing/diagnostic, release/support/incident and long-offline coexistence/retirement architecture are sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
+Generic direct-sync establishment, offline/update/recovery, testing/diagnostic, release/support/incident, long-offline coexistence/retirement and supply-chain/update-integrity architecture are sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
 
 ## Stage 12 — Advanced / Expert Web Management — COMPLETE
 081 — **Expert Web Management Decision Governance — PASS.**  
@@ -86,7 +95,7 @@ Generic direct-sync establishment, offline/update/recovery, testing/diagnostic, 
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–091 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident and long-offline compatibility/retirement governance. Production/device validation remains OPEN.
+075–092 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement and release-supply-chain governance. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
