@@ -14,39 +14,37 @@ Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`
 - Stage 7 Performance / Browser Runtime: 066–070 — **PASS**
 - Stage 8 Security / Privacy / Trust: 071–072 — **PASS**
 - Stage 9 Analytics / Experimentation: 075–076 — **PASS**
+- Stage 10 App-Company Web Strategy & Growth: 077–078 — **PASS**
 
 All passes are foundation/practitioner curriculum gates, not production validation.
 
-## Stage 10 — App-Company Web Strategy & Growth — ACTIVE
+## Stage 10 — App-Company Web Strategy & Growth — COMPLETE
 077 — **App-Company Web Portfolio & Lifecycle Strategy — PASS.**  
-Builds a scalable app-company web operating model across company identity, per-product resources, product proof, store handoff, support/governance, verified web↔native links, PWA positioning, prelaunch→launch→postlaunch, localization, growth evidence and product retirement. Adds Resource Identity Record, Locale Readiness Contract and Portfolio Consistency Matrix.
+Establishes company/product/resource/store/support/governance/PWA/localization/retirement portfolio responsibilities plus Resource Identity Record, Locale Readiness Contract and Portfolio Consistency Matrix.
 
-Stage 10 core model:
-`company identity → product identity → task/proof resources → distribution/store handoff → support → governance/trust → operational status/release → lifecycle/retirement`.
+078 — **Release Governance, Portfolio Growth & Lifecycle Integration — PASS / STAGE 10 GATE.**  
+Stress-tests asynchronous review/release/rollout/region states, mixed-version populations, default/custom store variants, proof freshness, multi-product truth ownership, localization lineage, retirement, URL migration and PWA client-version lifecycle. Adds Release Truth Record, Availability Contract, Variant Governance Record, Proof Asset Ledger, Product Truth Registry, Surface Compatibility Matrix, Cross-Surface Release Gate and URL Migration Table.
+
+Stage 10 integrated model:
+`company identity → product identity → resource/proof truth → store/distribution state → support/governance → release/rollout population → locale/region → measurement → maintenance/retirement → URL/data continuity`.
 
 Key guards:
-- company identity ≠ product identity;
-- product page ≠ campaign page;
-- proof ≠ claim;
-- store CTA ≠ install;
-- public URL ≠ verified app association ≠ native-route correctness;
-- support ≠ status ≠ changelog ≠ governance;
-- translation completeness ≠ market readiness;
-- product retirement ≠ URL deletion;
-- public website ≠ installable web experience ≠ offline-capable task ≠ synchronized product.
+- release approval/upload ≠ universal user availability;
+- product capability ≠ store presentation ≠ web claim;
+- language ≠ region ≠ store availability;
+- custom listing/campaign variant ≠ independent product truth;
+- screenshot/proof freshness ≠ visual polish;
+- distribution removal ≠ existing-user/support/data lifecycle completion;
+- no 404s ≠ healthy migration;
+- origin deployment complete ≠ all installed PWA clients updated.
 
-Apple Universal Links / Android App Links are treated as verified public-URL↔native-app associations with browser fallback and separate route validation. Exact platform behavior is CHANGE WATCH; actual MintTap association files/identifiers/routes remain OPEN.
-
-**Stage 10 remains ACTIVE.** Next integrated block: portfolio governance, release/store synchronization, proof/content freshness, multi-product stress tests, lifecycle operations and retirement/migration; then Stage 10 integration gate if evidence is sufficient.
+Current platform release/store behavior is CHANGE WATCH. Actual MintTap store/web/runtime state remains OPEN.
 
 ## Stage 9 — Analytics / Experimentation — COMPLETE
-075 — **Analytics, Measurement & Experimentation Evidence Foundations — PASS.**  
-Builds decision→task semantics→observable evidence→privacy/minimization→event/metric contract→quality validation→aggregation/segmentation→interpretation→decision→re-observation. Separates product state/event/metric/funnel/attribution/causality; defines outcome/diagnostic/guardrail architecture, event contracts, funnel eligibility, segmentation/cohort risks, attribution limits, privacy-aware instrumentation, qualitative+quantitative evidence, experiment validity foundations, risk-weighted decision thresholds and an Analytics Evidence Registry.
+075 — **Analytics, Measurement & Experimentation Evidence Foundations — PASS.**
+076 — **Measurement Reliability, Causal Inference & Pre-Launch Integration — PASS / STAGE 9 GATE.**
 
-076 — **Measurement Reliability, Causal Inference & Pre-Launch Integration — PASS / STAGE 9 GATE.**  
-Extends the evidence system through semantic/coverage/data-quality reliability, systematic missingness, observed-vs-modeled evidence, sampling/thresholding, late/duplicate/offline delivery, identity/attribution discontinuity, randomization/blocking/confounding, statistical-vs-practical significance, experiment validity, low-traffic/non-experiment alternatives, pre-launch measurement planning and release/measurement lineage.
-
-Stage 9 integrated model:
+Stage 9 model:
 `decision → population/task → product truth → observable signal → collection → missingness/selection → transformation/modeling → metric/uncertainty → alternatives → causal design if needed → guardrails → decision → intervention → re-observation`.
 
 ## Strategic cross-track specialization — PWA
@@ -56,14 +54,18 @@ Service workers, offline, install, storage, updates and platform reality.
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**  
 Separates local transaction, durable outbox, transport, remote idempotent apply, acknowledgement, reconciliation/conflict and independent backup.
 
-075–077 add measurement and portfolio transfer without changing product-state authority. Offline telemetry can be late/missing/duplicated and must never become sync correctness infrastructure.
+075–078 add measurement, portfolio and release-lifecycle transfer without changing product-state authority. PWA production/device validation remains OPEN. Implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link validation is a Software Engineering dependency.
 
-PWA production/device validation remains OPEN. Implementation-level schema, outbox, conflict, backup, transport, telemetry and deep-link route handling are Software Engineering dependencies.
+## Next vertical curriculum study — Stage 11 Web Operations & Platform Architecture
+Highest-value integrated start:
+`requirements → rendering/hosting model → DNS/CDN/origin topology → environments/CI-CD → deployment atomicity/cache invalidation → observability → rollback/recovery → dependency/update governance → provider cost/lock-in/portability`.
+
+PWA remains elevated as a Stage 11 application case: service-worker deployment, cache generations, offline clients, schema migration and rollback/forward-fix boundaries.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns web task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability and measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates.
 
-Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Stage 10 coordinates these disciplines through explicit handoffs rather than absorbing them.
+Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Cross-repository transfer uses explicit evidence boundaries rather than discipline duplication.
 
 ## Study quality standard
 Substantial studies include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, project relevance without invented production facts, durable vs changeable behavior, and competency/application checks.
