@@ -31,7 +31,10 @@ Current Home Screen/install behavior, Push/Badging vs general background executi
 Recovery Contract, offline identity/session/local-unlock/authorization boundaries, WebAuthn/Web Crypto limits, XSS/client-storage risk, device-loss/logout/revocation conflicts, export→restore lifecycle and safety-critical Saved/Sync/Backup state semantics.
 
 086 — **PWA Direct Transport, Discovery, Pairing & Security Boundaries — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
-Separates WebSocket/WebTransport server transport from WebRTC peer data transport; separates transport from discovery/signaling, reachability, pairing identity, background execution and sync correctness; establishes managed-iPad target-device acceptance matrix and keeps direct unattended PWA↔native sync OPEN.
+Separates WebSocket/WebTransport server transport from WebRTC peer data transport; separates transport from discovery/signaling, reachability, pairing identity, background execution and sync correctness.
+
+087 — **PWA WebRTC Establishment, Managed-Network Reality & Fallback Experiment Contract — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
+Deepens signaling/offer-answer/ICE candidate exchange, STUN vs TURN, NAT/firewall/network-isolation failure, ICE restart/re-signaling, managed local-network policy boundaries and direct-vs-relayed-vs-server fallback architecture. Converts remaining LogMate uncertainty into a canonical managed-iPad/native-phone experiment matrix for Software Engineering.
 
 Key guards:
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -44,9 +47,13 @@ Key guards:
 - `saved locally ≠ synchronized ≠ backed up ≠ restorable`;
 - `WebSocket/WebTransport available ≠ nearby peer discovery`;
 - `RTCDataChannel available ≠ signaling/discovery/pairing/background correctness`;
+- `paired identity ≠ current address/current ICE state`;
+- `STUN reachable ≠ peer reachable`;
+- `TURN success ≠ direct P2P`, while TURN relay also does not automatically imply application-record storage;
+- `same LAN ≠ peer reachability`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Next PWA maintenance target: managed-iPad network/policy and WebRTC establishment reality — ICE/STUN/TURN/signaling/NAT/network isolation plus fallback architecture and target-device experiment matrix. Software Engineering target-device evidence is required before product architecture selection.
+Direct-sync generic theory is now sufficient for handoff. Product feasibility requires executable evidence using 087's topology/establishment/lifecycle matrix. Without that evidence, autonomous PWA research should move to offline navigation/cache/update/recovery observability rather than repeat WebRTC primers.
 
 ## Stage 12 — Advanced / Expert Web Management — COMPLETE
 081 — **Expert Web Management Decision Governance — PASS.**  
@@ -56,7 +63,7 @@ Next PWA maintenance target: managed-iPad network/policy and WebRTC establishmen
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–086 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth and direct-transport boundary evidence. Production/device validation remains OPEN.
+075–087 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct-transport and managed-network establishment evidence. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
