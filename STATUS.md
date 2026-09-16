@@ -9,31 +9,44 @@ Platforms: iOS / App Store, Android / Google Play, strategic PWA/Web App capabil
 GitHub is canonical memory. `LEARNING_ROADMAP.md` is the vertical curriculum; `SPECIALIST_TRACKS.md` is the horizontal five-track model. Web Manager coordinates A Platform/Browser, B UX/IA/Content, C Performance/Accessibility/Quality, D Search/Discovery/Analytics and E Architecture/Security/Operations by evidence, risk, dependency and live-project value. PWA remains a strategic cross-track specialization.
 
 # Curriculum state
-Stages 1–10: **COMPLETE — FOUNDATION/PRACTITIONER GATES PASSED.** These are transferable competency gates, not production certification.
+Stages 1–11: **COMPLETE — FOUNDATION/PRACTITIONER GATES PASSED.** These are transferable competency gates, not production certification.
 
-Stage 11 Web Operations & Platform Architecture: **ACTIVE — FOUNDATION/PRACTITIONER.**
+- Stage 1 Web Foundations: 027–033
+- Stage 2 Website Anatomy / Content / IA: 034–038
+- Stage 3 UX & Interaction: 039–044
+- Stage 4 Web Design Literacy: 045–050
+- Stage 5 Accessibility: 051–058
+- Stage 6 Search / Discovery / Content Quality: 059–065
+- Stage 7 Performance / Browser Runtime: 066–070
+- Stage 8 Security / Privacy / Trust: 071–072
+- Stage 9 Analytics / Experimentation: 075–076
+- Stage 10 App-Company Web Strategy & Growth: 077–078
+- Stage 11 Web Operations & Platform Architecture: 079–080
 
+# Stage 11 closure
 079 — **Web Operations & Platform Architecture: Deployment, Recovery & PWA Lifecycle — PASS.**
+080 — **Reliability, Observability, DR & Supply-Chain Integration — PASS / STAGE 11 GATE CLOSED.**
 
 Integrated operations model:
-`requirements → rendering/execution model → origin/backend → edge/CDN/cache → DNS/TLS → deployment/version → browser/service-worker/client state → observation → recovery`.
+`critical user task → architecture/failure domains → source/artifact provenance → environment/promotion → DNS/TLS/edge/origin/backend/data → client/worker versions → observation/SLO → incident/recovery → tested restore/RTO/RPO → learning/portability`.
 
-Retained judgments through 079:
-- architecture starts from required behavior/failure tolerance, not provider selection;
-- build artifact ≠ deployed release ≠ healthy release;
-- origin version ≠ edge-cache version ≠ browser cache ≠ service-worker version ≠ open-client version;
-- preview frontend ≠ safe sandbox when it targets production backends/data;
-- release lineage should connect source commit, build/toolchain, immutable artifact, environment, deployment ID, config/schema and validation evidence;
-- cache invalidation is a correctness problem as well as performance work; broad purge can increase origin load;
-- deploying components together does not make user-visible rollout atomic because distributed caches, workers, tabs and offline clients persist;
-- PWA update lifecycle adds installing/waiting/activation/control states; forced `skipWaiting()`/`clients.claim()` is a compatibility decision rather than a generic best practice;
-- rollback of web bytes ≠ configuration rollback ≠ cache recovery ≠ data recovery ≠ safe service-worker recovery;
-- an available rollback button does not prove rollback safety after persistent schema/data changes;
-- observability requires environment/version/population/time/missingness context;
-- provider lock-in is not automatically bad, but replacement/exit cost must be understood explicitly;
-- **PWA/offline acceptance attaches to the exact build artifact and deployment provenance, not source code alone; bypassing a product's canonical offline build/post-build pipeline creates a different artifact class.**
+Retained judgments through 080:
+- architecture starts from required behavior, failure tolerance and recovery objectives, not provider selection;
+- infrastructure uptime is not equivalent to user-task reliability;
+- SLI, SLO, SLA, RTO and RPO are distinct concepts;
+- registrar/DNS/TLS/CDN/origin/backend/data are distinct control/failure dependencies even when one vendor operates several;
+- source commit ≠ build artifact ≠ deployed release ≠ healthy release;
+- environment promotion should bind reviewed source, reproducible artifact, config/schema and validation evidence;
+- secrets, non-secret config, runtime feature state and persistent schema/data require separate governance;
+- artifact provenance/attestation establishes origin/build evidence but does not prove security;
+- metrics/logs/traces/synthetics/client-local evidence serve different observability roles;
+- analytics is not operational monitoring;
+- backup exists ≠ restore works ≠ application works after restore ≠ RTO/RPO met;
+- recovery tests must validate data integrity and the application stack, not only backup-file existence;
+- origin rollback ≠ PWA client recovery; offline fleets require worker/cache/schema/protocol/local-data compatibility reasoning;
+- provider lock-in is a trade-off, not automatically a defect; total cost includes engineering, incidents, recovery and migration as well as the provider bill.
 
-Reusable Stage 11 controls added:
+Reusable Stage 11 controls:
 - Environment Contract;
 - Release Lineage Record;
 - Deployment Compatibility Window;
@@ -41,52 +54,53 @@ Reusable Stage 11 controls added:
 - PWA Safe Update Contract;
 - Recovery Decision Record;
 - Portability Ledger;
-- canonical PWA artifact-provenance preflight transferred from the LogMate EFB regression case.
+- Domain Control Record;
+- operational SLI/SLO contract;
+- Incident Record;
+- Recovery Contract for irreplaceable data;
+- source→artifact→deployment provenance chain.
 
 # PWA strategic specialization
-073 — PWA Cross-Track Foundations — **PASS**.  
-074 — PWA Data Durability & Synchronization Architecture Boundaries — **PASS**.  
-075–079 transfer measurement, portfolio, release and operations knowledge.
+073–074 establish foundations/data-sync boundaries; 075–080 transfer measurement, portfolio, release and operations knowledge.
 
 PWA guards:
 `public website ≠ installable web experience ≠ offline-capable task ≠ synchronized product`.
 `local save ≠ sync queued ≠ transport attempt ≠ remote acknowledgement ≠ reconciliation ≠ backup ≠ analytics arrival`.
 `origin deployment complete ≠ all installed PWA clients updated`.
 `origin rollback complete ≠ installed PWA recovered`.
-`same source ref ≠ equivalent PWA artifact when build flags/post-build worker transforms/origin differ`.
+`same source ref ≠ equivalent PWA artifact when build flags/post-build transforms/origin differ`.
 
-Current standards confirm independently managed service-worker lifecycle; current WebKit releases continue service-worker fixes, so Safari/iPadOS runtime remains CHANGE WATCH. Physical EFB/iPad validation remains product-specific and cannot be inferred from generic platform evidence.
+For long-offline EFB clients, skipped-version recovery must preserve local data, identify schema/protocol/client version, support a bounded migration path, replay queued operations idempotently and reconcile before declaring synchronization complete. Physical managed-iPad validation remains product-specific.
 
 # Balanced track state
-- **A Platform & Browser:** strong foundation; supplies HTTP/cache/service-worker mechanics consumed by Stage 11.
-- **B UX/IA/Content:** strong; consumes update/offline/maintenance/recovery state requirements.
-- **C Performance/Accessibility/Quality:** substantial; release regression and cross-browser/device evidence remain production dependencies.
-- **D Search/Discovery/Analytics:** strong foundation/practitioner; consumes migration/status/release-lineage evidence and cannot be used as deployment truth.
-- **E Architecture/Security/Operations:** **current largest bottleneck and primary Stage 11 owner**; 079 materially improves deployment/cache/recovery architecture and now includes a live LogMate artifact-provenance transfer, but DNS/TLS operations, reliability/SLO, incident/DR, secret/config governance and provider failure/portability stress tests remain.
+- **A Platform & Browser:** strong foundation/practitioner; supplies browser/network/cache/worker mechanics.
+- **B UX/IA/Content:** strong foundation/practitioner; owns truthful maintenance/offline/recovery states.
+- **C Performance/Accessibility/Quality:** substantial foundation/practitioner; production cross-browser/device/AT evidence remains separate.
+- **D Search/Discovery/Analytics:** strong foundation/practitioner; measurement and migration evidence boundaries established.
+- **E Architecture/Security/Operations:** Stage 11 now closes the major foundation/practitioner gap across deployment, DNS/TLS, observability, incidents, DR, supply chain and portability.
+
+No track is promoted to production certification by curriculum completion.
 
 # Cross-repository evidence
-Design Studio latest checked 2026-09-16: Web Design Stage 1/2 PASS, Stage 3 PRACTICE; true-origin, cross-browser, AT and physical-device evidence remains OPEN. Web Manager does not promote bounded design evidence to production validation.
+Design Studio remains canonical for reusable visual/interaction evidence; latest known Web Design state is Stage 1/2 PASS, Stage 3 PRACTICE with true-origin/cross-browser/AT/physical-device evidence still open.
 
-Software Engineering remains implementation authority for actual CI/CD, schema/API compatibility, service-worker code, sync protocol, automated tests and runtime evidence. Its cross-repository contract now carries historical-regression preflight and artifact-provenance gates for future implementation work.
+Software Engineering owns actual CI/CD implementation, schema/API compatibility, service-worker code, dependency tooling, automated tests, backup automation and runtime/device validation. Web Manager owns the operational contracts and acceptance/failure model.
 
-**LogMate transfer, 2026-09-16:** current product evidence showed that a direct generic Flutter Web preview build rendered online but white-screened on physical EFB Safari after terminate → offline → re-entry, while the product repository already defined a stricter canonical PWA build/post-build path and historical POC evidence contained the same failure class. Web Manager classifies the current result as failure evidence for that exact preview artifact, not proof of IndexedDB/Safari/product-logic failure. Canonical PWA rebuild on a fresh origin and readable-first-frame re-acceptance is the required isolation step; exact code/CI/device PASS remains LogMate + Software Engineering authority.
-
-Marketing owns acquisition/channel/community strategy; Stage 11 does not duplicate it.
+Marketing owns acquisition/channel/community strategy. Web Manager owns receiving-resource truth, operational continuity and measurement boundaries.
 
 # Production OPEN register
-Actual `minttap.app` framework/rendering model, hosting provider, DNS/CDN/origin topology, environments, CI/CD, cache policy, service-worker strategy, IndexedDB/schema migration, observability/alerts, rollback/data recovery, dependency inventory, backup/RPO/RTO and PWA production role remain OPEN.
-
-Do not infer production capability from generic platform/provider documentation.
+Actual `minttap.app` IA/runtime/framework, provider, DNS/TLS/CDN/origin topology, environments, CI/CD, secret/config model, cache/service-worker policy, schema migration, monitoring/alerts/SLOs, incident process, backups/RPO/RTO, dependency inventory and production PWA role remain OPEN. Do not infer them from curriculum/provider documentation.
 
 # Highest-value next work
-Continue Stage 11 with a large integrated reliability block: **DNS/domain/TLS operations → origin/CDN failure domains → CI/CD promotion + secret/config governance → monitoring/SLO/incident evidence → backup/RPO/RTO/disaster recovery → dependency/supply-chain release operations → provider portability/cost stress tests**. Use bad-worker recovery, skipped-version offline clients, canonical-artifact provenance enforcement and EFB Safari/iPad constraints as major PWA cases. Then assess whether a second Stage 11 integration block is sufficient to close the gate.
+Begin **Stage 12 — Advanced / Expert Web Management**. First integrated block should build expert decision governance across portfolio-level ownership, Architecture Decision Records, evidence-confidence/uncertainty, technical/content/operational debt, migration/replatforming, accessibility/privacy/security/analytics governance, specialist conflict resolution, total cost of ownership and reversible-vs-irreversible decisions. Use MintTap/LogMate/PWA scenarios without inventing production facts.
 
 # Persistence state
 - `AGENTS.md`: five-track + large-bundle governance active.
 - `SPECIALIST_TRACKS.md`: canonical horizontal model.
 - `LEARNING_ROADMAP.md`: canonical vertical curriculum.
 - `research/README.md`: staged/specialization research index.
-- Stages 1–10: COMPLETE at intended foundation/practitioner level.
-- Stage 11: **ACTIVE; 079 PASS + LogMate artifact-provenance transfer recorded.**
+- Stages 1–11: COMPLETE at intended foundation/practitioner level.
+- Stage 11: **079–080 PASS / CLOSED.**
+- Stage 12: **NEXT — Advanced / Expert Web Management.**
 - PWA: strategic cross-track specialization active; production/device validation remains product-specific.
 - Reporting remains coarse/checkpoint-based.
