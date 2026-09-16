@@ -12,7 +12,7 @@ Learning sequence: `history/problem → design principle → standard → curren
 
 ---
 
-# Stages 1–6
+# Stages 1–7
 **COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATES PASSED.**
 - Stage 1 Web Foundations: 027–033.
 - Stage 2 Website Anatomy / Content / IA: 034–038.
@@ -20,56 +20,62 @@ Learning sequence: `history/problem → design principle → standard → curren
 - Stage 4 Web Design Literacy: 045–050.
 - Stage 5 Accessibility: 051–058.
 - Stage 6 Search / Discovery / Content Quality: 059–065.
+- Stage 7 Web Performance / Browser Runtime: 066–070.
 
-Production accessibility/search quality remain OPEN pending real `minttap.app` evidence.
+Production accessibility/search/performance quality remain OPEN pending real `minttap.app` implementation/browser/AT/crawler/runtime/field/task evidence.
 
 ---
 
 # Stage 7 — Web Performance / Browser Runtime
-**ACTIVE — FOUNDATION/PRACTITIONER STUDY.**
+**COMPLETE — FOUNDATION/PRACTITIONER CURRICULUM GATE PASSED.**
 
 066 — **Web Performance Foundations — PASS.**  
 067 — **Core Web Vitals from First Principles — PASS.**  
 068 — **Performance Causality: Delivery, Resource Priority, Caching, Media, Fonts, JavaScript & Third-Party Cost — PASS.**  
-069 — **Performance Budgets, Measurement Toolchain & Release Regression Governance — PASS.**
+069 — **Performance Budgets, Measurement Toolchain & Release Regression Governance — PASS.**  
+070 — **Stage 7 Integration: Performance Diagnostic & Release Operating System — PASS.**
 
-Established progression:
-`navigation/network → resource discovery/dependencies → parse/style/layout/paint/main-thread work → task-relative readiness → bounded metric observation → causal resource/delivery diagnosis → task/page-family budget → regression gate → release → field re-observation`.
+Integrated operating model:
+`user task → navigation context → delivery → resource discovery/dependency → parse/style/layout/paint/main-thread work → visible/operable readiness → metric observation → causal evidence → intervention → regression gate → release → field/task re-observation`.
 
-Retained judgments through 069:
-- performance is not one duration and `load` is not synonymous with readiness;
-- LCP/INP/CLS are bounded observations, not root causes or general quality scores;
-- field and lab evidence answer different questions and should be joined rather than substituted;
-- resource bytes, transfer time, discovery time, dependency delay, CPU/decode/render cost and task impact are distinct;
-- critical dependency path matters more than undifferentiated page weight;
-- preload/preconnect/fetch priority are selective ordering tools rather than universal acceleration;
-- compression, caching, media sizing, font delivery, CSS dependencies, JS execution and third-party work solve/create different costs;
-- a **Resource Criticality Matrix** classifies primary-task necessity, discovery, network/CPU/render/layout risk, cache reuse and deferrability;
-- a performance budget is a pre-declared boundary on an evidence-bearing variable whose regression threatens an important task, not an arbitrary Lighthouse/byte target;
-- budgets should be page-family/task specific and may cover task milestones, relevant vitals, critical-path resources, main-thread work or regression delta;
-- measurement should preserve deterministic/static, controlled lab/trace, production field/RUM and downstream task evidence as distinct layers;
-- release gates should block material reproducible regressions against justified contracts, not small/noisy score changes;
-- baseline variance, browser/tool version, cache/navigation context and release identity are required for meaningful comparison;
-- budget hierarchy is `task invariant → user-experience budget → causal budget → diagnostic guardrail`;
-- performance exceptions require measured cost, rationale, owner and review/expiry trigger;
-- accessibility/correctness/design cannot be silently traded away to pass a performance gate.
+Retained judgments through 070:
+- experience symptom, metric, browser phase, resource cause, fix and release decision are distinct layers;
+- LCP/INP/CLS are bounded observation models, not root causes or general quality scores;
+- field and lab/trace evidence answer different questions and should be joined;
+- bytes, transfer, discovery, dependency, CPU/decode/render, layout and task cost are distinct;
+- Primary Readiness Contract, Performance Evidence Contract and Resource Criticality Matrix provide complementary evidence structures;
+- diagnosis begins with a user/task symptom and preserves route, release, device/network, navigation/cache/bfcache and tool context before intervention;
+- LCP diagnosis follows the actual candidate/dependency path; INP follows the actual interaction and latency phases; CLS follows actual shift sources/geometry;
+- a good Core Web Vitals result does not prove task readiness, correctness or accessibility;
+- optimization should apply the narrowest causal intervention rather than generic preload/compression/JS/image checklists;
+- performance budgets are task/page-family evidence boundaries, not invented universal scores or byte caps;
+- release gates block material reproducible regressions against justified contracts, not one noisy synthetic run;
+- performance changes must preserve accessibility, correctness, content/product fidelity and task continuity;
+- release evidence should retain baseline variance, causal traces, exception ownership and post-release field/task re-observation;
+- production `minttap.app` performance remains OPEN until actual runtime and field evidence exist.
 
-Production `minttap.app` performance remains **OPEN** pending actual routes/tasks, runtime architecture, hosting/CDN/cache, resource/third-party inventory, representative population, repeated lab baseline, field/RUM evidence and CI/release enforcement capability. No numeric MintTap budget is invented before those facts exist.
+---
+
+# Stage 8 — Security / Privacy / Trust
+**READY — FOUNDATION/PRACTITIONER STUDY.**
 
 Highest-value next block:
-070 — **Stage 7 Integration: Performance Diagnostic & Release Operating System.**
+071 — **Web Security Foundations: Threat Model, Origin/Trust Boundaries, Browser Security Model, Assets/Actors & Defense-in-Depth.**
 
-066–069 now cover browser work, user-centric observations, causal delivery/resource families and regression governance. 070 should test the integrated competency gate across representative failure scenarios before advancing to Stage 8 Security / Privacy / Trust.
+Begin from why browser/web security boundaries exist and how assets, actors, origins, trust and threat models relate. Do not jump directly to CSP/security-header configuration before the underlying model is established.
 
 ---
 
 # Design Studio relationship
-Latest relevant Web Design state checked 2026-09-16: Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W018 progressive readiness/stability Chromium transfer is now 8/8 after a measurement-method correction; real HTTP/network breadth and production LCP/INP/CLS remain OPEN.
+Latest `design-studio/progress/WEB_STATUS.md` checked 2026-09-16:
+- Web Design is now Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE NOT PASSED;
+- W021 integrated executable specimen exists; browser execution is next;
+- real HTTP/network, cross-browser, screen-reader, physical-device, field-performance and human UX evidence remain OPEN.
 
 ### Stage 7 handoff
-066 supplies browser phases; 067 metric-evidence boundaries; 068 resource causality; 069 adds page-family budgets and release-regression governance. W018's first-frame/data-visible/task-ready separation and reserved-vs-unreserved geometry are useful bounded evidence, but its measured milliseconds are not targets and its zero layout-shift observer result does not override direct geometry evidence.
+Future integrated runtime work should preserve task/readiness milestones, actual metric candidate/interaction/shift context, direct geometry where instrumentation is silent, waterfall/initiator/resource causes, cache/navigation state, baseline variance and release identity. Local specimen timings are not production performance targets.
 
-Future live-project validation should preserve page-family/task identity, waterfall/initiator chains, media/font/JS/third-party causes, actual LCP/INP/CLS context, direct geometry where useful, baseline variance, release identity and field re-observation. Type owns typographic suitability; Web/engineering return measured font delivery/layout evidence. Layout/Interaction owns async geometry/task continuity. Visual media optimization requires fidelity review when product proof is affected. Content Design/UX remain user-managed and receive evidence handoffs only when performance changes content priority/loading language/task flow.
+Type owns typography suitability; Web/engineering return measured font delivery/layout evidence. Layout/Interaction owns async geometry and task continuity. Product-media optimization requires fidelity review. Content Design/UX remain user-managed and receive evidence handoffs only when performance changes information priority/loading language or actual readiness/interaction evidence suggests task harm.
 
 No Design Studio canonical file was edited.
 
@@ -78,14 +84,16 @@ No Design Studio canonical file was edited.
 # Important unknown MintTap facts
 Real project decisions still require verified evidence for actual app/page/process inventory, frontend/component library/router, production brand/fonts/components, supported locales, analytics/privacy constraints and accessibility/search production evidence.
 
-Stage 7 additionally requires actual rendering/deployment architecture, hosting/CDN/origin topology, HTTP/cache/compression headers, waterfall/dependency graph, JS/CSS framework and hydration, media/font/third-party inventory, service-worker behavior, page-family readiness definitions, device/network population, field Core Web Vitals/RUM, baseline variance, release/CI tooling and justified performance budgets. Do not infer these from generic app-company patterns.
+Performance additionally requires actual rendering/deployment architecture, hosting/CDN/origin topology, HTTP/cache/compression headers, waterfall/dependency graph, JS/CSS framework and hydration, media/font/third-party inventory, service-worker behavior, page-family readiness definitions, device/network population, field Core Web Vitals/RUM, baseline variance, release/CI tooling and justified performance budgets.
+
+Stage 8 will additionally require actual data flows, forms/support/contact surfaces, authentication/account behavior if any, third parties, cookies/storage, analytics/advertising, secrets/deployment model, security headers, dependency/supply-chain inventory, privacy/legal requirements and incident/support-abuse model. Do not infer these from generic app-company patterns.
 
 ---
 
 # Persistence state
 - `LEARNING_ROADMAP.md` remains canonical curriculum.
 - `research/README.md` indexes staged learning.
-- Stages 1–6: COMPLETE at intended foundation/practitioner level.
-- Stage 7: **ACTIVE; 066–069 PASS.**
-- Current next work: **070 — Stage 7 Integration / competency gate**.
+- Stages 1–7: COMPLETE at intended foundation/practitioner level.
+- Stage 8: **READY**.
+- Current next work: **071 — Web Security Foundations**.
 - Reporting cadence remains coarse: deep internal study, consolidated persistence/reporting.
