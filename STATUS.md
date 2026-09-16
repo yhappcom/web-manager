@@ -8,12 +8,11 @@ Platforms: iOS / App Store, Android / Google Play, strategic PWA/Web App capabil
 ## Operating model
 GitHub is canonical memory. `LEARNING_ROADMAP.md` is the vertical beginner→expert curriculum; `SPECIALIST_TRACKS.md` is the horizontal five-track expertise model. Web Manager coordinates A Platform/Browser, B UX/IA/Content, C Performance/Accessibility/Quality, D Search/Discovery/Analytics and E Architecture/Security/Operations by evidence/risk/dependency value rather than equal volume.
 
-PWA is now a **strategic high-priority cross-track specialization**, not a sixth track. Track A owns platform/browser mechanics; B install/offline/update/recovery UX; C runtime/offline/accessibility/resilience validation; D discoverability/install measurement; E secure context, deployment/update/storage durability/operations.
-
-Learning sequence: `history/problem → design principle → standard → current implementation → limitations/failure → cross-domain connection → operational judgment → integrated competency`.
+PWA is a **strategic high-priority cross-track specialization**, not a sixth track.
 
 # Curriculum state
-Stages 1–8: **COMPLETE — FOUNDATION/PRACTITIONER GATES PASSED.**
+Stages 1–8: **COMPLETE — FOUNDATION/PRACTITIONER GATES PASSED.** These are transferable competency gates, not production certification.
+
 - Stage 1 Web Foundations: 027–033
 - Stage 2 Website Anatomy / Content / IA: 034–038
 - Stage 3 UX & Interaction: 039–044
@@ -23,64 +22,68 @@ Stages 1–8: **COMPLETE — FOUNDATION/PRACTITIONER GATES PASSED.**
 - Stage 7 Web Performance / Browser Runtime: 066–070
 - Stage 8 Security / Privacy / Trust: 071–072
 
-These passes are transferable competency gates, **not production certification**.
-
 # PWA strategic specialization
 073 — **PWA Cross-Track Foundations: Service Workers, Offline, Install, Storage, Updates & Platform Reality — PASS.**
 
-Core model:
-`secure web origin → manifest/presentation → service-worker registration/scope/lifecycle → request strategy/cache → structured origin data → update/version transition → standalone/browser platform behavior → offline/recovery contract → target-device validation`.
+074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-Retained judgments:
-- PWA is a composition of web capabilities, not one binary platform type;
-- service workers are programmable origin/scope-bound request/event intermediaries, not merely offline cache lists;
-- install → waiting → activate → control creates real mixed-version/update hazards; `skipWaiting()` is not a universal best practice;
-- cache strategy must be selected per resource/data/task semantics;
-- CacheStorage is HTTP Request/Response storage; structured user records belong in a database layer such as IndexedDB rather than being conflated with shell caching;
-- browser-origin storage is not a backup; persistence requests can be browser-policy dependent and explicit clearing/device/storage pressure remain durability risks;
-- Safari/iPadOS and Chromium/Android installation models differ materially and are CHANGE WATCH;
-- Safari 26/iOS/iPadOS 26 allows any site added to Home Screen to open as a web app by default, but target managed-device policy/version remains OPEN;
-- installed PWA does not establish native-style indefinite background execution, unattended peer discovery or device-to-device synchronization;
-- offline UI must distinguish local save, stale data, queued operation, syncing, acknowledged/synced, conflict and failure;
-- production claims require target OS/browser/standalone/storage/update/offline evidence.
+Integrated PWA model now extends to:
+`secure origin → service-worker/cache/app shell → IndexedDB structured local state → atomic local mutation/outbox → transport opportunity → authenticated idempotent remote apply → acknowledgement → pull/reconciliation → conflict/recovery → independent backup/restore → target-device validation`.
+
+Retained judgments through 074:
+- local save, queued sync, transmission, remote acknowledgement, replication and backup are distinct states;
+- IndexedDB provides local transactions/schema versioning, not cross-device transactions or synchronization;
+- schema upgrades can be blocked by old open connections and must be coordinated with page/service-worker version transitions;
+- same-origin Web Locks can coordinate tabs/workers but cannot prevent cross-device/retry duplicates;
+- durable offline sync requires stable record/change identity, outbox, retry, idempotency/deduplication, acknowledgement, remote-change discovery, deletion semantics and conflict policy;
+- acknowledgement loss creates an ambiguous-delivery case, so transport reliability alone does not remove idempotency requirements;
+- conflict resolution is domain semantics, not a transport feature; silent last-write-wins is not assumed for logbook-like records;
+- browser persistent storage and synchronized replicas are not independent backups;
+- Background Sync and Periodic Background Sync are not universal browser capabilities and cannot be correctness dependencies;
+- foreground/open/resume/manual sync paths must recover durable pending work even if optional background APIs never fire;
+- WebSocket/WebTransport are server-oriented transports; WebRTC data channels prove peer transport exists but not zero-intervention discovery/signaling/background feasibility; Web Bluetooth remains platform-limited/experimental;
+- direct local-network peer sync on a managed EFB remains OPEN pending discovery/addressing, secure-context/TLS, local-network/privacy policy, connectivity and suspension evidence;
+- server relay, direct peer and user-mediated export/import are separate architecture options; automatic sync and disaster-recovery backup should remain independent concerns;
+- long-offline operation must resume from durable checkpoints and reconcile changes/conflicts rather than blindly overwrite or restart full state;
+- production/device claims require the actual managed iPad OS/browser/policy matrix.
 
 ## EFB / LogMate-like scenario boundary
-Established in principle: secure PWA shell/content can work offline using service-worker/cache mechanisms and structured records can be held locally in IndexedDB-like origin storage.
+**Established in principle:** offline shell/content plus structured local records are feasible web-platform patterns; durable outbox/reconciliation can be specified independently of transport.
 
-Still **OPEN / requires validation**:
-- managed company iPad allows Add to Home Screen/web-app mode and required origins/capabilities;
-- target iPadOS/browser version and actual service-worker/storage behavior;
-- long-term local-data durability and export/backup workflow;
-- background synchronization while closed/suspended;
-- unattended PWA↔native-phone discovery/transport;
+Still **OPEN / requires implementation + target-device validation**:
+- managed company iPad permits required Home Screen/storage/export/network capabilities;
+- actual schema/data model and migration behavior;
+- authoritative replica and conflict semantics;
+- background synchronization support/reliability on target platform;
+- unattended PWA↔native-phone discovery and transport;
 - hotspot/Bluetooth/local-network feasibility under company/OS policy;
-- multi-device authoritative-replica/conflict/idempotency design.
-
-Do not infer these from generic PWA capability.
+- authentication/pairing persistence and lost-device behavior;
+- independent backup/export/restore on permitted destinations;
+- long-offline, duplicate/retry, update-with-pending-outbox and storage-loss recovery.
 
 # Balanced track state
-- **A Platform & Browser:** strong foundation; now primary owner of PWA service-worker/storage/manifest/platform mechanics. PWA platform depth is elevated.
-- **B UX/IA/Content:** foundation/practitioner complete; consumes explicit install/offline/stale/update/conflict/recovery state requirements.
-- **C Performance/Accessibility/Quality:** substantial foundation/practitioner; PWA requires cold/warm/offline/update/storage-loss and Safari/Chromium target-device validation. Production browser/AT/device/field evidence remains OPEN.
-- **D Search/Discovery/Analytics:** search/discovery mature; Stage 9 analytics/experimentation remains the largest vertical curriculum gap, but PWA strategic specialization temporarily received priority after Stage 8 prerequisites closed.
-- **E Architecture/Security/Operations:** security/privacy foundation PASS; co-owns PWA secure-context, scope/blast-radius, deployment/update/cache invalidation, data durability/backup and rollback requirements.
+- **A Platform & Browser:** strong foundation; 073–074 materially deepen service-worker/storage/IndexedDB/concurrency/transport boundaries.
+- **B UX/IA/Content:** foundation/practitioner complete; PWA handoff now includes local-only/queued/sending/synced/conflict/auth-blocked/recovery state language.
+- **C Performance/Accessibility/Quality:** substantial foundation/practitioner; target-device PWA validation matrix now includes crash/outbox, schema upgrade, long offline, duplicate ack loss, backup restore and update transition failures.
+- **D Search/Discovery/Analytics:** search/discovery mature; **Stage 9 Analytics/Experimentation is now the highest-value vertical bottleneck**. PWA offline/install/sync measurement will be a major application case.
+- **E Architecture/Security/Operations:** security/privacy foundation PASS; PWA durability/sync threat, backup, migration and transport requirements are now bounded, with implementation evidence still OPEN.
 
 # Cross-repository evidence
-Design Studio latest checked 2026-09-16: Web Design Stage 1/2 PASS, Stage 3 PRACTICE; W022 packages integrated execution handoff but browser runtime/HTTP/cross-browser/AT/device/field/human evidence remains OPEN. PWA runtime evidence must not be inferred from deterministic design specimens.
+Design Studio latest checked 2026-09-16: Web Design Stage 1/2 PASS, Stage 3 PRACTICE; W023 provides bounded integrated Chromium transfer but route/network/cross-browser/AT/physical-device/field/human evidence remains OPEN. PWA runtime quality is not inferred from it.
 
-Software Engineering Studio repository exists but currently exposes no substantive canonical evidence; no implementation maturity is inferred. PWA schema migration, synchronization/conflict/idempotency and transport implementation require engineering handoff when that repository becomes substantive.
+Software Engineering remains the implementation dependency for schema/data IDs, transaction boundaries, migration harness, outbox/idempotent endpoint, conflict algorithm, backup format and target managed-iPad transport experiments. Web Manager retains web capability/risk contracts rather than duplicating engineering.
 
-Marketing boundary: acquisition/install messaging must consume verified platform/runtime capability truth. Claims such as “works offline” or “syncs automatically” require evidence contracts rather than generic PWA assumptions.
+Marketing must consume verified capability truth; “works offline,” “automatically syncs,” “background sync” or “safe backup” claims remain prohibited until their specific evidence contracts pass.
 
 # Production OPEN register
 Actual `minttap.app` routes/runtime, hosting/CDN/origin, TLS/HSTS/headers/CSP/CORS, forms/endpoints, authentication/session, cookies/storage/service worker, web analytics/ads, third parties, personal-data flows/processors/retention, dependencies/build/deployment pipeline, secrets, DNS/registrar controls, monitoring/incidents/rollback, vulnerability contact, and production accessibility/search/performance/security evidence remain OPEN.
 
-PWA adds: manifest/install identity, service-worker script/scope/version/update policy, CacheStorage/IndexedDB schema, persistence/quota/eviction evidence, offline contract, update/migration strategy, standalone/browser parity, background capability support, backup/export/restore, synchronization transport and managed-EFB policy/device validation.
+PWA additionally requires manifest/install identity, worker scope/version/update policy, CacheStorage/IndexedDB schema, persistence/quota/eviction evidence, offline contract, update/migration strategy, standalone/browser parity, backup/export/restore, synchronization protocol/transport and managed-EFB validation.
 
 # Highest-value next work
-**PWA specialization remains elevated.** Next high-value integrated block: **PWA Data Durability & Synchronization Architecture Boundaries** — IndexedDB transactions/schema/migration; local-first outbox/acknowledgement; retry/idempotency/conflict foundations; backup/export/restore; long-offline recovery; suspension/background limits; feasible web↔native synchronization transports; EFB target-device validation plan.
+Return to the largest vertical curriculum gap: **Stage 9 Analytics / Experimentation (Track D)**. Build the first substantial integrated body from `decision/task semantics → observable event → privacy/minimization → instrumentation contract → offline delivery/idempotency → aggregation/segmentation → attribution/inference limits → experiment/qualitative evidence → decision threshold → re-observation`. Use PWA install/standalone/offline/sync states as major application cases without allowing analytics to become a synchronization correctness dependency.
 
-After this strategic dependency checkpoint, return to **Stage 9 Analytics / Experimentation** as the largest remaining vertical curriculum gap, while continuing PWA cross-track depth where it materially affects the company app.
+PWA implementation validation resumes when Software Engineering or actual managed-EFB evidence becomes available.
 
 # Persistence state
 - `AGENTS.md`: five-track + large-bundle governance active.
@@ -88,5 +91,6 @@ After this strategic dependency checkpoint, return to **Stage 9 Analytics / Expe
 - `LEARNING_ROADMAP.md`: canonical vertical curriculum.
 - `research/README.md`: staged/specialization research index.
 - Stages 1–8: COMPLETE at intended foundation/practitioner level.
-- PWA: 073 cross-track foundation/practitioner checkpoint PASS; production validation OPEN.
+- PWA: 073–074 specialization checkpoints PASS; production/device validation OPEN.
+- Next vertical block: Stage 9 Analytics / Experimentation.
 - Reporting remains coarse/checkpoint-based.
