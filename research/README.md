@@ -31,16 +31,19 @@ Current Home Screen/install behavior, Push/Badging vs general background executi
 Recovery Contract, offline identity/session/local-unlock/authorization boundaries, WebAuthn/Web Crypto limits, XSS/client-storage risk, device-loss/logout/revocation conflicts, export→restore lifecycle and safety-critical Saved/Sync/Backup state semantics.
 
 086 — **PWA Direct Transport, Discovery, Pairing & Security Boundaries — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
-Separates WebSocket/WebTransport server transport from WebRTC peer data transport; separates transport from discovery/signaling, reachability, pairing identity, background execution and sync correctness.
+Separates server transports from WebRTC peer data transport and transport from discovery/signaling, reachability, pairing identity, background execution and sync correctness.
 
 087 — **PWA WebRTC Establishment, Managed-Network Reality & Fallback Experiment Contract — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
-Deepens signaling/offer-answer/ICE candidate exchange, STUN vs TURN, NAT/firewall/network-isolation failure, ICE restart/re-signaling, managed local-network policy boundaries and direct-vs-relayed-vs-server fallback architecture. Converts remaining LogMate uncertainty into a canonical managed-iPad/native-phone experiment matrix for Software Engineering.
+Signaling/offer-answer/ICE/STUN/TURN, NAT/firewall/network isolation, ICE restart, managed-network boundaries and managed-iPad/native-phone experiment matrix.
 
 088 — **PWA Offline Navigation, Service-Worker Update Recovery & Observability — PASS (generic) / PRODUCT VALIDATION OPEN.**  
-Integrates navigation failure states, worker update/waiting/activation/control boundaries, update-script cache semantics, navigation preload, cache ownership, long-offline skipped-version recovery, recovery hierarchy, privacy-minimized observability, accessible degraded/update/recovery UX and a failure-injection/acceptance matrix for exact managed-iPad validation.
+Navigation failure states, worker update/control boundaries, cache ownership, skipped-version recovery, privacy-minimized observability, accessible recovery UX and failure injection.
 
 089 — **PWA Testing, Diagnostics & Release Evidence Architecture — PASS (generic) / TARGET-DEVICE EXECUTION OPEN.**  
-Converts 083–088 into a four-tier evidence system: deterministic logic/protocol tests → browser automation → engine/device diagnostics → exact managed-device acceptance. Establishes Chromium-vs-Safari worker-test boundaries, canonical fault injection, state/data release invariants, privacy-minimized diagnostic bundles and implementation handoff requirements.
+Four-tier evidence system, Chromium-vs-Safari worker-test boundaries, fault injection, state/data release invariants, privacy-minimized diagnostic bundles and implementation handoff.
+
+090 — **PWA Release, Support & Incident Evidence + Accessible Recovery Contract — PASS (generic) / TARGET-DEVICE & AT EXECUTION OPEN.**  
+Connects exact-artifact release acceptance to Safari/Home-Screen inspection boundaries, privacy-safe support diagnostics, correlation-ID minimization, accessible saved/sync/update/recovery state requirements, telemetry blind spots, incident evidence preservation and rollback-schema compatibility. Consumes Design Studio W040 boundary and Software Engineering D003 compatibility evidence without duplicating their disciplines.
 
 Key guards:
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -48,6 +51,8 @@ Key guards:
 - `online signal ≠ usable network ≠ successful navigation ≠ task-ready application`;
 - `worker update found ≠ installed ≠ activated ≠ controlling ≠ application-compatible`;
 - `automated browser PASS ≠ Safari PASS ≠ physical iPad PASS ≠ managed-EFB product PASS`;
+- `Safari diagnostic capability documented ≠ managed-EFB diagnostic workflow permitted`;
+- `release deployed ≠ release accepted ≠ product recovery validated`;
 - `rendered page/HTTP 200 ≠ PWA state/data invariant satisfied`;
 - `navigation preload ≠ offline fallback ≠ cache correctness`;
 - `Home Screen installed ≠ offline-capable ≠ background-sync capable`;
@@ -60,11 +65,12 @@ Key guards:
 - `RTCDataChannel available ≠ signaling/discovery/pairing/background correctness`;
 - `paired identity ≠ current address/current ICE state`;
 - `STUN reachable ≠ peer reachable`;
-- `TURN success ≠ direct P2P`, while TURN relay also does not automatically imply application-record storage;
+- `TURN success ≠ direct P2P`;
 - `same LAN ≠ peer reachability`;
+- `cannot diagnose ≠ user should clear storage`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Generic direct-sync establishment, offline/update/recovery and testing/diagnostic architecture are sufficient for implementation handoff. Product feasibility requires executable evidence using 087–089 topology, lifecycle, fault, recovery and evidence-tier contracts. Autonomous research should consume new runtime evidence or address adjacent release/support/change-watch gaps rather than repeat WebRTC/service-worker/testing primers.
+Generic direct-sync establishment, offline/update/recovery, testing/diagnostic and release/support/incident architecture are sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
 
 ## Stage 12 — Advanced / Expert Web Management — COMPLETE
 081 — **Expert Web Management Decision Governance — PASS.**  
@@ -74,7 +80,7 @@ Generic direct-sync establishment, offline/update/recovery and testing/diagnosti
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–089 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery and validation/diagnostic evidence. Production/device validation remains OPEN.
+075–090 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics and release/support/incident governance. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
