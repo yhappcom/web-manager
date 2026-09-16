@@ -30,10 +30,9 @@ Curriculum passes are competency gates, not production certification.
 089 — **PWA Testing, Diagnostics & Release Evidence Architecture — PASS (generic) / TARGET-DEVICE EXECUTION OPEN.**  
 090 — **PWA Release, Support & Incident Evidence + Accessible Recovery Contract — PASS (generic) / TARGET-DEVICE & AT EXECUTION OPEN.**  
 091 — **PWA Long-Offline Release Coexistence, API Retirement & Incident Containment — PASS (generic) / PRODUCT EXECUTION OPEN.**  
-092 — **PWA Release/Update Supply-Chain Integrity & Secure Deployment Trust — PASS (generic) / PRODUCT IMPLEMENTATION VALIDATION OPEN.**  
-Treats the worker/update channel as privileged deployment; separates HTTPS from release authorization; defines source→dependency→build→immutable artifact→authorized publication evidence, worker/page CSP boundaries, deployment-IAM/credential separation and non-destructive compromised-worker recovery.  
-093 — **PWA Session Revocation, Offline Authorization & Security-Sensitive Local Data Separation — PASS (generic) / PRODUCT AUTHORIZATION + DEVICE VALIDATION OPEN.**  
-Separates identity binding, server-session validity, local unlock, offline authorization, pending mutation acknowledgement and recovery state; establishes `logout ≠ origin wipe`, revocation-propagation limits, security/recoverability data classes, destructive-cleanup gates and an exact-artifact expiry/revocation/reconnect test matrix. Consumes Software Engineering D004/D005 boundaries without duplicating their discipline.
+092 — **PWA Release/Update Supply-Chain Integrity & Secure Deployment Trust — PASS (generic) / PRODUCT IMPLEMENTATION VALIDATION OPEN.** Treats the worker/update channel as privileged deployment; separates HTTPS from release authorization; defines source→dependency→build→immutable artifact→authorized publication evidence, worker/page CSP boundaries, deployment-IAM/credential separation and non-destructive compromised-worker recovery.  
+093 — **PWA Session Revocation, Offline Authorization & Security-Sensitive Local Data Separation — PASS (generic) / PRODUCT AUTHORIZATION + DEVICE VALIDATION OPEN.** Separates identity binding, server-session validity, local unlock, offline authorization, pending mutation acknowledgement and recovery state; establishes `logout ≠ origin wipe`, revocation-propagation limits, security/recoverability data classes, destructive-cleanup gates and an exact-artifact expiry/revocation/reconnect test matrix.  
+094 — **PWA Account/Device Recovery & Cryptographic Key Lifecycle — PASS (generic) / PRODUCT CRYPTOGRAPHIC + DEVICE VALIDATION OPEN.** Separates account/authenticator/device/data/backup/sync recovery; distinguishes authentication, local-unlock, DEK, KEK/recovery, backup and pairing lifecycles; applies WebAuthn backup semantics and Web Crypto key-storage/export boundaries without inferring a product cryptographic design; defines replacement/revocation/rotation and exact-device recovery validation requirements.
 
 ## Key guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -45,6 +44,9 @@ Separates identity binding, server-session validity, local unlock, offline autho
 - `previously authenticated ≠ server session currently valid ≠ local data currently unlocked ≠ offline operation authorized ≠ pending mutation remotely accepted`;
 - `credential revoked at server ≠ disconnected PWA instantly aware ≠ local data instantly inaccessible`;
 - `logout ≠ origin wipe`;
+- `account recovery ≠ authenticator recovery ≠ device recovery ≠ local-data recovery ≠ backup recovery ≠ synchronization recovery`;
+- `credential rotation ≠ data-encryption-key rotation ≠ re-encryption ≠ old-device revocation`;
+- `new device authorized ≠ old offline device contained`;
 - `HTTP cache policy ≠ application-data authorization policy`;
 - `HTTPS + same-origin storage ≠ complete device-loss/XSS/data-at-rest security`;
 - `Web Crypto available ≠ safe encryption/key-recovery architecture established`;
@@ -61,13 +63,13 @@ Separates identity binding, server-session validity, local unlock, offline autho
 - `origin repaired ≠ installed fleet clean`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Generic direct-sync establishment, offline/update/recovery, testing/diagnostic, release/support/incident, long-offline coexistence/retirement, supply-chain/update-integrity and session-revocation/offline-authorization architecture are sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
+Generic direct-sync establishment, offline/update/recovery, testing/diagnostic, release/support/incident, long-offline coexistence/retirement, supply-chain/update-integrity, session-revocation/offline-authorization and account/device/key-recovery architecture are sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–093 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain governance and session-revocation/offline-authorization governance. Production/device validation remains OPEN.
+075–094 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain governance, session-revocation/offline-authorization and account/device/key-recovery governance. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
