@@ -36,26 +36,29 @@ Retained prior knowledge across launch requirements, IA, privacy/support, conten
 
 ## Stage 6 — Search / Discovery / Content Quality
 
-059 — **Search & Discovery Foundations: Crawling, Indexing, Rendering, Canonicalization & App-Company Findability — PASS.**  
-Establishes the search pipeline and Search Discovery Evidence Contract.
+059 — **Search & Discovery Foundations — PASS.**  
+Search pipeline and Search Discovery Evidence Contract.
 
 060 — **Search Content Semantics, Titles/Snippets, Helpful Content, Internal Linking & Query-to-Page Intent — PASS.**  
-Establishes truthful page meaning and Search Content Intent Contract.
+Truthful page meaning and Search Content Intent Contract.
 
 061 — **Structured Data, Entity/Site Identity, Software-App Representation & Search Appearance Boundaries — PASS.**  
-Separates vocabulary, engine support, validity, eligibility, display and ranking; establishes Structured Data Evidence Contract.
+Vocabulary/engine/validity/eligibility/display/ranking boundaries and Structured Data Evidence Contract.
 
-062 — **Localization & International Search: Language/Locale URLs, hreflang, Canonical Interaction, App-Store Locale Continuity & Multilingual Content Quality — PASS.**  
-Treats locale as resource architecture rather than translation decoration; establishes an International Search / Locale Contract and cross-channel Locale Continuity Matrix.
+062 — **Localization & International Search — PASS.**  
+Locale resource architecture, hreflang/canonical boundaries, International Search / Locale Contract and cross-channel Locale Continuity Matrix.
 
-063 — **Search Measurement & Webmaster Operations: Index, URL, Sitemap, Query/Page Evidence & Diagnostic Workflow — PASS.**  
-Separates intended/live/crawled/indexed/served states; distinguishes site-wide reports, URL inspection and performance evidence; establishes a three-clock diagnostic model and timestamped Search Operations Evidence Ledger for Google/Bing observation → intervention → re-observation.
+063 — **Search Measurement & Webmaster Operations — PASS.**  
+Intended/live/crawled/indexed/served state separation, three-clock diagnostics and Search Operations Evidence Ledger.
+
+064 — **Search Demand, Query Research, Content Opportunity & Niche App Discovery Strategy — PASS.**  
+Separates user need, query, tool volume, relevance and opportunity; documents Search Console/Trends/Keyword Planner evidence limits; separates web/App Store/Play discovery; treats intent as hypothesis; establishes a Search Opportunity Record and create/improve/merge/observe/reject decision discipline for niche app content.
 
 Next integrated study:
 
-064 — **Search Demand, Query Research, Content Opportunity & Niche App Discovery Strategy.**
+065 — **Stage 6 Integration: Search/Discovery/Content-Quality Competency Review & Niche App Search Operating System.**
 
-059–063 now define intended resources, truthful meaning, entity/locale relationships and actual crawler/index/result observation. Query/demand research comes next so content opportunities are evaluated against evidence rather than keyword-volume folklore.
+059–064 now cover resource discovery/index mechanics, truthful page meaning, entity/locale representation, webmaster observation and demand/opportunity research. Integrate them and test the Stage 6 foundation/practitioner gate before Stage 7.
 
 ---
 
@@ -66,16 +69,14 @@ Next integrated study:
 **Stage 3 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 4 — COMPLETE at intended foundation/practitioner level.**  
 **Stage 5 — COMPLETE at intended foundation/practitioner level; 051–058 PASS.**  
-**Stage 6 — ACTIVE; 059–063 PASS.**
+**Stage 6 — ACTIVE; 059–064 PASS.**
 
 ## Design Studio relationship
-Latest Web specialist state checked 2026-09-16: Web Design Stage 1 PASS / Stage 2 PRACTICE NOT PASSED. W016 provides actual Chromium native/custom control transfer 14/14. W015 real Fetch/DOM/network transfer, true HTTP direct-entry/reload/404, W011 icon runtime, actual browser-UI zoom and broader browser/device/AT/human evidence remain OPEN.
+Latest Design Studio repository state checked 2026-09-16. Web runtime/true-HTTP evidence remains relevant to production search validation. Content Design repository HEAD includes CD006 foundation/history/source-literacy work; Content Design and UX remain user-managed.
 
-059–063 extend the true-HTTP/IA handoff: future runtime transfer should verify representative route direct entry/status/redirect/404, initial-vs-rendered identity, crawlable links, title/H1, metadata/canonical/index directives, sitemap membership, crawler-visible structured data and timestamped deployment identity, plus locale/hreflang behavior when real locales exist. This runtime truth should be joinable to webmaster observations. Type owns production Korean/Latin/fallback/expansion evidence; Layout/Interaction owns language-switch/fallback task continuity. Web Manager owns search/content/entity/localization truth requirements and crawler/index/result evidence.
+059–064 extend the true-HTTP/IA handoff: future runtime transfer should verify representative route direct entry/status/redirect/404, initial-vs-rendered identity, crawlable links, title/H1, metadata/canonical/index directives, sitemap membership, crawler-visible structured data and timestamped deployment identity, with locale/hreflang when real locales exist.
 
-Content Design and UX are currently user-managed. Web Manager continues normally and records handoffs when search evidence reveals content-intent or landing-task issues; it does not assume management of those specialists.
-
-No Design Studio canonical file is edited without authorization.
+064 additionally hands aggregated/privacy-safe query language and task context to Content Design when real evidence exists; search volume must not dictate interface wording. UX receives observed landing/task evidence when qualified search visits expose a possible orientation/action issue; search metrics alone do not prove a UX defect. Web Manager owns search/content/entity/localization truth requirements, crawler/index/result evidence and search-opportunity governance. No Design Studio canonical file is edited without authorization.
 
 ## Study quality standard
 A substantial study should include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, MintTap relevance without invented facts, durable vs changeable behavior, and competency/application checks.
