@@ -19,58 +19,43 @@ Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`
 
 All passes are foundation/practitioner curriculum gates, not production validation.
 
-## Stage 11 — Web Operations & Platform Architecture — COMPLETE
-079 — **Web Operations & Platform Architecture: Deployment, Recovery & PWA Lifecycle — PASS.**  
-Establishes requirements-first architecture, runtime/origin/edge/browser version boundaries, environment contracts, artifact/deployment lineage, cache ownership, PWA update compatibility, rollback boundaries, recovery decisions and portability.
+## Stage 12 — Advanced / Expert Web Management — ACTIVE
+081 — **Expert Web Management Decision Governance — PASS / integrated block 1.**  
+Builds decision ownership, ADR/evidence-confidence contracts, uncertainty and reversibility framing, specialist-conflict resolution, lifecycle governance, technical/content/operational/governance debt, migration/replatforming gates, TCO, durable-principle vs change-watch classification and an Expert Web Decision Packet.
 
-080 — **Reliability, Observability, DR & Supply-Chain Integration — PASS / STAGE 11 GATE.**  
-Integrates DNS/domain/TLS control, failure-domain mapping, CI/CD promotion and secret/config boundaries, artifact provenance, SLI/SLO/error-budget reasoning, metrics/logs/traces/synthetic/client-local observability, incident operation, backup/restore/RPO/RTO/DR, bad-worker/skipped-version PWA recovery, supply-chain governance and provider portability/TCO.
-
-Stage 11 integrated model:
-`critical user task → architecture/failure domains → source/artifact provenance → environment/promotion → DNS/TLS/edge/origin/backend/data → client/worker versions → observation/SLO → incident/recovery → tested restore/RTO/RPO → learning/portability`.
+Stage 12 model:
+`decision trigger → owner → affected tasks → constraints → alternatives → evidence/confidence → uncertainty → risk/impact → reversibility/TCO → specialist conflict → decision → validation/guardrails → review/supersession`.
 
 Key guards:
-- infrastructure uptime ≠ user-task reliability;
-- SLI ≠ SLO ≠ SLA ≠ RTO ≠ RPO;
-- source ≠ artifact ≠ deployed release ≠ healthy release;
-- secure secret storage ≠ correct secret scope/workflow trust;
-- artifact attestation ≠ artifact security;
-- analytics ≠ operational monitoring;
-- backup exists ≠ restore works ≠ application recovery;
-- origin rollback ≠ installed-PWA recovery;
-- redundancy ≠ independent failure domain;
-- lowest provider bill ≠ lowest total cost.
+- fact ≠ observation ≠ inference ≠ forecast ≠ preference ≠ decision;
+- technical evidence ≠ authority to accept residual risk;
+- consensus ≠ correctness;
+- WCAG conformance ≠ accessibility maturity;
+- launch gate ≠ continuing governance;
+- framework novelty ≠ migration justification;
+- provider bill ≠ TCO;
+- current platform behavior ≠ durable web principle;
+- project observation ≠ universal platform truth.
 
-## Stage 10 — App-Company Web Strategy & Growth — COMPLETE
-077 — App-Company Web Portfolio & Lifecycle Strategy — **PASS**.  
-078 — Release Governance, Portfolio Growth & Lifecycle Integration — **PASS / STAGE 10 GATE**.
+Next Stage 12 block: portfolio ownership/escalation, localization at scale, governance conflicts, postmortems, competitor/precedent analysis, platform evolution/change-watch, organizational ownership and final expert stress tests.
 
-## Stage 9 — Analytics / Experimentation — COMPLETE
-075 — Analytics, Measurement & Experimentation Evidence Foundations — **PASS**.  
-076 — Measurement Reliability, Causal Inference & Pre-Launch Integration — **PASS / STAGE 9 GATE**.
+## Stage 11 — Web Operations & Platform Architecture — COMPLETE
+079 — Web Operations & Platform Architecture: Deployment, Recovery & PWA Lifecycle — **PASS**.  
+080 — Reliability, Observability, DR & Supply-Chain Integration — **PASS / STAGE 11 GATE**.
+
+Stage 11 model:
+`critical user task → architecture/failure domains → source/artifact provenance → environment/promotion → DNS/TLS/edge/origin/backend/data → client/worker versions → observation/SLO → incident/recovery → tested restore/RTO/RPO → learning/portability`.
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–080 add measurement, portfolio, release and operational transfer. PWA production/device validation remains OPEN. Implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link validation is a Software Engineering dependency.
-
-Operational PWA guard set:
-`origin deployment complete ≠ all installed clients updated`;
-`origin rollback complete ≠ installed client recovered`;
-`same source ref ≠ same accepted PWA artifact`;
-`persistent browser storage ≠ independent backup`.
-
-## Next vertical curriculum — Stage 12 Advanced / Expert Web Management
-Highest-value start:
-`portfolio governance → ADR/evidence-confidence → reversible/irreversible decision framing → technical/content/operational debt → migration/replatforming → accessibility/privacy/security/analytics governance → cross-specialist conflict resolution → total cost of ownership → expert judgment under uncertainty`.
-
-Use MintTap/LogMate/PWA cases as bounded applications, without inventing production facts.
+075–081 add measurement, portfolio, release, operations and expert-governance transfer. PWA production/device validation remains OPEN. Implementation-level worker/cache/schema/outbox/conflict/backup/transport/telemetry/deep-link validation is a Software Engineering dependency.
 
 ## Specialist relationships
-A Platform/Browser owns reusable mechanics; B UX/IA/Content owns web task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability and measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates.
+A Platform/Browser owns reusable mechanics; B UX/IA/Content owns web task/information structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability and measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates their evidence and decisions rather than replacing them.
 
-Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Cross-repository transfer uses explicit evidence boundaries rather than discipline duplication.
+Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation.
 
 ## Study quality standard
 Substantial studies include precise vocabulary, first-principles mechanics, authoritative evidence, examples/counterexamples, failure diagnosis, cross-domain effects, project relevance without invented production facts, durable vs changeable behavior, and competency/application checks.
