@@ -31,7 +31,8 @@ Curriculum passes are competency gates, not production certification.
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
 111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
 117 — **PWA Partial/Offline Fleet Containment Assurance — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + FLEET TELEMETRY VALIDATION OPEN.** Separates containment issuance, authoritative enforcement, observed convergence, client remediation and reconciliation; treats long-offline clients as unknown until re-entry evidence exists; relies on fail-closed remote authority gates rather than assumed immediate client policy delivery.  
-118 — **PWA Containment-Policy Rollback & Emergency-Gate Lifecycle — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + INCIDENT-DRILL VALIDATION OPEN.** Treats rollback as a forward transition into a new trust baseline; separates emergency-privilege expiry from containment-restriction relaxation; stages authority restoration by capability; preserves fail-closed re-entry for long-offline clients; and requires evidence-bearing retirement of incident-created authority.
+118 — **PWA Containment-Policy Rollback & Emergency-Gate Lifecycle — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + INCIDENT-DRILL VALIDATION OPEN.** Treats rollback as a forward transition into a new trust baseline; separates emergency-privilege expiry from containment-restriction relaxation; stages authority restoration by capability; preserves fail-closed re-entry for long-offline clients; and requires evidence-bearing retirement of incident-created authority.  
+119 — **PWA Post-Incident Trust Normalization & Residual-Risk Acceptance — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + RISK-OWNER VALIDATION OPEN.** Defines normalization as an explicit current trust baseline; separates resolved, accepted residual risk, open work and unknown state; preserves fail-closed re-entry for unknown offline clients; keeps unverifiable local data useful without inventing provenance; and prevents incident debt from silently becoming permanent trust policy.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -118,13 +119,29 @@ Curriculum passes are competency gates, not production certification.
 - `automatic expiry good for emergency privilege ≠ every containment deny should auto-expire`;
 - `current client succeeds ≠ stale client remains denied`;
 - `incident over ≠ incident-created authority gone`;
-- `incident closed before device reconnects ≠ device skipped recovery`.
+- `incident closed before device reconnects ≠ device skipped recovery`;
+- `incident closed ≠ residual risk disappeared`;
+- `service normalized ≠ uncertainty eliminated`;
+- `known unresolved item ≠ accepted risk`;
+- `no planned fix ≠ risk accepted`;
+- `unknown ≠ accepted ≠ known compromised`;
+- `emergency controls removed ≠ baseline defined`;
+- `baseline documented ≠ baseline enforced`;
+- `risk accepted ≠ risk erased from monitoring`;
+- `residual risk accepted ≠ revoked credential authorized`;
+- `fleet uncertainty accepted ≠ stale client remote mutation allowed`;
+- `organization normalized ≠ every device normalized`;
+- `device absent from telemetry ≠ retired`;
+- `data preserved ≠ data trusted`;
+- `data useful for recovery ≠ data safe for automatic replay`;
+- `survived incident closure ≠ approved permanent architecture`;
+- `accepted once ≠ accepted forever`.
 
 ## Current evidence boundary
 All numbered PASS labels above are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**; W070 is the current runtime-promotion/field-performance boundary and existing MintTap widget evidence remains EXECUTED-FAIL. Software Engineering remains **Foundation IN STUDY** across all specialists and a dependency source for implementation/test/tooling evidence; Web Manager does not absorb general software-engineering ownership.
+Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**; W071 is the current served-runtime evidence-manifest boundary and existing MintTap widget evidence remains EXECUTED-FAIL. Software Engineering remains **Foundation IN STUDY** across all specialists. A006's evidence-preserving ADR lifecycle is a useful transfer dependency for permanent post-incident decisions, but it is not PWA runtime evidence and Web Manager does not absorb general software-engineering ownership.
 
 ## Next high-value maintenance target
-After 118, the highest-value adjacent generic question is **post-incident trust normalization and residual-risk acceptance**: establish a defensible new baseline after emergency controls retire, preserve unresolved/unknown client and data states, distinguish accepted residual risk from unfinished incident work, and prevent temporary recovery assumptions from silently becoming permanent trust policy.
+After 119, the highest-value adjacent generic question is **post-incident learning → permanent control-baseline change governance**: determine when incident lessons should change durable architecture/control requirements, preserve superseded assumptions and decision history, avoid overfitting the platform to one event, and validate corrective actions against recurrence rather than treating documentation completion as risk reduction.
