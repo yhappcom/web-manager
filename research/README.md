@@ -31,7 +31,8 @@ Curriculum passes are competency gates, not production certification.
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
 111 — **PWA Recovery Authority Continuity Under Identity, Domain & Control-Plane Loss — PASS (generic).** Recovery is a bounded authority transition with explicit circular-dependency, trust-generation, stale-client and emergency-privilege controls.  
 112 — **PWA Recovery Authority Abuse Resistance & Dual-Use Incident Governance — PASS (generic).** Recovery availability is separated from abuse resistance; human/provider support, notification, high-impact staging, independent observation, factor independence, repudiation and post-compromise persistence are explicit.  
-113 — **PWA Hostile-Origin / Service-Worker Compromise Scoping & Trust Re-entry — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD VALIDATION OPEN.** Restored origin authority is separated from installed-client cleanliness; non-exposure vs remediation evidence, worker/cache/session/data/operation planes, data-preserving quarantine, selective cleanup, monotonic trust re-entry and target-WebKit validation are explicit.
+113 — **PWA Hostile-Origin / Service-Worker Compromise Scoping & Trust Re-entry — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD VALIDATION OPEN.** Restored origin authority is separated from installed-client cleanliness; non-exposure vs remediation evidence, worker/cache/session/data/operation planes, data-preserving quarantine, selective cleanup, monotonic trust re-entry and target-WebKit validation are explicit.  
+114 — **PWA Compromise-Era Data Integrity & Operation Provenance — PASS (generic) / PRODUCT RUNTIME + CRYPTOGRAPHIC + MANAGED-IPAD VALIDATION OPEN.** Persistence is separated from authorship/provenance; independent evidence domains, acknowledgement semantics, intent-vs-authentication, trusted chronology, unverifiable recovery states, privacy-minimized audit evidence and replay gating are explicit.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -88,10 +89,23 @@ Curriculum passes are competency gates, not production certification.
 - `same origin storage ≠ same security meaning`;
 - `bytes parse correctly ≠ record integrity proven after hostile same-origin execution`;
 - `new worker active ≠ old tokens/remote side effects reconciled`;
-- `WebKit feature exists ≠ managed-EFB policy permits/retains it`.
+- `WebKit feature exists ≠ managed-EFB policy permits/retains it`;
+- `transaction committed ≠ user authored`;
+- `durably stored ≠ semantically trustworthy`;
+- `record + local audit entry ≠ two independent witnesses`;
+- `append-only data model ≠ append-only security boundary`;
+- `client timestamp ≠ trusted chronology`;
+- `HTTP 2xx ≠ acknowledged domain state identified`;
+- `server acknowledged operation ≠ user intended operation`;
+- `authenticated request ≠ legitimate user intent`;
+- `signature valid ≠ unsigned semantics protected`;
+- `no integrity evidence ≠ data known corrupted ≠ data known clean`;
+- `unverifiable` is a valid recovery state;
+- `more forensic data ≠ better privacy/security system`;
+- `synced=true ≠ provenance/reconciliation evidence`.
 
 ## Current validation boundary
 All numbered PASS states above are generic learning/competency gates unless an artifact explicitly records execution evidence. Actual `minttap.app`, LogMate-like PWA, target iOS/iPadOS/Android/browser/MDM behavior, accessibility, production IAM/security, data durability, sync, backup, recovery and incident controls remain OPEN until exact project/runtime evidence exists.
 
 ## Current next target
-After 113, highest-value adjacent generic work is **compromise-era data integrity and operation provenance**: when arbitrary same-origin code may have executed, preserve irreplaceable local records while distinguishing user-authored state, attacker mutation, queued operations and remotely acknowledged effects where evidence exists; explicitly define safe degraded behavior when retrospective integrity cannot be proven.
+After 114, highest-value adjacent generic work is **evidence-preserving incident acquisition and chain-of-custody for an offline PWA client**: when recovery actions can mutate worker/cache/storage/outbox evidence, determine how to preserve diagnostically useful state without sacrificing irreplaceable user records, leaking sensitive data, or overclaiming formal legal-forensic chain of custody.
