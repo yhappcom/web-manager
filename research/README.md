@@ -34,7 +34,8 @@ Curriculum passes are competency gates, not production certification.
 106 — **PWA Release Compatibility Contracts, Retirement Proof & Data-Preserving Unsupported States — PASS (generic) / PRODUCT SUPPORT HORIZON + TARGET-RUNTIME VALIDATION OPEN.**  
 107 — **PWA Compatibility-Bridge Minimization, Parser Isolation & Attack-Surface Debt — PASS (generic) / PRODUCT LEGACY FORMAT + TARGET-RUNTIME VALIDATION OPEN.** Recovery compatibility is preserved through narrow current-authority read/convert/quarantine paths rather than indefinite obsolete runtime authority.  
 108 — **PWA Recovery-Bridge Provenance, Dependency/Supply-Chain Closure & Recoverability-Preserving Replacement — PASS (generic) / PRODUCT BUILD + DEPENDENCY + HISTORICAL-CORPUS VALIDATION OPEN.** The remaining recovery bridge is treated as security-critical infrastructure: exact artifact identity, provenance/builder admission, dependency/vulnerability state and historical semantic corpus must close on the same shipped converter; vulnerable bridge replacement must preserve opaque user artifacts and independently prove historical recoverability.  
-109 — **PWA Recovery Corpus Longevity, Format-Spec Escrow & Future Converter Reconstruction — PASS (generic) / PRODUCT FORMAT-ESCROW + LONGEVITY-DRILL VALIDATION OPEN.** Long-lived recovery is treated as a representation-knowledge obligation: preserve non-secret format semantics, significant properties, fixtures/oracles, migration invariants and toolchain/dependency knowledge so a future current-toolchain converter can be reconstructed without retaining vulnerable executable authority or production secrets.
+109 — **PWA Recovery Corpus Longevity, Format-Spec Escrow & Future Converter Reconstruction — PASS (generic) / PRODUCT FORMAT-ESCROW + LONGEVITY-DRILL VALIDATION OPEN.** Long-lived recovery is treated as a representation-knowledge obligation: preserve non-secret format semantics, significant properties, fixtures/oracles, migration invariants and toolchain/dependency knowledge so a future current-toolchain converter can be reconstructed without retaining vulnerable executable authority or production secrets.  
+110 — **PWA Recovery Escrow Custody, Independence & Organizational Survivability — PASS (generic) / PRODUCT CUSTODY + DISASTER-DRILL VALIDATION OPEN.** Escrow survivability is modeled by independent failure domains across storage/provider, identity, authorization, key/trust, control plane, billing/domain ownership, personnel and tooling; the strongest drill removes the primary repository/cloud/SSO and original converter while preserving non-secret recovery knowledge and current-authority controls.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -84,7 +85,18 @@ Curriculum passes are competency gates, not production certification.
 - `format reconstruction requires understanding cryptography ≠ escrow should contain production keys`;
 - `documentation URL retained ≠ documentation retained`;
 - `app version history ≠ recovery format history`;
-- `old converter still runs ≠ future reconstruction proven`.
+- `old converter still runs ≠ future reconstruction proven`;
+- `two copies ≠ two independent failure domains`;
+- `different repository ≠ different IAM/control-plane failure domain`;
+- `copy count ≠ independence score`;
+- `provider durability SLA ≠ organizational survivability`;
+- `escrow survives production loss ≠ escrow should contain production authority`;
+- `decryption key recoverable ≠ signing key should be recoverable`;
+- `documented procedure ≠ successor can execute procedure`;
+- `backup restore drill PASS ≠ organizational-loss drill PASS`;
+- `independent copy exists ≠ independent access/authentication works`;
+- `authorized to read/reconstruct ≠ authorized to destroy all recovery evidence`;
+- `multi-region ≠ multi-account ≠ multi-provider ≠ multi-authority`.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
@@ -92,9 +104,9 @@ A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/informatio
 Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Use explicit handoffs and evidence boundaries.
 
 ## Current evidence boundary
-Generic PWA architecture through recovery corpus longevity/format-spec escrow is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable format/corpus/reconstruction, build/dependency, security, privacy, accessibility and operational validation.
+Generic PWA architecture through recovery escrow custody/organizational survivability is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable format/corpus/reconstruction, custody/IAM/key, build/dependency, security, privacy, accessibility and operational validation.
 
-Current next generic boundary, only if implementation evidence remains unavailable: **recovery escrow custody, independence and organizational survivability** — a complete preservation package can still disappear or become untrustworthy if it shares the same GitHub/cloud/IAM/provider/personnel failure domain as production. Determine independent custody, integrity/authenticity, access/recovery authority, personnel/key turnover and disaster-drill requirements without turning escrow into a secret or personal-data aggregation target.
+Current next generic boundary, only if implementation evidence remains unavailable: **recovery authority continuity under identity/domain/control-plane loss** — narrow how emergency organizational identity, domain ownership, signing/trust verification and recovery authority can be re-established without creating a standing bypass that defeats least privilege or anti-rollback. Consume 093/099/100/110 and Software Engineering security evidence rather than inventing product credentials.
 
 ## Study quality standard
 Substantial work includes precise vocabulary, first-principles mechanics, authoritative evidence, counterexamples/failure analysis, cross-domain effects, bounded project relevance, durable-vs-changeable classification, validation requirements and explicit decision ownership.
