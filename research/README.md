@@ -32,7 +32,8 @@ Curriculum passes are competency gates, not production certification.
 104 — **PWA Offline-First Recovery Objectives, Exposure Budgets & Long-Offline Operations — PASS (generic) / PRODUCT THRESHOLDS + TARGET-DEVICE VALIDATION OPEN.**  
 105 — **PWA Recovery-Risk Release Governance, Rollout Gates & Forward-Only State — PASS (generic) / PRODUCT RELEASE POLICY + TARGET-RUNTIME VALIDATION OPEN.**  
 106 — **PWA Release Compatibility Contracts, Retirement Proof & Data-Preserving Unsupported States — PASS (generic) / PRODUCT SUPPORT HORIZON + TARGET-RUNTIME VALIDATION OPEN.**  
-107 — **PWA Compatibility-Bridge Minimization, Parser Isolation & Attack-Surface Debt — PASS (generic) / PRODUCT LEGACY FORMAT + TARGET-RUNTIME VALIDATION OPEN.** Recovery compatibility is preserved through narrow current-authority read/convert/quarantine paths rather than indefinite obsolete runtime authority; historically legitimate artifacts remain untrusted parser inputs; vulnerable parser implementation may be retired without discarding the recovery obligation or opaque artifact.
+107 — **PWA Compatibility-Bridge Minimization, Parser Isolation & Attack-Surface Debt — PASS (generic) / PRODUCT LEGACY FORMAT + TARGET-RUNTIME VALIDATION OPEN.** Recovery compatibility is preserved through narrow current-authority read/convert/quarantine paths rather than indefinite obsolete runtime authority.  
+108 — **PWA Recovery-Bridge Provenance, Dependency/Supply-Chain Closure & Recoverability-Preserving Replacement — PASS (generic) / PRODUCT BUILD + DEPENDENCY + HISTORICAL-CORPUS VALIDATION OPEN.** The remaining recovery bridge is treated as security-critical infrastructure: exact artifact identity, provenance/builder admission, dependency/vulnerability state and historical semantic corpus must close on the same shipped converter; vulnerable bridge replacement must preserve opaque user artifacts and independently prove historical recoverability.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -61,7 +62,17 @@ Curriculum passes are competency gates, not production certification.
 - `can decode old record ≠ may execute old operation`;
 - `Web Worker used ≠ security sandbox proven`;
 - `legacy parser retired ≠ legacy artifact must be discarded`;
-- `old implementation removed ≠ recovery contract necessarily ended`.
+- `old implementation removed ≠ recovery contract necessarily ended`;
+- `artifact hash known ≠ artifact provenance verified`;
+- `provenance verified ≠ builder acceptable ≠ dependency set safe`;
+- `dependency provenance verified ≠ dependency non-malicious`;
+- `attestation signature valid ≠ attested artifact authorized for recovery`;
+- `SBOM generated ≠ SBOM consumed`;
+- `release-time dependency review PASS ≠ bridge safe for its entire recovery lifetime`;
+- `source tests passed ≠ shipped artifact tested`;
+- `converter version label same ≠ artifact bytes same`;
+- `dependency upgraded ≠ historical recoverability preserved`;
+- `vulnerable bridge disabled ≠ opaque user artifact should be deleted`.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
@@ -69,9 +80,9 @@ A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/informatio
 Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Use explicit handoffs and evidence boundaries.
 
 ## Current evidence boundary
-Generic PWA architecture through compatibility-bridge minimization is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable security, privacy, accessibility and operational validation.
+Generic PWA architecture through recovery-bridge provenance/supply-chain closure is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable build/dependency, security, privacy, accessibility and operational validation.
 
-Current next generic boundary, only if implementation evidence remains unavailable: **recovery-bridge provenance and dependency/supply-chain closure** — once a narrow parser/converter becomes security-critical recovery infrastructure, its libraries, build artifacts and historical corpus require provenance, vulnerability/update and replacement evidence. Determine how to patch/replace it without silently breaking old-artifact recoverability. Consume Software Engineering supply-chain evidence rather than duplicate general dependency-management theory.
+Current next generic boundary, only if implementation evidence remains unavailable: **recovery corpus longevity and format-spec escrow** — a long-lived recovery promise must survive disappearance of the original parser dependency/toolchain. Determine what non-secret format semantics, fixtures, migration invariants and authority procedures must be retained so a future safe converter can be reconstructed without retaining vulnerable executables or secrets.
 
 ## Study quality standard
 Substantial work includes precise vocabulary, first-principles mechanics, authoritative evidence, counterexamples/failure analysis, cross-domain effects, bounded project relevance, durable-vs-changeable classification, validation requirements and explicit decision ownership.
