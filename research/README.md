@@ -29,10 +29,11 @@ Curriculum passes are competency gates, not production certification.
 091–098 cover long-offline compatibility/API retirement; release supply-chain; session/offline authorization; account/device/key recovery; XSS/unlocked-data authority; sensitive-context isolation; explicit trust bridges; stale-client revocation/data-preserving containment.  
 099 — **PWA Trust-Policy Authenticity, Authority Recovery & Anti-Rollback Boundaries — PASS (generic).**  
 100 — **PWA Trusted-State Persistence, Reset/Reinstall Bootstrap & Recovery — PASS (generic).**  
-101 — **PWA Mixed-Epoch Recovery Provenance & Reconciliation — PASS (generic).** Restore is treated as a vector of record/trust/key/schema/protocol/outbox/ack epochs; integrity, provenance, reader/domain acceptance, reconciliation and replay authorization remain separate gates.  
+101 — **PWA Mixed-Epoch Recovery Provenance & Reconciliation — PASS (generic).** Restore is a vector of record/trust/key/schema/protocol/outbox/ack epochs; integrity, provenance, reader/domain acceptance, reconciliation and replay authorization remain separate gates.  
 102 — **PWA Portable Recovery Artifact Confidentiality, Custody & Import Authority — PASS (generic).** Portable Files/cloud/share artifacts are a new trust boundary; encryption is separated from recoverability/key custody; import is hostile-input processing; bearer/session/device/trust restoration and metadata leakage are constrained.  
 103 — **PWA Backup Freshness, Completeness, Recoverability Evidence & Privacy-Safe Assurance — PASS (generic) / PRODUCT RESTORE-DRILL + TARGET-DEVICE VALIDATION OPEN.** Backup assurance is capture frontier → completeness → serialization → custody → integrity/authenticity → key → reader/schema → semantic restore → reconciliation → restore rehearsal.  
-104 — **PWA Offline-First Recovery Objectives, Exposure Budgets & Long-Offline Operations — PASS (generic) / PRODUCT THRESHOLDS + TARGET-DEVICE VALIDATION OPEN.** Traditional RPO/RTO are adapted into a vector covering local durable save, external-protection exposure, restore readiness, recovery duration, sync convergence, long-offline survivability and trust revalidation. Error-budget governance transfers as an action/decision mechanism, not permission to lose irreplaceable user records; thresholds remain product-evidence-driven.
+104 — **PWA Offline-First Recovery Objectives, Exposure Budgets & Long-Offline Operations — PASS (generic) / PRODUCT THRESHOLDS + TARGET-DEVICE VALIDATION OPEN.** Recovery objectives are a vector covering local durable save, external-protection exposure, restore readiness, recovery duration, sync convergence, long-offline survivability and trust revalidation.  
+105 — **PWA Recovery-Risk Release Governance, Rollout Gates & Forward-Only State — PASS (generic) / PRODUCT RELEASE POLICY + TARGET-RUNTIME VALIDATION OPEN.** Recovery-critical releases consume evidence/risk margin, not user records; rollout requires exact-artifact/migration/restore/mixed-generation/fault/breaker evidence; service-worker activation is a compatibility decision; code rollback does not imply schema/key/trust/remote-effect rollback and may require compatibility bridge + forward repair.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -45,21 +46,10 @@ Curriculum passes are competency gates, not production certification.
 - `RPO defined ≠ every authoritative local change externally protected`;
 - `RTO met ≠ restored state trustworthy/current/reconciled`;
 - `service reachable ≠ user's authoritative offline data recoverable`;
-- `one recovery objective ≠ local durability + external protection + restore readiness + sync convergence + trust revalidation`;
 - `error budget concept useful ≠ data-loss percentage acceptable`;
-- `budget not exhausted ≠ individual user's irreplaceable data safe`;
-- `aggregate reliability green ≠ tail recovery failure acceptable`;
-- `offline ≠ app unavailable`;
-- `online ≠ sync authorized`;
-- `long offline supported ≠ indefinite stale-client compatibility guaranteed`;
-- `wall-clock newer ≠ logically includes all earlier-looking authoritative changes`;
-- `healthy average ≠ vulnerable cohort healthy`;
-- `no telemetry received ≠ objective met`;
+- `offline ≠ app unavailable`; `online ≠ sync authorized`;
+- `healthy average ≠ vulnerable cohort healthy`; `no telemetry received ≠ objective met`;
 - `backup integrity verified ≠ semantic recovery verified`;
-- `export/share completion ≠ externally durable custody verified`;
-- `restore UI reached ≠ restore drill passed`;
-- `restore drill passed once ≠ all future builds/artifacts recoverable`;
-- `backup restored ≠ trust state restored ≠ restored trust state current`;
 - `restore completed ≠ records/trust/keys/outbox share one coherent recovery epoch`;
 - `hash matches ≠ artifact provenance established ≠ application semantics accepted`;
 - `outbox item present ≠ never applied remotely ≠ replay authorized`;
@@ -68,19 +58,23 @@ Curriculum passes are competency gates, not production certification.
 - `network restored ≠ trust restored ≠ replay authorized`;
 - `HTTPS policy fetch succeeded ≠ policy authorized by an independent trust root`;
 - `encrypted at rest ≠ protected from authorized same-origin script while unlocked`;
-- `different path ≠ different origin security boundary`;
-- `different origin ≠ no trust bridge`;
+- `different path ≠ different origin security boundary`; `different origin ≠ no trust bridge`;
 - `postMessage origin validated ≠ message authorized ≠ payload semantically valid ≠ transaction current`;
 - `CORS allowed ≠ caller authenticated ≠ caller authorized ≠ mutation safe`;
-- `origin deployment complete ≠ all installed clients updated`;
-- `origin repaired ≠ installed fleet clean`;
+- `origin deployment complete ≠ all installed clients updated`; `origin repaired ≠ installed fleet clean`;
 - `user selected file ≠ trusted recovery artifact`;
 - `backup encrypted ≠ backup recoverable ≠ key independently protected`;
-- `device-bound key ≠ portable recovery capability`;
-- `Files destination available on consumer iPad ≠ permitted on managed EFB`;
-- `recognized extension ≠ recognized content ≠ valid manifest ≠ authorized recovery`;
-- `backup import accepted ≠ old session/device credential should be reactivated`;
-- `more recovery telemetry ≠ more trustworthy recovery`.
+- `build passed ≠ rollout safe`;
+- `artifact published ≠ installed fleet converged`;
+- `canary healthy ≠ long-offline cohort compatible`;
+- `new worker installed ≠ new worker controlling every client`;
+- `code version N ≠ cache/schema/trust/API generation N`;
+- `feature flag off ≠ migrated local state rolled back`;
+- `code rollback ≠ schema rollback ≠ key/trust rollback ≠ remote side-effect rollback`;
+- `down migration implemented ≠ down migration lossless`;
+- `faster activation ≠ safer recovery`;
+- `worker file removed from origin ≠ installed worker removed from clients`;
+- `connected fleet converged ≠ long-offline fleet recoverable`.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
@@ -88,9 +82,9 @@ A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/informatio
 Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Use explicit handoffs and evidence boundaries.
 
 ## Current evidence boundary
-Generic PWA architecture through offline-first recovery objectives/exposure budgets is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable security, privacy, accessibility and operational validation.
+Generic PWA architecture through recovery-risk release/change governance is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable security, privacy, accessibility and operational validation.
 
-Current next generic boundary, only if implementation evidence remains unavailable: **recovery-objective breach escalation and release/change governance** — determine how schema/key/service-worker/API releases consume or freeze recovery-risk budget, what compatibility/restore evidence gates rollout, and how code rollback avoids rolling back user data/trust state. Consume existing release/supply-chain and Software Engineering evidence rather than duplicating CI/CD foundations.
+Current next generic boundary, only if implementation evidence remains unavailable: **release compatibility contracts and retirement proof** — determine how long old readers/writers/API/protocol/key generations remain supported, what evidence permits contract/field/API removal, and how a long-offline authoritative client is retired without converting `unsupported` into silent data loss. Consume 091/105 and Software Engineering migration/compatibility evidence rather than duplicate API-versioning primers.
 
 ## Study quality standard
 Substantial work includes precise vocabulary, first-principles mechanics, authoritative evidence, counterexamples/failure analysis, cross-domain effects, bounded project relevance, durable-vs-changeable classification, validation requirements and explicit decision ownership.
