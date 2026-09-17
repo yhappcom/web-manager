@@ -29,7 +29,8 @@ Curriculum passes are competency gates, not production certification.
 091–098 cover long-offline compatibility/API retirement; release supply-chain; session/offline authorization; account/device/key recovery; XSS/unlocked-data authority; sensitive-context isolation; explicit trust bridges; stale-client revocation/data-preserving containment.  
 099–102 cover trust-policy authenticity/anti-rollback; trusted-state reset/rebootstrap; mixed-epoch recovery; portable recovery confidentiality/custody/import authority.  
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
-111 — **PWA Recovery Authority Continuity Under Identity, Domain & Control-Plane Loss — PASS (generic) / PRODUCT AUTHORITY-TOPOLOGY + EMERGENCY-DRILL VALIDATION OPEN.** Recovery is modeled as a distinct, bounded authority transition: identify circular recovery dependencies, separate human/organizational identity from action authorization, distinguish registrar/DNS/domain/signing/session/application-trust surfaces, preserve anti-rollback, establish a new trust generation after total-root compromise, contain stale PWA clients, and expire emergency privilege after ordinary least-privilege administration returns.
+111 — **PWA Recovery Authority Continuity Under Identity, Domain & Control-Plane Loss — PASS (generic).** Recovery is a bounded authority transition with explicit circular-dependency, trust-generation, stale-client and emergency-privilege controls.  
+112 — **PWA Recovery Authority Abuse Resistance & Dual-Use Incident Governance — PASS (generic) / PRODUCT PROVIDER + RECOVERY-CEREMONY VALIDATION OPEN.** Recovery availability is separated from abuse resistance: human/provider support is treated as a social-engineering trust bridge; notification is detection rather than authorization; high-impact actions are staged by reversibility/blast radius; independent observation, factor independence, repudiation limits, provider policy and PWA post-compromise persistence are explicit.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -38,59 +39,47 @@ Curriculum passes are competency gates, not production certification.
 - `backup file exists ≠ backup current ≠ backup complete ≠ restore works`;
 - `offline ≠ app unavailable`; `online ≠ sync authorized`;
 - `restore completed ≠ records/trust/keys/outbox share one coherent recovery epoch`;
-- `outbox item present ≠ never applied remotely ≠ replay authorized`;
-- `authority revoked remotely ≠ disconnected client informed ≠ local capability immediately unavailable`;
 - `network restored ≠ trust restored ≠ replay authorized`;
-- `HTTPS policy fetch succeeded ≠ policy authorized by an independent trust root`;
 - `encrypted at rest ≠ protected from authorized same-origin script while unlocked`;
-- `different path ≠ different origin security boundary`; `different origin ≠ no trust bridge`;
-- `postMessage origin validated ≠ message authorized ≠ payload semantically valid ≠ transaction current`;
 - `user selected file ≠ trusted recovery artifact`;
 - `build passed ≠ rollout safe`; `artifact published ≠ installed fleet converged`;
 - `code rollback ≠ schema rollback ≠ key/trust rollback ≠ remote side-effect rollback`;
-- `deprecated ≠ non-operational`; `sunset announced ≠ every client received the announcement`;
 - `zero observed old clients ≠ zero old clients`;
 - `normal sync retired ≠ recovery import must be retired simultaneously`;
 - `unsupported for sync ≠ unsupported for local read/export/recovery`;
 - `artifact authenticated ≠ parser invulnerable`;
 - `recovery compatibility retained ≠ legacy runtime authority retained`;
-- `can decode old record ≠ may execute old operation`;
-- `Web Worker used ≠ security sandbox proven`;
-- `legacy parser retired ≠ legacy artifact must be discarded`;
 - `provenance verified ≠ builder acceptable ≠ dependency set safe`;
 - `SBOM generated ≠ SBOM consumed`;
 - `source tests passed ≠ shipped artifact tested`;
-- `dependency upgraded ≠ historical recoverability preserved`;
 - `artifact retained ≠ artifact interpretable`;
 - `all bytes converted ≠ all significant semantics preserved`;
-- `old parser output ≠ authoritative oracle`;
 - `checksum valid ≠ artifact authentic`;
-- `format reconstruction requires understanding cryptography ≠ escrow should contain production keys`;
-- `old converter still runs ≠ future reconstruction proven`;
 - `two copies ≠ two independent failure domains`;
-- `different repository ≠ different IAM/control-plane failure domain`;
-- `copy count ≠ independence score`;
 - `provider durability SLA ≠ organizational survivability`;
 - `escrow survives production loss ≠ escrow should contain production authority`;
-- `decryption key recoverable ≠ signing key should be recoverable`;
-- `documented procedure ≠ successor can execute procedure`;
 - `backup restore drill PASS ≠ organizational-loss drill PASS`;
-- `independent copy exists ≠ independent access/authentication works`;
-- `authorized to read/reconstruct ≠ authorized to destroy all recovery evidence`;
-- `multi-region ≠ multi-account ≠ multi-provider ≠ multi-authority`;
 - `recovery succeeded ≠ ordinary authentication occurred`;
 - `break-glass exists ≠ standing super-admin justified`;
 - `documented recovery path ≠ non-circular recovery path`;
 - `DNS restored ≠ registrar ownership restored`;
 - `domain possession ≠ release-signing authority`;
-- `old root can sign new root ≠ safe recovery if old root is compromised`;
 - `historically authentic ≠ currently authorized`;
-- `emergency reset ≠ anti-rollback reset`;
-- `human identity proven ≠ current organizational role proven`;
-- `control regained ≠ compromise eradicated`;
 - `origin recovered ≠ installed PWA recovered`;
-- `network reachable ≠ stale client authorized to replay`;
-- `incident closed ≠ emergency privilege automatically disappeared`.
+- `incident closed ≠ emergency privilege automatically disappeared`;
+- `recovery path available ≠ recovery path abuse-resistant`;
+- `human-assisted recovery ≠ high-assurance recovery`;
+- `support agent accepted claimant ≠ organization independently authorized destructive change`;
+- `notification delivered ≠ action authorized`;
+- `notification after destructive change ≠ preventive control`;
+- `audit record exists ≠ audit record independent of the actor being audited`;
+- `authorized to inspect ≠ authorized to replace trust root`;
+- `waiting period exists ≠ attacker cannot wait`;
+- `registrar MFA enabled ≠ support-assisted takeover impossible`;
+- `two factors ≠ two independent failure domains`;
+- `event repudiated ≠ compromise effects automatically reversed`;
+- `fraudulent recovery reversed at provider ≠ installed hostile state eradicated`;
+- `wipe removes hostile cache ≠ wipe is acceptable if it destroys authoritative local records`.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
@@ -98,9 +87,9 @@ A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/informatio
 Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Use explicit handoffs and evidence boundaries.
 
 ## Current evidence boundary
-Generic PWA architecture through recovery-authority continuity is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable authority/IAM/registrar/DNS/trust-rebootstrap, format/corpus/reconstruction, custody/key, build/dependency, security, privacy, accessibility and operational validation.
+Generic PWA architecture through recovery-authority continuity and abuse resistance is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable provider/IAM/registrar/DNS/trust-rebootstrap, recovery-ceremony, format/corpus/reconstruction, custody/key, build/dependency, security, privacy, accessibility and operational validation.
 
-Current next generic boundary, only if implementation evidence remains unavailable: **recovery-authority abuse resistance and dual-use incident governance** — distinguish legitimate emergency recovery from an attacker invoking the same process, including recovery-request authentication, provider-support/social-engineering risk, independent observation, high-risk action staging, repudiation limits and evidence before destructive trust-root/domain/account changes.
+Current next generic boundary, only if implementation evidence remains unavailable: **compromise scoping and trust re-entry after hostile origin / Service Worker exposure** — establish which clients, cached artifacts, data and trust generations can be considered clean after domain/deployment takeover; distinguish non-exposure evidence from remediation evidence; preserve irreplaceable local records while quarantining uncertain authority instead of using indiscriminate storage wipe as the default response.
 
 ## Study quality standard
 Substantial work includes precise vocabulary, first-principles mechanics, authoritative evidence, counterexamples/failure analysis, cross-domain effects, bounded project relevance, durable-vs-changeable classification, validation requirements and explicit decision ownership.
