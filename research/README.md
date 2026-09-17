@@ -29,8 +29,8 @@ Curriculum passes are competency gates, not production certification.
 091–098 cover long-offline compatibility/API retirement; release supply-chain; session/offline authorization; account/device/key recovery; XSS/unlocked-data authority; sensitive-context isolation; explicit trust bridges; stale-client revocation/data-preserving containment.  
 099–102 cover trust-policy authenticity/anti-rollback; trusted-state reset/rebootstrap; mixed-epoch recovery; portable recovery confidentiality/custody/import authority.  
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
-111–115 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition and legal-forensic boundary.  
-116 — **PWA Active-Compromise Containment vs Evidence Preservation — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + INCIDENT-LEGAL VALIDATION OPEN.** Containment and preservation are separate coordinated gates; client isolation is separated from remote authority containment; credible continuing harm outranks forensic convenience; irreplaceable local records are preserved through least-destructive containment where possible; evidence-sacrifice decisions and reconnect/replay gates are explicit.
+111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
+117 — **PWA Partial/Offline Fleet Containment Assurance — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + FLEET TELEMETRY VALIDATION OPEN.** Separates containment issuance, authoritative enforcement, observed convergence, client remediation and reconciliation; treats long-offline clients as unknown until re-entry evidence exists; relies on fail-closed remote authority gates rather than assumed immediate client policy delivery.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -92,13 +92,24 @@ Curriculum passes are competency gates, not production certification.
 - `local record irreplaceable ≠ compromised executable authority must remain active`;
 - `remote containment complete ≠ reconnect safe`;
 - `reconnect required for update ≠ replay should be enabled simultaneously`;
-- `incident response need ≠ unlimited telemetry collection authority`.
+- `incident response need ≠ unlimited telemetry collection authority`;
+- `revocation requested ≠ revocation globally enforced`;
+- `clean worker published ≠ offline client fetched it`;
+- `authority contained ≠ client clean`;
+- `remote containment PASS ≠ client remediation complete`;
+- `cannot remotely update offline client ≠ must remotely trust it on return`;
+- `local read allowed ≠ remote mutation allowed`;
+- `reconnect observed ≠ replay authorized`;
+- `telemetry silence ≠ containment evidence`;
+- `update-required UI shown ≠ stale API authority blocked`;
+- `offline usefulness ≠ indefinite remote authority`;
+- `managed fleet ≠ every device continuously reachable`.
 
 ## Current evidence boundary
 All numbered PASS labels above are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains Stage 3 PRACTICE / NOT PASSED; its current W068 path requires repaired widget regression before served browser/cross-browser claims. Software Engineering Studio remains a dependency source for implementation/test/tooling evidence; Web Manager does not absorb general software-engineering ownership.
+Design Studio Web remains Stage 3 PRACTICE / NOT PASSED; W069 is the current product-repair evidence-promotion gate and existing MintTap widget evidence remains EXECUTED-FAIL. Software Engineering remains a dependency source for implementation/test/tooling evidence; Web Manager does not absorb general software-engineering ownership.
 
 ## Next high-value maintenance target
-After 116, the highest-value adjacent generic question is **containment assurance under partial/offline fleet convergence**: establish how revocation, API-generation blocks, deployment/origin recovery and trust changes can constrain a fleet containing long-offline installed PWAs, and how to prove containment without interpreting missing telemetry as evidence that stale clients no longer exist.
+After 117, the highest-value adjacent generic question is **containment-policy rollback and emergency-gate lifecycle**: establish how incident-only API-generation blocks, credential freezes, quarantine/trust gates and replay suppression can later be relaxed without silently re-authorizing stale clients, replaying preserved operations or leaving emergency controls permanently active.
