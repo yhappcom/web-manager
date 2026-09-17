@@ -30,7 +30,8 @@ Curriculum passes are competency gates, not production certification.
 099–102 cover trust-policy authenticity/anti-rollback; trusted-state reset/rebootstrap; mixed-epoch recovery; portable recovery confidentiality/custody/import authority.  
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
 111 — **PWA Recovery Authority Continuity Under Identity, Domain & Control-Plane Loss — PASS (generic).** Recovery is a bounded authority transition with explicit circular-dependency, trust-generation, stale-client and emergency-privilege controls.  
-112 — **PWA Recovery Authority Abuse Resistance & Dual-Use Incident Governance — PASS (generic) / PRODUCT PROVIDER + RECOVERY-CEREMONY VALIDATION OPEN.** Recovery availability is separated from abuse resistance: human/provider support is treated as a social-engineering trust bridge; notification is detection rather than authorization; high-impact actions are staged by reversibility/blast radius; independent observation, factor independence, repudiation limits, provider policy and PWA post-compromise persistence are explicit.
+112 — **PWA Recovery Authority Abuse Resistance & Dual-Use Incident Governance — PASS (generic).** Recovery availability is separated from abuse resistance; human/provider support, notification, high-impact staging, independent observation, factor independence, repudiation and post-compromise persistence are explicit.  
+113 — **PWA Hostile-Origin / Service-Worker Compromise Scoping & Trust Re-entry — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD VALIDATION OPEN.** Restored origin authority is separated from installed-client cleanliness; non-exposure vs remediation evidence, worker/cache/session/data/operation planes, data-preserving quarantine, selective cleanup, monotonic trust re-entry and target-WebKit validation are explicit.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -78,18 +79,19 @@ Curriculum passes are competency gates, not production certification.
 - `registrar MFA enabled ≠ support-assisted takeover impossible`;
 - `two factors ≠ two independent failure domains`;
 - `event repudiated ≠ compromise effects automatically reversed`;
-- `fraudulent recovery reversed at provider ≠ installed hostile state eradicated`;
-- `wipe removes hostile cache ≠ wipe is acceptable if it destroys authoritative local records`.
+- `origin fixed now ≠ every client controlled by clean worker now`;
+- `clean worker published ≠ clean worker fetched ≠ clean worker activated ≠ client revalidated`;
+- `worker registration clean ≠ cache clean ≠ application data clean ≠ trust state clean`;
+- `no observed compromise ≠ proven non-exposure`;
+- `remediated ≠ never exposed`;
+- `clear site data supported ≠ indiscriminate clearing safe`;
+- `same origin storage ≠ same security meaning`;
+- `bytes parse correctly ≠ record integrity proven after hostile same-origin execution`;
+- `new worker active ≠ old tokens/remote side effects reconciled`;
+- `WebKit feature exists ≠ managed-EFB policy permits/retains it`.
 
-## Specialist relationships
-A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
+## Current validation boundary
+All numbered PASS states above are generic learning/competency gates unless an artifact explicitly records execution evidence. Actual `minttap.app`, LogMate-like PWA, target iOS/iPadOS/Android/browser/MDM behavior, accessibility, production IAM/security, data durability, sync, backup, recovery and incident controls remain OPEN until exact project/runtime evidence exists.
 
-Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Use explicit handoffs and evidence boundaries.
-
-## Current evidence boundary
-Generic PWA architecture through recovery-authority continuity and abuse resistance is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable provider/IAM/registrar/DNS/trust-rebootstrap, recovery-ceremony, format/corpus/reconstruction, custody/key, build/dependency, security, privacy, accessibility and operational validation.
-
-Current next generic boundary, only if implementation evidence remains unavailable: **compromise scoping and trust re-entry after hostile origin / Service Worker exposure** — establish which clients, cached artifacts, data and trust generations can be considered clean after domain/deployment takeover; distinguish non-exposure evidence from remediation evidence; preserve irreplaceable local records while quarantining uncertain authority instead of using indiscriminate storage wipe as the default response.
-
-## Study quality standard
-Substantial work includes precise vocabulary, first-principles mechanics, authoritative evidence, counterexamples/failure analysis, cross-domain effects, bounded project relevance, durable-vs-changeable classification, validation requirements and explicit decision ownership.
+## Current next target
+After 113, highest-value adjacent generic work is **compromise-era data integrity and operation provenance**: when arbitrary same-origin code may have executed, preserve irreplaceable local records while distinguishing user-authored state, attacker mutation, queued operations and remotely acknowledged effects where evidence exists; explicitly define safe degraded behavior when retrospective integrity cannot be proven.
