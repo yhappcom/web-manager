@@ -32,7 +32,8 @@ Curriculum passes are competency gates, not production certification.
 111 — **PWA Recovery Authority Continuity Under Identity, Domain & Control-Plane Loss — PASS (generic).** Recovery is a bounded authority transition with explicit circular-dependency, trust-generation, stale-client and emergency-privilege controls.  
 112 — **PWA Recovery Authority Abuse Resistance & Dual-Use Incident Governance — PASS (generic).** Recovery availability is separated from abuse resistance; human/provider support, notification, high-impact staging, independent observation, factor independence, repudiation and post-compromise persistence are explicit.  
 113 — **PWA Hostile-Origin / Service-Worker Compromise Scoping & Trust Re-entry — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD VALIDATION OPEN.** Restored origin authority is separated from installed-client cleanliness; non-exposure vs remediation evidence, worker/cache/session/data/operation planes, data-preserving quarantine, selective cleanup, monotonic trust re-entry and target-WebKit validation are explicit.  
-114 — **PWA Compromise-Era Data Integrity & Operation Provenance — PASS (generic) / PRODUCT RUNTIME + CRYPTOGRAPHIC + MANAGED-IPAD VALIDATION OPEN.** Persistence is separated from authorship/provenance; independent evidence domains, acknowledgement semantics, intent-vs-authentication, trusted chronology, unverifiable recovery states, privacy-minimized audit evidence and replay gating are explicit.
+114 — **PWA Compromise-Era Data Integrity & Operation Provenance — PASS (generic) / PRODUCT RUNTIME + CRYPTOGRAPHIC + MANAGED-IPAD VALIDATION OPEN.** Persistence is separated from authorship/provenance; independent evidence domains, acknowledgement semantics, intent-vs-authentication, trusted chronology, unverifiable recovery states, privacy-minimized audit evidence and replay gating are explicit.  
+115 — **PWA Evidence-Preserving Incident Acquisition & Chain-of-Custody Boundary — PASS (generic) / PRODUCT TOOLING + MANAGED-IPAD + LEGAL-FORENSIC VALIDATION OPEN.** Acquisition is modeled as a potentially mutating state transition; remote-before-reconnect evidence, least-mutating local acquisition, original/copy separation, integrity metadata, acquisition/remediation gating and formal chain-of-custody limits are explicit.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -102,10 +103,23 @@ Curriculum passes are competency gates, not production certification.
 - `no integrity evidence ≠ data known corrupted ≠ data known clean`;
 - `unverifiable` is a valid recovery state;
 - `more forensic data ≠ better privacy/security system`;
-- `synced=true ≠ provenance/reconciliation evidence`.
+- `synced=true ≠ provenance/reconciliation evidence`;
+- `incident evidence useful ≠ formal forensic evidence established`;
+- `application export ≠ forensic image`;
+- `most volatile first ≠ blindly open the PWA first`;
+- `read-only intent ≠ acquisition path is non-mutating`;
+- `state observed after interaction ≠ state that existed before interaction`;
+- `inspectable ≠ non-mutating`;
+- `DevTools visible ≠ forensic acquisition supported`;
+- `reconnect for diagnosis ≠ neutral observation`;
+- `hash matches ≠ source was trustworthy or acquisition complete`;
+- `preservation log ≠ formal chain of custody`;
+- `malicious executable state present ≠ user data should be destroyed`;
+- `user data preserved ≠ user data safe to replay`;
+- `cleanup succeeded ≠ evidence preservation succeeded`.
 
 ## Current validation boundary
-All numbered PASS states above are generic learning/competency gates unless an artifact explicitly records execution evidence. Actual `minttap.app`, LogMate-like PWA, target iOS/iPadOS/Android/browser/MDM behavior, accessibility, production IAM/security, data durability, sync, backup, recovery and incident controls remain OPEN until exact project/runtime evidence exists.
+All numbered PASS states above are generic learning/competency gates unless an artifact explicitly records execution evidence. Actual `minttap.app`, LogMate-like PWA, target iOS/iPadOS/Android/browser/MDM behavior, accessibility, production IAM/security, data durability, sync, backup, recovery, incident acquisition and formal forensic controls remain OPEN until exact project/runtime evidence exists.
 
 ## Current next target
-After 114, highest-value adjacent generic work is **evidence-preserving incident acquisition and chain-of-custody for an offline PWA client**: when recovery actions can mutate worker/cache/storage/outbox evidence, determine how to preserve diagnostically useful state without sacrificing irreplaceable user records, leaking sensitive data, or overclaiming formal legal-forensic chain of custody.
+After 115, highest-value adjacent generic work is **incident containment vs evidence preservation under active compromise**: isolation may preserve client state while delaying credential/trust revocation or remote containment, so define risk-based decision gates, evidence-sacrifice documentation and safe containment ordering without allowing evidence-preservation goals to prolong active harm.
