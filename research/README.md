@@ -36,7 +36,8 @@ Curriculum passes are competency gates, not production certification.
 095 — **PWA XSS/Origin Compromise Against Unlocked Data & Key-Use Authority — PASS (generic) / PRODUCT IMPLEMENTATION + TARGET-DEVICE VALIDATION OPEN.**  
 096 — **PWA Sensitive-Context Origin, Third-Party Isolation & Capability Minimization — PASS (generic) / PRODUCT TOPOLOGY + TARGET-DEVICE VALIDATION OPEN.**  
 097 — **PWA Explicit Cross-Context Trust Bridges — PASS (generic) / PRODUCT BRIDGE + TARGET-DEVICE VALIDATION OPEN.** Defines least-authority contracts for `postMessage`, credentialed CORS/API, auth redirects, Universal Links/deep links and support/export/sync/measurement handoffs.  
-098 — **PWA Bridge Revocation, Stale-Client Trust & Data-Preserving Containment — PASS (generic) / PRODUCT REVOCATION + TARGET-DEVICE VALIDATION OPEN.** Separates remote authority revocation from disconnected-client knowledge; requires current-trust revalidation before replay while preserving authoritative local records/outbox.
+098 — **PWA Bridge Revocation, Stale-Client Trust & Data-Preserving Containment — PASS (generic) / PRODUCT REVOCATION + TARGET-DEVICE VALIDATION OPEN.** Separates remote authority revocation from disconnected-client knowledge; requires current-trust revalidation before replay while preserving authoritative local records/outbox.  
+099 — **PWA Trust-Policy Authenticity, Authority Recovery & Anti-Rollback Boundaries — PASS (generic) / PRODUCT CRYPTOGRAPHIC + CONTROL-PLANE VALIDATION OPEN.** Separates HTTPS delivery from independent policy authority; integrates signed semantic context, bootstrap, key-transition, rollback/freeze/fast-forward and long-offline recovery boundaries.
 
 ## Key guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -44,14 +45,22 @@ Curriculum passes are competency gates, not production certification.
 - `online signal ≠ usable network ≠ successful navigation ≠ task-ready application`;
 - `worker update found ≠ installed ≠ activated ≠ controlling ≠ application-compatible`;
 - `automated browser PASS ≠ Safari PASS ≠ physical iPad PASS ≠ managed-EFB product PASS`;
-- `previously authenticated ≠ server session currently valid ≠ local data currently unlocked ≠ offline operation authorized ≠ pending mutation remotely accepted`;
-- `credential revoked at server ≠ disconnected PWA instantly aware ≠ local data instantly inaccessible`;
 - `authority revoked remotely ≠ disconnected client informed ≠ local capability immediately unavailable`;
 - `network restored ≠ trust restored ≠ replay authorized`;
 - `sync denied ≠ local record should be deleted`;
 - `outbox replay paused ≠ outbox discarded`;
-- `AASA changed at origin ≠ Apple CDN refreshed ≠ every device association refreshed`;
 - `stale trust metadata ≠ corrupted user data`;
+- `HTTPS policy fetch succeeded ≠ policy authorized by an independent trust root`;
+- `signature mathematically valid ≠ signer authorized for this policy`;
+- `valid old signature ≠ current policy`;
+- `signed payload ≠ signed interpretation context`;
+- `SubtleCrypto.verify available ≠ trustworthy policy-update system established`;
+- `public key fetched from compromised origin ≠ independent authenticity proof`;
+- `successor signed only by compromised key ≠ compromise recovery proven`;
+- `monotonic version check ≠ freeze resistance`;
+- `expiry check ≠ trustworthy wall clock`;
+- `policy expired ≠ local records expired`;
+- `new signed policy accepted ≠ compromised worker/runtime repaired`;
 - `logout ≠ origin wipe`;
 - `account recovery ≠ authenticator recovery ≠ device recovery ≠ local-data recovery ≠ backup recovery ≠ synchronization recovery`;
 - `encrypted at rest ≠ protected from authorized same-origin script while unlocked`;
@@ -61,14 +70,11 @@ Curriculum passes are competency gates, not production certification.
 - `different origin ≠ no trust bridge`;
 - `postMessage origin validated ≠ message authorized ≠ payload semantically valid ≠ transaction current`;
 - `CORS allowed ≠ caller authenticated ≠ caller authorized ≠ mutation safe`;
-- `user returned from identity provider ≠ response belongs to this transaction ≠ requested navigation target trusted`;
 - `Universal Link association valid ≠ deep-link payload authorized`;
 - `third-party business value ≠ requirement for sensitive-context execution authority`;
 - `measurement continuity ≠ shared script authority`;
 - `analytics queue ≠ authoritative application outbox`;
-- `SSO convenience ≠ every web origin should receive the same session credential`;
 - `RTCDataChannel available ≠ signaling/discovery/pairing/background correctness`;
-- `deprecation signal delivered ≠ every installed client informed ≠ migration completed`;
 - `remote kill switch configured ≠ offline client contained`;
 - `server compatible ≠ local schema compatible ≠ queued operation replayable`;
 - `cannot diagnose ≠ user should clear storage`;
@@ -78,13 +84,13 @@ Curriculum passes are competency gates, not production certification.
 - `origin repaired ≠ installed fleet clean`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Generic PWA architecture through stale-client trust/revocation containment is sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
+Generic PWA architecture through trust-policy authenticity/authority recovery is sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable security/privacy/accessibility/operational validation.
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–098 transfer measurement, portfolio, release, operations, expert governance, durability, iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain, session/offline-authorization, account/device/key-recovery, runtime-origin-compromise, sensitive-context isolation, explicit trust-bridge governance and stale-client revocation/containment. Production/device validation remains OPEN.
+075–099 transfer measurement, portfolio, release, operations, expert governance, durability, iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain, session/offline-authorization, account/device/key-recovery, runtime-origin-compromise, sensitive-context isolation, explicit trust-bridge governance, stale-client revocation/containment and trust-policy authenticity/authority recovery. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
