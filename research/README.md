@@ -35,10 +35,11 @@ Curriculum passes are competency gates, not production certification.
 094 — **PWA Account/Device Recovery & Cryptographic Key Lifecycle — PASS (generic) / PRODUCT CRYPTOGRAPHIC + DEVICE VALIDATION OPEN.**  
 095 — **PWA XSS/Origin Compromise Against Unlocked Data & Key-Use Authority — PASS (generic) / PRODUCT IMPLEMENTATION + TARGET-DEVICE VALIDATION OPEN.**  
 096 — **PWA Sensitive-Context Origin, Third-Party Isolation & Capability Minimization — PASS (generic) / PRODUCT TOPOLOGY + TARGET-DEVICE VALIDATION OPEN.**  
-097 — **PWA Explicit Cross-Context Trust Bridges — PASS (generic) / PRODUCT BRIDGE + TARGET-DEVICE VALIDATION OPEN.** Defines least-authority contracts for `postMessage`, credentialed CORS/API, auth redirects, Universal Links/deep links and support/export/sync/measurement handoffs.  
-098 — **PWA Bridge Revocation, Stale-Client Trust & Data-Preserving Containment — PASS (generic) / PRODUCT REVOCATION + TARGET-DEVICE VALIDATION OPEN.** Separates remote authority revocation from disconnected-client knowledge; requires current-trust revalidation before replay while preserving authoritative local records/outbox.  
-099 — **PWA Trust-Policy Authenticity, Authority Recovery & Anti-Rollback Boundaries — PASS (generic) / PRODUCT CRYPTOGRAPHIC + CONTROL-PLANE VALIDATION OPEN.** Separates HTTPS delivery from independent policy authority; integrates signed semantic context, bootstrap, key-transition, rollback/freeze/fast-forward and long-offline recovery boundaries.  
-100 — **PWA Trusted-State Persistence, Reset/Reinstall Bootstrap & Recovery — PASS (generic) / PRODUCT STORAGE + BOOTSTRAP + TARGET-DEVICE VALIDATION OPEN.** Separates browser persistence from backup/security trust continuity; models missing anti-rollback state, reset/reinstall/new-device bootstrap, mixed restore epochs and data-preserving containment.
+097 — **PWA Explicit Cross-Context Trust Bridges — PASS (generic) / PRODUCT BRIDGE + TARGET-DEVICE VALIDATION OPEN.**  
+098 — **PWA Bridge Revocation, Stale-Client Trust & Data-Preserving Containment — PASS (generic) / PRODUCT REVOCATION + TARGET-DEVICE VALIDATION OPEN.**  
+099 — **PWA Trust-Policy Authenticity, Authority Recovery & Anti-Rollback Boundaries — PASS (generic) / PRODUCT CRYPTOGRAPHIC + CONTROL-PLANE VALIDATION OPEN.**  
+100 — **PWA Trusted-State Persistence, Reset/Reinstall Bootstrap & Recovery — PASS (generic) / PRODUCT STORAGE + BOOTSTRAP + TARGET-DEVICE VALIDATION OPEN.**  
+101 — **PWA Mixed-Epoch Recovery Provenance & Reconciliation — PASS (generic) / PRODUCT RECOVERY-MANIFEST + RECONCILIATION VALIDATION OPEN.** Treats restore as a vector of record/trust/key/schema/protocol/outbox/ack epochs; separates integrity, provenance, reader/domain acceptance, reconciliation and replay authorization; consumes Software Engineering D003/D005/D006 rather than duplicating them.
 
 ## Key guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -53,6 +54,19 @@ Curriculum passes are competency gates, not production certification.
 - `anti-rollback memory lost ≠ local record should be deleted`;
 - `rebootstrap required ≠ destructive reset required`;
 - `restore completed ≠ records/trust/keys/outbox share one coherent recovery epoch`;
+- `hash matches ≠ artifact provenance established`;
+- `artifact provenance established ≠ application semantics accepted`;
+- `ciphertext intact ≠ decryptable ≠ correctly bound to the restored key generation`;
+- `restore bytes copied ≠ recovery candidate accepted ≠ live state safely published`;
+- `schema version label matches ≠ migration/reader acceptance proven`;
+- `outbox item present ≠ never applied remotely ≠ replay authorized`;
+- `one backup timestamp ≠ one coherent application epoch`;
+- `later timestamp ≠ causally newer state`;
+- `manifest present ≠ manifest authentic ≠ components mutually coherent`;
+- `local recovery accepted ≠ remote replay authorized`;
+- `candidate incompatible ≠ candidate worthless`;
+- `replay quarantined ≠ records should be erased`;
+- `record recovery success ≠ sync recovery success`;
 - `Home Screen ITP exemption ≠ universal durability guarantee`;
 - `local durability ≠ backup availability ≠ trust continuity ≠ key recoverability ≠ sync correctness`;
 - reconstructible cache assets ≠ irreplaceable user records/outbox;
@@ -98,13 +112,13 @@ Curriculum passes are competency gates, not production certification.
 - `origin repaired ≠ installed fleet clean`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Generic PWA architecture through trusted-state reset/rebootstrap is sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable security/privacy/accessibility/operational validation.
+Generic PWA architecture through mixed-epoch recovery provenance/reconciliation is sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable security/privacy/accessibility/operational validation.
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–100 transfer measurement, portfolio, release, operations, expert governance, durability, iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain, session/offline-authorization, account/device/key-recovery, runtime-origin-compromise, sensitive-context isolation, explicit trust-bridge governance, stale-client revocation/containment, trust-policy authenticity/authority recovery and trusted-state reset/rebootstrap. Production/device validation remains OPEN.
+075–101 transfer measurement, portfolio, release, operations, expert governance, durability, iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain, session/offline-authorization, account/device/key-recovery, runtime-origin-compromise, sensitive-context isolation, explicit trust-bridge governance, stale-client revocation/containment, trust-policy authenticity/authority recovery, trusted-state reset/rebootstrap and mixed-epoch recovery provenance/reconciliation. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
