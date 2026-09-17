@@ -23,17 +23,18 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Fu
 094 PWA Account/Device Recovery & Cryptographic Key Lifecycle — **PASS (generic) / PRODUCT CRYPTOGRAPHIC + DEVICE VALIDATION OPEN**.  
 095 PWA XSS/Origin Compromise Against Unlocked Data & Key-Use Authority — **PASS (generic) / PRODUCT IMPLEMENTATION + TARGET-DEVICE VALIDATION OPEN**.  
 096 PWA Sensitive-Context Origin, Third-Party Isolation & Capability Minimization — **PASS (generic) / PRODUCT TOPOLOGY + TARGET-DEVICE VALIDATION OPEN**.  
-097 PWA Explicit Cross-Context Trust Bridges — **PASS (generic) / PRODUCT BRIDGE + TARGET-DEVICE VALIDATION OPEN**.
+097 PWA Explicit Cross-Context Trust Bridges — **PASS (generic) / PRODUCT BRIDGE + TARGET-DEVICE VALIDATION OPEN**.  
+098 PWA Bridge Revocation, Stale-Client Trust & Data-Preserving Containment — **PASS (generic) / PRODUCT REVOCATION + TARGET-DEVICE VALIDATION OPEN**.
 
-## 097 material findings
-- origin isolation is only durable if every reconnecting bridge has explicit source/destination, operation, schema, credential, transaction, lifetime and failure semantics;
-- `postMessage` exact origin/source validation is necessary but does not authorize message semantics; payload schema, allowed operation, transaction binding and replay behavior remain application responsibilities;
-- CORS is response-sharing policy, not authentication or authorization; credentialed CORS broadens a trust bridge and must not be granted merely because an origin is company-controlled;
-- OAuth Security BCP requires exact redirect matching, rejects open redirectors and requires transaction protections; current RFC 10017 carries strict in-browser communication discipline into browser-based apps;
-- Apple Universal Links/Associated Domains provide stronger website↔app association than custom schemes, but valid association does not make arbitrary deep-link payloads authorized commands;
-- navigation, auth, support, export/backup, sync and measurement bridges are different capability classes and must not be collapsed into one generic JSON/URL handoff;
-- Universal Links, `postMessage` and CORS do not prove unattended PWA↔native background synchronization; 086/087 product feasibility remains OPEN;
-- exact MintTap/LogMate bridge inventory, OAuth/OIDC usage, origin/CORS policy, native-link topology and managed-device behavior remain OPEN.
+## 098 material findings
+- revocation is an authority decision, not instantaneous knowledge at a disconnected client; an offline PWA cannot receive a remote revocation until contact or a locally enforceable expiry/constraint occurs;
+- credential, origin, protocol, native-association, device/pairing, deployment and business-integration revocation are different classes and must not collapse into one global `app blocked` state;
+- reconnect must re-establish current trust/protocol policy before remote mutation or outbox replay; `network restored ≠ trust restored ≠ replay authorized`;
+- revocation should withdraw the smallest unsafe capability while preserving locally authoritative records/outbox until a separately authorized recovery/destruction decision exists;
+- broad `Clear-Site-Data: "storage"` is not a precise bridge-revocation primitive because it can remove IndexedDB and Service Worker registrations;
+- Apple Associated Domains data is CDN/cached and refreshed asynchronously; changing AASA is not an instantaneous fleet-wide emergency revocation channel;
+- stale trust metadata is not evidence of corrupted user data; explicit policy/protocol generations can support reconnect comparison without treating old clients as malicious;
+- exact MintTap/LogMate offline authorization duration, MDM revocation, pairing identity, sync protocol and data-destruction policy remain OPEN.
 
 ## Persistent PWA guards
 `public website ≠ installable web experience ≠ offline-capable task ≠ synchronized product`.  
@@ -44,6 +45,13 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Fu
 `Home Screen installed ≠ background synchronization available`.  
 `previously authenticated ≠ server session currently valid ≠ local data currently unlocked ≠ offline operation authorized ≠ pending mutation remotely accepted`.  
 `credential revoked at server ≠ disconnected PWA instantly aware ≠ local data instantly inaccessible`.  
+`authority revoked remotely ≠ disconnected client informed ≠ local capability immediately unavailable`.  
+`network restored ≠ trust restored ≠ replay authorized`.  
+`sync denied ≠ local record should be deleted`.  
+`outbox replay paused ≠ outbox discarded`.  
+`bridge untrusted ≠ origin storage should be wiped`.  
+`AASA changed at origin ≠ Apple CDN refreshed ≠ every device association refreshed`.  
+`stale trust metadata ≠ corrupted user data`.  
 `logout ≠ origin wipe`.  
 `account recovery ≠ data recovery`.  
 `credential rotation ≠ data-encryption-key rotation`.  
@@ -82,16 +90,16 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Fu
 
 ## Five-track state
 All tracks have integrated foundation/practitioner coverage; allocation is risk/evidence-gap driven.
-- **A Platform/Browser:** strong; supplies origin/storage/Service Worker/CSP/Fetch/CORS/`postMessage`/navigation mechanics. Exact Safari/managed-iPad behavior remains CHANGE WATCH / target-device evidence.
-- **B UX/IA/Content:** consumes bridge state as continuity/recovery requirements; redirect, popup, link and export transitions must preserve truthful local/save/sync/recovery state.
-- **C Performance/Accessibility/Quality:** owns bridge negative tests, focus/history/AT recovery, cross-browser/device evidence and third-party failure isolation. Safari/AT/physical-device execution remains OPEN.
-- **D Search/Discovery/Analytics:** public discovery and campaign/deep-link parameters are not authorization; measurement continuity must not expand sensitive bridge authority.
-- **E Architecture/Security/Operations:** current highest-risk owner; 097 closes the generic explicit trust-bridge prerequisite. Product bridge decisions require exact implementation evidence.
+- **A Platform/Browser:** strong; supplies origin/storage/Service Worker/CSP/Fetch/CORS/message/navigation/update mechanics. Exact Safari/managed-iPad revocation/update behavior remains CHANGE WATCH / target-device evidence.
+- **B UX/IA/Content:** consumes stale-trust/revocation state as truthful continuity/recovery requirements; remote-sync denial must not be phrased as local-data loss.
+- **C Performance/Accessibility/Quality:** owns revocation-before/during-replay, stale-client reconnect, focus/status-message, cross-browser/device evidence. Safari/AT/physical-device execution remains OPEN.
+- **D Search/Discovery/Analytics:** retired campaign/deep-link state is not authorization; discovery staleness must degrade safely without preserving privileged bridge authority.
+- **E Architecture/Security/Operations:** current highest-risk owner; 098 closes the generic stale-client trust/revocation prerequisite. Product policy requires exact implementation/MDM evidence.
 
 ## Cross-repository evidence
-Design Studio checked 2026-09-17: global status now reports Web Design Stage 1 PASS / Stage 2 PRACTICE with runtime/browser breadth incomplete; no Safari, screen-reader, physical-device or human-UX PASS may be inferred.
+Design Studio checked 2026-09-17: Web Design is Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE; W049 tenant-context cache-isolation runtime is ready but execution remains OPEN. No Safari, screen-reader, physical-device or human-UX PASS may be inferred.
 
-Software Engineering Studio checked 2026-09-17: all specialists remain Foundation IN STUDY. F004 now adds predicate-vs-notification evidence relevant to future bridge/sync event semantics, but no exact PWA bridge/CORS/auth-link/managed-iPad implementation evidence exists.
+Software Engineering Studio checked 2026-09-17: all specialists remain Foundation IN STUDY. F005 distinguishes waiter timeout from underlying operation cancellation; D006 retains replication/idempotency/conflict work. These support replay/reconciliation semantics but do not prove browser/PWA revocation behavior.
 
 ## Production OPEN register
 Actual `minttap.app` production state remains OPEN unless verified from project evidence.
@@ -100,16 +108,16 @@ PWA/EFB OPEN includes exact managed-iPad OS/WebKit/MDM policy, Home Screen reten
 
 Auth/security/recovery OPEN includes actual authentication/session/token/cookie architecture, offline authorization, passkey/local-unlock design, locally authoritative record classes, encryption-at-rest threat model, DEK/KEK/recovery hierarchy, backup compatibility and device replacement/revocation evidence.
 
-Runtime-origin/topology OPEN includes actual framework/rendering sinks, CSP/Reporting/Trusted Types, first/third-party script graph, analytics/ads/support widgets, origin/hostname topology, allowed network destinations, CORS/credential policy, `postMessage` bridges, iframe/sandbox/Permissions Policy, Storage Access behavior, worker script/scope, auth redirects, deep/native links, support/export handoffs, auth continuity, key/plaintext lifetime and compromised-worker repair.
+Runtime-origin/topology OPEN includes actual framework/rendering sinks, CSP/Reporting/Trusted Types, first/third-party script graph, analytics/ads/support widgets, origin/hostname topology, allowed network destinations, CORS/credential policy, `postMessage` bridges, iframe/sandbox/Permissions Policy, Storage Access behavior, worker script/scope, auth redirects, deep/native links, support/export handoffs, auth continuity, key/plaintext lifetime, bridge-policy generation and compromised-worker repair.
 
 Supply-chain OPEN includes actual repository review enforcement, CI runner/action trust, dependency pinning, SBOM/provenance/signing, immutable artifact promotion, hosting/CDN deployment identity, secret/workload identity, DNS/provider recovery and credential/key rotation drills.
 
 ## Next learning mode
-097 closes the generic explicit cross-context trust-bridge gap. Avoid repeating `postMessage`/CORS/OAuth redirect primers. Highest-value next work should consume exact implementation, Design Studio execution or Software Engineering evidence when available. Without it, the next adjacent question is **capability/bridge revocation and stale-client trust**: how an installed/offline client learns that a bridge, origin, credential audience, native association or export/sync protocol is no longer trusted without destroying locally authoritative data.
+098 closes the generic stale-client trust/revocation prerequisite. Avoid repeating token/AASA/reconnect primers. Highest-value next work should consume exact implementation, Design Studio execution or Software Engineering evidence when available. Without it, the next adjacent high-value question is **revocation-policy authenticity and recovery from authority compromise**: how a client distinguishes a legitimate trust-policy change from a compromised origin/control plane, including policy signing/provenance, key rotation, rollback/freeze resistance and offline bootstrap/recovery boundaries without inventing a product cryptographic design.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–097 PASS**.
-- Generic PWA architecture is sufficient for implementation handoff across durability, platform capability, recovery/auth, direct transport, offline/update, diagnostics, release/incident, long-offline compatibility, supply-chain, key lifecycle, runtime-origin compromise, sensitive-context topology and explicit cross-context trust bridges.
+- Continuous maintenance: **083–098 PASS**.
+- Generic PWA architecture is sufficient for implementation handoff across durability, platform capability, recovery/auth, direct transport, offline/update, diagnostics, release/incident, long-offline compatibility, supply-chain, key lifecycle, runtime-origin compromise, sensitive-context topology, explicit cross-context trust bridges and stale-client revocation/containment.
 - Product/device/AT/security/privacy validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
