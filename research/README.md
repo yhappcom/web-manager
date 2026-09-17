@@ -29,11 +29,8 @@ Curriculum passes are competency gates, not production certification.
 091–098 cover long-offline compatibility/API retirement; release supply-chain; session/offline authorization; account/device/key recovery; XSS/unlocked-data authority; sensitive-context isolation; explicit trust bridges; stale-client revocation/data-preserving containment.  
 099–102 cover trust-policy authenticity/anti-rollback; trusted-state reset/rebootstrap; mixed-epoch recovery; portable recovery confidentiality/custody/import authority.  
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
-111 — **PWA Recovery Authority Continuity Under Identity, Domain & Control-Plane Loss — PASS (generic).** Recovery is a bounded authority transition with explicit circular-dependency, trust-generation, stale-client and emergency-privilege controls.  
-112 — **PWA Recovery Authority Abuse Resistance & Dual-Use Incident Governance — PASS (generic).** Recovery availability is separated from abuse resistance; human/provider support, notification, high-impact staging, independent observation, factor independence, repudiation and post-compromise persistence are explicit.  
-113 — **PWA Hostile-Origin / Service-Worker Compromise Scoping & Trust Re-entry — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD VALIDATION OPEN.** Restored origin authority is separated from installed-client cleanliness; non-exposure vs remediation evidence, worker/cache/session/data/operation planes, data-preserving quarantine, selective cleanup, monotonic trust re-entry and target-WebKit validation are explicit.  
-114 — **PWA Compromise-Era Data Integrity & Operation Provenance — PASS (generic) / PRODUCT RUNTIME + CRYPTOGRAPHIC + MANAGED-IPAD VALIDATION OPEN.** Persistence is separated from authorship/provenance; independent evidence domains, acknowledgement semantics, intent-vs-authentication, trusted chronology, unverifiable recovery states, privacy-minimized audit evidence and replay gating are explicit.  
-115 — **PWA Evidence-Preserving Incident Acquisition & Chain-of-Custody Boundary — PASS (generic) / PRODUCT TOOLING + MANAGED-IPAD + LEGAL-FORENSIC VALIDATION OPEN.** Acquisition is modeled as a potentially mutating state transition; remote-before-reconnect evidence, least-mutating local acquisition, original/copy separation, integrity metadata, acquisition/remediation gating and formal chain-of-custody limits are explicit.
+111–115 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition and legal-forensic boundary.  
+116 — **PWA Active-Compromise Containment vs Evidence Preservation — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + INCIDENT-LEGAL VALIDATION OPEN.** Containment and preservation are separate coordinated gates; client isolation is separated from remote authority containment; credible continuing harm outranks forensic convenience; irreplaceable local records are preserved through least-destructive containment where possible; evidence-sacrifice decisions and reconnect/replay gates are explicit.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -72,54 +69,36 @@ Curriculum passes are competency gates, not production certification.
 - `incident closed ≠ emergency privilege automatically disappeared`;
 - `recovery path available ≠ recovery path abuse-resistant`;
 - `human-assisted recovery ≠ high-assurance recovery`;
-- `support agent accepted claimant ≠ organization independently authorized destructive change`;
 - `notification delivered ≠ action authorized`;
-- `notification after destructive change ≠ preventive control`;
-- `audit record exists ≠ audit record independent of the actor being audited`;
 - `authorized to inspect ≠ authorized to replace trust root`;
 - `waiting period exists ≠ attacker cannot wait`;
-- `registrar MFA enabled ≠ support-assisted takeover impossible`;
-- `two factors ≠ two independent failure domains`;
-- `event repudiated ≠ compromise effects automatically reversed`;
 - `origin fixed now ≠ every client controlled by clean worker now`;
-- `clean worker published ≠ clean worker fetched ≠ clean worker activated ≠ client revalidated`;
-- `worker registration clean ≠ cache clean ≠ application data clean ≠ trust state clean`;
-- `no observed compromise ≠ proven non-exposure`;
+- `clean worker published ≠ fetched ≠ activated ≠ client revalidated`;
 - `remediated ≠ never exposed`;
-- `clear site data supported ≠ indiscriminate clearing safe`;
-- `same origin storage ≠ same security meaning`;
-- `bytes parse correctly ≠ record integrity proven after hostile same-origin execution`;
-- `new worker active ≠ old tokens/remote side effects reconciled`;
-- `WebKit feature exists ≠ managed-EFB policy permits/retains it`;
 - `transaction committed ≠ user authored`;
-- `durably stored ≠ semantically trustworthy`;
 - `record + local audit entry ≠ two independent witnesses`;
-- `append-only data model ≠ append-only security boundary`;
-- `client timestamp ≠ trusted chronology`;
-- `HTTP 2xx ≠ acknowledged domain state identified`;
 - `server acknowledged operation ≠ user intended operation`;
 - `authenticated request ≠ legitimate user intent`;
-- `signature valid ≠ unsigned semantics protected`;
-- `no integrity evidence ≠ data known corrupted ≠ data known clean`;
-- `unverifiable` is a valid recovery state;
-- `more forensic data ≠ better privacy/security system`;
-- `synced=true ≠ provenance/reconciliation evidence`;
 - `incident evidence useful ≠ formal forensic evidence established`;
 - `application export ≠ forensic image`;
-- `most volatile first ≠ blindly open the PWA first`;
 - `read-only intent ≠ acquisition path is non-mutating`;
-- `state observed after interaction ≠ state that existed before interaction`;
-- `inspectable ≠ non-mutating`;
-- `DevTools visible ≠ forensic acquisition supported`;
 - `reconnect for diagnosis ≠ neutral observation`;
-- `hash matches ≠ source was trustworthy or acquisition complete`;
-- `preservation log ≠ formal chain of custody`;
-- `malicious executable state present ≠ user data should be destroyed`;
-- `user data preserved ≠ user data safe to replay`;
-- `cleanup succeeded ≠ evidence preservation succeeded`.
+- `cleanup succeeded ≠ evidence preservation succeeded`;
+- `evidence preservation valuable ≠ active compromise may continue for evidence convenience`;
+- `suspect client offline ≠ compromised account/session revoked`;
+- `one device isolated ≠ fleet contained`;
+- `network isolation ≠ remote authority containment`;
+- `containment urgent ≠ wipe is automatically the safest containment`;
+- `local record irreplaceable ≠ compromised executable authority must remain active`;
+- `remote containment complete ≠ reconnect safe`;
+- `reconnect required for update ≠ replay should be enabled simultaneously`;
+- `incident response need ≠ unlimited telemetry collection authority`.
 
-## Current validation boundary
-All numbered PASS states above are generic learning/competency gates unless an artifact explicitly records execution evidence. Actual `minttap.app`, LogMate-like PWA, target iOS/iPadOS/Android/browser/MDM behavior, accessibility, production IAM/security, data durability, sync, backup, recovery, incident acquisition and formal forensic controls remain OPEN until exact project/runtime evidence exists.
+## Current evidence boundary
+All numbered PASS labels above are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
-## Current next target
-After 115, highest-value adjacent generic work is **incident containment vs evidence preservation under active compromise**: isolation may preserve client state while delaying credential/trust revocation or remote containment, so define risk-based decision gates, evidence-sacrifice documentation and safe containment ordering without allowing evidence-preservation goals to prolong active harm.
+## Current cross-repository boundary
+Design Studio Web remains Stage 3 PRACTICE / NOT PASSED; its current W068 path requires repaired widget regression before served browser/cross-browser claims. Software Engineering Studio remains a dependency source for implementation/test/tooling evidence; Web Manager does not absorb general software-engineering ownership.
+
+## Next high-value maintenance target
+After 116, the highest-value adjacent generic question is **containment assurance under partial/offline fleet convergence**: establish how revocation, API-generation blocks, deployment/origin recovery and trust changes can constrain a fleet containing long-offline installed PWAs, and how to prove containment without interpreting missing telemetry as evidence that stale clients no longer exist.
