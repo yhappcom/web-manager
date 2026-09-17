@@ -1,6 +1,6 @@
 # MintTap Web Manager Research Index
 
-This directory is the source-grounded learning and decision-support layer for the MintTap company website and related strategic web-app capability. Canonical curriculum: `../LEARNING_ROADMAP.md`; horizontal ownership: `../SPECIALIST_TRACKS.md`.
+This directory is the source-grounded learning and decision-support layer for the MintTap company website and strategic web-app/PWA capability. Canonical curriculum: `../LEARNING_ROADMAP.md`; horizontal ownership: `../SPECIALIST_TRACKS.md`.
 
 Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`, `DEPENDENCY`, `VALIDATION`, `CHANGE WATCH`, `TRANSFER VALIDATION`, `CONTRADICTION`.
 
@@ -20,110 +20,60 @@ Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`
 
 Curriculum passes are competency gates, not production certification.
 
-## Continuous expert maintenance/application
-083 — **PWA Storage Durability & Service-Worker Standards Change Watch — PASS.**  
-084 — **iOS/iPadOS PWA Install, Background & Authentication Reality — PASS.**  
-085 — **PWA Irreplaceable Data Recovery, Offline Authorization & Device-Loss Security — PASS.**  
-086 — **PWA Direct Transport, Discovery, Pairing & Security Boundaries — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
-087 — **PWA WebRTC Establishment, Managed-Network Reality & Fallback Experiment Contract — PASS (generic) / PRODUCT FEASIBILITY OPEN.**  
-088 — **PWA Offline Navigation, Service-Worker Update Recovery & Observability — PASS (generic) / PRODUCT VALIDATION OPEN.**  
-089 — **PWA Testing, Diagnostics & Release Evidence Architecture — PASS (generic) / TARGET-DEVICE EXECUTION OPEN.**  
-090 — **PWA Release, Support & Incident Evidence + Accessible Recovery Contract — PASS (generic) / TARGET-DEVICE & AT EXECUTION OPEN.**  
-091 — **PWA Long-Offline Release Coexistence, API Retirement & Incident Containment — PASS (generic) / PRODUCT EXECUTION OPEN.**  
-092 — **PWA Release/Update Supply-Chain Integrity & Secure Deployment Trust — PASS (generic) / PRODUCT IMPLEMENTATION VALIDATION OPEN.**  
-093 — **PWA Session Revocation, Offline Authorization & Security-Sensitive Local Data Separation — PASS (generic) / PRODUCT AUTHORIZATION + DEVICE VALIDATION OPEN.**  
-094 — **PWA Account/Device Recovery & Cryptographic Key Lifecycle — PASS (generic) / PRODUCT CRYPTOGRAPHIC + DEVICE VALIDATION OPEN.**  
-095 — **PWA XSS/Origin Compromise Against Unlocked Data & Key-Use Authority — PASS (generic) / PRODUCT IMPLEMENTATION + TARGET-DEVICE VALIDATION OPEN.**  
-096 — **PWA Sensitive-Context Origin, Third-Party Isolation & Capability Minimization — PASS (generic) / PRODUCT TOPOLOGY + TARGET-DEVICE VALIDATION OPEN.**  
-097 — **PWA Explicit Cross-Context Trust Bridges — PASS (generic) / PRODUCT BRIDGE + TARGET-DEVICE VALIDATION OPEN.**  
-098 — **PWA Bridge Revocation, Stale-Client Trust & Data-Preserving Containment — PASS (generic) / PRODUCT REVOCATION + TARGET-DEVICE VALIDATION OPEN.**  
-099 — **PWA Trust-Policy Authenticity, Authority Recovery & Anti-Rollback Boundaries — PASS (generic) / PRODUCT CRYPTOGRAPHIC + CONTROL-PLANE VALIDATION OPEN.**  
-100 — **PWA Trusted-State Persistence, Reset/Reinstall Bootstrap & Recovery — PASS (generic) / PRODUCT STORAGE + BOOTSTRAP + TARGET-DEVICE VALIDATION OPEN.**  
-101 — **PWA Mixed-Epoch Recovery Provenance & Reconciliation — PASS (generic) / PRODUCT RECOVERY-MANIFEST + RECONCILIATION VALIDATION OPEN.** Treats restore as a vector of record/trust/key/schema/protocol/outbox/ack epochs; separates integrity, provenance, reader/domain acceptance, reconciliation and replay authorization; consumes Software Engineering D003/D005/D006 rather than duplicating them.
-
-## Key guards
-- `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
-- `persistent storage granted ≠ trust state can never disappear`;
-- `same origin bucket ≠ same data authority ≠ same recovery policy`;
-- `storage reset ≠ benign cache reset`;
-- `PWA installed ≠ native uninstall/reinstall storage semantics`;
-- `new device authenticated ≠ previous trusted-state continuity restored`;
-- `backup restored ≠ trust state restored ≠ restored trust state current`;
-- `trust state missing ≠ lowest generation trusted`;
-- `trust state missing ≠ user records untrusted`;
-- `anti-rollback memory lost ≠ local record should be deleted`;
-- `rebootstrap required ≠ destructive reset required`;
-- `restore completed ≠ records/trust/keys/outbox share one coherent recovery epoch`;
-- `hash matches ≠ artifact provenance established`;
-- `artifact provenance established ≠ application semantics accepted`;
-- `ciphertext intact ≠ decryptable ≠ correctly bound to the restored key generation`;
-- `restore bytes copied ≠ recovery candidate accepted ≠ live state safely published`;
-- `schema version label matches ≠ migration/reader acceptance proven`;
-- `outbox item present ≠ never applied remotely ≠ replay authorized`;
-- `one backup timestamp ≠ one coherent application epoch`;
-- `later timestamp ≠ causally newer state`;
-- `manifest present ≠ manifest authentic ≠ components mutually coherent`;
-- `local recovery accepted ≠ remote replay authorized`;
-- `candidate incompatible ≠ candidate worthless`;
-- `replay quarantined ≠ records should be erased`;
-- `record recovery success ≠ sync recovery success`;
-- `Home Screen ITP exemption ≠ universal durability guarantee`;
-- `local durability ≠ backup availability ≠ trust continuity ≠ key recoverability ≠ sync correctness`;
-- reconstructible cache assets ≠ irreplaceable user records/outbox;
-- `online signal ≠ usable network ≠ successful navigation ≠ task-ready application`;
-- `worker update found ≠ installed ≠ activated ≠ controlling ≠ application-compatible`;
-- `automated browser PASS ≠ Safari PASS ≠ physical iPad PASS ≠ managed-EFB product PASS`;
-- `authority revoked remotely ≠ disconnected client informed ≠ local capability immediately unavailable`;
-- `network restored ≠ trust restored ≠ replay authorized`;
-- `sync denied ≠ local record should be deleted`;
-- `outbox replay paused ≠ outbox discarded`;
-- `stale trust metadata ≠ corrupted user data`;
-- `HTTPS policy fetch succeeded ≠ policy authorized by an independent trust root`;
-- `signature mathematically valid ≠ signer authorized for this policy`;
-- `valid old signature ≠ current policy`;
-- `signed payload ≠ signed interpretation context`;
-- `SubtleCrypto.verify available ≠ trustworthy policy-update system established`;
-- `public key fetched from compromised origin ≠ independent authenticity proof`;
-- `successor signed only by compromised key ≠ compromise recovery proven`;
-- `monotonic version check ≠ freeze resistance`;
-- `expiry check ≠ trustworthy wall clock`;
-- `policy expired ≠ local records expired`;
-- `new signed policy accepted ≠ compromised worker/runtime repaired`;
-- `logout ≠ origin wipe`;
-- `account recovery ≠ authenticator recovery ≠ device recovery ≠ local-data recovery ≠ backup recovery ≠ synchronization recovery`;
-- `encrypted at rest ≠ protected from authorized same-origin script while unlocked`;
-- `non-extractable key ≠ unusable cryptographic capability`;
-- `different path ≠ different origin security boundary`;
-- `narrow Service Worker scope ≠ independent origin isolation`;
-- `different origin ≠ no trust bridge`;
-- `postMessage origin validated ≠ message authorized ≠ payload semantically valid ≠ transaction current`;
-- `CORS allowed ≠ caller authenticated ≠ caller authorized ≠ mutation safe`;
-- `Universal Link association valid ≠ deep-link payload authorized`;
-- `third-party business value ≠ requirement for sensitive-context execution authority`;
-- `measurement continuity ≠ shared script authority`;
-- `analytics queue ≠ authoritative application outbox`;
-- `RTCDataChannel available ≠ signaling/discovery/pairing/background correctness`;
-- `remote kill switch configured ≠ offline client contained`;
-- `server compatible ≠ local schema compatible ≠ queued operation replayable`;
-- `cannot diagnose ≠ user should clear storage`;
-- `HTTPS delivered ≠ intended artifact delivered ≠ authorized artifact built ≠ dependency graph uncompromised`;
-- `page CSP strong ≠ service-worker CSP strong`;
-- `commit SHA known ≠ deployed bytes proven`;
-- `origin repaired ≠ installed fleet clean`;
-- generic platform evidence ≠ managed-EFB product validation.
-
-Generic PWA architecture through mixed-epoch recovery provenance/reconciliation is sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable security/privacy/accessibility/operational validation.
-
-## Strategic cross-track specialization — PWA
+## Strategic PWA foundation
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–101 transfer measurement, portfolio, release, operations, expert governance, durability, iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain, session/offline-authorization, account/device/key-recovery, runtime-origin-compromise, sensitive-context isolation, explicit trust-bridge governance, stale-client revocation/containment, trust-policy authenticity/authority recovery, trusted-state reset/rebootstrap and mixed-epoch recovery provenance/reconciliation. Production/device validation remains OPEN.
+## Continuous expert maintenance/application
+083–090 cover storage durability/change watch; iOS/iPadOS capability; irreplaceable-data recovery/offline authorization; direct transport/WebRTC managed-network boundaries; offline navigation/update recovery; testing/diagnostics; release/support/incident evidence.  
+091–098 cover long-offline compatibility/API retirement; release supply-chain; session/offline authorization; account/device/key recovery; XSS/unlocked-data authority; sensitive-context isolation; explicit trust bridges; stale-client revocation/data-preserving containment.  
+099 — **PWA Trust-Policy Authenticity, Authority Recovery & Anti-Rollback Boundaries — PASS (generic).**  
+100 — **PWA Trusted-State Persistence, Reset/Reinstall Bootstrap & Recovery — PASS (generic).**  
+101 — **PWA Mixed-Epoch Recovery Provenance & Reconciliation — PASS (generic).** Restore is treated as a vector of record/trust/key/schema/protocol/outbox/ack epochs; integrity, provenance, reader/domain acceptance, reconciliation and replay authorization remain separate gates.  
+102 — **PWA Portable Recovery Artifact Confidentiality, Custody & Import Authority — PASS (generic) / PRODUCT BACKUP-CRYPTO + TARGET-DEVICE VALIDATION OPEN.** Portable Files/cloud/share artifacts are treated as a new trust boundary; separates encryption from recoverability/key custody, treats import as hostile-input processing, prevents silent bearer/session/device/trust restoration, minimizes metadata leakage and makes retention/version rotation part of the recovery protocol.
+
+## High-value current guards
+- `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
+- `local save ≠ sync queued ≠ remote acknowledgement ≠ reconciliation ≠ backup`;
+- `automated browser PASS ≠ Safari PASS ≠ physical iPad PASS ≠ managed-EFB product PASS`;
+- `backup restored ≠ trust state restored ≠ restored trust state current`;
+- `restore completed ≠ records/trust/keys/outbox share one coherent recovery epoch`;
+- `hash matches ≠ artifact provenance established ≠ application semantics accepted`;
+- `outbox item present ≠ never applied remotely ≠ replay authorized`;
+- `local recovery accepted ≠ remote replay authorized`;
+- `authority revoked remotely ≠ disconnected client informed ≠ local capability immediately unavailable`;
+- `network restored ≠ trust restored ≠ replay authorized`;
+- `HTTPS policy fetch succeeded ≠ policy authorized by an independent trust root`;
+- `encrypted at rest ≠ protected from authorized same-origin script while unlocked`;
+- `different path ≠ different origin security boundary`;
+- `different origin ≠ no trust bridge`;
+- `postMessage origin validated ≠ message authorized ≠ payload semantically valid ≠ transaction current`;
+- `CORS allowed ≠ caller authenticated ≠ caller authorized ≠ mutation safe`;
+- `origin deployment complete ≠ all installed clients updated`;
+- `origin repaired ≠ installed fleet clean`;
+- `user selected file ≠ trusted recovery artifact`;
+- `share sheet completed ≠ destination confidential ≠ backup still under application custody`;
+- `backup encrypted ≠ backup recoverable ≠ key independently protected`;
+- `ciphertext + directly usable key in same artifact ≠ meaningful key/data separation`;
+- `device-bound key ≠ portable recovery capability`;
+- `saved to cloud ≠ end-to-end encrypted under every account configuration`;
+- `file contents encrypted ≠ filename/size/timestamps/manifest metadata confidential`;
+- `Files destination available on consumer iPad ≠ permitted on managed EFB`;
+- `recognized extension ≠ recognized content ≠ valid manifest ≠ authorized recovery`;
+- `decrypt succeeded ≠ semantic validation succeeded`;
+- `backup proves possession of old data ≠ current account authentication`;
+- `backup import accepted ≠ old session/device credential should be reactivated`;
+- `more backup copies ≠ monotonically safer recovery`.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
 
 Design Studio remains canonical for reusable visual/interaction evidence. Marketing owns acquisition/channel/community strategy. Software Engineering owns implementation/code/runtime validation. Use explicit handoffs and evidence boundaries.
+
+## Current evidence boundary
+Generic PWA architecture through portable recovery artifact confidentiality/custody/import authority is sufficient for implementation handoff. Product feasibility/certification still requires exact-artifact evidence on target managed devices plus applicable security, privacy, accessibility and operational validation.
+
+Current next generic boundary, only if implementation evidence remains unavailable: **backup freshness, completeness and recoverability evidence** — prove the backup contains the latest authoritative local state, reached durable external custody, remains decryptable/readable across supported versions and has been restore-tested without leaking sensitive recovery telemetry.
 
 ## Study quality standard
 Substantial work includes precise vocabulary, first-principles mechanics, authoritative evidence, counterexamples/failure analysis, cross-domain effects, bounded project relevance, durable-vs-changeable classification, validation requirements and explicit decision ownership.
