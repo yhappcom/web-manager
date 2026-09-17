@@ -30,10 +30,11 @@ Curriculum passes are competency gates, not production certification.
 089 — **PWA Testing, Diagnostics & Release Evidence Architecture — PASS (generic) / TARGET-DEVICE EXECUTION OPEN.**  
 090 — **PWA Release, Support & Incident Evidence + Accessible Recovery Contract — PASS (generic) / TARGET-DEVICE & AT EXECUTION OPEN.**  
 091 — **PWA Long-Offline Release Coexistence, API Retirement & Incident Containment — PASS (generic) / PRODUCT EXECUTION OPEN.**  
-092 — **PWA Release/Update Supply-Chain Integrity & Secure Deployment Trust — PASS (generic) / PRODUCT IMPLEMENTATION VALIDATION OPEN.** Treats the worker/update channel as privileged deployment; separates HTTPS from release authorization; defines source→dependency→build→immutable artifact→authorized publication evidence, worker/page CSP boundaries, deployment-IAM/credential separation and non-destructive compromised-worker recovery.  
-093 — **PWA Session Revocation, Offline Authorization & Security-Sensitive Local Data Separation — PASS (generic) / PRODUCT AUTHORIZATION + DEVICE VALIDATION OPEN.** Separates identity binding, server-session validity, local unlock, offline authorization, pending mutation acknowledgement and recovery state; establishes `logout ≠ origin wipe`, revocation-propagation limits, security/recoverability data classes, destructive-cleanup gates and an exact-artifact expiry/revocation/reconnect test matrix.  
-094 — **PWA Account/Device Recovery & Cryptographic Key Lifecycle — PASS (generic) / PRODUCT CRYPTOGRAPHIC + DEVICE VALIDATION OPEN.** Separates account/authenticator/device/data/backup/sync recovery; distinguishes authentication, local-unlock, DEK, KEK/recovery, backup and pairing lifecycles; applies WebAuthn backup semantics and Web Crypto key-storage/export boundaries without inferring a product cryptographic design; defines replacement/revocation/rotation and exact-device recovery validation requirements.  
-095 — **PWA XSS/Origin Compromise Against Unlocked Data & Key-Use Authority — PASS (generic) / PRODUCT IMPLEMENTATION + TARGET-DEVICE VALIDATION OPEN.** Separates encryption-at-rest from runtime origin compromise; key extraction from key use; same-origin isolation from hostile same-origin execution; integrates CSP/Trusted Types, worker persistence, key/plaintext lifetime, third-party authority and exact-artifact security validation without claiming a product vulnerability or cryptographic design.
+092 — **PWA Release/Update Supply-Chain Integrity & Secure Deployment Trust — PASS (generic) / PRODUCT IMPLEMENTATION VALIDATION OPEN.** Worker/update channel as privileged deployment; source→dependency→build→artifact→publication evidence and compromised-worker recovery.  
+093 — **PWA Session Revocation, Offline Authorization & Security-Sensitive Local Data Separation — PASS (generic) / PRODUCT AUTHORIZATION + DEVICE VALIDATION OPEN.** Identity/session/local-unlock/offline-authorization separation and destructive-cleanup gates.  
+094 — **PWA Account/Device Recovery & Cryptographic Key Lifecycle — PASS (generic) / PRODUCT CRYPTOGRAPHIC + DEVICE VALIDATION OPEN.** Account/authenticator/device/data/backup/sync recovery and key lifecycle boundaries.  
+095 — **PWA XSS/Origin Compromise Against Unlocked Data & Key-Use Authority — PASS (generic) / PRODUCT IMPLEMENTATION + TARGET-DEVICE VALIDATION OPEN.** Encryption-at-rest vs hostile same-origin runtime, CSP/Trusted Types, worker persistence and key/plaintext lifetime.  
+096 — **PWA Sensitive-Context Origin, Third-Party Isolation & Capability Minimization — PASS (generic) / PRODUCT TOPOLOGY + TARGET-DEVICE VALIDATION OPEN.** Separates URL paths from browser origins; evaluates same-origin policy separation vs separate sensitive-app origin; integrates Service Worker scope, CSP/connect/frame controls, iframe sandbox, Permissions Policy, storage-access/credential bridges, analytics/advertising authority budgets, auth continuity and exact-artifact validation without inferring current MintTap/LogMate topology.
 
 ## Key guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -56,6 +57,16 @@ Curriculum passes are competency gates, not production certification.
 - `same-origin isolation ≠ isolation from hostile code executing as that origin`;
 - `CSP/Trusted Types reduce injection risk ≠ origin compromise becomes harmless`;
 - `different path ≠ different origin security boundary`;
+- `narrow Service Worker scope ≠ independent origin isolation`;
+- `CSP destination minimization ≠ malicious same-origin code loses all application authority`;
+- `sandbox attribute present ≠ embedded third party safely contained`;
+- `cross-origin iframe ≠ no cookie/storage relationship`;
+- `different origin ≠ no trust bridge`;
+- `third-party business value ≠ requirement for sensitive-context execution authority`;
+- `measurement continuity ≠ shared script authority`;
+- `analytics queue ≠ authoritative application outbox`;
+- `PWA installed from site ≠ Service Worker should control the entire site`;
+- `SSO convenience ≠ every web origin should receive the same session credential`;
 - `saved locally ≠ synchronized ≠ backed up ≠ restorable`;
 - `RTCDataChannel available ≠ signaling/discovery/pairing/background correctness`;
 - `same LAN ≠ peer reachability`;
@@ -69,13 +80,13 @@ Curriculum passes are competency gates, not production certification.
 - `origin repaired ≠ installed fleet clean`;
 - generic platform evidence ≠ managed-EFB product validation.
 
-Generic direct-sync establishment, offline/update/recovery, testing/diagnostic, release/support/incident, long-offline coexistence/retirement, supply-chain/update-integrity, session-revocation/offline-authorization, account/device/key-recovery and runtime-origin-compromise architecture are sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
+Generic PWA architecture through sensitive-context topology is sufficient for implementation handoff. Product feasibility requires executable exact-artifact evidence on target managed devices and applicable assistive-technology/security/privacy/operational validation.
 
 ## Strategic cross-track specialization — PWA
 073 — **PWA Cross-Track Foundations — PASS.**  
 074 — **PWA Data Durability & Synchronization Architecture Boundaries — PASS.**
 
-075–095 transfer measurement, portfolio, release, operations, expert governance, durability, current iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain governance, session-revocation/offline-authorization, account/device/key-recovery and runtime-origin-compromise governance. Production/device validation remains OPEN.
+075–096 transfer measurement, portfolio, release, operations, expert governance, durability, iOS/iPadOS capability, recovery/offline-auth, direct transport, managed-network establishment, offline/update/recovery, testing/diagnostics, release/support/incident, long-offline compatibility/retirement, release-supply-chain, session/offline-authorization, account/device/key-recovery, runtime-origin-compromise and sensitive-context isolation governance. Production/device validation remains OPEN.
 
 ## Specialist relationships
 A Platform/Browser owns reusable mechanics; B UX/IA/Content owns task/information/state structure; C Performance/Accessibility/Quality owns runtime/inclusive/regression evidence; D Search/Discovery/Analytics owns discoverability/measurement; E Architecture/Security/Operations owns trust/risk/operations. Web Manager coordinates portfolio decisions.
