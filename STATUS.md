@@ -22,17 +22,18 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Fu
 093 PWA Session Revocation, Offline Authorization & Security-Sensitive Local Data Separation — **PASS (generic) / PRODUCT AUTHORIZATION + DEVICE VALIDATION OPEN**.  
 094 PWA Account/Device Recovery & Cryptographic Key Lifecycle — **PASS (generic) / PRODUCT CRYPTOGRAPHIC + DEVICE VALIDATION OPEN**.  
 095 PWA XSS/Origin Compromise Against Unlocked Data & Key-Use Authority — **PASS (generic) / PRODUCT IMPLEMENTATION + TARGET-DEVICE VALIDATION OPEN**.  
-096 PWA Sensitive-Context Origin, Third-Party Isolation & Capability Minimization — **PASS (generic) / PRODUCT TOPOLOGY + TARGET-DEVICE VALIDATION OPEN**.
+096 PWA Sensitive-Context Origin, Third-Party Isolation & Capability Minimization — **PASS (generic) / PRODUCT TOPOLOGY + TARGET-DEVICE VALIDATION OPEN**.  
+097 PWA Explicit Cross-Context Trust Bridges — **PASS (generic) / PRODUCT BRIDGE + TARGET-DEVICE VALIDATION OPEN**.
 
-## 096 material findings
-- origin is scheme/host/port; route/path separation is not a browser security boundary;
-- Service Worker scope can reduce routing/control coupling but does not create independent same-origin storage/script principals;
-- public/marketing/analytics/advertising/support surfaces do not automatically require the execution/storage/worker authority of a locally authoritative offline PWA;
-- per-response CSP, narrow `connect-src`, `frame-src`/`frame-ancestors`, sandbox and Permissions Policy are useful capability-reduction controls, not substitutes for origin separation where mutual distrust is required;
-- cross-origin isolation can be deliberately weakened again through credentialed APIs, CORS, `postMessage`, Storage Access grants or shared identity; these bridges require explicit contracts;
-- separate sensitive-app origin is a stronger browser-principal boundary but introduces auth/session, CORS, deployment, DNS/certificate, navigation and support complexity; it is mandatory to evaluate for high-sensitivity PWA topology but not generically mandated;
-- advertising/analytics business value does not prove a requirement for top-level execution in the sensitive PWA; measurement continuity and execution authority are separate requirements;
-- exact MintTap/LogMate origin, worker, script, analytics/ad/support, CSP, auth and MDM topology remains OPEN.
+## 097 material findings
+- origin isolation is only durable if every reconnecting bridge has explicit source/destination, operation, schema, credential, transaction, lifetime and failure semantics;
+- `postMessage` exact origin/source validation is necessary but does not authorize message semantics; payload schema, allowed operation, transaction binding and replay behavior remain application responsibilities;
+- CORS is response-sharing policy, not authentication or authorization; credentialed CORS broadens a trust bridge and must not be granted merely because an origin is company-controlled;
+- OAuth Security BCP requires exact redirect matching, rejects open redirectors and requires transaction protections; current RFC 10017 carries strict in-browser communication discipline into browser-based apps;
+- Apple Universal Links/Associated Domains provide stronger website↔app association than custom schemes, but valid association does not make arbitrary deep-link payloads authorized commands;
+- navigation, auth, support, export/backup, sync and measurement bridges are different capability classes and must not be collapsed into one generic JSON/URL handoff;
+- Universal Links, `postMessage` and CORS do not prove unattended PWA↔native background synchronization; 086/087 product feasibility remains OPEN;
+- exact MintTap/LogMate bridge inventory, OAuth/OIDC usage, origin/CORS policy, native-link topology and managed-device behavior remain OPEN.
 
 ## Persistent PWA guards
 `public website ≠ installable web experience ≠ offline-capable task ≠ synchronized product`.  
@@ -57,10 +58,12 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Fu
 `CSP/Trusted Types reduce injection risk ≠ origin compromise becomes harmless`.  
 `different path ≠ different origin security boundary`.  
 `narrow Service Worker scope ≠ independent origin isolation`.  
-`CSP destination minimization ≠ malicious same-origin code loses all application authority`.  
-`sandbox attribute present ≠ embedded third party safely contained`.  
-`cross-origin iframe ≠ no cookie/storage relationship`.  
 `different origin ≠ no trust bridge`.  
+`postMessage origin validated ≠ message authorized ≠ payload semantically valid ≠ transaction current`.  
+`CORS allowed ≠ caller authenticated ≠ caller authorized ≠ mutation safe`.  
+`user returned from identity provider ≠ response belongs to this transaction ≠ requested navigation target trusted`.  
+`Universal Link association valid ≠ deep-link payload authorized`.  
+`custom URL scheme launches an app ≠ intended app ownership proven`.  
 `third-party business value ≠ requirement for sensitive-context execution authority`.  
 `measurement continuity ≠ shared script authority`.  
 `analytics queue ≠ authoritative application outbox`.  
@@ -79,16 +82,16 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Fu
 
 ## Five-track state
 All tracks have integrated foundation/practitioner coverage; allocation is risk/evidence-gap driven.
-- **A Platform/Browser:** strong; supplies origin/storage/Service Worker/CSP/iframe/sandbox/credential mechanics. Exact Safari/managed-iPad storage-access, worker and policy behavior remains CHANGE WATCH / target-device evidence.
-- **B UX/IA/Content:** consumes security topology as a continuity constraint; public/support/auth transitions must preserve truthful local/save/sync/recovery state.
-- **C Performance/Accessibility/Quality:** owns third-party failure isolation, CSP/sandbox/credential negative tests, embed/fallback accessibility and target-engine/device evidence. Safari/AT/physical-device execution remains OPEN.
-- **D Search/Discovery/Analytics:** public crawl/discovery surfaces need no unlocked-record authority; measurement continuity must not be equated with shared sensitive execution.
-- **E Architecture/Security/Operations:** current highest-risk owner; 096 closes the generic origin/third-party capability-minimization prerequisite. Product topology decision requires exact implementation evidence.
+- **A Platform/Browser:** strong; supplies origin/storage/Service Worker/CSP/Fetch/CORS/`postMessage`/navigation mechanics. Exact Safari/managed-iPad behavior remains CHANGE WATCH / target-device evidence.
+- **B UX/IA/Content:** consumes bridge state as continuity/recovery requirements; redirect, popup, link and export transitions must preserve truthful local/save/sync/recovery state.
+- **C Performance/Accessibility/Quality:** owns bridge negative tests, focus/history/AT recovery, cross-browser/device evidence and third-party failure isolation. Safari/AT/physical-device execution remains OPEN.
+- **D Search/Discovery/Analytics:** public discovery and campaign/deep-link parameters are not authorization; measurement continuity must not expand sensitive bridge authority.
+- **E Architecture/Security/Operations:** current highest-risk owner; 097 closes the generic explicit trust-bridge prerequisite. Product bridge decisions require exact implementation evidence.
 
 ## Cross-repository evidence
-Design Studio Web checked 2026-09-17: Stage 1/2 PASS, Stage 3 PRACTICE / NOT PASSED; W047 retention-boundary runtime ready but execution OPEN. No Safari, cross-browser, screen-reader, physical-device/print, field-CWV or human-UX PASS may be inferred.
+Design Studio checked 2026-09-17: global status now reports Web Design Stage 1 PASS / Stage 2 PRACTICE with runtime/browser breadth incomplete; no Safari, screen-reader, physical-device or human-UX PASS may be inferred.
 
-Software Engineering Studio checked 2026-09-17: all specialists remain Foundation IN STUDY. F004 synchronization evidence and D006/S001 remain relevant, but no exact PWA origin/CSP/worker/third-party/managed-iPad implementation evidence exists in canonical status.
+Software Engineering Studio checked 2026-09-17: all specialists remain Foundation IN STUDY. F004 now adds predicate-vs-notification evidence relevant to future bridge/sync event semantics, but no exact PWA bridge/CORS/auth-link/managed-iPad implementation evidence exists.
 
 ## Production OPEN register
 Actual `minttap.app` production state remains OPEN unless verified from project evidence.
@@ -97,16 +100,16 @@ PWA/EFB OPEN includes exact managed-iPad OS/WebKit/MDM policy, Home Screen reten
 
 Auth/security/recovery OPEN includes actual authentication/session/token/cookie architecture, offline authorization, passkey/local-unlock design, locally authoritative record classes, encryption-at-rest threat model, DEK/KEK/recovery hierarchy, backup compatibility and device replacement/revocation evidence.
 
-Runtime-origin/topology OPEN includes actual framework/rendering sinks, CSP/Reporting/Trusted Types, first/third-party script graph, analytics/ads/support widgets, origin/hostname topology, allowed network destinations, CORS/credential policy, iframe/sandbox/Permissions Policy, Storage Access behavior, worker script/scope, auth continuity, key/plaintext lifetime and compromised-worker repair.
+Runtime-origin/topology OPEN includes actual framework/rendering sinks, CSP/Reporting/Trusted Types, first/third-party script graph, analytics/ads/support widgets, origin/hostname topology, allowed network destinations, CORS/credential policy, `postMessage` bridges, iframe/sandbox/Permissions Policy, Storage Access behavior, worker script/scope, auth redirects, deep/native links, support/export handoffs, auth continuity, key/plaintext lifetime and compromised-worker repair.
 
 Supply-chain OPEN includes actual repository review enforcement, CI runner/action trust, dependency pinning, SBOM/provenance/signing, immutable artifact promotion, hosting/CDN deployment identity, secret/workload identity, DNS/provider recovery and credential/key rotation drills.
 
 ## Next learning mode
-096 closes the generic sensitive-context topology/capability-minimization gap. Avoid repeating same-origin/CSP/iframe primers. Highest-value next work should consume exact implementation or Design Studio execution evidence when available. Without it, the next adjacent cross-track question is **explicit cross-context trust bridges**: `postMessage`, CORS/credentialed APIs, auth redirects, deep links/universal links and support/export handoffs — how origin isolation can be accidentally undone by overly broad message origins, credential scope or navigation authority.
+097 closes the generic explicit cross-context trust-bridge gap. Avoid repeating `postMessage`/CORS/OAuth redirect primers. Highest-value next work should consume exact implementation, Design Studio execution or Software Engineering evidence when available. Without it, the next adjacent question is **capability/bridge revocation and stale-client trust**: how an installed/offline client learns that a bridge, origin, credential audience, native association or export/sync protocol is no longer trusted without destroying locally authoritative data.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–096 PASS**.
-- Generic PWA architecture is sufficient for implementation handoff across durability, platform capability, recovery/auth, direct transport, offline/update, diagnostics, release/incident, long-offline compatibility, supply-chain, key lifecycle, runtime-origin compromise and sensitive-context topology.
+- Continuous maintenance: **083–097 PASS**.
+- Generic PWA architecture is sufficient for implementation handoff across durability, platform capability, recovery/auth, direct transport, offline/update, diagnostics, release/incident, long-offline compatibility, supply-chain, key lifecycle, runtime-origin compromise, sensitive-context topology and explicit cross-context trust bridges.
 - Product/device/AT/security/privacy validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
