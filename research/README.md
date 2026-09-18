@@ -34,7 +34,8 @@ Curriculum passes are competency gates, not production certification.
 122–126 cover control-assurance independence; oracle freshness/replay/continuity; evidence retention/key/epoch rotation; verifier-context recovery; organizational-loss recovery authority/provenance.  
 127–130 cover correlated recovery dependencies; dependency drift/resilience budget; resilience-debt retirement/recovery objectives; recovery-objective conflict/graceful degradation.  
 131–134 cover split-brain reconciliation; policy/schema evolution; correction provenance; provenance publication atomicity/partial-history recovery.  
-135 — **PWA Provenance Integrity Under Compaction, Export/Import & Cross-Device Transfer — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL + CRYPTO/KEY + BACKUP VALIDATION OPEN.** Treats compaction/export/import/merge as provenance transformations; separates integrity/authenticity/completeness/confidentiality/interpretability/current authorization; preserves source lineage across device transfer; governs portable package scope, admission, branch merge and managed-iPad backup evidence boundaries.
+135 covers provenance integrity across compaction/export/import/cross-device transfer.  
+136 — **PWA Provenance Fork Detection, Checkpoint Anchoring & Anti-Splicing Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL + CRYPTO/KEY + EXTERNAL-ANCHOR VALIDATION OPEN.** Separates item authenticity, inclusion, append-only continuity, freshness, non-equivocation, semantic legitimacy and current authorization; governs omission/reorder/rollback/splice/fork detection, scoped checkpoints, threat-specific independent anchoring and legitimate offline branches without assuming blockchain/public transparency infrastructure.
 
 ## High-value current guards
 ### PWA/runtime and data
@@ -66,7 +67,10 @@ Curriculum passes are competency gates, not production certification.
 - `queue item removed ≠ authoritative receipt preserved`;
 - `export button works ≠ backup verified`;
 - `backup file exists ≠ restore tested`;
-- `cross-device import ≠ automatic device-to-device sync`.
+- `cross-device import ≠ automatic device-to-device sync`;
+- `local head verifies ≠ remote head known`;
+- `Service Worker current ≠ data lineage current`;
+- `offline branch valid ≠ safe to auto-publish`.
 
 ### Privacy, provenance and telemetry
 - `auditability required ≠ retain every payload forever`;
@@ -84,7 +88,12 @@ Curriculum passes are competency gates, not production certification.
 - `atomic provenance required ≠ duplicate full sensitive payload per revision`;
 - `derived provenance package ≠ original provenance event`;
 - `compacted chain verifies ≠ original detail recoverable`;
-- `checkpoint continuity ≠ semantic completeness`.
+- `checkpoint continuity ≠ semantic completeness`;
+- `entry signature valid ≠ sequence intact`;
+- `inclusion proven ≠ append-only continuity proven`;
+- `append-only PASS ≠ semantic legitimacy PASS`;
+- `non-equivocation PASS ≠ statement accuracy PASS`;
+- `valid segment A + valid segment B ≠ valid A→B transition`.
 
 ### Portable provenance / transfer
 - `exported copy ≠ original storage context`;
@@ -106,6 +115,21 @@ Curriculum passes are competency gates, not production certification.
 - `encrypted export ≠ authentic export`;
 - `signed export ≠ confidential export`;
 - `portable recovery ≠ portable authority credential`.
+
+### Checkpoint / fork / anti-splicing
+- `checkpoint valid ≠ checkpoint fresh`;
+- `one valid head ≠ no competing valid-looking head`;
+- `checkpoint stored ≠ independently anchored`;
+- `history + checkpoint in same mutable failure domain ≠ rollback-resistant evidence`;
+- `second copy ≠ independent anchor`;
+- `authentic old head ≠ current head`;
+- `one branch verifies ≠ no fork exists`;
+- `two heads individually authenticate ≠ heads are mutually consistent`;
+- `fork detected ≠ attacker proven`;
+- `legitimate branch ≠ automatically authoritative merge`;
+- `fork resistance required ≠ blockchain required`;
+- `checkpointing useful ≠ public transparency service required`;
+- `signed proof object ≠ embedded proof valid`.
 
 ### Recovery, authority and provenance
 - `two copies ≠ two independent failure domains`;
@@ -149,10 +173,10 @@ Curriculum passes are competency gates, not production certification.
 - `zero production use ≠ recovery path unnecessary`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation/device identity, revisions, reconciliation/conflict/correction semantics, provenance schema/integrity/transaction scope, compaction/export/import/package format, actual schema/API/policy generations, migration behavior, rejected-operation retention, tombstone/dedup retention, privacy/legal/aviation/investment retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation/device identity, revisions, reconciliation/conflict/correction semantics, provenance schema/integrity/transaction scope, compaction/export/import/package format, lineage/checkpoint/anchor topology, actual schema/API/policy generations, migration behavior, rejected-operation retention, tombstone/dedup retention, privacy/legal/aviation/investment retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W086**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering implementation evidence is consumed as bounded transfer evidence, not promoted into product PASS.
+Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W087**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering implementation evidence is consumed as bounded transfer evidence, not promoted into product PASS.
 
 ## Next high-value maintenance target
-After 135, the highest-value adjacent generic question is **PWA provenance fork detection, checkpoint anchoring & anti-splicing governance**: determine how omission/reordering/splicing of individually valid provenance segments can be detected across exports, compaction epochs and device branches; separate cryptographic continuity from semantic legitimacy and avoid assuming heavyweight blockchain/transparency-log infrastructure is required.
+After 136, the highest-value adjacent generic question is **PWA checkpoint lifecycle, key/algorithm agility & verifier migration without lineage reset**: determine how checkpoint/signature algorithms, keys, canonicalization and verifier formats can rotate over years without turning each rotation into an unconnected history, while preserving historical verification and preventing downgrade/rollback to retired verifier epochs.
