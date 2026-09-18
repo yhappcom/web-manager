@@ -30,10 +30,8 @@ Curriculum passes are competency gates, not production certification.
 099–102 cover trust-policy authenticity/anti-rollback; trusted-state reset/rebootstrap; mixed-epoch recovery; portable recovery confidentiality/custody/import authority.  
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
 111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
-117 — **PWA Partial/Offline Fleet Containment Assurance — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + FLEET TELEMETRY VALIDATION OPEN.** Separates containment issuance, authoritative enforcement, observed convergence, client remediation and reconciliation; treats long-offline clients as unknown until re-entry evidence exists; relies on fail-closed remote authority gates rather than assumed immediate client policy delivery.  
-118 — **PWA Containment-Policy Rollback & Emergency-Gate Lifecycle — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + INCIDENT-DRILL VALIDATION OPEN.** Treats rollback as a forward transition into a new trust baseline; separates emergency-privilege expiry from containment-restriction relaxation; stages authority restoration by capability; preserves fail-closed re-entry for long-offline clients; and requires evidence-bearing retirement of incident-created authority.  
-119 — **PWA Post-Incident Trust Normalization & Residual-Risk Acceptance — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + RISK-OWNER VALIDATION OPEN.** Defines normalization as an explicit current trust baseline; separates resolved, accepted residual risk, open work and unknown state; preserves fail-closed re-entry for unknown offline clients; keeps unverifiable local data useful without inventing provenance; and prevents incident debt from silently becoming permanent trust policy.  
-120 — **PWA Post-Incident Learning → Permanent Control-Baseline Change Governance — PASS (generic) / PRODUCT RUNTIME + ORGANIZATIONAL CHANGE-OWNER VALIDATION OPEN.** Separates incident-local cleanup from durable control promotion; requires causal/failure-class reasoning, preserves superseded decisions, keeps incident-driven changes inside normal change governance, and closes corrective actions only with recurrence and side-effect evidence.
+117–120 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; and post-incident learning → permanent control-baseline governance.  
+121 — **PWA Corrective-Control Drift, Exception & Waiver Lifecycle — PASS (generic) / PRODUCT RUNTIME + EXCEPTION-OWNER + MANAGED-IPAD VALIDATION OPEN.** Separates approved baseline, declared configuration, effective enforcement and observed population; treats deviations as bounded governed objects rather than implicit bypasses; scopes compatibility/recovery support separately from remote authority; includes feature/provider configuration in security state; requires expiry/review, composition analysis and runtime conformance evidence.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -98,13 +96,23 @@ Curriculum passes are competency gates, not production certification.
 - `test exists ≠ test would fail on vulnerable behavior`;
 - `positive canary PASS ≠ negative invariant PASS`;
 - `zero observed recurrence ≠ recurrence prevented`;
-- `durable invariant ≠ immutable browser mechanism`.
+- `durable invariant ≠ immutable browser mechanism`;
+- `baseline documented ≠ runtime conforms`;
+- `deviation exists ≠ control governance failed`;
+- `exception approved ≠ exception safe indefinitely`;
+- `temporary label ≠ temporary behavior`;
+- `exception for capability A ≠ authorization for capability B`;
+- `code contains gate ≠ runtime gate enabled`;
+- `expiry timestamp passed ≠ runtime exception actually disabled`;
+- `exception registry count ≠ effective waived population`;
+- `waiver revoked centrally ≠ every client remediated`;
+- `each exception individually bounded ≠ combined exception set bounded`.
 
 ## Current evidence boundary
 All numbered PASS labels above are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**; W072 is the current runtime-diagnostic-provenance boundary and existing MintTap widget evidence remains EXECUTED-FAIL. Software Engineering remains **Foundation IN STUDY** across all specialists. A006's evidence-preserving ADR lifecycle transfers usefully to superseded-decision history, while M005 supplies capability-contract thinking; neither is direct PWA runtime evidence.
+Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**; W073 is the current diagnostic→served-browser closure boundary and no repaired widget/product-browser/cross-browser/Safari/device PASS is claimed. Software Engineering remains **Foundation IN STUDY** across all specialists. M006 supplies capability-contract evidence useful for capability-specific exception scoping; it is not direct PWA runtime evidence.
 
 ## Next high-value maintenance target
-After 120, the highest-value adjacent generic question is **corrective-control drift / exception / waiver lifecycle**: determine how a validated permanent control can later be weakened by compatibility exceptions, emergency bypasses, feature flags, stale clients or operational workarounds; distinguish intentional risk acceptance from silent control erosion; and define evidence that effective runtime enforcement still matches the approved baseline.
+After 121, the highest-value adjacent generic question is **control-assurance independence / anti-self-attestation**: determine when the same control plane cannot be trusted as the sole reporter of its own conformance, what proportionate independent evidence can detect false conformance, and how to avoid both false assurance and impractical full duplication.
