@@ -30,8 +30,8 @@ Curriculum passes are competency gates, not production certification.
 099–102 cover trust-policy authenticity/anti-rollback; trusted-state reset/rebootstrap; mixed-epoch recovery; portable recovery confidentiality/custody/import authority.  
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
 111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
-117–120 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; and post-incident learning → permanent control-baseline governance.  
-121 — **PWA Corrective-Control Drift, Exception & Waiver Lifecycle — PASS (generic) / PRODUCT RUNTIME + EXCEPTION-OWNER + MANAGED-IPAD VALIDATION OPEN.** Separates approved baseline, declared configuration, effective enforcement and observed population; treats deviations as bounded governed objects rather than implicit bypasses; scopes compatibility/recovery support separately from remote authority; includes feature/provider configuration in security state; requires expiry/review, composition analysis and runtime conformance evidence.
+117–121 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; permanent corrective-control governance; and corrective-control drift/exception/waiver lifecycle.  
+122 — **PWA Control-Assurance Independence & Anti-Self-Attestation — PASS (generic) / PRODUCT RUNTIME + ASSURANCE-OWNER + MANAGED-IPAD VALIDATION OPEN.** Separates control functionality from assurance; identifies circular self-attestation/common-mode failures; uses risk-proportionate independence rather than universal duplication; requires negative behavioral challenge for high-impact authorization claims; separates Service Worker served/fetched/activated/control/local-state/remote-authority/fleet-convergence evidence.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -106,13 +106,26 @@ Curriculum passes are competency gates, not production certification.
 - `expiry timestamp passed ≠ runtime exception actually disabled`;
 - `exception registry count ≠ effective waived population`;
 - `waiver revoked centrally ≠ every client remediated`;
-- `each exception individually bounded ≠ combined exception set bounded`.
+- `each exception individually bounded ≠ combined exception set bounded`;
+- `control exists ≠ control effectiveness assured`;
+- `control reports healthy ≠ forbidden path is impossible`;
+- `configuration evidence ≠ behavioral evidence`;
+- `more telemetry from one authority domain ≠ independent assurance`;
+- `independent assurance ≠ external vendor required`;
+- `different dashboard ≠ independent evidence`;
+- `continuous monitoring ≠ continuously correct monitoring`;
+- `allowed path succeeds ≠ forbidden path denied`;
+- `canary proves gate ≠ canary should be the gate`;
+- `two evidence artifacts ≠ two independent evidence sources`;
+- `server serves clean worker ≠ installed client clean`;
+- `client reports current worker ≠ remote authorization current`;
+- `higher assurance ≠ maximum duplication everywhere`.
 
 ## Current evidence boundary
 All numbered PASS labels above are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**; W073 is the current diagnostic→served-browser closure boundary and no repaired widget/product-browser/cross-browser/Safari/device PASS is claimed. Software Engineering remains **Foundation IN STUDY** across all specialists. M006 supplies capability-contract evidence useful for capability-specific exception scoping; it is not direct PWA runtime evidence.
+Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**. W074 has per-scenario Chrome EXECUTED-PASS evidence for several LogMate product-auth scenarios, but the workflow also contains harness/API drift and genuine legacy-layout 200% overflows; no independent-browser/Safari/device/field-CWV/human UX PASS is claimed. Software Engineering remains implementation owner for exact feature/configuration, auth/API/trust, Service Worker and assurance tooling; cross-repository concepts are transfer evidence, not direct runtime proof unless explicitly validated.
 
 ## Next high-value maintenance target
-After 121, the highest-value adjacent generic question is **control-assurance independence / anti-self-attestation**: determine when the same control plane cannot be trusted as the sole reporter of its own conformance, what proportionate independent evidence can detect false conformance, and how to avoid both false assurance and impractical full duplication.
+After 122, the highest-value adjacent generic question is **assurance-oracle compromise, stale evidence and freshness/replay resistance**: independent evidence remains weak if an attacker can replay an old PASS, suppress failed probes, backdate health or keep a stale signed snapshot looking current. Distinguish authenticity, freshness, liveness, coverage and continuity without assuming a perfect trusted clock.
