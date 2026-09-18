@@ -1,79 +1,67 @@
 # MintTap Web Manager Status
 
 Operating state: **ACTIVE — CONTINUOUS EXPERT MAINTENANCE / APPLICATION + FIVE-TRACK COORDINATION + PWA SPECIALIZATION**  
-Last sync: 2026-09-18  
-Domain: `minttap.app`  
-Platforms: iOS / App Store, Android / Google Play, strategic PWA/Web App capability
+Last sync: 2026-09-18
 
 ## Operating model
-GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Future work is targeted expert maintenance/application selected from live evidence, change-watch, risk and specialist dependencies. Curriculum completion is not production certification. Detailed historical guards and study summaries live in `research/README.md` and numbered research artifacts; this status intentionally stays checkpoint-oriented.
+GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Curriculum completion is not production certification. Detailed guards and studies live in `research/README.md` and numbered research artifacts.
 
 ## Continuous expert maintenance
-083–122 — **PASS at their recorded generic gates; product/device/runtime validation remains OPEN where stated in the research index.**  
-123 PWA Assurance-Oracle Freshness, Replay Resistance & Continuity — **PASS (generic) / PRODUCT RUNTIME + CLOCK/ORACLE + MANAGED-IPAD VALIDATION OPEN**.
+083–123 — **PASS at recorded generic gates.**  
+124 PWA Assurance Evidence Retention, Key/Epoch Rotation & Long-Term Verifiability — **PASS (generic) / PRODUCT RETENTION + KEY/ORACLE + MANAGED-IPAD VALIDATION OPEN**.
 
-## 123 material findings
-- independent assurance can still be false-current when an old authentic PASS is replayed, a FAIL is suppressed, a scheduler stops, or evidence is not bound to current control/configuration identity;
-- authenticity, integrity, freshness, liveness, coverage and continuity are separate assurance properties;
-- RFC 9421 shows signed evidence can require nonce/creation/expiration policy to resist replay; signature validity alone does not establish currentness;
-- RFC 9449 provides a transferable challenge principle: verifier-issued nonce can establish a current interaction without relying solely on a client wall clock; this is not a decision to adopt DPoP for product monitoring;
-- timestamp presence and signed creation time are not equivalent to independently trusted chronology; RFC 3161 is one specialized trusted-timestamp mechanism, not a universal requirement;
-- freshness can be established proportionately through verifier receipt age, challenge-response, monotonic sequence/epoch, protected sink ordering, or trusted timestamping according to the claim;
-- a fresh point PASS does not prove continuous PASS across an observation gap;
-- missing expected assurance evidence must not leave a dashboard indefinitely green, while oracle outage must remain distinguishable from production-control failure;
-- recent evidence must bind to relevant policy/trust/API/configuration generation; recent time alone cannot prove the current runtime state was tested;
-- PWA assurance continues to separate origin/worker served, client worker lifecycle/control, local state, remote authority and fleet denominator;
-- legitimate long-offline EFB operation cannot require continuous client liveness, but reconnect must not convert stale local evidence into current remote authority.
+## 124 checkpoint
+- Historical verifiability and current authorization are separate claims; retained PASS never grants current remote authority.
+- Routine signing-key rotation can retire production authority while retaining public verification context needed for historical evidence.
+- Key compromise creates an uncertain historical interval; rotation prevents future use but does not retroactively repair that interval.
+- Retention separates bytes retained → retrievable → interpretable → cryptographically verifiable.
+- Long-lived evidence may need schema/canonicalization, producer/key/epoch identity, verification context, protected-sink provenance and migration records.
+- Epoch transition requires explicit identity/predecessor semantics; sequence continuity inside one epoch does not prove continuity across reset/rotation.
+- Expected policy expiry differs from unexplained evidence loss; absence after expiry does not mean `NO EVENT`.
+- Format migration must preserve source provenance and semantic mapping.
+- RFC 4998 long-term renewal and RFC 9162 append-only consistency are transferable high-assurance patterns, not default MintTap architecture requirements.
+- Retired Service Worker/API/client-generation evidence can remain historically useful while remaining invalid for long-offline EFB re-entry authorization.
 
-## Persistent guards added by 123
-`signature valid ≠ evidence fresh`.  
-`evidence authentic ≠ evidence live`.  
-`old PASS authentic ≠ current control PASS`.  
-`created timestamp signed ≠ timestamp independently trustworthy`.  
-`clock disagreement ≠ freshness impossible`.  
-`timestamp present ≠ trusted chronology`.  
-`fresh ≠ comprehensive`.  
-`live oracle ≠ correct oracle`.  
-`missing evidence ≠ control failed`, but `missing expected evidence ≠ assurance PASS`.  
-`fresh PASS now ≠ continuous PASS since last observation`.  
-`last known good ≠ currently good`.  
-`probe outage ≠ production outage`.  
-`probe outage ≠ assurance remains green`.  
-`recent probe ≠ current configuration probed`.  
-`fresh origin evidence ≠ fresh installed-client evidence`.  
-`client reconnects ≠ prior offline interval retrospectively assured`.
+## Persistent guards added by 124
+`signing key retired ≠ historical evidence automatically unverifiable`.  
+`verification material retained ≠ signing authority retained`.  
+`key rotated ≠ old evidence becomes current under the new key`.  
+`certificate expired now ≠ signature necessarily invalid when produced`.  
+`historical signature valid ≠ producer currently authorized`.  
+`long retention ≠ long-term cryptographic verifiability`.  
+`retained bytes ≠ retrievable evidence ≠ interpretable evidence`.  
+`key compromised now ≠ every historical record proven forged or trustworthy`.  
+`new key deployed ≠ uncertain old interval repaired`.  
+`sequence monotonic within epoch ≠ continuity across epoch transition`.  
+`historical verification need ≠ retain historical signing capability`.  
+`format migrated ≠ semantics preserved`.  
+`evidence absent after retention expiry ≠ event never occurred`.  
+`expected retained evidence missing ≠ historical assurance PASS`.  
+`append-only log ≠ truthful producer`.  
+`old worker evidence verifiable ≠ old worker supported`.  
+`old API evidence retained ≠ old API generation re-enabled`.  
+`client history preserved ≠ client re-entry authorized`.
 
 ## Five-track state
-All tracks retain integrated foundation/practitioner coverage; allocation remains risk/evidence-gap driven.
-- **A Platform/Browser:** critical dependency supplier for Service Worker/client/offline/reconnect and clock/browser-state mechanics. Exact target-runtime behavior remains OPEN.
-- **B UX/IA/Content:** consumes stale/unknown/restricted assurance states; old green evidence must not be represented as verified-current state where material.
-- **C Performance/Accessibility/Quality:** high dependency pressure; owns replay/suppression mutants, freshness/continuity oracles, evidence provenance and exact runtime/config identity.
-- **D Search/Discovery/Analytics:** owns observation-window/denominator discipline; fresh observed-client evidence cannot prove absent/offline populations safe.
-- **E Architecture/Security/Operations:** current highest-risk owner; 123 closes the generic independent-oracle→freshness/replay→continuity boundary without assuming perfect global time.
+- **A Platform/Browser:** dependency supplier for Service Worker/client/offline/reconnect and generation mechanics; exact runtime OPEN.
+- **B UX/IA/Content:** consumes historical/current/unverifiable states; archived PASS must not appear current.
+- **C Performance/Accessibility/Quality:** high dependency pressure; owns verification regression across key/epoch/schema migration and pruning.
+- **D Search/Discovery/Analytics:** owns retention-window/denominator semantics; expired evidence absence cannot become `NO EVENT`.
+- **E Architecture/Security/Operations:** highest-risk owner; 124 closes the generic freshness→retention→rotation→long-term-verification boundary.
 
 ## Cross-repository evidence
-Design Studio checked 2026-09-18: canonical Web Design is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**, now W075 LogMate Customize browser closure. Existing widget evidence does not yet establish non-drag reorder, persisted configuration, independent browser/Safari/Firefox, screen-reader, physical-device, field-CWV or human UX PASS. Real persistence, Sync and FlightRecord projection remain not implemented in that evidence.
+Design Studio checked 2026-09-18: Web Design is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**, now W076 Customize Accessibility Runtime Manifest. Cross-browser/Safari/Firefox, non-drag reorder, persisted configuration, screen-reader, physical-device, field-CWV, full WCAG and human UX PASS remain OPEN.
 
-Software Engineering remains **Foundation IN STUDY** across all specialists. Latest A005 bounded evidence demonstrates partial repeated-change migration can leave observers with inconsistent semantics; transfer here is that assurance must bind to relevant configuration/policy generation. It is not PWA/Dart/Flutter runtime proof.
-
-Marketing latest canonical work is not material to this assurance boundary and is not duplicated.
+Software Engineering remains an implementation dependency for actual key rotation, evidence canonicalization, migration and verifier tooling; no bounded engineering evidence is promoted to PWA runtime proof. Marketing has no material canonical evidence changing this boundary.
 
 ## Production OPEN register
-Actual `minttap.app` production state remains OPEN unless verified from project evidence.
-
-PWA/EFB OPEN includes exact managed-iPad OS/WebKit/MDM policy; Home Screen storage/reset behavior; Files/iCloud/share availability; background execution; worker/cache/update behavior; schema/protocol/API compatibility; accessible degraded/recovery UX; network restrictions; pairing/sync transport; backup/export/import/restore; diagnostics and fleet update policy.
-
-Auth/security/recovery OPEN includes actual authentication/session/token/cookie architecture; offline authorization; authoritative local data classes; encryption/key hierarchy; backup/restore/trust-state architecture; anti-rollback/rebootstrap; mixed-epoch reconciliation; exact providers/accounts/IAM/SSO/registrar/registry/DNS authority graph; recovery factors/contacts; emergency/recovery authority; hostile-origin/Service-Worker compromise scope; record integrity/provenance; operation IDs/idempotency; trusted chronology; acquisition/containment/reconnect/replay gates; fleet denominator/decommission evidence; API-generation enforcement; post-incident baseline/risk workflow; and permanent promotion/retirement of incident controls.
-
-Runtime/control-plane/supply-chain OPEN includes actual origin/script/CSP/Trusted Types topology; third parties; worker scope/activation policy; signing/bootstrap trust; trusted-time/rotation/recovery authority; CI/dependency/provenance/deployment identity; DNS/provider recovery and credential/key rotation drills.
-
-Corrective-action/change-governance OPEN includes actual incident history; root-cause method; baseline/control identity; feature flags/configuration/provider settings; exception/waiver registry; exception owners/approvers; runtime enforcement evidence; composition tests; assurance owners; probe identities; evidence sinks; challenge/nonce/sequence/epoch mechanisms; clock/time source and uncertainty; common-mode-failure analysis; ADR/control-baseline/configuration implementation; recurrence-test tooling; exact source/build/deployment/runtime identity chain; legal/safety constraints; and criteria for accepted permanent deviation.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM behavior; PWA storage/update/background/sync; authentication/session/offline authorization; local authoritative data; encryption/key hierarchy; backup/restore; Service Worker trust; record provenance; operation identity/idempotency; fleet denominator; API-generation enforcement; evidence sinks; challenge/sequence/epoch/time mechanisms; evidence classes/retention periods; historical verification keys/certificates/trust anchors; revocation/timestamp model; schema/canonicalization; migration/renewal tooling; deletion/hold policy; legal/safety constraints; and real rotation/recovery drills.
 
 ## Next learning mode
-123 closes the generic assurance freshness/replay/continuity boundary. Highest-value adjacent generic work, if exact implementation evidence remains absent, is **assurance evidence retention, key/epoch rotation and long-term verifiability**: preserve historical evidence across key/certificate rotation, revocation, retention pruning, format migration and oracle-epoch reset without confusing historical authenticity with current authorization.
+Highest-value adjacent generic work is **assurance evidence recovery after verifier/context loss**: determine which historical claims remain reconstructable if verification keys, trust anchors, schema interpreters, sink indexes or epoch-transition records are lost/corrupted, and force unrecoverable claims to `UNVERIFIABLE/UNKNOWN` rather than fabricating trust through re-signing.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–123 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/risk-owner/change-owner/exception-owner/assurance-owner/clock-oracle validation remains OPEN.
+- Continuous maintenance: **083–124 PASS** at generic gates.
+- Product/device/AT/security/privacy/legal/owner/clock-oracle/retention-key validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
