@@ -9,48 +9,51 @@ Platforms: iOS / App Store, Android / Google Play, strategic PWA/Web App capabil
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Future work is targeted expert maintenance/application selected from live evidence, change-watch, risk and specialist dependencies. Curriculum completion is not production certification. Detailed historical guards and study summaries live in `research/README.md` and numbered research artifacts; this status intentionally stays checkpoint-oriented.
 
 ## Continuous expert maintenance
-083–120 — **PASS at their recorded generic gates; product/device/runtime validation remains OPEN where stated in the research index.**  
-121 PWA Corrective-Control Drift, Exception & Waiver Lifecycle — **PASS (generic) / PRODUCT RUNTIME + EXCEPTION-OWNER + MANAGED-IPAD VALIDATION OPEN**.
+083–121 — **PASS at their recorded generic gates; product/device/runtime validation remains OPEN where stated in the research index.**  
+122 PWA Control-Assurance Independence & Anti-Self-Attestation — **PASS (generic) / PRODUCT RUNTIME + ASSURANCE-OWNER + MANAGED-IPAD VALIDATION OPEN**.
 
-## 121 material findings
-- a control baseline needs explicit identity; approved policy, declared configuration, effective runtime enforcement and observed population are separate evidence layers;
-- NIST configuration-management guidance permits operational deviations but requires them to be identified, documented, approved, monitored and controlled; deviation itself is not governance failure;
-- distinguish compatibility exception, availability exception, emergency bypass, migration bridge, feature/config override, provider exception, manual workaround and accepted permanent deviation;
-- scope exceptions by capability, subject/client/release/trust/schema generation, time/review trigger and compensating controls; a narrow exception must not become a transitive authority bridge;
-- security-relevant feature flags/provider settings/configuration are part of effective security state; source/build identity alone cannot prove enforcement;
-- temporary privilege should not persist merely because expiry/review automation failed; availability/data-recovery controls may require explicit review rather than destructive automatic cutoff;
-- long-offline clients remain a denominator problem: central waiver revocation does not prove client remediation, but stale local state need not regain server authority;
-- individually bounded exceptions can compose into an unsafe authority path and therefore require composition analysis;
-- exact MintTap/LogMate baseline, feature flags, exception owners, provider policy and runtime behavior remain OPEN.
+## 122 material findings
+- control functionality and assurance are separate: a configured/enabled control is not proof that the forbidden runtime path is actually blocked;
+- self-attestation becomes circular when the same compromised/misconfigured authority can both fail enforcement and manufacture its health evidence;
+- NIST independent-assessment guidance is risk-proportionate and does not require an external auditor or duplicate platform for every control;
+- independence has multiple dimensions: authority, credential, execution path, data source, failure domain, time, population and organizational role;
+- high-impact authorization/exception claims benefit from negative behavioral probes that exercise the real enforcement path and preserve evidence outside the relevant common-mode failure where proportionate;
+- a probe/canary must remain separate from the production authorization mechanism;
+- count independent failure domains rather than dashboards/files/copies;
+- PWA assurance must separate clean worker served, fetched, installed, activated/controlling, local data/cache state, remote authority and fleet convergence;
+- long-offline EFB clients need not be continuously observable, but they must not self-attest around current server-side re-entry policy;
+- independent assurance must remain privacy-minimized and must not create destructive production side effects merely to prove a control.
 
-## Persistent guards added by 121
-`baseline documented ≠ runtime conforms`.  
-`same source revision ≠ same effective security configuration`.  
-`deviation exists ≠ control governance failed`.  
-`operational need asserted ≠ deviation justified`.  
-`exception approved ≠ exception safe indefinitely`.  
-`documented exception ≠ effective scope matches documentation`.  
-`temporary label ≠ temporary behavior`.  
-`exception for capability A ≠ authorization for capability B`.  
-`code contains gate ≠ runtime gate enabled`.  
-`expiry timestamp passed ≠ runtime exception actually disabled`.  
-`review overdue ≠ exception implicitly renewed`.  
-`exception registry count ≠ effective waived population`.  
-`waiver revoked centrally ≠ every client remediated`.  
-`each exception individually bounded ≠ combined exception set bounded`.
+## Persistent guards added by 122
+`control exists ≠ control effectiveness assured`.  
+`control reports healthy ≠ forbidden path is impossible`.  
+`configuration evidence ≠ behavioral evidence`.  
+`more telemetry from one authority domain ≠ independent assurance`.  
+`independent assurance ≠ external vendor required`.  
+`different dashboard ≠ independent evidence`.  
+`continuous monitoring ≠ continuously correct monitoring`.  
+`monitor green ≠ monitor coverage complete`.  
+`allowed path succeeds ≠ forbidden path denied`.  
+`negative probe configured ≠ negative probe executed`.  
+`canary proves gate ≠ canary should be the gate`.  
+`two evidence artifacts ≠ two independent evidence sources`.  
+`server serves clean worker ≠ installed client clean`.  
+`client reports current worker ≠ remote authorization current`.  
+`exception owner attests bounded ≠ runtime scope independently bounded`.  
+`higher assurance ≠ maximum duplication everywhere`.
 
 ## Five-track state
 All tracks retain integrated foundation/practitioner coverage; allocation remains risk/evidence-gap driven.
-- **A Platform/Browser:** critical dependency supplier for causal browser/PWA mechanics and platform-specific change watch. Exact target-runtime behavior remains OPEN.
-- **B UX/IA/Content:** consumes capability-specific degraded/restricted states; a waiver must not be presented as unrestricted normal operation.
-- **C Performance/Accessibility/Quality:** owns conformance, negative canaries, exception-path/expiry/composition tests and exact runtime/configuration identity.
-- **D Search/Discovery/Analytics:** owns exception-population/denominator discipline; telemetry cannot prove conformance from silence.
-- **E Architecture/Security/Operations:** current highest-risk owner; 121 closes the generic baseline→deviation→effective-enforcement→retirement governance boundary.
+- **A Platform/Browser:** critical dependency supplier for Service Worker/client/runtime causal mechanics and platform-specific change watch. Exact target-runtime behavior remains OPEN.
+- **B UX/IA/Content:** consumes capability-specific restricted/degraded/uncertain states; assurance uncertainty must not be presented as verified normality where material.
+- **C Performance/Accessibility/Quality:** dependency pressure rises; owns behavioral challenge, negative canaries, oracle quality, provenance and exact runtime/configuration identity.
+- **D Search/Discovery/Analytics:** owns denominator/observation-bias discipline; admitted/current-client telemetry cannot prove excluded/offline populations safe.
+- **E Architecture/Security/Operations:** current highest-risk owner; 122 closes the generic self-attestation→common-mode-failure→proportionate-independent-assurance boundary.
 
 ## Cross-repository evidence
-Design Studio checked 2026-09-18: canonical Web Design is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. W073 requires diagnostic replication → repaired widget regression → production Web build → served primary browser → independent engine; no repaired widget/browser/cross-browser/Safari/device/field-CWV/human UX PASS is claimed.
+Design Studio checked 2026-09-18: canonical Web Design is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. W074 audits LogMate runtime: several Chrome production-auth scenarios have per-scenario EXECUTED-PASS evidence, while the red workflow also contains harness/API drift and genuine legacy-layout 200% overflows. No independent browser/Safari/Firefox, screen-reader, physical-device, field-CWV or human UX PASS is claimed.
 
-Software Engineering checked 2026-09-18: all specialists remain **Foundation IN STUDY**. M006 distinguishes PWA installability, offline capability, service-worker execution, storage policy, update/control state and continuous-background assumptions through capability-aware acceptance. This transfers to capability-specific waiver scoping but is not direct PWA runtime evidence. Software Engineering remains implementation owner for exact auth/session/API/trust generations, storage/outbox behavior, Service Worker release policy, feature/configuration mechanisms and conformance tooling.
+Software Engineering remains implementation owner for exact auth/session/API/trust generations, storage/outbox behavior, Service Worker release policy, feature/configuration mechanisms, assurance probes and protected evidence sinks. Exact product implementation/runtime evidence remains OPEN; cross-repository concepts are transfer evidence only unless directly validated.
 
 ## Production OPEN register
 Actual `minttap.app` production state remains OPEN unless verified from project evidence.
@@ -61,13 +64,13 @@ Auth/security/recovery OPEN includes actual authentication/session/token/cookie 
 
 Runtime/control-plane/supply-chain OPEN includes actual origin/script/CSP/Trusted Types topology; third parties; worker scope/activation policy; signing/bootstrap trust; trusted-time/rotation/recovery authority; CI/dependency/provenance/deployment identity; DNS/provider recovery and credential/key rotation drills.
 
-Corrective-action/change-governance OPEN includes actual incident history; root-cause method; baseline/control identity; feature flags/configuration/provider settings; exception/waiver registry; exception owners/approvers; runtime enforcement evidence; composition tests; ADR/control-baseline/configuration implementation; recurrence-test tooling; exact source/build/deployment/runtime identity chain; legal/safety constraints; and criteria for accepted permanent deviation.
+Corrective-action/change-governance OPEN includes actual incident history; root-cause method; baseline/control identity; feature flags/configuration/provider settings; exception/waiver registry; exception owners/approvers; runtime enforcement evidence; composition tests; assurance owners; probe identities; evidence sinks; common-mode-failure analysis; ADR/control-baseline/configuration implementation; recurrence-test tooling; exact source/build/deployment/runtime identity chain; legal/safety constraints; and criteria for accepted permanent deviation.
 
 ## Next learning mode
-121 closes the generic corrective-control drift/exception/waiver lifecycle. Highest-value adjacent generic work, if exact implementation evidence remains absent, is **control-assurance independence / anti-self-attestation**: determine when the same control plane cannot be trusted as the sole reporter of its own conformance, what independent evidence is proportionate, and how to avoid both false assurance and impractical full duplication.
+122 closes the generic control-assurance independence / anti-self-attestation boundary. Highest-value adjacent generic work, if exact implementation evidence remains absent, is **assurance-oracle compromise, stale evidence and freshness/replay resistance**: distinguish evidence authenticity from freshness/liveness/coverage/continuity, and determine how to detect replayed old PASS, suppressed failures and stale signed health without assuming a perfect trusted clock.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–121 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/risk-owner/change-owner/exception-owner validation remains OPEN.
+- Continuous maintenance: **083–122 PASS** at generic gates.
+- Product/device/AT/security/privacy/legal/risk-owner/change-owner/exception-owner/assurance-owner validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
