@@ -33,7 +33,8 @@ Curriculum passes are competency gates, not production certification.
 117–121 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; permanent corrective-control governance; corrective-control drift/exception/waiver lifecycle.  
 122 — **PWA Control-Assurance Independence & Anti-Self-Attestation — PASS (generic).** Separates control functionality from assurance and requires proportionate independent challenge for high-impact claims.  
 123 — **PWA Assurance-Oracle Freshness, Replay Resistance & Continuity — PASS (generic).** Separates authenticity/integrity/freshness/liveness/coverage/continuity and prevents replayed old PASS or monitoring gaps from appearing current.  
-124 — **PWA Assurance Evidence Retention, Key/Epoch Rotation & Long-Term Verifiability — PASS (generic) / PRODUCT RETENTION + KEY/ORACLE + MANAGED-IPAD VALIDATION OPEN.** Separates historical verifiability from current authorization; governs rotation/compromise, epoch continuity, verification context, pruning and format migration without prescribing unnecessary non-repudiation infrastructure.
+124 — **PWA Assurance Evidence Retention, Key/Epoch Rotation & Long-Term Verifiability — PASS (generic).** Separates historical verifiability from current authorization; governs rotation/compromise, epoch continuity, verification context, pruning and format migration.  
+125 — **PWA Assurance Evidence Recovery After Verifier/Context Loss — PASS (generic) / PRODUCT RECOVERY + MANAGED-IPAD VALIDATION OPEN.** Separates recovery from replacement/re-signing; defines conservative reconstruction states for lost keys, trust anchors, schema interpreters, sink indexes and epoch transitions.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -41,15 +42,11 @@ Curriculum passes are competency gates, not production certification.
 - `automated browser PASS ≠ Safari PASS ≠ physical iPad PASS ≠ managed-EFB product PASS`;
 - `offline ≠ app unavailable`; `online ≠ sync authorized`;
 - `network restored ≠ trust restored ≠ replay authorized`;
-- `encrypted at rest ≠ protected from authorized same-origin script while unlocked`;
 - `build passed ≠ rollout safe`; `artifact published ≠ installed fleet converged`;
-- `code rollback ≠ schema rollback ≠ key/trust rollback ≠ remote side-effect rollback`;
 - `zero observed old clients ≠ zero old clients`;
 - `unsupported for sync ≠ unsupported for local read/export/recovery`;
-- `source tests passed ≠ shipped artifact tested`;
 - `two copies ≠ two independent failure domains`;
 - `backup restore drill PASS ≠ organizational-loss drill PASS`;
-- `break-glass exists ≠ standing super-admin justified`;
 - `documented recovery path ≠ non-circular recovery path`;
 - `historically authentic ≠ currently authorized`;
 - `origin recovered ≠ installed PWA recovered`;
@@ -94,27 +91,38 @@ Curriculum passes are competency gates, not production certification.
 - `fresh origin evidence ≠ fresh installed-client evidence`;
 - `signing key retired ≠ historical evidence automatically unverifiable`;
 - `verification material retained ≠ signing authority retained`;
-- `key rotated ≠ old evidence becomes current under the new key`;
 - `historical signature valid ≠ producer currently authorized`;
 - `long retention ≠ long-term cryptographic verifiability`;
 - `retained bytes ≠ retrievable evidence ≠ interpretable evidence`;
-- `key compromised now ≠ every historical record proven forged or trustworthy`;
 - `new key deployed ≠ uncertain old interval repaired`;
 - `sequence monotonic within epoch ≠ continuity across epoch transition`;
 - `historical verification need ≠ retain historical signing capability`;
 - `format migrated ≠ semantics preserved`;
-- `evidence absent after retention expiry ≠ event never occurred`;
 - `expected retained evidence missing ≠ historical assurance PASS`;
-- `append-only log ≠ truthful producer`;
 - `old worker evidence verifiable ≠ old worker supported`;
 - `old API evidence retained ≠ old API generation re-enabled`;
-- `client history preserved ≠ client re-entry authorized`.
+- `client history preserved ≠ client re-entry authorized`;
+- `replacement key ≠ recovered historical key`;
+- `same key ID label ≠ same cryptographic key`;
+- `new trust anchor installed ≠ old trust path reconstructed`;
+- `public key mathematically verifies signature ≠ historical trust policy reconstructed`;
+- `evidence object retained ≠ verification context retained`;
+- `backup exists ≠ recoverable verifier context`;
+- `cannot verify ≠ proven false`;
+- `cannot disprove ≠ verified true`;
+- `partial reconstruction ≠ full historical PASS`;
+- `re-signed old bytes ≠ old signature trust restored`;
+- `new recovery statement authentic ≠ historical producer claim authentic`;
+- `historical key recovered for verification ≠ key reactivated for signing`;
+- `historical trust path reconstructed ≠ old client authorized now`;
+- `current worker known ≠ historical worker chain known`;
+- `fresh login succeeds ≠ historical outbox provenance repaired`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**, now W076 Customize Accessibility Runtime Manifest. Cross-browser/Safari/Firefox, non-drag reorder, persisted configuration, screen-reader, physical-device, field-CWV, full WCAG and human UX PASS remain OPEN. Software Engineering remains the implementation owner for actual key/evidence tooling; bounded specialist evidence is not PWA runtime proof.
+Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**, now W077 Reorder Mutation Browser Closure. Cross-browser/Safari/Firefox, non-drag reorder, persisted configuration, screen-reader, physical-device, field-CWV, full WCAG and human UX PASS remain OPEN. Software Engineering remains **Foundation IN STUDY**; D005 application-process crash/restart evidence is bounded and not PWA/runtime durability proof.
 
 ## Next high-value maintenance target
-After 124, the highest-value adjacent generic question is **assurance evidence recovery after verifier/context loss**: determine which historical claims remain reconstructable when verification keys, trust anchors, schema interpreters, sink indexes or epoch-transition records are lost/corrupted, and force unrecoverable claims to `UNVERIFIABLE/UNKNOWN` rather than fabricating trust through re-signing or migration.
+After 125, the highest-value adjacent generic question is **assurance recovery authority & provenance after disaster/organizational loss**: when the people, accounts, cloud tenant, repository or provider that authenticated recovery context are unavailable or compromised, determine how bootstrap authority can be re-established without circularly trusting the replacement environment. Reuse prior organizational-survivability/break-glass work and avoid prescribing enterprise PKI/escrow unless consequence justifies it.
