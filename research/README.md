@@ -31,7 +31,8 @@ Curriculum passes are competency gates, not production certification.
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
 111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
 117–121 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; permanent corrective-control governance; and corrective-control drift/exception/waiver lifecycle.  
-122 — **PWA Control-Assurance Independence & Anti-Self-Attestation — PASS (generic) / PRODUCT RUNTIME + ASSURANCE-OWNER + MANAGED-IPAD VALIDATION OPEN.** Separates control functionality from assurance; identifies circular self-attestation/common-mode failures; uses risk-proportionate independence rather than universal duplication; requires negative behavioral challenge for high-impact authorization claims; separates Service Worker served/fetched/activated/control/local-state/remote-authority/fleet-convergence evidence.
+122 — **PWA Control-Assurance Independence & Anti-Self-Attestation — PASS (generic) / PRODUCT RUNTIME + ASSURANCE-OWNER + MANAGED-IPAD VALIDATION OPEN.** Separates control functionality from assurance and requires proportionate independent challenge for high-impact claims.  
+123 — **PWA Assurance-Oracle Freshness, Replay Resistance & Continuity — PASS (generic) / PRODUCT RUNTIME + CLOCK/ORACLE + MANAGED-IPAD VALIDATION OPEN.** Separates authenticity/integrity/freshness/liveness/coverage/continuity; uses challenge, sequence, receipt-age and trusted-time patterns proportionately; prevents replayed old PASS or monitoring gaps from appearing current; preserves long-offline PWA semantics.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -52,80 +53,62 @@ Curriculum passes are competency gates, not production certification.
 - `DNS restored ≠ registrar ownership restored`;
 - `historically authentic ≠ currently authorized`;
 - `origin recovered ≠ installed PWA recovered`;
-- `recovery path available ≠ recovery path abuse-resistant`;
-- `notification delivered ≠ action authorized`;
 - `clean worker published ≠ fetched ≠ activated ≠ client revalidated`;
-- `remediated ≠ never exposed`;
 - `transaction committed ≠ user authored`;
-- `record + local audit entry ≠ two independent witnesses`;
 - `server acknowledged operation ≠ user intended operation`;
 - `application export ≠ forensic image`;
-- `read-only intent ≠ acquisition path is non-mutating`;
 - `reconnect for diagnosis ≠ neutral observation`;
 - `evidence preservation valuable ≠ active compromise may continue for evidence convenience`;
-- `suspect client offline ≠ compromised account/session revoked`;
 - `one device isolated ≠ fleet contained`;
 - `containment urgent ≠ wipe is automatically the safest containment`;
 - `remote containment complete ≠ reconnect safe`;
 - `revocation requested ≠ revocation globally enforced`;
-- `authority contained ≠ client clean`;
 - `cannot remotely update offline client ≠ must remotely trust it on return`;
 - `telemetry silence ≠ containment evidence`;
 - `offline usefulness ≠ indefinite remote authority`;
 - `return to normal ≠ return to old trust generation`;
-- `policy rollback ≠ configuration snapshot rollback`;
 - `read safe ≠ write safe ≠ destructive operation safe`;
-- `global emergency block removed ≠ every stale client re-authorized`;
-- `replay suppression removed ≠ preserved outbox safe to flush`;
 - `incident closed ≠ residual risk disappeared`;
-- `known unresolved item ≠ accepted risk`;
 - `unknown ≠ accepted ≠ known compromised`;
-- `residual risk accepted ≠ revoked credential authorized`;
-- `organization normalized ≠ every device normalized`;
 - `data preserved ≠ data trusted`;
-- `survived incident closure ≠ approved permanent architecture`;
-- `accepted once ≠ accepted forever`;
 - `lesson documented ≠ lesson institutionalized`;
-- `postmortem complete ≠ recurrence risk reduced`;
-- `instance fixed ≠ root cause fixed`;
-- `useful emergency measure ≠ justified permanent control`;
-- `prevents exact replay ≠ prevents failure class`;
-- `decision superseded ≠ prior evidence should be erased`;
-- `ADR accepted ≠ corrective action effective`;
 - `code merged ≠ corrective action closed`;
-- `test exists ≠ test would fail on vulnerable behavior`;
 - `positive canary PASS ≠ negative invariant PASS`;
-- `zero observed recurrence ≠ recurrence prevented`;
-- `durable invariant ≠ immutable browser mechanism`;
 - `baseline documented ≠ runtime conforms`;
-- `deviation exists ≠ control governance failed`;
 - `exception approved ≠ exception safe indefinitely`;
 - `temporary label ≠ temporary behavior`;
 - `exception for capability A ≠ authorization for capability B`;
-- `code contains gate ≠ runtime gate enabled`;
 - `expiry timestamp passed ≠ runtime exception actually disabled`;
-- `exception registry count ≠ effective waived population`;
-- `waiver revoked centrally ≠ every client remediated`;
 - `each exception individually bounded ≠ combined exception set bounded`;
 - `control exists ≠ control effectiveness assured`;
 - `control reports healthy ≠ forbidden path is impossible`;
 - `configuration evidence ≠ behavioral evidence`;
 - `more telemetry from one authority domain ≠ independent assurance`;
 - `independent assurance ≠ external vendor required`;
-- `different dashboard ≠ independent evidence`;
-- `continuous monitoring ≠ continuously correct monitoring`;
 - `allowed path succeeds ≠ forbidden path denied`;
 - `canary proves gate ≠ canary should be the gate`;
 - `two evidence artifacts ≠ two independent evidence sources`;
 - `server serves clean worker ≠ installed client clean`;
-- `client reports current worker ≠ remote authorization current`;
-- `higher assurance ≠ maximum duplication everywhere`.
+- `signature valid ≠ evidence fresh`;
+- `evidence authentic ≠ evidence live`;
+- `old PASS authentic ≠ current control PASS`;
+- `created timestamp signed ≠ timestamp independently trustworthy`;
+- `clock disagreement ≠ freshness impossible`;
+- `fresh ≠ comprehensive`;
+- `missing evidence ≠ control failed`, but `missing expected evidence ≠ assurance PASS`;
+- `fresh PASS now ≠ continuous PASS since last observation`;
+- `last known good ≠ currently good`;
+- `probe outage ≠ production outage`;
+- `probe outage ≠ assurance remains green`;
+- `recent probe ≠ current configuration probed`;
+- `fresh origin evidence ≠ fresh installed-client evidence`;
+- `client reconnects ≠ prior offline interval retrospectively assured`.
 
 ## Current evidence boundary
 All numbered PASS labels above are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**. W074 has per-scenario Chrome EXECUTED-PASS evidence for several LogMate product-auth scenarios, but the workflow also contains harness/API drift and genuine legacy-layout 200% overflows; no independent-browser/Safari/device/field-CWV/human UX PASS is claimed. Software Engineering remains implementation owner for exact feature/configuration, auth/API/trust, Service Worker and assurance tooling; cross-repository concepts are transfer evidence, not direct runtime proof unless explicitly validated.
+Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**, now W075 LogMate Customize browser closure. Existing widget evidence does not establish non-drag reorder, persisted configuration, independent browser/Safari/Firefox, screen-reader, physical-device, field-CWV or human UX PASS; persistence, Sync and FlightRecord projection remain not implemented in that evidence. Software Engineering remains **Foundation IN STUDY** across all specialists; latest A005 repeated-change evidence is bounded transfer evidence, not PWA runtime proof.
 
 ## Next high-value maintenance target
-After 122, the highest-value adjacent generic question is **assurance-oracle compromise, stale evidence and freshness/replay resistance**: independent evidence remains weak if an attacker can replay an old PASS, suppress failed probes, backdate health or keep a stale signed snapshot looking current. Distinguish authenticity, freshness, liveness, coverage and continuity without assuming a perfect trusted clock.
+After 123, the highest-value adjacent generic question is **assurance evidence retention, key/epoch rotation and long-term verifiability**: preserve historical evidence across key/certificate rotation, revocation, retention pruning, format migration and oracle-epoch reset without confusing historical authenticity with current authorization or constructing unnecessary non-repudiation infrastructure.
