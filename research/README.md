@@ -34,7 +34,8 @@ Curriculum passes are competency gates, not production certification.
 122–126 cover control-assurance independence; oracle freshness/replay/continuity; evidence retention/key/epoch rotation; verifier-context recovery; organizational-loss recovery authority/provenance.  
 127–130 cover correlated recovery dependencies; dependency drift/resilience budget; resilience-debt retirement/recovery objectives; recovery-objective conflict/graceful degradation.  
 131 — **PWA Degraded-Mode Convergence & Split-Brain Reconciliation Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL VALIDATION OPEN.** Separates retry/idempotency from conflict safety; record/operation/revision/progress identities; ambiguous ACK; stale update; tombstone/deletion; user-mediated reconciliation and convergence gates.  
-132 — **PWA Reconciliation Policy Evolution & Schema/Version Conflict Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL VALIDATION OPEN.** Separates structural/format migration from semantic re-authorization; versions storage/domain/operation/policy/API/worker meanings independently; governs directional compatibility, migration provenance, stale-policy admission, rejected-operation recovery and compatibility retirement.
+132 — **PWA Reconciliation Policy Evolution & Schema/Version Conflict Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL VALIDATION OPEN.** Separates structural/format migration from semantic re-authorization; versions storage/domain/operation/policy/API/worker meanings independently; governs directional compatibility, migration provenance, stale-policy admission, rejected-operation recovery and compatibility retirement.  
+133 — **PWA Reconciliation Auditability & User-Correction Provenance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL + PRIVACY/LEGAL VALIDATION OPEN.** Separates original intent, automated transformation, admission/conflict adjudication and correction; defines bounded provenance without defaulting to event sourcing; separates business provenance from security logs/analytics and integrates minimization/retention/tombstone boundaries.
 
 ## High-value current guards
 ### PWA/runtime and data
@@ -68,7 +69,27 @@ Curriculum passes are competency gates, not production certification.
 - `new worker active ≠ every client/data schema migrated`;
 - `operation translated ≠ operation valid against current base`;
 - `valid under old policy ≠ valid under current policy`;
-- `old data recoverable ≠ old writer supported`.
+- `old data recoverable ≠ old writer supported`;
+- `current value ≠ complete provenance`;
+- `correction applied ≠ original intent rewritten`;
+- `migration transformed value ≠ user corrected value`;
+- `current authoritative ≠ historically original`;
+- `append-style provenance ≠ event-sourced application`;
+- `user confirmed current result ≠ user authored every transformed intermediate`.
+
+### Privacy, provenance and telemetry
+- `auditability required ≠ retain every payload forever`;
+- `data minimization ≠ no provenance`;
+- `audit trail ≠ security log ≠ analytics event stream`;
+- `compacted ≠ equivalent to original detail`;
+- `hash retained ≠ content recoverable`;
+- `business record deleted ≠ every provenance fact deleted`;
+- `tombstone retained ≠ full record retained`;
+- `local provenance present ≠ durable audit archive`;
+- `provenance recorded ≠ provenance trustworthy`;
+- `signed provenance ≠ provenance complete`;
+- `analytics event emitted ≠ provenance committed`;
+- `no conflict telemetry ≠ no conflicts`.
 
 ### Recovery, authority and provenance
 - `two copies ≠ two independent failure domains`;
@@ -134,10 +155,10 @@ Curriculum passes are competency gates, not production certification.
 - `temporary bridge still works ≠ bridge should remain supported`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation identity, revisions, reconciliation/conflict/merge semantics, actual schema/API/policy generations, migration behavior, rejected-operation retention, tombstone/dedup retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation identity, revisions, reconciliation/conflict/correction semantics, provenance schema/integrity, actual schema/API/policy generations, migration behavior, rejected-operation retention, tombstone/dedup retention, privacy/legal/aviation/investment retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W083**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering Data is Stage 1 IN STUDY; D003 migration compatibility and D006 bounded sync/idempotency/conflict evidence are consumed as transfer evidence, not promoted into product PASS.
+Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W084**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering Data is Stage 1 IN STUDY; D003 migration compatibility and D006 bounded sync/idempotency/conflict evidence are consumed as transfer evidence, not promoted into product PASS.
 
 ## Next high-value maintenance target
-After 132, the highest-value adjacent generic question is **PWA reconciliation auditability & user-correction provenance**: determine how automated migration, conflict resolution and later user correction preserve an explainable chain from original local intent to authoritative current state without defaulting to heavyweight event sourcing; cover correction vs mutation, provenance compaction, privacy/minimization, retention and user-visible explanation boundaries.
+After 133, the highest-value adjacent generic question is **PWA provenance publication atomicity & partial-history recovery**: determine how authoritative current state and provenance/receipt are published without split-brain history when crashes occur between business-state commit, provenance commit and acknowledgement; define repair/rebuild boundaries when projection survives but lineage is missing, or lineage survives while projection did not commit.
