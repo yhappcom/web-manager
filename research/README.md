@@ -34,7 +34,8 @@ Curriculum passes are competency gates, not production certification.
 122–126 cover control-assurance independence; oracle freshness/replay/continuity; evidence retention/key/epoch rotation; verifier-context recovery; organizational-loss recovery authority/provenance.  
 127 — **PWA Recovery-of-Recovery Dependency Assurance & Correlated Provider Failure — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.**  
 128 — **PWA Recovery Dependency Drift & Resilience-Budget Governance — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.**  
-129 — **PWA Resilience-Debt Retirement & Recovery-Objective Evidence Governance — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Connects recovery paths to consequence/MTD/RTO/RPO evidence, classifies resilience debt and keep/re-prove/replace/retire lifecycle, and separates central recovery objectives from installed-PWA/local-data/integrity/authority recovery.
+129 — **PWA Resilience-Debt Retirement & Recovery-Objective Evidence Governance — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Connects recovery paths to consequence/MTD/RTO/RPO evidence, classifies resilience debt and keep/re-prove/replace/retire lifecycle, and separates central recovery objectives from installed-PWA/local-data/integrity/authority recovery.  
+130 — **PWA Recovery-Objective Conflict & Graceful-Degradation Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + SAFETY/LEGAL VALIDATION OPEN.** Resolves availability/integrity/authorization conflicts by capability; separates fail-closed, safe degradation and visible failure; defines partial-recovery state and normalization requirements without converting RTO pressure into stale remote authority.
 
 ## High-value current guards
 ### PWA/runtime and data
@@ -47,7 +48,10 @@ Curriculum passes are competency gates, not production certification.
 - `unsupported for sync ≠ unsupported for local read/export/recovery`;
 - `server serves clean worker ≠ installed client clean`;
 - `origin RTO met ≠ installed-client recovery complete`;
-- `central RPO met ≠ device-local unsynced data recovered`.
+- `central RPO met ≠ device-local unsynced data recovered`;
+- `application available ≠ every capability available`;
+- `queued ≠ sent ≠ acknowledged ≠ reconciled`;
+- `network returns ≠ queue replay automatically safe`.
 
 ### Recovery, authority and provenance
 - `two copies ≠ two independent failure domains`;
@@ -61,6 +65,12 @@ Curriculum passes are competency gates, not production certification.
 - `restore succeeds eventually ≠ RTO met`;
 - `latest backup exists ≠ RPO met`;
 - `RTO met ≠ integrity/provenance restored`;
+- `RTO pressure ≠ authorization bypass justification`;
+- `availability restored ≠ integrity restored ≠ authority restored`;
+- `fail closed ≠ make all local data inaccessible`;
+- `graceful degradation ≠ silent stale behavior`;
+- `network healthy ≠ degraded mode exit criteria satisfied`;
+- `UNKNOWN ≠ NORMAL`;
 - `runbook retained ≠ recovery path executable`;
 - `runtime path retired ≠ historical evidence deleted`.
 
@@ -107,10 +117,10 @@ Curriculum passes are competency gates, not production certification.
 - `temporary bridge still works ≠ bridge should remain supported`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, current recovery paths, accepted concentration, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, reconciliation/conflict semantics, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
 Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W080**. Cross-browser/Safari/Firefox, persisted configuration, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering implementation evidence is not promoted into this generic recovery gate.
 
 ## Next high-value maintenance target
-After 129, the highest-value adjacent generic question is **PWA recovery-objective conflict & graceful-degradation governance**: resolve conflicts among availability RTO, data integrity/provenance, privacy/security, offline usefulness and stale-client retirement; define which capabilities may degrade, which must fail closed, and how partial recovery is communicated without turning an availability target into unsafe remote authority.
+After 130, the highest-value adjacent generic question is **PWA degraded-mode convergence & split-brain reconciliation governance**: determine how independently degraded clients rejoin after long offline periods without treating last-writer-wins, fresh login, network restoration or newest timestamp as sufficient conflict resolution; separate domain-record conflict, operation identity/idempotency, provenance, tombstones/deletion and user-mediated reconciliation while keeping direct device-to-device assumptions OPEN.
