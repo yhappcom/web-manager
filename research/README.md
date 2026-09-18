@@ -34,7 +34,8 @@ Curriculum passes are competency gates, not production certification.
 122 — **PWA Control-Assurance Independence & Anti-Self-Attestation — PASS (generic).** Separates control functionality from assurance and requires proportionate independent challenge for high-impact claims.  
 123 — **PWA Assurance-Oracle Freshness, Replay Resistance & Continuity — PASS (generic).** Separates authenticity/integrity/freshness/liveness/coverage/continuity and prevents replayed old PASS or monitoring gaps from appearing current.  
 124 — **PWA Assurance Evidence Retention, Key/Epoch Rotation & Long-Term Verifiability — PASS (generic).** Separates historical verifiability from current authorization; governs rotation/compromise, epoch continuity, verification context, pruning and format migration.  
-125 — **PWA Assurance Evidence Recovery After Verifier/Context Loss — PASS (generic) / PRODUCT RECOVERY + MANAGED-IPAD VALIDATION OPEN.** Separates recovery from replacement/re-signing; defines conservative reconstruction states for lost keys, trust anchors, schema interpreters, sink indexes and epoch transitions.
+125 — **PWA Assurance Evidence Recovery After Verifier/Context Loss — PASS (generic).** Separates recovery from replacement/re-signing and defines conservative reconstruction states for lost verifier context.  
+126 — **PWA Assurance Recovery Authority & Provenance After Organizational Loss — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Separates system/data restoration from organizational-authority recovery; rejects circular bootstrap; scopes recovery authority and preserves offline-PWA re-entry boundaries.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -82,8 +83,6 @@ Curriculum passes are competency gates, not production certification.
 - `server serves clean worker ≠ installed client clean`;
 - `signature valid ≠ evidence fresh`;
 - `old PASS authentic ≠ current control PASS`;
-- `fresh ≠ comprehensive`;
-- `missing evidence ≠ control failed`, but `missing expected evidence ≠ assurance PASS`;
 - `fresh PASS now ≠ continuous PASS since last observation`;
 - `last known good ≠ currently good`;
 - `probe outage ≠ assurance remains green`;
@@ -98,31 +97,35 @@ Curriculum passes are competency gates, not production certification.
 - `sequence monotonic within epoch ≠ continuity across epoch transition`;
 - `historical verification need ≠ retain historical signing capability`;
 - `format migrated ≠ semantics preserved`;
-- `expected retained evidence missing ≠ historical assurance PASS`;
-- `old worker evidence verifiable ≠ old worker supported`;
-- `old API evidence retained ≠ old API generation re-enabled`;
-- `client history preserved ≠ client re-entry authorized`;
 - `replacement key ≠ recovered historical key`;
-- `same key ID label ≠ same cryptographic key`;
-- `new trust anchor installed ≠ old trust path reconstructed`;
 - `public key mathematically verifies signature ≠ historical trust policy reconstructed`;
 - `evidence object retained ≠ verification context retained`;
-- `backup exists ≠ recoverable verifier context`;
 - `cannot verify ≠ proven false`;
-- `cannot disprove ≠ verified true`;
 - `partial reconstruction ≠ full historical PASS`;
 - `re-signed old bytes ≠ old signature trust restored`;
-- `new recovery statement authentic ≠ historical producer claim authentic`;
 - `historical key recovered for verification ≠ key reactivated for signing`;
 - `historical trust path reconstructed ≠ old client authorized now`;
 - `current worker known ≠ historical worker chain known`;
-- `fresh login succeeds ≠ historical outbox provenance repaired`.
+- `fresh login succeeds ≠ historical outbox provenance repaired`;
+- `data backup survived ≠ recovery authority survived`;
+- `system rebuilt ≠ organization re-authorized`;
+- `second account ≠ second authority domain`;
+- `geographic separation ≠ identity/control-plane separation`;
+- `provider account recovered ≠ all historical authority recovered`;
+- `identity re-proved ≠ old authorization graph reconstructed`;
+- `authority to recover ≠ authority to operate indefinitely`;
+- `replacement environment self-attests ≠ bootstrap provenance established`;
+- `new key signs succession claim ≠ predecessor authorized succession`;
+- `domain recovered ≠ installed PWA recovered`;
+- `organizational authority recovered ≠ compromise-era outbox authorized`;
+- `support ticket resolved ≠ historical provenance restored`;
+- `organizational survivability required ≠ enterprise PKI required`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**, now W077 Reorder Mutation Browser Closure. Cross-browser/Safari/Firefox, non-drag reorder, persisted configuration, screen-reader, physical-device, field-CWV, full WCAG and human UX PASS remain OPEN. Software Engineering remains **Foundation IN STUDY**; D005 application-process crash/restart evidence is bounded and not PWA/runtime durability proof.
+Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**, W077 Reorder Mutation Browser Closure. Cross-browser/Safari/Firefox, non-drag reorder, persisted configuration, screen-reader, physical-device, field-CWV, full WCAG and human UX PASS remain OPEN. Software Engineering implementation evidence is not promoted into this generic security gate.
 
 ## Next high-value maintenance target
-After 125, the highest-value adjacent generic question is **assurance recovery authority & provenance after disaster/organizational loss**: when the people, accounts, cloud tenant, repository or provider that authenticated recovery context are unavailable or compromised, determine how bootstrap authority can be re-established without circularly trusting the replacement environment. Reuse prior organizational-survivability/break-glass work and avoid prescribing enterprise PKI/escrow unless consequence justifies it.
+After 126, the highest-value adjacent generic question is **PWA recovery-of-recovery dependency assurance / correlated provider failure**: map hidden shared dependencies across identity provider, registrar/DNS, repository, CI/CD, hosting/CDN, evidence sink, recovery mailbox/device and key custody; determine when nominally independent recovery paths collapse under one SSO/provider/person/device failure and when bounded manual recovery is sufficient instead of full duplication.
