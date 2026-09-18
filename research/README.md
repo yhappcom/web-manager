@@ -33,10 +33,8 @@ Curriculum passes are competency gates, not production certification.
 117–121 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; permanent corrective-control governance; corrective-control drift/exception/waiver lifecycle.  
 122–126 cover control-assurance independence; oracle freshness/replay/continuity; evidence retention/key/epoch rotation; verifier-context recovery; organizational-loss recovery authority/provenance.  
 127–130 cover correlated recovery dependencies; dependency drift/resilience budget; resilience-debt retirement/recovery objectives; recovery-objective conflict/graceful degradation.  
-131 — **PWA Degraded-Mode Convergence & Split-Brain Reconciliation Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL VALIDATION OPEN.** Separates retry/idempotency from conflict safety; record/operation/revision/progress identities; ambiguous ACK; stale update; tombstone/deletion; user-mediated reconciliation and convergence gates.  
-132 — **PWA Reconciliation Policy Evolution & Schema/Version Conflict Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL VALIDATION OPEN.** Separates structural/format migration from semantic re-authorization; versions storage/domain/operation/policy/API/worker meanings independently; governs directional compatibility, migration provenance, stale-policy admission, rejected-operation recovery and compatibility retirement.  
-133 — **PWA Reconciliation Auditability & User-Correction Provenance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL + PRIVACY/LEGAL VALIDATION OPEN.** Separates original intent, automated transformation, admission/conflict adjudication and correction; defines bounded provenance without defaulting to event sourcing; separates business provenance from security logs/analytics and integrates minimization/retention/tombstone boundaries.  
-134 — **PWA Provenance Publication Atomicity & Partial-History Recovery — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL + BACKEND VALIDATION OPEN.** Defines authoritative acceptance units; separates transaction atomicity from multi-system publication; governs effect/provenance/receipt split-brain, durable publication intent, ambiguous ACK and explicit partial-history recovery states.
+131–134 cover split-brain reconciliation; policy/schema evolution; correction provenance; provenance publication atomicity/partial-history recovery.  
+135 — **PWA Provenance Integrity Under Compaction, Export/Import & Cross-Device Transfer — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL + CRYPTO/KEY + BACKUP VALIDATION OPEN.** Treats compaction/export/import/merge as provenance transformations; separates integrity/authenticity/completeness/confidentiality/interpretability/current authorization; preserves source lineage across device transfer; governs portable package scope, admission, branch merge and managed-iPad backup evidence boundaries.
 
 ## High-value current guards
 ### PWA/runtime and data
@@ -47,12 +45,6 @@ Curriculum passes are competency gates, not production certification.
 - `network restored ≠ trust restored ≠ replay authorized`;
 - `build passed ≠ rollout safe`; `artifact published ≠ installed fleet converged`;
 - `unsupported for sync ≠ unsupported for local read/export/recovery`;
-- `server serves clean worker ≠ installed client clean`;
-- `origin RTO met ≠ installed-client recovery complete`;
-- `central RPO met ≠ device-local unsynced data recovered`;
-- `application available ≠ every capability available`;
-- `queued ≠ sent ≠ acknowledged ≠ reconciled`;
-- `network returns ≠ queue replay automatically safe`;
 - `connectivity recovery ≠ convergence`;
 - `retry-safe ≠ conflict-safe`;
 - `ACK missing ≠ commit missing`;
@@ -60,34 +52,21 @@ Curriculum passes are competency gates, not production certification.
 - `newest timestamp ≠ most authoritative record`;
 - `record absent ≠ deletion proven`;
 - `old update arrives ≠ deleted record should resurrect`;
-- `fresh login ≠ queued operation fresh`;
-- `queue empty ≠ converged`;
-- `client caught up ≠ fleet converged`;
 - `syntactic migration ≠ semantic re-authorization`;
 - `schema structurally current ≠ record semantically current`;
 - `parseable ≠ lossless ≠ same domain meaning`;
 - `backward-readable ≠ backward-writable`;
-- `new worker active ≠ every client/data schema migrated`;
-- `operation translated ≠ operation valid against current base`;
-- `valid under old policy ≠ valid under current policy`;
-- `old data recoverable ≠ old writer supported`;
 - `current value ≠ complete provenance`;
 - `correction applied ≠ original intent rewritten`;
-- `migration transformed value ≠ user corrected value`;
-- `current authoritative ≠ historically original`;
-- `append-style provenance ≠ event-sourced application`;
-- `user confirmed current result ≠ user authored every transformed intermediate`;
 - `two writes in one function ≠ one atomic commit`;
 - `transactional locally ≠ transactional across browser/server`;
 - `projection durable ≠ provenance durable`;
-- `history missing ≠ effect absent`;
-- `provenance entry exists ≠ business effect committed`;
-- `outbox committed ≠ downstream applied`;
-- `downstream applied ≠ client received ACK`;
 - `current projection ≠ invertible history`;
-- `projection rebuildable from history ≠ history rebuildable from projection`;
 - `local transaction committed ≠ remote transaction committed`;
-- `queue item removed ≠ authoritative receipt preserved`.
+- `queue item removed ≠ authoritative receipt preserved`;
+- `export button works ≠ backup verified`;
+- `backup file exists ≠ restore tested`;
+- `cross-device import ≠ automatic device-to-device sync`.
 
 ### Privacy, provenance and telemetry
 - `auditability required ≠ retain every payload forever`;
@@ -95,14 +74,38 @@ Curriculum passes are competency gates, not production certification.
 - `audit trail ≠ security log ≠ analytics event stream`;
 - `compacted ≠ equivalent to original detail`;
 - `hash retained ≠ content recoverable`;
+- `hash matches ≠ package complete`;
+- `signature valid ≠ omitted history complete`;
 - `business record deleted ≠ every provenance fact deleted`;
 - `tombstone retained ≠ full record retained`;
 - `local provenance present ≠ durable audit archive`;
 - `provenance recorded ≠ provenance trustworthy`;
 - `signed provenance ≠ provenance complete`;
-- `analytics event emitted ≠ provenance committed`;
-- `no conflict telemetry ≠ no conflicts`;
-- `atomic provenance required ≠ duplicate full sensitive payload per revision`.
+- `atomic provenance required ≠ duplicate full sensitive payload per revision`;
+- `derived provenance package ≠ original provenance event`;
+- `compacted chain verifies ≠ original detail recoverable`;
+- `checkpoint continuity ≠ semantic completeness`.
+
+### Portable provenance / transfer
+- `exported copy ≠ original storage context`;
+- `manifest present ≠ manifest trustworthy`;
+- `integrity PASS ≠ authenticity PASS`;
+- `authentic package ≠ complete package`;
+- `complete package ≠ confidential package`;
+- `decryptable ≠ trustworthy`;
+- `file opened ≠ import accepted`;
+- `package verified ≠ records admitted`;
+- `records admitted ≠ remote mutation authorized`;
+- `copied to device B ≠ authored by device B`;
+- `same user account ≠ same device lineage`;
+- `device lineage ≠ human identity`;
+- `two valid histories ≠ one automatically ordered history`;
+- `later device clock ≠ later authoritative intent`;
+- `same resulting value ≠ same provenance`;
+- `merge succeeded structurally ≠ semantic convergence proven`;
+- `encrypted export ≠ authentic export`;
+- `signed export ≠ confidential export`;
+- `portable recovery ≠ portable authority credential`.
 
 ### Recovery, authority and provenance
 - `two copies ≠ two independent failure domains`;
@@ -116,33 +119,14 @@ Curriculum passes are competency gates, not production certification.
 - `restore succeeds eventually ≠ RTO met`;
 - `latest backup exists ≠ RPO met`;
 - `RTO met ≠ integrity/provenance restored`;
-- `RTO pressure ≠ authorization bypass justification`;
 - `availability restored ≠ integrity restored ≠ authority restored`;
-- `fail closed ≠ make all local data inaccessible`;
-- `graceful degradation ≠ silent stale behavior`;
-- `network healthy ≠ degraded mode exit criteria satisfied`;
 - `UNKNOWN ≠ NORMAL`;
-- `runbook retained ≠ recovery path executable`;
-- `runtime path retired ≠ historical evidence deleted`;
 - `repair created provenance ≠ original provenance recovered`.
-
-### Incident/control assurance
-- `one device isolated ≠ fleet contained`;
-- `remote containment complete ≠ reconnect safe`;
-- `offline usefulness ≠ indefinite remote authority`;
-- `incident closed ≠ residual risk disappeared`;
-- `lesson documented ≠ lesson institutionalized`;
-- `code merged ≠ corrective action closed`;
-- `baseline documented ≠ runtime conforms`;
-- `exception approved ≠ exception safe indefinitely`;
-- `control reports healthy ≠ forbidden path is impossible`;
-- `allowed path succeeds ≠ forbidden path denied`.
 
 ### Evidence freshness and long-term verification
 - `signature valid ≠ evidence fresh`;
 - `old PASS authentic ≠ current control PASS`;
 - `fresh PASS now ≠ continuous PASS since last observation`;
-- `recent probe ≠ current configuration probed`;
 - `signing key retired ≠ historical evidence automatically unverifiable`;
 - `historical signature valid ≠ producer currently authorized`;
 - `retained bytes ≠ retrievable evidence ≠ interpretable evidence`;
@@ -160,19 +144,15 @@ Curriculum passes are competency gates, not production certification.
 - `more redundancy ≠ proportionately better resilience`;
 - `accepted concentration ≠ unmanaged concentration`;
 - `material dependency change ≠ wait for annual review`;
-- `dependency inventory automated ≠ dependency independence proven`;
 - `resilience control added ≠ resilience debt retired`;
 - `more alternate paths ≠ more usable resilience`;
-- `path retained for safety ≠ path is safe to retain`;
-- `zero production use ≠ recovery path unnecessary`;
-- `retirement approved ≠ path retired`;
-- `temporary bridge still works ≠ bridge should remain supported`.
+- `zero production use ≠ recovery path unnecessary`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation identity, revisions, reconciliation/conflict/correction semantics, provenance schema/integrity/transaction scope, actual schema/API/policy generations, migration behavior, rejected-operation retention, tombstone/dedup retention, privacy/legal/aviation/investment retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation/device identity, revisions, reconciliation/conflict/correction semantics, provenance schema/integrity/transaction scope, compaction/export/import/package format, actual schema/API/policy generations, migration behavior, rejected-operation retention, tombstone/dedup retention, privacy/legal/aviation/investment retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W085**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering Data is Stage 1 IN STUDY; D005 bounded crash/storage evidence and D006 bounded sync/idempotency/cursor-effect atomicity evidence are consumed as transfer evidence, not promoted into product PASS.
+Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W086**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering implementation evidence is consumed as bounded transfer evidence, not promoted into product PASS.
 
 ## Next high-value maintenance target
-After 134, the highest-value adjacent generic question is **PWA provenance integrity under compaction/export/import and cross-device transfer**: determine how bounded lineage remains attributable and non-misleading when history is compacted, exported for backup/device migration, imported into a new trust context, or merged with another device lineage; separate chain continuity from content availability and current authorization.
+After 135, the highest-value adjacent generic question is **PWA provenance fork detection, checkpoint anchoring & anti-splicing governance**: determine how omission/reordering/splicing of individually valid provenance segments can be detected across exports, compaction epochs and device branches; separate cryptographic continuity from semantic legitimacy and avoid assuming heavyweight blockchain/transparency-log infrastructure is required.
