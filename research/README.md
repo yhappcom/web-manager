@@ -31,11 +31,8 @@ Curriculum passes are competency gates, not production certification.
 103–110 cover backup assurance/objectives; forward-only release governance; compatibility retirement; recovery-bridge isolation/supply-chain; format-spec longevity; independent escrow custody and organizational survivability.  
 111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
 117–121 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; permanent corrective-control governance; corrective-control drift/exception/waiver lifecycle.  
-122 — **PWA Control-Assurance Independence & Anti-Self-Attestation — PASS (generic).** Separates control functionality from assurance and requires proportionate independent challenge for high-impact claims.  
-123 — **PWA Assurance-Oracle Freshness, Replay Resistance & Continuity — PASS (generic).** Separates authenticity/integrity/freshness/liveness/coverage/continuity and prevents replayed old PASS or monitoring gaps from appearing current.  
-124 — **PWA Assurance Evidence Retention, Key/Epoch Rotation & Long-Term Verifiability — PASS (generic).** Separates historical verifiability from current authorization; governs rotation/compromise, epoch continuity, verification context, pruning and format migration.  
-125 — **PWA Assurance Evidence Recovery After Verifier/Context Loss — PASS (generic).** Separates recovery from replacement/re-signing and defines conservative reconstruction states for lost verifier context.  
-126 — **PWA Assurance Recovery Authority & Provenance After Organizational Loss — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Separates system/data restoration from organizational-authority recovery; rejects circular bootstrap; scopes recovery authority and preserves offline-PWA re-entry boundaries.
+122–126 cover control-assurance independence; oracle freshness/replay/continuity; evidence retention/key/epoch rotation; verifier-context recovery; organizational-loss recovery authority/provenance.  
+127 — **PWA Recovery-of-Recovery Dependency Assurance & Correlated Provider Failure — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Models recovery as scenario-relative dependency graphs, exposes hidden identity/person/device/provider/toolchain cut sets, separates central failover from installed-PWA recovery, and scales redundancy to consequence rather than defaulting to multi-cloud.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
@@ -119,13 +116,21 @@ Curriculum passes are competency gates, not production certification.
 - `domain recovered ≠ installed PWA recovered`;
 - `organizational authority recovered ≠ compromise-era outbox authorized`;
 - `support ticket resolved ≠ historical provenance restored`;
-- `organizational survivability required ≠ enterprise PKI required`.
+- `organizational survivability required ≠ enterprise PKI required`;
+- `alternate path exists ≠ alternate path survives the same hazard`;
+- `different vendor name ≠ independent supply-chain failure domain`;
+- `replicated data ≠ independent administration`;
+- `multi-provider ≠ independent identity/recovery`;
+- `path B differs from path A ≠ path B is independent for every threat`;
+- `resilience required ≠ active-active multi-cloud required`;
+- `provider failover succeeds ≠ installed PWA updated`;
+- `recovery drill passed once ≠ dependency graph still current`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**, W077 Reorder Mutation Browser Closure. Cross-browser/Safari/Firefox, non-drag reorder, persisted configuration, screen-reader, physical-device, field-CWV, full WCAG and human UX PASS remain OPEN. Software Engineering implementation evidence is not promoted into this generic security gate.
+Latest Web Manager canonical Design Studio record remains **Stage 3 PRACTICE / NOT PASSED, W077**; this run did not obtain newer Design Studio evidence through the connector. Software Engineering implementation evidence is not promoted into this generic security gate.
 
 ## Next high-value maintenance target
-After 126, the highest-value adjacent generic question is **PWA recovery-of-recovery dependency assurance / correlated provider failure**: map hidden shared dependencies across identity provider, registrar/DNS, repository, CI/CD, hosting/CDN, evidence sink, recovery mailbox/device and key custody; determine when nominally independent recovery paths collapse under one SSO/provider/person/device failure and when bounded manual recovery is sufficient instead of full duplication.
+After 127, the highest-value adjacent generic question is **PWA recovery dependency drift & resilience-budget governance**: maintain dependency-graph freshness as providers/SSO/CI/domain/key custody evolve; define which shared dependencies are acceptable bounded concentration, which require mitigation, and how to avoid both silent common-mode erosion and unjustified multi-provider complexity.
