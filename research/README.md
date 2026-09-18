@@ -35,7 +35,8 @@ Curriculum passes are competency gates, not production certification.
 127–130 cover correlated recovery dependencies; dependency drift/resilience budget; resilience-debt retirement/recovery objectives; recovery-objective conflict/graceful degradation.  
 131–134 cover split-brain reconciliation; policy/schema evolution; correction provenance; provenance publication atomicity/partial-history recovery.  
 135 covers provenance integrity across compaction/export/import/cross-device transfer.  
-136 — **PWA Provenance Fork Detection, Checkpoint Anchoring & Anti-Splicing Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL + CRYPTO/KEY + EXTERNAL-ANCHOR VALIDATION OPEN.** Separates item authenticity, inclusion, append-only continuity, freshness, non-equivocation, semantic legitimacy and current authorization; governs omission/reorder/rollback/splice/fork detection, scoped checkpoints, threat-specific independent anchoring and legitimate offline branches without assuming blockchain/public transparency infrastructure.
+136 covers provenance fork detection, checkpoint anchoring and anti-splicing.  
+137 — **PWA Checkpoint Lifecycle, Crypto Agility & Verifier Migration — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL + CRYPTO/KEY + LONG-HORIZON VERIFIER VALIDATION OPEN.** Separates key/algorithm/canonicalization/verifier/trust/application epochs; preserves historical verification without obsolete current authority; requires authenticated lineage transition and anti-downgrade; distinguishes planned rotation from compromise; and scopes legacy-verifier retention/isolation.
 
 ## High-value current guards
 ### PWA/runtime and data
@@ -45,50 +46,33 @@ Curriculum passes are competency gates, not production certification.
 - `offline ≠ app unavailable`; `online ≠ sync authorized`;
 - `network restored ≠ trust restored ≠ replay authorized`;
 - `build passed ≠ rollout safe`; `artifact published ≠ installed fleet converged`;
-- `unsupported for sync ≠ unsupported for local read/export/recovery`;
 - `connectivity recovery ≠ convergence`;
 - `retry-safe ≠ conflict-safe`;
 - `ACK missing ≠ commit missing`;
 - `last write wins ≠ latest intent wins`;
 - `newest timestamp ≠ most authoritative record`;
-- `record absent ≠ deletion proven`;
-- `old update arrives ≠ deleted record should resurrect`;
 - `syntactic migration ≠ semantic re-authorization`;
-- `schema structurally current ≠ record semantically current`;
 - `parseable ≠ lossless ≠ same domain meaning`;
-- `backward-readable ≠ backward-writable`;
-- `current value ≠ complete provenance`;
-- `correction applied ≠ original intent rewritten`;
 - `two writes in one function ≠ one atomic commit`;
 - `transactional locally ≠ transactional across browser/server`;
 - `projection durable ≠ provenance durable`;
-- `current projection ≠ invertible history`;
-- `local transaction committed ≠ remote transaction committed`;
-- `queue item removed ≠ authoritative receipt preserved`;
 - `export button works ≠ backup verified`;
-- `backup file exists ≠ restore tested`;
 - `cross-device import ≠ automatic device-to-device sync`;
 - `local head verifies ≠ remote head known`;
 - `Service Worker current ≠ data lineage current`;
+- `Service Worker updated ≠ crypto/verifier migration complete`;
 - `offline branch valid ≠ safe to auto-publish`.
 
 ### Privacy, provenance and telemetry
 - `auditability required ≠ retain every payload forever`;
 - `data minimization ≠ no provenance`;
 - `audit trail ≠ security log ≠ analytics event stream`;
-- `compacted ≠ equivalent to original detail`;
 - `hash retained ≠ content recoverable`;
-- `hash matches ≠ package complete`;
 - `signature valid ≠ omitted history complete`;
-- `business record deleted ≠ every provenance fact deleted`;
 - `tombstone retained ≠ full record retained`;
 - `local provenance present ≠ durable audit archive`;
 - `provenance recorded ≠ provenance trustworthy`;
-- `signed provenance ≠ provenance complete`;
-- `atomic provenance required ≠ duplicate full sensitive payload per revision`;
-- `derived provenance package ≠ original provenance event`;
-- `compacted chain verifies ≠ original detail recoverable`;
-- `checkpoint continuity ≠ semantic completeness`;
+- `current projection ≠ invertible history`;
 - `entry signature valid ≠ sequence intact`;
 - `inclusion proven ≠ append-only continuity proven`;
 - `append-only PASS ≠ semantic legitimacy PASS`;
@@ -97,69 +81,62 @@ Curriculum passes are competency gates, not production certification.
 
 ### Portable provenance / transfer
 - `exported copy ≠ original storage context`;
-- `manifest present ≠ manifest trustworthy`;
 - `integrity PASS ≠ authenticity PASS`;
 - `authentic package ≠ complete package`;
-- `complete package ≠ confidential package`;
 - `decryptable ≠ trustworthy`;
-- `file opened ≠ import accepted`;
 - `package verified ≠ records admitted`;
 - `records admitted ≠ remote mutation authorized`;
 - `copied to device B ≠ authored by device B`;
 - `same user account ≠ same device lineage`;
-- `device lineage ≠ human identity`;
 - `two valid histories ≠ one automatically ordered history`;
 - `later device clock ≠ later authoritative intent`;
-- `same resulting value ≠ same provenance`;
 - `merge succeeded structurally ≠ semantic convergence proven`;
-- `encrypted export ≠ authentic export`;
-- `signed export ≠ confidential export`;
 - `portable recovery ≠ portable authority credential`.
 
-### Checkpoint / fork / anti-splicing
+### Checkpoint / fork / crypto lifecycle
 - `checkpoint valid ≠ checkpoint fresh`;
 - `one valid head ≠ no competing valid-looking head`;
 - `checkpoint stored ≠ independently anchored`;
 - `history + checkpoint in same mutable failure domain ≠ rollback-resistant evidence`;
-- `second copy ≠ independent anchor`;
 - `authentic old head ≠ current head`;
 - `one branch verifies ≠ no fork exists`;
-- `two heads individually authenticate ≠ heads are mutually consistent`;
 - `fork detected ≠ attacker proven`;
-- `legitimate branch ≠ automatically authoritative merge`;
 - `fork resistance required ≠ blockchain required`;
-- `checkpointing useful ≠ public transparency service required`;
-- `signed proof object ≠ embedded proof valid`.
+- `algorithm identifier present ≠ crypto agility achieved`;
+- `new verifier implemented ≠ deployed fleet can verify it`;
+- `key rotation ≠ algorithm migration`;
+- `algorithm migration ≠ canonicalization migration`;
+- `supports old algorithm ≠ may use old algorithm for new checkpoints`;
+- `historical verification support ≠ current signing support`;
+- `old signature verifies ≠ old algorithm approved for new signatures`;
+- `new chain starts validly ≠ continuity from old chain proven`;
+- `same subject identifier ≠ same authenticated lineage`;
+- `cryptographically valid legacy object ≠ current-policy acceptable object`;
+- `fallback succeeded ≠ downgrade safe`;
+- `old signature mathematically valid ≠ signature predates key compromise`;
+- `same semantic record ≠ same committed bytes`;
+- `re-serialization succeeds ≠ original signature preserved`;
+- `legacy verifier available ≠ legacy verifier belongs in primary request path`;
+- `zero observed legacy use ≠ zero legacy artifacts exist`;
+- `online fleet migrated ≠ offline fleet migrated`;
+- `historical verification needed ≠ retain historical private signing key`.
 
-### Recovery, authority and provenance
+### Recovery, authority and evidence
 - `two copies ≠ two independent failure domains`;
 - `backup restore drill PASS ≠ organizational-loss drill PASS`;
 - `historically authentic ≠ currently authorized`;
 - `data preserved ≠ data trusted`;
-- `data backup survived ≠ recovery authority survived`;
-- `system rebuilt ≠ organization re-authorized`;
-- `replacement environment self-attests ≠ bootstrap provenance established`;
 - `recovery path exists ≠ recovery objective met`;
 - `restore succeeds eventually ≠ RTO met`;
 - `latest backup exists ≠ RPO met`;
-- `RTO met ≠ integrity/provenance restored`;
 - `availability restored ≠ integrity restored ≠ authority restored`;
 - `UNKNOWN ≠ NORMAL`;
-- `repair created provenance ≠ original provenance recovered`.
-
-### Evidence freshness and long-term verification
-- `signature valid ≠ evidence fresh`;
-- `old PASS authentic ≠ current control PASS`;
-- `fresh PASS now ≠ continuous PASS since last observation`;
-- `signing key retired ≠ historical evidence automatically unverifiable`;
-- `historical signature valid ≠ producer currently authorized`;
-- `retained bytes ≠ retrievable evidence ≠ interpretable evidence`;
-- `format migrated ≠ semantics preserved`;
+- `repair created provenance ≠ original provenance recovered`;
 - `cannot verify ≠ proven false`;
 - `re-signed old bytes ≠ old signature trust restored`.
 
 ### Dependency/resilience governance
-- `alternate path exists ≠ alternate path survives the same hazard`;
+- `two copies ≠ two independent failure domains`;
 - `different vendor name ≠ independent supply-chain failure domain`;
 - `replicated data ≠ independent administration`;
 - `multi-provider ≠ independent identity/recovery`;
@@ -168,15 +145,13 @@ Curriculum passes are competency gates, not production certification.
 - `more redundancy ≠ proportionately better resilience`;
 - `accepted concentration ≠ unmanaged concentration`;
 - `material dependency change ≠ wait for annual review`;
-- `resilience control added ≠ resilience debt retired`;
-- `more alternate paths ≠ more usable resilience`;
 - `zero production use ≠ recovery path unnecessary`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation/device identity, revisions, reconciliation/conflict/correction semantics, provenance schema/integrity/transaction scope, compaction/export/import/package format, lineage/checkpoint/anchor topology, actual schema/API/policy generations, migration behavior, rejected-operation retention, tombstone/dedup retention, privacy/legal/aviation/investment retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation/device identity, revisions, reconciliation/conflict/correction semantics, provenance schema/integrity/transaction scope, compaction/export/import/package format, lineage/checkpoint/anchor topology, cryptographic algorithms/keys/trust roots/verifier topology, actual schema/API/policy generations, migration behavior, rejected-operation retention, tombstone/dedup retention, privacy/legal/aviation/investment retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W087**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering implementation evidence is consumed as bounded transfer evidence, not promoted into product PASS.
+Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W088**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device/IME, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering implementation evidence is consumed as bounded transfer evidence, not promoted into product PASS.
 
 ## Next high-value maintenance target
-After 136, the highest-value adjacent generic question is **PWA checkpoint lifecycle, key/algorithm agility & verifier migration without lineage reset**: determine how checkpoint/signature algorithms, keys, canonicalization and verifier formats can rotate over years without turning each rotation into an unconnected history, while preserving historical verification and preventing downgrade/rollback to retired verifier epochs.
+After 137, the highest-value adjacent generic question is **PWA cryptographic compromise recovery, historical-validity windows & trust re-establishment**: determine how to scope evidence when a signing/verifier key or trust root is suspected compromised, avoid both blanket historical invalidation and false trust of post-compromise artifacts, and establish successor trust without allowing an attacker-controlled old root to authorize its own replacement.
