@@ -32,116 +32,79 @@ Curriculum passes are competency gates, not production certification.
 111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
 117 — **PWA Partial/Offline Fleet Containment Assurance — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + FLEET TELEMETRY VALIDATION OPEN.** Separates containment issuance, authoritative enforcement, observed convergence, client remediation and reconciliation; treats long-offline clients as unknown until re-entry evidence exists; relies on fail-closed remote authority gates rather than assumed immediate client policy delivery.  
 118 — **PWA Containment-Policy Rollback & Emergency-Gate Lifecycle — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + INCIDENT-DRILL VALIDATION OPEN.** Treats rollback as a forward transition into a new trust baseline; separates emergency-privilege expiry from containment-restriction relaxation; stages authority restoration by capability; preserves fail-closed re-entry for long-offline clients; and requires evidence-bearing retirement of incident-created authority.  
-119 — **PWA Post-Incident Trust Normalization & Residual-Risk Acceptance — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + RISK-OWNER VALIDATION OPEN.** Defines normalization as an explicit current trust baseline; separates resolved, accepted residual risk, open work and unknown state; preserves fail-closed re-entry for unknown offline clients; keeps unverifiable local data useful without inventing provenance; and prevents incident debt from silently becoming permanent trust policy.
+119 — **PWA Post-Incident Trust Normalization & Residual-Risk Acceptance — PASS (generic) / PRODUCT RUNTIME + MANAGED-IPAD + RISK-OWNER VALIDATION OPEN.** Defines normalization as an explicit current trust baseline; separates resolved, accepted residual risk, open work and unknown state; preserves fail-closed re-entry for unknown offline clients; keeps unverifiable local data useful without inventing provenance; and prevents incident debt from silently becoming permanent trust policy.  
+120 — **PWA Post-Incident Learning → Permanent Control-Baseline Change Governance — PASS (generic) / PRODUCT RUNTIME + ORGANIZATIONAL CHANGE-OWNER VALIDATION OPEN.** Separates incident-local cleanup from durable control promotion; requires causal/failure-class reasoning, preserves superseded decisions, keeps incident-driven changes inside normal change governance, and closes corrective actions only with recurrence and side-effect evidence.
 
 ## High-value current guards
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
 - `local save ≠ sync queued ≠ remote acknowledgement ≠ reconciliation ≠ backup`;
 - `automated browser PASS ≠ Safari PASS ≠ physical iPad PASS ≠ managed-EFB product PASS`;
-- `backup file exists ≠ backup current ≠ backup complete ≠ restore works`;
 - `offline ≠ app unavailable`; `online ≠ sync authorized`;
-- `restore completed ≠ records/trust/keys/outbox share one coherent recovery epoch`;
 - `network restored ≠ trust restored ≠ replay authorized`;
 - `encrypted at rest ≠ protected from authorized same-origin script while unlocked`;
-- `user selected file ≠ trusted recovery artifact`;
 - `build passed ≠ rollout safe`; `artifact published ≠ installed fleet converged`;
 - `code rollback ≠ schema rollback ≠ key/trust rollback ≠ remote side-effect rollback`;
 - `zero observed old clients ≠ zero old clients`;
-- `normal sync retired ≠ recovery import must be retired simultaneously`;
 - `unsupported for sync ≠ unsupported for local read/export/recovery`;
-- `artifact authenticated ≠ parser invulnerable`;
-- `recovery compatibility retained ≠ legacy runtime authority retained`;
-- `provenance verified ≠ builder acceptable ≠ dependency set safe`;
-- `SBOM generated ≠ SBOM consumed`;
 - `source tests passed ≠ shipped artifact tested`;
-- `artifact retained ≠ artifact interpretable`;
-- `all bytes converted ≠ all significant semantics preserved`;
-- `checksum valid ≠ artifact authentic`;
 - `two copies ≠ two independent failure domains`;
-- `provider durability SLA ≠ organizational survivability`;
-- `escrow survives production loss ≠ escrow should contain production authority`;
 - `backup restore drill PASS ≠ organizational-loss drill PASS`;
-- `recovery succeeded ≠ ordinary authentication occurred`;
 - `break-glass exists ≠ standing super-admin justified`;
 - `documented recovery path ≠ non-circular recovery path`;
 - `DNS restored ≠ registrar ownership restored`;
-- `domain possession ≠ release-signing authority`;
 - `historically authentic ≠ currently authorized`;
 - `origin recovered ≠ installed PWA recovered`;
-- `incident closed ≠ emergency privilege automatically disappeared`;
 - `recovery path available ≠ recovery path abuse-resistant`;
-- `human-assisted recovery ≠ high-assurance recovery`;
 - `notification delivered ≠ action authorized`;
-- `authorized to inspect ≠ authorized to replace trust root`;
-- `waiting period exists ≠ attacker cannot wait`;
-- `origin fixed now ≠ every client controlled by clean worker now`;
 - `clean worker published ≠ fetched ≠ activated ≠ client revalidated`;
 - `remediated ≠ never exposed`;
 - `transaction committed ≠ user authored`;
 - `record + local audit entry ≠ two independent witnesses`;
 - `server acknowledged operation ≠ user intended operation`;
-- `authenticated request ≠ legitimate user intent`;
-- `incident evidence useful ≠ formal forensic evidence established`;
 - `application export ≠ forensic image`;
 - `read-only intent ≠ acquisition path is non-mutating`;
 - `reconnect for diagnosis ≠ neutral observation`;
-- `cleanup succeeded ≠ evidence preservation succeeded`;
 - `evidence preservation valuable ≠ active compromise may continue for evidence convenience`;
 - `suspect client offline ≠ compromised account/session revoked`;
 - `one device isolated ≠ fleet contained`;
-- `network isolation ≠ remote authority containment`;
 - `containment urgent ≠ wipe is automatically the safest containment`;
-- `local record irreplaceable ≠ compromised executable authority must remain active`;
 - `remote containment complete ≠ reconnect safe`;
-- `reconnect required for update ≠ replay should be enabled simultaneously`;
-- `incident response need ≠ unlimited telemetry collection authority`;
 - `revocation requested ≠ revocation globally enforced`;
-- `clean worker published ≠ offline client fetched it`;
 - `authority contained ≠ client clean`;
-- `remote containment PASS ≠ client remediation complete`;
 - `cannot remotely update offline client ≠ must remotely trust it on return`;
-- `local read allowed ≠ remote mutation allowed`;
-- `reconnect observed ≠ replay authorized`;
 - `telemetry silence ≠ containment evidence`;
-- `update-required UI shown ≠ stale API authority blocked`;
 - `offline usefulness ≠ indefinite remote authority`;
-- `managed fleet ≠ every device continuously reachable`;
-- `incident pressure ended ≠ pre-incident policy automatically safe`;
 - `return to normal ≠ return to old trust generation`;
-- `emergency control useful once ≠ standing privilege justified`;
-- `one incident ≠ one reversible switch`;
 - `policy rollback ≠ configuration snapshot rollback`;
-- `normal service restored ≠ revoked credential revived`;
 - `read safe ≠ write safe ≠ destructive operation safe`;
 - `global emergency block removed ≠ every stale client re-authorized`;
-- `credential freeze removed ≠ frozen credential valid again`;
 - `replay suppression removed ≠ preserved outbox safe to flush`;
-- `automatic expiry good for emergency privilege ≠ every containment deny should auto-expire`;
-- `current client succeeds ≠ stale client remains denied`;
-- `incident over ≠ incident-created authority gone`;
-- `incident closed before device reconnects ≠ device skipped recovery`;
 - `incident closed ≠ residual risk disappeared`;
-- `service normalized ≠ uncertainty eliminated`;
 - `known unresolved item ≠ accepted risk`;
-- `no planned fix ≠ risk accepted`;
 - `unknown ≠ accepted ≠ known compromised`;
-- `emergency controls removed ≠ baseline defined`;
-- `baseline documented ≠ baseline enforced`;
-- `risk accepted ≠ risk erased from monitoring`;
 - `residual risk accepted ≠ revoked credential authorized`;
-- `fleet uncertainty accepted ≠ stale client remote mutation allowed`;
 - `organization normalized ≠ every device normalized`;
-- `device absent from telemetry ≠ retired`;
 - `data preserved ≠ data trusted`;
-- `data useful for recovery ≠ data safe for automatic replay`;
 - `survived incident closure ≠ approved permanent architecture`;
-- `accepted once ≠ accepted forever`.
+- `accepted once ≠ accepted forever`;
+- `lesson documented ≠ lesson institutionalized`;
+- `postmortem complete ≠ recurrence risk reduced`;
+- `instance fixed ≠ root cause fixed`;
+- `useful emergency measure ≠ justified permanent control`;
+- `prevents exact replay ≠ prevents failure class`;
+- `decision superseded ≠ prior evidence should be erased`;
+- `ADR accepted ≠ corrective action effective`;
+- `code merged ≠ corrective action closed`;
+- `test exists ≠ test would fail on vulnerable behavior`;
+- `positive canary PASS ≠ negative invariant PASS`;
+- `zero observed recurrence ≠ recurrence prevented`;
+- `durable invariant ≠ immutable browser mechanism`.
 
 ## Current evidence boundary
 All numbered PASS labels above are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**; W071 is the current served-runtime evidence-manifest boundary and existing MintTap widget evidence remains EXECUTED-FAIL. Software Engineering remains **Foundation IN STUDY** across all specialists. A006's evidence-preserving ADR lifecycle is a useful transfer dependency for permanent post-incident decisions, but it is not PWA runtime evidence and Web Manager does not absorb general software-engineering ownership.
+Design Studio Web remains **Stage 3 PRACTICE / NOT PASSED**; W072 is the current runtime-diagnostic-provenance boundary and existing MintTap widget evidence remains EXECUTED-FAIL. Software Engineering remains **Foundation IN STUDY** across all specialists. A006's evidence-preserving ADR lifecycle transfers usefully to superseded-decision history, while M005 supplies capability-contract thinking; neither is direct PWA runtime evidence.
 
 ## Next high-value maintenance target
-After 119, the highest-value adjacent generic question is **post-incident learning → permanent control-baseline change governance**: determine when incident lessons should change durable architecture/control requirements, preserve superseded assumptions and decision history, avoid overfitting the platform to one event, and validate corrective actions against recurrence rather than treating documentation completion as risk reduction.
+After 120, the highest-value adjacent generic question is **corrective-control drift / exception / waiver lifecycle**: determine how a validated permanent control can later be weakened by compatibility exceptions, emergency bypasses, feature flags, stale clients or operational workarounds; distinguish intentional risk acceptance from silent control erosion; and define evidence that effective runtime enforcement still matches the approved baseline.
