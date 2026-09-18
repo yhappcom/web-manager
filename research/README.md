@@ -32,10 +32,8 @@ Curriculum passes are competency gates, not production certification.
 111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
 117–121 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; permanent corrective-control governance; corrective-control drift/exception/waiver lifecycle.  
 122–126 cover control-assurance independence; oracle freshness/replay/continuity; evidence retention/key/epoch rotation; verifier-context recovery; organizational-loss recovery authority/provenance.  
-127 — **PWA Recovery-of-Recovery Dependency Assurance & Correlated Provider Failure — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.**  
-128 — **PWA Recovery Dependency Drift & Resilience-Budget Governance — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.**  
-129 — **PWA Resilience-Debt Retirement & Recovery-Objective Evidence Governance — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Connects recovery paths to consequence/MTD/RTO/RPO evidence, classifies resilience debt and keep/re-prove/replace/retire lifecycle, and separates central recovery objectives from installed-PWA/local-data/integrity/authority recovery.  
-130 — **PWA Recovery-Objective Conflict & Graceful-Degradation Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + SAFETY/LEGAL VALIDATION OPEN.** Resolves availability/integrity/authorization conflicts by capability; separates fail-closed, safe degradation and visible failure; defines partial-recovery state and normalization requirements without converting RTO pressure into stale remote authority.
+127–130 cover correlated recovery dependencies; dependency drift/resilience budget; resilience-debt retirement/recovery objectives; recovery-objective conflict/graceful degradation.  
+131 — **PWA Degraded-Mode Convergence & Split-Brain Reconciliation Governance — PASS (generic) / PRODUCT + MANAGED-IPAD + DATA-MODEL VALIDATION OPEN.** Separates retry/idempotency from conflict safety; record/operation/revision/progress identities; ambiguous ACK; stale update; tombstone/deletion; user-mediated reconciliation and convergence gates without assuming direct device transport or product data semantics.
 
 ## High-value current guards
 ### PWA/runtime and data
@@ -51,7 +49,17 @@ Curriculum passes are competency gates, not production certification.
 - `central RPO met ≠ device-local unsynced data recovered`;
 - `application available ≠ every capability available`;
 - `queued ≠ sent ≠ acknowledged ≠ reconciled`;
-- `network returns ≠ queue replay automatically safe`.
+- `network returns ≠ queue replay automatically safe`;
+- `connectivity recovery ≠ convergence`;
+- `retry-safe ≠ conflict-safe`;
+- `ACK missing ≠ commit missing`;
+- `last write wins ≠ latest intent wins`;
+- `newest timestamp ≠ most authoritative record`;
+- `record absent ≠ deletion proven`;
+- `old update arrives ≠ deleted record should resurrect`;
+- `fresh login ≠ queued operation fresh`;
+- `queue empty ≠ converged`;
+- `client caught up ≠ fleet converged`.
 
 ### Recovery, authority and provenance
 - `two copies ≠ two independent failure domains`;
@@ -117,10 +125,10 @@ Curriculum passes are competency gates, not production certification.
 - `temporary bridge still works ≠ bridge should remain supported`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, reconciliation/conflict semantics, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/MTD/RTO/RPO, degraded-mode capability policy, record/operation identity, revisions, reconciliation/conflict/merge semantics, tombstone/dedup retention, safety/legal consequence and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W080**. Cross-browser/Safari/Firefox, persisted configuration, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering implementation evidence is not promoted into this generic recovery gate.
+Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W082**. Cross-browser/Safari/Firefox, persisted configuration, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering Data is Stage 1 IN STUDY; D006 bounded sync/idempotency/conflict and LogMate cursor-atomicity evidence is consumed as transfer evidence, not promoted into product PASS.
 
 ## Next high-value maintenance target
-After 130, the highest-value adjacent generic question is **PWA degraded-mode convergence & split-brain reconciliation governance**: determine how independently degraded clients rejoin after long offline periods without treating last-writer-wins, fresh login, network restoration or newest timestamp as sufficient conflict resolution; separate domain-record conflict, operation identity/idempotency, provenance, tombstones/deletion and user-mediated reconciliation while keeping direct device-to-device assumptions OPEN.
+After 131, the highest-value adjacent generic question is **PWA reconciliation policy evolution & schema/version conflict governance**: determine how long-offline operations created under older domain schema, validation rule, conflict policy or operation format are handled without treating syntactic migration as semantic re-authorization; preserve rejected operations for recovery and prevent schema upgrades from silently rewriting historical user intent.
