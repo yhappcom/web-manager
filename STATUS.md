@@ -9,48 +9,48 @@ Platforms: iOS / App Store, Android / Google Play, strategic PWA/Web App capabil
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Future work is targeted expert maintenance/application selected from live evidence, change-watch, risk and specialist dependencies. Curriculum completion is not production certification. Detailed historical guards and study summaries live in `research/README.md` and numbered research artifacts; this status intentionally stays checkpoint-oriented.
 
 ## Continuous expert maintenance
-083–119 — **PASS at their recorded generic gates; product/device/runtime validation remains OPEN where stated in the research index.**  
-120 PWA Post-Incident Learning → Permanent Control-Baseline Change Governance — **PASS (generic) / PRODUCT RUNTIME + ORGANIZATIONAL CHANGE-OWNER VALIDATION OPEN**.
+083–120 — **PASS at their recorded generic gates; product/device/runtime validation remains OPEN where stated in the research index.**  
+121 PWA Corrective-Control Drift, Exception & Waiver Lifecycle — **PASS (generic) / PRODUCT RUNTIME + EXCEPTION-OWNER + MANAGED-IPAD VALIDATION OPEN**.
 
-## 120 material findings
-- incident lessons must feed ordinary risk/architecture/engineering/validation governance; a postmortem document alone does not institutionalize learning;
-- classify lessons before promotion: incident-local cleanup, implementation correction, validation/control strengthening, durable architecture/security requirement, organizational/process change, or accepted no-permanent-change residual risk;
-- prefer controls that constrain a causal failure class or durable invariant over controls that merely replay the exact chronology of one incident;
-- preserve superseded assumptions/decisions and why they were once accepted; do not rewrite history after a new baseline is chosen;
-- incident-driven permanent controls still require normal change/configuration governance, effectiveness tests and side-effect evidence;
-- corrective-action closure requires a falsifiable recurrence oracle plus legitimate-behavior/side-effect checks; code merge, documentation, ticket closure or quiet telemetry are insufficient;
-- for PWA/EFB, durable requirements should separate local data usefulness/preservation from remote mutation authority and preserve fail-closed re-entry for stale/unknown clients;
-- exact WebKit/iPadOS/MDM/product mechanisms remain OPEN and must not be inferred from generic controls.
+## 121 material findings
+- a control baseline needs explicit identity; approved policy, declared configuration, effective runtime enforcement and observed population are separate evidence layers;
+- NIST configuration-management guidance permits operational deviations but requires them to be identified, documented, approved, monitored and controlled; deviation itself is not governance failure;
+- distinguish compatibility exception, availability exception, emergency bypass, migration bridge, feature/config override, provider exception, manual workaround and accepted permanent deviation;
+- scope exceptions by capability, subject/client/release/trust/schema generation, time/review trigger and compensating controls; a narrow exception must not become a transitive authority bridge;
+- security-relevant feature flags/provider settings/configuration are part of effective security state; source/build identity alone cannot prove enforcement;
+- temporary privilege should not persist merely because expiry/review automation failed; availability/data-recovery controls may require explicit review rather than destructive automatic cutoff;
+- long-offline clients remain a denominator problem: central waiver revocation does not prove client remediation, but stale local state need not regain server authority;
+- individually bounded exceptions can compose into an unsafe authority path and therefore require composition analysis;
+- exact MintTap/LogMate baseline, feature flags, exception owners, provider policy and runtime behavior remain OPEN.
 
-## Persistent guards added by 120
-`lesson documented ≠ lesson institutionalized`.  
-`postmortem complete ≠ recurrence risk reduced`.  
-`instance fixed ≠ root cause fixed`.  
-`root cause identified ≠ recurrence control implemented`.  
-`useful emergency measure ≠ justified permanent control`.  
-`prevents exact replay ≠ prevents failure class`.  
-`stronger restriction ≠ better architecture`.  
-`decision superseded ≠ prior evidence should be erased`.  
-`ADR accepted ≠ corrective action effective`.  
-`new baseline approved ≠ deployed fleet conforms`.  
-`code merged ≠ corrective action closed`.  
-`test exists ≠ test would fail on vulnerable behavior`.  
-`positive canary PASS ≠ negative invariant PASS`.  
-`zero observed recurrence ≠ recurrence prevented`.  
-`durable invariant ≠ immutable browser mechanism`.
+## Persistent guards added by 121
+`baseline documented ≠ runtime conforms`.  
+`same source revision ≠ same effective security configuration`.  
+`deviation exists ≠ control governance failed`.  
+`operational need asserted ≠ deviation justified`.  
+`exception approved ≠ exception safe indefinitely`.  
+`documented exception ≠ effective scope matches documentation`.  
+`temporary label ≠ temporary behavior`.  
+`exception for capability A ≠ authorization for capability B`.  
+`code contains gate ≠ runtime gate enabled`.  
+`expiry timestamp passed ≠ runtime exception actually disabled`.  
+`review overdue ≠ exception implicitly renewed`.  
+`exception registry count ≠ effective waived population`.  
+`waiver revoked centrally ≠ every client remediated`.  
+`each exception individually bounded ≠ combined exception set bounded`.
 
 ## Five-track state
 All tracks retain integrated foundation/practitioner coverage; allocation remains risk/evidence-gap driven.
 - **A Platform/Browser:** critical dependency supplier for causal browser/PWA mechanics and platform-specific change watch. Exact target-runtime behavior remains OPEN.
-- **B UX/IA/Content:** consumes durable restricted/re-entry/reconciliation states; permanent security state does not justify permanent incident-alarm UX.
-- **C Performance/Accessibility/Quality:** owns recurrence/negative-oracle campaign, side-effect evidence, test sensitivity and exact runtime identity.
-- **D Search/Discovery/Analytics:** owns recurrence observation/denominator discipline; telemetry cannot prove prevention from silence.
-- **E Architecture/Security/Operations:** current highest-risk owner; 120 closes the generic incident-learning → durable-control promotion/supersession/corrective-action boundary.
+- **B UX/IA/Content:** consumes capability-specific degraded/restricted states; a waiver must not be presented as unrestricted normal operation.
+- **C Performance/Accessibility/Quality:** owns conformance, negative canaries, exception-path/expiry/composition tests and exact runtime/configuration identity.
+- **D Search/Discovery/Analytics:** owns exception-population/denominator discipline; telemetry cannot prove conformance from silence.
+- **E Architecture/Security/Operations:** current highest-risk owner; 121 closes the generic baseline→deviation→effective-enforcement→retirement governance boundary.
 
 ## Cross-repository evidence
-Design Studio checked 2026-09-18: canonical Web Design is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. W072 adds runtime diagnostic provenance after a real MintTap widget-runtime EXECUTED-FAIL; repaired widget, product-browser/cross-browser/Safari, screen-reader, physical-device, field-CWV and human UX PASS remain OPEN.
+Design Studio checked 2026-09-18: canonical Web Design is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. W073 requires diagnostic replication → repaired widget regression → production Web build → served primary browser → independent engine; no repaired widget/browser/cross-browser/Safari/device/field-CWV/human UX PASS is claimed.
 
-Software Engineering checked 2026-09-18: all specialists remain **Foundation IN STUDY**. A006 evidence-preserving architecture-decision lifecycle is compatible transfer evidence for preserving superseded decisions and separating decision acceptance from validation PASS. M005 establishes a capability-contract model and exact-ref LogMate transfer, but direct Flutter/native/PWA runtime transfer remains OPEN. Software Engineering remains implementation owner for exact auth/session, API/trust generations, storage/outbox behavior, Service Worker release policy, ADR/configuration implementation and recurrence-test tooling.
+Software Engineering checked 2026-09-18: all specialists remain **Foundation IN STUDY**. M006 distinguishes PWA installability, offline capability, service-worker execution, storage policy, update/control state and continuous-background assumptions through capability-aware acceptance. This transfers to capability-specific waiver scoping but is not direct PWA runtime evidence. Software Engineering remains implementation owner for exact auth/session/API/trust generations, storage/outbox behavior, Service Worker release policy, feature/configuration mechanisms and conformance tooling.
 
 ## Production OPEN register
 Actual `minttap.app` production state remains OPEN unless verified from project evidence.
@@ -61,13 +61,13 @@ Auth/security/recovery OPEN includes actual authentication/session/token/cookie 
 
 Runtime/control-plane/supply-chain OPEN includes actual origin/script/CSP/Trusted Types topology; third parties; worker scope/activation policy; signing/bootstrap trust; trusted-time/rotation/recovery authority; CI/dependency/provenance/deployment identity; DNS/provider recovery and credential/key rotation drills.
 
-Corrective-action/change-governance OPEN includes actual incident history; root-cause method; change owners/approvers; ADR/control-baseline/configuration implementation; recurrence-test tooling and sensitivity; side-effect acceptance criteria; exact source/build/deployment/runtime identity chain; legal/safety constraints; and criteria for deliberately accepting no permanent change.
+Corrective-action/change-governance OPEN includes actual incident history; root-cause method; baseline/control identity; feature flags/configuration/provider settings; exception/waiver registry; exception owners/approvers; runtime enforcement evidence; composition tests; ADR/control-baseline/configuration implementation; recurrence-test tooling; exact source/build/deployment/runtime identity chain; legal/safety constraints; and criteria for accepted permanent deviation.
 
 ## Next learning mode
-120 closes the generic post-incident lesson → permanent-control governance boundary. Highest-value adjacent generic work, if exact implementation evidence remains absent, is **corrective-control drift / exception / waiver lifecycle**: determine how a validated permanent control can later be weakened by compatibility exceptions, emergency bypasses, feature flags, stale clients or operational workarounds; distinguish intentional risk acceptance from silent control erosion; and define evidence that the effective runtime control still matches the approved baseline.
+121 closes the generic corrective-control drift/exception/waiver lifecycle. Highest-value adjacent generic work, if exact implementation evidence remains absent, is **control-assurance independence / anti-self-attestation**: determine when the same control plane cannot be trusted as the sole reporter of its own conformance, what independent evidence is proportionate, and how to avoid both false assurance and impractical full duplication.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–120 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/risk-owner/change-owner validation remains OPEN.
+- Continuous maintenance: **083–121 PASS** at generic gates.
+- Product/device/AT/security/privacy/legal/risk-owner/change-owner/exception-owner validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
