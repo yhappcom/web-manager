@@ -32,9 +32,11 @@ Curriculum passes are competency gates, not production certification.
 111–116 cover recovery authority continuity/abuse resistance; hostile-origin/Service-Worker compromise scoping; compromise-era data integrity/provenance; evidence-preserving incident acquisition; active-compromise containment vs evidence preservation.  
 117–121 cover partial/offline fleet containment; containment-policy rollback/emergency-gate lifecycle; post-incident trust normalization/residual-risk acceptance; permanent corrective-control governance; corrective-control drift/exception/waiver lifecycle.  
 122–126 cover control-assurance independence; oracle freshness/replay/continuity; evidence retention/key/epoch rotation; verifier-context recovery; organizational-loss recovery authority/provenance.  
-127 — **PWA Recovery-of-Recovery Dependency Assurance & Correlated Provider Failure — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Models recovery as scenario-relative dependency graphs, exposes hidden identity/person/device/provider/toolchain cut sets, separates central failover from installed-PWA recovery, and scales redundancy to consequence rather than defaulting to multi-cloud.
+127 — **PWA Recovery-of-Recovery Dependency Assurance & Correlated Provider Failure — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Models recovery as scenario-relative dependency graphs, exposes hidden identity/person/device/provider/toolchain cut sets, separates central failover from installed-PWA recovery, and scales redundancy to consequence rather than defaulting to multi-cloud.  
+128 — **PWA Recovery Dependency Drift & Resilience-Budget Governance — PASS (generic) / PRODUCT + PROVIDER + MANAGED-IPAD VALIDATION OPEN.** Adds change-triggered dependency revalidation, explicit bounded concentration, dependency-diff states and proportionate resilience-budget governance; rejects both silent common-mode erosion and redundancy-for-its-own-sake.
 
 ## High-value current guards
+### PWA/runtime and data
 - `storage API available ≠ persistence granted ≠ backup ≠ tested restore`;
 - `local save ≠ sync queued ≠ remote acknowledgement ≠ reconciliation ≠ backup`;
 - `automated browser PASS ≠ Safari PASS ≠ physical iPad PASS ≠ managed-EFB product PASS`;
@@ -43,17 +45,29 @@ Curriculum passes are competency gates, not production certification.
 - `build passed ≠ rollout safe`; `artifact published ≠ installed fleet converged`;
 - `zero observed old clients ≠ zero old clients`;
 - `unsupported for sync ≠ unsupported for local read/export/recovery`;
+- `clean worker published ≠ fetched ≠ activated ≠ client revalidated`;
+- `server serves clean worker ≠ installed client clean`;
+- `provider failover succeeds ≠ installed PWA updated`;
+- `central dependency graph updated ≠ installed fleet graph updated`.
+
+### Recovery, authority and provenance
 - `two copies ≠ two independent failure domains`;
 - `backup restore drill PASS ≠ organizational-loss drill PASS`;
 - `documented recovery path ≠ non-circular recovery path`;
 - `historically authentic ≠ currently authorized`;
 - `origin recovered ≠ installed PWA recovered`;
-- `clean worker published ≠ fetched ≠ activated ≠ client revalidated`;
 - `transaction committed ≠ user authored`;
 - `server acknowledged operation ≠ user intended operation`;
 - `application export ≠ forensic image`;
 - `reconnect for diagnosis ≠ neutral observation`;
-- `evidence preservation valuable ≠ active compromise may continue for evidence convenience`;
+- `data preserved ≠ data trusted`;
+- `data backup survived ≠ recovery authority survived`;
+- `system rebuilt ≠ organization re-authorized`;
+- `replacement environment self-attests ≠ bootstrap provenance established`;
+- `new key signs succession claim ≠ predecessor authorized succession`;
+- `organizational survivability required ≠ enterprise PKI required`.
+
+### Incident/control assurance
 - `one device isolated ≠ fleet contained`;
 - `remote containment complete ≠ reconnect safe`;
 - `revocation requested ≠ revocation globally enforced`;
@@ -62,7 +76,6 @@ Curriculum passes are competency gates, not production certification.
 - `read safe ≠ write safe ≠ destructive operation safe`;
 - `incident closed ≠ residual risk disappeared`;
 - `unknown ≠ accepted ≠ known compromised`;
-- `data preserved ≠ data trusted`;
 - `lesson documented ≠ lesson institutionalized`;
 - `code merged ≠ corrective action closed`;
 - `positive canary PASS ≠ negative invariant PASS`;
@@ -76,8 +89,9 @@ Curriculum passes are competency gates, not production certification.
 - `configuration evidence ≠ behavioral evidence`;
 - `more telemetry from one authority domain ≠ independent assurance`;
 - `allowed path succeeds ≠ forbidden path denied`;
-- `two evidence artifacts ≠ two independent evidence sources`;
-- `server serves clean worker ≠ installed client clean`;
+- `two evidence artifacts ≠ two independent evidence sources`.
+
+### Evidence freshness and long-term verification
 - `signature valid ≠ evidence fresh`;
 - `old PASS authentic ≠ current control PASS`;
 - `fresh PASS now ≠ continuous PASS since last observation`;
@@ -92,45 +106,42 @@ Curriculum passes are competency gates, not production certification.
 - `retained bytes ≠ retrievable evidence ≠ interpretable evidence`;
 - `new key deployed ≠ uncertain old interval repaired`;
 - `sequence monotonic within epoch ≠ continuity across epoch transition`;
-- `historical verification need ≠ retain historical signing capability`;
 - `format migrated ≠ semantics preserved`;
 - `replacement key ≠ recovered historical key`;
 - `public key mathematically verifies signature ≠ historical trust policy reconstructed`;
-- `evidence object retained ≠ verification context retained`;
 - `cannot verify ≠ proven false`;
 - `partial reconstruction ≠ full historical PASS`;
 - `re-signed old bytes ≠ old signature trust restored`;
-- `historical key recovered for verification ≠ key reactivated for signing`;
-- `historical trust path reconstructed ≠ old client authorized now`;
-- `current worker known ≠ historical worker chain known`;
-- `fresh login succeeds ≠ historical outbox provenance repaired`;
-- `data backup survived ≠ recovery authority survived`;
-- `system rebuilt ≠ organization re-authorized`;
-- `second account ≠ second authority domain`;
-- `geographic separation ≠ identity/control-plane separation`;
-- `provider account recovered ≠ all historical authority recovered`;
-- `identity re-proved ≠ old authorization graph reconstructed`;
-- `authority to recover ≠ authority to operate indefinitely`;
-- `replacement environment self-attests ≠ bootstrap provenance established`;
-- `new key signs succession claim ≠ predecessor authorized succession`;
-- `domain recovered ≠ installed PWA recovered`;
-- `organizational authority recovered ≠ compromise-era outbox authorized`;
-- `support ticket resolved ≠ historical provenance restored`;
-- `organizational survivability required ≠ enterprise PKI required`;
+- `fresh login succeeds ≠ historical outbox provenance repaired`.
+
+### Dependency/resilience governance
 - `alternate path exists ≠ alternate path survives the same hazard`;
 - `different vendor name ≠ independent supply-chain failure domain`;
 - `replicated data ≠ independent administration`;
 - `multi-provider ≠ independent identity/recovery`;
 - `path B differs from path A ≠ path B is independent for every threat`;
 - `resilience required ≠ active-active multi-cloud required`;
-- `provider failover succeeds ≠ installed PWA updated`;
-- `recovery drill passed once ≠ dependency graph still current`.
+- `recovery drill passed once ≠ dependency graph still current`;
+- `more redundancy ≠ proportionately better resilience`;
+- `shared dependency exists ≠ shared dependency is automatically unacceptable`;
+- `accepted concentration ≠ unmanaged concentration`;
+- `vendor relationship unchanged ≠ dependency topology unchanged`;
+- `diversity added ≠ net risk reduced`;
+- `resilience budget ≠ permission to ignore dependencies`;
+- `one score ≠ dependency graph`;
+- `risk accepted once ≠ topology change pre-accepted`;
+- `material dependency change ≠ wait for annual review`;
+- `change completed successfully ≠ recovery claim preserved`;
+- `cost optimization ≠ free resilience consumption`;
+- `dependency inventory automated ≠ dependency independence proven`;
+- `old risk acceptance ≠ acceptance of new dependency graph`;
+- `resilience control added ≠ resilience debt retired`.
 
 ## Current evidence boundary
-All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
+All numbered PASS labels are generic knowledge/competency gates unless a study explicitly records stronger runtime evidence. Actual `minttap.app`, LogMate-like PWA, managed-iPad, authentication, storage, sync, Service Worker, provider, deployment, key/PKI, retention/recovery, organizational authority/succession, dependency topology, resilience objectives/RTO/RPO, accepted concentration, legal and production facts remain OPEN until verified from canonical project/runtime evidence.
 
 ## Current cross-repository boundary
-Latest Web Manager canonical Design Studio record remains **Stage 3 PRACTICE / NOT PASSED, W077**; this run did not obtain newer Design Studio evidence through the connector. Software Engineering implementation evidence is not promoted into this generic security gate.
+Design Studio Web is now **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED, W080**. Cross-browser/Safari/Firefox, non-drag reorder/reset-history, persisted configuration, screen-reader, physical-device, field Core Web Vitals, full WCAG and human UX evidence remain OPEN. Software Engineering Studio remains **FOUNDATION STUDY UNDERWAY** with no specialist at Foundation PASS; its implementation evidence is not promoted into this generic web-security/recovery gate.
 
 ## Next high-value maintenance target
-After 127, the highest-value adjacent generic question is **PWA recovery dependency drift & resilience-budget governance**: maintain dependency-graph freshness as providers/SSO/CI/domain/key custody evolve; define which shared dependencies are acceptable bounded concentration, which require mitigation, and how to avoid both silent common-mode erosion and unjustified multi-provider complexity.
+After 128, the highest-value adjacent generic question is **PWA resilience-debt retirement & recovery-objective evidence governance**: connect tolerated concentration to explicit recovery objectives/consequence; prevent temporary manual bridges, stale alternates and untested recovery paths from accumulating as permanent resilience debt; define when a recovery path should be retired, replaced or re-proven rather than kept alive indefinitely.
