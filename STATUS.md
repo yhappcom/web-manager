@@ -7,57 +7,57 @@ Last sync: 2026-09-19
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Curriculum completion is not production certification. Detailed guards and studies live in `research/README.md` and numbered research artifacts.
 
 ## Continuous expert maintenance
-083–142 — **PASS at recorded generic gates.**  
-143 PWA Recovery-Authority Inventory, Dormant-Access Detection & Periodic Survivability Drills — **PASS (generic) / PRODUCT + MANAGED-IPAD + IDENTITY/ADMIN + CUSTODY + DRILL VALIDATION OPEN**.
+083–143 — **PASS at recorded generic gates.**  
+144 PWA Recovery-Assurance Evidence Freshness, Exception Debt & False-Confidence Control — **PASS (generic) / PRODUCT + MANAGED-IPAD + IDENTITY/ADMIN + EVIDENCE-RUNTIME VALIDATION OPEN**.
 
-## 143 checkpoint
-- Recovery continuity decays unless authority inventory is reconciled against actual runtime/provider state; inventory is evidence, not an authorization source.
-- Dormancy is a diagnostic state, not an automatic revocation rule. Expected-dormant emergency authority must be distinguished from orphaned, superseded-still-active and unusable alternate authority.
-- Human offboarding is insufficient when service accounts, deploy/API credentials, recovery identities or other non-human authority survive the owner.
-- Recovery assurance should be event-driven plus periodic: personnel/provider/custody/key/policy/incident changes trigger review; calendar cadence is a backstop, not the only freshness mechanism.
-- A small-company drill ladder should escalate from inventory reconciliation and readiness inspection through dependency tabletop, bounded capability proof, isolated exercise and only where justified controlled production recovery.
-- Successful service restoration is not enough: authority legitimacy, independence, anti-rollback, predecessor revocation, provenance, local-data preservation, remote-write gating and post-emergency normalization are separate PASS conditions.
-- Telemetry can reveal use/failure/duration but cannot prove absence of uninstrumented dormant authority, legitimate succession or independent custody.
-- Long-offline PWA/EFB clients preserve local irreplaceable data but do not infer current recovery authority from cached UI, stale Service Worker state or credential inactivity.
+## 144 checkpoint
+- Assurance evidence has a validity envelope: claim, scope, provenance, environment, generation/epoch, method, dependencies, collection time, exceptions and invalidation triggers matter; timestamp alone is not freshness.
+- Freshness is semantic. Material personnel/provider/key/policy/schema/API/browser/device/custody/incident changes can invalidate evidence immediately; periodic revalidation is only a backstop for silent drift.
+- Explicit evidence states prevent binary-dashboard distortion: CURRENT-VERIFIED, CURRENT-WITH-EXCEPTION, REVALIDATION-DUE, INVALIDATED-BY-CHANGE, CONTRADICTED, PARTIAL/BOUNDED, UNKNOWN and SUPERSEDED.
+- Exceptions are debt, not permanent architecture. Renewal is a new risk decision using current evidence; expired/missing-owner exceptions do not silently remain authorized.
+- Compensating controls require their own current evidence. Multiple individually accepted exceptions can create an unaccepted combined failure path.
+- Do not average recovery/security assurance into one opaque score. Critical UNKNOWN/CONTRADICTED claims remain visible and cannot be diluted by many low-consequence green claims.
+- Long-offline PWA/EFB evidence is environment- and epoch-bounded; current server evidence does not prove stale Service Worker/cache/IndexedDB or physical managed-iPad behavior.
 
-## Persistent guards added by 143
-`credential inventoried ≠ credential currently authorized`.  
-`credential currently authorized ≠ credential usable`.  
-`credential usable ≠ recovery path survivable`.  
-`account inactive ≠ account harmless`.  
-`no recent login ≠ authority revoked`.  
-`employee account removed ≠ service/recovery identities removed`.  
-`owner field populated ≠ owner still accountable`.  
-`two recovery paths listed ≠ two independent failure domains`.  
-`inventory says revoked ≠ runtime authority revoked`.  
-`runtime revoked ≠ stale inventory harmless`.  
-`tabletop PASS ≠ credential usable`.  
-`credential usable ≠ production recovery safe`.  
-`staging PASS ≠ managed-iPad PASS`.  
-`drill completed ≠ recovery outcome correct`.  
-`one successful drill ≠ future survivability guaranteed`.  
-`telemetry silent ≠ dormant authority absent`.
+## Persistent guards added by 144
+`evidence exists ≠ evidence current`.  
+`evidence current ≠ evidence covers this scope`.  
+`recent timestamp ≠ strong evidence`.  
+`old evidence ≠ automatically false`.  
+`old evidence ≠ current assurance`.  
+`control unchanged ≠ dependencies unchanged`.  
+`dashboard green ≠ uncertainty absent`.  
+`exception approved ≠ exception harmless`.  
+`temporary exception ≠ permanent architecture`.  
+`compensating control documented ≠ compensating control effective`.  
+`revalidation scheduled ≠ revalidation completed`.  
+`exception expired ≠ control fixed`.  
+`exception expired ≠ exception still authorized`.  
+`exception renewed ≠ original evidence still sufficient`.  
+`two accepted exceptions ≠ combined risk accepted`.  
+`waiver closed in tracker ≠ runtime deviation removed`.  
+`compensating control PASS ≠ original control restored`.
 
 ## Five-track state
-- **A Platform/Browser:** high dependency supplier; stale SW/cache/storage can retain obsolete authority presentation but cannot establish current recovery authorization.
-- **B UX/IA/Content:** elevated dependency pressure; owns recovery-review-required, alternate-unavailable, authority-superseded, local-preserved/remote-blocked and normalization-pending states.
-- **C Performance/Accessibility/Quality:** high dependency pressure; owns reproducible destructive drills, negative tests and physical Safari/managed-iPad evidence when implementation exists.
-- **D Search/Discovery/Analytics:** constrained supporting consumer; telemetry is bounded evidence and must not become a shadow recovery credential/provenance store.
-- **E Architecture/Security/Operations:** highest-risk owner; 143 closes generic recovery-authority inventory, dormant-access classification and proportionate survivability-drill governance.
+- **A Platform/Browser:** high dependency supplier; browser/SW/storage/device-generation changes are explicit evidence invalidators where claims depend on them.
+- **B UX/IA/Content:** elevated dependency pressure; owns degraded/revalidation/exception/local-preserved-remote-blocked assurance states without false green presentation.
+- **C Performance/Accessibility/Quality:** high dependency pressure; owns evidence provenance, scenario/environment/version, contradiction handling and physical Safari/managed-iPad validation.
+- **D Search/Discovery/Analytics:** constrained supporting consumer; telemetry may trigger revalidation but cannot authorize exceptions or prove assurance.
+- **E Architecture/Security/Operations:** highest-risk owner; 144 closes generic evidence-freshness, exception-debt and honest assurance-aggregation governance.
 
 ## Cross-repository evidence
-Design Studio `progress/WEB_STATUS.md` is **W093 SERVED SCROLL-REORDER ARBITRATION CLOSURE; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device/input, field-CWV, full-WCAG and human UX evidence remain OPEN.
+Design Studio `progress/WEB_STATUS.md` is **W094 SERVED EDGE-AUTOSCROLL REORDER CLOSURE; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Persistence/offline/Sync, cross-browser/Safari/Firefox, screen-reader, physical-device/input, field-CWV, full-WCAG and human UX evidence remain OPEN.
 
-Software Engineering implementation evidence remains a bounded dependency. Actual LogMate persistence/Sync, Flutter/mobile transfer, key storage, account/device identity, trust-floor storage, reset/rebootstrap authority, server-side idempotency, approval/succession workflow, runtime authority inventory, dormant-access detection, provider APIs, backup/restore and managed-device integration remain OPEN.
+Software Engineering implementation evidence remains a bounded dependency. Actual LogMate persistence/Sync, Flutter/mobile transfer, key storage, account/device identity, trust-floor storage, reset/rebootstrap authority, server-side idempotency, approval/succession workflow, runtime authority inventory, dormant-access detection, evidence/exception store, dependency graph, provider APIs, backup/restore and managed-device integration remain OPEN.
 
 ## Production OPEN register
-Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM behavior; PWA storage/update/background/sync; authentication/session/offline authorization; local authoritative data; actual schema/operation/API versions; validation/authorization/conflict-policy epochs; compatibility horizon; allowed offline edits/deletes; record/operation/device identity; base/server revision model; conflict/merge/correction policy; provenance schema/integrity/transaction scope; compaction policy; export/import/package format; lineage topology; checkpoint/range/parent model; canonicalization; encryption/signature/MAC algorithms; key/trust-root hierarchy and custody; verifier topology and historical retention; algorithm/key/verifier transition format; compromise detection/revocation; successor/recovery authority and independence; trust-policy metadata; trust-floor storage; reset/rebootstrap authorization; recovery request/approval/execution model; organizational succession; predecessor revocation; recovery-authority inventory; dormant/orphaned/service identities; provider/failure-domain mapping; alternate/recovery credential custody and aging; IdP/provider outage behavior; break-glass lifecycle; drill environment/cadence/evidence; first-bootstrap vs replacement-device classification; lost-device revocation; timestamp/anchor/witness evidence; browser file/share APIs; backup semantics; operation receipt/dedup; tombstones; retention obligations; audit/analytics separation; inbound cursor atomicity; Service Worker trust; fleet denominator; API-generation enforcement; actual RTO/RPO/MTD; and real recovery/succession/survivability drills.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM behavior; PWA storage/update/background/sync; authentication/session/offline authorization; local authoritative data; actual schema/operation/API versions; validation/authorization/conflict-policy epochs; compatibility horizon; allowed offline edits/deletes; record/operation/device identity; base/server revision model; conflict/merge/correction policy; provenance schema/integrity/transaction scope; compaction policy; export/import/package format; lineage topology; checkpoint/range/parent model; canonicalization; encryption/signature/MAC algorithms; key/trust-root hierarchy and custody; verifier topology and historical retention; algorithm/key/verifier transition format; compromise detection/revocation; successor/recovery authority and independence; trust-policy metadata; trust-floor storage; reset/rebootstrap authorization; recovery request/approval/execution model; organizational succession; predecessor revocation; recovery-authority inventory; dormant/orphaned/service identities; provider/failure-domain mapping; alternate/recovery credential custody and aging; IdP/provider outage behavior; break-glass lifecycle; drill environment/cadence/evidence; evidence validity envelopes; exception workflow/debt; assurance aggregation; first-bootstrap vs replacement-device classification; lost-device revocation; timestamp/anchor/witness evidence; browser file/share APIs; backup semantics; operation receipt/dedup; tombstones; retention obligations; audit/analytics separation; inbound cursor atomicity; Service Worker trust; fleet denominator; API-generation enforcement; actual RTO/RPO/MTD; and real recovery/succession/survivability drills.
 
 ## Next learning mode
-Highest-value adjacent generic work is **PWA recovery-assurance evidence freshness, exception debt & false-confidence control**: prevent old drill PASSes, stale attestations and waived dormant authority from remaining green indefinitely; define evidence expiry/revalidation, exception retirement and honest assurance aggregation without heavyweight compliance theater.
+Highest-value adjacent generic work is **PWA recovery-assurance dependency propagation, evidence graph consistency & transitive invalidation**: invalidate only claims that actually depend on a changed IdP/key/provider/browser/custody root, detect orphan/cyclic/contradictory evidence, and avoid both stale green assurance and blanket revalidation without heavyweight GRC infrastructure.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–143 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/provider/data-model/backend/crypto/anchor/backup/compromise/re-entry/reset/recovery-authority/succession/inventory/drill validation remains OPEN.
+- Continuous maintenance: **083–144 PASS** at generic gates.
+- Product/device/AT/security/privacy/legal/provider/data-model/backend/crypto/anchor/backup/compromise/re-entry/reset/recovery-authority/succession/inventory/drill/evidence-freshness/exception validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
