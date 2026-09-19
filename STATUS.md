@@ -7,60 +7,55 @@ Last sync: 2026-09-20
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Curriculum completion is not production certification. Detailed guards and studies live in `research/README.md` and numbered research artifacts.
 
 ## Continuous expert maintenance
-083–164 — **PASS at recorded generic gates.**  
-165 PWA Retention-Policy Evidence Integrity, Issuer Compromise & Emergency Correction — **PASS (generic) / PRODUCT + LEGAL + IDENTITY/KEY + PROVIDER + MANAGED-FLEET VALIDATION OPEN**.
+083–165 — **PASS at recorded generic gates.**  
+166 PWA Policy-Decision Explainability, Provenance Minimization & Contest/Appeal Correction — **PASS (generic) / PRODUCT + LEGAL + POLICY-RUNTIME + HUMAN/AT + MANAGED-FLEET VALIDATION OPEN**.
 
-## 164–165 integrated checkpoint
-- Deletion intent, destruction authority, retention/hold authority, operational disposition and physical propagation are distinct state dimensions.
-- Korea PIPA Article 21 provides a current concrete example: unnecessary personal information is destroyed without delay except where another law requires preservation; preserved data under that exception is separately stored/managed. EU/UK source evidence likewise shows erasure can coexist with legal-obligation/legal-claim retention/restricted processing. These are source patterns, not MintTap/LogMate applicability conclusions.
-- Browser/PWA code consumes minimum authoritative disposition. Locale, IP, GPS, App Store region or cached Service Worker state do not determine governing legal policy.
-- Holds are scoped/versioned/currentness-checked. Release creates a new policy generation and mandatory re-evaluation; it is neither automatic deletion nor restoration of pre-hold state.
-- Unresolved policy contradiction enters governed review/unknown rather than destructive guess, with owner/escalation to prevent indefinite silent retention.
-- Policy authenticity, issuer authorization, currentness and semantic correctness are separate. A legitimate issuer can publish a harmful rule; a valid signature does not make it correct.
-- Planned issuer rotation, suspected/confirmed compromise, semantic policy error and repository/distribution rollback require different handling.
-- A compromised predecessor authority cannot be the sole authority for its successor. Successor trust needs an independent surviving basis/recovery path.
-- Emergency policy correction is forward-only: issue a new corrective generation, preserve defective-generation provenance, and reconcile effects already executed rather than pretending byte rollback reverses consequences.
-- Restore/PITR and long-offline PWA reconnect must recover current trust/revocation/policy floors before consequence-bearing actions. Restored signing credentials do not automatically return to active use.
-- Unique unsynced local iPad data remains preservable/exportable while suspect policy blocks remote mutation.
+## 166 integrated checkpoint
+- A consequence-bearing policy outcome needs a truthful usable reason and correction path, but explanation is a purpose-limited projection of authoritative decision provenance, not a dump of policy-engine traces, privileged legal material, security topology or a complete personal-data history.
+- Separate four records: authoritative decision; user/operator explanation projection; contest/redress record; privileged/sensitive review evidence where such evidence actually exists.
+- Explanation should communicate current outcome, affected scope, a useful minimum reason class, available next action and currentness/revalidation state without inventing legal conclusions or exposing security-sensitive internals.
+- Stable machine reason classes and localized plain-language wording are separate layers. Reason codes themselves must not encode unnecessary sensitive subject facts.
+- Contest binds to the challenged decision generation/scope. Factual correction, policy correction and issuer/security compromise are distinct paths.
+- Correction is forward-only: create a new decision generation that supersedes the old decision, preserve minimum history, and reconcile already escaped effects. `appeal won` does not mean the prior decision never existed.
+- Central correction does not prove downstream convergence. Queues/jobs, search/index, analytics-derived processing, external recipients, exports/import admission and offline fleet participate as applicable.
+- Redress/explanation data is itself privacy-governed. Minimize free text, separate evidence references from payloads, and do not let analytics become a permanent subject-level legal/appeal dossier.
+- Long-offline PWA explanation can be historically authentic but stale. Cached SW/IndexedDB state never establishes current policy/appeal authority; unique unsynced local data remains preservable/exportable during revalidation.
 
-## Persistent guards added by 164–165
-`deletion requested ≠ destruction authorized`.  
-`retention required ≠ ordinary processing allowed`.  
-`hold active ≠ retain every related byte`.  
-`hold released ≠ delete immediately without re-evaluation`.  
-`client locale ≠ governing jurisdiction`.  
-`device location ≠ sufficient legal applicability fact`.  
-`policy input authentic ≠ policy input current`.  
-`policy engine produced outcome ≠ legal interpretation proven correct`.  
-`signature valid ≠ policy semantically correct`.  
-`issuer authenticated ≠ issuer uncompromised`.  
-`authorized change ≠ safe change`.  
-`new policy has higher version ≠ successor trust established`.  
-`compromised old issuer signs successor ≠ successor independently trusted`.  
-`emergency rollback ≠ safe restoration of old authority`.  
-`policy revoked ≠ all offline clients learned revocation`.  
-`historical policy authentic ≠ historical disposition still current`.
+## Persistent guards added by 166
+`explanation available ≠ all internal evidence disclosed`.  
+`reason withheld in detail ≠ no meaningful reason can be given`.  
+`policy engine trace ≠ user explanation`.  
+`legal citation ≠ plain-language explanation`.  
+`user-facing explanation ≠ legal advice`.  
+`contest submitted ≠ challenged decision suspended`.  
+`contest pending ≠ destructive action remains safe`.  
+`appeal won ≠ old decision never existed`.  
+`corrected input ≠ downstream effects automatically corrected`.  
+`recipient notified ≠ recipient converged`.  
+`analytics event recorded ≠ redress evidence retained appropriately`.  
+`offline explanation authentic ≠ explanation current`.  
+`support can explain ≠ support can authorize disposition`.
 
 ## Five-track state
-- **A Platform/Browser:** high dependency supplier; owns SW/Cache/IndexedDB/OPFS/offline/reconnect mechanics. Cached browser policy is data/enforcement state, not legal or successor-trust authority.
-- **B UX/IA/Content:** high dependency pressure; owns truthful requested/restricted/revalidation/review/local-conflict states without unnecessary sensitive hold/incident disclosure.
-- **C Performance/Accessibility/Quality:** high dependency pressure; owns 164's 96-case policy-convergence campaign plus 165's 72-case issuer-compromise/correction campaign and accessible state validation.
-- **D Search/Discovery/Analytics:** bounded consumer; derived systems consume corrected disposition and participate in reconciliation without becoming policy deciders or permanent subject-level hold inventories.
-- **E Architecture/Security/Operations:** highest-risk owner; 164–165 close generic hold lifecycle/cross-jurisdiction convergence plus issuer compromise, independent successor trust, forward correction and anti-rollback governance.
+- **A Platform/Browser:** high dependency supplier; owns SW/Cache/IndexedDB/offline/reconnect mechanics. Cached explanation/policy state is historical client state, not current adjudication authority.
+- **B UX/IA/Content:** very high dependency pressure; owns plain-language reason hierarchy, review path, pending/corrected/superseded states and accessible status behavior while consuming Design Studio interaction evidence.
+- **C Performance/Accessibility/Quality:** high dependency pressure; owns 166's 84-case destructive explainability/redress campaign plus cross-browser/device/AT/human validation.
+- **D Search/Discovery/Analytics:** bounded consumer; consumes corrected disposition and measures aggregate workflow health without becoming policy/appeal authority or a permanent subject dossier.
+- **E Architecture/Security/Operations:** highest-risk owner; 166 closes the generic explanation/provenance-minimization/forward-correction lifecycle. Next identity/authorization/anti-abuse redress boundary is the adjacent bottleneck.
 
 ## Cross-repository evidence
 Design Studio `progress/WEB_STATUS.md` is **W113 PRODUCTION CLOSURE MATRIX; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. No production runtime closure, independent-browser/native PASS, physical-device PASS, field Core Web Vitals, full WCAG conformance, screen-reader or human UX PASS is claimed.
 
-Software Engineering Studio remains at Foundation across specialists. M006 supplies real generic Chromium service-worker/offline transfer with positive precached and negative uncached oracles, but explicitly does not prove Safari/iPadOS/EFB, LogMate Flutter web, restart/update/storage eviction or production behavior. Actual disposition/policy schema, issuer/key topology, policy-floor durability, replay/admission gates, held-data isolation, local-data classification and exact SW migration remain implementation handoffs.
+Software Engineering evidence remains bounded: prior generic Chromium service-worker/offline transfer does not prove Safari/iPadOS/EFB, LogMate Flutter web, restart/update/storage eviction or production behavior. Actual policy/decision schema, reason mapping, contest persistence/idempotency, role authorization, correction propagation and exact SW migration remain implementation handoffs.
 
 ## Production OPEN register
-Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM behavior; PWA storage/update/background/sync; authentication/session/offline authorization; local authoritative data; actual schema/API/policy generations; record/operation/device/effect identity; conflict/merge/correction/compensation/closure policy; provenance/export/import/checkpoint/crypto/key/trust hierarchy; compromise/revocation/recovery; provider replication/restore/backup semantics; organizational recovery authority; closure/deletion evidence; retention/deletion/legal obligations; deletion propagation and backup expiry; retention/hold authority/applicability/release; cross-jurisdiction convergence; policy issuer/admin/key/trust topology and compromise windows; independent successor/recovery anchor; actual aviation/employment/tax/investment/legal-claims preservation requirements; stale export/import admission; offline-fleet reconciliation; Service Worker trust; actual RTO/RPO/MTD; and real physical-device/security/privacy/legal/aviation validation.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM behavior; PWA storage/update/background/sync; authentication/session/offline authorization; local authoritative data; actual schema/API/policy/decision/reason generations; record/operation/device/effect identity; conflict/merge/correction/compensation/closure policy; provenance/export/import/checkpoint/crypto/key/trust hierarchy; compromise/revocation/recovery; provider replication/restore/backup semantics; organizational recovery authority; closure/deletion evidence; retention/deletion/legal obligations; deletion propagation and backup expiry; retention/hold authority/applicability/release; cross-jurisdiction convergence; policy issuer/admin/key/trust topology; actual aviation/employment/tax/investment/legal-claims preservation requirements; explanation/redress rights and response times; review/appeal authority; privileged-material handling; external-recipient correction; stale export/import admission; offline-fleet reconciliation; Service Worker trust; actual RTO/RPO/MTD; and real physical-device/security/privacy/legal/aviation validation.
 
 ## Next learning mode
-Highest-value adjacent generic work is **PWA policy decision explainability, legal-review provenance minimization & contest/appeal correction**: determine how users/operators receive truthful reasons and challenge paths without exposing privileged/sensitive legal material, how corrected applicability decisions propagate through disposition/effect lineage, and how explanation records avoid becoming permanent personal-data or security-sensitive dossiers.
+Highest-value adjacent generic work is **PWA redress identity, authorization & anti-abuse without exclusion**: determine how a person, device or authorized representative can inspect/challenge the relevant decision with proportionate identity proofing and least disclosure, while preventing account-takeover attackers, abusive automation and support impersonation from enumerating or mutating sensitive policy state. Preserve accessibility and recovery paths and avoid turning identity proofing into a new excessive personal-data collection system.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–165 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/policy-runtime/deletion/retention runtime validation remains OPEN.
+- Continuous maintenance: **083–166 PASS** at generic gates.
+- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/policy-runtime/deletion/retention/redress runtime validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
