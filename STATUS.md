@@ -7,51 +7,55 @@ Last sync: 2026-09-20
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Curriculum completion is not production certification. Detailed guards and studies live in `research/README.md` and numbered research artifacts.
 
 ## Continuous expert maintenance
-083–158 — **PASS at recorded generic gates.**  
-159 PWA Recovery-Effect Closure Proof, Downstream Reconciliation & Residual-Risk Expiry — **PASS (generic) / PRODUCT + PROVIDER + DOWNSTREAM + MANAGED-IPAD + RISK-AUTHORITY VALIDATION OPEN**.
+083–159 — **PASS at recorded generic gates.**  
+160 PWA Recovery-Closure Evidence Retention, Verifier Independence & Closure-Claim Anti-Forgery — **PASS (generic) / PRODUCT + EVIDENCE-STORE + PROVIDER + VERIFIER + MANAGED-IPAD VALIDATION OPEN**.
 
-## 159 checkpoint
-- `CLOSED` is a bounded evidence claim, not a synonym for local compensation/API success, ticket completion or operator acknowledgement.
-- Closure requires a declared scope/invariant and consequence-relevant downstream classification: authoritative/mandatory, known derived consumer, best-effort/non-authoritative and unknown/unobservable.
-- Future escaped authority must be contained where it can create new consequences; provider success alone does not prove downstream convergence.
-- Closure proof preserves uncertainty and proves only the declared scope; it does not claim universal deletion of every stale byte, cache or human observation.
-- Residual-risk acceptance is modeled as bounded governance state with explicit scope, authority, assumptions, monitoring, expiry/review and event-driven invalidation triggers.
-- Renewal is a new current-evidence decision and does not rewrite the original acceptance into timeless approval.
-- Material contradiction, newly discovered downstreams, failed controls or expired acceptance can reopen a previously closed effect without erasing its prior closure provenance.
-- Long-offline PWA/iPad local data remains preservable independently of remote authority convergence; stale SW/offline queues cannot inherit expired residual-risk acceptance.
+## 160 checkpoint
+- `CLOSED` is a versioned claim with lineage, not a mutable incident boolean; closure→reopen→reclosure remains historical provenance.
+- Integrity, authenticity, authorization, completeness/continuity, currentness and semantic support are separate verification questions.
+- Historical authenticity does not grant current authority: an authentic old `CLOSED` claim may be superseded by a later reopen/currentness floor.
+- Closure evidence should be independently verifiable relative to the relevant failure mode; extra replicas under the same root/admin/account do not establish independence.
+- Evidence-set commitments and protected audit/anchor paths can detect substitution/truncation but do not prove provider truth or semantic legitimacy.
+- Restore/PITR must reacquire a stronger accepted closure/reopen currentness floor before operational rows can become authoritative; stale backups cannot resurrect closure.
+- Provider receipts are point-in-time evidence and require explicit freshness/currentness semantics.
+- Evidence retention is privacy-bounded: proof metadata/commitments are separated from sensitive recoverable content and bearer secrets are not retained merely for audit completeness.
+- Offline PWA/SW/IndexedDB may preserve authentic historical closure state but cannot mint or resurrect current server closure authority; unique local data remains preservable/exportable.
+- NIST SP 800-92 Rev.1 remains draft as of this checkpoint and stays CHANGE WATCH rather than being treated as final policy.
 
-## Persistent guards added by 159
-`local compensation success ≠ effect closure`.  
-`provider success ≠ downstream convergence`.  
-`all known consumers reconciled ≠ no unknown consumer exists`.  
-`closure evidence complete for declared scope ≠ universal absence proven`.  
-`risk accepted ≠ risk eliminated`.  
-`risk accepted once ≠ risk accepted forever`.  
-`ticket closed ≠ authority path closed`.  
-`notification sent ≠ recipient state corrected`.  
-`cached client stale ≠ server authority stale`.  
-`telemetry quiet ≠ consequence absent`.
+## Persistent guards added by 160
+`closure row exists ≠ closure claim trustworthy`.  
+`closure claim authentic ≠ closure claim current`.  
+`evidence retained ≠ evidence independently verifiable`.  
+`hash matches ≠ source statement true`.  
+`signature valid ≠ signer authorized for this closure generation`.  
+`append-only history ≠ semantic legitimacy`.  
+`independent storage ≠ independent administration`.  
+`replica count > 1 ≠ failure-domain independence`.  
+`provider receipt retained ≠ provider state still current`.  
+`audit evidence sufficient ≠ raw sensitive payload retained`.  
+`offline client remembers CLOSED ≠ server closure remains current`.  
+`backup restored successfully ≠ restored closure generation accepted`.
 
 ## Five-track state
-- **A Platform/Browser:** high dependency supplier; owns exact SW/cache/storage/offline-queue lifecycle and reconnect revalidation boundaries.
-- **B UX/IA/Content:** elevated dependency pressure; owns truthful `RECONCILING`, `CONTAINED`, `RESIDUAL RISK`, `CLOSED — MONITORED`, `REOPENED` and local-data-preservation states.
-- **C Performance/Accessibility/Quality:** high dependency pressure; owns destructive closure/reopen/expiry testing across stale clients, provider contradiction, evidence loss and AT states.
-- **D Search/Discovery/Analytics:** constrained supporting consumer; telemetry may reveal unexpected residual activity but silence cannot prove containment and analytics cannot accept risk.
-- **E Architecture/Security/Operations:** highest-risk owner; 159 closes generic closure-scope/invariant, downstream reconciliation and residual-risk expiry/reopen governance.
+- **A Platform/Browser:** high dependency supplier; owns exact SW/cache/storage/offline-queue persistence and reconnect currentness/revalidation boundaries.
+- **B UX/IA/Content:** elevated dependency pressure; owns truthful `HISTORICAL CLOSURE`, `CLOSED — VERIFIED CURRENT`, `REVALIDATION REQUIRED`, `REOPENED`, `SUPERSEDED` and evidence-unavailable states.
+- **C Performance/Accessibility/Quality:** high dependency pressure; owns 72-case destructive anti-forgery/restore/currentness campaign, evidence-outage behavior and accessible state differentiation.
+- **D Search/Discovery/Analytics:** constrained diagnostic consumer; telemetry may reveal stale closure generations but cannot certify closure or currentness.
+- **E Architecture/Security/Operations:** highest-risk owner; 160 closes generic evidence retention/minimization, verifier-independence, closure-lineage/currentness and anti-resurrection governance.
 
 ## Cross-repository evidence
-Design Studio `progress/WEB_STATUS.md` is **W107 DATE-LOCALE RUNTIME MANIFEST; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. No W107 runtime execution, independent-browser/Safari/Firefox PASS, physical-device PASS, field Core Web Vitals, full WCAG conformance, screen-reader or human UX PASS is claimed.
+Design Studio `progress/WEB_STATUS.md` is **W108 CROSS-SURFACE PRODUCTION TRANSFER; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. No W108 runtime execution, independent-browser/Safari/Firefox PASS, physical-device PASS, field Core Web Vitals, full WCAG conformance, screen-reader or human UX PASS is claimed.
 
-Software Engineering implementation evidence remains a bounded dependency. Actual LogMate persistence/Sync, Flutter/mobile transfer, key storage, account/device identity, policy store/replication, transaction/lease/effect schema, authority epoch, backup/PITR/restore, KMS/HSM/trust roots, recovery custody/succession/ceremony/abort/compensation/closure schema, provider/downstream commit semantics, authenticator deployment, Service Worker and managed-device integration remain OPEN.
+Software Engineering implementation evidence remains a bounded dependency. Actual LogMate persistence/Sync, Flutter/mobile transfer, key storage, account/device identity, policy store/replication, transaction/lease/effect schema, authority epoch, backup/PITR/restore, KMS/HSM/trust roots, recovery custody/succession/ceremony/abort/compensation/closure/evidence schema, provider/downstream commit semantics, audit/evidence store, verifier/anchor topology, canonicalization/signing model, authenticator deployment, Service Worker and managed-device integration remain OPEN.
 
 ## Production OPEN register
-Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM behavior; PWA storage/update/background/sync; authentication/session/offline authorization; local authoritative data; actual schema/operation/API/policy versions; authority/compatibility/data-recovery horizons; allowed offline edits/deletes; record/operation/device/effect identity; conflict/merge/correction/compensation/closure policy; provenance/integrity/compaction/export/import; checkpoint/crypto/key/trust hierarchy; compromise/revocation/recovery; evidence/event/SLO/gating/policy-runtime semantics; rollout cohort integrity; cross-generation transaction boundaries; in-flight policy leases; retirement floor/tombstone semantics; provider replication/restore/compaction/commit/ACK/downstream semantics; authority-floor escrow schema/freshness/custody; KMS/HSM and backup-encryption dependencies; organizational succession/quorum/emergency authority; recovery ceremony target/participant/authenticator/channel/evidence/abort/effect/closure semantics; residual-risk owner/tolerance/expiry; temporary-authority revocation topology; Service Worker trust; actual RTO/RPO/MTD; and real physical-device/security/privacy/legal/aviation validation.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM behavior; PWA storage/update/background/sync; authentication/session/offline authorization; local authoritative data; actual schema/operation/API/policy versions; authority/compatibility/data-recovery horizons; allowed offline edits/deletes; record/operation/device/effect identity; conflict/merge/correction/compensation/closure policy; provenance/integrity/compaction/export/import; checkpoint/crypto/key/trust hierarchy; compromise/revocation/recovery; evidence/event/SLO/gating/policy-runtime semantics; rollout cohort integrity; cross-generation transaction boundaries; in-flight policy leases; retirement floor/tombstone semantics; provider replication/restore/compaction/commit/ACK/downstream semantics; authority-floor escrow schema/freshness/custody; KMS/HSM and backup-encryption dependencies; organizational succession/quorum/emergency authority; recovery ceremony target/participant/authenticator/channel/evidence/abort/effect/closure semantics; closure evidence retention/currentness/verifier independence; residual-risk owner/tolerance/expiry; temporary-authority revocation topology; Service Worker trust; actual RTO/RPO/MTD; and real physical-device/security/privacy/legal/aviation validation.
 
 ## Next learning mode
-Highest-value adjacent generic work is **PWA recovery-closure evidence retention, verifier independence & closure-claim anti-forgery**: determine how closure evidence remains verifiable without turning the incident ledger into mutable self-attestation, how independent/provider evidence is retained with privacy minimization, and how stale/forged closure claims are detected across backup/restore, replicas and offline clients.
+Highest-value adjacent generic work is **PWA closure-evidence key/trust compromise, verifier migration & long-horizon proof survivability**: determine how historical closure evidence remains verifiable when evidence-signing/verifier keys or trust roots rotate or are compromised, how compromise time is bounded without laundering suspect historical claims, and how long-retained proof survives algorithm/canonicalization migration without re-enabling retired authority.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–159 PASS** at generic gates.
+- Continuous maintenance: **083–160 PASS** at generic gates.
 - Product/device/AT/security/privacy/legal/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/event/SLO/gating/policy-runtime/disaster/custody/ceremony/effect/closure-runtime validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
