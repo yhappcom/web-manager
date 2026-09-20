@@ -7,55 +7,53 @@ Last sync: 2026-09-20
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Curriculum completion is not production certification. Detailed guards and studies live in `research/README.md` and numbered research artifacts.
 
 ## Continuous expert maintenance
-083–168 — **PASS at recorded generic gates.**  
-169 PWA Redress Case Confidentiality Across Delegated/Representative Access, Shared/Managed Devices & Support Collaboration — **PASS (generic) / PRODUCT + IDP + DELEGATION + SUPPORT + MDM + LEGAL + HUMAN/AT + MANAGED-FLEET VALIDATION OPEN**.
+083–169 — **PASS at recorded generic gates.**  
+170 PWA Delegation Lifecycle Recovery, Authority Conflict & Offline Reconciliation — **PASS (generic) / PRODUCT + IDP + DELEGATION + EMPLOYMENT/ORG + MDM + LEGAL + HUMAN/AT + MANAGED-FLEET VALIDATION OPEN**.
 
-## 169 integrated checkpoint
-- Confidentiality follows the specific subject–case–capability–purpose relationship, not device ownership, organizational employment, support role, case-ID possession or prior access.
-- Separate subject, actor, relationship/delegation, case/object scope, capability, purpose, device/session context and disclosure projection. `has access` is too coarse for sensitive redress workflows.
-- NIST least-privilege/access-enforcement and ABAC models support narrow authorization based on subject/object/operation/context attributes; this is a governance transfer, not a requirement to adopt a specific ABAC product.
-- OWASP authorization guidance reinforces deny-by-default and object-level checks on every request. Guess-resistant case IDs do not replace authorization.
-- Delegation is narrow, generation/currentness-aware and revocable. Representative access to one case/capability does not imply all cases/evidence or adjudication authority.
-- Support receives purpose-limited diagnostic projections; support authentication does not make the operator the subject, representative or adjudicator. Privileged legal/security/fraud material remains outside routine support views.
-- Apple Shared iPad provides supervised multiuser separation with Managed Apple Accounts and protected user storage, but organization/device ownership or MDM enrollment does not establish LogMate subject/representative authority. Physical Safari/Home Screen/MDM product behavior remains OPEN.
-- PWA cached SW/IndexedDB/browser state is not delegation evidence. Account switch/sign-out/shared-device flows require explicit leakage tests across cache/history/BFCache/storage/notifications.
-- Revocation can stop future access but cannot truthfully claim to recall information already legitimately disclosed to an external representative/device.
-- Unique unsynced local flight data remains independently preservable/exportable even when remote redress/delegation authority is withdrawn; queued consequence-bearing submissions revalidate on reconnect.
+## 170 integrated checkpoint
+- Recover identity without silently recovering stale delegation. Identity/account, authenticator/session, relationship/delegation, organization/employment, case/decision and device/offline observation generations are separate.
+- NIST SP 800-63B-4 separates authenticator lifecycle/recovery/session management; successful account recovery restores authentication capability but does not prove current external representative/employment authority.
+- WebAuthn Level 3 is now a W3C Recommendation (2026-08-25). Strong RP-scoped authentication proves authenticator control, not business delegation, employment, guardianship or case scope.
+- Revocation is a historical authority event. Renewal/re-delegation creates a new grant generation even for the same actor/scope; old invitations, exports, queues and cached grants do not revive.
+- Multiple individually authorized delegates can still produce semantically conflicting operations. High-consequence conflicts require product/domain adjudication; last-write-wins, client timestamp and device clock are not generic authority rules.
+- Long-offline PWA clients preserve unique local operational data and drafts, but current server-side authority must be re-established before consequence-bearing queued replay. Re-delegation to the same actor does not automatically authorize an old queued operation.
+- Organization ownership, IdP membership, MDM enrollment and Managed Apple Account state are evidence/context only where actual product/legal policy grants them authority.
+- Apple Shared iPad/user-storage separation remains bounded platform evidence; physical Safari/Home Screen/MDM/LogMate transfer remains OPEN.
 
-## Persistent guards added by 169
-`authenticated actor ≠ subject`.  
-`representative for one case ≠ representative for all cases`.  
-`may submit evidence ≠ may read all evidence`.  
-`may view explanation ≠ may adjudicate`.  
-`support access ≠ subject authority`.  
-`device ownership ≠ data-subject authority`.  
-`MDM enrollment ≠ representative consent`.  
-`case ID possession ≠ case entitlement`.  
-`access granted once ≠ access current forever`.  
-`shared device ≠ shared account`.  
-`browser cache present ≠ current disclosure authorization`.  
-`audit need ≠ unrestricted case-content retention`.
+## Persistent guards added by 170
+`account recovered ≠ delegation recovered`.  
+`authenticator rebound ≠ representative relationship renewed`.  
+`employment active once ≠ employment active now`.  
+`same email ≠ same authority generation`.  
+`same Managed Apple Account ≠ same LogMate delegation`.  
+`device still managed ≠ user still authorized`.  
+`revoked then renewed ≠ old grant resurrected`.  
+`multiple valid delegates ≠ their actions are semantically compatible`.  
+`offline action authored while authorized ≠ action still authorized at commit time`.  
+`later device timestamp ≠ later authoritative intent`.  
+`queued mutation preserved ≠ queued mutation executable`.  
+`remote authority lost ≠ unique local operational data should be destroyed`.
 
 ## Five-track state
-- **A Platform/Browser:** high dependency supplier; owns session/origin/cache/SW/storage/shared-device mechanics. Browser/device state cannot establish human delegation.
-- **B UX/IA/Content:** very high dependency pressure; owns explicit acting-for context, role-aware case projections, delegation/revocation UX and shared-device exit/recovery while consuming Design Studio evidence.
-- **C Performance/Accessibility/Quality:** high dependency pressure; owns 169's 112-case destructive object-authorization/disclosure/shared-device campaign plus independent browser/device/AT/human validation.
-- **D Search/Discovery/Analytics:** bounded consumer; may measure aggregate workflow quality but representative relationships/case payloads must not become marketing identity graphs.
-- **E Architecture/Security/Operations:** highest-risk owner; 169 closes generic delegated/shared-device/support confidentiality boundaries. Delegation lifecycle recovery and authority conflict is the adjacent bottleneck.
+- **A Platform/Browser:** high dependency supplier; owns session/WebAuthn/SW/cache/storage/reconnect mechanics. Cached/browser/device state cannot establish current human delegation.
+- **B UX/IA/Content:** very high dependency pressure; owns acting-for, access-ended/review-required, stale-local-draft and conflict UX while consuming Design Studio evidence.
+- **C Performance/Accessibility/Quality:** high dependency pressure; owns 170's 120-case destructive recovery/revocation/conflict/offline campaign plus independent browser/device/AT/human validation.
+- **D Search/Discovery/Analytics:** bounded consumer; may measure aggregate recovery/conflict quality but must not turn representative/employment relationships into durable acquisition identity graphs.
+- **E Architecture/Security/Operations:** highest-risk owner; 170 closes generic delegation recovery/revocation/renewal/conflict/offline-reconciliation boundaries. Cross-system delegation provenance/federation is the adjacent bottleneck.
 
 ## Cross-repository evidence
-Design Studio `progress/WEB_STATUS.md` is **W117 CANDIDATE 05 PRODUCTION PROMOTION PACKET; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Candidate 05 remains owner-review eligible only; analyze/test/golden/runtime, independent browser/native, physical device/PWA, field Core Web Vitals, full WCAG, screen-reader and human UX evidence remain OPEN.
+Design Studio `progress/WEB_STATUS.md` is **W118 CANDIDATE 07 PRODUCTION TRANSFER PACKET; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Analyze/golden/runtime, independent browser/native, physical device/PWA, field Core Web Vitals, full WCAG, screen-reader and human UX evidence remain OPEN.
 
-Software Engineering Studio remains at Foundation study. Its Mobile M006 evidence covers exact generic Chromium offline/restart/update-control/offline-cold-start behavior, while native/Safari-iPadOS/EFB/canonical LogMate runtime remains explicitly OPEN. Implementation-level authorization/session/cache/shared-device tests remain an engineering handoff, not Web Manager reading evidence.
+Software Engineering Studio Mobile remains **Stage 1 IN STUDY / NOT YET PASSED**. M006 has bounded real generic Chromium evidence for controlled offline fetch, browser restart/profile persistence, Service Worker update/client-control transition and second-process offline-before-navigation cold start. It explicitly does not prove Safari/iPadOS/EFB, Flutter Web/LogMate, storage eviction, physical connectivity loss or production behavior.
 
 ## Production OPEN register
-Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM/Shared-iPad behavior; PWA storage/update/background/sync/push; authentication/session/offline authorization; local authoritative data; actual account/tenant/IdP/authenticator/passkey/session model; notification channels/providers/templates; representative/delegation/employer/guardian authority; support/adjudication roles; case/evidence disclosure projections; account/device/key recovery; API/schema/policy/decision/reason generations; record/operation/device/effect identity; conflict/merge/correction/compensation/closure policy; provenance/export/import/checkpoint/crypto/key/trust hierarchy; compromise/revocation/recovery; provider replication/restore/backup semantics; organizational recovery authority; closure/deletion evidence; retention/deletion/legal obligations; deletion propagation and backup expiry; retention/hold authority/applicability/release; cross-jurisdiction convergence; policy issuer/admin/key/trust topology; actual aviation/employment/tax/investment/legal-claims preservation requirements; explanation/redress rights and response times; privileged-material handling; external-recipient correction; stale export/import admission; offline-fleet reconciliation; Service Worker trust; actual RTO/RPO/MTD; and real physical-device/security/privacy/legal/aviation validation.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM/Shared-iPad behavior; PWA storage/update/background/sync/push; authentication/session/offline authorization; local authoritative data; actual account/tenant/IdP/authenticator/passkey/session model; representative/delegation/employer/airline/guardian authority; organization/employment lifecycle; support/adjudication roles; offline queue/replay/conflict policy; case/evidence disclosure projections; account/device/key recovery; API/schema/policy/decision/reason generations; record/operation/device/effect identity; conflict/merge/correction/compensation/closure policy; provenance/export/import/checkpoint/crypto/key/trust hierarchy; provider replication/restore/backup semantics; organizational recovery authority; closure/deletion evidence; retention/deletion/legal obligations; cross-jurisdiction convergence; actual aviation/employment/tax/investment/legal-claims preservation requirements; explanation/redress rights; external-recipient correction; Service Worker trust; actual RTO/RPO/MTD; and real physical-device/security/privacy/legal/aviation validation.
 
 ## Next learning mode
-Highest-value adjacent generic work is **PWA delegation lifecycle recovery & authority conflict**: determine how subject/representative account recovery, organization/employment changes, multiple conflicting delegates, revocation/renewal, offline queued actions and long-offline managed devices interact without stale relationship state resurrecting authority or destroying unique local operational data.
+Highest-value adjacent generic work is **PWA delegation provenance portability & cross-system federation**: determine how employer/airline/IdP/external-service assertions can establish bounded local authority without becoming permanent cached grants, how currentness/revocation survives provider outage or migration, and how offline PWA state remains usable without treating cached federation assertions as evergreen authorization.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–169 PASS** at generic gates.
+- Continuous maintenance: **083–170 PASS** at generic gates.
 - Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/policy-runtime/deletion/retention/redress/identity/notification/delegation runtime validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
