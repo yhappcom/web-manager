@@ -8,86 +8,49 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Cu
 
 ## Continuous expert maintenance
 083–170 — **PASS at recorded generic gates.**  
-171–184 — **PASS (generic)** across federation provenance/currentness/convergence, availability/dependency isolation, SLO/brownout, exception/break-glass governance, emergency compromise/reconstitution, recovery-root survivability, organizational succession, deadlock-safe quorum liveness, constitutional recovery-policy/governance-key change control, exact-artifact supply-chain/transparency, witness independence, gossip and monitor-compromise recovery.  
-185 PWA Transparency Evidence Retention, Witness-Key Succession & Compromise-Era Checkpoint Survivability — **PASS (generic) / PRODUCT + SECURITY + TRANSPARENCY-TOPOLOGY + KEY-CUSTODY + RETENTION + MANAGED-IPAD + RUNTIME + PRIVACY + HUMAN/AT VALIDATION OPEN**.
+171–185 — **PASS (generic)** across federation/currentness, availability/SLO, exception/break-glass, emergency/recovery authority, organizational succession, quorum liveness, constitutional policy/governance keys, exact-artifact supply chain, transparency/witness/monitor and historical evidence/key succession.  
+186 PWA Transparency Archive Integrity, Historical-Verifier Isolation & Evidence-Deletion/Crypto-Erasure Governance — **PASS (generic) / PRODUCT + SECURITY + ARCHIVE-TOPOLOGY + LEGAL/RETENTION + CRYPTO + MANAGED-IPAD + RUNTIME + PRIVACY + HUMAN/AT VALIDATION OPEN**.
 
-## 171–185 integrated checkpoint
-- Federation evidence, local delegation, authentication/session state, emergency authority, recovery authority, constitutional recovery policy, transparency evidence and offline observation are separate authority/evidence layers.
-- Security-policy publication, regional admission, actual enforcement, client observation and convergence evidence are distinct distributed states.
-- Offline-first utility does not require stale-authority fail-open. Unique local records/drafts may remain usable while consequence-bearing remote operations wait for current server admission.
-- Availability/reliability objectives do not authorize weaker security. Temporary exceptions/break-glass are bounded executable generations with hard expiry/revocation, rollback resistance and evidence.
-- Emergency-authority compromise recovery is trust reconstitution, not credential rotation. A compromised emergency/recovery root cannot solely bless its successor.
-- Recovery-root survivability is continuity of governed authority/evidence, not duplicate credentials. People, IdP, provider, administrator, site/device, legal entity, evidence store and policy/currentness can be correlated failure domains.
-- Organizational/personnel succession is a new eligibility/custody event, not inheritance of predecessor credentials, sessions or emergency generation.
-- Recovery ceremony is a versioned state machine; recovery liveness is not authority weakening. Timeout, outage duration, backlog and urgency cannot create authority or lower quorum.
-- Recovery-policy change is constitutional authority, not ordinary configuration. Policy semantics, generation, governance authority, governance key, publication, regional admission and runtime enforcement are distinct.
-- Constitutional approval must bind to exact immutable deployable artifact identity/lineage. Authorization, build/provenance, signature, publication, regional admission and runtime enforcement remain separate evidence layers.
-- Transparency is detection evidence, not authority. Inclusion/append-only evidence does not prove semantic authorization, and one internally consistent local log view does not prove global non-equivocation.
-- Witness independence is a failure-domain property, not numerical multiplicity. Witness, monitor, distributor/gossip, constitutional admission authority and client observer are distinct roles.
-- Monitor silence/green is not proof that no conflict existed. Missing or compromised observation intervals remain UNKNOWN unless authenticated retained evidence permits reconstruction.
-- Signed conflicting checkpoints are incident evidence and must survive newer heads, rotation and recovery rather than being overwritten.
-- **Current authority material and historical verification material are distinct.** Retired public verification material may remain necessary for retained evidence while the corresponding key is forbidden for new signing/admission.
-- **Key rotation does not erase compromise-era uncertainty.** A successor key or restored archive cannot retroactively certify an interval whose legitimacy is unknown.
-- **Evidence retention is claim-specific.** Checkpoint identity, applicable verification context, continuity/conflict evidence and compromise metadata may need to survive; maximal raw logs, business payloads and stable per-device dossiers are not the default.
-- **PITR must reconcile against the surviving current security/key floor.** Restored old active-key flags, witness state, policies or monitor DBs cannot silently reactivate retired authority or erase later conflict evidence.
-- PWA clients may contribute bounded signed observations but are not trust anchors or policy voters. Missing browser evidence is not proof of absence because local storage may be evicted or stale.
-- Long-offline PWA clients may skip policy/key/transparency generations; reconnect obtains current server authority before privileged queue drain while unique local data remains preserved.
+## 171–186 integrated checkpoint
+- Federation, local delegation, session state, emergency/recovery authority, constitutional policy, transparency evidence, archives and offline observations are separate authority/evidence layers.
+- Security-policy publication, regional admission, runtime enforcement, client observation and convergence are distinct distributed states.
+- Offline-first utility does not require stale-authority fail-open: preserve unique local records/drafts while consequence-bearing remote operations wait for current admission.
+- Reliability/SLO pressure cannot weaken security; exceptions and break-glass are bounded, expiring, revocable generations.
+- Recovery is trust reconstitution, not credential rotation; compromised roots cannot solely bless successors; quorum outage/timeout does not create authority.
+- Constitutional policy change is higher-order authority. Approval binds to exact immutable artifact identity/lineage; build, signature, publication, admission and enforcement remain separate evidence layers.
+- Transparency is detection evidence, not authority. Witness independence is a failure-domain property; monitor silence is not proof of no conflict; conflicting signed checkpoints survive rotation/recovery.
+- Current authority material and historical verification material are distinct. Retired public verification material may remain necessary while corresponding keys/algorithms are forbidden for new signing/admission.
+- Key rotation does not erase compromise-era uncertainty. PITR/restores reconcile against the surviving current security/key/deletion/hold floor.
+- **Archive integrity is not archive authority.** Readability, signature validity and successful restore do not by themselves prove completeness, currentness or semantic legitimacy.
+- **Historical verifier retention is a bounded read-only capability.** Legacy parsers/algorithms/public keys must not silently re-enter the current mutation/admission path; exact isolation is an engineering/security dependency.
+- **Deletion is a governed lifecycle, not a UI/database boolean.** Retention, hold, deletion/sanitization, validation and residual backup/replica handling are separate states.
+- **Cryptographic erase is topology-dependent.** Deleting one key handle does not prove all usable key material/wrapping/recovery paths or plaintext copies are gone. NIST SP 800-88 Rev.2 is the current media-sanitization baseline; Rev.1 is withdrawn.
+- Security/incident retention must remain claim-specific and privacy-bounded; it does not justify permanent raw user/device/flight/location dossiers.
+- PWA clients may retain or lose historical observations but are neither durable archives nor deletion/current-authority oracles. Long-offline reconnect obtains current server state before privileged queue drain while unique local data remains preserved.
 
-## Persistent guards added through 185
-`federated login PASS ≠ local delegation PASS`.  
-`policy published ≠ every region admitted/enforced it`.  
-`authorization unavailable ≠ local data unavailable`.  
-`SLO met ≠ security floor met`.  
-`temporary exception approved ≠ permanent policy changed`.  
-`compensating control configured ≠ compensating control effective`.  
-`two approvals recorded ≠ approvals independent`.  
-`credential rotated ≠ emergency trust reconstituted`.  
-`old root signed successor ≠ successor independently trusted`.  
-`quorum unavailable ≠ quorum may be lowered`.  
-`timeout elapsed ≠ authority expanded`.  
-`policy administrator can edit file ≠ administrator may redefine its own authority`.  
-`historical policy verifies ≠ historical policy remains executable`.  
-`policy approved ≠ exact deployed artifact approved`.  
-`artifact signed ≠ policy semantics authorized`.  
-`transparency inclusion PASS ≠ artifact authorized`.  
-`append-only consistency PASS ≠ global non-equivocation proven`.  
-`three witness signatures ≠ three independent failure domains`.  
-`monitor saw no conflict ≠ no conflict existed`.  
-`many clients report X ≠ X legitimate by majority vote`.  
-`witness key valid ≠ witness state/history uncompromised`.  
-`transparency plane recovered ≠ policy/admission plane recovered`.  
-`old key verifies history ≠ old key may sign new history`.  
-`key retired ≠ historical evidence must be deleted`.  
-`key compromised ≠ every pre-compromise signature automatically trustworthy`.  
-`key rotated ≠ compromise-era uncertainty resolved`.  
-`checkpoint retained ≠ consistency path retained`.  
-`latest checkpoint retained ≠ conflict evidence retained`.  
-`archive restored ≠ missing interval reconstructed`.  
-`PITR recovered old key/policy ≠ old authority reactivated`.  
-`historical verifier available ≠ verifier belongs on current admission path`.  
-`client retained old checkpoint ≠ client is authoritative witness`.  
-`remote authority unavailable ≠ unique local operational data should be destroyed`.
+## Persistent guards added through 186
+`federated login PASS ≠ local delegation PASS`; `policy published ≠ every region admitted/enforced it`; `authorization unavailable ≠ local data unavailable`; `SLO met ≠ security floor met`; `temporary exception approved ≠ permanent policy changed`; `credential rotated ≠ emergency trust reconstituted`; `quorum unavailable ≠ quorum may be lowered`; `timeout elapsed ≠ authority expanded`; `historical policy verifies ≠ historical policy remains executable`; `policy approved ≠ exact deployed artifact approved`; `artifact signed ≠ policy semantics authorized`; `transparency inclusion PASS ≠ artifact authorized`; `append-only consistency PASS ≠ global non-equivocation proven`; `three witness signatures ≠ three independent failure domains`; `monitor saw no conflict ≠ no conflict existed`; `old key verifies history ≠ old key may sign new history`; `key rotated ≠ compromise-era uncertainty resolved`; `archive restored ≠ missing interval reconstructed`; `historical verifier available ≠ verifier belongs on current admission path`; `archive readable ≠ archive authentic`; `archive signature valid ≠ archive complete`; `archive integrity PASS ≠ archived statement semantically legitimate`; `record hidden from UI ≠ record deleted`; `database row deleted ≠ all replicas/backups/caches sanitized`; `encryption key deleted ≠ crypto-erasure proven`; `legal/incident hold active ≠ retain unrelated data forever`; `PITR restored deleted evidence ≠ deletion automatically undone legitimately`; `remote authority unavailable ≠ unique local operational data should be destroyed`.
 
 ## Five-track state
-- **A Platform/Browser:** high dependency supplier; owns HTTP/DNS/TLS, cache/session/SW/storage/reconnect mechanics and stale privileged browser-state boundaries. Local checkpoints/public keys are historical observations, not current authority.
-- **B UX/IA/Content:** very high dependency pressure; owns verification-pending, local-work-preserved, privileged-submission-paused and re-admission semantics while consuming Design Studio evidence.
-- **C Performance/Accessibility/Quality:** high dependency pressure; owns destructive campaigns through 185's 240-case retention/key-transition campaign. Execution, physical-device, AT and human validation remain OPEN.
-- **D Search/Discovery/Analytics:** bounded consumer; evidence-health telemetry must remain low-cardinality and must not expose policy bodies, signing secrets, witness/custodian identities, stable per-device dossiers or flight/user/location payloads.
-- **E Architecture/Security/Operations:** highest-risk owner; 185 closes the generic evidence-retention/witness-key-succession/compromise-era survivability boundary. Archive integrity, historical-verifier isolation and evidence deletion/crypto-erasure governance are the adjacent bottleneck.
+- **A Platform/Browser:** high dependency supplier; owns HTTP/DNS/TLS, cache/session/SW/storage/reconnect mechanics. Browser caches/IndexedDB may retain or lose old observations and are not durable archive/deletion/currentness authority.
+- **B UX/IA/Content:** very high dependency pressure; owns local-work-preserved, remote-verification/deletion-pending and privileged-submission-paused semantics while consuming Design Studio evidence.
+- **C Performance/Accessibility/Quality:** high dependency pressure; owns destructive campaigns through 186's 248-case archive/verifier/deletion campaign. Execution, physical-device, AT and human validation remain OPEN.
+- **D Search/Discovery/Analytics:** bounded consumer; archive/deletion health telemetry must remain low-cardinality and avoid raw evidence, policy bodies, identities and flight/user/location dossiers.
+- **E Architecture/Security/Operations:** highest-risk owner; 186 closes the generic archive-integrity/historical-verifier/deletion/crypto-erasure boundary. Archive migration, algorithm retirement and long-term evidence re-attestation without authority laundering are the adjacent bottleneck.
 
 ## Cross-repository evidence
 Design Studio `progress/WEB_STATUS.md` remains **W121 EXECUTION-PRIORITY GATE; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Exact-source runtime, independent browser/native, physical-device/PWA, field Core Web Vitals, full WCAG, screen-reader and human UX evidence remain OPEN.
 
-Software Engineering implementation evidence remains a dependency for exact policy build/provenance/signing/publication/witness/monitor/archive/verifier behavior. No Web Manager generic conclusion is promoted to product/runtime PASS without canonical implementation evidence.
+Software Engineering implementation evidence remains a dependency for exact archive integrity, verifier isolation, key hierarchy, deletion/sanitization, backup/PITR and runtime behavior. No generic conclusion is promoted to product/runtime PASS without canonical implementation evidence.
 
 ## Production OPEN register
-Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM/Shared-iPad behavior; PWA storage/update/background/sync/push; authentication/session/offline authorization; actual account/tenant/IdP/federation/trust-anchor model; provider/region/control-plane topology; retry/queue semantics; exception/emergency/recovery authority; constitutional/recovery-policy authority and governance keys; policy canonicalization/build/signature/provenance/publication/transparency/distribution/admission/enforcement; witness/monitor/gossip topology and independence; key rotation/revocation and historical verifier; archive/retention/deletion/legal hold; organizational/legal succession; backup/PITR; authoritative time/currentness; audit/evidence stack; BIA/RTO/RPO/SLO; legal/aviation obligations; and physical-device/security/privacy/human validation.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence, including managed-iPad/WebKit/MDM/Shared-iPad behavior; PWA storage/update/background/sync; authentication/session/offline authorization; provider/region/control-plane topology; queue/retry semantics; exception/emergency/recovery authority; constitutional policy/build/signature/provenance/transparency/admission/enforcement; witness/monitor/archive topology; historical verifier and algorithms; encryption/key hierarchy/KMS recovery; retention/deletion/legal hold/crypto-erasure; backup/PITR/export/cache copies; organizational succession; legal/aviation obligations; and physical-device/security/privacy/human validation.
 
 ## Next learning mode
-Highest-value adjacent generic work is **PWA transparency archive integrity, historical-verifier isolation & evidence-deletion/crypto-erasure governance**: determine how retained historical evidence is independently integrity-protected and restorable; how legacy verification code/algorithms are isolated from current mutation authority; how deletion, legal hold and crypto-erasure interact with incident evidence; and how archive compromise/recovery avoids converting the evidence store into a new trust anchor or privacy dossier.
+Highest-value adjacent generic work is **PWA archive migration, algorithm-retirement & long-term evidence re-attestation without authority laundering**: determine how retained evidence remains interpretable when formats, canonicalization, signature/hash algorithms and verifier runtimes age out; how later timestamps/re-attestations preserve original provenance without pretending to recreate original trust; and how long-offline clients converge after historical-verifier retirement.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–185 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/policy-runtime/supply-chain/transparency/deletion/retention/redress/identity/notification/delegation/federation/runtime/SLO/exception/break-glass/organizational-succession/quorum/constitutional-policy validation remains OPEN.
+- Continuous maintenance: **083–186 PASS** at generic gates.
+- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/policy-runtime/supply-chain/transparency/deletion/retention/runtime validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
