@@ -14,9 +14,10 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Cu
 174 PWA Federation Trust-Policy Availability, Fail-Safe Degradation & Recovery Objectives — **PASS (generic) / PRODUCT + FEDERATION + PROVIDER + MULTI-REGION + MANAGED-IPAD + RUNTIME + SLA/BIA + HUMAN/AT VALIDATION OPEN**.  
 175 PWA Federation Dependency Isolation, Cascading-Failure Containment & Degraded-Mode Observability — **PASS (generic) / PRODUCT + FEDERATION + PROVIDER + MULTI-REGION + MANAGED-IPAD + RUNTIME + SLO/BIA + HUMAN/AT VALIDATION OPEN**.  
 176 PWA Degraded-Mode SLO, Error-Budget, Brownout Admission & Recovery-Proof Governance — **PASS (generic) / PRODUCT + BIA + SLO + PROVIDER + MULTI-REGION + MANAGED-IPAD + RUNTIME + HUMAN/AT VALIDATION OPEN**.  
-177 PWA Exception/Waiver Debt, Configuration Provenance & Automated Expiry Enforcement — **PASS (generic) / PRODUCT + SECURITY + LEGAL + PROVIDER + MULTI-REGION + MANAGED-IPAD + RUNTIME + HUMAN/AT VALIDATION OPEN**.
+177 PWA Exception/Waiver Debt, Configuration Provenance & Automated Expiry Enforcement — **PASS (generic) / PRODUCT + SECURITY + LEGAL + PROVIDER + MULTI-REGION + MANAGED-IPAD + RUNTIME + HUMAN/AT VALIDATION OPEN**.  
+178 PWA Compensating-Control Assurance, Break-Glass Authority & Independent Approval Boundaries — **PASS (generic) / PRODUCT + SECURITY + LEGAL + PROVIDER + MULTI-REGION + MANAGED-IPAD + RUNTIME + HUMAN/AT VALIDATION OPEN**.
 
-## 171–177 integrated checkpoint
+## 171–178 integrated checkpoint
 - Federation is bounded issuer-specific evidence, not evergreen local delegation. External assertion, local authority mapping, delegation generation, browser/session/token state and offline observation remain distinct.
 - Federation metadata, JWKS, trust chains and local trust-anchor configuration are versioned security state. HTTPS reachability or valid signatures alone do not establish current semantic trust.
 - Trust-policy publication is a distributed security-state transition: authoring, authorization, publication, regional admission, enforcement, client observation and convergence evidence are distinct.
@@ -36,12 +37,18 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Cu
 - Renewal is a new risk decision/generation; repeated renewal is debt evidence, not automatic permission.
 - Expiry/revocation must survive rollback/PITR and stale regional/client state; a restored old exception cannot reactivate itself.
 - Exception registries remain subordinate inputs to primary authorization policy and must not become a second broad `allow` plane.
+- **Compensating-control configuration and compensating-control assurance are distinct.** If an exception contract depends on a control's current effectiveness, material failure or UNKNOWN assurance cannot silently preserve exceptional consequence authority.
+- **Break-glass is a distinct, narrow, expiring emergency capability, not a routine administrator-shaped universal bypass.** Emergency declaration does not erase least privilege or consequence scope.
+- Separation/independence is evaluated across authority and failure domains, not by counting approvals. Request, approval/activation, policy administration, exercise, observation/audit, revocation and review remain conceptually separable.
+- Emergency-use evidence should resist unilateral concealment where the threat model requires it; audit absence is UNKNOWN, not proof of clean use.
+- Break-glass termination is not closure: post-use review, residual-risk evaluation and credential/capability reset may still be required by the real implementation.
+- Emergency activation/revocation is distributed security state and must resist stale regions, rollback/PITR and offline-client persistence.
 - Recovery requires current floor + actual enforcement + reconciliation evidence and bounded progressive reopen; endpoint recovery, lower burn rate or queue drain alone is insufficient.
 - Telemetry absence, lag or sampling cannot be silently interpreted as healthy/current. Client/PWA telemetry supports diagnosis but is never the authority oracle.
-- Service Worker/app-shell availability and semantic authorization-policy/exception availability/convergence remain separate.
-- No generic claim is made that iPadOS refreshes federation metadata, keys, tokens, policy, exceptions or Service Worker in the background. Physical Safari/Home Screen/MDM transfer remains OPEN.
+- Service Worker/app-shell availability and semantic authorization-policy/exception/emergency-authority availability/convergence remain separate.
+- No generic claim is made that iPadOS refreshes federation metadata, keys, tokens, policy, exceptions, emergency authority or Service Worker in the background. Physical Safari/Home Screen/MDM transfer remains OPEN.
 
-## Persistent guards added by 171–177
+## Persistent guards added by 171–178
 `federated login PASS ≠ local delegation PASS`.  
 `token cached ≠ authority evergreen`.  
 `policy published ≠ every region admitted/enforced it`.  
@@ -77,31 +84,43 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete. Cu
 `client clock says valid ≠ server authority says valid`.  
 `cached exception present ≠ offline client may self-authorize consequence`.  
 `exception registry available ≠ registry may bypass primary authorization policy`.  
+`compensating control configured ≠ compensating control effective`.  
+`control health green ≠ required assurance proven`.  
+`exception unexpired ≠ usable after required control failure`.  
+`break-glass account exists ≠ emergency use authorized`.  
+`emergency declared ≠ unlimited capability granted`.  
+`operator authenticated ≠ operator may self-approve emergency authority`.  
+`two approvals recorded ≠ approvals independent`.  
+`approval independent ≠ runtime use independently observed`.  
+`emergency access ended ≠ post-use review complete`.  
+`logs exist ≠ emergency operator could not suppress them`.  
+`PITR restored emergency config ≠ emergency authority reactivated`.  
+`offline client cached emergency state ≠ remote consequence authorized`.  
 `low burn rate ≠ current authority proven`.  
 `queue draining ≠ recovery proven`.  
-`Service Worker updated ≠ trust-policy/exception reconciliation complete`.  
+`Service Worker updated ≠ trust-policy/exception/emergency-authority reconciliation complete`.  
 `remote authority unavailable ≠ unique local operational data should be destroyed`.
 
 ## Five-track state
-- **A Platform/Browser:** high dependency supplier; owns HTTP/DNS/TLS, cache/session/SW/storage/reconnect and transport failure semantics. Cache/config possession and browser/device clocks cannot establish current exception authority.
-- **B UX/IA/Content:** very high dependency pressure; owns local-work-preserved, unsynced, submission-paused, temporary-access-ended, rechecking and review-required semantics while consuming Design Studio evidence.
-- **C Performance/Accessibility/Quality:** high dependency pressure; owns 171's 128-case through 177's 176-case destructive campaigns, expiry/rollback/renewal/convergence validation and independent browser/device/AT/human validation.
-- **D Search/Discovery/Analytics:** bounded consumer; reliability/exception telemetry must remain low-cardinality and must not become durable acquisition, identity, incident or waiver-history graphs.
-- **E Architecture/Security/Operations:** highest-risk owner; 171–177 close generic federation/currentness/convergence, consequence-specific availability, isolation/observability, SLO/brownout/recovery and exception provenance/expiry/debt governance. Compensating-control assurance and break-glass approval boundaries are the adjacent bottleneck.
+- **A Platform/Browser:** high dependency supplier; owns HTTP/DNS/TLS, cache/session/SW/storage/reconnect and transport failure semantics. Cache/config possession, browser/device clocks and cached emergency state cannot establish current exceptional authority.
+- **B UX/IA/Content:** very high dependency pressure; owns local-work-preserved, unsynced, submission-paused, approval-required, emergency-active/ended, rechecking and review-required semantics while consuming Design Studio evidence.
+- **C Performance/Accessibility/Quality:** high dependency pressure; owns 171's 128-case through 178's 184-case destructive campaigns, control-failure/approval-independence/expiry/rollback/convergence validation and independent browser/device/AT/human validation.
+- **D Search/Discovery/Analytics:** bounded consumer; reliability/exception/emergency telemetry must remain low-cardinality and must not become durable acquisition, identity, incident, privileged-activity or waiver-history graphs.
+- **E Architecture/Security/Operations:** highest-risk owner; 171–178 close generic federation/currentness/convergence, consequence-specific availability, isolation/observability, SLO/brownout/recovery, exception provenance/expiry/debt, compensating-control assurance and break-glass/separation boundaries. Emergency-authority compromise and trust reconstitution are the adjacent bottleneck.
 
 ## Cross-repository evidence
 Design Studio `progress/WEB_STATUS.md` is **W121 EXECUTION-PRIORITY GATE; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Exact-source analyze/golden/runtime closure, independent browser/native, physical-device/PWA, field Core Web Vitals, full WCAG, screen-reader and human UX evidence remain OPEN.
 
-Software Engineering evidence remains bounded transfer evidence only. Generic implementation patterns or Chromium Service Worker/offline evidence do not prove Safari/iPadOS/EFB, canonical LogMate runtime, physical connectivity-loss, storage eviction, federation dependency failure, multi-region convergence, exception expiry/rollback resistance, retry isolation, SLO correctness, brownout admission or production recovery behavior.
+Software Engineering evidence remains bounded transfer evidence only. Generic implementation patterns or Chromium Service Worker/offline evidence do not prove Safari/iPadOS/EFB, canonical LogMate runtime, physical connectivity-loss, storage eviction, federation dependency failure, multi-region convergence, exception/emergency expiry/rollback resistance, approval independence, compensating-control assurance, retry isolation, SLO correctness, brownout admission or production recovery behavior.
 
 ## Production OPEN register
-Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM/Shared-iPad behavior; PWA storage/update/background/sync/push; authentication/session/offline authorization; actual account/tenant/IdP/federation/issuer/JWKS/trust-anchor model; provider/resolver/control-plane/region topology; dependency/resource pools; retry ownership; queue semantics; trust-policy/exception representation/signing/distribution; representative/delegation/employer/airline authority; account/device/key/trust recovery; API/schema/policy generations; provider replication/restore/backup semantics; retention/deletion/legal obligations; actual BIA/MTD/RTO/RPO/currentness/revocation/reconciliation/durability objectives; user-critical journeys and consequence classes; numeric SLI/SLO/error-budget/burn thresholds; SLA obligations; brownout/exception authority, permissible deviations, expiry/renewal/retention and compensating controls; authoritative time/currentness mechanism; telemetry stack/cardinality/retention; and real physical-device/security/privacy/legal/aviation/human validation.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence. This includes managed-iPad/WebKit/MDM/Shared-iPad behavior; PWA storage/update/background/sync/push; authentication/session/offline authorization; actual account/tenant/IdP/federation/issuer/JWKS/trust-anchor model; provider/resolver/control-plane/region topology; dependency/resource pools; retry ownership; queue semantics; trust-policy/exception/emergency-authority representation/signing/distribution; representative/delegation/employer/airline authority; account/device/key/trust/emergency recovery; API/schema/policy generations; provider replication/restore/backup semantics; retention/deletion/legal obligations; actual BIA/MTD/RTO/RPO/currentness/revocation/reconciliation/durability objectives; user-critical journeys and consequence classes; numeric SLI/SLO/error-budget/burn thresholds; SLA obligations; brownout/exception/break-glass authority, permissible deviations, expiry/renewal/retention, compensating controls and approval independence; authoritative time/currentness mechanism; telemetry/audit stack/cardinality/retention; and real physical-device/security/privacy/legal/aviation/human validation.
 
 ## Next learning mode
-Highest-value adjacent generic work is **PWA exception-compensating-control assurance, break-glass authority & independent approval boundaries**: determine how a temporary deviation remains bounded when its compensating control fails; when emergency break-glass can be represented without inventing product roles; how separation/independence and post-use review should work; how region/offline/PITR state cannot turn emergency authority into a permanent bypass; and how unique local PWA data remains preservable without granting stale remote consequence authority.
+Highest-value adjacent generic work is **PWA emergency-authority compromise, break-glass credential recovery & trust reconstitution**: determine what happens when the emergency path or one of its approval/recovery roots is itself compromised; how to revoke and rebuild emergency authority without trusting the compromised root to bless its successor; how sessions/regions/offline clients converge after emergency-root rotation; and how unique local operational data remains preservable while privileged trust is being reconstituted.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–177 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/policy-runtime/deletion/retention/redress/identity/notification/delegation/federation/runtime/SLO/exception validation remains OPEN.
+- Continuous maintenance: **083–178 PASS** at generic gates.
+- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/policy-runtime/deletion/retention/redress/identity/notification/delegation/federation/runtime/SLO/exception/break-glass validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
