@@ -8,49 +8,49 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete; cu
 
 ## Continuous expert maintenance
 083–170 — **PASS at recorded generic gates.**  
-171–209 — **PASS (generic)** across authority/currentness, recovery/governance, provenance/supply-chain, custody, revocation/time/witness/quorum, recovery-anchor succession/bootstrap, organizational/provider survivability and recovery-ceremony/break-glass contraction.  
-210 PWA Recovery-Ceremony Evidence Integrity, Approver Impersonation/Coercion & Audit Survivability — **PASS (generic) / PRODUCT + CEREMONY + IDENTITY/PAM + AUDIT + MANAGED-IPAD + RUNTIME + SECURITY/LEGAL + HUMAN VALIDATION OPEN**.
+171–210 — **PASS (generic)** across authority/currentness, recovery/governance, provenance/supply-chain, custody, revocation/time/witness/quorum, recovery-anchor succession/bootstrap, organizational/provider survivability, recovery ceremony/break-glass contraction and ceremony-evidence integrity/audit survivability.  
+211 PWA Recovery-Evidence Retention, Key Succession, Verifier Survivability & Post-Compromise Admissibility — **PASS (generic) / PRODUCT + EVIDENCE-SCHEMA + KEY/PKI + VERIFIER + RETENTION/LEGAL + MANAGED-IPAD + RUNTIME VALIDATION OPEN**.
 
-## 171–210 integrated checkpoint
-- Authority, distribution/provisioning, observation and convergence remain separate layers; offline-first utility preserves unique local data without making stale authority current.
+## 171–211 integrated checkpoint
+- Authority, distribution/provisioning, observation, evidence and convergence remain separate layers; offline-first utility preserves unique local data without making stale authority current.
 - Recovery request, ceremony authorization, exceptional-capability activation, execution, normalization and post-recovery privilege contraction remain separate gates.
-- Dual/multi-control is a failure-domain-separation property, not merely an approval count; approver unavailability never silently lowers admitted policy.
-- **Approver authentication, authentication intent, organizational authority, recovery intent and exact execution binding are separate properties.**
-- **Phishing-resistant authentication strengthens identity/session assurance but does not prove ceremony legitimacy, informed authorization or absence of coercion.**
-- **Approval evidence must be bound to the consequence-bearing request/scope/capability/current policy context; authentic stale approval is not current authority.**
-- **Audit integrity and audit survivability are separate from authorization.** Tamper-evident/transparency mechanisms can expose deletion/rollback/equivocation but cannot make an unauthorized ceremony authorized.
-- **Evidence plane survival must not promote it into a recovery super-root.** Ability to prove what happened is distinct from authority to decide what happens next.
-- Long-offline/company-iPad recovery preserves unique data first, obtains current authority, and re-admits consequence-bearing work without using ceremony artifacts as synchronization credentials.
+- Approver authentication, authentication intent, organizational authority, recovery intent and exact execution binding remain separate properties; audit integrity/survivability does not create authorization.
+- **Evidence signing and historical evidence verification are separate capabilities.** Retiring a signing key must not erase required historical verification, and retaining verification context must not preserve current signing/recovery authority.
+- **Verifier survivability includes original bytes/canonicalization, algorithm/key/trust context, status/timestamp/checkpoint evidence, schema/version semantics and migration lineage—not merely a public key.**
+- **Compromise produces evidence intervals and uncertainty states.** Revocation/processing time, suspected compromise interval, discovery time and independently supported evidence time remain distinct.
+- **Timestamp/checkpoint evidence is another trust dependency with its own compromise and retention lifecycle; it is not an eternal historical-validity oracle.**
+- **Legacy verification is read-only/purpose-scoped.** Historical verifier/key support must never become a fallback for current recovery/session/signing authority.
+- Long-offline/company-iPad recovery preserves unique data first, obtains current authority, and re-admits consequence-bearing work without using historical evidence keys/receipts as synchronization credentials.
 
-## Persistent guards added through 210
-Retain all prior guards, plus: `identity authenticated ≠ ceremony authorized`; `authentication intent ≠ recovery intent`; `recovery intent ≠ informed authorization`; `phishing-resistant authentication PASS ≠ ceremony-integrity PASS`; `approved request X ≠ approved modified request X′`; `signature valid ≠ approval current`; `timestamp present ≠ replay impossible`; `secure approval UI ≠ secure execution binding`; `real approver ≠ voluntary approver`; `user presence ≠ informed consent`; `two signatures ≠ no coercion`; `separate log bucket ≠ independent audit plane`; `tamper-evident ≠ authorized`; `transparent ≠ truthful`; `receipt verifies ≠ ceremony legitimate`; `log restored ≠ audit history complete`; `can prove what happened ≠ can authorize what happens next`; `ceremony artifact present ≠ client authority current`; `audit receipt ≠ synchronization credential`.
+## Persistent guards added through 211
+Retain all prior guards, plus: `signing key retired ≠ verification key deleted`; `historical verification support ≠ current signing support`; `key retained ≠ evidence verifiable`; `bytes retained ≠ semantics recoverable`; `verifier executable ≠ verifier trustworthy`; `provider retired ≠ history invalid`; `export succeeded ≠ independent verification proven`; `re-signed old bytes ≠ old signature trust restored`; `key compromised now ≠ every historical signature forged`; `signature says old date ≠ signature proven pre-compromise`; `revocation time ≠ compromise time ≠ discovery time`; `timestamp verifies ≠ signer uncompromised`; `legacy verifier available ≠ legacy signer allowed`; `modern parser accepts ≠ historical signature preserved`; `audit retained ≠ verification context retained`; `historical verifier trusts K-old ≠ runtime trusts K-old for new authority`; `cryptographically verified ≠ legally admissible`.
 
 ## Five-track state
-- **A Platform/Browser:** high dependency supplier; WebAuthn/phishing-resistant authentication, origin/session and managed-iPad mechanics constrain approver evidence but do not define constitutional recovery authority. Exact WebKit/iPadOS/IdP/MDM/PAM behavior remains implementation evidence.
-- **B UX/IA/Content:** very high dependency pressure; owns comprehensible request/target/scope/consequence/currentness and evidence-state semantics while consuming Design Studio evidence. Interaction/runtime validation remains OPEN.
-- **C Performance/Accessibility/Quality:** high dependency pressure; destructive campaign now reaches **440 defined cases**. Execution, physical-device, AT and human validation remain OPEN.
-- **D Search/Discovery/Analytics:** bounded consumer; ceremony/audit telemetry may reveal anomalies but cannot authorize recovery, prove voluntary intent, evidence completeness or privilege extinction.
-- **E Architecture/Security/Operations:** highest-risk owner; 210 closes the generic approver-evidence binding, replay/substitution/coercion-limit and audit-survivability gate.
+- **A Platform/Browser:** high dependency supplier; browser/WebCrypto/certificate/verifier support constrains implementation but does not define historical evidence validity or constitutional authority. Exact WebKit/iPadOS behavior remains implementation evidence.
+- **B UX/IA/Content:** very high dependency pressure; owns comprehensible `current authority` vs `historical verified` / `uncertain-window` / `partial` / `forked` / `unverifiable` / `unknown` semantics while consuming Design Studio evidence. Interaction/runtime validation remains OPEN.
+- **C Performance/Accessibility/Quality:** high dependency pressure; destructive campaign now reaches **448 defined cases**. Execution, physical-device, AT and human validation remain OPEN.
+- **D Search/Discovery/Analytics:** bounded consumer; telemetry can reveal verifier failures, migration coverage and legacy tails but cannot decide evidentiary admissibility or compromise chronology.
+- **E Architecture/Security/Operations:** highest-risk owner; 211 closes the generic evidence-retention/key-succession/verifier-survivability/compromise-window gate.
 
 ## Cross-repository evidence
 Design Studio `progress/WEB_STATUS.md`: **W121 EXECUTION-PRIORITY GATE; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Physical-device/PWA, screen-reader and human UX evidence remain OPEN.
 
-Software Engineering Studio `progress/STATUS.md`: **ACTIVE — FOUNDATION STUDY UNDERWAY**; no specialist has passed Foundation. It now contains bounded Android emulator/runtime evidence, but physical iOS/Safari/EFB, canonical product runtime, PAM/IdP/MDM/session implementation, secure audit, runtime expiry and authorization-oracle execution remain implementation dependencies.
+Software Engineering Studio `progress/STATUS.md`: **ACTIVE — FOUNDATION STUDY UNDERWAY**; no specialist has passed Foundation. It contains bounded Android emulator/runtime evidence, but physical iOS/Safari/EFB, canonical product runtime, PKI/KMS/verifier migration, secure audit, PAM/IdP/MDM/session implementation and authorization-oracle execution remain implementation dependencies.
 
 ## Production OPEN register
-Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence, including managed-iPad ownership/iPadOS/WebKit/MDM enrollment/supervision/admin topology; Apple Business/School Manager access and recovery; PWA storage/update/background/sync; auth/session/offline authorization; provider/region/control-plane topology; trusted-time/currentness/witness representation; recovery-anchor hierarchy/custody/reconstitution; recovery-ceremony approvers/quorum/independence; emergency accounts/PAM/IdP/MDM capability; approver authenticators and transaction binding; audit isolation/signing/checkpoint/retention; bootstrap provisioning; regional enforcement; backup/PITR; legal/aviation/safety obligations; and physical-device/security/privacy/human validation.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence, including managed-iPad ownership/iPadOS/WebKit/MDM enrollment/supervision/admin topology; PWA storage/update/background/sync; auth/session/offline authorization; provider/region/control-plane topology; recovery-anchor hierarchy/custody/reconstitution; recovery-ceremony approvers/quorum/independence; emergency accounts/PAM/IdP/MDM capability; audit isolation/signing/checkpoint/retention; evidence schema/canonicalization/verifier versions; PKI/KMS/key rotation/revocation; trusted timestamp/checkpoint topology; compromise-window investigation; bootstrap provisioning; regional enforcement; backup/PITR; legal/aviation/safety obligations; and physical-device/security/privacy/human validation.
 
 ## Freshness / current external precedent
-- Current NIST SP 800-63B-4 distinguishes phishing resistance from authentication intent. Verifier/channel binding can resist impostor-verifier relay, while explicit claimant intervention establishes authentication intent; neither by itself proves informed recovery authorization or absence of coercion.
-- NIST SP 800-53 Rev.5 audit/accountability, separation-of-duties and least-privilege controls remain bounded precedents for protecting ceremony evidence from the same emergency authority where feasible.
-- RFC 9162 append-only/consistency evidence is a bounded precedent for detecting rollback/equivocation; RFC 9943 explicitly preserves the distinction between transparency/accountability and issuer honesty.
-- Prior TUF threshold/offline-root and Apple managed-device/provider-migration evidence remain bounded precedents only; neither defines MintTap's ceremony or audit architecture.
+- NIST SP 800-57 Part 1 Rev.5 remains the final baseline: private signature-key and public signature-verification-key cryptoperiods may differ, supporting longer-lived verification context without retaining current private signing authority. Rev.6 remains an Initial Public Draft dated 2025-12-05 and is CHANGE WATCH only.
+- RFC 5280 distinguishes invalidity/known-or-suspected compromise time from CRL revocation processing time; historical evidence around uncertain compromise intervals must not be given false temporal precision.
+- RFC 3161 provides a bounded timestamping precedent for establishing that data/signatures existed before a time, while explicitly recognizing that compromise of the timestamp authority's own key undermines that evidence.
+- Prior NIST authentication/audit, RFC transparency, TUF threshold/offline-root and Apple managed-device evidence remain bounded precedents only; none defines MintTap's production evidence or recovery architecture.
 
 ## Next learning mode
-Highest-value adjacent generic work is **211 — recovery-evidence retention/key succession, verifier survivability & post-compromise evidentiary admissibility**: determine how ceremony evidence remains verifiable after audit-signing key rotation/compromise, provider migration, verifier/software retirement and long retention; preserve historical verification without letting retired evidence keys authorize new recovery; classify evidence around uncertain compromise windows; and keep restored/offline clients dependent on current authority rather than historical evidence artifacts.
+Highest-value adjacent generic work is **212 — evidence-chain migration under cryptographic deprecation, trust-anchor expiry & long-horizon re-attestation**: preserve historical verification when algorithms/trust anchors become unacceptable or unverifiable; distinguish original provenance from migration/re-attestation; prove migration occurred while the old chain was still trustworthy; and retire obsolete verifier code/keys without losing required historical evidence.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–210 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/runtime/personnel/time/witness/quorum/recovery-anchor/bootstrap/custody/MDM/ceremony/PAM/audit validation remains OPEN.
+- Continuous maintenance: **083–211 PASS** at generic gates.
+- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/backup/compromise/recovery/evidence/runtime/personnel/time/witness/quorum/recovery-anchor/bootstrap/custody/MDM/ceremony/PAM/audit/verifier/retention validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
