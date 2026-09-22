@@ -7,89 +7,62 @@ Last sync: 2026-09-22
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete; curriculum completion is not production certification. Five specialist tracks remain mandatory and Web Manager coordinates rather than acting as a sixth specialist.
 
 ## Continuous expert maintenance
-083–170 — **PASS at recorded generic gates.**  
-171–214 — **PASS (generic)** across authority/currentness, recovery/governance, provenance/supply-chain, custody, revocation/time/witness/quorum, recovery-anchor/bootstrap, ceremony/audit/evidence retention, long-horizon cryptographic preservation, PQ transition, crypto inventory and algorithm-agility failure containment.  
-215–222 — **PASS (generic)** across cryptographic inventory attestation, exception/waiver lifecycle, delegated policy composition, distributed currentness, witness trust, quorum/degraded assurance, emergency authority, assurance-debt closure, debt-ledger integrity and post-emergency regression governance; product/runtime gates remain OPEN.  
-223 PWA Assurance-Debt Dependency Graphs, Transitive Blast-Radius Proof & Safe Partial Reauthorization — **PASS (generic) / PRODUCT + DEPENDENCY-GRAPH + POLICY-ENGINE + MANAGED-IPAD + RUNTIME VALIDATION OPEN**.  
-224 PWA Dependency-Graph Discovery Completeness, Hidden-Control-Plane Detection & Executable Cut-Set Validation — **PASS (generic) / PRODUCT + DISCOVERY-PIPELINE + PROVIDER + RECOVERY + MANAGED-IPAD + RUNTIME VALIDATION OPEN**.
+- 083–170 — **PASS at recorded generic gates**.
+- 171–214 — **PASS (generic)** across authority/currentness, recovery/governance, provenance/supply-chain, custody, revocation/time/witness/quorum, bootstrap, evidence retention, long-horizon cryptographic preservation, PQ transition, crypto inventory and algorithm-agility failure containment.
+- 215–222 — **PASS (generic)** across inventory attestation, exception/waiver lifecycle, delegated policy composition, distributed currentness, witness trust, quorum/degraded assurance, emergency authority, assurance-debt closure, ledger integrity and post-emergency regression governance.
+- 223 — **PASS (generic)** assurance-debt dependency graphs, transitive blast-radius proof and safe partial reauthorization.
+- 224 — **PASS (generic)** dependency-graph discovery completeness, hidden-control-plane detection and executable cut-set validation.
+- 225 — **PASS (generic)** dependency-graph drift, change-triggered revalidation and stale-proof expiry. Product/change-event/provider/managed-iPad/runtime validation remains OPEN.
 
-## 171–224 integrated checkpoint
-- Authority, distribution/provisioning, observation, evidence and convergence remain separate layers; offline-first utility preserves unique local data without making stale authority current.
-- Evidence signing and historical verification remain separate capabilities; current cryptographic acceptability and historical verification remain separate policy questions.
-- Long-horizon preservation requires authenticated migration before predecessor trust becomes unsupported; a stronger wrapper after predecessor break cannot retroactively prove continuity.
-- Quantum transition separates confidentiality and authenticity horizons; hybrid/dual-stack security depends on explicit acceptance policy rather than component count.
-- Crypto agility is controlled replaceability, not universal fallback. Algorithm/key/provider support is separate from policy acceptance.
-- Crypto inventory is a versioned evidence product with provenance, scope, coverage and explicit unknowns; signed/attested inventory does not prove completeness.
-- Inventory fact authority, acceptance-policy authority and exception authority are separate. UNKNOWN is not an implicit approval category.
-- Crypto waivers are scoped, versioned, revocable capability leases, not baseline rewrites. Expiry/revocation must survive rollback, stale replicas, provider migration and long-offline return.
-- Emergency release bypass is evidence-producing debt, not normal PASS. Gate unavailable, gate failed and gate unnecessary are different states.
-- Delegation and succession are different authority transitions. A delegate cannot expand its ceiling; succession must define predecessor/delegation/waiver fate.
-- Policy composition is versioned security logic. Specificity, timestamp and merge order do not define authority, and individually valid waivers must not union into unintended broader permission.
-- Split-brain convergence uses authenticated authority/currentness lineage, not the most permissive or newest-looking branch.
-- Policy publication, distribution, consumption and effective enforcement are separate states. Central currentness does not prove enforcement currentness.
-- Convergence claims require a versioned enforcement-set denominator and explicit unreachable/unknown tails. Observed 100% of an incomplete denominator is not fleet convergence.
-- Currentness witnesses are evidence, not authority. Witness, collector, enforcement point and independent attestor are distinct identities/trust roles.
-- Collector compromise includes omission/framing/replay/split-view attacks; a valid collector signature proves report origin/integrity, not truth or independence.
-- Anti-equivocation requires overlapping comparison evidence. Contradictory authentic evidence must be preserved rather than averaged away.
-- Independence is failure-domain specific; two collectors sharing credentials, source, database, deployment/admin plane or other relevant root are not automatically independent.
-- Quorum eligibility precedes quorum arithmetic. Quorum is claim-specific security policy; weights cannot manufacture independence and contradiction policy is separate from threshold policy.
-- Witness-diversity loss is assurance degradation, not authorization. Emergency assurance mode is a bounded capability policy, not a quorum bypass.
-- Quorum-policy authorship, emergency activation, execution and closure are distinct authorities. A failed quorum cannot recursively authorize its own weakening.
-- Emergency authority has a pre-authorized capability ceiling. Incident severity or observation loss does not create new authority.
-- Emergency operation creates assurance debt. Service restoration does not close debt; NORMAL requires restored assurance plus negative evidence that temporary/stale authority is extinct.
-- Expiry does not grandfather queued work. PITR/rollback does not resurrect closed emergency authority. Long-offline clients preserve unique data, not expired emergency sovereignty.
-- Assurance debt is a versioned evidence obligation, not a mutable incident checkbox. Amendments preserve lineage rather than rewriting historical evidence.
-- Debt-ledger integrity and completeness are separate. A signed/tamper-evident record can still omit debt; the evidence plane must survive the incident/admin failure domain.
-- Closure evidence is claim-specific and should not depend solely on the authority/failure domain that created the debt.
-- Risk acceptance does not rewrite evidence truth. UNKNOWN/CONTRADICTED history remains so even when continued operation is authorized.
-- Repeated emergency activation is regression evidence, not implicit baseline permission. Incident-debt closure, systemic corrective-action closure and executable regression closure remain distinct.
-- Central debt closure does not prove every offline enforcement tail converged. Returning clients reacquire current authority and re-admit queued work.
-- Debt-ledger durability/recovery/retention are part of the evidence architecture. Production recovery without ledger recovery is incomplete assurance recovery.
-- **Assurance-debt scope is a dependency-graph claim, not a label.** Debt propagates only through claim-relevant edges, but missing/unknown material edges prevent a false narrow-scope claim.
-- **Partial reauthorization is a positive proof problem.** An unaffected capability needs a current consequence-bearing trust cut plus evidence that affected/unknown alternate authority paths cannot mutate or authorize it.
-- **Primary request-flow health does not prove isolation.** Shared IAM, signing, deployment, provider-admin, recovery/PITR, evidence and update roots can transitively widen blast radius.
-- **Reauthorization is operation-specific and current-policy based.** Queued offline work is preserved and re-admitted; it is not grandfathered by creation-time authority.
-- **UNKNOWN remote authority can coexist with safe local data preservation.** Restrict the affected consequence-bearing remote capability without destroying unique local/offline data when its local dependency cut remains outside the affected trust path.
-- **Dependency graphs drift and require provenance.** A fresh timestamp or current CMDB does not by itself prove current runtime/control-plane dependency coverage.
-- **Partial recovery is not global NORMAL.** Capability-by-capability expansion preserves unresolved restrictions until new evidence closes them.
-- **Graph discovery must be multi-plane.** Declared/IaC, provider/IAM, runtime, audit, CI/update, recovery/PITR, endpoint/browser and supplier evidence are reconciled rather than trusting one source to prove its own completeness.
-- **Material edges carry epistemic state and provenance.** DECLARED, OBSERVED, INFERRED, CONTRADICTED and UNKNOWN are distinct; freshness belongs to the evidence/claim, not merely the graph file.
-- **Hidden control planes are consequence-bearing even off the request path.** Provider console, root/admin roles, DNS/registrar, signing/KMS, feature/policy control, recovery, break-glass, MDM and legacy/update paths require explicit challenge.
-- **Completeness is scoped, not absolute.** Report a versioned denominator, orphan/unknown/contradicted tails and evidence-source coverage rather than claiming universal 100% completeness.
-- **Executable trust-cut validation requires positive and negative evidence.** Current allowed-operation success does not prove stale/bypass/recovery rejection.
-- **Recovery and offline return mutate the graph.** PITR/failover and long-offline PWA reconnect require graph/current-authority reconciliation before consequence-bearing rejoin.
-- **Discovery collectors are evidence-plane components.** Scanner success/authentication does not prove source scope, truth, completeness or independence.
+## Current integrated checkpoint — through 225
+Prior guards and conclusions remain canonical in their numbered research artifacts. Current high-value integration:
+- Assurance-debt scope and partial reauthorization are dependency-graph claims, not labels. UNKNOWN/CONTRADICTED material edges prevent false narrow-scope recovery.
+- Dependency discovery is multi-plane: declared/IaC, provider/IAM, runtime, audit, CI/update, recovery/PITR, endpoint/browser and supplier evidence are reconciled. No source proves its own completeness.
+- Hidden provider/admin/DNS/signing/recovery/break-glass/MDM/legacy/Service-Worker paths remain consequence-bearing even when outside the primary request path.
+- Executable trust-cut validation needs positive current-operation evidence and negative stale/bypass/recovery rejection evidence. Simulation/staging evidence is bounded to its environment.
+- **Proof validity is claim-, dependency-, generation- and evidence-specific.** A stored PASS is not automatically current.
+- **High-consequence proofs carry dependency manifests**: claim, graph generation, material node/edge generations, policy/evaluator/code/provider/recovery/update generations, evidence-source state and executed oracles.
+- **Material change invalidates affected proof closure immediately.** Change impact is classified by consequence-bearing dependency, not diff size, repository location or whether application bytes changed.
+- **Graph-directed incremental revalidation is preferred when the unaffected cut is itself evidenced.** UNKNOWN impact widens revalidation; it is not treated as unaffected.
+- **Time is a freshness backstop, not the primary truth model.** A proof may invalidate before a TTL because a dependency changed; an aged proof may require refresh even when no event was observed. Numeric production TTLs remain OPEN.
+- **Change events are evidence-plane objects.** Webhooks/audit/Git/provider/MDM events can trigger fast invalidation, while state reconciliation provides omission resistance. Absence of an event does not prove absence of change.
+- **Revalidation must target the invalidated claim.** Generic smoke PASS does not close IAM, signing, recovery, Service Worker or evidence-plane invalidation unless the relevant positive/negative oracle set is exercised.
+- **PWA proof state is multi-epoch.** Server-published, discovered/installing, waiting, active and client-controlling Service Worker generations are distinct from data/schema/policy generations.
+- **Long-offline return is reconciliation across missed generations.** Preserve unique local data first, reacquire current authenticated requirements, migrate safely and re-admit consequence-bearing queued work under current authority; creation-time proof does not grandfather replay.
+- **Rollback/PITR are graph mutations.** Old-looking bytes/state do not revive historical proof or retired authority.
+- **External platform/provider changes can invalidate assumptions without an internal deploy.** CHANGE WATCH propagates only to claims with a material dependency on the changed assumption.
+- Historical proof lineage is retained for auditability, but superseded/invalidated proof cannot satisfy current admission.
 
-## Persistent guards added through 224
-Retain all guards recorded in prior research artifacts. Add: `IaC declared ≠ all control paths declared`; `runtime observed ≠ dormant recovery path absent`; `audit log silent ≠ authority absent`; `provider inventory present ≠ application consequence modeled`; `fresh source ≠ complete source`; `not on request path ≠ not consequence-bearing`; `dormant path ≠ extinct path`; `manual path ≠ outside system security`; `100% of known denominator ≠ absolute completeness`; `zero orphan today ≠ no hidden path`; `positive PASS ≠ negative-path PASS`; `test harness cannot reach path ≠ path rejected`; `restore succeeded ≠ graph current`; `zero online legacy calls ≠ zero dormant legacy clients`; `Service Worker update offered ≠ update installed`; `source disagreement ≠ majority vote`; `scanner authenticated ≠ scan complete`; `collector success ≠ source scope complete`; `untestable safely ≠ assumed safe`; `simulation PASS ≠ production enforcement PASS`.
+## Persistent guards added in 225
+Retain all guards from prior artifacts. Add: `proof stored ≠ proof current`; `artifact unchanged ≠ authority graph unchanged`; `graph file unchanged ≠ dependency world unchanged`; `small diff ≠ small assurance impact`; `no code diff ≠ no security-impacting change`; `provider-side change ≠ outside product proof`; `change detected ≠ global invalidation`; `unknown impact ≠ unaffected`; `within TTL ≠ unchanged`; `TTL expired ≠ claim false`; `no event received ≠ no event occurred`; `webhook delivered ≠ state reconciled`; `retest passed ≠ invalidated claim retested`; `new worker installed ≠ new worker controls all relevant clients`; `proof valid when queued ≠ proof valid when replayed`; `same bytes as old release ≠ old proof current`; `no internal deploy ≠ no dependency change`; `historical PASS ≠ current PASS`.
 
 ## Five-track state
-- **A Platform/Browser:** high dependency supplier; browser/WebCrypto/WebKit/server/provider capability, Service Worker/update state, cached policy, storage/session state, offline epochs and dormant client routes are graph/discovery nodes and edges but do not own debt truth or reauthorization policy. Exact iPadOS/WebKit capability remains execution evidence.
-- **B UX/IA/Content:** very high dependency pressure; owns comprehensible capability-specific normal/degraded/recovery/data-preserved-sync-blocked/unknown states while consuming Design Studio evidence. Interaction/runtime validation remains OPEN.
-- **C Performance/Accessibility/Quality:** high dependency pressure; destructive campaign now reaches **552 defined cases**. Execution, physical-device, AT and human validation remain OPEN.
-- **D Search/Discovery/Analytics:** bounded consumer; telemetry can measure graph/source coverage, orphan/unknown edges, drift, debt fan-out, recurrence and reauthorization outcomes but cannot prove graph completeness, grant authority or close debt.
-- **E Architecture/Security/Operations:** highest-risk owner; 215–224 close generic inventory/exception/delegation/policy-composition/distributed-currentness/witness/quorum/emergency/debt-ledger/dependency-graph/discovery and partial-reauthorization reasoning. Product implementation remains OPEN.
+- **A Platform/Browser:** high dependency supplier. Browser/WebKit, Service Worker publication/install/wait/activate/control, cache, storage/session/schema/policy and offline epochs are proof dependencies. Exact managed-iPad behavior remains execution evidence.
+- **B UX/IA/Content:** very high dependency pressure. Owns comprehensible capability-specific CURRENT/REVALIDATING/RESTRICTED/data-preserved-sync-blocked states while consuming Design Studio evidence. Human/AT/runtime validation remains OPEN.
+- **C Performance/Accessibility/Quality:** high dependency pressure. Destructive campaign reaches **560 defined cases**. Execution, physical-device, AT and human validation remain OPEN.
+- **D Search/Discovery/Analytics:** bounded consumer. Can measure drift, event coverage, proof age, invalidation latency and revalidation outcomes but cannot prove no hidden change, grant authority or make stale proof current.
+- **E Architecture/Security/Operations:** highest-risk owner. 215–225 close generic inventory→exception→distributed currentness→assurance debt→dependency graph→discovery→drift/revalidation reasoning. Product implementation remains OPEN.
 
 ## Cross-repository evidence
-Design Studio `progress/WEB_STATUS.md`: **W121 EXECUTION-PRIORITY GATE; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Physical-device/PWA, screen-reader and human UX evidence remain OPEN.
+Design Studio `progress/WEB_STATUS.md` (2026-09-20): **W121 EXECUTION-PRIORITY GATE; Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASSED**. Physical-device/PWA, screen-reader and representative-human UX evidence remain OPEN.
 
-Software Engineering Studio `progress/STATUS.md` (2026-09-22): **ACTIVE — FOUNDATION STUDY UNDERWAY; no specialist has passed Foundation**. It has bounded emulator/Chrome/runtime transfers, but physical Android/iOS, Safari/iPadOS/EFB and canonical-product runtime remain OPEN. Web Manager does not promote those execution gates from generic research.
+Software Engineering Studio `progress/STATUS.md` (2026-09-22): **ACTIVE — FOUNDATION STUDY UNDERWAY; no specialist has passed Foundation**. Bounded emulator/Chrome/runtime transfers exist, but physical Android/iOS, Safari/iPadOS/EFB and canonical-product runtime remain OPEN.
 
 ## Production OPEN register
-Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence, including managed-iPad ownership/iPadOS/WebKit/MDM topology; PWA storage/update/background/sync; auth/session/offline authorization; provider/control-plane topology; recovery authority; audit/evidence schema; cryptographic inventory/discovery; acceptance/exception/delegated authority; policy layers/composition/precedence; enforcement-set inventory; witness/collector/attestor topology; quorum policy; emergency roles/capability ceiling; assurance-debt ledger schema/storage/access/retention/recovery; **capability/dependency graph, discovery sources/permissions, edge provenance/state, hidden control/recovery/update/admin paths, scoped denominator, orphan/unknown/contradicted tails, executable trust cuts and alternate-path rejection evidence**; closure-assessment independence; recurrence/corrective-action thresholds; convergence; crypto/PQ/hybrid; release/bypass enforcement; provider/library common-mode failures; bootstrap; regional enforcement/currentness; backup/PITR; legal/aviation/safety obligations; and physical-device/security/privacy/human validation.
+Actual `minttap.app` and LogMate-like production facts remain OPEN unless verified from canonical project/runtime evidence, including managed-iPad/iPadOS/WebKit/MDM topology; PWA storage/update/background/sync; auth/session/offline authorization; provider/control-plane topology; recovery authority; cryptographic inventory; policy/exception/delegation/enforcement topology; witness/quorum/emergency/assurance-debt implementation; dependency graph/discovery sources and permissions; hidden admin/recovery/update paths; proof/dependency schema; change-event sources/coverage/sequence; claim-specific freshness backstops; revalidation automation; rollback/PITR behavior; closure independence; crypto/PQ/hybrid; legal/aviation/safety obligations; and physical-device/security/privacy/human validation.
 
-## Freshness / current external precedent
-- NIST **SP 800-70 Rev.5** is final (May 2026) and supports machine-readable/executable configuration verification and unauthorized-change detection; a checklist remains one evidence plane, not proof of dependency completeness.
-- NIST NCCoE **Asset Management as a Foundation for OT Cybersecurity** project description is an Initial Public Draft (June 25, 2026); it is CHANGE WATCH and supports multi-method discovery/inventory/configuration/change-management precedent only.
-- NIST **IR 8613 Multi-Cloud Architecture Challenges** is an Initial Public Draft (August 21, 2026; comments due October 5, 2026) and remains CHANGE WATCH; autonomous cloud silos can amplify control/discovery consistency challenges.
-- NIST **SP 800-53 / 800-53A Rev.5** remain current control/assessment precedents; declared architecture/inventory boundaries require evidence where implementation determines the claim.
-- CISA's Log4Shell guidance remains bounded precedent for broad asset inventory and multi-method mitigation verification; vulnerability inventory is not a MintTap authority/dependency graph.
+## Freshness / current precedent
+- NIST SP 800-53/RMF distinguishes configuration change control, security impact analysis, component inventory and continuous monitoring; it supports change-triggered assessment but does not define a MintTap proof graph.
+- NIST SP 800-128 supports security impact analysis around changes and post-change verification/configuration monitoring; it is bounded configuration-management precedent.
+- Current Service Worker platform documentation distinguishes update discovery/install/activation/control and cache-update behavior; those mechanics do not prove managed-iPad fleet convergence.
+- Design Studio and Software Engineering execution gates remain unchanged; generic Web Manager research does not promote them.
 
 ## Next learning mode
-Highest-value adjacent generic work is **225 — dependency-graph drift detection, change-triggered revalidation & stale-proof expiry**: identify which architecture/provider/IAM/CI/recovery/Service Worker changes invalidate prior trust-cut proofs, make evidence expiry claim/change based rather than arbitrary time alone, prevent both permanent retesting and stale-proof reuse, and handle long-offline clients returning after multiple dependency-proof generations.
+Highest-value adjacent generic work is **226 — proof-generation lineage, invalidation-event authenticity & revalidation-race containment**: handle concurrent deploy/IAM/recovery changes while validation is running; prevent mixed-generation proof publication; bind assessment start/end snapshots; contain TOCTOU between proof issuance and enforcement consumption; and define monotonic proof publication without assuming impossible global transactions.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–224 PASS** at generic gates.
-- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/PQ/hybrid/backup/recovery/evidence/runtime/personnel/time/witness/quorum/recovery-anchor/bootstrap/custody/MDM/ceremony/PAM/audit/verifier/retention/migration/inventory/exception/release-bypass/delegation/policy-composition/distributed-enforcement/currentness-witness/collector/quorum-policy/emergency-assurance/emergency-authority/assurance-debt/ledger-integrity/closure-independence/regression-governance/**dependency-graph/discovery-completeness/hidden-control-plane/executable-cut-set/blast-radius/partial-reauthorization** validation remains OPEN.
+- Continuous maintenance: **083–225 PASS** at generic gates.
+- Track C destructive campaign: **560 defined cases; execution PASS not claimed**.
+- Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/crypto/PQ/hybrid/backup/recovery/evidence/runtime/personnel/time/witness/quorum/bootstrap/custody/MDM/ceremony/PAM/audit/verifier/retention/migration/inventory/exception/release-bypass/delegation/policy-composition/distributed-enforcement/emergency-assurance/assurance-debt/dependency-graph/discovery/drift/change-event/proof-freshness/revalidation validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
