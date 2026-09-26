@@ -1,7 +1,7 @@
 # MintTap Web Manager Status
 
 Operating state: **ACTIVE — CONTINUOUS EXPERT MAINTENANCE / APPLICATION + FIVE-TRACK COORDINATION + PWA SPECIALIZATION**  
-Last sync: 2026-09-25
+Last sync: 2026-09-26
 
 ## Operating model
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete; curriculum completion is not production certification. Five specialist tracks remain mandatory; Web Manager coordinates rather than acting as a sixth specialist. PWA remains a strategic cross-track specialization.
@@ -11,9 +11,12 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete; cu
 - 260–265 — **PASS (generic)** across compromise dependency-graph reconstruction, bounded successor reauthorization, dependency completeness/hidden-edge discovery, inventory drift/discovery-control failure, completeness-proof independence, topology-change authorization, shadow-consumer admission, emergency-exception expiry/normalization, exception-debt concentration/budgets, renewal-authority separation and forced architecture-review triggers.
 - 266–284 — **PASS (generic)** across exception-budget breach/degradation, compensating-control decay, exit proof, staged re-entry/partial-fleet convergence, attestation correlation/false-composition resistance, composite-proof revocation/cache invalidation, revocation distribution/partition/anti-rollback, authority rotation/dual-control, emergency trust reset, recovery-root/custody continuity, custody/provider-org migration split-brain, migration-bridge minimization, cross-provider session/token invalidation, convergence proof, credential-lineage inventory completeness, orphaned authorization discovery, dormant-path eradication, acceptance-boundary topology attestation, hidden-bypass discovery, continuous dormant-authority regression control, topology-attestation provenance, poisoned-discovery resistance, assurance-plane compromise detection, evidence-source independence budgeting, trust restoration, assurance-recovery drill design, independence-budget exhaustion, graceful assurance degradation, degraded-policy integrity, capability-tier anti-escalation, recovery-state rollback resistance, policy-distribution authenticity, partial-fleet policy convergence and mixed-generation operation adjudication. Product/data-model/backend/CI-CD/MDM/managed-iPad/runtime/domain/legal/personnel/provider validation remains OPEN.
 
-## Current integrated checkpoint — through 286
+## Current integrated checkpoint — through 289
 - **285:** stale-client PWA rebootstrap separates transport authenticity, organizational bootstrap/currentness, runtime adoption and queued-operation admission; unique local data/provenance is preserved before destructive repair.
 - **286:** catastrophic recovery is not complete when a successor merely works. Succession evidence, witness independence, anti-equivocation, predecessor rejection and emergency-authority retirement are separate security obligations.
+- **287:** recovery evidence retention, witness rotation, emergency-credential retirement and normalization drills require evidence that remains verifiable across authority and failure-domain changes.
+- **288:** recovery validation becomes falsifiable through H01–H10, multidimensional PWA state, PASS/FAIL/UNKNOWN verdicts, non-transitive T0–T5 validation tiers and successor-positive/predecessor-negative evidence.
+- **289:** F0–F10 deterministic fixture identities, non-authoritative validation controls, reset/normalization invariants, compressed-vs-elapsed dormancy boundaries and a bounded Software Engineering handoff make H01–H10 implementable without turning test hooks into product authority.
 - Recovery evidence should survive the failure domain it is intended to judge; copy count alone does not establish witness independence.
 - Append-only/transparency evidence can expose history inconsistency but does not elect legitimate organizational authority.
 - Conflicting valid-looking lineages must not be resolved by highest epoch, newest timestamp, traffic majority or dormant-client preference.
@@ -52,7 +55,7 @@ Retain all prior guards. New key additions: `policy delivered ≠ policy authori
 ## Five-track state
 - **A Platform/Browser:** high dependency supplier. Owns HTTPS/secure-context, browser/storage/cache/Service Worker lifecycle, origin/scope, browser/RP session and late-client persistence/update mechanics. Supplies partial-fleet and stale-representation mechanics.
 - **B UX/IA/Content:** elevated dependency pressure. Owns comprehensible local-saved, queued, update/revalidation-required, rejected/conflict and remotely-confirmed task states. Human/AT/runtime validation remains OPEN.
-- **C Performance/Accessibility/Quality:** high dependency pressure. Destructive campaign reaches **1032 defined cases**. Execution, physical-device, AT and human validation remain OPEN.
+- **C Performance/Accessibility/Quality:** high dependency pressure. Destructive campaign reaches **1072 defined cases**. Execution, physical-device, AT and human validation remain OPEN.
 - **D Search/Discovery/Analytics:** elevated challenger. Measures observed policy-generation spread, predecessor attempts/rejections, rejoin latency, compatibility outcomes and contradictions; telemetry cannot elect authority.
 - **E Architecture/Security/Operations:** highest-risk owner. Through 284 closes generic distribution-vs-authority separation, mixed-generation adjudication, consequence-based convergence, predecessor retirement, and distributed acceptance-boundary consequence consistency during partial server rollout. Product implementation/domain/personnel/provider/CI-CD authority remains OPEN.
 
@@ -71,11 +74,11 @@ Actual `minttap.app` and LogMate-like production facts remain OPEN unless verifi
 - Apple Platform Deployment and WebKit/iOS/iPadOS PWA behavior remain OS/enrollment/version-specific CHANGE WATCH.
 
 ## Next learning mode
-Highest-value adjacent generic work is **285 — cross-boundary policy-decision provenance, asynchronous authorization TOCTOU & execution-time currentness**: determine what evidence may travel from admission to delayed execution without turning a stale allow into permanent authority, how immutable intent/provenance differs from revocable authorization context, and when execution-time revalidation is required versus when a bounded authorization snapshot can remain valid.
+Highest-value adjacent generic work is **290 — Physical-iPad Lifecycle Experiment Design, Dormancy-Duration Ladder & Storage/Update/Rejoin Evidence Limits**: separate claims provable with compressed deterministic offline tests from those requiring real elapsed dormancy, OS termination/restart, storage pressure, Home Screen lifecycle, managed-device conditions and physical-iPad evidence.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–284 PASS** at generic gates.
-- Track C destructive campaign: **1032 defined cases; execution PASS not claimed**.
+- Continuous maintenance: **083–289 PASS** at generic gates.
+- Track C destructive campaign: **1072 defined cases; execution PASS not claimed**.
 - Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/CI-CD/provenance/attestation/discovery/evidence-source/independence-budget/assurance-plane/degraded-policy/policy-distribution/drill/backup/recovery/runtime/personnel/identity/session/token/credential-lineage/acceptance-boundary/topology/custody/provider-org-migration/currentness/partition/anti-rollback/authority-rotation/rebootstrap/recovery-root validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
