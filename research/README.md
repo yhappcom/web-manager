@@ -155,3 +155,6 @@ Design Studio Web is **Stage 1 PASS / Stage 2 PASS / Stage 3 PRACTICE / NOT PASS
 
 ## Next high-value maintenance target
 After 137, the highest-value adjacent generic question is **PWA cryptographic compromise recovery, historical-validity windows & trust re-establishment**: determine how to scope evidence when a signing/verifier key or trust root is suspected compromised, avoid both blanket historical invalidation and false trust of post-compromise artifacts, and establish successor trust without allowing an attacker-controlled old root to authorize its own replacement.
+
+## Latest integrated checkpoint
+298 — **PWA Durable Local State vs Device Backup / Restore Failure-Domain Contract — PASS (generic) / PRODUCT + PHYSICAL-IPAD + MANAGED-IPAD + BACKUP-RESTORE VALIDATION OPEN.** Separates persistent origin storage from independent backup and executable recovery; rejects promotion from generic Apple device-backup wording to PWA IndexedDB/Cache/outbox restore assurance; defines 24 deterministic contradiction cases and V0–V5 backup/destruction/restore validation.
