@@ -158,3 +158,9 @@ After 137, the highest-value adjacent generic question is **PWA cryptographic co
 
 ## Latest integrated checkpoint
 298 — **PWA Durable Local State vs Device Backup / Restore Failure-Domain Contract — PASS (generic) / PRODUCT + PHYSICAL-IPAD + MANAGED-IPAD + BACKUP-RESTORE VALIDATION OPEN.** Separates persistent origin storage from independent backup and executable recovery; rejects promotion from generic Apple device-backup wording to PWA IndexedDB/Cache/outbox restore assurance; defines 24 deterministic contradiction cases and V0–V5 backup/destruction/restore validation.
+
+
+## 2026-10-03 PWA / LogMate runtime continuation
+- 306 — LogMate email identifier privacy boundary — persisted.
+- 307 — LogMate email-auth abuse-control release gate — persisted.
+- 308 — PWA Flutter Service-Worker Ownership & Offline-Correctness Gate — **PASS (generic/source-level) / LogMate build + deployed-runtime + physical/managed-iPad validation OPEN**.
