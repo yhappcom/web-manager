@@ -1,7 +1,7 @@
 # MintTap Web Manager Status
 
 Operating state: **ACTIVE — CONTINUOUS EXPERT MAINTENANCE / APPLICATION + FIVE-TRACK COORDINATION + PWA SPECIALIZATION**  
-Last sync: 2026-09-27
+Last sync: 2026-10-07
 
 ## Operating model
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete; curriculum completion is not production certification. Five specialist tracks remain mandatory; Web Manager coordinates rather than acting as a sixth specialist. PWA remains a strategic cross-track specialization.
@@ -11,7 +11,7 @@ GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete; cu
 - 260–265 — **PASS (generic)** across compromise dependency-graph reconstruction, bounded successor reauthorization, dependency completeness/hidden-edge discovery, inventory drift/discovery-control failure, completeness-proof independence, topology-change authorization, shadow-consumer admission, emergency-exception expiry/normalization, exception-debt concentration/budgets, renewal-authority separation and forced architecture-review triggers.
 - 266–284 — **PASS (generic)** across exception-budget breach/degradation, compensating-control decay, exit proof, staged re-entry/partial-fleet convergence, attestation correlation/false-composition resistance, composite-proof revocation/cache invalidation, revocation distribution/partition/anti-rollback, authority rotation/dual-control, emergency trust reset, recovery-root/custody continuity, custody/provider-org migration split-brain, migration-bridge minimization, cross-provider session/token invalidation, convergence proof, credential-lineage inventory completeness, orphaned authorization discovery, dormant-path eradication, acceptance-boundary topology attestation, hidden-bypass discovery, continuous dormant-authority regression control, topology-attestation provenance, poisoned-discovery resistance, assurance-plane compromise detection, evidence-source independence budgeting, trust restoration, assurance-recovery drill design, independence-budget exhaustion, graceful assurance degradation, degraded-policy integrity, capability-tier anti-escalation, recovery-state rollback resistance, policy-distribution authenticity, partial-fleet policy convergence and mixed-generation operation adjudication. Product/data-model/backend/CI-CD/MDM/managed-iPad/runtime/domain/legal/personnel/provider validation remains OPEN.
 
-## Current integrated checkpoint — through 293
+## Current integrated checkpoint — through 317
 - **285:** stale-client PWA rebootstrap separates transport authenticity, organizational bootstrap/currentness, runtime adoption and queued-operation admission; unique local data/provenance is preserved before destructive repair.
 - **286:** catastrophic recovery is not complete when a successor merely works. Succession evidence, witness independence, anti-equivocation, predecessor rejection and emergency-authority retirement are separate security obligations.
 - **287:** recovery evidence retention, witness rotation, emergency-credential retirement and normalization drills require evidence that remains verifiable across authority and failure-domain changes.
@@ -78,11 +78,11 @@ Actual `minttap.app` and LogMate-like production facts remain OPEN unless verifi
 - Apple Platform Deployment and WebKit/iOS/iPadOS PWA behavior remain OS/enrollment/version-specific CHANGE WATCH.
 
 ## Next learning mode
-Highest-value adjacent generic work is **290 — Physical-iPad Lifecycle Experiment Design, Dormancy-Duration Ladder & Storage/Update/Rejoin Evidence Limits**: separate claims provable with compressed deterministic offline tests from those requiring real elapsed dormancy, OS termination/restart, storage pressure, Home Screen lifecycle, managed-device conditions and physical-iPad evidence.
+Highest-value adjacent generic work is **318 — Account deletion authority retirement, stale-device/backup/PITR restore fencing**. Generic research is developed but is not canonical PASS until its integrated artifact is persisted. Product/runtime validation remains OPEN.
 
 ## Persistence state
 - Stages 1–12: COMPLETE at defined curriculum gates.
-- Continuous maintenance: **083–289 PASS** at generic gates.
+- Continuous maintenance: **083–317 PASS** at generic gates.
 - Track C destructive campaign: **1072 defined cases; execution PASS not claimed**.
 - Product/device/AT/security/privacy/legal/aviation/provider/data-model/backend/CI-CD/provenance/attestation/discovery/evidence-source/independence-budget/assurance-plane/degraded-policy/policy-distribution/drill/backup/recovery/runtime/personnel/identity/session/token/credential-lineage/acceptance-boundary/topology/custody/provider-org-migration/currentness/partition/anti-rollback/authority-rotation/rebootstrap/recovery-root validation remains OPEN.
 - Reporting remains coarse/checkpoint-based.
