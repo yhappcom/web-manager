@@ -169,3 +169,13 @@ After 137, the highest-value adjacent generic question is **PWA cryptographic co
 - 310 — Flutter generated Service Worker retirement / ownership-migration gate — persisted.
 - 311 — PWA storage durability & selective cache-retirement gate — persisted.
 - 312 — **LogMate PWA Firebase Auth Reserved-Namespace & Service-Worker Isolation Gate — PASS (generic/platform + canonical-source contract) / exact built-worker + deployed OAuth + Safari/Home-Screen + physical/managed-iPad validation OPEN.** Custom `authDomain` is not sufficient: Firebase Hosting reserves `/__` for Auth helpers and explicitly requires PWA Service Workers/navigation fallbacks not to intercept it; LogMate's exact current generated worker handling remains OPEN until release-artifact inspection.
+
+
+## 2026-10-06 Stage 8 / LogMate authority continuation
+- 313 — LogMate PWA Sync trust-boundary continuation — persisted; production/runtime validation remains OPEN.
+- 314 — LogMate PWA Sync activity/server-authority Firestore privacy gate — persisted; production backend contract remains OPEN.
+- 315 — **LogMate PWA Foreground Convergence, UNKNOWN Commit & Idempotency Gate — PASS (generic/platform) / production Sync + runtime validation OPEN.**
+- 316 — **LogMate PWA Dedup Receipt Retention, TTL & Long-Offline Replay Gate — PASS (generic/platform) / production Sync + retention/runtime validation OPEN.**
+- 317 — **LogMate PWA Layered Admission, App Attestation & Replay-Safe Offline Retry Gate — PASS (generic/platform) / production Sync + runtime + physical/managed-iPad validation OPEN.** Separates durable logical-operation identity, request-attempt identity, current subject authority and app attestation; requires fresh/current admission proof without minting a new logical operation; preserves authoritative idempotency/receipt/reconciliation independently of App Check replay protection; and keeps privileged server-SDK authorization separate from client Firestore Rules.
+
+Current adjacent Stage 8 target after 317: integrate account deletion, credential revocation, stale-device/backup return and predecessor-authority retirement into the same authority-lifecycle gate without inferring unverified production architecture.
