@@ -179,3 +179,8 @@ After 137, the highest-value adjacent generic question is **PWA cryptographic co
 - 317 — **LogMate PWA Layered Admission, App Attestation & Replay-Safe Offline Retry Gate — PASS (generic/platform) / production Sync + runtime + physical/managed-iPad validation OPEN.** Separates durable logical-operation identity, request-attempt identity, current subject authority and app attestation; requires fresh/current admission proof without minting a new logical operation; preserves authoritative idempotency/receipt/reconciliation independently of App Check replay protection; and keeps privileged server-SDK authorization separate from client Firestore Rules.
 
 Current adjacent Stage 8 target after 317: integrate account deletion, credential revocation, stale-device/backup return and predecessor-authority retirement into the same authority-lifecycle gate without inferring unverified production architecture.
+
+## 2026-10-08 Stage 8 canonical checkpoints
+- 318 — PWA account-deletion authority retirement, provider/identity/remote-data separation and recovery anti-rollback — **PASS (generic/source-bounded)**; production validation OPEN.
+- 319 — PWA deletion-domain completeness, retention/tombstones and recovery-proof independence — **PASS (generic/source-bounded)**; production validation OPEN.
+- 320 — Managed-iPad PWA Web Clip policy, Shared iPad storage and EFB recovery — **research completed, GitHub persistence OPEN**; physical fleet validation OPEN.
