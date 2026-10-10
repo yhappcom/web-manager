@@ -183,4 +183,6 @@ Current adjacent Stage 8 target after 317: integrate account deletion, credentia
 ## 2026-10-08 Stage 8 canonical checkpoints
 - 318 — PWA account-deletion authority retirement, provider/identity/remote-data separation and recovery anti-rollback — **PASS (generic/source-bounded)**; production validation OPEN.
 - 319 — PWA deletion-domain completeness, retention/tombstones and recovery-proof independence — **PASS (generic/source-bounded)**; production validation OPEN.
-- 320 — Managed-iPad PWA Web Clip policy, Shared iPad storage and EFB recovery — **research completed, GitHub persistence OPEN**; physical fleet validation OPEN.
+- 320 — Managed-iPad PWA delivery/offline/Auth release integrity — **PERSISTED on main; generic/source PASS**, physical fleet validation OPEN.
+- 321–324 — Auth response/CSP reporting, PWA header/data survival, Worker trust and release evidence — **321–324 persisted on main; generic/source/model gates only**, normal-build/browser/managed-iPad validation OPEN.
+- 325 — Safari 27 static routing and installation failure modes — local study only; GitHub persistence OPEN; production validation OPEN.
