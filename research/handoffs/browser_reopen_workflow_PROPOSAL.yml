@@ -1,0 +1,63 @@
+# REVIEW-ONLY Engineering handoff; not a production/managed-iPad release approval.
+# Requires copying browser_reopen_result_gate.py to tool/browser_reopen_result_gate.py.
+name: DATA-001 Chrome IndexedDB Reopen Evidence Candidate
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/data001-browser-persistence-validation.yml
+      - pubspec.yaml
+      - pubspec.lock
+      - lib/domain/logbook/**
+      - lib/repository/logbook/**
+      - test/repository/logbook/sembast_web_reopen_test*.dart
+      - tool/browser_reopen_result_gate.py
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: data001-chrome-reopen-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  chrome-reopen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.5'
+          channel: stable
+          cache: true
+      - name: Toolchain, browser and source provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          flutter --version
+          dart --version
+          command -v google-chrome
+          google-chrome --version
+          echo "source_commit=${GITHUB_SHA} ref=${GITHUB_REF}"
+      - name: Dependencies and lockfile
+        run: |
+          flutter pub get
+          git diff --exit-code -- pubspec.lock
+      - name: Execute exact Chrome reopen test and fail closed on machine evidence
+        shell: bash
+        run: |
+          set -uo pipefail
+          flutter test --platform chrome --machine test/repository/logbook/sembast_web_reopen_test.dart > browser-reopen-events.jsonl
+          result=$?
+          python3 tool/browser_reopen_result_gate.py --events browser-reopen-events.jsonl --exit-code "$result"
+      - name: Bounded evidence summary
+        if: success()
+        run: |
+          {
+            echo '### DATA-001 Chrome IndexedDB reopen: bounded PASS'
+            echo "- exact source: \`${GITHUB_SHA}\`"
+            echo "- ref: \`${GITHUB_REF}\`"
+            echo '- one browser unit test: create/delete/restore and close/reopen same named IndexedDB database'
+            echo '- NOT tested: browser process restart, B1 whole-ledger .lbk restore, Service Worker, Safari/Home Screen, managed iPad'
+          } >> "$GITHUB_STEP_SUMMARY"
+# Deliberately no deploy, no release promotion, no sensitive test-event artifact upload.
+# Engineering must confirm flutter test --machine schema on pinned Flutter 3.47.5.
