@@ -42,7 +42,8 @@ def check(path: Path, process_exit: int, expected_names=None, expected_suite_suf
             ident = suite.get('id')
             if ident is None or ident in suites:
                 raise ValueError('missing or duplicate suite ID')
-            suites[ident] = (str(suite.get('platform', '')).lower(),\n                             str(suite.get('path', '')).replace('\\\\', '/'))
+            suites[ident] = (str(suite.get('platform', '')).lower(),
+                             str(suite.get('path', '')).replace(chr(92), '/'))
         elif kind == 'testStart':
             test = event.get('test', {})
             ident = test.get('id')
@@ -70,9 +71,13 @@ def check(path: Path, process_exit: int, expected_names=None, expected_suite_suf
     if len(visible) != len(expected) or set(names) != set(expected):
         raise ValueError(f'exact test set mismatch: expected={expected!r}, got={names!r}')
     for test, result in visible:
-        if (result.get('skipped') is not False or\n                result.get('result') != 'success' or\n                result.get('retried') is not False):
+        if (result.get('skipped') is not False or
+                result.get('result') != 'success' or
+                result.get('retried') is not False):
             raise ValueError(f'test did not execute successfully: {test.get("name")!r}')
-        platform = suites.get(test.get('suiteID'), '')
+        platform, suite_path = suites.get(test.get('suiteID'), ('', ''))
+        if expected_suite_suffix and not suite_path.endswith(expected_suite_suffix):
+            raise ValueError(f'unexpected suite path: {suite_path!r}')
         if 'chrome' not in platform:
             raise ValueError(f'expected Chrome suite for {test.get("name")!r}, got {platform!r}')
     return f'BROWSER MACHINE ORACLE PASS: {len(expected)}/{len(expected)} executed in Chrome; no skips/errors'
@@ -82,7 +87,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--events', required=True, type=Path)
     parser.add_argument('--exit-code', required=True, type=int)
-    parser.add_argument('--expected-test', action='append', dest='expected_tests')\n    parser.add_argument('--expected-suite-suffix')
+    parser.add_argument('--expected-test', action='append', dest='expected_tests')
+    parser.add_argument('--expected-suite-suffix')
     args = parser.parse_args()
     try:
         print(check(args.events, args.exit_code, args.expected_tests, args.expected_suite_suffix))
