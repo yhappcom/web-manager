@@ -1,0 +1,63 @@
+# REVIEW-ONLY Web Manager -> Engineering proposal. No product CI has been changed.
+# Copy whole_ledger_backup_browser_test_PROPOSAL.dart into LogMate at:
+#   test/repository/logbook/whole_ledger_backup_browser_test.dart
+# Copy the updated browser_reopen_result_gate.py into:
+#   tool/browser_reopen_result_gate.py
+# Source contract pinned during review: LogMate main@59cd171176c58b598a4db55d128ffd21d406e862.
+name: DATA-001 B1 Chrome Whole-Ledger Recovery Evidence Candidate
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  b1-chrome-recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.5'
+          channel: stable
+          cache: true
+      - name: Exact source and toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "source_commit=${GITHUB_SHA} ref=${GITHUB_REF}"
+          flutter --version
+          dart --version
+          command -v google-chrome
+          google-chrome --version
+      - name: Dependency and formatting gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          flutter pub get
+          git diff --exit-code -- pubspec.lock
+          dart format --output=none --set-exit-if-changed test/repository/logbook/whole_ledger_backup_browser_test.dart
+      - name: Execute B1 in Chrome; reject skipped, partial or VM-only results
+        shell: bash
+        run: |
+          set -uo pipefail
+          flutter test --platform chrome --machine test/repository/logbook/whole_ledger_backup_browser_test.dart > b1-chrome-events.jsonl
+          result=$?
+          python3 tool/browser_reopen_result_gate.py \
+            --events b1-chrome-events.jsonl --exit-code "$result" \
+            --expected-test 'B1 Chrome restores 30 stores across IndexedDB close reopen' \
+            --expected-test 'B1 Chrome rejects tamper and wrong owner without mutation' \
+            --expected-test 'B1 Chrome rolls back injected failure and retries after reopen'
+      - name: Bounded execution summary
+        if: success()
+        shell: bash
+        run: |
+          {
+            echo '### B1 Chrome IndexedDB restore: exact test set PASS (bounded)'
+            echo "- source SHA: ${GITHUB_SHA}"
+            echo "- workflow ref: ${GITHUB_REF}"
+            echo '- Three synthetic browser tests: 30-store restore, rejection, injected rollback/retry.'
+            echo '- Database close/reopen is NOT a browser-process restart.'
+            echo '- NOT verified: user-selected .lbk file I/O, Safari tab/Home Screen, managed iPad, eviction, Sync ACK, actual offline PWA.'
+          } >> "$GITHUB_STEP_SUMMARY"
+# Deliberately no release promotion, deploy credentials or real user data artifacts.
+# Engineering must validate Flutter machine reporter compatibility and test compilation.
