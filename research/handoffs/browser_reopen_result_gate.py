@@ -15,7 +15,7 @@ DEFAULT_EXPECTED = (
 )
 
 
-def check(path: Path, process_exit: int, expected_names=None):
+def check(path: Path, process_exit: int, expected_names=None, expected_suite_suffix=None):
     if process_exit != 0:
         raise ValueError(f'Flutter test process exit={process_exit}')
     expected = tuple(DEFAULT_EXPECTED if expected_names is None else expected_names)
@@ -42,7 +42,7 @@ def check(path: Path, process_exit: int, expected_names=None):
             ident = suite.get('id')
             if ident is None or ident in suites:
                 raise ValueError('missing or duplicate suite ID')
-            suites[ident] = str(suite.get('platform', '')).lower()
+            suites[ident] = (str(suite.get('platform', '')).lower(),\n                             str(suite.get('path', '')).replace('\\\\', '/'))
         elif kind == 'testStart':
             test = event.get('test', {})
             ident = test.get('id')
@@ -70,7 +70,7 @@ def check(path: Path, process_exit: int, expected_names=None):
     if len(visible) != len(expected) or set(names) != set(expected):
         raise ValueError(f'exact test set mismatch: expected={expected!r}, got={names!r}')
     for test, result in visible:
-        if result.get('skipped') is not False or result.get('result') != 'success':
+        if (result.get('skipped') is not False or\n                result.get('result') != 'success' or\n                result.get('retried') is not False):
             raise ValueError(f'test did not execute successfully: {test.get("name")!r}')
         platform = suites.get(test.get('suiteID'), '')
         if 'chrome' not in platform:
@@ -82,10 +82,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--events', required=True, type=Path)
     parser.add_argument('--exit-code', required=True, type=int)
-    parser.add_argument('--expected-test', action='append', dest='expected_tests')
+    parser.add_argument('--expected-test', action='append', dest='expected_tests')\n    parser.add_argument('--expected-suite-suffix')
     args = parser.parse_args()
     try:
-        print(check(args.events, args.exit_code, args.expected_tests))
+        print(check(args.events, args.exit_code, args.expected_tests, args.expected_suite_suffix))
     except (OSError, ValueError) as exc:
         print(f'BROWSER MACHINE ORACLE FAIL: {exc}', file=sys.stderr)
         sys.exit(2)
