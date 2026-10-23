@@ -116,3 +116,76 @@ For a v17/v2 source backup S and newly initialized destination D, with matching 
 - https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md
 - https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D006_logmate_inbound_cursor_atomicity_transfer.md
 - https://github.com/yhappcom/marketing-manager/blob/main/research/438_logmate_one_pass_ad_architecture_and_launch_gates.md
+
+
+## 8. F1 consumer-path and recovery-hold collision audit [SOURCE / SYNTHESIS / CONTRADICTION / OPEN]
+
+**Source pin and method:** 2026-10-24, LogMate read-only `main@5ad78167cb97d6846ed7b5f866151d2a080dcc88`; directly inspected the full 6,148-line `lib/repository/logbook/sembast_logbook_repository.dart`, all 137 lines of `sync_persistence.dart`, `sync_operation_binding_acceptance_test.dart`, `sync_replica_identity_safety_test.dart`, the B1 test inventory, F1 acceptance closure and current `MASTER.md`. Searched exact store-reference uses within the complete repository adapter, not merely excerpts. This is a **bounded static source audit**, not a compiled whole-app call graph, executed Flutter test or deployed Sync adapter audit. GitHub code-search returned no indexed matches and cannot be used to claim a whole-repository negative.
+
+### 8.1 Ownership and consumer census [SOURCE]
+
+| Store / seam | Observed exact adapter usage | Consequence |
+|---|---|---|
+| `_syncStateStore` | initialization, owner-UID rewrite, state validation, restore reset, legacy drop/empty check, durable-data count | Local state is not proof of authenticated stream binding. `_validateSyncState` checks shape/owner/replica consistency, not server authority. |
+| `_syncBindingStore` | frozen binding get/put in `_writeF1OperationBinding`, restore/legacy drop, empty/count | A supported simple Flight CREATE can create `eligibleProven` **local payload evidence** atomically with record/revision/outbox. It is not an ACK. |
+| `_syncReceiptStore` | declaration, v1 restore drop, legacy empty check, durable-data count | **No direct receipt read or write in this audited adapter**. A v2 restore copies its rows generically via the 37-store registry. No authenticated remote Receipt consumer is demonstrated. |
+| `_syncHeadStore` | declaration, v1 restore drop, legacy empty check, durable-data count | **No direct record-head read or write in this audited adapter**. V2 generic copy is not current server-head authority. |
+| `_syncCursorStore`, `_syncAppliedIdentityStore` | restore-to-hold/drop, legacy drop/empty check, durable-data count | No normal inbound apply/cursor advancement consumer observed in the adapter. Source progress is historical evidence on restore, not destination progress. |
+| `_syncHoldStore` | deferred/legacy hold creation, restored cursor/identity hold put, v1 drop, legacy empty/count | Recovery holds are evidence custody. Their key uniqueness across *successive restorations* requires additional validation (8.3). |
+| `confirmPendingOperation` | explicit deprecated API always throws `invalidMutationPlan` | Unverified caller cannot delete Outbox through this API. It does not prove future server receipt validation. |
+
+**Specific source points:** adapter lines 191–208 (store refs), 419–480 (v2 export), 483–592 (restore/reset), 2380–2386 (fail-closed legacy confirm), 2455–2467 and 2746–2755 (atomic F1 binding), 2802–2859 (binding eligibility and deferred holds), 3350–3365 (owner/state coupling), 4799–4882 (Sync state validation), 5918–5924 (restore reference checks). `sync_persistence.dart` explicitly states that F1 has no remote-operation decoder; `F1-R03` remains NOT VERIFIED in the acceptance record. The product `MASTER.md` likewise leaves Manual Delta Sync, authenticated Receipt, remote apply and convergence unimplemented at this source pin.
+
+**TRANSFER VALIDATION:** Engineering D006's cursor/application atomicity invariant remains applicable to a *future* inbound adapter, not proof that an inbound adapter exists today. Design Studio W121's exact-runtime evidence gate and Marketing 438's PWA ad-free / no false Sync-complete contract are unchanged.
+
+### 8.2 Correct authority interpretation [MINTTAP DECISION / DEPENDENCY]
+
+1. `eligibleProven` means a locally frozen, digest-bound eligible outbound operation; **not** sent, accepted, applied, remotely acknowledged, or converged. The operation's `originReplicaId` is the *source* replica. Copying the binding during restore does not make it a new destination-origin operation.
+2. Source Sync receipts and record heads are **copied bytes of unknown current authority**. No consumer is observed in the audited adapter, so report a *future consumer contract requirement*, not a demonstrated remote-ACK exploit.
+3. `_resetRestoredSyncTrust` sets destination `unbound/unverified` and moves live source applied cursor/identities to holds; copied receipts/heads/bindings must never bypass that state when a future consumer is added.
+4. `snapshotDigest` is an unkeyed integrity checksum. A checksum-correct LBK, matching caller-supplied `verifiedOwnerUid`, local owner unlock or local `eligibleProven` binding cannot authenticate server Receipt provenance. Server-side admission must establish owner, operation/digest, stream/epoch, freshness, replay/idempotency and destination authority independently.
+5. `_validateRestoredLbkReferences` calls canonical ready-state and aggregate-manifest checks. It is **not a receipt signature/provenance verifier**. Absence of such verification is expected while remote Receipt handling is intentionally unimplemented; it is a release requirement, not proof of a shipped vulnerability.
+
+### 8.3 New conditional collision counterexample: recovery hold overwrite [SOURCE / CONTRADICTION / OPEN]
+
+**Source-level sequence:** v2 restore first generically copies every source `logmate_sync_holds_v1` row. It then iterates live source cursor and applied-identity rows, writing to `_syncHoldStore.record('restored:${source.name}:${row.key}').put(...)` (adapter lines 496–507 and 569–580). The `put` has **no prior-key-exists check**. A collision with a preexisting source hold of that exact key therefore replaces the older hold value in the destination transaction.
+
+**Falsifiable minimal source fixture** (synthetic, not production): source `sync_holds` contains key `restored:logmate_sync_applied_cursor_v1:stream` with historical evidence A; source *live* `sync_applied_cursor` contains key `stream` with newer evidence B. A valid v2 export carries both. A fresh destination v2 restore copies A, then writes B at the same destination hold key. Post-restore only B is at that key: **historical hold A is not preserved under its original key**. The same conditional collision applies to `restored:logmate_sync_applied_identities_v1:<operationId>`. The current F1 product has no observed normal remote cursor writer; consequently this is a **source-level, future-Sync/repeated-recovery compatibility risk**, not an observed user-data-loss incident or proven currently reachable production path.
+
+**Why it matters:** A device restored from an earlier backup can retain recovery holds, then eventually acquire new live Sync progress after a future authenticated adapter is implemented. A later backup/restore may reuse the same cursor key or applied operation ID. Treating every restore as a fresh one-time import conceals this multi-generation evidence-custody edge. This is distinct from duplicate keys *within a single store* (already checked by `_validateLbkContainer`); the collision occurs **between two different source stores after transformation**.
+
+**Decision for Engineering:** Before any authenticated Sync rollout, either (a) fail closed on hold-key collision inside the existing restore transaction and preserve source/destination unchanged, or (b) introduce an explicitly versioned, collision-safe recovery-evidence lineage key with independent provenance and semantic migration tests. Do **not** silently overwrite, discard older evidence, rewrite history, or infer authority from either hold. Engineering owns implementation and may choose a better compatible scheme after testing. This study changes no LogMate source.
+
+### 8.4 Twelve-case executable handoff [VALIDATION / DEPENDENCY]
+
+| Case | Fixture / action | Required independent oracle |
+|---|---|---|
+| R01 | v2 populated source with no prior holds and one live cursor | Destination cursor empty; one new source-evidence hold; state unbound/unverified. |
+| R02 | v2 populated source with no prior holds and one applied identity | Destination applied store empty; one new identity hold; source operation ID retained. |
+| R03 | v2 source with preexisting hold and **same generated cursor-hold key** | No silent loss of either evidence A or B; current implementation is a **conditional overwrite candidate**. |
+| R04 | v2 source with preexisting hold and **same generated identity-hold key** | Same preservation or fail-closed requirement as R03. |
+| R05 | v2 source with different hold keys | Existing holds and newly generated holds all retained; no unintended merge. |
+| R06 | backup→restore→re-export→later nonempty progress→restore | Provenance survives multiple generations, not just first restore. |
+| R07 | copied `eligibleProven` binding with source replica ID | Remains historical source-origin binding; cannot be reclassified as destination ACK. |
+| R08 | copied receipt/head shaped like accepted remote result | Locked/unbound destination must not emit remote-complete or advance cursor. Future consumer must validate authenticated stream. |
+| R09 | forged-but-self-consistent checksum / altered receipt/head | Digest validation alone cannot authorize remote state; no trust promotion. |
+| R10 | `confirmPendingOperation` invoked with fabricated operation | Throws; original Outbox remains. Current source-level expectation, not server acceptance test. |
+| R11 | injected exception after store writes during restore | Whole transaction rolls back, including copied holds and transformed rows; fresh destination unchanged. |
+| R12 | actual v17 Chrome IndexedDB process exit/relaunch, then Safari/Home Screen and managed-iPad envelopes | Compare semantic source/restore/hold state with exact build/provenance; no Chrome→iPad inference. |
+
+**Priority:** R03–R04 are newly exposed **P0 design/negative-fixture review before remote Sync consumer implementation**, not a current production severity classification. R01–R02, R05–R11 should be executed on exact current Flutter/Sembast source by Engineering; R12 requires permitted browser and device environments. Synthetic map/digest tests alone cannot promote a product gate. Avoid real owner UIDs, flight payloads, tokens or receipt secrets in shared logs.
+
+### 8.5 Platform and cross-track transfer [SOURCE / CHANGE WATCH / TRANSFER]
+
+- **Track E (primary):** owns restore evidence custody, trust reset, non-overwrite, no ACK promotion, incident/recovery rollback and release HOLD. The new collision question is a preservation invariant, not a generic browser quota question.
+- **Track A:** owns Service Worker control, origin/profile and IDB transaction boundaries. Worker activation does not establish Sync receipt authority or prevent a logical recovery-hold key collision. Source: https://w3c.github.io/ServiceWorker/spec/service_worker/ (checked 2026-10-24).
+- **Track C:** owns R01–R12 typed semantic oracle, populated fixture, negative cases, independently confirmed browser-process restart, and separate physical-iPad evidence. IDB transaction completion does not equal crash-proof disk flush or independent backup. Source: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB and https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction/durability (checked 2026-10-24).
+- **Track B:** distinguish `local saved`, `eligible outbound`, `restored locked`, `source progress held`, `remote unverified`, `authenticated ACK`; a copied receipt must not render “Sync complete.” Design Studio owns visual/AT/human execution.
+- **Track D:** measure restoration/hold-collision/revalidation outcomes using privacy-minimized counts and explicit `UNKNOWN` states. Marketing 438's first-release PWA ad-free recommendation is unaffected; no Sync-success or durable-offline marketing claim without actual evidence.
+- **WebKit/iPad CHANGE WATCH:** browser origin quota, eviction and persistent storage are platform/OS/context-dependent; Safari/Home Screen/MDM evidence cannot be inferred from Chrome. Source: https://webkit.org/blog/14403/updates-to-storage-policy/ (checked 2026-10-24). Independent export/restore is still necessary for irreplaceable offline EFB data.
+
+### 8.6 Evidence verdict and adjacent-work checkpoint
+
+**SOURCE VERIFIED:** Exact current adapter and F1 contract, local binding creation, fail-closed legacy confirmation, copied receipt/head rows, restore trust reset and the **conditional hold-key overwrite path**. **SYNTHESIS:** Cross-store transform can overwrite prior recovery evidence even when each source store individually has unique keys. **OPEN:** Reachability under future real Sync progress, chosen remediation, full-app consumer graph, actual Chrome execution, independent NORMAL artifact/Hosting, physical Safari/managed iPad, authenticated remote Receipt. **VALIDATION:** No Flutter/Chrome/managed-device or production run executed here; this is static inspection and a falsifiable fixture specification, not a reproduced product incident.
+
+**Gate unchanged:** Stage 8 applied Security/Privacy/Trust; E highest-value bottleneck; A/C execution dependencies; B/D truthful-state/claim transfer. **Production validation OPEN; PWA release HOLD.** The next materially different checkpoint is Engineering's real current-head tests of R03/R04 plus R01/R02/R07/R08, exact Chrome populated 37-store restore and a permitted retained-profile process restart. Additional generic manifest-only micro-tests would not close this blocker.
