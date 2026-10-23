@@ -199,3 +199,6 @@ Current adjacent Stage 8 target after 317: integrate account deletion, credentia
 
 
   - **2026-10-23 executable custody handoff:** 504 now includes review-only Engineering files [NORMAL inventory prototype](handoffs/pwa_normal_inventory.py) and [manual two-job custody workflow proposal](handoffs/normal_pwa_custody_workflow_PROPOSAL.yml). A disposable file-tree fixture matched 7/7 expected create/verify/fail cases; this is not a LogMate CI, raw archive, Hosting, browser or managed-iPad PASS. Current manifest install identity/MDM storage transfer was reconciled against W3C/WebKit/Apple sources. Production validation OPEN, release HOLD.
+
+
+  - **2026-10-23 Chrome evidence execution handoff:** 504 now includes [pinned Chrome CI workflow proposal](handoffs/browser_reopen_workflow_PROPOSAL.yml) and [fail-closed JSON event oracle](handoffs/browser_reopen_result_gate.py). Reconciles LogMate current-main Dart ^3.12.0 vs old Flutter 3.38.7 browser workflow and missing main trigger; distinguishes the one real IndexedDB close/reopen browser test from B1 whole-ledger, browser-process restart, Service Worker, Safari and managed-iPad. Disposable reporter-event fixtures **10/10 expected**; **no real Flutter/Chrome CI run**, product validation OPEN and PWA release HOLD.
