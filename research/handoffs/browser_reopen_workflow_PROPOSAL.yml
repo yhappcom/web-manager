@@ -48,7 +48,7 @@ jobs:
           set -uo pipefail
           flutter test --platform chrome --machine test/repository/logbook/sembast_web_reopen_test.dart > browser-reopen-events.jsonl
           result=$?
-          python3 tool/browser_reopen_result_gate.py --events browser-reopen-events.jsonl --exit-code "$result"
+          python3 tool/browser_reopen_result_gate.py --events browser-reopen-events.jsonl --exit-code "$result" --expected-suite-suffix 'test/repository/logbook/sembast_web_reopen_test.dart'
       - name: Bounded evidence summary
         if: success()
         run: |
