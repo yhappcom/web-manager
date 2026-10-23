@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
-"""Review-only fail-closed oracle for one LogMate Chrome IndexedDB reopen test.
+"""Engineering-review-only fail-closed Chrome machine-result oracle.
 
-Consumes Flutter `flutter test --machine` JSONL. This validates reporter evidence,
-not the correctness of the test implementation or PWA/Service Worker behavior.
+Default contract preserves the original single IndexedDB reopen test.
+Pass repeated --expected-test to verify an exact multi-test B1 Chrome bundle.
+This proves runner/test execution only, not correctness or device durability.
 """
 import argparse
 import json
 import sys
 from pathlib import Path
 
-EXPECTED = 'IndexedDB canonical ledger survives create delete restore reopen'
+DEFAULT_EXPECTED = (
+    'IndexedDB canonical ledger survives create delete restore reopen',
+)
 
 
-def check(path: Path, process_exit: int):
+def check(path: Path, process_exit: int, expected_names=None):
     if process_exit != 0:
         raise ValueError(f'Flutter test process exit={process_exit}')
+    expected = tuple(DEFAULT_EXPECTED if expected_names is None else expected_names)
+    if not expected or len(set(expected)) != len(expected):
+        raise ValueError('expected test names must be nonempty and unique')
     tests = {}
     suites = {}
     finished = {}
@@ -33,7 +39,10 @@ def check(path: Path, process_exit: int):
         kind = event['type']
         if kind == 'suite':
             suite = event.get('suite', {})
-            suites[suite.get('id')] = str(suite.get('platform', '')).lower()
+            ident = suite.get('id')
+            if ident is None or ident in suites:
+                raise ValueError('missing or duplicate suite ID')
+            suites[ident] = str(suite.get('platform', '')).lower()
         elif kind == 'testStart':
             test = event.get('test', {})
             ident = test.get('id')
@@ -57,28 +66,28 @@ def check(path: Path, process_exit: int):
         raise ValueError('unfinished tests')
     visible = [(test, finished[ident]) for ident, test in tests.items()
                if not finished[ident].get('hidden', False)]
-    if len(visible) != 1:
-        raise ValueError(f'expected one visible test, observed {len(visible)}')
-    test, result = visible[0]
-    if test.get('name') != EXPECTED:
-        raise ValueError(f'unexpected test name: {test.get("name")!r}')
-    if result.get('skipped') is not False or result.get('result') != 'success':
-        raise ValueError('expected test did not execute successfully')
-    platform = suites.get(test.get('suiteID'), '')
-    if 'chrome' not in platform:
-        raise ValueError(f'expected Chrome suite, got {platform!r}')
-    return f'BROWSER REOPEN ORACLE PASS: 1/1 executed in {platform}; no skips/errors'
+    names = [test.get('name') for test, _ in visible]
+    if len(visible) != len(expected) or set(names) != set(expected):
+        raise ValueError(f'exact test set mismatch: expected={expected!r}, got={names!r}')
+    for test, result in visible:
+        if result.get('skipped') is not False or result.get('result') != 'success':
+            raise ValueError(f'test did not execute successfully: {test.get("name")!r}')
+        platform = suites.get(test.get('suiteID'), '')
+        if 'chrome' not in platform:
+            raise ValueError(f'expected Chrome suite for {test.get("name")!r}, got {platform!r}')
+    return f'BROWSER MACHINE ORACLE PASS: {len(expected)}/{len(expected)} executed in Chrome; no skips/errors'
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--events', required=True, type=Path)
     parser.add_argument('--exit-code', required=True, type=int)
+    parser.add_argument('--expected-test', action='append', dest='expected_tests')
     args = parser.parse_args()
     try:
-        print(check(args.events, args.exit_code))
+        print(check(args.events, args.exit_code, args.expected_tests))
     except (OSError, ValueError) as exc:
-        print(f'BROWSER REOPEN ORACLE FAIL: {exc}', file=sys.stderr)
+        print(f'BROWSER MACHINE ORACLE FAIL: {exc}', file=sys.stderr)
         sys.exit(2)
 
 
