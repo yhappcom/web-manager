@@ -84,4 +84,26 @@ class GateTests(unittest.TestCase):
     def test_missing_process_closure_rejected(self):
         t=fixture();t['events'][3]['all_tabs_closed']=False;self.assertEqual(assess(t)[0],'INVALID')
 
+    def test_deterministic_malformed_json_types_never_crash(self):
+        # The oracle must fail closed, not throw, on untrusted trace shapes.
+        import random
+        rng = random.Random(20261024)
+        values = [None, [], {}, True, False, 0, 1, 17, 37, -1,
+                  3.14, '', 'x', 'https://example.test', 'a'*64,
+                  ['x'], {'kind': 'migration'}]
+        for i in range(1000):
+            t = fixture()
+            if i % 3 == 0:
+                k = rng.choice(list(t))
+                t[k] = rng.choice(values)
+            elif i % 3 == 1:
+                j = rng.randrange(5)
+                k = rng.choice(list(t['events'][j]))
+                t['events'][j][k] = rng.choice(values)
+            else:
+                j = rng.randrange(5)
+                t['events'][j] = rng.choice(values)
+            verdict, _ = assess(t)
+            self.assertIn(verdict, ('INVALID', 'TRACE_CONSISTENT_UNVERIFIED'))
+
 if __name__=='__main__':unittest.main()
