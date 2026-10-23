@@ -76,9 +76,9 @@ def check(path: Path, process_exit: int, expected_names=None, expected_suite_suf
                 result.get('retried') is not False):
             raise ValueError(f'test did not execute successfully: {test.get("name")!r}')
         platform, suite_path = suites.get(test.get('suiteID'), ('', ''))
-        if expected_suite_suffix and not suite_path.endswith(expected_suite_suffix):
+        if expected_suite_suffix and not (suite_path == expected_suite_suffix or suite_path.endswith('/' + expected_suite_suffix)):
             raise ValueError(f'unexpected suite path: {suite_path!r}')
-        if 'chrome' not in platform:
+        if platform != 'chrome':
             raise ValueError(f'expected Chrome suite for {test.get("name")!r}, got {platform!r}')
     return f'BROWSER MACHINE ORACLE PASS: {len(expected)}/{len(expected)} executed in Chrome; no skips/errors'
 
