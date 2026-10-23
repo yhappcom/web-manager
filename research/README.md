@@ -186,3 +186,7 @@ Current adjacent Stage 8 target after 317: integrate account deletion, credentia
 - 320 — Managed-iPad PWA delivery/offline/Auth release integrity — **PERSISTED on main; generic/source PASS**, physical fleet validation OPEN.
 - 321–324 — Auth response/CSP reporting, PWA header/data survival, Worker trust and release evidence — **321–324 persisted on main; generic/source/model gates only**, normal-build/browser/managed-iPad validation OPEN.
 - 325 — Safari 27 static routing and installation failure modes — local study only; GitHub persistence OPEN; production validation OPEN.
+
+
+## 2026-10-23 integrated Stage 8 execution checkpoint
+- **503 — [PWA release-to-recovery evidence reconciliation and execution gate](503_stage8_pwa_release_to_recovery_evidence_reconciliation_20261023.md):** canonical, source-pinned synthesis of studies 427/431/437/460/480 plus noncanonical conversation-local 493–502. Records current main Core 798 PASS / 4 Golden FAIL / 1 SKIP, eight B1 host PASS, historical different-ref Chrome 1/1 PASS, current NORMAL archive/Hosting/Chrome/Safari/managed-iPad gaps and G0–G8 Engineering execution criteria. **SOURCE/SYNTHESIS PASS only; product validation OPEN; PWA release HOLD.** Local 493–502 are not separately committed studies.
