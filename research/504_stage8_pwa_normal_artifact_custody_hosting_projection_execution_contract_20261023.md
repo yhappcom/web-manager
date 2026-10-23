@@ -83,3 +83,49 @@ Prefer **two jobs**: (A) build-and-upload NORMAL with no deploy credentials; (B)
 **OPEN:** real CI patch/approval, NORMAL archive, independent downstream consumer, Hosting preview/served bytes, negative Dart tests, current-main browser B1, physical managed iPad, full recovery and Sync backend. **CHANGE WATCH:** GitHub artifact action versions/digest semantics/hidden file defaults, Flutter web output, Firebase Hosting ignore/rewrite semantics, WebKit quotas/installation/eviction, iPadOS and MDM.
 
 **Decision:** retain Stage 8, Track E bottleneck, Production validation OPEN, PWA release HOLD. The next meaningful checkpoint is **actual Engineering execution and exact artifact evidence**. More standalone synthetic studies should not be generated unless a new concrete contradiction changes the execution contract.
+
+
+---
+
+## 2026-10-23 source contradiction addendum — cross-generation Worker catalogue writer isolation (Track E owner, Track A dependency)
+
+**Evidence boundary:** inspected exact LogMate `main@59cd171176c58b598a4db55d128ffd21d406e862` `tool/pwa_precache.dart` generated-worker template (lines approximately 380–690), `web/flutter_bootstrap.js`, and `test/tool/pwa_precache_test.dart`. No deployed worker, physical device or two-generation browser interleaving was executed. This is a **source-level concurrency risk requiring a falsifying browser test**, not a proven user-data loss incident or security exploit. It is a concrete source contradiction worth adding to 504 rather than a new micro-study.
+
+### SOURCE — shared storage, separate execution contexts
+
+- Worker template sets `CONTROL_CACHE = 'logmate-offline-control-v2'` and `CONTROL_KEY = '/__logmate_offline_control_v2.json'`. `readControl()` reads one JSON response; `writeControl()` overwrites it via `cache.put`. `updateControl(change)` chains operations on a module-global `let controlMutation = Promise.resolve()` and performs **read → change → write**.
+- Active worker `fetch` uses `updateControl` to write `clientBuilds[clientId]` on root navigation; installing/waiting successor worker `install` and `precacheCandidate` also use `updateControl` to write `versions`, `candidateBuildId`, `verified` and sometimes `currentBuildId`. `web/flutter_bootstrap.js` explicitly selects `registration.waiting || registration.active || controller` for `START_PRECACHE`, so a waiting worker can receive a message while the previous worker serves clients.
+- Each ServiceWorkerGlobalScope has its **own** JavaScript module-global promise. It is not an origin-wide mutex. Both generations can access the same named Cache Storage; Cache API `put` is not an atomic multi-operation compare-and-swap transaction for the JSON catalogue. The source comment promising serialization of `every control catalogue mutation in this worker` is valid only within that worker context; it does not establish cross-generation serializability.
+- The existing Dart test checks for string markers (`controlMutation`, `updateControl`, two client IDs) but has no actual old-active/new-installing/waiting execution or stale-write oracle.
+
+**Primary/platform sources checked 2026-10-23:** W3C Service Workers specification https://www.w3.org/TR/service-workers/ (lifecycle, Cache/CacheStorage); web.dev https://web.dev/articles/service-worker-lifecycle (successor installation alongside active predecessor, waiting, update safety); MDN https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage (shared worker/window cache namespace) and https://developer.mozilla.org/en-US/docs/Web/API/Cache (application-controlled updates). Platform behavior on exact Safari/iPadOS is CHANGE WATCH; no claim of a browser bug is made.
+
+### SYNTHESIS — minimal falsifiable lost-update interleaving
+
+Let persisted catalogue `C0` contain current build `A` and an existing `clientBuilds` map. Two **distinct worker globals** have separate `controlMutation` queues. (1) Old active worker begins root navigation and reads `C0`. (2) New installing worker reads `C0` to remember candidate `B`. (3) Old worker writes `C0 + clientBuilds[newClient]=A`. (4) New worker writes `C0 + versions[B], candidateBuildId=B` from its stale snapshot. The client assignment disappears. Reverse write order can instead discard candidate metadata. No individual `cache.put` needs to be corrupt for the whole-object update to be lost. `fetch` later consults `clientBuilds[event.clientId]`; missing assignment can produce a 503 for an otherwise verified shell asset. This is a *possible schedule*, not an observed production trace.
+
+**Second adjacent boundary:** the same `updateControl` overwrites the JSON even when a callback merely returns `false`; a rejected `PROMOTE_VERIFIED_CANDIDATE` does not inherently prevent a stale whole-object write. `appBuildId` is derived from shell records rather than full Worker bytes (501), so catalogue ownership and release identity are distinct requirements. Do not assume `no skipWaiting` prevents old-active/new-installing shared-cache writes; waiting protects control takeover, not all storage mutations.
+
+### MINTTAP DECISION — Engineering contract, not an authorized LogMate patch
+
+**Do not declare Worker update / offline-ready gate PASS based on 504 custody alone.** Add a cross-generation catalogue-integrity gate to the same Engineering execution packet. Prefer architecture review of **immutable candidate records plus a single active-owner promotion path**, or a dedicated IndexedDB transactional catalogue with an explicit generation/epoch and rejection of stale authority. Merely adding another in-memory promise, retrying `cache.put`, or relying on `skipWaiting` is not a sufficient fix. An IndexedDB design must separately consider transactions, storage eviction, schema migration, and existing LogMate ledger isolation; no backend or app-data change is proposed by this study.
+
+### VALIDATION — real browser oracles (all NOT_EXECUTED)
+
+1. **Old-active/new-installing:** pause the successor immediately after its `readControl`, perform old-worker root navigation, then release successor write. Catalogue must retain both candidate and client assignment; correct versioned shell fetch must not return 503.
+2. **Reverse order:** pause active navigation write, allow successor catalogue write, then release active write; both records must survive. Capture exact Worker script digests and Cache Storage snapshot before/after.
+3. **Waiting worker message:** with old tab open, send `START_PRECACHE` to `registration.waiting` while old tab navigates/reloads; no lost `currentBuildId`, `versions`, `clientBuilds`, and no premature activation.
+4. **Rejected promotion and interrupted install:** exercise rejected `PROMOTE_VERIFIED_CANDIDATE`, install failure, retry and restart; previous verified shell must remain reachable, and catalogue must not lose newer entries.
+5. **Safari/Home Screen/managed iPad:** repeat only after Chromium test harness establishes deterministic reproduction. Each is an independent environment; do not infer shared Safari/Home Screen storage or managed Web Clip behavior.
+
+A PASS needs an **actual** pinned-source, pinned-browser two-generation run with recorded read/write interleaving and invariant checks, not merely the source comment, a mock single-global promise, or a green static generator test. For a FAIL, preserve a sanitized catalogue diff, worker versions, event/client IDs, and the exact 503 response without exporting flight/identity data.
+
+### Five-track transfer / dependency / contradiction
+
+- **E (owner):** shared catalogue authority, atomicity and update rollback; highest release consequence.
+- **A:** Service Worker lifecycle, distinct globals, Cache Storage scope and cross-browser semantics; owns generic mechanics only.
+- **C:** implement deterministic browser interleaving, test failure localization and offline asset oracles; Golden/Core CI debt remains independent.
+- **B:** never display offline-ready or safely-updated solely from registration/candidate status; maintain recoverable/repair-required states and screen-reader accessible instructions; consume Design Studio W121.
+- **D:** do not count an install/update event as durable offline readiness or publish offline capability claims without an actual read-after-update proof; consume Marketing 438 PWA-ad-exclusion boundary.
+
+**CONTRADICTION:** `serialized within one worker` ≠ `serialized across old-active/new-installing/waiting workers`; `Cache.put succeeded` ≠ `read-modify-write was atomic`; `no skipWaiting` ≠ `no shared-state overlap`. **OPEN:** exact Chromium/Safari reproduction, severity/frequency, production use of this path, remediation, managed-device execution. **Gate:** Stage 8 / Track E bottleneck / production validation OPEN / PWA release HOLD; this is an added Engineering blocker, not a runtime defect verdict.
