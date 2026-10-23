@@ -3,7 +3,7 @@
 #   test/repository/logbook/whole_ledger_backup_browser_test.dart
 # Copy the updated browser_reopen_result_gate.py into:
 #   tool/browser_reopen_result_gate.py
-# Source contract pinned during review: LogMate main@59cd171176c58b598a4db55d128ffd21d406e862.
+# Source contract pinned during review: LogMate main@5ad78167cb97d6846ed7b5f866151d2a080dcc88.
 name: DATA-001 B1 Chrome Whole-Ledger Recovery Evidence Candidate
 on:
   workflow_dispatch:
@@ -45,7 +45,7 @@ jobs:
           python3 tool/browser_reopen_result_gate.py \
             --events b1-chrome-events.jsonl --exit-code "$result" \
             --expected-suite-suffix 'test/repository/logbook/whole_ledger_backup_browser_test.dart' \
-            --expected-test 'B1 Chrome restores 30 stores across IndexedDB close reopen' \
+            --expected-test 'B1 Chrome restores 37 stores across IndexedDB close reopen' \
             --expected-test 'B1 Chrome rejects tamper and wrong owner without mutation' \
             --expected-test 'B1 Chrome rolls back injected failure and retries after reopen'
       - name: Bounded execution summary
@@ -56,7 +56,7 @@ jobs:
             echo '### B1 Chrome IndexedDB restore: exact test set PASS (bounded)'
             echo "- source SHA: ${GITHUB_SHA}"
             echo "- workflow ref: ${GITHUB_REF}"
-            echo '- Three synthetic browser tests: 30-store restore, rejection, injected rollback/retry.'
+            echo '- Three synthetic browser tests: 37-store Format v2 restore with Sync trust reset, rejection, injected rollback/retry.'
             echo '- Database close/reopen is NOT a browser-process restart.'
             echo '- NOT verified: user-selected .lbk file I/O, Safari tab/Home Screen, managed iPad, eviction, Sync ACK, actual offline PWA.'
           } >> "$GITHUB_STEP_SUMMARY"
