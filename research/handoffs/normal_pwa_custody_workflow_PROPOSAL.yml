@@ -1,0 +1,77 @@
+# REVIEW-ONLY HANDOFF. Do not install as production workflow without Engineering approval.
+# Requires copying pwa_normal_inventory.py to tool/pwa_normal_inventory.py in LogMate.
+name: PWA NORMAL Custody Candidate
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pwa-normal-custody-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build-normal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      inventory_sha256: ${{ steps.inventory.outputs.inventory_sha256 }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage C font integrity
+        run: |
+          echo 'e83c28c317854fcf04a62033fe474b56424dd7374f6d0f92c4e83c6d72459a87  third_party/fonts/stage-c/logmate-font-stage-3.47.5-stage-c-compliance-final.zip' | sha256sum -c -
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.5'
+          channel: stable
+          cache: true
+      - name: Build exact NORMAL release candidate
+        run: |
+          flutter --version
+          dart --version
+          flutter pub get
+          git diff --exit-code -- pubspec.lock
+          rm -rf build/web-normal
+          BUILD_WEB_OUTPUT=build/web-normal make build-pwa
+      - name: Inventory pre-upload tree
+        id: inventory
+        run: |
+          python3 tool/pwa_normal_inventory.py create --root build/web-normal --inventory build/pwa-normal-inventory.json --source-sha "$GITHUB_SHA"
+          echo "inventory_sha256=$(sha256sum build/pwa-normal-inventory.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pwa-normal-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: build/web-normal/
+          if-no-files-found: error
+          retention-days: 7
+          include-hidden-files: false
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pwa-normal-inventory-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: build/pwa-normal-inventory.json
+          if-no-files-found: error
+          retention-days: 7
+  verify-download:
+    needs: build-normal
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: pwa-normal-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: downloaded/normal
+      - uses: actions/download-artifact@v4
+        with:
+          name: pwa-normal-inventory-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: downloaded/inventory
+      - name: Fail closed on inventory and downloaded-file mismatch
+        env:
+          EXPECTED_INVENTORY_SHA256: ${{ needs.build-normal.outputs.inventory_sha256 }}
+        run: |
+          test -n "$EXPECTED_INVENTORY_SHA256"
+          echo "$EXPECTED_INVENTORY_SHA256  downloaded/inventory/pwa-normal-inventory.json" | sha256sum -c -
+          python3 tool/pwa_normal_inventory.py verify --root downloaded/normal --inventory downloaded/inventory/pwa-normal-inventory.json --source-sha "$GITHUB_SHA"
+          echo 'Downloaded file tree matches pre-upload NORMAL inventory.'
+# No deploy credentials, no Hosting promotion, no production PASS. ZIP member duplication,
+# artifact upload trust, runner compromise, and Hosting served-byte equivalence require
+# separate controls/review. This workflow is NOT a replacement for product/browser/iPad tests.
