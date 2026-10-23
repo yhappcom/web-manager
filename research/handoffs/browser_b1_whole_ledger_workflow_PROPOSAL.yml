@@ -44,6 +44,7 @@ jobs:
           result=$?
           python3 tool/browser_reopen_result_gate.py \
             --events b1-chrome-events.jsonl --exit-code "$result" \
+            --expected-suite-suffix 'test/repository/logbook/whole_ledger_backup_browser_test.dart' \
             --expected-test 'B1 Chrome restores 30 stores across IndexedDB close reopen' \
             --expected-test 'B1 Chrome rejects tamper and wrong owner without mutation' \
             --expected-test 'B1 Chrome rolls back injected failure and retries after reopen'
