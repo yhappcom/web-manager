@@ -281,3 +281,72 @@ The adjacent question “Can the existing trace validator accidentally admit wro
 **Next evidence-changing step:** Engineering must build actual pinned v16/v17 Flutter bundles; independently inventory NORMAL and instrumented artifacts; run M01/M06/M09 in a real Chrome persistent-profile, same-origin, two-tab sequence with a genuine capability-fence exception and an independently logged process restart; then run richer 37-store B1, Worker update/Hosting, and Safari/Home Screen/managed-iPad cases separately. Preserve unsynced data before any repair. If the exact runtime or test bridge is unavailable, record `NOT_EXECUTED` rather than synthetic success. **Production validation OPEN; PWA release HOLD.**
 
 **CHANGE WATCH:** exact LogMate main SHA, generated Flutter bootstrap/Worker, Sembast Web version and cross-tab retry behavior, Playwright/Chrome profile policies, IndexedDB durability/storage eviction, WebKit/iPadOS/MDM execution context, and authenticated remote Receipt semantics.
+
+
+## 14. Same-origin mixed-generation browser-lab execution attempt and environmental blocker — 2026-10-24 [SOURCE / VALIDATION / CONTRADICTION / OPEN]
+
+**Question / operational competency:** Can the previously specified M01/M06/M09 browser boundaries be exercised with an independently launched browser, rather than merely asserting self-reported JSON? Which parts can be tested in this execution environment without implying LogMate product safety? The answer is a concrete reusable browser lab, a verified **execution blocker**, and a sharper separation of platform mechanics from product proof.
+
+### 14.1 Exact provenance and five-track allocation [SOURCE / DEPENDENCY]
+
+Re-read Web Manager `AGENTS.md`, `SPECIALIST_TRACKS.md`, `LEARNING_ROADMAP.md`, `STATUS.md`, `research/README.md`, this 505 study and recent commits. At run start Web Manager `main@f5078f9e87409b604b2d2d0e8956e0d6a92eee66`; LogMate read-only `main@5ad78167cb97d6846ed7b5f866151d2a080dcc88` (historical v16 `59cd171176c58b598a4db55d128ffd21d406e862`). Checked Design Studio `W121` (runtime execution over another pre-runtime manifest), Engineering `D006` (logical operation, retry, ACK and conflict authority), and Marketing `438` (conditional native Manual Sync ad proposal; PWA ad-free default, production HOLD). These specialist boundaries are consumed, not rewritten.
+
+| Track | Stage 8 evidence maturity / dependency pressure | Allocation and owned decision |
+| --- | --- | --- |
+| **E** | Highest product-loss and release-authority risk; real artifact/device evidence OPEN | **Primary:** separate synthetic lab, real runtime and production admission; no-destructive-repair, NORMAL custody and rollback governance |
+| **A** | Foundational supplier; platform semantics sourced but LogMate old/new Worker behavior unexecuted | Browser origin, native IndexedDB vs application capability, SW client control, install/storage partition |
+| **C** | High execution pressure; prior Python oracle tests PASS but no product browser proof | Browser lab, falsifiable guarded/unguarded controls, actual process-restart oracle and independent logs |
+| **B** | State architecture mature; human/AT validation OPEN | Distinguish stale-read-only, local saved, backup verified, restored locked and remote ACK; Design Studio W121 owns presentation validation |
+| **D** | Analytics/source provenance mature; PWA acquisition/continuity proof OPEN | Sanitized cohort/trace outcomes, no promotional seamless-update/offline/Sync claims without real runtime |
+
+### 14.2 First principles and failure modes [SOURCE / SYNTHESIS]
+
+AppCache's declarative application cache lacked a sufficiently controllable request/update lifecycle; the Service Worker model supplies a scoped event-driven fetch intermediary and separately managed Cache Storage. **That is not a database transaction or a JS hot-reload mechanism.** W3C Service Workers defines client/control, activation, registration scope and update as distinct concepts. The active Worker that intercepts a page's later fetches need not equal the generation of JS already loaded into that page. `clients.claim()` changes control; it does not retroactively re-evaluate the page's JS. `skipWaiting()` can cause a new Worker to handle old-page fetches and must not be assumed safe for incompatible assets.
+
+IndexedDB names are scoped to an origin, and an IDB database has its own *native* version. The LogMate `LocalDatabaseCapabilityCodec.currentVersion=17` is a **logical Sembast application marker**, not a native `indexedDB.open(name, version)` upgrade. A native `versionchange` event cannot be promoted to proof of v16→v17 LogMate logical capability fencing. Multiple tabs at the same origin may use the same database name while running different JS generations. A transaction-scoped application capability check is a different control from Worker activation.
+
+**Current product source transfer:** LogMate's `web/index.html` uses a Flutter build-time `<base href="$FLUTTER_BASE_HREF">`; the source Worker generator uses its registration scope and a version catalogue; `web/manifest.json` uses relative `start_url` and `standalone`; `sembast_database_opener_web.dart` opens the fixed `logmate_ledger` database. A two-build `/old/` + `/new/` lab on one origin is appropriate to isolate database-generation interaction **only after** verifying compiled base href/asset paths and that both versions truly open the same logical DB. It is **not** a production-root Worker update test: path/scope mapping and the source-owned cache catalogue differ. For the actual release Worker, independently test root navigation, reserved Auth routes, old/new client assignment, cache promotion, offline restart and rollback.
+
+Primary references reviewed 2026-10-24:
+- W3C Service Workers editor's draft (2026-09-17): https://w3c.github.io/ServiceWorker/
+- MDN `ServiceWorkerContainer.controller`: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/controller
+- MDN IndexedDB usage and transaction shutdown caveats: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
+- Playwright `launchPersistentContext`: https://playwright.dev/docs/api/class-browsertype
+- WebKit storage policy (Safari 17-era baseline, platform-version CHANGE WATCH): https://webkit.org/blog/14403/updates-to-storage-policy/
+
+### 14.3 Durable executable lab, test sequence and evidence [VALIDATION / CONTRADICTION]
+
+New **Web Manager-only** research handoffs:
+- `research/handoffs/pwa_mixed_generation_browser_lab.py`: a disposable localhost HTTP server + Playwright persistent-profile Chromium runner. Its **synthetic** old/new JS versions share one plain IndexedDB native-version-1 database, first with logical marker 16 and then 17. It deliberately tests a guarded stale writer (rejected/no mutation) and an unsafe writer (mutates after migration), changes a **synthetic** Worker from V1 to V2 using `skipWaiting/clients.claim`, checks that old page JS remains generation 16, closes the persistent browser context, and reopens the same profile to read the synthetic payload. **The unsafe writer is an intentional counterexample, not LogMate code.** No real personal/flight records or production origin.
+- `research/handoffs/test_pwa_mixed_generation_browser_lab.py`: seven stdlib HTTP/source contract tests; source tests alone cannot assert JS execution or storage semantics.
+
+**Actually executed in this run (Python 3.13.5, Playwright 1.57.0, Chromium 144.0.7559.96, Node 22.16):**
+1. `python -m unittest -q test_pwa_mixed_generation_browser_lab.py` → **7/7 PASS** for localhost old/new routes, shared JS/native-version fixture, changed Worker response, cache headers, and network marker.
+2. `python -m py_compile` both files → PASS; `node --check` extracted embedded application JS → PASS.
+3. **Attempted real** `launch_persistent_context` with a disposable profile and `page.goto(http://127.0.0.1:<ephemeral>/old/)` → **`net::ERR_BLOCKED_BY_ADMINISTRATOR` before application load**. The container's managed Chromium policy includes `URLBlocklist: ["*"]`. No attempt was made to disable/bypass organizational policy. Thus **zero** browser-side IDB/Worker/migration assertions executed. The error is an **execution-environment navigation blocker**, not a LogMate failure or evidence of a PWA incompatibility.
+
+The committed Python/HTTP fixture and syntax are source/host validated. The 17 browser checks in the script are **NOT_EXECUTED**; do not label them 17 PASS. A later `BROWSER_LAB_PASS_NOT_PRODUCT_PASS` in a permitted browser would still prove only this synthetic native-IDB model, not Flutter, Sembast, LogMate, iPadOS, MDM or physical data durability.
+
+### 14.4 Independent evidence ladder and adversarial counterexamples [MINTTAP DECISION / DEPENDENCY]
+
+**T0** source/standards and product static pin → **T1** server fixture + Python/JS syntax → **T2** real Chromium synthetic lab → **T3** exact two compiled LogMate v16/v17 binaries with independently verified artifact inventories and application guard provenance → **T4** current NORMAL PWA bytes, root Worker/Hosting, rich 37-store v17 semantic B1 recovery, process restart and negative/fault variants → **T5** Safari tab/Home Screen and *policy-envelope-matched managed company iPad*, plus authenticated remote Sync ACK if claimed. **No tier is transitive.** Current run reaches T1 only for the new lab, while prior bounded host/product source evidence remains as separately pinned studies.
+
+Critical negative controls for Engineering:
+1. An old v16 tab that *loads fresh* after v17 migration is not the same as an **already-open** v16 tab.
+2. A locked owner or invalid operation rejection is not a capability-version guard.
+3. Distinct `/old/` and `/new/` paths do not imply separate origin storage, but two different ports/hosts do.
+4. Root Worker control of an old page does not mean old JS or local Sembast code has been replaced.
+5. A native IDB `versionchange` is not a LogMate logical v17 migration.
+6. Matching counts or a self-reported 37-store digest does not prove all 37 typed-key/value semantics, source-to-build custody or no re-seeding.
+7. `IDBTransaction.complete` / browser process restart / power-loss durability / independent `.lbk` backup / tested restore are separate.
+8. `local saved`, unsynced outbox, request sent, remote Receipt, remote convergence and backup are separate; no synthetic Receipt may be invented.
+9. A Chromium localhost secure-context exception does not certify real HTTPS, Safari/WebKit storage partitions or managed Web Clip policy.
+10. A Python/HTTP PASS, Playwright navigation policy error or synthetic browser PASS must not silently promote a NORMAL release gate.
+
+**EFB/managed-iPad decision:** Keep unique offline data non-destructively, preserve export/recovery options and distinguish storage persistence from independent backup. The company iPad installation route (Safari tab, Home Screen web app, managed Web Clip), profile/storage partition, background execution, hotspot/peer connectivity, MDM restrictions, and foreground/manual Sync opportunities each require independent version-specific evidence. No unattended peer Sync, automatic cross-device communication or App Store bypass entitlement is inferred.
+
+### 14.5 Stop check / next meaningful checkpoint [OPEN / CHANGE WATCH]
+
+The adjacent valuable question was pursued beyond source review: a browser runner was constructed, its HTTP/JS/Python surfaces tested, and actual Chromium navigation attempted. **The environment blocks the first navigation by administrative policy.** Continuing with additional synthetic-only trace gates would not resolve the product risk. The next responsible checkpoint is Engineering-owned, policy-permitted real Chrome with two pinned Flutter builds and genuine Sembast capability-guard instrumentation, followed by NORMAL custody/Hosting and managed-iPad acceptance. No LogMate source or external specialist repository was changed.
+
+**Gate:** Stage 8 security/trust application remains active; historical Stages 1–12 curriculum gates remain complete. **Track E primary bottleneck; Production validation OPEN; PWA release HOLD.** CHANGE WATCH: LogMate HEAD, Flutter/Worker build pipeline, browser policies and Playwright version, IndexedDB/Sembast cross-tab behavior, Safari/WebKit storage policy, managed-iPad MDM configuration and Sync Receipt implementation.
