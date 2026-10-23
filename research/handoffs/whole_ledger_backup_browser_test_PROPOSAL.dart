@@ -1,6 +1,7 @@
 // REVIEW-ONLY Engineering handoff. Browser-only; no dart:io.
-// Source contract: yhappcom/logmate main@59cd171176c58b598a4db55d128ffd21d406e862.
+// Source contract: yhappcom/logmate main@5ad78167cb97d6846ed7b5f866151d2a080dcc88 (capability v17).
 // Requires Engineering compile/review; NOT a reported Chrome execution PASS.
+// Minimal one-flight fixture: NOT 37-store nonempty semantic parity, process restart, or managed iPad proof.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logmate/domain/logbook/flight_record.dart';
 import 'package:logmate/domain/logbook/ledger_page_projection.dart';
@@ -20,7 +21,7 @@ import 'package:sembast_web/sembast_web.dart';
 const _uid = 'synthetic-b1-browser-owner';
 
 void main() {
-  test('B1 Chrome restores 30 stores across IndexedDB close reopen', () async {
+  test('B1 Chrome restores 37 stores across IndexedDB close reopen', () async {
     final prefix = _name('roundtrip');
     final sourceName = '$prefix-source';
     final destinationName = '$prefix-destination';
@@ -34,7 +35,10 @@ void main() {
       final sourceReplica = await source.readLocalReplicaIdentity();
       final encoded = await source.exportWholeLedgerBackup(verifiedOwnerUid: _uid);
       final backup = WholeLedgerBackup.decode(encoded);
-      expect(backup.stores.length, 30);
+      expect(backup.manifest['backupFormatVersion'], WholeLedgerBackup.syncAwareFormatVersion);
+      expect(backup.manifest['sourceCapability'], 17);
+      expect(backup.stores.length, 37);
+      expect(backup.stores['logmate_sync_operation_bindings_v1'], hasLength(1));
       expect(backup.stores['logmate_active_records_v1'], hasLength(1));
       expect(backup.stores['logmate_outbox_v1'], hasLength(1));
 
@@ -53,6 +57,18 @@ void main() {
       final locked = await destination.readOwnerAccess();
       expect(locked, isA<BoundLocalOwnerAccess>());
       expect((locked as BoundLocalOwnerAccess).isUnlocked, isFalse);
+      final syncState = await StoreRef<String, Map<String, Object?>>(
+        'logmate_sync_state_v1',
+      ).record('current').get(destinationDb);
+      expect(syncState?['originReplicaId'], destinationReplica);
+      expect(syncState?['remoteBaselineStatus'], 'unverified');
+      expect(syncState?['streamBindingStatus'], 'unbound');
+      expect(await StoreRef<String, Map<String, Object?>>(
+        'logmate_sync_receipts_v1',
+      ).count(destinationDb), 0);
+      expect(await StoreRef<String, Map<String, Object?>>(
+        'logmate_sync_applied_cursor_v1',
+      ).count(destinationDb), 0);
 
       await destinationDb.close();
       destinationDb = await databaseFactoryWeb.openDatabase(destinationName);
@@ -69,6 +85,10 @@ void main() {
       ).stores;
       sourceStores.remove('logmate_local_replica_v1');
       restoredStores.remove('logmate_local_replica_v1');
+      // Restoring into a fresh replica intentionally resets Sync State authority.
+      // Compare source payload stores separately from destination-local trust.
+      sourceStores.remove('logmate_sync_state_v1');
+      restoredStores.remove('logmate_sync_state_v1');
       expect(restoredStores, sourceStores);
     } finally {
       await sourceDb?.close();
@@ -166,7 +186,8 @@ void main() {
       final stores = WholeLedgerBackup.decode(
         await destination.exportWholeLedgerBackup(verifiedOwnerUid: _uid),
       ).stores;
-      expect(stores.length, 30);
+      expect(stores.length, 37);
+      expect(stores['logmate_sync_operation_bindings_v1'], hasLength(1));
       expect(stores['logmate_active_records_v1'], hasLength(1));
     } finally {
       await sourceDb?.close();
