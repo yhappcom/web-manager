@@ -16,7 +16,7 @@ oracle = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(oracle)
 
 TESTS = (
-    'B1 Chrome restores 30 stores across IndexedDB close reopen',
+    'B1 Chrome restores 37 stores across IndexedDB close reopen',
     'B1 Chrome rejects tamper and wrong owner without mutation',
     'B1 Chrome rolls back injected failure and retries after reopen',
 )
