@@ -325,7 +325,7 @@ New **Web Manager-only** research handoffs:
 2. `python -m py_compile` both files → PASS; `node --check` extracted embedded application JS → PASS.
 3. **Attempted real** `launch_persistent_context` with a disposable profile and `page.goto(http://127.0.0.1:<ephemeral>/old/)` → **`net::ERR_BLOCKED_BY_ADMINISTRATOR` before application load**. The container's managed Chromium policy includes `URLBlocklist: ["*"]`. No attempt was made to disable/bypass organizational policy. Thus **zero** browser-side IDB/Worker/migration assertions executed. The error is an **execution-environment navigation blocker**, not a LogMate failure or evidence of a PWA incompatibility.
 
-The committed Python/HTTP fixture and syntax are source/host validated. The 17 browser checks in the script are **NOT_EXECUTED**; do not label them 17 PASS. A later `BROWSER_LAB_PASS_NOT_PRODUCT_PASS` in a permitted browser would still prove only this synthetic native-IDB model, not Flutter, Sembast, LogMate, iPadOS, MDM or physical data durability.
+The committed Python/HTTP fixture and syntax are source/host validated. The 16 browser assertions in the script are **NOT_EXECUTED**; do not label them 17 PASS. A later `BROWSER_LAB_PASS_NOT_PRODUCT_PASS` in a permitted browser would still prove only this synthetic native-IDB model, not Flutter, Sembast, LogMate, iPadOS, MDM or physical data durability.
 
 ### 14.4 Independent evidence ladder and adversarial counterexamples [MINTTAP DECISION / DEPENDENCY]
 
