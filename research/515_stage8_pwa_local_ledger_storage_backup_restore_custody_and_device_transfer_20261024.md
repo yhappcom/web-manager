@@ -173,3 +173,78 @@ Run existing native and Web tests first, then an exact-current-head Web export�
 **CHANGE WATCH:** WebKit/iPadOS File API and Home Screen behavior, browser File System Access support, managed Web Clip semantics, Managed Open In and managed-domain settings, Flutter Web download implementation, LBK format/codec and future authenticated Sync. No production environment or airline policy facts were inferred.
 
 **Adjacent-value check:** Prior 506 already resolves the R03/R04 source counterexample and owns its Dart test proposal; this continuation instead resolves three distinct prerequisites in one bundle: browser file-delivery evidence, MDM data-flow authorization and untrusted import/resource admission. The next decisive boundary is a real policy-authorized external-file round trip on the exact Web artifact and physical managed iPad. **Stage 8 applied ACTIVE / Production validation OPEN / PWA release HOLD.** No product or peer repository changed.
+
+
+## 10. Product-authority reconciliation and executable file-flow admission (2026-10-24, later checkpoint) [SOURCE / CONTRADICTION / MINTTAP DECISION / VALIDATION]
+
+### 10.1 Canonical product status changes the next action [SOURCE / CONTRADICTION]
+
+Read-only product authority at LogMate `main@4101ec7380796300f68fa60dbc7e5b6061f00080`: `AGENTS.md` requires `MASTER.md` first, and `docs/roadmap-reconciliation-2026-10-24.md` completion matrix explicitly distinguishes:
+- **B1 / Whole-ledger backup foundation:** implemented repository slice, merged PR #18, host-CI bounded validation; actual file/device transfer is **NOT VERIFIED**.
+- **FILE / Backup file UX:** **NOT IMPLEMENTED complete product flow**. Export/pick/share/restore review and failure UX are future integration; do not presume an existing production Web file UI can simply be tested.
+- **OUTPUT / Export and print:** production output **NOT IMPLEMENTED**; formatted Excel/PDF/print and interchange are different from full-ledger LBK recovery.
+- **IMPORT / Production import:** engine **NOT IMPLEMENTED**; roster/third-party candidate review is not LBK owner-locked recovery.
+- **BACKUP-001/002:** nonempty destination merge/replace/reset and automatic/continuous backup remain owner decisions **OPEN**. Neither is a prerequisite for testing an approved empty-staging B1 path; neither may be silently chosen by Web Manager.
+
+This corrects a possible ambiguity in §§7–9: “test the real Web export UI” is not an assertion that the complete FILE UI exists. **Next actionable engineering gate is product-approved minimal file-flow implementation plus its exact-build acceptance, not another static UI-only test of a nonexistent complete flow.** Repository source is still the authority for actual methods at its pinned SHA; roadmap status is the authority for product-completion claims. GitHub code search returned no indexed matches, so this study does not infer absence of every partial caller from search emptiness.
+
+### 10.2 Source-verified method boundaries and state ownership [SOURCE / SYNTHESIS]
+
+Exact LogMate `lib/repository/logbook/sembast_logbook_repository.dart` source at `main@4101ec7`, blob `d7e4efd4f6dc85220a2f67ca8af956e8abf01aeb`:
+- Lines 419–481: `exportWholeLedgerBackup(verifiedOwnerUid)` requires READY capability, matching **unlocked** owner and no deletion lock, takes a transaction-consistent snapshot of the 37-store registry, and returns **String**. Comment explicitly assigns file selection and I/O to the caller. Snapshot SHA-256 detects corruption but is not an authentication signature.
+- Lines 483–556: `restoreWholeLedgerBackup(encodedBackup, verifiedOwnerUid)` decodes and validates, requires fresh otherwise-empty staging, preserves a new destination replica, locks the matching owner, resets destination Sync trust, and verifies references before transaction commit. Test-only fault callback is not user-facing rollback proof.
+- Lines 559–591: source cursor/applied-identity evidence moves into recovery holds while live destination authority resets. R03/R04 collision negative is owned by study 506; this section does not duplicate it.
+- Lines 5806–5924: manifest/registry/digest/typed-key checks and empty-staging checks are explicit. The inspected decoder performs `jsonDecode` before an explicit file-byte/depth budget. This is an **input resource-admission review**, not a demonstrated browser crash.
+
+`MASTER.md` §0 requires Firebase UID owner authority and allows an **already established unlocked owner** to retain offline local use during transient network/token failure. This does not prove a never-authenticated fresh iPad can import an LBK offline: destination owner verification/first sign-in is a separate prerequisite. The approved Sync contract is **manual delta**, not automatic PWA↔native background replication. A copied LBK is data-transfer evidence, not a Firebase Sync receipt.
+
+### 10.3 Minimal viable FILE boundary — proposed Engineering acceptance, not an owner-approved UI design [MINTTAP DECISION / DEPENDENCY]
+
+Do not invent a nonempty merge/reset flow, silent cloud backup, or universal save-picker capability. Implement and validate a **user-initiated, explicit-file, fresh-staging** path only after product owner approves its task/action contract:
+
+1. **Export admission:** established matching unlocked owner, capability READY, deletion not pending; snapshot returns encoded LBK. A failure must not be labeled “backup created.”
+2. **File handoff:** a user-activated browser-supported save/download path, with platform-specific fallback; record which path was used, not merely a generic “Files saved” claim. A canceled picker, blocked download, tab termination or zero-byte output is an incomplete attempt.
+3. **External custody proof:** user reselects the *actual destination file*, reads exact bytes, verifies digest/format and identifies destination class without logging sensitive path/name/content. This proves point-in-time readable file, **not** second-device/failure-domain independence.
+4. **Fresh restore:** a separate unclaimed staging DB, independently established matching Firebase UID authority, bounded untrusted-file admission, transaction rollback, semantic 37-store verification and owner locked until legitimate unlock. Never overwrite a nonempty existing ledger merely to make import succeed.
+5. **Independent recovery:** after a permitted independent copy is evidenced, destroy a disposable source origin/profile and restore in a fresh destination; verify local semantic state, new replica and unverified remote Sync. Distinguish this from a normal same-profile reopen.
+6. **User completion semantics:** only a verified file readback may support “file verified”; only a successful fresh restore may support “recovery verified”; neither implies cloud backup, cross-device Sync, or persistent EFB offline launch.
+
+Engineering owns actual Flutter Web caller, file picker/download integration, data-size admission and tests. Track E owns trust/failure-domain requirements, Track A browser capability distinction, Track C runtime/negative oracles, Track B state/action requirements, Track D privacy/claim controls. Design Studio Content CD127 requires exact-build state→accessible-name/action parity, not static wording approval. Design Studio Web W121 keeps real device/AT/human validation OPEN.
+
+### 10.4 Managed-iPad authority and failure-domain decision table [SOURCE / CHANGE WATCH / VALIDATION]
+
+Apple's organizational-data and Domains deployment documentation (checked 2026-10-24) says **Safari downloads** from managed domains may be managed documents and `allowOpenFromManagedToUnmanaged=false` restricts movement to unmanaged destinations. It does **not** establish that an arbitrary managed Web Clip's download or a specific airline iPad is configured the same way:
+- https://support.apple.com/guide/deployment/manage-organizational-data-depaa73a4973/web
+- https://support.apple.com/en-asia/guide/deployment/depb4c146c2e/web
+- https://developer.apple.com/documentation/devicemanagement/webclip
+
+| Actual device/policy evidence | Permitted engineering judgment | Prohibited inference |
+| --- | --- | --- |
+| Safari tab + allowed local Files destination | Test export/reopen in that context | Local Files on same iPad = independent disaster backup |
+| User-created Home Screen app + allowed destination | Test separate app container, picker/download and reimport | Safari IndexedDB was copied; Home Screen is same ledger |
+| MDM Web Clip + managed domain/destination approved | Test exact MDM payload, file classification, allowed provider and cold restart | Safari-tab PASS transfers to Web Clip |
+| Managed source → unmanaged destination blocked | Return policy-blocked/alternate approved route, preserve source ledger | Evade via email/clipboard/AirDrop/alternate domain |
+| No verified independent destination | Mark external disaster recovery **OPEN/BLOCKED_BY_POLICY** | Claim “automatic backup” or “safe device migration” |
+
+WebKit's 17.2 Home Screen storage-copy rule and Safari 26.0 “Open as Web App” toggle require **recording actual OS/version/installation mode/storage container**, not merely “Added to Home Screen.” Storage quota/persist() and OPFS remain same-origin failure domains and cannot replace an external LBK recovery copy. Sources: https://webkit.org/blog/14787/webkit-features-in-safari-17-2/ ; https://webkit.org/blog/17333/webkit-features-in-safari-26-0/ ; https://webkit.org/blog/14403/updates-to-storage-policy/ ; https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system . The `showSaveFilePicker()` API is limited-availability and user-activation dependent, not an assumed iPadOS route: https://developer.mozilla.org/en-US/docs/Web/API/Window/showSaveFilePicker .
+
+### 10.5 Ordered acceptance campaign and negative controls [VALIDATION / OPEN]
+
+This is a **sequencing and evidence-admission overlay** on existing D01–D20 and F01–F24, not another micro-case stream:
+- **Gate P (product authority):** owner-approved FILE scope; exact `MASTER`/roadmap/Sync contract pin; UI actions preserve “backup vs formatted export vs import” distinctions; BACKUP-001/002 remain undecided.
+- **Gate S (source+unit):** exact LogMate HEAD, actual Dart codec and adapter tests, bounded file size/depth/row materialization limits supported by representative device corpus, wrong UID/digest/format/duplicate/unknown store, R03/R04 negative regression from study 506, transactional rollback.
+- **Gate W (Web runtime):** verified NORMAL artifact and served bytes, first Service Worker claim/controlled reload, populated 37-store synthetic ledger, real Web file handoff and user reselect/hash readback, fresh staged restore, actual browser process exit/reopen and explicit profile deletion recovery.
+- **Gate I (iPad context):** Safari tab, user-created Home Screen web app and *actual* managed Web Clip separately; policy-allowed and policy-denied destinations, interrupted file flow, storage pressure, accessibility and manual offline cold start.
+- **Gate X (cross-device and claims):** new replica identity, old source cursor/receipt not promoted to authenticated destination authority, manual Firebase Sync independent; sanitized evidence only, Marketing D8 remains PRODUCT CLAIM HOLD until target-specific PASS.
+
+A structural source audit, synthetic test, browser download event, checksum-valid LBK, one platform PASS or MDM policy document alone **cannot** promote any subsequent gate. Reject false green from test skipped/blocked, unsupported picker, same-device copy counted as independent, restored cursor counted as ACK, or missing browser process restart.
+
+### 10.6 Five-track judgment, dependencies and next checkpoint [TRANSFER VALIDATION / OPEN]
+
+Allocation by risk: **E primary** (high consequence of pilot data loss and policy violation); **A/C critical suppliers** (WebKit/Safari/Worker/storage and independent runtime/failure oracle); **B** elevated because a premature “backup complete” or “synced” message misrepresents irreversible user decisions; **D** challenger because public claims/telemetry must not exceed evidence. One reusable source finding per owner, no duplicated Design Studio/Engineering/Marketing primers.
+
+**TRANSFER:** Software Engineering Studio `research/README.md` records D006 sync interruption and M006 browser lifecycle as bounded non-product transfer; its Q006 CI evidence guards against successful job status hiding failed semantic oracles. Marketing Manager `STATUS.md` (2026-10-24 22:37 KST) explicitly keeps LogMate PWA/import/export/Sync promotional claims on HOLD. Design Studio W121/CD127 require exact-run implementation/accessible/human evidence; none authorizes visual copy from a static protocol.
+
+**NEXT DECISIVE ACTION:** Engineering should implement the *owner-approved minimal FILE task surface* and execute the populated, synthetic, 37-store external-file round trip on exact NORMAL Web artifacts; then run the physical managed-iPad policy envelope. This is a materially different implementation/runtime boundary, so another synthetic-only model is not a substitute.
+
+**Verdict:** Stage 8 applied security/trust remains ACTIVE; generic curriculum PASS unchanged; product FILE complete-flow **NOT IMPLEMENTED** per canonical roadmap; Production validation **OPEN**; PWA release **HOLD**. No LogMate, Design Studio, Marketing or Engineering files modified.
