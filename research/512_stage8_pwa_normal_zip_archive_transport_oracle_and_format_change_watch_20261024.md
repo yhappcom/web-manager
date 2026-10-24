@@ -10,7 +10,7 @@ Five-track assessment: **E critical** because a correctly built NORMAL tree is n
 
 ## 2. Historical failure → principle → current official behavior [SOURCE / SYNTHESIS / CHANGE WATCH]
 
-Artifact download is not a release trust boundary by itself. GitHub's 2025-03-18 changelog explicitly says an artifact digest mismatch produces a **warning** and does not fail the workflow; its current official tutorial still describes the warning behavior. A zero-exit download therefore cannot be treated as a fail-closed G2 verdict.
+Artifact download is not a release trust boundary by itself. GitHub's 2025-03-18 changelog describes **historical warning-only** digest-mismatch behavior; this is **version-scoped**, since `download-artifact@v8` now defaults `digest-mismatch: error` (see §9). Neither a zero-exit action nor a fatal action-level digest check independently establishes G2 semantic or release-approval evidence.
 
 Official sources checked 2026-10-24:
 - GitHub 2025-03-18 artifact digest announcement: https://github.blog/changelog/2025-03-18-github-actions-now-supports-a-digest-for-validating-your-artifacts-at-runtime/
@@ -54,7 +54,7 @@ The result is deliberately **not** G2 closure by itself. Engineering must also r
 
 | Tempting inference | Correct boundary |
 | --- | --- |
-| Download action succeeded, so archive is safe | Warning-only digest behavior; independent fatal check required. |
+| Download action succeeded, so archive is safe | v4-era warning-only behavior and v8 default fatal behavior are version-specific; independent semantic/receipt check still required. |
 | Archive ZIP digest matches, so all files are correct | Digest of the *approved* archive must be trusted, and full-tree receipt independently checked. |
 | Full-tree ZIP check proves 509 semantic validation | No: an internally consistent but malicious/invalid receipt can be pinned; rerun 509 and verify approval provenance. |
 | Same source SHA means NORMAL | Source SHA is not build-flag polarity; explicit receipt kind and 509 marker check required. |
@@ -76,7 +76,7 @@ The result is deliberately **not** G2 closure by itself. Engineering must also r
 - **A supplier:** ZIP transport bytes differ from CacheStorage, Worker version and browser-controlled navigation; W01–W28 remain unexecuted in real browser.
 - **B consumer:** UI must not label G2 archive match as offline ready, restored, synchronized or backed up; Design Studio W121 runtime/human/AT evidence remains OPEN.
 - **D challenger:** install/acquisition/ad metrics and PWA continuity claims must not treat archive custody as an installed active user; avoid flight-data telemetry and preserve Marketing's HOLD.
-- **CHANGE WATCH:** GitHub upload v7 archive:false / download v8, action versions and artifact retention, GitHub digest warning behavior, Firebase deployment input, WebKit/MDM policies.
+- **CHANGE WATCH:** GitHub upload v7 archive:false / download v8, action versions and artifact retention, versioned GitHub digest-mismatch behavior, Firebase deployment input, WebKit/MDM policies.
 
 **Adjacent-value check:** The 511 specification's highest-value missing executable dependency was a fail-closed G2 archive-byte oracle; implemented, adversarially tested and checked against committed blobs. Also resolved the new non-ZIP artifact-format contradiction from 2026 official GitHub documentation. Further promotion requires a **real NORMAL archive, independent approved pins and exact GitHub run/artifact metadata**, plus separate 509 post-staging, 510 HTTPS, 508 Worker, 506 37-store/R03–R04 and 507 managed-iPad execution. **Applied Stage 8 ACTIVE; Production validation OPEN; PWA release HOLD.** Product/peer repositories remain read-only.
 
