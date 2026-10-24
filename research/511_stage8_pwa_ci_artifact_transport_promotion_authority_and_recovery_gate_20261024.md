@@ -119,3 +119,63 @@ For managed EFB iPad, distinguish Safari tab, user Home Screen Web App, MDM Web 
 Next evidence must be Engineering-controlled **G1→G2 exact NORMAL archive round trip with T01–T12 and fatal semantic verdict**, then G3 authorized deploy-input/target evidence and G4 actual hosted bytes. G5 Worker/restore/iPad is independently required. If no exact artifact and approved target exist, stop model expansion and request runtime evidence rather than manufacture synthetic PASS.
 
 **End-of-run adjacent-value check:** 509 left archive custody unverified; 510 established hosted-byte oracle but not the missing intermediate authority/transport step. This run reconciled GitHub's non-fatal digest warning, actual LogMate CI and Firebase roots, 24 falsifiers, approval authority, rollback and cross-track handoff. The next useful step requires new Engineering artifact/runtime evidence or an implementation-owner change; another static restatement cannot promote the gate.
+
+
+## 9. 2026-10-24 integrated G1→G2 implementation handoff and GitHub action-version correction [SOURCE / CONTRADICTION / VALIDATION]
+
+**Canonical refresh:** Web Manager pre-run `main@94a3a5135c7d3c7f975557f22cde21ca9cdb37b5`; required governance/roadmap/status/index, 509–512 and recent commits read. LogMate read-only `main@27f926aa6ea1e032dfa9affc598e8e41131eb092`, exact PWA workflow, Makefile and firebase.json rechecked. Design Studio `progress/WEB_STATUS.md` W121 Stage 3 PRACTICE/runtime OPEN; Engineering Q006 hosted Bash verdict propagation; Marketing Manager LogMate offline/ads/launch HOLD consumed as bounded transfers. No product/peer modification.
+
+### 9.1 Version-sensitive correction, not a timeless warning rule [SOURCE / CHANGE WATCH / CONTRADICTION]
+
+Prior §2 and studies 511–512 correctly describe **GitHub's 2025-03-18 documented warning-only artifact digest mismatch behavior**, but that statement must now be **version scoped**. The official `actions/download-artifact` `v4/action.yml` has no `digest-mismatch` input, while the official **`v8/action.yml` explicitly exposes `digest-mismatch: error` as the default**, with `ignore|info|warn|error` alternatives. Current `v8` README documents `artifact-ids`, `skip-decompress`, and non-ZIP support; `upload-artifact@v7` documents `archive:false`. Source inspected 2026-10-24:
+- https://github.com/actions/download-artifact/blob/v4/action.yml
+- https://github.com/actions/download-artifact/blob/v8/action.yml
+- https://github.com/actions/download-artifact/blob/main/README.md
+- https://github.com/actions/upload-artifact/blob/v4/action.yml
+- https://github.com/actions/upload-artifact/blob/v7/action.yml
+- https://github.blog/changelog/2025-03-18-github-actions-now-supports-a-digest-for-validating-your-artifacts-at-runtime/
+
+**Operational rule:** a generic claim that *every* GitHub artifact download digest mismatch is warning-only is now incorrect. For v8 default `error`, the action is documented to fail on digest mismatch. This does **not** establish an independent expected digest, semantic file-tree equivalence, release authority, or served-byte proof. A workflow that explicitly sets `digest-mismatch: warn` also cannot use step success as a release verdict. Pin the action SHA/version and verify actual runner behavior; do not extrapolate v8 semantics backwards to v4 or forwards indefinitely.
+
+| Transport | Artifact referent | Native behavior / risk | Web Manager rule |
+| --- | --- | --- | --- |
+| upload-artifact@v4 + download-artifact@v4 | GitHub-created ZIP wrapper | Historical warning-only digest behavior; normal download unwraps files | Separate fatal inner ZIP + receipt + 509 semantic gate |
+| upload-artifact@v7 `archive:false` + download-artifact@v8 | Single raw artifact | Format differs; v8 supports non-ZIP; digest mismatch default `error` | 512 ZIP-only verifier rejects raw input until separately validated |
+| upload-artifact@v4 ZIP wrapper containing explicit `normal.zip` file | Wrapper ZIP plus **independent inner NORMAL ZIP** | Wrapper digest and inner ZIP SHA need not match; v4 extracts inner file | Pin and audit inner ZIP; preserve wrapper artifact ID/digest as distinct metadata |
+| download-artifact@v8 with `digest-mismatch: error` | Action-managed downloaded artifact | Fatal action mismatch is useful but insufficient for G2/G3 | Still run 512 and 509 against independently trusted release receipt |
+
+### 9.2 Substantive CI handoff [MINTTAP DECISION CANDIDATE / DEPENDENCY]
+
+New non-deploying, **170-line** Engineering proposal: [`handoffs/pwa_normal_release_ci_PROPOSAL.yml`](handoffs/pwa_normal_release_ci_PROPOSAL.yml). It is **not installed under LogMate `.github/workflows`**, is **not executable there without Engineering integration**, and never deploys.
+
+1. `normal-build` uses exact `github.sha`, Flutter 3.47.5/Dart SDK check, approved Stage C font hash, lockfile and Dart formatting gates, then `BUILD_WEB_OUTPUT=build/web-normal make build-pwa`. It does **not** build Acceptance. This preserves the actual product's NORMAL build command rather than inventing a different Flutter pipeline.
+2. Run 509 `freeze` to produce the external-to-tree receipt; package the **entire receipt inventory including dotfiles** as one explicit stored `normal.zip`. ZIP members have fixed timestamps and ordinary-file modes. Run 512's inner ZIP byte oracle before upload. Record `sourceSha`, inner ZIP SHA, receipt SHA and separate GitHub wrapper artifact IDs/digests.
+3. Upload inner ZIP and receipt as **two v4 artifacts**, each with `if-no-files-found: error`; artifact names bind `run_id/run_attempt`. A new `normal-roundtrip` job downloads **by artifact ID**, not mutable name or latest successful run.
+4. Enforce independent fatal `sha256sum --check` on the *inner* ZIP and receipt using build-job outputs, then 512 ZIP/receipt/source/full-tree validation; safely stage archive members; check ZIP hash again; re-run 509 `verify` on the staged NORMAL tree. Bash uses `set -euo pipefail` so the semantic failure cannot be hidden by logging, consistent with Engineering Q006.
+5. Explicit result is **`G2_PRODUCER_SCOPED_TRANSPORT_AND_SEMANTIC_MATCH`**. Both pins originate from the build job, so this is **producer-scoped round-trip evidence only**, not independent approval or adversarial builder compromise protection. GitHub wrapper digests are recorded separately and not equated with inner ZIP or logical tree hashes.
+6. No `firebase deploy`, no Hosting target, no privileged token, no production secret, no G3 approval, no G4 served-byte or G5 runtime claims. Production integration requires Engineering review of action SHAs, runner support, file modes, archive size, CI execution and product-specific requirements.
+
+**Evidence / limitations:** The exact YAML was parsed with PyYAML, passed **11/11 static structural assertions**, and its embedded package/staging Python snippets completed a synthetic **880-file ZIP round trip** with byte-for-byte restored-file checks. The isolated snippet test used a *stub* `safe_path` import, **not execution of the actual 512 oracle or 509 semantic verifier**; the historical separate 509/512 synthetic suites are 19/19 and 28/28. The exact proposed YAML was committed and independently checked against the locally executed file's Git blob `92f2fd5a28ee1350b2f7ce5326161da3d8f4b668`. **GitHub-hosted Actions, real LogMate NORMAL build, actual artifact upload/download, 509+512 end-to-end execution, independent receipt pin, real Chrome, hosted origin and managed iPad were NOT_EXECUTED.**
+
+### 9.3 Cross-boundary negative/positive campaign [VALIDATION / TRANSFER VALIDATION]
+
+| ID | Scenario | Expected evidence / verdict |
+| --- | --- | --- |
+| U01 | Real NORMAL build; 509 freeze; inner ZIP contains all 880+ expected entries and any extra unlisted assets | G1 candidate; 512 exact full inventory; no Acceptance marker |
+| U02 | Acceptance main.dart.js or wrong `kind` enters NORMAL packaging | fatal HOLD at 509/512 |
+| U03 | Hidden resource omitted by upload globs | fatal HOLD; inner ZIP packaging must preserve it |
+| U04 | Correct wrapper digest, changed inner ZIP file | fatal 512/509 HOLD |
+| U05 | Inner ZIP digest correct but receipt source SHA, worker or manifest differs | fatal 512/509 HOLD |
+| U06 | Artifact name matches but immutable artifact ID/run/attempt differs | reject promotion context; ID and run must be bound by Engineering |
+| U07 | Download action exits zero despite warning; semantic oracle returns nonzero | final job nonzero; Q006 transfer |
+| U08 | ZIP extraction path/symlink/case collision or modified ZIP during staging | reject before 509; preserve evidence, no deployment |
+| U09 | Archive and receipt modified together and build-job output pins replaced | **producer-scoped comparison cannot detect same-authority compromise**; G3 independent authority OPEN |
+| U10 | GitHub v8 default `error` vs explicit `warn` negative controls | verify actual action-version behavior; do not infer v4 from v8 |
+| U11 | NORMAL archive G2 passes while Firebase `public=build/web` still selects Acceptance root | G3/G4 HOLD; no deployment |
+| U12 | G2 passes but Worker first claim, 37-store restore or MDM iPad fails | G5 HOLD; local data preservation and truthful UX required |
+
+**Cross-track allocation:** E owns producer/approval separation, target custody and rollback; C owns U01–U12 fatal oracles, provenance and Q006 transfer; A supplies v4/v8 archive behavior and Worker/runtime boundaries; B consumes separate local saved/offline/update/backup/remote-ACK states (Design Studio owns visual system); D must not advertise EFB offline/sync or count installed PWA without G5. Engineering owns any actual workflow patch, runner execution and release authority.
+
+### 9.4 Stop boundary and next high-information-gain proof [OPEN]
+
+This cycle resolves a genuine adjacent dependency: the previously independent 509 disk and 512 ZIP oracles now have a concrete non-deploying two-job NORMAL round-trip integration proposal, while action-version digest behavior is corrected. **Next evidence is an Engineering-owned actual NORMAL G1→G2 run with exact artifact IDs, independent 509/512 and source SHA; then an out-of-band trusted G3 release approval and G4 host comparison, followed by 508 Worker, 506 restore and 507 managed-iPad G5.** The proposal is not a production workflow and is not approval to deploy. Stage 8 applied Security/Privacy/Trust remains ACTIVE; Production validation OPEN; PWA release HOLD.
