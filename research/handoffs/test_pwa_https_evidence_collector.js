@@ -3,6 +3,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const {collect, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, safeLookup, requestOnce} = require("./pwa_https_evidence_collector");
 const https = require("node:https");
+const {gate} = require("./pwa_served_header_evidence_gate.js");
 const {EventEmitter} = require("node:events");
 const h = "a".repeat(64), b = "b".repeat(64);
 const plan = () => ({schema:"wm-header-v1",commit:h,artifact:b,origin:"https://preview.example.com/",routes:[
@@ -162,4 +163,18 @@ test("empty and report-uri-only CSP values are not meaningful pinned policy",asy
   await assert.rejects(collect(p,{...opts,transport:async u=>{calls++;return transport(u);}}),/ROUTE_POLICY_PLAN/);
   assert.equal(calls,0);
  }
+});
+
+test("exact collector-to-gate integration: enforced and report-only policies stay distinct",async()=>{
+ const p=plan();const capture=await collect(p,{...opts,transport:async url=>({
+  status:200,sha:url.endsWith("/")?h:b,bytes:25,headers:[
+   ["Content-Type",url.endsWith(".js")?"text/javascript":"text/html"],
+   [url.endsWith("/auth/action")?"Content-Security-Policy-Report-Only":"Content-Security-Policy","default-src 'self'"],
+   ["Set-Cookie","session=redacted"]
+  ]
+ })});
+ assert.equal(gate(p,capture).verdict,"SERVED_HEADER_CONSISTENT_UNVERIFIED");
+ assert.doesNotMatch(JSON.stringify(capture),/session=redacted/);
+ const broken=structuredClone(capture);broken.responses[1].headers[1][0]="Content-Security-Policy";
+ assert.equal(gate(p,broken).verdict,"REJECT");
 });
