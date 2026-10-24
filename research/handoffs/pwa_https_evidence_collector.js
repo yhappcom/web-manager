@@ -69,12 +69,20 @@ function selectSafeDNSRecords(records) {
        net.isIP(x.address) === x.family && publicIP(x.address))) return null;
  return records[0];
 }
-function safeLookup(hostname, options, callback) {
- dns.lookup(hostname, {all: true}, (err, records) => {
+function safeLookup(hostname, options, callback, resolver = dns.lookup) {
+ // Node 20+/22 autoSelectFamily requests lookup({all:true}) and requires
+ // callback(null, [{address, family}, ...]); the scalar callback breaks TLS connects.
+ const all = Boolean(options && typeof options === "object" && options.all);
+ const family = options && typeof options === "object" ? options.family : options;
+ resolver(hostname, {all: true}, (err, records) => {
   if (err) return callback(error("DNS_FAILURE"));
-  const selected = selectSafeDNSRecords(records);
-  if (!selected) return callback(error("DNS_NONPUBLIC"));
-  callback(null, selected.address, selected.family);
+  // Reject the entire OS-resolver answer before selecting any connection address.
+  if (!selectSafeDNSRecords(records)) return callback(error("DNS_NONPUBLIC"));
+  const eligible = family === 4 || family === 6
+   ? records.filter(x => x.family === family) : records;
+  if (!eligible.length) return callback(error("DNS_FAMILY_UNAVAILABLE"));
+  if (all) return callback(null, eligible.map(x => ({address:x.address, family:x.family})));
+  callback(null, eligible[0].address, eligible[0].family);
  });
 }
 function filterHeaders(raw) {
@@ -114,7 +122,7 @@ function requestOnce(url, {maxBytes = MAX_BYTES, timeoutMs = 15000} = {}) {
   req.setTimeout(timeoutMs, () => req.destroy(error("TIMEOUT")));
   req.on("close", () => clearTimeout(deadline));
   req.on("error", e => { clearTimeout(deadline);
-   reject(["BODY_LIMIT", "TIMEOUT", "DNS_NONPUBLIC", "DNS_FAILURE"].includes(e.code) ? e : error("REQUEST_FAILURE")); });
+   reject(["BODY_LIMIT", "TIMEOUT", "DNS_NONPUBLIC", "DNS_FAMILY_UNAVAILABLE", "DNS_FAILURE"].includes(e.code) ? e : error("REQUEST_FAILURE")); });
   req.end();
  });
 }
@@ -128,7 +136,7 @@ async function collect(plan, {allowOrigin, transport = requestOnce, maxBytes = M
   let result;
   // Enforce the remaining aggregate budget during streaming, not only after download.
   try { result = await transport(url, {maxBytes:Math.min(maxBytes,MAX_TOTAL_BYTES-totalBytes)}); }
-  catch (e) { const code = ["BODY_LIMIT","TIMEOUT","DNS_NONPUBLIC","DNS_FAILURE","REQUEST_FAILURE","RESPONSE_FAILURE"].includes(e && e.code) ? e.code : "FAILED"; throw error("CAPTURE_" + code); }
+  catch (e) { const code = ["BODY_LIMIT","TIMEOUT","DNS_NONPUBLIC","DNS_FAMILY_UNAVAILABLE","DNS_FAILURE","REQUEST_FAILURE","RESPONSE_FAILURE"].includes(e && e.code) ? e.code : "FAILED"; throw error("CAPTURE_" + code); }
   if (!result || !Number.isInteger(result.status) || !HASH.test(result.sha) ||
       !Number.isSafeInteger(result.bytes) || result.bytes < 0 || result.bytes > maxBytes ||
       !Array.isArray(result.headers)) throw error("CAPTURE_INVALID");
@@ -155,7 +163,7 @@ async function cli(argv) {
  fs.writeFileSync(argv[5], JSON.stringify(run,null,2) + "\n", {flag:"wx",mode:0o600});
  process.stdout.write("CAPTURE_WRITTEN_CONSISTENT_UNVERIFIED\n");
 }
-module.exports = {collect, validatePlan, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, requestOnce, MAX_BYTES, MAX_TOTAL_BYTES};
+module.exports = {collect, validatePlan, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, safeLookup, requestOnce, MAX_BYTES, MAX_TOTAL_BYTES};
 if (require.main === module) cli(process.argv.slice(2)).catch(e => {
  console.error("CAPTURE_FAILED:" + (e.code || "INVALID_INPUT")); process.exitCode = 2;
 });
