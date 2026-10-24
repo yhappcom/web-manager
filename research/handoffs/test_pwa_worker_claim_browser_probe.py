@@ -9,8 +9,8 @@ spec.loader.exec_module(module)
 
 class VerdictTests(unittest.TestCase):
     def baseline(self):
-        return {'first_claim_asset': {'status': 200}, 'controlled_asset': {'status': 200},
-                'offline_asset': {'status': 200}, 'cold_process_asset': {'status': 200},
+        return {'chromium_version': '144.0', 'controller_claimed': True, 'initial_navigation_status': 200, 'first_claim_asset': {'status': 200, 'contentType': 'text/javascript'}, 'controlled_asset': {'status': 200, 'contentType': 'text/javascript'},
+                'offline_asset': {'status': 200, 'contentType': 'text/javascript'}, 'cold_process_asset': {'status': 200, 'contentType': 'text/javascript'},
                 'controlled_reload_status': 200, 'offline_reload_status': 200,
                 'cold_process_reopen_status': 200}
     def test_complete_success(self):
@@ -42,6 +42,21 @@ class VerdictTests(unittest.TestCase):
     def test_bad_status_cannot_pass(self):
         x=self.baseline();x['first_claim_asset']['status']='200'
         self.assertEqual(module.classify(x), 'INCOMPLETE_OR_ERROR')
+    def test_initial_nav_failure(self):
+        x=self.baseline();x['initial_navigation_status']=404
+        self.assertEqual(module.classify(x), 'INITIAL_NAVIGATION_FAILURE_OBSERVED')
+    def test_missing_controller_cannot_pass(self):
+        x=self.baseline();x['controller_claimed']=False
+        self.assertEqual(module.classify(x), 'INCOMPLETE_OR_ERROR')
+    def test_boolean_status_cannot_pass(self):
+        x=self.baseline();x['first_claim_asset']['status']=True
+        self.assertEqual(module.classify(x), 'INCOMPLETE_OR_ERROR')
+    def test_html_200_cannot_pass(self):
+        x=self.baseline();x['controlled_asset']['contentType']='text/html'
+        self.assertEqual(module.classify(x), 'ASSET_REPRESENTATION_MISMATCH_OBSERVED')
+    def test_missing_mime_cannot_pass(self):
+        x=self.baseline();x['offline_asset']['contentType']=None
+        self.assertEqual(module.classify(x), 'ASSET_REPRESENTATION_MISMATCH_OBSERVED')
     def test_empty_cannot_pass(self):
         self.assertEqual(module.classify({}), 'INCOMPLETE_OR_ERROR')
 
