@@ -1,6 +1,17 @@
 "use strict";
 /* WM Stage 8: deterministic HTTPS evidence consistency, NOT CSP/browser/release proof. */
 const HASH=/^[0-9a-f]{64}$/;
+const GUARDED_CSP_DIRECTIVE=/(?:^|;)\s*(?:default-src|script-src(?:-elem|-attr)?|worker-src|object-src|base-uri|frame-ancestors|connect-src|form-action|style-src(?:-elem|-attr)?|img-src|font-src|child-src|frame-src|media-src|manifest-src|sandbox|require-trusted-types-for|trusted-types|upgrade-insecure-requests)(?=\s|;|$)/i;
+// Evidence-admission check only; actual browser enforcement requires negative runtime tests.
+function hasPinnedPolicy(route){
+ if(route && route.policy==="observe")return true;
+ const key=route?.policy==="enforce"?"content-security-policy":route?.policy==="report"?"content-security-policy-report-only":null;
+ if(!key||!route.headers||typeof route.headers!=="object"||Array.isArray(route.headers))return false;
+ const entries=Object.entries(route.headers).filter(([name])=>name.toLowerCase()===key);
+ if(entries.length!==1)return false;
+ const values=entries[0][1];
+ return Array.isArray(values)&&values.length>0&&values.every(v=>typeof v==="string"&&v.trim().length>0)&&values.some(v=>GUARDED_CSP_DIRECTIVE.test(v));
+}
 function gate(plan,run){
  const errors=[];const bad=x=>{if(!errors.includes(x))errors.push(x);};
  if(!plan||!run||plan.schema!=="wm-header-v1"||run.schema!=="wm-header-v1")return {verdict:"REJECT",errors:["SCHEMA"]};
@@ -10,6 +21,7 @@ function gate(plan,run){
  const wanted=new Map(),seen=new Set();
  for(const e of plan.routes){
   if(!e||typeof e.path!=="string"||!/^\/[a-zA-Z0-9_./-]*$/.test(e.path)||wanted.has(e.path)||!["html","js"].includes(e.mime)||!HASH.test(e.sha)||!["enforce","report","observe"].includes(e.policy)||!e.headers||typeof e.headers!=="object"||Array.isArray(e.headers)){bad("PLAN");continue;}
+  if(!hasPinnedPolicy(e))bad("POLICY_UNPINNED_OR_EMPTY");
   wanted.set(e.path,e);
  }
  for(const r of run.responses){
@@ -42,15 +54,25 @@ function selfTest(){
  const a="a".repeat(64),b="b".repeat(64);
  const plan={schema:"wm-header-v1",commit:a,artifact:b,origin:"https://preview.example.test/",routes:[
  {path:"/",mime:"html",sha:a,policy:"enforce",headers:{"content-security-policy":["default-src 'self'"],"referrer-policy":["no-referrer"]}},
- ...["/auth","/auth/","/auth/action","/auth/action/index.html"].map(path=>({path,mime:"html",sha:b,policy:"report",headers:{"referrer-policy":["no-referrer"]}})),
- {path:"/logmate_service_worker.js",mime:"js",sha:b,policy:"enforce",headers:{"x-content-type-options":["nosniff"]}}
+ ...["/auth","/auth/","/auth/action","/auth/action/index.html"].map(path=>({path,mime:"html",sha:b,policy:"report",headers:{"referrer-policy":["no-referrer"],"content-security-policy-report-only":["default-src 'self'"]}})),
+ {path:"/logmate_service_worker.js",mime:"js",sha:b,policy:"enforce",headers:{"x-content-type-options":["nosniff"],"content-security-policy":["default-src 'self'"]}}
  ]};
  const run={schema:plan.schema,commit:a,artifact:b,origin:plan.origin,responses:plan.routes.map(e=>({path:e.path,url:plan.origin.slice(0,-1)+e.path,kind:"HTTPS_RESPONSE",transport:"https",method:"GET",status:200,redirects:[],sha:e.sha,bytes:100,headers:[["Content-Type",e.mime==="html"?"text/html; charset=utf-8":"text/javascript"],["Referrer-Policy","no-referrer"],["X-Content-Type-Options","nosniff"],...(e.policy==="report"?[["Content-Security-Policy-Report-Only","default-src 'self'"]]:[["Content-Security-Policy","default-src 'self'"]])]}))};
  const cases=[["baseline",()=>{},false],["source",x=>x.commit="c".repeat(64),true],["artifact",x=>x.artifact="c".repeat(64),true],["origin",x=>x.origin="https://wrong.example.test/",true],["missing",x=>x.responses.pop(),true],["extra",x=>x.responses.push({...x.responses[0],path:"/bad"}),true],["duplicate",x=>x.responses.push({...x.responses[0]}),true],["http",x=>x.responses[0].transport="http",true],["post",x=>x.responses[0].method="POST",true],["status",x=>x.responses[0].status=302,true],["redirect",x=>x.responses[0].redirects=["/"],true],["query",x=>x.responses[1].url+="?oobCode=fake",true],["foreign",x=>x.responses[1].url="https://wrong.example.test/auth",true],["body",x=>x.responses[0].sha="c".repeat(64),true],["zero",x=>x.responses[0].bytes=0,true],["boolean",x=>x.responses[0].bytes=true,true],["html-js",x=>x.responses[5].headers[0][1]="text/html",true],["no-csp",x=>x.responses[0].headers=x.responses[0].headers.filter(h=>h[0]!=="Content-Security-Policy"),true],["no-report",x=>x.responses[1].headers=x.responses[1].headers.filter(h=>h[0]!=="Content-Security-Policy-Report-Only"),true],["referrer",x=>x.responses[1].headers[1][1]="unsafe-url",true],["nosniff",x=>x.responses[5].headers=x.responses[5].headers.filter(h=>h[0]!=="X-Content-Type-Options"),true],["duplicate-header",x=>x.responses[0].headers.push(["Referrer-Policy","no-referrer"]),true],["crlf",x=>x.responses[0].headers.push(["X-Foo","a\r\nb"]),true],["null-headers",x=>x.responses[0].headers=null,true],["schema",x=>x.schema="bad",true],["path",x=>x.responses[0].url="https://preview.example.test/auth",true]];
  const failures=[];for(const [name,mutate,reject] of cases){const x=JSON.parse(JSON.stringify(run));mutate(x);const r=gate(plan,x);if((r.verdict==="REJECT")!==reject)failures.push({name,r});}
- return {count:cases.length,failures,baseline:gate(plan,run)};
+ const policyCases=[
+  ["enforce-unpinned",(p,x)=>delete p.routes[0].headers["content-security-policy"]],
+  ["report-unpinned",(p,x)=>delete p.routes[1].headers["content-security-policy-report-only"]],
+  ["enforce-empty",(p,x)=>{p.routes[0].headers["content-security-policy"]=[""];x.responses[0].headers.find(h=>h[0]==="Content-Security-Policy")[1]="";}],
+  ["enforce-whitespace",(p,x)=>{p.routes[0].headers["content-security-policy"]=["   "];x.responses[0].headers.find(h=>h[0]==="Content-Security-Policy")[1]="   ";}],
+  ["enforce-report-uri-only",(p,x)=>{p.routes[0].headers["content-security-policy"]=["report-uri /csp"];x.responses[0].headers.find(h=>h[0]==="Content-Security-Policy")[1]="report-uri /csp";}],
+  ["report-whitespace",(p,x)=>{p.routes[1].headers["content-security-policy-report-only"]=[" "];x.responses[1].headers.find(h=>h[0]==="Content-Security-Policy-Report-Only")[1]=" ";}],
+  ["enforce-unknown-directive",(p,x)=>{p.routes[0].headers["content-security-policy"]=["not-a-csp-directive value"];x.responses[0].headers.find(h=>h[0]==="Content-Security-Policy")[1]="not-a-csp-directive value";}]
+ ];
+ for(const [name,mutate] of policyCases){const p=JSON.parse(JSON.stringify(plan));const x=JSON.parse(JSON.stringify(run));mutate(p,x);const r=gate(p,x);if(r.verdict!=="REJECT")failures.push({name,r});}
+ return {count:cases.length+policyCases.length,failures,baseline:gate(plan,run)};
 }
-if(typeof module!=="undefined")module.exports={gate,selfTest};
+if(typeof module!=="undefined")module.exports={gate,selfTest,hasPinnedPolicy};
 if(typeof require==="function"&&require.main===module){
  const fs=require("node:fs");
  if(process.argv.includes("--self-test")){const r=selfTest();console.log(JSON.stringify(r));process.exit(r.failures.length?1:0);}
