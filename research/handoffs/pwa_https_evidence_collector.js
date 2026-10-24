@@ -6,17 +6,13 @@ const dns = require("node:dns");
 const net = require("node:net");
 const crypto = require("node:crypto");
 const {URL} = require("node:url");
-const {hasPinnedPolicy,SAFE_CAPTURE_HEADERS,admissibleEvidenceHeader,sensitiveEvidenceValue} = require("./pwa_served_header_evidence_gate.js");
+const {hasPinnedPolicy,SAFE_CAPTURE_HEADERS,admissibleEvidenceHeader,sensitiveEvidenceValue,safeEvidenceRoute} = require("./pwa_served_header_evidence_gate.js");
 const MAX_BYTES = 32 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 128 * 1024 * 1024;
 const SAFE_HEADERS = SAFE_CAPTURE_HEADERS;
 const HASH = /^[0-9a-f]{64}$/;
 function error(code) { const e = new Error(code); e.code = code; return e; }
-function safeRoute(path) {
- return typeof path === "string" && /^\/[a-zA-Z0-9_./-]*$/.test(path) &&
-  !path.startsWith("//") && !path.split("/").some(x => x === "." || x === "..") &&
-  !path.includes("\\") && path.length <= 512;
-}
+const safeRoute = safeEvidenceRoute;
 function validatePlan(plan, allowOrigin) {
  if (!plan || plan.schema !== "wm-header-v1" || !HASH.test(plan.commit) ||
      !HASH.test(plan.artifact) || typeof plan.origin !== "string" ||
