@@ -177,3 +177,47 @@ Added [`pwa_https_evidence_research_tests.yml`](../.github/workflows/pwa_https_e
 **Track allocation:** E owns execution authority/egress and forbids promotion from green unit tests; C owns exact-run failure propagation and negative controls; A owns Node/HTTP/Worker/browser transfer; B owns truthful accessible offline/auth/recovery messages; D owns no premature acquisition/security/advertising claims. This adds executable proof infrastructure without duplicating Engineering Q006 or Design Studio W121.
 
 **CHANGE WATCH:** action release identity, Node 22 runtime and runner image changes, GitHub Actions enablement/event semantics, IANA address registries, CSP/WebKit/Hosting changes. **Stage 8 applied ACTIVE; Production validation OPEN; PWA release HOLD.** The adjacent valuable task was completed by adding the actual non-deploying CI path and reviewing its negative boundaries; further promotion requires hosted run evidence or an approved actual preview/device, not more synthetic documents.
+
+
+## 8. Node 22 autoSelectFamily / custom DNS lookup callback incompatibility — confirmed and corrected (2026-10-25) [SOURCE / CONTRADICTION / VALIDATION]
+
+### Why this was a priority over another synthetic policy matrix
+
+The collector's HTTPS transport was never executed against an approved real endpoint. An audit of the actual Node 22 network entrypoint revealed a more fundamental problem than another header-case fixture: the collector's `safeLookup(hostname, options, callback)` always returned `callback(null, address, family)` even when Node's connection algorithm requested `options.all === true`. This can make an otherwise valid HTTPS capture fail **before** TLS, and the injected-transport tests (32, later 36 cases) never exercised that real Node socket contract.
+
+**Primary platform authority checked 2026-10-25:**
+- Node `net.Socket.connect` family autoselection: https://nodejs.org/api/net.html — `autoSelectFamily` defaults to `net.getDefaultAutoSelectFamily()`; when enabled the custom lookup receives `all:true` and the connection algorithm expects an array of address records.
+- Node `dns.lookup` callback forms: https://nodejs.org/api/dns.html — with `all:true`, the callback receives `(err, addresses)`; without it, `(err, address, family)`.
+- GitHub Actions workflow-run REST: https://docs.github.com/en/rest/actions/workflow-runs — event/branch/head-SHA filtered push-run evidence requires a run ID and conclusion, not an empty generic commit-status or PR-only lookup.
+
+### Independent local reproduction [VALIDATION — bounded]
+
+On **Node v22.16.0**, `net.getDefaultAutoSelectFamily() === true`. A local disposable TCP server with an injected custom resolver was used to isolate the callback contract without contacting production or external hosts:
+
+| Same TCP fixture | Lookup callback | Observed result |
+| --- | --- | --- |
+| Original collector's callback shape | `callback(null, "127.0.0.1", 4)` even when `options.all=true` | `ERR_INVALID_IP_ADDRESS` |
+| Correct callback shape | `callback(null, [{address:"127.0.0.1", family:4}])` when `options.all=true` | `CONNECTED` |
+
+The loopback address was **only** used in a disposable local Node contract reproduction; the production collector's public-IP exclusion was not bypassed or relaxed. This proves the Node callback-shape incompatibility, not that the collector ever reached a real LogMate host or that a TLS capture has passed.
+
+### Source correction [MINTTAP DECISION — Web Manager research tool only]
+
+Updated `research/handoffs/pwa_https_evidence_collector.js`:
+
+1. Validate the **entire** OS resolver answer using the existing fail-closed public-IP admission predicate before selecting addresses. Mixed public/nonpublic answers still fail.
+2. Respect the Node lookup caller's `options.all`: return `(err, [{address, family}, ...])` for family autoselection, or `(err, address, family)` for scalar callers.
+3. Respect explicit family 4/6 selection and reject a missing eligible family with `DNS_FAMILY_UNAVAILABLE`. Keep TLS hostname/certificate verification and the original HTTPS URL unchanged.
+4. Preserve fixed error-code redaction through the request and collection layers; do not leak resolver host/address details into evidence.
+5. Inject a resolver only as a fourth **test-only** parameter to `safeLookup`, allowing deterministic callback-contract tests without network calls; normal `https.request` invokes the three-argument production path.
+6. Add one top-level regression test to `research/handoffs/test_pwa_https_evidence_collector.js`, covering all=true, scalar mode, explicit IPv6 family, missing family, mixed DNS and resolver failure. Expected top-level test inventory becomes **37**, not 36.
+
+**Persisted source identity:** collector blob `66bee44d8d5630c117366107fbc405343a31de98`; test blob `fe3ba4ff8ba29fbba9161901c371f854093a3e49`. The exact fetched committed JavaScript sources both passed V8 syntax compilation. The exact extracted committed `safeLookup` function, with deterministic stubbed dependencies, passed **5/5 isolated callback-shape checks**. The independent Node TCP fixture passed its original-failure/corrected-success comparison. These are distinct bounded validations, not a complete Node repository test-suite run.
+
+### CI, production and cross-track boundaries [OPEN / DEPENDENCY / TRANSFER VALIDATION]
+
+- The GitHub Actions workflow already watches both edited files and should be eligible for a main-branch push event, subject to repository policy and GitHub processing. **A hosted run ID, job logs and final 37/37 result were not obtainable from the available GitHub connector**: the available workflow-run lookup is PR-filtered, while commit status returned an empty list. Neither result establishes that the push workflow failed, passed or never started.
+- **OPEN:** execute exact committed 37-case Node suite plus 517 26-case gate in hosted Actions; verify job SHA/steps/conclusion and output integrity. Then perform an independently approved real HTTPS capture, exact NORMAL body/route evidence, Chromium/Safari enforced-CSP negative tests, Worker offline/upgrade, 37-store external restore and managed-iPad MDM. No synthetic success promotes these product gates.
+- **Track E** owns the collector's trust/egress/release semantics and this correction. **Track A** owns the Node resolver/dual-stack platform contract; **Track C** consumes it for independent socket-level and hosted regression falsification. **Track B** consumes truthful auth/offline/restore state evidence from Design Studio W120/CD127; **Track D** retains Marketing D8/D10 privacy and unverified-PWA-claim restrictions. No duplicate visual/engineering/marketing primer.
+- **CONTRADICTION:** `36-case injected transport suite green` does **not** imply `real Node HTTPS transport works`. The now-reproduced mismatch explains why real transport entrypoints must be part of the next validation tier. A successful TCP connection would still not prove TLS trust, deployed CSP enforcement, user data durability or managed-iPad readiness.
+- **Adjacent-value checkpoint:** the actual Node transport contract defect is fixed and deterministically falsified at the isolated boundary. The next higher-information-gain work requires hosted run evidence and approved network/real-device inputs, not another self-referential synthetic header matrix. **Stage 8 applied ACTIVE; Production validation OPEN; PWA release HOLD.**
