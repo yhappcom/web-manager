@@ -1,6 +1,16 @@
 "use strict";
 /* WM Stage 8: deterministic HTTPS evidence consistency, NOT CSP/browser/release proof. */
+const SAFE_CAPTURE_HEADERS = new Set([
+ "content-type", "content-security-policy", "content-security-policy-report-only",
+ "referrer-policy", "x-content-type-options", "cache-control", "permissions-policy",
+ "cross-origin-opener-policy", "cross-origin-resource-policy", "cross-origin-embedder-policy",
+ "strict-transport-security", "vary", "service-worker-allowed", "content-encoding"
+]);
 const HASH=/^[0-9a-f]{64}$/;
+function safeEvidenceRoute(path){return typeof path==="string" && /^\/[a-zA-Z0-9_./-]*$/.test(path) && !path.startsWith("//") && path.length<=512 && !path.split("/").some(s=>s==="."||s==="..");}
+function sensitiveEvidenceValue(value){return /(?:oobCode|access_token|id_token)=|Authorization\s|Bearer\s/i.test(value);}
+function admissibleEvidenceHeader(name,value){return typeof name==="string" && SAFE_CAPTURE_HEADERS.has(name.toLowerCase()) && /^[a-z0-9-]+$/i.test(name) && typeof value==="string" && !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\r\n]/.test(value) && !sensitiveEvidenceValue(value);}
+
 const GUARDED_CSP_DIRECTIVE=/(?:^|;)\s*(?:default-src|script-src(?:-elem|-attr)?|worker-src|object-src|base-uri|frame-ancestors|connect-src|form-action|style-src(?:-elem|-attr)?|img-src|font-src|child-src|frame-src|media-src|manifest-src|sandbox|require-trusted-types-for|trusted-types|upgrade-insecure-requests)(?=\s|;|$)/i;
 // Evidence-admission check only; actual browser enforcement requires negative runtime tests.
 function hasPinnedPolicy(route){
@@ -20,8 +30,9 @@ function gate(plan,run){
  if(!Array.isArray(plan.routes)||!Array.isArray(run.responses)||!plan.routes.length)return {verdict:"REJECT",errors:[...errors,"ROUTES"]};
  const wanted=new Map(),seen=new Set();
  for(const e of plan.routes){
-  if(!e||typeof e.path!=="string"||!/^\/[a-zA-Z0-9_./-]*$/.test(e.path)||wanted.has(e.path)||!["html","js"].includes(e.mime)||!HASH.test(e.sha)||!["enforce","report","observe"].includes(e.policy)||!e.headers||typeof e.headers!=="object"||Array.isArray(e.headers)){bad("PLAN");continue;}
+  if(!e||typeof e.path!=="string"||!safeEvidenceRoute(e.path)||wanted.has(e.path)||!["html","js"].includes(e.mime)||!HASH.test(e.sha)||!["enforce","report","observe"].includes(e.policy)||!e.headers||typeof e.headers!=="object"||Array.isArray(e.headers)){bad("PLAN");continue;}
   if(!hasPinnedPolicy(e))bad("POLICY_UNPINNED_OR_EMPTY");
+  for(const [k,values] of Object.entries(e.headers)){if(!Array.isArray(values)||values.some(v=>!admissibleEvidenceHeader(k,v)))bad("UNSAFE_PLAN_HEADER");}
   wanted.set(e.path,e);
  }
  for(const r of run.responses){
@@ -35,7 +46,7 @@ function gate(plan,run){
   if(!Array.isArray(r.headers)){bad("HEADERS");continue;}
   const h=new Map();
   for(const pair of r.headers){
-   if(!Array.isArray(pair)||pair.length!==2||typeof pair[0]!=="string"||typeof pair[1]!=="string"||!/^[a-z0-9-]+$/i.test(pair[0])||/[\r\n]/.test(pair[1])){bad("HEADERS");continue;}
+   if(!Array.isArray(pair)||pair.length!==2||!admissibleEvidenceHeader(pair[0],pair[1])){bad("UNSAFE_EVIDENCE_HEADER");continue;}
    const key=pair[0].toLowerCase();h.set(key,[...(h.get(key)||[]),pair[1]]);
   }
   const mime=h.get("content-type")||[];
@@ -70,9 +81,21 @@ function selfTest(){
   ["enforce-unknown-directive",(p,x)=>{p.routes[0].headers["content-security-policy"]=["not-a-csp-directive value"];x.responses[0].headers.find(h=>h[0]==="Content-Security-Policy")[1]="not-a-csp-directive value";}]
  ];
  for(const [name,mutate] of policyCases){const p=JSON.parse(JSON.stringify(plan));const x=JSON.parse(JSON.stringify(run));mutate(p,x);const r=gate(p,x);if(r.verdict!=="REJECT")failures.push({name,r});}
- return {count:cases.length+policyCases.length,failures,baseline:gate(plan,run)};
+ 
+ const adversarialCases=[
+ ["plan-path-traversal",(p,x)=>{p.routes[0].path="/auth/../action";x.responses[0].path=p.routes[0].path;x.responses[0].url=p.origin.slice(0,-1)+p.routes[0].path;}],
+ ["plan-protocol-relative",(p,x)=>{p.routes[0].path="//evil.example.com";x.responses[0].path=p.routes[0].path;x.responses[0].url=p.origin.slice(0,-1)+p.routes[0].path;}],
+ ["extra-cookie",(p,x)=>x.responses[0].headers.push(["Set-Cookie","session=SECRET"])],
+ ["extra-authorization",(p,x)=>x.responses[0].headers.push(["Authorization","Bearer SECRET"])],
+ ["extra-unapproved",(p,x)=>x.responses[0].headers.push(["X-Unreviewed","value"])],
+ ["planned-cookie",(p,x)=>{p.routes[0].headers["set-cookie"]=["session=SECRET"];x.responses[0].headers.push(["Set-Cookie","session=SECRET"]);}],
+ ["planned-sensitive-csp",(p,x)=>{const v="default-src 'self'; report-uri /?oobCode=SECRET";p.routes[0].headers["content-security-policy"]=[v];x.responses[0].headers.find(h=>h[0]==="Content-Security-Policy")[1]=v;}],
+ ["header-nul",(p,x)=>x.responses[0].headers.push(["Cache-Control","max-age=0"+String.fromCharCode(0)])]
+ ];
+ for(const [name,mutate] of adversarialCases){const p=JSON.parse(JSON.stringify(plan));const x=JSON.parse(JSON.stringify(run));mutate(p,x);const result=gate(p,x);if(result.verdict!=="REJECT")failures.push({name,result});}
+ return {count:cases.length+policyCases.length+adversarialCases.length,failures,baseline:gate(plan,run)};
 }
-if(typeof module!=="undefined")module.exports={gate,selfTest,hasPinnedPolicy};
+if(typeof module!=="undefined")module.exports={gate,selfTest,hasPinnedPolicy,SAFE_CAPTURE_HEADERS,sensitiveEvidenceValue,admissibleEvidenceHeader,safeEvidenceRoute};
 if(typeof require==="function"&&require.main===module){
  const fs=require("node:fs");
  if(process.argv.includes("--self-test")){const r=selfTest();console.log(JSON.stringify(r));process.exit(r.failures.length?1:0);}
