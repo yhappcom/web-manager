@@ -50,7 +50,7 @@ Example for a future Engineering-controlled, **already-built** NORMAL artifact:
 
 With the currently observed firebase.json pointing to build/web, the second command should **HOLD** for a NORMAL build at build/web-normal. This is intentional; do not 'fix' it by silently selecting Acceptance output. Engineering must supply an explicit deployment config/root and independently inspect the exact publish input. The tool does not deploy.
 
-**Execution actually performed:** Python 3 unittest on synthetic generated fixtures with 724 font and 148 notice records: **15/15 PASS**, including freeze/verify positive, Worker-only drift, unlisted file drift, marker leak/missing, manifest corruption/path traversal, file/root symlinks, receipt overwrite/location, Worker-manifest divergence, source SHA validation, and Firebase root mismatch/match. The positive fixture contained **880** files. This is a *test of the verifier*, not a test of LogMate's generated PWA. Syntax compilation passed. No Flutter build, actual NORMAL archive, Firebase publish, browser, Safari or managed-iPad run occurred.
+**Execution actually performed:** Python 3 unittest on synthetic generated fixtures with 724 font and 148 notice records: **19/19 PASS**, including NORMAL and Acceptance freeze/verify positives, receipt path canonicalization and tampering, wrong-source rejection, Worker-only drift, unlisted file drift, marker leak/missing, manifest corruption/path traversal, file/root symlinks, receipt overwrite/location, Worker-manifest divergence, source SHA validation, and Firebase root mismatch/match. The positive fixture contained **880** files. This is a *test of the verifier*, not a test of LogMate's generated PWA. Syntax compilation passed. No Flutter build, actual NORMAL archive, Firebase publish, browser, Safari or managed-iPad run occurred.
 
 ## 4. Threat model, negative controls and limits [CONTRADICTION / OPEN]
 
@@ -61,7 +61,7 @@ With the currently observed firebase.json pointing to build/web, the second comm
 | A NORMAL verification means the Hosting root is NORMAL | Optional firebase.json public-path equality must be checked against the exact artifact root; source currently points to Acceptance output. |
 | CI artifact upload digest means hosted bytes match | Upload digest identifies an artifact, not deployment selection or served origin bytes. |
 | A matching JSON receipt proves an authorized release | Receipt is **not signed or independently trusted**; a malicious actor able to replace both receipt and artifact can forge consistency. |
-| 15 synthetic tests PASS means product release PASS | Product build, archive download, hosted response, Worker runtime and managed iPad remain OPEN. |
+| 19 synthetic tests PASS means product release PASS | Product build, archive download, hosted response, Worker runtime and managed iPad remain OPEN. |
 | Disk bytes match, so browser CacheStorage/IDB data is durable | Different failure domains; process restart, storage pressure/eviction, backup/restore and Sync authority need separate oracles. |
 | Firebase public directory equality means actual served bytes match | Firebase ignore rules, transforms, deploy permissions, preview channels, caching, rewrites, CDN and network fetch still require independent verification. |
 
