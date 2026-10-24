@@ -140,3 +140,40 @@ The original `req.setTimeout` only bounded socket inactivity, not a slow-drip tr
 The collector still has no independently approved real endpoint, authenticated NORMAL archive/body-hash plan, production DNS/egress trace, real TLS response or browser enforcement evidence. Future work must independently audit full IANA address-class coverage, DNS/proxy and network namespace effects, and verify Node's exact connection/timeout behavior under real CI. A public IP can still be attacker-controlled; a TLS-valid endpoint can still serve unexpected content; an exact hash can still come from an unapproved artifact. These are distinct trust dimensions.
 
 The adjacent-value question **was completed now**: rather than adding another CSP primer, the existing collector was falsified and corrected across address canonicalization, mixed DNS, slow-drip and aggregate resource exhaustion, with explicit synthetic-vs-runtime boundaries. Further release promotion now crosses a materially different evidence boundary (exact Node suite + approved host + actual browser/device). **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+## 7. Exact-source hosted regression execution boundary and read-only CI integration (2026-10-25) [SOURCE / VALIDATION / DEPENDENCY]
+
+### Why this checkpoint matters [SYNTHESIS / CONTRADICTION]
+
+Section 6's revised collector and four new regressions were committed but the **full updated 36-case Node suite had not run**. Targeted 22/22 IP and 1/1 timeout checks were not a substitute for exercising the exact repository tests and the 517 gate together. The next useful action is a *non-deploying hosted execution path*, not another isolated PWA primer or another ungrounded security-success claim.
+
+At the beginning of this checkpoint, canonical Web Manager main was `b1213c15fed5964073b6214acb78372f1dffa8eb`. The five-track governance, roadmap, STATUS, index, 517/518, collector/test source and latest commits were read. Design Studio Web Stage 3 W121 still requires real runtime; Engineering Quality Q006 owns fatal verdict propagation; Marketing D8/D10 still hold unproven PWA/advertising claims. Product `MASTER.md` confirms account-required Auth and **user-triggered Manual Delta Sync**, not an automatic unattended PWA↔native sync assumption. These are bounded read-only transfers.
+
+### Persisted executable workflow [MINTTAP DECISION — Web Manager research only]
+
+Added [`pwa_https_evidence_research_tests.yml`](.github/workflows/pwa_https_evidence_research_tests.yml) at repository path `.github/workflows/pwa_https_evidence_research_tests.yml` (link from this research file: `../.github/workflows/pwa_https_evidence_research_tests.yml`). It is intentionally **read-only and non-deploying**, triggered on relevant `main` source/workflow changes and manually via `workflow_dispatch`.
+
+- `permissions: contents: read`, `ubuntu-24.04`, 10-minute job timeout, no secrets, upload, deployment, third-party package install, credential persistence or privileged PR trigger.
+- Checkout pinned to reviewed full SHA `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1` (v7.0.1); Node setup pinned to `actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1` (v7.1.0). Both full commits were fetched from their official GitHub repositories. Pinning code identity does **not** attest all transitive runner/network dependencies or create independent release approval.
+- Node runtime requested as exact `22.16.0`, automatic package-manager caching disabled. Shell `set -euo pipefail` precedes three `node --check` commands, the exact committed `node --test research/handoffs/test_pwa_https_evidence_collector.js` suite, and `node research/handoffs/pwa_served_header_evidence_gate.js --self-test`.
+- No actual preview origin, HTTP capture, credentials, production action-link, Worker process, or user ledger is involved. This workflow tests **research-tool logic**, not served CSP, real browser security or PWA product readiness.
+
+**Local validation:** workflow YAML parsed successfully, and **14/14 structural assertions PASS** for trigger, permissions, immutable action refs, bounded job, pinned Node, no persisted checkout credentials/cache, fatal shell, expected commands, no deployment and no privileged trigger. This does not prove the GitHub Actions runner can download Node or execute the tests.
+
+**Hosted execution remains OPEN at this checkpoint.** The connector returned empty commit statuses and its commit-workflow-run endpoint only reports PR-triggered runs; those observations cannot establish that a push-triggered job ran, passed, failed, or was disabled. Do not promote 36/36 or 26/26 to hosted PASS without a concrete run ID, job/step conclusion, exact SHA and output.
+
+### Release-evidence admission and failure modes [DEPENDENCY / VALIDATION]
+
+| Boundary | Required evidence | If missing |
+| --- | --- | --- |
+| Research source | exact commit SHA and collector/gate/test blob identities | UNKNOWN |
+| Hosted synthetic suite | run ID, runner/Node identity, `node --test` exit status and full 36-case outcome | NOT EXECUTED / HOLD |
+| Hosted 517 gate | same run ID, `--self-test` exit status, 26 expected outcomes | NOT EXECUTED / HOLD |
+| Artifact-to-HTTPS | independently approved NORMAL archive and expected body hashes; real TLS response with egress provenance | OPEN |
+| Browser enforcement | Chromium + Safari positive and deliberately blocked CSP script tests, Auth aliases and Worker/offline behavior | OPEN |
+| Ledger and managed EFB | 37-store external file round trip, same-profile restart, Home Screen and managed-iPad policy envelope | OPEN |
+
+**Track allocation:** E owns execution authority/egress and forbids promotion from green unit tests; C owns exact-run failure propagation and negative controls; A owns Node/HTTP/Worker/browser transfer; B owns truthful accessible offline/auth/recovery messages; D owns no premature acquisition/security/advertising claims. This adds executable proof infrastructure without duplicating Engineering Q006 or Design Studio W121.
+
+**CHANGE WATCH:** action release identity, Node 22 runtime and runner image changes, GitHub Actions enablement/event semantics, IANA address registries, CSP/WebKit/Hosting changes. **Stage 8 applied ACTIVE; Production validation OPEN; PWA release HOLD.** The adjacent valuable task was completed by adding the actual non-deploying CI path and reviewing its negative boundaries; further promotion requires hosted run evidence or an approved actual preview/device, not more synthetic documents.
