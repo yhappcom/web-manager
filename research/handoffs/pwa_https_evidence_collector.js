@@ -6,6 +6,7 @@ const dns = require("node:dns");
 const net = require("node:net");
 const crypto = require("node:crypto");
 const {URL} = require("node:url");
+const {hasPinnedPolicy} = require("./pwa_served_header_evidence_gate.js");
 const MAX_BYTES = 32 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 128 * 1024 * 1024;
 const SAFE_HEADERS = new Set([
@@ -38,6 +39,7 @@ function validatePlan(plan, allowOrigin) {
   if (!r || !safeRoute(r.path) || seen.has(r.path) || !HASH.test(r.sha) ||
       !["html", "js"].includes(r.mime) || !["observe", "report", "enforce"].includes(r.policy) ||
       !r.headers || typeof r.headers !== "object" || Array.isArray(r.headers)) throw error("ROUTE_PLAN");
+  if(!hasPinnedPolicy(r))throw error("ROUTE_POLICY_PLAN");
   seen.add(r.path);
  }
  return u;
