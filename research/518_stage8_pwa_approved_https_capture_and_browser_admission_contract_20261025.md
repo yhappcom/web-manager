@@ -76,3 +76,67 @@ Read-only canonical transfers: Design Studio progress/WEB_STATUS.md, research/we
 - **CHANGE WATCH:** Firebase pre-rewrite header matching and reserved namespaces, Node HTTPS/header handling, W3C CSP and browser enforcement, WebKit Home Screen behavior, storage quota/eviction, CI action version/verdict propagation and Flutter/Firebase module graph.
 - **CONTRADICTION:** a 200 status + expected header strings cannot certify actual script blocking; a syntactically valid capture cannot certify approved deployment; a browser-only PASS cannot certify managed-EFB data durability. Reject all such promotions.
 - **Adjacent-value checkpoint:** the 517 evidence-oracle gap was closed to the **synthetic read-only collector** layer and stress-tested with 32 cases. Next material work requires approved HTTPS host and independently pinned NORMAL bytes; additional ungrounded synthetic variants have lower information gain. **Stage 8 ACTIVE; Production validation OPEN; PWA release HOLD.**
+
+## 6. DNS target admission, slow-drip exhaustion and aggregate capture-budget correction (2026-10-25) [SOURCE / CONTRADICTION / VALIDATION]
+
+### Trigger: existing collector's security claims required adversarial falsification
+
+A read-only collector is still an outbound network client. The original 518 implementation relied on textual IPv6 prefix matching and a hand-maintained IPv4 exclusion list. This is not equivalent to the IANA special-purpose registries or normalized address-prefix evaluation. A locally reproduced copy of the **original** `publicIP` predicate returned `true` for four non-general-purpose addresses:
+
+| Counterexample | IANA classification / issue | Old result | Revised expected result |
+| --- | --- | --- | --- |
+| `2001:0db8::1` | IPv6 documentation prefix, alternative textual spelling of `2001:db8::/32` | incorrectly allowed | reject |
+| `3fff::1` | IPv6 documentation prefix `3fff::/20` (RFC 9637) | incorrectly allowed | reject |
+| `2001:2::1` | IPv6 benchmarking `2001:2::/48` | incorrectly allowed | reject conservatively |
+| `192.88.99.2` | 6a44/retired 6to4 relay special-purpose range | incorrectly allowed | reject conservatively |
+
+This is a **confirmed source-level classifier defect** in the Web Manager research tool, not evidence of an SSRF exploit, real network connection or LogMate product vulnerability. The existing 32-case synthetic suite missed these equivalence classes; a prior green test count was not evidence of complete IP classification.
+
+**Primary sources checked 2026-10-25:**
+- IANA IPv4 special-purpose registry: https://www.iana.org/assignments/iana-ipv4-special-registry
+- IANA IPv6 special-purpose registry: https://www.iana.org/assignments/iana-ipv6-special-registry
+- IANA IPv6 global unicast assignments: https://www.iana.org/assignments/ipv6-unicast-address-assignments
+- Node 22 `net.BlockList.addSubnet/check`: https://nodejs.org/api/net.html
+- Node DNS lookup/OS resolver behavior: https://nodejs.org/api/dns.html
+- Node HTTPS/TLS client behavior: https://nodejs.org/api/https.html
+
+### Correction [MINTTAP DECISION — research handoff, not product]
+
+The collector now uses Node `net.BlockList` parsed-prefix matching instead of textual IPv6 prefix comparison. IPv4 rejects private/shared/loopback/link-local/documentation/benchmarking/multicast/reserved ranges and deprecated 6to4 relay addresses. IPv6 must fall within `2000::/3` and must not match conservative special-purpose exclusions (`2001::/23`, `2001:db8::/32`, `2002::/16`, `3fff::/20`). These exclusions deliberately prefer false negatives over accidentally probing ambiguous addresses. They are **not** a claim that all remaining addresses are reachable or safe in every enterprise network; IANA's registry is a maintained source and additional special-purpose allocations can change.
+
+`dns.lookup(..., {all:true})` now rejects an entire response set if **any** address is malformed, has a mismatched address family, or is nonpublic. It no longer silently selects one public address from a mixed public/private answer set. The selected address is passed through the HTTPS client's lookup callback; TLS certificate verification remains enabled for the requested hostname. An independently approved origin remains mandatory: public-address classification is not authorization to scan arbitrary hosts.
+
+The original `req.setTimeout` only bounded socket inactivity, not a slow-drip transfer that periodically produces data. A separate wall-clock timer now destroys the request on expiry and is cleared on request close/error. A separate 128 MiB **aggregate** capture budget now complements the pre-existing 32 MiB per-response limit; five individually valid 32 MiB responses must fail as a combined collection. Neither change certifies a total CI job deadline; an approved runner must also impose an independent job-level timeout and egress policy.
+
+### Adversarial execution and test boundary [VALIDATION]
+
+- **Observed baseline:** the original classifier admitted all four counterexamples above in a local Node reproduction. This falsifies the former broad `DNS private/reserved rejected` assurance.
+- **Isolated corrected-function Node v22.16.0 smoke:** 18 negative and 4 positive IP cases matched expected outcomes (**22/22**); a separate mocked HTTPS request exercised the wall-clock deadline (**1/1**). These are **isolated targeted executions**, not a byte-identical run of the complete GitHub collector.
+- **Persisted GitHub source:** collector blob `419d9b406374b572be3b77b3d0cd12d0494ed603`; test blob `583e66050ccbc6115665718a96029344afd975f3`. Both fetched again and parsed successfully by V8 (`new Function`, syntax only).
+- **Four new top-level Node test cases** added to the existing 32-case suite: (1) special-purpose IPv4/IPv6; (2) mixed/malformed/empty DNS answers; (3) mocked slow-drip deadline; (4) aggregate inventory exhaustion with boundary success. **The updated full 36-case repository suite has NOT been executed** in this run because GitHub connector file bytes were not mounted into the local Node runtime. Do not label it 36/36 PASS. The prior 32/32 PASS belongs to the earlier uncorrected revision only.
+- **No real network probes, production DNS, actual HTTPS, deployed CSP, Chromium/Safari or managed iPad tests** were performed. The repaired predicate has not been independently audited against the complete, evolving IANA registry or an enterprise proxy topology.
+
+### Release/operations contract and 12-case negative matrix [DEPENDENCY / TRANSFER VALIDATION]
+
+| Case | Falsifiable expected outcome | Owner |
+| --- | --- | --- |
+| N01 | Alternate-spelling `2001:0db8::1` rejected | A → E |
+| N02 | `3fff::/20` and benchmarking IPv6 rejected | A → E |
+| N03 | Deprecated 6to4 relay IPv4 rejected | A → E |
+| N04 | Public-only IPv4/IPv6 DNS set allowed to connect, TLS still verified | A / C |
+| N05 | Mixed public/private DNS answer fails before connect | E / C |
+| N06 | Empty/malformed/address-family mismatch fails closed | E / C |
+| N07 | Slow-drip response times out on wall clock despite periodic bytes | E / C |
+| N08 | Aggregate body budget fails across routes | E / C |
+| N09 | Redirect, encoded body and credential/action-code header rejected | E / C |
+| N10 | Approval plan and source/archive hash independently pinned; collector cannot self-approve | E / Engineering |
+| N11 | Runner egress/proxy, DNS resolution and TLS endpoint identity independently observed | E / Engineering |
+| N12 | Actual browser enforced-CSP negative test plus Auth/Worker/offline/restore still required | A / C / B / D |
+
+**Track allocation:** E remains Stage 8's release/egress/custody bottleneck and owns this correction. A supplies browser/HTTP/DNS normalization semantics, C owns independent negative controls and execution proof, B consumes truthful offline/auth/recovery states from Design Studio W121/CD127, and D continues to reject unproven privacy/security/offline/advertising claims under Marketing D8/D10. Engineering Q006 owns CI verdict/timeout transfer semantics; Web Manager does not replace Engineering implementation review.
+
+### Remaining blockers, operational judgment and adjacent-value check [OPEN / CHANGE WATCH]
+
+The collector still has no independently approved real endpoint, authenticated NORMAL archive/body-hash plan, production DNS/egress trace, real TLS response or browser enforcement evidence. Future work must independently audit full IANA address-class coverage, DNS/proxy and network namespace effects, and verify Node's exact connection/timeout behavior under real CI. A public IP can still be attacker-controlled; a TLS-valid endpoint can still serve unexpected content; an exact hash can still come from an unapproved artifact. These are distinct trust dimensions.
+
+The adjacent-value question **was completed now**: rather than adding another CSP primer, the existing collector was falsified and corrected across address canonicalization, mixed DNS, slow-drip and aggregate resource exhaustion, with explicit synthetic-vs-runtime boundaries. Further release promotion now crosses a materially different evidence boundary (exact Node suite + approved host + actual browser/device). **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
