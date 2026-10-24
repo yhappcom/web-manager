@@ -152,7 +152,7 @@ At the beginning of this checkpoint, canonical Web Manager main was `b1213c15fed
 
 ### Persisted executable workflow [MINTTAP DECISION — Web Manager research only]
 
-Added [`pwa_https_evidence_research_tests.yml`](.github/workflows/pwa_https_evidence_research_tests.yml) at repository path `.github/workflows/pwa_https_evidence_research_tests.yml` (link from this research file: `../.github/workflows/pwa_https_evidence_research_tests.yml`). It is intentionally **read-only and non-deploying**, triggered on relevant `main` source/workflow changes and manually via `workflow_dispatch`.
+Added [`pwa_https_evidence_research_tests.yml`](../.github/workflows/pwa_https_evidence_research_tests.yml) at repository path `.github/workflows/pwa_https_evidence_research_tests.yml` (link from this research file: `../.github/workflows/pwa_https_evidence_research_tests.yml`). It is intentionally **read-only and non-deploying**, triggered on relevant `main` source/workflow changes and manually via `workflow_dispatch`.
 
 - `permissions: contents: read`, `ubuntu-24.04`, 10-minute job timeout, no secrets, upload, deployment, third-party package install, credential persistence or privileged PR trigger.
 - Checkout pinned to reviewed full SHA `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1` (v7.0.1); Node setup pinned to `actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1` (v7.1.0). Both full commits were fetched from their official GitHub repositories. Pinning code identity does **not** attest all transitive runner/network dependencies or create independent release approval.
