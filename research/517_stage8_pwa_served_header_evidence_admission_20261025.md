@@ -83,3 +83,48 @@ The stages are **not** automatically promoted. An offline Worker can serve an ol
 **Adjacent-value check:** after 516, this run completed the executable source-to-served admission model, 26 adversarial false-green controls, standards contradiction analysis and A–E handoff. The next decisive proof is a **materially different environment boundary**: approved HTTPS and real browser/device execution. No LogMate, Design, Engineering or Marketing repository was modified.
 
 **Gate:** **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+## 7. Enforced-policy presence false-green and independently pinned CSP expectation (2026-10-25) [SOURCE / CONTRADICTION / VALIDATION]
+
+### Falsified assurance and causal mechanism
+
+An audit of the exact pre-change 517 gate (blob c5d52d52571f8c68588109139c060da98beeff0b) found that `policy: enforce` only checked whether an array named `Content-Security-Policy` had at least one member. It did not require an independently expected CSP value, nonempty policy text or a recognized directive capable of constraining behavior. Executing that exact committed gate in V8 returned `SERVED_HEADER_CONSISTENT_UNVERIFIED` for each of: an empty enforced header, whitespace-only text, and `report-uri /csp-report` with no enforcement directive. These are **confirmed evidence-oracle false greens**, not a demonstrated LogMate deployment failure.
+
+History/problem → principle → standard: CSP is a directive-list policy delivered by HTTP; merely receiving a header field is not equivalent to a browser enforcing an effective restriction. `report-uri` routes reports and does not independently restrict script execution. W3C CSP Level 3 separates policy parsing, enforced policies and report-only delivery. MDN documents directive semantics and distinct reporting behavior. Current primary references checked 2026-10-25:
+- W3C CSP Level 3 Working Draft (2026-09-16): https://www.w3.org/TR/CSP3/
+- MDN CSP guide: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
+- Firebase Hosting configuration: https://firebase.google.com/docs/hosting/full-config
+
+### Corrected admission contract [MINTTAP DECISION — research-tool boundary only]
+
+1. For each route with `policy: enforce`, an independently approved plan must explicitly pin a `content-security-policy` array. For `policy: report`, it must pin `content-security-policy-report-only`; these classes are not interchangeable. `observe` retains the existing observation-only semantics.
+2. A pinned array must be nonempty; every value must contain non-whitespace text; at least one must name a recognized security-relevant CSP directive (e.g., `default-src`, `script-src`, `worker-src`, `object-src`, `base-uri`, `frame-ancestors`, `connect-src`, `form-action`, `sandbox`, `upgrade-insecure-requests` or `require-trusted-types-for`). A report-only transport directive by itself does not satisfy this minimal policy-shape gate.
+3. The existing 517 gate still compares all pinned header instances exactly against received evidence. Empty, unpinned, whitespace, report-uri-only and unknown-directive cases now return `REJECT` with `POLICY_UNPINNED_OR_EMPTY`. This is a **necessary admission guard**, not a CSP parser, browser interpretation proof, a recommendation of a universal policy string, or a guarantee that an independently pinned policy is secure.
+4. The 518 HTTPS collector now reuses the **same 517-owned `hasPinnedPolicy` function** during plan preflight and refuses invalid plans with `ROUTE_POLICY_PLAN` **before starting any network request**. This avoids duplicating policy semantics between collector and verifier and prevents wasted/unauthorized probing on structurally invalid plans.
+5. The 517 self-test fixture now explicitly pins enforced and report-only policy values on all relevant routes. The 518 collector test fixture is aligned; three new Node top-level negative controls check that missing enforce/report expectations and empty/report-uri-only values do not reach the transport.
+
+### Reproduction and verification [VALIDATION — bounded]
+
+| Evidence tier | Exact outcome | Not proven |
+| --- | --- | --- |
+| Before fix, exact 517 committed blob | 3/3 false-green values (`''`, whitespace, report-uri-only) admitted | Browser CSP behavior |
+| After fix, exact 517 committed blob | 33/33 deterministic V8 self-test outcomes; 7 new policy-oracle negative controls | Hosted Node execution |
+| After fix, exact 518 collector blob | 4/4 isolated V8 preflight cases (1 approved, 3 rejected) using mocked Node modules | Real Node HTTPS transport |
+| After fix, committed JS files | 3/3 V8 syntax compilation | Full 40-case Node test suite |
+| CI | Workflow watches the changed files; expected 40 collector top-level tests and 33 gate self-tests | Run ID, exact hosted conclusion and logs OPEN |
+
+New code identities at this checkpoint: gate blob `9685a7b7daecab5f3be2e7c6361825112cd0e007`; collector blob `c0b485301bfbd8b60bc43d54a617310415f3a10d`; Node test blob `036090c8836101aa6d997fb56a4cfa557911a4a8`. The V8 collector preflight check used a mock URL/net/Node module shim, so it is **not** an exact Node transport or CLI run. Do not claim hosted 40/40 or real HTTPS PASS.
+
+### Five-track dependency, residual failure modes and operational judgment [DEPENDENCY / TRANSFER VALIDATION]
+
+| Track | Gate pressure and bounded contribution |
+| --- | --- |
+| E — primary | Stage 8 release-trust bottleneck: owns independently approved policy expectation, CSP evidence-admission and no-false-green gate. |
+| A — dependency | Owns W3C/browser enforced vs report-only and Worker-global policy semantics. Actual Chromium/WebKit execution still OPEN. |
+| C — challenger | Owns 33 deterministic gate controls, 40 expected Node collector controls, CI failure propagation and negative browser probes; no hosted verdict claimed. |
+| B — transfer | Design Studio W120/CD127 requires actual visible↔accessible↔action truth for Auth/offline/recovery; do not translate gate PASS into UI reassurance. |
+| D — transfer | Marketing D8/D10 retains PWA/ads claim HOLD; telemetry must not collect Auth action-code URLs or represent policy consistency as security certification. |
+
+Residual contradictions: an explicitly pinned but permissive CSP can still pass text equality; a recognized directive name does not guarantee meaningful browser enforcement; multiple policies, fallback directives, inline module behavior, Worker script policy and Safari differences require browser tests. An independently supplied plan can be self-approved unless Engineering/release authority pins it outside the collector's writable domain. DNS/TLS capture custody, NORMAL artifact→served body identity, browser policy enforcement, 37-store external restore and managed-iPad/MDM remain distinct OPEN gates. No policy change is prescribed to LogMate `firebase.json` without exact Auth/Flutter runtime compatibility evidence.
+
+**Adjacent-value checkpoint:** a confirmed false-green in the current release-evidence oracle was reproduced, its source-level admission path corrected in both verifier and collector, and new negative cases added without changing LogMate or other specialist repositories. Further promotion requires the actual hosted 40-case/33-case results, an independently approved NORMAL preview and Chromium/Safari/managed-iPad runtime evidence. **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
