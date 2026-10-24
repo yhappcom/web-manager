@@ -128,3 +128,45 @@ New code identities at this checkpoint: gate blob `9685a7b7daecab5f3be2e7c636182
 Residual contradictions: an explicitly pinned but permissive CSP can still pass text equality; a recognized directive name does not guarantee meaningful browser enforcement; multiple policies, fallback directives, inline module behavior, Worker script policy and Safari differences require browser tests. An independently supplied plan can be self-approved unless Engineering/release authority pins it outside the collector's writable domain. DNS/TLS capture custody, NORMAL artifact→served body identity, browser policy enforcement, 37-store external restore and managed-iPad/MDM remain distinct OPEN gates. No policy change is prescribed to LogMate `firebase.json` without exact Auth/Flutter runtime compatibility evidence.
 
 **Adjacent-value checkpoint:** a confirmed false-green in the current release-evidence oracle was reproduced, its source-level admission path corrected in both verifier and collector, and new negative cases added without changing LogMate or other specialist repositories. Further promotion requires the actual hosted 40-case/33-case results, an independently approved NORMAL preview and Chromium/Safari/managed-iPad runtime evidence. **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+## 8. Canonical-route and sanitized-evidence false-green correction (2026-10-25) [SOURCE / CONTRADICTION / VALIDATION]
+
+### 8.1 Causal audit — the verifier was broader than the capture client
+
+At run start the canonical `main@f0d77953` governance, tracks, roadmap, status/index, 517/518, exact JS/CI files and recent commits were read. Design Studio W120/CD127, Engineering Q006 and Marketing D8/D10 were inspected read-only. The highest-value Stage 8 bottleneck remained **E evidence admission / privacy**, with A URL mechanics and C independent negative controls; B/D consume transfer findings.
+
+The existing 517 gate accepted plan route `/auth/../action` even though the 518 collector refused dot-segment routes. It also accepted an evidence response with additional `Set-Cookie: session=SECRET` and `Authorization: Bearer SECRET` headers, even though the collector intentionally stripped them. An exact committed-gate V8 reproduction returned `SERVED_HEADER_CONSISTENT_UNVERIFIED` for a plan/response containing both the dot-segment route and those extra credential-bearing fields. A separate `https://foo.internal/` envelope also passed the *consistency-only* gate; the collector's origin/network policy remains intentionally stricter. These are **research evidence-admission false greens**, not proof that LogMate exposed credentials or that an HTTPS request to a prohibited host occurred.
+
+**SOURCE:** RFC 3986 §5.2.4 and §6.2.2.3 (dot-segment removal), https://www.rfc-editor.org/rfc/rfc3986 ; WHATWG URL Standard (URL path parsing and canonicalization), https://url.spec.whatwg.org/ ; W3C CSP Level 3 Working Draft 2026-09-16, https://www.w3.org/TR/CSP/ ; GitHub Actions push/path semantics, https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows . Sources checked 2026-10-25.
+
+**SYNTHESIS:** exact equality between two *untrusted* evidence envelopes does not imply a canonical route, sanitized evidence, a trustworthy collector, or browser CSP enforcement. The 517 JSON gate is an independently usable comparator; therefore its admissible route/header vocabulary cannot rely solely on a caller having used 518 first. URI normalization can make a visually different path resolve to a different route, and preserving authentication response fields in research artifacts violates the collector's stated minimization objective.
+
+### 8.2 Bounded correction [MINTTAP DECISION]
+
+- 517 now owns `safeEvidenceRoute` and a shared `SAFE_CAPTURE_HEADERS` allowlist plus `admissibleEvidenceHeader` / `sensitiveEvidenceValue` predicates. The gate rejects dot-segment and protocol-relative plan paths, excessively long routes, non-allowlisted plan/response headers, control characters and the existing explicitly recognized action-token patterns even when the plan itself pins the same unsafe value. Both *planned* and *observed* header arrays are validated.
+- 518 imports these predicates instead of maintaining a second route/allowed-header vocabulary. Its collector still **drops** non-allowlisted raw headers, preserving the intended sanitized capture format. Explicitly sensitive values in allowed fields fail with `SENSITIVE_HEADER`, preserving the existing negative-test contract; other invalid allowed fields fail closed.
+- The gate's `SERVED_HEADER_CONSISTENT_UNVERIFIED` verdict remains deliberately weak: it is neither proof of a real TLS exchange nor proof that a policy blocks a script. The 517 gate does **not** become a network-target authorization service; 518 retains separate HTTPS origin, DNS/IP, TLS and egress controls. Syntactically valid `.test` fixtures remain usable in offline gate self-tests.
+
+### 8.3 Adversarial evidence [VALIDATION]
+
+Eight new deterministic 517 self-test negatives cover dot-segment traversal, protocol-relative path, extra cookie, extra authorization, extra unknown header, planned cookie, planned CSP containing `oobCode`, and NUL in an otherwise allowlisted header. The exact **committed** 517 gate was re-fetched and executed in V8: **41/41 deterministic self-test outcomes; baseline `SERVED_HEADER_CONSISTENT_UNVERIFIED`; zero failures.** Prior pre-fix false-green reproduction was also executed against the earlier committed gate. The 518 collector suite adds one **collector→gate** end-to-end synthetic case distinguishing enforce and report-only responses, with explicit cookie redaction and a negative mutation. **Expected Node top-level collector tests: 41; exact Node suite/hosted GitHub Actions conclusion NOT VERIFIED.** These are code-level oracles, not a live HTTPS capture or Chromium/Safari test.
+
+| Distinction | What this checkpoint proves | What remains OPEN |
+| --- | --- | --- |
+| Route admission | 517 and 518 now share conservative dot-segment/protocol-relative rejection | Actual Hosting rewrite/redirect/alias behavior |
+| Evidence minimization | 517 refuses credential-bearing/unknown evidence headers; 518 filters raw response headers | Complete sensitive-data taxonomy, encoded/double-encoded tokens, actual log/artifact custody |
+| CSP plan consistency | 517 pinned-policy requirement remains; expected/observed header comparison preserved | Actual browser-enforced CSP, multiple policy interaction, third-party SDK/Auth compatibility |
+| CI | Code changed in workflow-watched paths | Exact run ID, Node 41/41, gate 41/41 hosted steps and final conclusion |
+| PWA product | No LogMate changes | NORMAL artifact/HTTPS, Worker, 37-store external restore, managed iPad/MDM |
+
+### 8.4 Cross-track transfer, counterexamples and operational judgment [DEPENDENCY / TRANSFER VALIDATION / OPEN]
+
+- **E owner:** evidence minimization, approved origin, collector/gate custody and release decision remain independent. A sanitized JSON object can still be fabricated; do not promote comparator PASS into attested collection.
+- **A supplier:** URI dot segments and browser URL normalization are distinct from literal plan-string equality. Safari, Chromium, Firebase Hosting and Worker route behavior still require exact deployed tests.
+- **C challenger:** new eight-case falsification plus one cross-component collector→gate synthetic case. Hosted Node and actual browser negative-control execution remain OPEN; a configured workflow is not a run.
+- **B transfer:** Design Studio W120/CD127 still requires exact visible↔accessible↔actual-action semantics for Auth/offline/restore; no reassurance string may imply verified security from JSON gate output.
+- **D transfer:** Marketing D8/D10 still prohibits unverified PWA/offline/advertising claims and Auth action-code analytics. Reject leaking sensitive response values into telemetry or diagnostics.
+
+**CONTRADICTION:** rejecting known token patterns is not a complete DLP engine; whitelisting headers does not prove that all permitted values are non-sensitive. A valid CSP containing only `img-src` can be textually consistent without proving script blocking; script execution requires independent positive/negative browser probes. A current HTTPS response does not prove an old installed Worker has relinquished control. No synthetic result establishes 37-store durability or managed EFB installability.
+
+**Adjacent-value check:** after reproducing the independent-gate false green, the run completed shared-predicate integration, additional negative controls, collector→gate cross-check design and specialist transfer without another generic CSP primer. The next meaningful boundary is exact Node/hosted execution and independently approved NORMAL HTTPS/browser/device evidence. **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
