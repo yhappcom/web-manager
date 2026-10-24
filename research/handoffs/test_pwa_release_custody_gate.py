@@ -114,6 +114,37 @@ class CustodyTests(unittest.TestCase):
                          '--source-sha', SHA, '--receipt', str(self.receipt),
                          '--firebase-config', str(config)]), 0)
 
+    def test_receipt_dotdot_inside_root(self):
+        disguised = self.root / '..' / 'normal' / 'receipt.json'
+        self.assertEqual(self.run_gate(receipt=disguised), 2)
+
+    def test_tampered_receipt(self):
+        self.assertEqual(self.run_gate(), 0)
+        data = json.loads(self.receipt.read_text())
+        data['sourceSha'] = 'b' * 40
+        self.receipt.write_text(json.dumps(data))
+        self.assertEqual(self.run_gate('verify'), 2)
+
+    def test_verify_wrong_source_sha(self):
+        self.assertEqual(self.run_gate(), 0)
+        self.assertEqual(main(['verify', '--root', str(self.root), '--kind', 'normal',
+                         '--source-sha', 'b' * 40, '--receipt', str(self.receipt)]), 2)
+
+    def test_acceptance_positive(self):
+        main_file = self.root / 'main.dart.js'
+        main_file.write_text(main_file.read_text() + 'LOGMATE_PERSISTENCE_ACCEPTANCE_FLIGHT_V1')
+        manifest_file = self.root / 'logmate-offline-manifest.json'
+        manifest = json.loads(manifest_file.read_text())
+        for entry in manifest['shell']:
+            if entry['path'] == 'main.dart.js':
+                entry['bytes'] = main_file.stat().st_size
+                entry['sha256'] = digest(main_file.read_bytes())
+        manifest['appBuildId'] = digest(json.dumps(manifest['shell'], ensure_ascii=False, separators=(',', ':')).encode())[:32]
+        manifest_file.write_text(json.dumps(manifest))
+        (self.root / 'logmate_service_worker.js').write_text('const OFFLINE_MANIFEST = ' + json.dumps(manifest) + ';\nconst CONTROL_CACHE = 1;')
+        self.assertEqual(self.run_gate(kind='acceptance'), 0)
+        self.assertEqual(self.run_gate('verify', kind='acceptance'), 0)
+
     def test_bad_source_sha(self):
         self.assertEqual(main(['freeze', '--root', str(self.root), '--kind', 'normal',
                          '--source-sha', 'main', '--receipt', str(self.receipt)]), 2)
