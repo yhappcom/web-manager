@@ -114,8 +114,10 @@ test("wall-clock deadline rejects a slow-drip request even without socket idle t
 test("aggregate route inventory is capped even when each response is under its own limit",async()=>{
  const p=plan();
  p.routes=Array.from({length:5},(_,i)=>({...p.routes[0],path:"/asset"+i+".js"}));
- const big=async()=>({status:200,sha:h,bytes:32*1024*1024,headers:[["Content-Type","text/javascript"]]});
+ let calls=0;
+ const big=async()=>{calls++;return {status:200,sha:h,bytes:32*1024*1024,headers:[["Content-Type","text/javascript"]]};};
  await assert.rejects(collect(p,{...opts,transport:big}),/CAPTURE_TOTAL_LIMIT/);
+ assert.equal(calls,4,"fifth request must not start once aggregate budget is exhausted");
  p.routes.pop();
  const four=await collect(p,{...opts,transport:big});
  assert.equal(four.responses.length,4);
