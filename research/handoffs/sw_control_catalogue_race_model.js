@@ -64,3 +64,70 @@ test('no pruning: closed-client IDs accumulate', () => {
   assert.ok(JSON.stringify(state).length > JSON.stringify(baseline()).length);
 });
 console.log('MODEL ONLY; no product/browser/Service Worker execution.');
+// Extension 2026-10-24: source-compatible FIRST-LOAD/CLAIM counterexamples.
+// These functions deliberately abstract away actual browser event timing,
+// CacheStorage, and asset-byte validation. A 503 here is a possible routing
+// outcome under the stated event sequence, NOT a reproduced LogMate incident.
+function sourceCompatibleRoute(control, {mode, clientId = '', resultingClientId = ''}) {
+  let buildId;
+  if (mode === 'navigate') {
+    buildId = control.currentBuildId;
+    if (buildId) for (const id of new Set([clientId, resultingClientId].filter(Boolean)))
+      control.clientBuilds[id] = buildId;
+  } else {
+    buildId = control.clientBuilds[clientId];
+  }
+  return control.versions[buildId]?.manifest ? 200 : 503;
+}
+function routableControl() {
+  const c = baseline();
+  c.versions.v1.manifest = {shell: [{path: 'main.dart.js'}]};
+  return c;
+}
+function sourceCompatibleReadControl(serialized) {
+  try {
+    if (serialized) {
+      const c = JSON.parse(serialized);
+      if (c?.schemaVersion === 2 && c.versions && c.clientBuilds) return c;
+    }
+  } catch (_) {}
+  return {schemaVersion: 2, currentBuildId: null, previousBuildId: null,
+    candidateBuildId: null, versions: {}, clientBuilds: {}};
+}
+test('claimed network-loaded first page has no navigation mapping for late shell', () => {
+  const c = routableControl();
+  assert.equal(sourceCompatibleRoute(c, {mode: 'subresource', clientId: 'first-page'}), 503);
+});
+test('controlled root navigation maps resulting client before late subresources', () => {
+  const c = routableControl();
+  assert.equal(sourceCompatibleRoute(c, {mode: 'navigate', resultingClientId: 'reloaded'}), 200);
+  assert.equal(sourceCompatibleRoute(c, {mode: 'subresource', clientId: 'reloaded'}), 200);
+});
+test('verified cache or START_PRECACHE alone cannot map a claimed first page', () => {
+  const c = routableControl();
+  c.versions.v1.verified = true;
+  assert.equal(sourceCompatibleRoute(c, {mode: 'subresource', clientId: 'first-page'}), 503);
+});
+test('navigation with no reported IDs serves root but leaves later asset unmapped', () => {
+  const c = routableControl();
+  assert.equal(sourceCompatibleRoute(c, {mode: 'navigate'}), 200);
+  assert.equal(sourceCompatibleRoute(c, {mode: 'subresource', clientId: 'later-page'}), 503);
+});
+test('malformed control JSON is silently interpreted as empty control', () => {
+  const c = sourceCompatibleReadControl('{broken');
+  assert.equal(c.currentBuildId, null);
+  assert.deepEqual(c.versions, {});
+});
+test('unmapped old client must not be assigned unverified candidate by default', () => {
+  const c = routableControl();
+  newInstallation(c);
+  assert.equal(sourceCompatibleRoute(c, {mode: 'subresource', clientId: 'unknown-old'}), 503);
+  assert.equal(c.candidateBuildId, 'v2');
+});
+test('candidate byte readiness is not sufficient for client-route readiness', () => {
+  const c = routableControl();
+  c.versions.v1.verified = true;
+  const candidateReady = true; // bounded status() analogue, not inspect().
+  assert.equal(candidateReady, true);
+  assert.equal(sourceCompatibleRoute(c, {mode: 'subresource', clientId: 'unmapped'}), 503);
+});
