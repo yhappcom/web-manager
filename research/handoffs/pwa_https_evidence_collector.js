@@ -123,9 +123,11 @@ async function collect(plan, {allowOrigin, transport = requestOnce, maxBytes = M
  const responses = [];
  let totalBytes = 0;
  for (const r of plan.routes) {
+  if (totalBytes >= MAX_TOTAL_BYTES) throw error("CAPTURE_TOTAL_LIMIT");
   const url = plan.origin.slice(0, -1) + r.path;
   let result;
-  try { result = await transport(url, {maxBytes}); }
+  // Enforce the remaining aggregate budget during streaming, not only after download.
+  try { result = await transport(url, {maxBytes:Math.min(maxBytes,MAX_TOTAL_BYTES-totalBytes)}); }
   catch (e) { const code = ["BODY_LIMIT","TIMEOUT","DNS_NONPUBLIC","DNS_FAILURE","REQUEST_FAILURE","RESPONSE_FAILURE"].includes(e && e.code) ? e.code : "FAILED"; throw error("CAPTURE_" + code); }
   if (!result || !Number.isInteger(result.status) || !HASH.test(result.sha) ||
       !Number.isSafeInteger(result.bytes) || result.bytes < 0 || result.bytes > maxBytes ||
