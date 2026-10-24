@@ -7,6 +7,7 @@ const net = require("node:net");
 const crypto = require("node:crypto");
 const {URL} = require("node:url");
 const MAX_BYTES = 32 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 128 * 1024 * 1024;
 const SAFE_HEADERS = new Set([
  "content-type", "content-security-policy", "content-security-policy-report-only",
  "referrer-policy", "x-content-type-options", "cache-control", "permissions-policy",
@@ -120,6 +121,7 @@ function requestOnce(url, {maxBytes = MAX_BYTES, timeoutMs = 15000} = {}) {
 async function collect(plan, {allowOrigin, transport = requestOnce, maxBytes = MAX_BYTES} = {}) {
  validatePlan(plan, allowOrigin);
  const responses = [];
+ let totalBytes = 0;
  for (const r of plan.routes) {
   const url = plan.origin.slice(0, -1) + r.path;
   let result;
@@ -128,6 +130,8 @@ async function collect(plan, {allowOrigin, transport = requestOnce, maxBytes = M
   if (!result || !Number.isInteger(result.status) || !HASH.test(result.sha) ||
       !Number.isSafeInteger(result.bytes) || result.bytes < 0 || result.bytes > maxBytes ||
       !Array.isArray(result.headers)) throw error("CAPTURE_INVALID");
+  if (totalBytes + result.bytes > MAX_TOTAL_BYTES) throw error("CAPTURE_TOTAL_LIMIT");
+  totalBytes += result.bytes;
   const flat = result.headers.flatMap(x => Array.isArray(x) && x.length === 2 ? x : [null, null]);
   const headers = filterHeaders(flat);
   if (headers.some(([k,v]) => k.toLowerCase() === "content-encoding" && v.toLowerCase().trim() !== "identity")) throw error("ENCODED_RESPONSE");
@@ -149,7 +153,7 @@ async function cli(argv) {
  fs.writeFileSync(argv[5], JSON.stringify(run,null,2) + "\n", {flag:"wx",mode:0o600});
  process.stdout.write("CAPTURE_WRITTEN_CONSISTENT_UNVERIFIED\n");
 }
-module.exports = {collect, validatePlan, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, requestOnce, MAX_BYTES};
+module.exports = {collect, validatePlan, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, requestOnce, MAX_BYTES, MAX_TOTAL_BYTES};
 if (require.main === module) cli(process.argv.slice(2)).catch(e => {
  console.error("CAPTURE_FAILED:" + (e.code || "INVALID_INPUT")); process.exitCode = 2;
 });
