@@ -7,8 +7,8 @@ const {EventEmitter} = require("node:events");
 const h = "a".repeat(64), b = "b".repeat(64);
 const plan = () => ({schema:"wm-header-v1",commit:h,artifact:b,origin:"https://preview.example.com/",routes:[
  {path:"/",mime:"html",sha:h,policy:"enforce",headers:{"content-security-policy":["default-src 'self'"]}},
- {path:"/auth/action",mime:"html",sha:b,policy:"report",headers:{}},
- {path:"/logmate_service_worker.js",mime:"js",sha:b,policy:"enforce",headers:{}}
+ {path:"/auth/action",mime:"html",sha:b,policy:"report",headers:{"content-security-policy-report-only":["default-src 'self'"]}},
+ {path:"/logmate_service_worker.js",mime:"js",sha:b,policy:"enforce",headers:{"content-security-policy":["default-src 'self'"]}}
 ]});
 const transport = async url => ({status:200,sha:url.endsWith("/")?h:b,bytes:25,headers:[
  ["Content-Type",url.endsWith(".js")?"text/javascript":"text/html"],
@@ -144,4 +144,22 @@ test("Node 22 autoSelectFamily lookup all=true returns address records, scalar m
  assert.equal(mixed.error,"DNS_NONPUBLIC","mixed answers must fail before connection");
  const failed=await check(null,{all:true},new Error("resolver unavailable"));
  assert.equal(failed.error,"DNS_FAILURE");
+});
+
+// Negative controls: reject unpinned or nonrestrictive CSP plans before any HTTPS request.
+test("unapproved enforce CSP plan is rejected before transport",async()=>{
+ const p=plan();delete p.routes[0].headers["content-security-policy"];let calls=0;
+ await assert.rejects(collect(p,{...opts,transport:async u=>{calls++;return transport(u);}}),/ROUTE_POLICY_PLAN/);
+ assert.equal(calls,0);
+});
+test("unapproved report-only CSP plan is rejected before transport",async()=>{
+ const p=plan();delete p.routes[1].headers["content-security-policy-report-only"];let calls=0;
+ await assert.rejects(collect(p,{...opts,transport:async u=>{calls++;return transport(u);}}),/ROUTE_POLICY_PLAN/);
+ assert.equal(calls,0);
+});
+test("empty and report-uri-only CSP values are not meaningful pinned policy",async()=>{
+ for(const value of ["","   ","report-uri /csp"]){const p=plan();p.routes[0].headers["content-security-policy"]=[value];let calls=0;
+  await assert.rejects(collect(p,{...opts,transport:async u=>{calls++;return transport(u);}}),/ROUTE_POLICY_PLAN/);
+  assert.equal(calls,0);
+ }
 });
