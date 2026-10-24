@@ -239,3 +239,44 @@ The authoritative security finding and eight-case falsification belong to [517 �
 Operational counterexamples: (1) an unapproved JSON capture can be syntactically consistent but fabricated; (2) a CSP header can be exactly pinned yet permit script execution; (3) a successful collector read does not imply deployed Worker/offline/backup/iPad readiness; (4) an approved plan and a sanitized output do not replace external egress/TLS/provenance and artifact custody. The independent NORMAL/HTTPS plan, real Chromium/Safari negative probes, Firebase Auth, Worker generation, 37-store external restore and managed iPad/MDM gates remain unchanged. No product/peer writes.
 
 **CHANGE WATCH:** WHATWG URL canonicalization, RFC 3986 dot-segment behavior, CSP3 multi-policy enforcement, Firebase Hosting rewrite/header matching, Node rawHeaders/HTTPS behavior and GitHub Actions hosted verdicts. **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+## 11. Hosted GitHub Actions evidence reconciliation — exact-source 41/41 + 41/41 (2026-10-25) [SOURCE / VALIDATION / CONTRADICTION / TRANSFER VALIDATION]
+
+### Question and first-principles evidence distinction
+
+Can the earlier **"hosted run unknown"** blocker be resolved with independent GitHub Actions execution evidence, without conflating research-tool CI with deployed PWA security? Yes, **for the bounded synthetic tool gate**. GitHub's actual workflow-run collection, job metadata and decoded hosted job logs were read directly on 2026-10-25. The earlier empty commit-status and PR-filtered lookup were **insufficient discovery paths**, not evidence that push-triggered Actions did not run. This checkpoint supersedes only the older hosted-execution-unknown statements in §§7–10; their historical observations remain retained.
+
+**Primary GitHub records (UTC; Asia/Seoul is UTC+09):**
+- Workflow run collection: https://api.github.com/repos/yhappcom/web-manager/actions/runs?per_page=20 (11 push-triggered runs observed at this checkpoint; do not assume this remains the complete lifetime inventory).
+- **Latest source-bearing successful run:** https://github.com/yhappcom/web-manager/actions/runs/40136992197 — run ID `40136992197`, attempt 1, event `push`, head `93f156118df73324df0fb1d2bc4799418b4de690`, created `2026-10-24T22:04:40Z`, completed, conclusion `success`.
+- Job `121000500627`: hosted runner, started `2026-10-24T22:04:42Z`, completed `22:04:53Z`; checkout, Node setup and exact synthetic-regression step all concluded `success`. Decoded log explicitly records **Node v22.16.0**, **41 collector top-level tests / 41 pass / 0 fail**, followed by 517 `--self-test` JSON `{"count":41,"failures":[],"baseline":{"verdict":"SERVED_HEADER_CONSISTENT_UNVERIFIED","errors":[]}}`. This is **two separate 41-case suites**, not 41 total.
+- **Earlier diagnostic failed run:** https://github.com/yhappcom/web-manager/actions/runs/40136928705 — run `40136928705`, head `417f00b7eb6d174584bd32441083af39f65fb972`, job `121000302663`, test step `failure`, collector **40 pass / 1 fail**. The decoded log identifies the failed negative test `reject sensitive value in allowed response header` with a mismatched `SENSITIVE_OR_INVALID_HEADER` error; this is a research-tool/test contract failure, not a product leak. Later run `40136939563` (head `3b0dd6ae...`) and the final source-bearing run above both concluded success. Preserve failed-run history; do not count it as success or erase the reason for failure.
+
+### Exact-source promotion check [VALIDATION]
+
+At this checkpoint, Web Manager `main` was `01724bdd49e89a1273360590674acf280a49bd38`. GitHub compare `93f156118df73324df0fb1d2bc4799418b4de690...01724bdd49e89a1273360590674acf280a49bd38` returned **ahead 4 / behind 0**, with **only** `STATUS.md`, `research/517_...md`, `research/518_...md`, and `research/README.md` changed. **No collector, gate, test or workflow file changed between the hosted successful run and the run-start main.** This establishes source-equivalence of the tested executable research files across that interval. It does **not** make the later documentation-only main SHA itself a separately executed workflow run. This documentation update also does not alter those executable files.
+
+| Evidence tier | Observed | Correct verdict |
+| --- | --- | --- |
+| Tool syntax + isolated mocks | historical bounded checks | PASS at their own earlier refs |
+| **Exact executable research-tool suite on hosted Node 22.16.0** | **run 40136992197, job 121000500627, 41/41 collector + 41/41 gate, both commands success** | **HOSTED SYNTHETIC PASS** |
+| Prior failing test and repair chain | run 40136928705: 40/41 with specific error-code mismatch; later success | **FAILED HISTORICAL RUN RETAINED; CURRENT TEST REGRESSION CLOSED AT TESTED SOURCE** |
+| Independently approved NORMAL PWA artifact and body hashes | none in this workflow | OPEN |
+| Approved HTTPS endpoint, DNS/egress/TLS, actual served CSP | workflow never makes product request | OPEN |
+| Chromium and Safari CSP negative enforcement, Auth/Worker/offline/update | no browser runtime here | OPEN |
+| External 37-store backup/reopen/restore; managed-iPad Home Screen/MDM | no physical-device or data-path test here | OPEN |
+
+**CONTRADICTION corrected:** the previous reports that hosted 41-case execution was unavailable are now stale as *current* evidence status. However, `CI green ⇒ production CSP effective`, `CI green ⇒ safe managed iPad`, and `exact research-tool SHA ⇒ independently approved product build` remain invalid inferences. Workflow trigger scope covers executable research paths and its own YAML, not documentation-only commits or product releases. Run success proves these commands exited successfully on that runner; it does not attest supply-chain independence, runner network isolation, or negative browser behavior. The Bash step uses `set -euo pipefail` and no `tee` pipeline, consistent with Engineering Q006's verdict-propagation requirement; this is a **bounded transfer**, not a fresh general CI assurance study.
+
+### Five-track synthesis and operational judgment [MINTTAP DECISION / DEPENDENCY / OPEN]
+
+- **E — owner / highest-risk bottleneck:** close only the *hosted synthetic evidence* subgate. Preserve approval-plan independence, artifact provenance, TLS/egress custody, deployed security-header verification and release/rollback ownership as OPEN. A signed-in runner is not an organizational release authority.
+- **A — browser/platform supplier:** Node DNS `all:true` callback and HTTP response/Service Worker behavior remain separate from real Chromium/WebKit policy execution. An actual browser's CSP enforcement and Auth path control must be observed on the exact served build.
+- **C — independent quality challenger:** the failed 40/41 run and subsequent 41/41 success demonstrate a discriminating test path and fatal exit propagation. Require positive **and** deliberately failing browser CSP probes, plus Worker cold/upgrade/offline and restore oracles. Transfer Design Studio W081's provenance-rich runtime ladder; do not promote synthetic tests into AT or physical-iPad PASS.
+- **B — web task/state consumer:** Design Studio CD121 prohibits unsupported `Saved`, `Synced`, `Offline` state claims. Design truthful update/recovery/backup messages only after actual local-save, external-file and remote-ack distinctions are implementable and verified.
+- **D — discovery/measurement challenger:** Marketing Manager D8 keeps import/export/PWA/sync public claims on HOLD; D10 ads production HOLD. Research CI outcomes are not acquisition/product evidence and should not appear as offline/sync/security claims in launch copy.
+
+**Next evidence request (concrete, no product assumptions):** Engineering/product owner supplies an independently approved NORMAL archive SHA, exact route/body hashes, non-production HTTPS origin and authorization to probe it; E/C then run the existing collector against that origin, record DNS/egress/TLS/headers, and execute positive/negative Chromium+Safari CSP/Auth/Worker tests on the same artifact. Separately, physical managed-iPad policy envelope and 37-store external-file restoration require their own acceptance owners and evidence. The next adjacent valuable question was resolved **now** by collecting hosted job logs and comparing source paths to latest main; further advancement crosses a genuinely different approved product/runtime evidence boundary. **Stage 8 ACTIVE · hosted research-tool synthetic PASS · Production validation OPEN · PWA release HOLD.**
+
+**CHANGE WATCH:** GitHub Actions runner/action/Node revisions, workflow enablement and event filters, exact source/commit relationships, browser CSP/WebKit/Hosting changes and managed-device OS policy. Official API references: https://docs.github.com/en/rest/actions/workflow-runs and https://docs.github.com/en/rest/actions/workflow-jobs .
