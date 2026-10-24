@@ -40,16 +40,24 @@ def launch(p, profile, chromium):
     return p.chromium.launch_persistent_context(**opts)
 
 def classify(o):
-    """A complete result cannot be inferred from an incomplete observation set."""
+    """Fail closed on missing proof, invalid status types, or HTML masquerading as JS."""
     required_assets = ('first_claim_asset', 'controlled_asset', 'offline_asset', 'cold_process_asset')
-    required_nav = ('controlled_reload_status', 'offline_reload_status', 'cold_process_reopen_status')
-    if not all(isinstance(o.get(k), dict) and isinstance(o[k].get('status'), int)
-               for k in required_assets) or not all(isinstance(o.get(k), int) for k in required_nav):
+    required_nav = ('initial_navigation_status', 'controlled_reload_status',
+                    'offline_reload_status', 'cold_process_reopen_status')
+    if o.get('controller_claimed') is not True or not isinstance(o.get('chromium_version'), str) or not o['chromium_version']:
         return 'INCOMPLETE_OR_ERROR'
+    if not all(isinstance(o.get(k), dict) and type(o[k].get('status')) is int
+               for k in required_assets) or not all(type(o.get(k)) is int for k in required_nav):
+        return 'INCOMPLETE_OR_ERROR'
+    if o['initial_navigation_status'] != 200:
+        return 'INITIAL_NAVIGATION_FAILURE_OBSERVED'
     if o['first_claim_asset']['status'] != 200:
         return 'FIRST_CLAIM_ASSET_FAILURE_OBSERVED'
-    if any(o[k]['status'] != 200 for k in required_assets[1:]) or any(o[k] != 200 for k in required_nav):
+    if any(o[k]['status'] != 200 for k in required_assets[1:]) or any(o[k] != 200 for k in required_nav[1:]):
         return 'RELOAD_OFFLINE_OR_REOPEN_FAILURE_OBSERVED'
+    accepted = {'text/javascript', 'application/javascript', 'application/x-javascript'}
+    if any(str(o[k].get('contentType') or '').split(';', 1)[0].strip().lower() not in accepted for k in required_assets):
+        return 'ASSET_REPRESENTATION_MISMATCH_OBSERVED'
     return 'BOUNDED_CHROMIUM_PATH_PASS'
 
 def probe(root, chromium, timeout_ms, source_sha):
