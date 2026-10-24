@@ -75,6 +75,7 @@ function filterHeaders(raw) {
   if (typeof k !== "string" || typeof v !== "string") throw error("INVALID_RAW_HEADERS");
   if (SAFE_HEADERS.has(k.toLowerCase())) {
    if (!/^[a-z0-9-]+$/i.test(k) || /[\r\n]/.test(v)) throw error("INVALID_RAW_HEADERS");
+   if (/(?:oobCode|access_token|id_token)=|Authorization\s|Bearer\s/i.test(v)) throw error("SENSITIVE_HEADER");
    out.push([k, v]);
   }
  }
@@ -109,7 +110,7 @@ async function collect(plan, {allowOrigin, transport = requestOnce, maxBytes = M
   const url = plan.origin.slice(0, -1) + r.path;
   let result;
   try { result = await transport(url, {maxBytes}); }
-  catch (e) { throw error("CAPTURE_" + (e.code || "FAILED")); }
+  catch (e) { const code = ["BODY_LIMIT","TIMEOUT","DNS_NONPUBLIC","DNS_FAILURE","REQUEST_FAILURE","RESPONSE_FAILURE"].includes(e && e.code) ? e.code : "FAILED"; throw error("CAPTURE_" + code); }
   if (!result || !Number.isInteger(result.status) || !HASH.test(result.sha) ||
       !Number.isSafeInteger(result.bytes) || result.bytes < 0 || result.bytes > maxBytes ||
       !Array.isArray(result.headers)) throw error("CAPTURE_INVALID");

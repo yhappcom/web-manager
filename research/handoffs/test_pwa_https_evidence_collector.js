@@ -68,3 +68,10 @@ test("safeRoute exact",()=>{assert.equal(safeRoute("/auth/action/index.html"),tr
 test("reject compressed representation even with valid hash",async()=>{
  await assert.rejects(collect(plan(),{...opts,transport:async u=>({...await transport(u),headers:[["Content-Encoding","gzip"]]})}),/ENCODED_RESPONSE/);
 });
+
+test("injected exception code cannot leak action token",async()=>{
+ await assert.rejects(collect(plan(),{...opts,transport:async()=>{throw {code:"oobCode=SECRET"}}}),e=>e.message==="CAPTURE_FAILED");
+});
+test("reject sensitive value in allowed response header",async()=>{
+ await assert.rejects(collect(plan(),{...opts,transport:async u=>({...await transport(u),headers:[["Content-Security-Policy","report-uri /?oobCode=SECRET"]]})}),/SENSITIVE_HEADER/);
+});

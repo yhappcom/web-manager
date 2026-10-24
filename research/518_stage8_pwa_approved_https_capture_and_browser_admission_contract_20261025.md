@@ -1,7 +1,7 @@
 # 518 — Stage 8 PWA Approved HTTPS Capture, Release Verdict Propagation and Browser Admission
 
 Date: **2026-10-25 (Asia/Seoul)**  
-State: **SOURCE + PRIMARY STANDARD + CROSS-TRACK SYNTHESIS + EXECUTABLE SYNTHETIC CAPTURE 30/30; LIVE HTTPS / BROWSER / MANAGED-IPAD / PRODUCT VALIDATION OPEN**  
+State: **SOURCE + PRIMARY STANDARD + CROSS-TRACK SYNTHESIS + EXECUTABLE SYNTHETIC CAPTURE 32/32; LIVE HTTPS / BROWSER / MANAGED-IPAD / PRODUCT VALIDATION OPEN**  
 Canonical starting Web Manager main: ffb9db81fb51e92389914c6c47dd05eafd6c1fc6. LogMate firebase.json blob 9ac0972e26749215c4a718360c66315c6caf3cc8 inspected read-only.  
 Primary owner: **Track E** (trust, release/incident and approved endpoint). A supplies HTTP/TLS/CSP/Worker semantics; C independent falsification and verdict propagation; B auth/offline recovery state truth; D privacy-preserving measurement and publisher claims.
 
@@ -45,9 +45,9 @@ Collector contract: Node.js 22+ (stdlib only); explicit arguments:
 
     node research/handoffs/pwa_https_evidence_collector.js --plan APPROVED.json --allow-origin https://approved.example.com/ --out sanitized-capture.json
 
-It performs sequential **GET** requests against an exact HTTPS origin; no credentials, cookies, query strings, POSTs, automatic redirect following or body retention. DNS lookup rejects private/reserved destinations, certificate verification stays enabled, body hashing is streamed and size-bounded (32 MiB per route), selected raw header instances are retained, and Set-Cookie/Location are excluded from output. Encoded bodies are rejected. The CLI runs 517's semantic gate and writes with exclusive creation (mode 0600) **only after** SERVED_HEADER_CONSISTENT_UNVERIFIED; failures exit nonzero with fixed diagnostic codes. A capture remains **unattested** even if consistent. This collector is a research handoff, not a production CI deployment change.
+It performs sequential **GET** requests against an exact HTTPS origin; no credentials, cookies, query strings, POSTs, automatic redirect following or body retention. DNS lookup rejects private/reserved destinations, certificate verification stays enabled, body hashing is streamed and size-bounded (32 MiB per route), selected raw header instances are retained, and Set-Cookie/Location are excluded from output. Encoded bodies and action-code/token-like values in approved response headers are rejected; unexpected injected error codes are mapped to fixed failure codes to avoid leaking secrets. The CLI runs 517's semantic gate and writes with exclusive creation (mode 0600) **only after** SERVED_HEADER_CONSISTENT_UNVERIFIED; failures exit nonzero with fixed diagnostic codes. A capture remains **unattested** even if consistent. This collector is a research handoff, not a production CI deployment change.
 
-**Local synthetic test evidence:** Node v22.16.0; running the test file with node --test yielded **30/30 PASS** on injected transport responses. Positive fixture checks three-route capture and header redaction; negative cases include origin/URL/route/hash/policy/schema, redirects, oversized responses, invalid headers, compressed body, DNS address classification and failure-message redaction. **No real HTTPS endpoint was contacted and the combined CLI→517 gate has not been executed against a real capture.**
+**Local synthetic test evidence:** Node v22.16.0; running the test file with node --test yielded **32/32 PASS** on injected transport responses. Positive fixture checks three-route capture and header redaction; negative cases include origin/URL/route/hash/policy/schema, redirects, oversized responses, invalid headers, compressed body, DNS address classification and failure-message redaction. **No real HTTPS endpoint was contacted and the combined CLI→517 gate has not been executed against a real capture.**
 
 ### CI admission contract [MINTTAP DECISION / PROPOSED]
 
@@ -64,7 +64,7 @@ It performs sequential **GET** requests against an exact HTTPS origin; no creden
 | --- | --- | --- |
 | **E** | Stage 8 applied bottleneck; provenance/custody/approval and recovery highest risk | Owns approved origin, collector and release verdict semantics; dominates work. |
 | **A** | Browser/HTTP/CSP foundations available; Safari/WebKit/installed Worker reality OPEN | Supplies exact route, raw header and Home Screen vs Safari/MDM distinctions. |
-| **C** | Synthetic 509–517 oracles mature; exact hosted and browser PASS missing | Owns 30 falsifications, negative controls, CI exit propagation and provenance transfer. |
+| **C** | Synthetic 509–517 oracles mature; exact hosted and browser PASS missing | Owns 32 falsifications, negative controls, CI exit propagation and provenance transfer. |
 | **B** | Static Design Studio content saturated before runtime | Consumes W120/CD127 for visible↔accessible↔actual auth/offline/recovery parity. |
 | **D** | Marketing D8/D10 release/ads evidence HOLD | No action-code telemetry, no web ad rollout or verified-security/offline marketing claim. |
 
@@ -75,4 +75,4 @@ Read-only canonical transfers: Design Studio progress/WEB_STATUS.md, research/we
 - **OPEN:** independently approved preview origin, real NORMAL archive and body-hash plan, actual TLS response, unaltered capture custody, verified DNS/HTTP negative cases on real network, deployed CSP and Firebase Auth, Chromium/WebKit enforced-policy negative tests, old/new Worker session, 37-store external restore and managed iPad/MDM.
 - **CHANGE WATCH:** Firebase pre-rewrite header matching and reserved namespaces, Node HTTPS/header handling, W3C CSP and browser enforcement, WebKit Home Screen behavior, storage quota/eviction, CI action version/verdict propagation and Flutter/Firebase module graph.
 - **CONTRADICTION:** a 200 status + expected header strings cannot certify actual script blocking; a syntactically valid capture cannot certify approved deployment; a browser-only PASS cannot certify managed-EFB data durability. Reject all such promotions.
-- **Adjacent-value checkpoint:** the 517 evidence-oracle gap was closed to the **synthetic read-only collector** layer and stress-tested with 30 cases. Next material work requires approved HTTPS host and independently pinned NORMAL bytes; additional ungrounded synthetic variants have lower information gain. **Stage 8 ACTIVE; Production validation OPEN; PWA release HOLD.**
+- **Adjacent-value checkpoint:** the 517 evidence-oracle gap was closed to the **synthetic read-only collector** layer and stress-tested with 32 cases. Next material work requires approved HTTPS host and independently pinned NORMAL bytes; additional ungrounded synthetic variants have lower information gain. **Stage 8 ACTIVE; Production validation OPEN; PWA release HOLD.**
