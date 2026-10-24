@@ -150,11 +150,11 @@ void main() {
     addTearDown(sourceDb.close);
     final source = await SembastLogbookRepository.open(sourceDb);
     await source.createOwnedLedger(_uid);
-    final collisionKey = 'restored:$_cursorName:stream';
-    final oldHold = _historicalHold(_cursorName, 'stream', {
+    final historicalKey = 'existing:r11-history';
+    final oldHold = _historicalHold(_cursorName, 'previous', {
       'generation': 'historical-A',
     });
-    await _holds.record(collisionKey).put(sourceDb, oldHold);
+    await _holds.record(historicalKey).put(sourceDb, oldHold);
     await _cursor.record('stream').put(sourceDb, {'sequence': '7'});
     final encoded = await source.exportWholeLedgerBackup(verifiedOwnerUid: _uid);
 
@@ -174,6 +174,6 @@ void main() {
     expect(await destination.readOwnerAccess(), const LocalOwnerAccess.unbound());
     expect(await _holds.count(destinationDb), 0);
     expect(await _cursor.count(destinationDb), 0);
-    expect(await _holds.record(collisionKey).get(sourceDb), oldHold);
+    expect(await _holds.record(historicalKey).get(sourceDb), oldHold);
   });
 }
