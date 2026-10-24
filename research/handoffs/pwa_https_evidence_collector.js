@@ -6,15 +6,10 @@ const dns = require("node:dns");
 const net = require("node:net");
 const crypto = require("node:crypto");
 const {URL} = require("node:url");
-const {hasPinnedPolicy} = require("./pwa_served_header_evidence_gate.js");
+const {hasPinnedPolicy,SAFE_CAPTURE_HEADERS,admissibleEvidenceHeader} = require("./pwa_served_header_evidence_gate.js");
 const MAX_BYTES = 32 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 128 * 1024 * 1024;
-const SAFE_HEADERS = new Set([
- "content-type", "content-security-policy", "content-security-policy-report-only",
- "referrer-policy", "x-content-type-options", "cache-control", "permissions-policy",
- "cross-origin-opener-policy", "cross-origin-resource-policy", "cross-origin-embedder-policy",
- "strict-transport-security", "vary", "service-worker-allowed", "content-encoding"
-]);
+const SAFE_HEADERS = SAFE_CAPTURE_HEADERS;
 const HASH = /^[0-9a-f]{64}$/;
 function error(code) { const e = new Error(code); e.code = code; return e; }
 function safeRoute(path) {
@@ -94,8 +89,7 @@ function filterHeaders(raw) {
   const k = raw[i], v = raw[i + 1];
   if (typeof k !== "string" || typeof v !== "string") throw error("INVALID_RAW_HEADERS");
   if (SAFE_HEADERS.has(k.toLowerCase())) {
-   if (!/^[a-z0-9-]+$/i.test(k) || /[\r\n]/.test(v)) throw error("INVALID_RAW_HEADERS");
-   if (/(?:oobCode|access_token|id_token)=|Authorization\s|Bearer\s/i.test(v)) throw error("SENSITIVE_HEADER");
+   if (!admissibleEvidenceHeader(k,v)) throw error("SENSITIVE_OR_INVALID_HEADER");
    out.push([k, v]);
   }
  }
