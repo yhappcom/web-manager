@@ -1,6 +1,6 @@
 // Research-only evidence admission oracle. Not a browser probe or product test.
 // A PASS here is bounded to the supplied independently captured trace.
-// Node: node pwa_worker_trace_gate.js --self-test | node pwa_worker_trace_gate.js trace.json
+// Node usage: node pwa_worker_trace_evidence_gate.js --self-test\n// Node trace: node pwa_worker_trace_evidence_gate.js trace.json
 'use strict';
 const HEX40 = /^[a-f0-9]{40}$/;
 const HEX64 = /^[a-f0-9]{64}$/;
