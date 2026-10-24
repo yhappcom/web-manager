@@ -1,7 +1,9 @@
 "use strict";
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const {collect, safeRoute, filterHeaders, publicIP} = require("./pwa_https_evidence_collector");
+const {collect, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, requestOnce} = require("./pwa_https_evidence_collector");
+const https = require("node:https");
+const {EventEmitter} = require("node:events");
 const h = "a".repeat(64), b = "b".repeat(64);
 const plan = () => ({schema:"wm-header-v1",commit:h,artifact:b,origin:"https://preview.example.com/",routes:[
  {path:"/",mime:"html",sha:h,policy:"enforce",headers:{"content-security-policy":["default-src 'self'"]}},
@@ -74,4 +76,37 @@ test("injected exception code cannot leak action token",async()=>{
 });
 test("reject sensitive value in allowed response header",async()=>{
  await assert.rejects(collect(plan(),{...opts,transport:async u=>({...await transport(u),headers:[["Content-Security-Policy","report-uri /?oobCode=SECRET"]]})}),/SENSITIVE_HEADER/);
+});
+
+test("IANA special-purpose IPv4/IPv6 ranges are not accepted as public capture targets",()=>{
+ for (const ip of [
+  "2001:db8::1","2001:0db8::1","3fff::1","3fff:0fff::1",
+  "2001:2::1","2002:0a00:0001::","192.88.99.2","192.0.2.1",
+  "198.18.1.1","198.51.100.2","::ffff:127.0.0.1"
+ ]) assert.equal(publicIP(ip),false,ip);
+ for (const ip of ["8.8.8.8","1.1.1.1","2606:4700:4700::1111","2001:4860:4860::8888"])
+  assert.equal(publicIP(ip),true,ip);
+});
+test("DNS lookup must fail closed for mixed, malformed or empty address sets",()=>{
+ const a={address:"8.8.8.8",family:4}, b={address:"2606:4700:4700::1111",family:6};
+ assert.deepEqual(selectSafeDNSRecords([a,b]),a);
+ for(const records of [
+  [],null,[a,{address:"127.0.0.1",family:4}],
+  [a,{address:"2001:0db8::1",family:6}],
+  [{address:"8.8.8.8",family:6}],
+  [{address:"3fff::1",family:6}]
+ ]) assert.equal(selectSafeDNSRecords(records),null);
+});
+test("wall-clock deadline rejects a slow-drip request even without socket idle timeout",async()=>{
+ const original=https.request;
+ https.request=()=>{
+  const req=new EventEmitter();
+  req.setTimeout=()=>{};
+  req.end=()=>{};
+  req.destroy=e=>{req.emit("error",e);req.emit("close");};
+  return req;
+ };
+ try {
+  await assert.rejects(requestOnce("https://preview.example.com/",{timeoutMs:20}),e=>e.code==="TIMEOUT");
+ } finally { https.request=original; }
 });
