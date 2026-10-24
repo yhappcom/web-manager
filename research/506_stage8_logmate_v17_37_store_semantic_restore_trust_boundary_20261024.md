@@ -254,3 +254,60 @@ For a v17/v2 source backup S and newly initialized destination D, with matching 
 **SOURCE VERIFIED:** exact v17 restore order, unconditional transformed-key `put`, source-container validation boundary, native memory test conventions, v17 37-store format. **SYNTHESIS:** collision can cause loss of older recovery evidence despite transactional atomicity. **MINTTAP DECISION:** fail closed or preserve two evidence instances under a versioned lineage; never silently overwrite. **VALIDATION:** Engineering-ready real-repository Dart proposal with two expected RED cases and two expected GREEN controls, **not compiled/executed**. **OPEN:** actual compiled R03/R04 behavior; selected remediation and its regressions; product-reachable remote Sync progress; Chrome IndexedDB, retained-profile process restart, exact NORMAL artifact/Hosting, physical Safari/Home Screen/managed iPad and authenticated remote Receipt. **DEPENDENCY:** Engineering execution and product decision before release-gate promotion. **CONTRADICTION:** “37 stores present + transaction committed” is not sufficient for semantic recovery-evidence preservation.
 
 **Gate unchanged:** Stage 8 applied Security/Privacy/Trust; E major bottleneck, A/C dependencies; Production validation **OPEN**, PWA release **HOLD**. Adjacent valuable questions were checked: additional generic Worker/manifest studies cannot resolve the identified semantic collision. The next meaningful checkpoint is Engineering's exact-head execution of R03/R04/R05/R11, a reviewed remediation, then real Chrome populated 37-store restore and independent process-restart evidence, followed by separate managed-iPad testing.
+
+## 10. Latest-main Stage 8 reconciliation — L-2C browser, SDK CI, recovery custody (2026-10-24)
+
+### 10.1 SOURCE / provenance refresh
+Read current Web Manager AGENTS, five-track model, roadmap, STATUS, research index, recent commits and §§1–9; checked Design Studio W121, Engineering D006, Marketing 438, and LogMate read-only latest main. **Latest LogMate main is `97a9a6613fdd976a7b90ac50b2a8210a894420b5`**, not prior `5ad78167`. Timeline: F1 `5ad78167` (2026-10-23 16:42 UTC), PR #17 Flutter SDK/CI `58e6464e` (2026-10-24 00:27 UTC), PR #16 L-2C `97a9a661` (00:51 UTC). The old pin remains historically valid for previous studies but not as a current-main claim.
+
+**Independent exact-code comparison:** fetched the entire repository adapter at both SHAs. The contiguous `restoreWholeLedgerBackup` and `_resetRestoredSyncTrust` method region is **byte-identical (4,438 characters)** even though the containing file blob changed (`eee08f93...` to `d7e4efd4...`). The transformed hold write is still an unconditional `put` with key made from `restored:` + source store name + source key. A preexisting hold copied earlier in the transaction can still be overwritten. **R03/R04 remain a source-verified conditional loss candidate on latest main**, not a reproduced runtime bug, user incident, or demonstrated reachable remote-Sync path. F1 still does not establish authenticated remote Receipt acceptance.
+
+### 10.2 SOURCE / CONTRADICTION — browser test expansion
+Latest `test/repository/logbook/sembast_web_reopen_test_browser.dart` now calls `registerL2cMultiPageTests` with `databaseFactoryWeb.openDatabase` and `reopenAtTransitions: true`. The shared fixture creates **18 Flight records**, Custom Text/Duration/Count definitions and values, and checks multi-page projection, totals/checkpoints, deletion and restoration across close/reopen. It iterates both `DeletedSlotBehavior` values: `keepVacancy` and `closeGap`. The earlier Flight browser test also remains.
+
+**Resolved contradiction:** “the current browser suite has only one simple Flight test” is stale for this latest source. However **no current-head executed PASS was obtained here**, and these new tests do not exercise 37-store LBK restore, source hold collisions, real Chrome process termination/relaunch, independent backup, WebKit, or managed iPad. The shared helper accepts optional `cleanup` but the browser caller passes none, while generating unique timestamped DB names. Reused persistent test profiles may accumulate test DBs; investigate controlled teardown and explicit post-delete assertion as a **test-hygiene hypothesis**, not a production leak claim.
+
+### 10.3 SOURCE / VALIDATION — SDK and CI admission
+PR #17 now pins **Flutter 3.47.5 / Dart 3.13.4** and verifies both with a machine-readable guard before dependencies across six workflows. A separately confirmed visual policy defers **exactly four** Welcome image comparisons using tag `visual-acceptance-deferred`; PNGs, assertions and tolerances remain. Six nonvisual Welcome checks, repository/functional tests and platform builds remain required. Exclusion is **not** a Golden PASS.
+
+LogMate `docs/evidence/pr17-sdk-ci-integration-20261024.md` records **815 passed / 1 skipped** in local required tests at integration evidence SHA `8393067e...`, and historical Chrome persistence PASS (run `39995989305`) and Core PASS (run `39995985656`). These results are **SHA-scoped**, not automatic evidence for `97a9a661` with the new L-2C suite. The connector's PR-filtered workflow lookup returned no `97a9a661` runs; **this cannot prove that no runs exist**.
+
+**Concrete CI coverage gap:** Core workflow is `workflow_dispatch` only. Browser persistence workflow auto-push targets `feature/data001-domain`, not `main`, and its path filters omit shared `test/repository/logbook/l2c_multi_page_lifecycle_test.dart` and broad `lib/application/**`. Fast validation auto-push also targets `feature/data001-domain`; PWA artifact auto-push excludes `main`. PWA job builds NORMAL locally but uploads only development Acceptance `build/web`, not the NORMAL `build/web-normal` archive. Thus a main merge does **not** itself prove exact-main browser execution or release custody. Engineering owns trigger/cost decisions; do not silently edit workflows from Web Manager.
+
+### 10.4 MINTTAP DECISION — conservative collision patch review (NOT APPLIED)
+A minimal candidate is an **in-transaction existence guard immediately before the transformed hold write**. Illustrative review pseudocode, not product code:
+
+```dart
+final key = 'restored:' + source.name + ':' + row.key.toString();
+final target = _syncHoldStore.record(key);
+if (await target.exists(transaction)) {
+  throw const FormatException('LBK restore recovery evidence key collision.');
+}
+await target.put(transaction, {
+  'classification': 'recoveryRequired',
+  'sourceStore': source.name,
+  'sourceKey': row.key,
+  'sourceEvidence': Map<String, Object?>.from(row.value),
+});
+```
+
+The guard sees copied historical holds and any earlier transformed writes **inside the same transaction**; it must abort the entire staging restore on collision without modifying the source backup or destination prestate. Even equal-value collisions are rejected until lineage equivalence has an explicit contract. Engineering must review error typing, public UX, exception propagation, transaction semantics and repeated-recovery policy. A collision-safe versioned lineage alternative is admissible only if it preserves **both** evidence instances and provenance through repeated backup/re-export, with bounded retention; a random suffix or timestamp alone is not an authority model.
+
+**Required falsification matrix (not executed):** R03 cursor collision, R04 applied-identity collision (expected rejection, untouched staging/source); R05 noncollision (all three holds retained); R11 injected failure after writes (rollback, not preflight failure); R06 multi-generation recovery; R07/R08 copied binding/receipt/head cannot assert remote ACK; wrong owner/tampered digest/duplicate source key/nonempty destination negatives; v16 format-v1 import without invented v17 Sync progress; populated 37-store Chrome export/restore; retained-profile **process** restart; NORMAL archive/download/served bytes; separate Safari tab/Home Screen/managed-iPad/MDM/offline/eviction recovery. A new test proposal in `handoffs/recovery_hold_collision_test_PROPOSAL.dart` is still **NOT COMPILED / NOT EXECUTED**.
+
+**Standards and CHANGE WATCH:** IndexedDB 3.0 specifies `strict`, `relaxed`, `default` transaction durability **hints**, not an independent backup or guaranteed power-loss survival (https://www.w3.org/TR/IndexedDB/ ; https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction/durability ; checked 2026-10-24). WebKit documents origin quota and origin-wide eviction separately (https://webkit.org/blog/14403/updates-to-storage-policy/ ; checked 2026-10-24). Sembast transaction atomicity, Chrome connection reopen, process restart, browser storage persistence, independent LBK custody and server ACK are **different evidence claims**.
+
+### 10.5 Five-track dependency and expert judgment
+| Track | Evidence maturity / relative pressure | This bundle's owner or transfer |
+| --- | --- | --- |
+| **E (highest)** | Latest-head static restore contract SOURCE VERIFIED; patch/runtime OPEN | Recovery-evidence preservation, fail-closed choice, NORMAL release and no-destructive-repair. |
+| **A (prerequisite)** | New Chrome IndexedDB source coverage; real process/Worker/WebKit OPEN | Connection vs process vs Worker generation vs logical Sembast capability boundaries. |
+| **C (high)** | Historical SHA-bound browser PASS, two new L-2C source cases; current-head run OPEN | Exact-source executable R03/R04/R05/R11, populated B1, provenance, cleanup, device matrix. |
+| **B (consumer)** | Recovery-state architecture known; human/AT runtime OPEN | “restore rejected, evidence preserved, remote unverified” not “Sync complete”; Design Studio W121 owns visuals. |
+| **D (consumer)** | Privacy-aware measurement principles; deployed evidence OPEN | Sanitized recovery outcome counts and claim discipline; Marketing 438 owns ad strategy, PWA ad-free conditional first release. |
+
+**TRANSFER VALIDATION:** Engineering D006's cursor/apply atomicity does not prove semantic preservation across transformed-key namespaces; the two controls are complementary. Design Studio W121 requires exact-runtime/AT/human validation before promotion. Marketing 438 prohibits inferring Sync success from an ad or copied local evidence.
+
+**VALIDATION verdict:** SOURCE VERIFIED for exact latest-main code comparison, changed browser-test inventory, SDK/CI trigger configuration and conditional collision. Historical PR17 CI evidence is not re-executed current-main evidence. **No new Flutter, Chrome, NORMAL artifact, Safari, managed-iPad or server Sync execution.** Stage 8 applied security/trust remains active; **Track E bottleneck, Production validation OPEN, PWA release HOLD**.
+
+**Adjacent-question check:** Resolved in this same bundle whether PR #16 fixed the collision (no), whether the Chrome suite stayed single-case (no), whether PR #17 green certifies new main (no), and whether an atomic transaction alone preserves historical evidence (no). The next materially different boundary is Engineering's exact-current-head execution and reviewed fix, not another synthetic micro-validator.
