@@ -41,30 +41,39 @@ function validatePlan(plan, allowOrigin) {
  }
  return u;
 }
+// Conservative special-purpose deny rules, checked on parsed IP bytes (not textual IPv6 spelling).
+// Source: IANA IPv4/IPv6 special-purpose registries; review as CHANGE WATCH.
+const nonpublic = new net.BlockList();
+for (const [prefix, bits] of [
+ ["0.0.0.0",8], ["10.0.0.0",8], ["100.64.0.0",10], ["127.0.0.0",8],
+ ["169.254.0.0",16], ["172.16.0.0",12], ["192.0.0.0",24],
+ ["192.0.2.0",24], ["192.88.99.0",24], ["192.168.0.0",16],
+ ["198.18.0.0",15], ["198.51.100.0",24], ["203.0.113.0",24],
+ ["224.0.0.0",4], ["240.0.0.0",4]
+]) nonpublic.addSubnet(prefix, bits, "ipv4");
+for (const [prefix, bits] of [
+ ["2001::",23], ["2001:db8::",32], ["2002::",16], ["3fff::",20]
+]) nonpublic.addSubnet(prefix, bits, "ipv6");
+const globalV6 = new net.BlockList();
+globalV6.addSubnet("2000::",3,"ipv6");
 function publicIP(ip) {
- if (net.isIP(ip) === 4) {
-  const a = ip.split(".").map(Number);
-  if ([0, 10, 127].includes(a[0]) || a[0] >= 224 ||
-      (a[0] === 100 && a[1] >= 64 && a[1] <= 127) ||
-      (a[0] === 169 && a[1] === 254) ||
-      (a[0] === 172 && a[1] >= 16 && a[1] <= 31) ||
-      (a[0] === 192 && (a[1] === 168 || a[1] === 0 || (a[1] === 0 && a[2] === 2))) ||
-      (a[0] === 198 && (a[1] === 18 || a[1] === 19 || (a[1] === 51 && a[2] === 100))) ||
-      (a[0] === 203 && a[1] === 0 && a[2] === 113)) return false;
-  return true;
- }
- if (net.isIP(ip) === 6) {
-  const s = ip.toLowerCase();
-  return /^[23][0-9a-f]{0,3}:/.test(s) && !s.startsWith("2001:db8:") && !s.includes(".");
- }
+ const family = net.isIP(ip);
+ if (family === 4) return !nonpublic.check(ip,"ipv4");
+ if (family === 6) return globalV6.check(ip,"ipv6") && !nonpublic.check(ip,"ipv6");
  return false;
+}
+function selectSafeDNSRecords(records) {
+ if (!Array.isArray(records) || !records.length ||
+     !records.every(x => x && (x.family === 4 || x.family === 6) &&
+       net.isIP(x.address) === x.family && publicIP(x.address))) return null;
+ return records[0];
 }
 function safeLookup(hostname, options, callback) {
  dns.lookup(hostname, {all: true}, (err, records) => {
   if (err) return callback(error("DNS_FAILURE"));
-  const good = (records || []).find(x => publicIP(x.address));
-  if (!good) return callback(error("DNS_NONPUBLIC"));
-  callback(null, good.address, good.family);
+  const selected = selectSafeDNSRecords(records);
+  if (!selected) return callback(error("DNS_NONPUBLIC"));
+  callback(null, selected.address, selected.family);
  });
 }
 function filterHeaders(raw) {
@@ -98,8 +107,13 @@ function requestOnce(url, {maxBytes = MAX_BYTES, timeoutMs = 15000} = {}) {
    res.on("end", () => { if (!settled) resolve({status: res.statusCode, headers, sha: h.digest("hex"), bytes}); });
    res.on("error", e => reject(e.code === "BODY_LIMIT" ? e : error("RESPONSE_FAILURE")));
   });
+  // Socket-idle timeout alone cannot bound slow-drip responses or delayed DNS.
+  // Enforce an independent wall-clock deadline and clear it on completion.
+  const deadline = setTimeout(() => req.destroy(error("TIMEOUT")), timeoutMs);
   req.setTimeout(timeoutMs, () => req.destroy(error("TIMEOUT")));
-  req.on("error", e => reject(["BODY_LIMIT", "TIMEOUT", "DNS_NONPUBLIC", "DNS_FAILURE"].includes(e.code) ? e : error("REQUEST_FAILURE")));
+  req.on("close", () => clearTimeout(deadline));
+  req.on("error", e => { clearTimeout(deadline);
+   reject(["BODY_LIMIT", "TIMEOUT", "DNS_NONPUBLIC", "DNS_FAILURE"].includes(e.code) ? e : error("REQUEST_FAILURE")); });
   req.end();
  });
 }
@@ -135,7 +149,7 @@ async function cli(argv) {
  fs.writeFileSync(argv[5], JSON.stringify(run,null,2) + "\n", {flag:"wx",mode:0o600});
  process.stdout.write("CAPTURE_WRITTEN_CONSISTENT_UNVERIFIED\n");
 }
-module.exports = {collect, validatePlan, safeRoute, filterHeaders, publicIP, requestOnce, MAX_BYTES};
+module.exports = {collect, validatePlan, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, requestOnce, MAX_BYTES};
 if (require.main === module) cli(process.argv.slice(2)).catch(e => {
  console.error("CAPTURE_FAILED:" + (e.code || "INVALID_INPUT")); process.exitCode = 2;
 });
