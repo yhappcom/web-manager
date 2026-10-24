@@ -135,7 +135,7 @@ def main(argv=None):
         if args.root.is_symlink():
             raise GateError('artifact root is a symlink')
         root = args.root.resolve(strict=True)
-        receipt = args.receipt.absolute()
+        receipt = args.receipt.resolve()
         if receipt == root or root in receipt.parents:
             raise GateError('receipt must be outside artifact root')
         current = snapshot(root, args.kind, args.source_sha)
