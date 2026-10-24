@@ -15,7 +15,7 @@ function assessRuntime(t) {
       !HEX64.test(i.release_tree_sha256 || '') || !HEX64.test(i.index_sha256 || '') ||
       !HEX64.test(i.asset_sha256 || '') || typeof i.browser_version !== 'string' ||
       !i.browser_version.trim() || !['loopback','https'].includes(i.origin_class) ||
-      i.disposable_profile !== true)
+      i.disposable_profile !== true || i.browser_family !== 'Chromium')
     return fail('INCOMPLETE_EVIDENCE','unbound source/worker/receipt/browser/profile identity');
   for (const name of names) {
     const p = t.phases[name];
@@ -32,7 +32,7 @@ function assessRuntime(t) {
     const controlled = name !== 'initial_navigation';
     if (p.process_epoch !== epoch || p.offline_enforced !== offline || p.controlled !== controlled)
       return fail('INCOMPLETE_EVIDENCE','phase context not proven: ' + name);
-    if (controlled && p.controller_worker_sha256 !== i.worker_sha256)
+    if (controlled && (p.controller_worker_sha256 !== i.worker_sha256 || p.intercept_proven !== true))
       return fail('WORKER_IDENTITY_MISMATCH','controller identity differs or missing: ' + name);
   }
   if (t.phases.initial_navigation.status !== 200)
@@ -59,7 +59,7 @@ function assessRuntime(t) {
 function assessRace(t) {
   if (!object(t) || !object(t.identity) || !object(t.final_catalogue) ||
       !Array.isArray(t.events) || t.barrier_observed !== true || t.old_client_live !== true ||
-      t.candidate_verified_independently !== true ||
+      t.candidate_verified_independently !== true || t.final_catalogue_readback_independent !== true ||
       !HEX64.test(t.identity.old_worker_sha256 || '') ||
       !HEX64.test(t.identity.new_worker_sha256 || '') ||
       t.identity.old_worker_sha256 === t.identity.new_worker_sha256 ||
@@ -90,20 +90,20 @@ function selfTest() {
   const runtime = () => {
     const identity = {source_sha:'f'.repeat(40),worker_sha256:old,release_tree_sha256:tree,
       index_sha256:idx,asset_sha256:asset,browser_version:'Chromium test',
-      origin_class:'loopback',disposable_profile:true};
+      origin_class:'loopback',disposable_profile:true,browser_family:'Chromium'};
     const phases = {};
     for (const name of names) {
       const isAsset=name.endsWith('_asset'), isReopen=name.startsWith('reopen_');
       const isOffline=name.startsWith('offline_') || isReopen;
       phases[name]={status:200,controlled:name!=='initial_navigation',offline_enforced:isOffline,
         process_epoch:isReopen?2:1,content_type:isAsset?'text/javascript':'text/html',
-        response_sha256:isAsset?asset:idx,controller_worker_sha256:old};
+        response_sha256:isAsset?asset:idx,controller_worker_sha256:old,intercept_proven:true};
     }
     return {identity,phases,offline_negative_control_failed:true,reopen_negative_control_failed:true};
   };
   const race = () => ({identity:{old_worker_sha256:old,new_worker_sha256:next,
     old_build_id:'v1',new_build_id:'v2',old_client_id:'client-1'},
-    barrier_observed:true,old_client_live:true,candidate_verified_independently:true,
+    barrier_observed:true,old_client_live:true,candidate_verified_independently:true,final_catalogue_readback_independent:true,
     events:[{actor:'old',op:'read',revision:1},{actor:'new',op:'read',revision:1},
       {actor:'old',op:'write'},{actor:'new',op:'write'}],
     final_catalogue:{clientBuilds:{'client-1':'v1'},candidateBuildId:'v2',versions:{v2:{verified:true}}}});
@@ -120,7 +120,9 @@ function selfTest() {
     ['process not restarted','INCOMPLETE_EVIDENCE',(()=>{const t=runtime();t.phases.reopen_asset.process_epoch=1;return t})()],
     ['offline not enforced','INCOMPLETE_EVIDENCE',(()=>{const t=runtime();t.phases.offline_asset.offline_enforced=false;return t})()],
     ['boolean status rejected','INCOMPLETE_EVIDENCE',(()=>{const t=runtime();t.phases.offline_asset.status=true;return t})()],
-    ['no receipt','INCOMPLETE_EVIDENCE',(()=>{const t=runtime();t.identity.release_tree_sha256='';return t})()]
+    ['no receipt','INCOMPLETE_EVIDENCE',(()=>{const t=runtime();t.identity.release_tree_sha256='';return t})()],
+    ['wrong browser family','INCOMPLETE_EVIDENCE',(()=>{const t=runtime();t.identity.browser_family='WebKit';return t})()],
+    ['interception not proven','WORKER_IDENTITY_MISMATCH',(()=>{const t=runtime();t.phases.offline_asset.intercept_proven=false;return t})()]
   ];
   let count=0;
   for(const [label,want,input] of tests){const got=assessRuntime(input).verdict;if(got!==want)throw Error(label+': '+got+' expected '+want);count++}
@@ -132,7 +134,8 @@ function selfTest() {
     ['read after write','INCOMPLETE_INTERLEAVING',(()=>{const t=race();t.events=[t.events[0],t.events[2],t.events[1],t.events[3]];return t})()],
     ['different revision','INCOMPLETE_INTERLEAVING',(()=>{const t=race();t.events[1].revision=2;return t})()],
     ['same worker generation','INCOMPLETE_INTERLEAVING',(()=>{const t=race();t.identity.new_worker_sha256=old;return t})()],
-    ['client not alive','INCOMPLETE_INTERLEAVING',(()=>{const t=race();t.old_client_live=false;return t})()]
+    ['client not alive','INCOMPLETE_INTERLEAVING',(()=>{const t=race();t.old_client_live=false;return t})()],
+    ['final readback not independent','INCOMPLETE_INTERLEAVING',(()=>{const t=race();t.final_catalogue_readback_independent=false;return t})()]
   ];
   for(const [label,want,input] of races){const got=assessRace(input).verdict;if(got!==want)throw Error(label+': '+got+' expected '+want);count++}
   return count;
@@ -140,7 +143,7 @@ function selfTest() {
 if (typeof module !== 'undefined') module.exports = {assessRuntime,assessRace,selfTest};
 if (typeof require !== 'undefined' && require.main === module) {
   const fs=require('node:fs');
-  if(process.argv[2]==='--self-test'){console.log(selfTest()+'/21 synthetic oracle cases PASS; no browser or product execution');}
+  if(process.argv[2]==='--self-test'){console.log(selfTest()+'/24 synthetic oracle cases PASS; no browser or product execution');}
   else {
     const t=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
     const out=t.kind==='race'?assessRace(t):t.kind==='runtime'?assessRuntime(t):fail('INCOMPLETE_EVIDENCE','unknown kind');
