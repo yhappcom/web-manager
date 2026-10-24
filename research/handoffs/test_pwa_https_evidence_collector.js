@@ -1,7 +1,7 @@
 "use strict";
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const {collect, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, requestOnce} = require("./pwa_https_evidence_collector");
+const {collect, safeRoute, filterHeaders, publicIP, selectSafeDNSRecords, safeLookup, requestOnce} = require("./pwa_https_evidence_collector");
 const https = require("node:https");
 const {EventEmitter} = require("node:events");
 const h = "a".repeat(64), b = "b".repeat(64);
@@ -121,4 +121,27 @@ test("aggregate route inventory is capped even when each response is under its o
  p.routes.pop();
  const four=await collect(p,{...opts,transport:big});
  assert.equal(four.responses.length,4);
+});
+
+test("Node 22 autoSelectFamily lookup all=true returns address records, scalar mode stays compatible",async()=>{
+ const a={address:"8.8.8.8",family:4}, b={address:"2606:4700:4700::1111",family:6};
+ const check=(records,options,lookupError=null)=>new Promise(resolve=>{
+  safeLookup("preview.example.com",options,(err,...values)=>resolve({error:err?.code||null,values}),
+   (_hostname,resolverOptions,callback)=>{
+    assert.deepEqual(resolverOptions,{all:true});
+    callback(lookupError,records);
+   });
+ });
+ const multi=await check([a,b],{all:true,hints:32});
+ assert.deepEqual(multi,{error:null,values:[[a,b]]},"all=true must pass one array, not a scalar IP");
+ const single=await check([a,b],{all:false});
+ assert.deepEqual(single,{error:null,values:[a.address,4]});
+ const ipv6=await check([a,b],{all:true,family:6});
+ assert.deepEqual(ipv6,{error:null,values:[[b]]});
+ const missing=await check([a],{all:true,family:6});
+ assert.equal(missing.error,"DNS_FAMILY_UNAVAILABLE");
+ const mixed=await check([a,{address:"127.0.0.1",family:4}],{all:true});
+ assert.equal(mixed.error,"DNS_NONPUBLIC","mixed answers must fail before connection");
+ const failed=await check(null,{all:true},new Error("resolver unavailable"));
+ assert.equal(failed.error,"DNS_FAILURE");
 });
