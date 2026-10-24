@@ -6,7 +6,7 @@ const dns = require("node:dns");
 const net = require("node:net");
 const crypto = require("node:crypto");
 const {URL} = require("node:url");
-const {hasPinnedPolicy,SAFE_CAPTURE_HEADERS,admissibleEvidenceHeader} = require("./pwa_served_header_evidence_gate.js");
+const {hasPinnedPolicy,SAFE_CAPTURE_HEADERS,admissibleEvidenceHeader,sensitiveEvidenceValue} = require("./pwa_served_header_evidence_gate.js");
 const MAX_BYTES = 32 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 128 * 1024 * 1024;
 const SAFE_HEADERS = SAFE_CAPTURE_HEADERS;
@@ -89,7 +89,7 @@ function filterHeaders(raw) {
   const k = raw[i], v = raw[i + 1];
   if (typeof k !== "string" || typeof v !== "string") throw error("INVALID_RAW_HEADERS");
   if (SAFE_HEADERS.has(k.toLowerCase())) {
-   if (!admissibleEvidenceHeader(k,v)) throw error("SENSITIVE_OR_INVALID_HEADER");
+   if (!admissibleEvidenceHeader(k,v)) throw error(sensitiveEvidenceValue(v) ? "SENSITIVE_HEADER" : "INVALID_RAW_HEADERS");
    out.push([k, v]);
   }
  }
