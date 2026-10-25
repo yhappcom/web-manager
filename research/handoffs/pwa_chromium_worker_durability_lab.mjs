@@ -16,7 +16,7 @@ const ledger=async(write)=>{const d=await db();return await new Promise((resolve
 try {
  if(!('serviceWorker' in navigator))throw Error('NO_SERVICE_WORKER');
  let reg=await navigator.serviceWorker.getRegistration('/app/');
- if(phase==='install') {reg=await navigator.serviceWorker.register('/app/sw.js',{scope:'/app/',updateViaCache:'none'});await navigator.serviceWorker.ready;}
+ if(phase==='install') {reg=await navigator.serviceWorker.register('/app/sw.js',{scope:'/app/',updateViaCache:'none'});await navigator.serviceWorker.ready;const activationStart=Date.now();while(reg.active?.state!=='activated'&&Date.now()-activationStart<6000)await new Promise(r=>setTimeout(r,50));if(reg.active?.state!=='activated')throw Error('SW_ACTIVATION_TIMEOUT');}
  if(!reg)throw Error('NO_REGISTRATION');
  if(phase==='update'){
    await reg.update();
