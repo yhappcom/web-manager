@@ -31,7 +31,7 @@ async function runCase(name, port, withShadow, withPolicy=false) {
         ignore: ['firebase.json','**/.*','**/node_modules/**'],
         headers: [
           {source:'**',headers:[{key:'Cache-Control',value:'no-cache, no-store, must-revalidate'}]},
-          ...(withPolicy ? ['/auth','/auth/','/auth/action','/auth/action/','/auth/action/index.html'].map(source=>({
+          ...(withPolicy ? (withPolicy==='destination-only' ? ['/auth/action/index.html'] : ['/auth','/auth/','/auth/action','/auth/action/','/auth/action/index.html']).map(source=>({
             source,headers:[{key:'Referrer-Policy',value:'no-referrer'}],
           })) : []),
         ],
@@ -110,6 +110,7 @@ const baseline=await runCase('baseline',5511,false);
 const shadow=await runCase('auth-index-shadow',5512,true);
 const protectedBaseline=await runCase('auth-referrer-policy',5513,false,true);
 const protectedShadow=await runCase('auth-referrer-policy-shadow',5514,true,true);
+const destinationOnly=await runCase('destination-only-referrer-policy',5515,false,'destination-only');
 // Assertions are intentionally explicit: if Hosting serves different content
 // or redirects unexpectedly, the experiment FAILS rather than calling it PASS.
 assert.equal(baseline['/'].marker,'ROOT','root control must remain distinct');
@@ -144,6 +145,11 @@ for (const alias of ['/auth','/auth/','/auth/action','/auth/action/','/auth/acti
 assert.equal(protectedBaseline['/'].finalReferrerPolicy,null,'root must not acquire auth-only policy');
 assert.equal(protectedShadow['/auth/'].marker,'SHADOW','policy must not mask static shadow');
 assert.equal(protectedShadow['/auth/'].finalReferrerPolicy,'no-referrer','static shadow still gets matched policy');
+assert.equal(destinationOnly['/auth/action/index.html'].finalReferrerPolicy,'no-referrer','destination file policy applies on direct request');
+for(const alias of ['/auth','/auth/','/auth/action','/auth/action/']){
+  assert.equal(destinationOnly[alias].finalReferrerPolicy,null,alias+' destination-only policy must not be mistaken for original URL match');
+}
+
 for(const alias of ['/auth','/auth/action']){
   assert.equal(protectedBaseline.queryProbe[alias].finalPreservedQuery,true,'policy does not remove initial query: '+alias);
   assert.equal(protectedBaseline.queryProbe[alias].finalReferrerPolicy,'no-referrer','query probe final policy: '+alias);
