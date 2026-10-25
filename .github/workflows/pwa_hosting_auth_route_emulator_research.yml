@@ -1,0 +1,42 @@
+name: PWA Firebase Hosting auth-route emulator research (synthetic only)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pwa_hosting_auth_route_emulator_research.yml
+      - research/handoffs/test_firebase_hosting_auth_route_emulator.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  auth-route-precedence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact triggering revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install pinned Node runtime
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22.16.0
+          package-manager-cache: false
+      - name: Install pinned Firebase CLI in disposable runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/firebase-cli" --no-audit --no-fund --no-save firebase-tools@15.34.1
+          "$RUNNER_TEMP/firebase-cli/node_modules/.bin/firebase" --version
+      - name: Verify auth aliases and static precedence on synthetic local Hosting emulator
+        shell: bash
+        env:
+          FIREBASE_CLI_PIN: "15.34.1"
+        run: |
+          set -euo pipefail
+          node --check research/handoffs/test_firebase_hosting_auth_route_emulator.mjs
+          node research/handoffs/test_firebase_hosting_auth_route_emulator.mjs "$RUNNER_TEMP/firebase-cli/node_modules/.bin/firebase"
