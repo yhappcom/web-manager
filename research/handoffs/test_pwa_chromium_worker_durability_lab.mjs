@@ -68,3 +68,35 @@ async function transactionProbe(abortFirst=false){
 }
 test('Worker ledger waits for IDB write and read transaction completion',async()=>{await transactionProbe(false);});
 test('aborted IDB transaction cannot emit a successful Worker durability result',async()=>{await transactionProbe(true);});
+
+
+test('install waits for activated state instead of admitting ready-but-activating Worker',async()=>{
+ const {server}=makeWorkerServer();
+ await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
+ let source;
+ try{source=await (await fetch('http://127.0.0.1:'+server.address().port+'/app/client.js')).text();}
+ finally{await new Promise(ok=>server.close(ok));}
+ const registration={active:{state:'activating'},waiting:null};
+ const timers=[];let output='PENDING';
+ const context={
+  URLSearchParams,Date,Promise,Error,
+  location:{search:'?phase=install'},
+  navigator:{serviceWorker:{
+   controller:null,getRegistration:async()=>null,register:async()=>registration,ready:Promise.resolve(registration)
+  }},
+  setTimeout:callback=>{timers.push(callback);return timers.length;},
+  caches:{keys:async()=>['synthetic-app-v1']},
+  document:{getElementById:()=>({set textContent(value){output=value;}})}
+ };
+ vm.runInNewContext(source,context);
+ const tick=()=>new Promise(ok=>setImmediate(ok));
+ await tick();
+ assert.equal(output,'PENDING','ready with activating Worker is not yet activated');
+ assert.ok(timers.length>0,'activation wait should be pending');
+ registration.active.state='activated';timers.shift()();
+ await tick();
+ const parsed=JSON.parse(output);
+ assert.equal(parsed.active,true);
+ assert.equal(parsed.controller,false);
+ assert.equal(parsed.registered,true);
+});
