@@ -7,6 +7,11 @@ import { fileURLToPath } from 'node:url';
 
 const REQUIRED = ['index.html', 'flutter_bootstrap.js', 'manifest.json', 'logmate_service_worker.js', 'logmate-offline-manifest.json', 'auth/action/index.html', 'main.dart.js', 'canvaskit/canvaskit.js', 'canvaskit/canvaskit.wasm'];
 const SAFE_IGNORES = new Set(['firebase.json', '**/.*', '**/node_modules/**']);
+const REQUIRED_AUTH_REWRITES = new Map([
+  ['/auth', '/auth/action/index.html'],
+  ['/auth/', '/auth/action/index.html'],
+  ['/auth/action', '/auth/action/index.html'],
+]);
 const sha256 = b => createHash('sha256').update(b).digest('hex');
 const ACCEPTANCE_MARKER = 'LOGMATE_PERSISTENCE_ACCEPTANCE_FLIGHT_V1';
 const digestPacket = p => sha256(Buffer.from(JSON.stringify({schema:p.schema,releaseMode:p.releaseMode,sourceSha:p.sourceSha,files:p.files})));
@@ -28,6 +33,8 @@ export async function inventory(root) {
       if (entry.startsWith('.')) fail(`hidden file/directory requires explicit review: ${prefix}${entry}`);
       if (entry === 'node_modules') fail('node_modules would be excluded from Hosting');
       const rel = prefix + entry;
+      // Firebase Hosting ignores this root file even when raw trees match.
+      if (rel === 'firebase.json') fail('Hosting-ignored root firebase.json cannot be treated as a deployed asset');
       const folded = rel.toLowerCase();
       if (seen.has(folded)) fail(`case-fold collision: ${rel}`);
       seen.add(folded);
@@ -58,6 +65,20 @@ function assertInventory(rows) {
     seen.add(folded);
   }
   for (const required of REQUIRED) if (!seen.has(required.toLowerCase())) fail(`required resource missing: ${required}`);
+}
+
+function assertHostingRoutes(hosting) {
+  // Product-specific routing guard, not an emulator or HTTPS response oracle.
+  if (hosting.redirects !== undefined && (!Array.isArray(hosting.redirects) || hosting.redirects.length !== 0)) fail('unreviewed Hosting redirect');
+  if (hosting.cleanUrls !== undefined || hosting.trailingSlash !== undefined) fail('unreviewed Hosting URL normalization');
+  if (!Array.isArray(hosting.rewrites) || hosting.rewrites.length !== REQUIRED_AUTH_REWRITES.size) fail('unreviewed Hosting rewrite set');
+  const seen = new Set();
+  for (const rule of hosting.rewrites) {
+    if (!rule || Object.keys(rule).sort().join(',') !== 'destination,source' ||
+        typeof rule.source !== 'string' || !REQUIRED_AUTH_REWRITES.has(rule.source) ||
+        REQUIRED_AUTH_REWRITES.get(rule.source) !== rule.destination || seen.has(rule.source)) fail('unreviewed Hosting rewrite');
+    seen.add(rule.source);
+  }
 }
 
 function compare(expected, actual, label) {
@@ -91,6 +112,7 @@ export async function verify(packet, downloadedRoot, stagedRoot, firebaseConfigP
   if (!Array.isArray(config.hosting.ignore) || config.hosting.ignore.some(p => !SAFE_IGNORES.has(p))) fail('unreviewed Hosting ignore rule');
   const actualPublic = path.resolve(path.dirname(configPath), config.hosting.public);
   if (actualPublic !== path.resolve(stagedRoot)) fail(`Hosting public directory mismatch: ${config.hosting.public}`);
+  assertHostingRoutes(config.hosting);
   compare(packet.files, await inventory(downloadedRoot), 'download');
   compare(packet.files, await inventory(stagedRoot), 'hosting');
   await assertNormal(downloadedRoot);
