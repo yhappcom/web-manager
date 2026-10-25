@@ -76,7 +76,7 @@ function findChrome() {
   }
   return null;
 }
-async function visit(chrome,url,profile) {
+export async function visit(chrome,url,profile) {
   return new Promise(resolve => {
     const args=['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
       '--no-first-run','--no-default-browser-check','--disable-extensions',
@@ -90,7 +90,9 @@ async function visit(chrome,url,profile) {
     p.stdout.on('data',b=>{output+=b.toString();if(output.length>200000){kill();finish('OUTPUT_LIMIT');}});
     p.stderr.on('data',()=>{});
     p.on('error',()=>finish('CHROME_START_ERROR'));
-    p.on('exit',code=>finish(code===0?'COMPLETED':'CHROME_NONZERO'));
+    // 'exit' can precede the final stdout bytes; 'close' waits for stdio closure.
+    // The 12s wall-clock watchdog still bounds descendants that retain a pipe.
+    p.on('close',code=>finish(code===0?'COMPLETED':'CHROME_NONZERO'));
   });
 }
 export async function runLab() {
