@@ -3,9 +3,9 @@ import http from 'node:http';
 import {mkdtemp,rm} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
-import {visit} from './pwa_chromium_csp_runtime_lab.mjs';
+import {spawn,execFileSync} from 'node:child_process';
+import {readFile} from 'node:fs/promises';
 const phases=['install','controlled','update','post-update','auth','offline'];
 const script=String.raw`(async()=>{
 const phase=new URLSearchParams(location.search).get('phase')||'unknown';
@@ -73,6 +73,107 @@ export function classifyWorkerDom(output,phase,processReason){
  return {verdict:'PASS',reason:'WORKER_CONTROL_VERSION_AND_DATA_ORACLES'};
 }
 function findChrome(){for(const p of [process.env.CHROME_PATH,'/usr/bin/google-chrome','/usr/bin/chromium'].filter(Boolean))try{return {path:p,version:execFileSync(p,['--version'],{encoding:'utf8',timeout:3000}).trim()};}catch{}return null;}
+
+// A real-time CDP poll is required: --dump-dom with virtual-time budget can
+// snapshot PENDING before asynchronous Service Worker install/ready completes.
+// Chrome's DevToolsActivePort and /json/list are loopback-only, disposable.
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function cdpSocket(url){
+ const ws=new WebSocket(url);
+ await new Promise((resolve,reject)=>{
+  const timer=setTimeout(()=>reject(Error('CDP_SOCKET_TIMEOUT')),4000);
+  ws.addEventListener('open',()=>{clearTimeout(timer);resolve();},{once:true});
+  ws.addEventListener('error',()=>{clearTimeout(timer);reject(Error('CDP_SOCKET_ERROR'));},{once:true});
+ });
+ let id=0;const pending=new Map();
+ ws.addEventListener('message',event=>{
+  let msg;try{msg=JSON.parse(event.data)}catch{return}
+  const p=pending.get(msg.id);if(!p)return;
+  pending.delete(msg.id);clearTimeout(p.timer);
+  msg.error?p.reject(Error('CDP_COMMAND_ERROR')):p.resolve(msg.result||{});
+ });
+ ws.addEventListener('close',()=>{
+  for(const p of pending.values()){clearTimeout(p.timer);p.reject(Error('CDP_DISCONNECTED'))}
+  pending.clear();
+ });
+ return {
+  send:(method,params={},timeout=4000)=>new Promise((resolve,reject)=>{
+   if(ws.readyState!==WebSocket.OPEN)return reject(Error('CDP_DISCONNECTED'));
+   const key=++id,timer=setTimeout(()=>{pending.delete(key);reject(Error('CDP_COMMAND_TIMEOUT'))},timeout);
+   pending.set(key,{resolve,reject,timer});
+   ws.send(JSON.stringify({id:key,method,params}));
+  }),
+  close:()=>{if(ws.readyState===WebSocket.OPEN)ws.close()}
+ };
+}
+export async function visitWorkerCdp(chrome,url,profile,phase,{probeTimeoutMs=20000}={}){
+ // Profile is reused across browser processes; remove stale debugging-port
+ // metadata before each fresh process without touching origin data.
+ await rm(path.join(profile,'DevToolsActivePort'),{force:true});
+ const args=['--headless=new','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
+  '--no-first-run','--no-default-browser-check','--disable-extensions',
+  '--disable-background-networking','--remote-debugging-port=0',
+  '--user-data-dir='+profile,'about:blank'];
+ const child=spawn(chrome,args,{detached:process.platform!=='win32',stdio:['ignore','ignore','pipe']});
+ let exited=false,exitCode=null,stderr='';
+ child.stderr.on('data',data=>{stderr=(stderr+data.toString()).slice(-600)});
+ child.on('close',code=>{exited=true;exitCode=code});
+ let page=null,browser=null,output='',reason='CDP_UNKNOWN',diagnostic='';
+ try{
+  let port=0;const startupEnd=Date.now()+9000;
+  while(Date.now()<startupEnd){
+   if(exited)throw Error('CHROME_EARLY_EXIT');
+   try{const data=await readFile(path.join(profile,'DevToolsActivePort'),'utf8');
+    port=Number(data.split('\n')[0]);if(Number.isInteger(port)&&port>0)break;
+   }catch{}
+   await sleep(100);
+  }
+  if(!port)throw Error('CDP_PORT_TIMEOUT');
+  const endpoint='http://127.0.0.1:'+port;
+  const targets=await (await fetch(endpoint+'/json/list')).json();
+  const target=targets.find(t=>t.type==='page');
+  if(!target?.webSocketDebuggerUrl)throw Error('CDP_PAGE_MISSING');
+  page=await cdpSocket(target.webSocketDebuggerUrl);
+  await page.send('Page.enable');await page.send('Runtime.enable');
+  const navigation=await page.send('Page.navigate',{url});
+  if(navigation.errorText&&phase!=='offline')throw Error('CDP_NAVIGATION_ERROR');
+  const end=Date.now()+probeTimeoutMs;
+  const probeId=phase==='auth'?'auth-result':'worker-result';
+  while(Date.now()<end){
+   await sleep(200);
+   let evaluation;
+   try{evaluation=await page.send('Runtime.evaluate',{
+    expression:"(()=>{const p=document.getElementById("+JSON.stringify(probeId)+");return {text:p?.textContent||'',html:document.documentElement?.outerHTML||'',url:location.href}})()",
+    returnByValue:true
+   },2500)}catch{continue}
+   const v=evaluation?.result?.value;
+   if(!v)continue;
+   diagnostic=String(v.text||'').slice(0,200);
+   const marker=phase==='auth'?'content="auth-excluded"':'content="worker-durability-v1"';
+   if(v.text&&v.text!=='PENDING'&&v.html.includes(marker)&&v.url===url){
+    output=v.html;reason='COMPLETED';break;
+   }
+  }
+  if(reason!=='COMPLETED')reason='PROBE_TIMEOUT';
+  const version=await (await fetch(endpoint+'/json/version')).json();
+  browser=await cdpSocket(version.webSocketDebuggerUrl);
+  try{await browser.send('Browser.close',{},2000)}catch{}
+  const shutdownEnd=Date.now()+5000;
+  while(!exited&&Date.now()<shutdownEnd)await sleep(100);
+  if(!exited)reason='CHROME_SHUTDOWN_TIMEOUT';
+  else if(exitCode!==0)reason='CHROME_NONZERO';
+ }catch(e){
+  reason=String(e?.message||'CDP_UNKNOWN').replace(/[^A-Z_]/g,'_').slice(0,48);
+ }finally{
+  try{page?.close();browser?.close()}catch{}
+  if(!exited){
+   try{if(process.platform!=='win32'&&child.pid)process.kill(-child.pid,'SIGKILL');else child.kill('SIGKILL')}catch{}
+   await sleep(150);
+  }
+ }
+ return {output,reason,diagnostic,stderr:reason==='COMPLETED'?undefined:stderr.slice(-200)};
+}
+
 export async function runWorkerLab(){
  const chrome=findChrome();if(!chrome)return {tier:'CHROMIUM_LOOPBACK_SYNTHETIC_NO_TLS',verdict:'UNKNOWN',reason:'NO_CHROME',cases:[]};
  const {server,setVersion}=makeWorkerServer();await new Promise((ok,bad)=>{server.once('error',bad);server.listen(0,'127.0.0.1',ok)});
@@ -83,9 +184,9 @@ export async function runWorkerLab(){
    if(phase==='update')setVersion('v2');
    if(phase==='offline')await new Promise(ok=>server.close(ok));
    const url=phase==='auth'?base+'/auth/action':base+'/app/?phase='+phase;
-   const r=await visit(chrome.path,url,profile);
+   const r=await visitWorkerCdp(chrome.path,url,profile,phase);
    const result=classifyWorkerDom(r.output,phase,r.reason);
-   cases.push({phase,...result,processReason:r.reason});
+   cases.push({phase,...result,processReason:r.reason,...(result.verdict!=='PASS'?{diagnostic:r.diagnostic}:{} )});
    if(result.verdict!=='PASS')break;
   }
  }finally{
