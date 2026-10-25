@@ -30,7 +30,9 @@ test('unexpected hosted resource REJECT', async () => fixture(async f => {
   await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/unexpected/);
 }));
 test('Hosting public points elsewhere REJECT', async () => fixture(async f => {
-  await fs.writeFile(f.config,JSON.stringify({hosting:{public:'normal',ignore:['firebase.json']}}));
+  const config = JSON.parse(await fs.readFile(f.config,'utf8'));
+  config.hosting.public = 'normal';
+  await fs.writeFile(f.config,JSON.stringify(config));
   await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/public directory mismatch/);
 }));
 test('unreviewed Hosting ignore REJECT', async () => fixture(async f => {
@@ -66,7 +68,7 @@ test('acceptance harness byte marker REJECT', async () => fixture(async f => {
   f.packet.files.find(x=>x.path==='main.dart.js').sha256 = '0'.repeat(64);
   // The trusted digest prevents altering the inventory to hide an acceptance marker.
   await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/trusted inventory digest mismatch/);
-  await assert.rejects(snapshot(f.downloaded,SOURCE),/acceptance harness/);
+  await assert.rejects(snapshot(f.downloaded,SOURCE),/development acceptance marker/);
 }));
 test('wrong independently supplied inventory digest REJECT', async () => fixture(async f => {
   await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,'b'.repeat(64)),/trusted inventory digest mismatch/);
@@ -89,7 +91,9 @@ test('CLI rejects wrong Hosting projection with nonzero exit', async () => fixtu
   const cli = path.resolve(path.dirname(new URL(import.meta.url).pathname),'pwa_release_inventory_gate.mjs');
   const packetPath = path.join(f.dir,'packet.json');
   await fs.writeFile(packetPath,JSON.stringify(f.packet));
-  await fs.writeFile(f.config,JSON.stringify({hosting:{public:'normal',ignore:['firebase.json']}}));
+  const config = JSON.parse(await fs.readFile(f.config,'utf8'));
+  config.hosting.public = 'normal';
+  await fs.writeFile(f.config,JSON.stringify(config));
   const r = spawnSync(process.execPath,[cli,'verify',packetPath,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest],{encoding:'utf8'});
   assert.equal(r.status,1);
   assert.match(r.stderr,/public directory mismatch/);
