@@ -617,3 +617,61 @@ The guard cannot decide how Firebase handles the existing `auth/` directory when
 **CONTRADICTION:** `exact rewrite list` ≠ `rewrite wins`; `three equal static trees` ≠ `same effective route`; `directory exists` ≠ `known served status without testing`; `emulator pass` ≠ `preview HTTPS pass`; `auth HTML served` ≠ `one-time code protected`. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
 
 **Adjacent-value check:** This integrated checkpoint addresses a concrete false-green and its test design, plus the more consequential existing-directory ambiguity and a bounded cross-track runtime packet. The next step requires a real NORMAL artifact and authorized Firebase execution; additional static speculation would have lower value than that boundary.
+
+
+---
+
+## 2026-10-25 — Hosted negative-control repair and Firebase Hosting route-execution checkpoint (504 continuation)
+
+**Evidence tier:** real GitHub-hosted Node test execution and **synthetic** Firebase Hosting Emulator HTTP execution. Neither is a retained NORMAL product archive, deployed HTTPS response, actual Firebase action-code run, Chromium/Safari application acceptance, or managed-iPad release approval. Primary owner **E**; **A/C** direct transfer; **B/D** consequence consumers. Product LogMate and Design Studio inspected read-only.
+
+### 1. A failing research gate is not evidence of a failing product [SOURCE / VALIDATION]
+
+The previous 29-test research suite had a real hosted failure at [run 40195845863](https://github.com/yhappcom/web-manager/actions/runs/40195845863), source `67dce0e`: **26 PASS / 3 FAIL**, not the previously reported UNKNOWN. Exact job log identified three test-oracle defects:
+
+- **Cases 4 and 16:** tests intended to exercise `hosting.public` mismatch also replaced the fixture's valid three-element `ignore` set with `['firebase.json']`. The strengthened verifier correctly rejected **the malformed ignore rule first**, so the test's required `public directory mismatch` diagnostic was unreachable. This was an invalid negative-control fixture, **not a verifier false acceptance**.
+- **Case 12:** the all-file development Acceptance marker scanner correctly rejected the injected marker, but the assertion still expected the old `acceptance harness` wording instead of `development acceptance marker`. This was diagnostic drift, not a missing rejection.
+
+The repair changed only `research/handoffs/test_pwa_release_inventory_gate.mjs`: preserve the otherwise valid Hosting fixture and mutate **only** `hosting.public` for cases 4/16; align case 12 with the actual fail-closed marker diagnostic. No relaxation of `pwa_release_inventory_gate.mjs`, no product edit, no claim that all rejection reasons are interchangeable.
+
+**Independent execution:** [GitHub Actions run 40200670106](https://github.com/yhappcom/web-manager/actions/runs/40200670106) at exact test-source commit `0d565d342f95964cd4657e98837d02b6fa15dd04`, pinned Node 22.16.0: **29 tests / 29 PASS / 0 FAIL** (syntax checks and negative controls). This closes the **synthetic Node inventory suite** gate. It does **not** prove a real NORMAL artifact or deployment.
+
+**Reusable quality principle:** a negative control must isolate the intended causal variable. An early failure for a different reason is not proof that the specific security invariant under test is enforced. Assert the expected diagnostic/observable, retain the valid control fixture, and keep a positive control.
+
+### 2. From documented priority to observed route behavior [SOURCE / VALIDATION]
+
+Firebase's official [Hosting configuration reference](https://firebase.google.com/docs/hosting/full-config) specifies priority: reserved namespaces → redirects → exact static content → rewrites → 404. Source review alone did not establish how the existing `auth/` and `auth/action/` directories interact with aliases. A disposable, **credential-free** synthetic fixture now reproduces the reviewed LogMate-style three rewrites and `auth/action/index.html` with unique ROOT/AUTH sentinels. A second fixture adds `auth/index.html` with a distinct SHADOW sentinel. No real account codes, flight records, production site, Firebase credentials, or deployment are used.
+
+[Executable synthetic emulator harness](handoffs/test_firebase_hosting_auth_route_emulator.mjs) and [pinned CI workflow](../.github/workflows/pwa_hosting_auth_route_emulator_research.yml) use Firebase CLI **15.34.1**, Node **22.16.0**, a `demo-` project ID and localhost. The hosted baseline [run 40200765303](https://github.com/yhappcom/web-manager/actions/runs/40200765303) at `181876ce587bf1a896ea38a56586975367858cf3` **PASS**. Extended synthetic query-continuity [run 40200839407](https://github.com/yhappcom/web-manager/actions/runs/40200839407) at `56e8f0316e734493010da0f983f787a80aa343c9` **PASS**.
+
+| Requested path | Baseline: no `auth/index.html` | With `auth/index.html` | Operational interpretation |
+| --- | --- | --- | --- |
+| `/` | 200 ROOT | 200 ROOT | Root control unchanged. |
+| `/auth` | 200 AUTH, no redirect | **301 → `/auth/` → 200 SHADOW** | Added static directory index changes both route and response. |
+| `/auth/` | 200 AUTH, no redirect | **200 SHADOW** | Exact static content overrides reviewed rewrite. |
+| `/auth/action` | **301 → `/auth/action/` → 200 AUTH** | Same 301 → AUTH | Existing action directory causes a normalization redirect in this pinned emulator despite a configured rewrite. |
+| `/auth/action/` | 200 AUTH | 200 AUTH | Direct directory-index response. |
+| `/auth/action/index.html` | 200 AUTH | 200 AUTH | Exact static action document. |
+
+**Synthetic query probe:** `/auth/action?mode=resetPassword&oobCode=<non-secret sentinel>` returned 301 to `/auth/action/` in both fixtures. The emulator's redirect `Location` and final URL **preserved the synthetic query parameters**. Baseline `/auth` returned 200 AUTH with query preserved; shadow `/auth` redirected to SHADOW while preserving query. The harness prints only Boolean query-preservation observations, never token-bearing URLs.
+
+**CONTRADICTION RESOLVED, scoped:** merely having an `auth/` directory with **no index** did **not** suppress the `/auth` rewrite in this tested emulator; adding `auth/index.html` did. The existing `auth/action/` directory **did** cause `/auth/action` to redirect. Therefore `rewrite configured` does not mean `no redirect`, and `directory exists` alone is not enough to predict one response for all aliases. The conservative `auth/index.html` source guard now has an executed provider-emulator counterexample, but is not a complete Hosting response oracle.
+
+### 3. Security, usability and release consequences [SYNTHESIS / TRANSFER VALIDATION]
+
+- **E — release custody:** keep reviewed static-shadow rejection and exact Hosting projection checks. The passing Node suite and synthetic emulator are separate proof dimensions; neither promotes an unretained NORMAL build into a deployable product. Production release stays HOLD.
+- **A — browser/platform:** 301 normalization and query preservation were observed at the **HTTP emulator** layer, not verified on HTTPS CDN, Chromium with Worker control, Safari, Home Screen, or managed Web Clip. The Worker-reserved Auth route must still be verified on the exact product build. Firebase CLI behavior is a **CHANGE WATCH**.
+- **C — independent validation:** retain two fixtures (baseline and deliberately shadowed), raw initial status/Location, final status/path, distinct body sentinels and query-preservation Boolean. Do not substitute a `fetch`-following 200 for evidence that there was no 301. Future product gate needs response-body digest, Content-Type, Referrer-Policy, CSP, cache headers and Service Worker interception evidence.
+- **B — auth/recovery UX:** Design Studio's mandatory LogMate synthesis gate protects semantic state, focus and recovery continuity. An auth-action link reaching the wrong HTML or losing an action query is not a successful reset; browser-visible redirect and error handling need human/assistive-technology validation.
+- **D — privacy/discovery:** the synthetic query survived a 301, which preserves functional inputs **but also preserves a sensitive query parameter in the redirect URL** in an actual action-link design. This is a conditional exposure/logging review item, not a demonstrated leak. No raw `oobCode` in CI logs, analytics, screenshots, support transcripts or crawler/marketing surfaces. Web PWA/ad/sync claims remain HOLD pending their separate gates.
+- **Engineering dependency:** owns approved NORMAL artifact custody, authorized disposable Auth project, exact HTTPS preview and real product routing/Worker verification. No changes to LogMate, Marketing, Design Studio or Software Engineering repos were made.
+
+### 4. Open product gates and next meaningful context boundary [OPEN / DEPENDENCY / CHANGE WATCH]
+
+1. Independently retained **NORMAL** artifact and trusted digest, not development Acceptance; exact `firebase.json` projection and approved release target.
+2. Authorized **HTTPS preview** using exact product bytes: six-route matrix with 301/Location, final body hash, headers, CSP/Referrer-Policy, safe error states, and Worker bypass. No actual bearer codes in logs.
+3. Browser/runtime: real Chromium then Safari.app, Home Screen and company-managed iPad as distinct tiers. Validate app navigation, account action, offline resume, storage eviction/recovery, and user-visible status; no automatic device-to-device/background Sync assumption.
+4. External backup and full **37-store** restore, including negative cases and data-preserving rollback, remain product/device OPEN. Emulator response success does not imply IndexedDB durability or Sync/ACK success.
+5. Recheck Firebase CLI/Hosting response priority, browser redirects and OS/MDM policy when versions change; do not transfer a localhost emulator PASS to CDN/OS policy.
+
+**Checkpoint:** synthetic release-inventory Node **29/29 PASS**; synthetic Firebase Hosting baseline/static-shadow/query-continuity **PASS**; **Stage 8 applied security ACTIVE · Production validation OPEN · PWA release HOLD**. The next higher-value work requires authorized product artifact and HTTPS/device evidence, not another invented static fixture.
