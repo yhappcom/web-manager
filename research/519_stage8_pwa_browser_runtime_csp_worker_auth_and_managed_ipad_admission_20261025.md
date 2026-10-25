@@ -571,3 +571,95 @@ The actual data-safety chain is `successful local command → committed IndexedD
 **Cross-domain consequence:** a transaction callback re-execution must not issue a second external network request, mint a different Operation ID, send an advertisement event, emit an irreversible user notification or overwrite independently accepted records. Inputs such as identity, timestamp and payload digest should be stable across retries where the product contract requires it; compare final transaction result and externally visible side effects under controlled two-tab contention. This is an **implementation validation request**, not a finding of such side effects in LogMate. A successful single-tab Chrome clean reopen does not exercise BroadcastChannel concurrency or retry interleavings. C should consume Engineering D006's retry/idempotency models rather than author a second Sync algorithm.
 
 **Refined acceptance:** preserve §18 EFB-C06 and §19.3 crash/backup gates; add a *bounded concurrent-two-tab/worker-context* review to existing product repository test planning, with explicit stable Operation ID, single visible side effect, atomic ledger+outbox and post-reopen consistency oracles. Distinguish same-origin **two-tab** behavior from Safari↔Home Screen↔MDM **different-container** behavior. Do not promise cross-container BroadcastChannel or device-to-device data sharing. **OPEN** until exact pinned dependency source and real browser concurrency execution are reviewed. No change to PWA release HOLD.
+
+
+---
+
+## §20 — Managed-EFB external `.lbk` custody: browser file boundary, Apple Managed Open In and actual product call-site (2026-10-26 KST)
+
+**Owner / scope:** Track **E** owns external custody, device-policy trust, incident/release decision; **A** owns web file-API mechanics; **C** owns independent file/destination/restore acceptance; **B** owns truthful recovery task states; **D** owns privacy-safe claims. This is a substantive refinement of existing **EFB-C09/C10** in §18, **not** a new test family or an implementation authorization. Product `yhappcom/logmate/main@4101ec7380796300f68fa60dbc7e5b6061f00080` and peers were read-only. **SOURCE audit + standards/Apple policy + transfer synthesis; no physical iPad or product file-I/O execution.**
+
+### 20.1 Problem / trust model [SOURCE / SYNTHESIS]
+
+The critical transition is **in-origin database snapshot → browser-mediated user-visible file → destination permitted by organization policy → independently re-opened file → clean-context restore**. An `IndexedDB` transaction, an in-memory serialized `.lbk` string, a download-click, a native Share Sheet presentation, a successful share Promise, a Files filename, a SHA-256 field *inside the same file*, and a verified external recovery copy are **different events**. A local download saved on the same managed iPad may survive a site-data purge but still share the **device-loss / MDM-wipe** failure domain. A cloud or external target is not automatically permitted or trustworthy. The threat is inadvertent loss of unique pilot records or unauthorized disclosure of an unencrypted ledger; **no actual LogMate loss or leak is evidenced**.
+
+**Exact product code evidence (2026-10-26):**
+- `lib/repository/logbook/sembast_logbook_repository.dart` lines **419–481**, blob `d7e4efd4`: `exportWholeLedgerBackup({verifiedOwnerUid})` returns `Future<String>`; its comment explicitly assigns **file selection and I/O to the caller**. It requires READY capability, matching unlocked owner, no deletion lock, enumerates the sync-aware store registry and writes `snapshotDigest = lbkSha256(...)`. This proves **in-memory serialization**, not a browser file saved to Files.
+- Same file lines **483–529**: `restoreWholeLedgerBackup` validates the container and requires a **new empty staging database**, retains a new destination Replica ID, locks restored owner and resets restored Sync trust. Do not use restore to overwrite an occupied ledger.
+- `lib/repository/logbook/whole_ledger_backup.dart` blob `711f7845` defines canonical JSON and SHA-256; it explicitly says checksum is **not author authentication or encryption**. A copied `.lbk` should be treated as sensitive plaintext containing ledger, Owner UID, metadata and pending operation state; encryption and destination policy require a separate product/security decision.
+- `lib/screens/settings_screen.dart` lines **28–34**, blob `4affdb26`, shows an `Import flight history` tile with `onTap: () {}`; the inspected Settings screen has **no full-ledger export/import control**. This is a bounded screen-level observation, not a proof about every possible uninspected call site.
+- `test/repository/logbook/whole_ledger_backup_test.dart` lines **775–785**, blob `2f9d6b0a`, stages a `.lbk` using **`dart:io File.writeAsString` + rename in a host test** and asserts 37 stores. Host filesystem success is **not** Safari/Home Screen/MDM Files permission or web-download proof.
+- Current `docs/specs/local-first-manual-delta-sync-contract.md` (blob `2240fc1b`) approves `.lbk` full-ledger device migration but explicitly marks implementation/production Manual Delta Sync/P2P and full recovery unverified. The format's current schema and owner/Replica/Outbox constraints are Engineering-owned.
+
+Source links:
+- https://github.com/yhappcom/logmate/blob/4101ec7380796300f68fa60dbc7e5b6061f00080/lib/repository/logbook/sembast_logbook_repository.dart
+- https://github.com/yhappcom/logmate/blob/4101ec7380796300f68fa60dbc7e5b6061f00080/lib/repository/logbook/whole_ledger_backup.dart
+- https://github.com/yhappcom/logmate/blob/4101ec7380796300f68fa60dbc7e5b6061f00080/lib/screens/settings_screen.dart
+- https://github.com/yhappcom/logmate/blob/4101ec7380796300f68fa60dbc7e5b6061f00080/test/repository/logbook/whole_ledger_backup_test.dart
+
+### 20.2 Web-platform capability is not durable external custody [SOURCE / CHANGE WATCH]
+
+**A — platform distinctions, primary docs checked 2026-10-26:**
+
+| Mechanism | Platform-standard / documented behavior | Admission judgment |
+| --- | --- | --- |
+| `<a download>` with same-origin Blob URL | HTML download is a **hint**, and browsers may save, prompt, open or ignore it; a suggested filename does not prove disk save. | Candidate fallback; observe actual Safari/Home Screen result, then independent file re-selection. Do not label success on anchor click. |
+| `window.showSaveFilePicker()` | MDN calls this **limited availability**, secure-context/user-activation gated; iOS Safari lacks the API in the current compatibility table. | **Not a required iPad path**; progressive enhancement only where observed supported. |
+| `navigator.canShare({files})` / `navigator.share({files})` | File support and destination depend on OS/browser, permissions policy, user gesture and supported MIME/size. Promise resolution semantics differ by platform and do **not** prove durable target custody or later re-open. | Optional user-initiated alternative; rejected/cancelled/no-target and policy-denied cases must preserve local ledger and report no verified backup. |
+| `<input type=file>` + File API | Broadly available user-mediated import surface; does not grant arbitrary path access or guarantee a managed destination is visible. | Preferred broadly compatible *re-selection/readback candidate*, not proof until actual file is readable and checksum/schema/owner checked. |
+| OPFS / Cache Storage / IndexedDB | Origin-private or quota-governed storage, not a user-visible independent recovery file. Clearing site data can delete OPFS. | **Never** count an in-origin duplicate as an external backup. |
+
+Primary references: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a ; https://developer.mozilla.org/en-US/docs/Web/API/Window/showSaveFilePicker ; https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share ; https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API ; https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file ; https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system . Browser feature support, MIME handling, downloads and file sharing are **CHANGE WATCH**; Chrome or desktop Safari cannot certify iPadOS Home Screen.
+
+### 20.3 Apple device-management is an independent policy gate [SOURCE / CONTRADICTION]
+
+Apple Platform Deployment states that **Safari downloads from managed domains are managed documents**. The restriction **“Allow documents from managed sources in unmanaged destinations”** can prevent their transfer to unmanaged destinations. Managed domain matching includes configured hosts/paths; policy application is organization- and MDM-configuration-specific. This is **not** merely a browser API compatibility problem. A company can allow opening the web app but restrict saving its documents into personal iCloud Drive, unmanaged Files providers, AirDrop or other destinations. Conversely, no specific airline policy has been observed.
+
+Apple references checked 2026-10-26:
+- https://support.apple.com/en-asia/guide/deployment/depb4c146c2e/web (Domains / managed Safari downloads)
+- https://support.apple.com/guide/deployment/manage-organizational-data-depaa73a4973/1/web/1.0 (Managed Open In)
+- https://support.apple.com/en-mide/guide/deployment/dep739685973/1/web/1.0 (restriction names/semantics)
+- https://support.apple.com/en-me/102440 (Safari download in Files, **unmanaged general-user instructions only**)
+
+**Critical scope separation:** Apple documents **Safari-originated managed downloads**; whether a particular **Home Screen standalone app**, **MDM Web Clip**, managed browser, Shared iPad session or third-party Files provider is classified and handled identically must be **observed on that exact fleet envelope**. Do not infer all Web Clips share Safari download privileges, data containers or Files providers. A Safari-tab PASS does not transfer to Home Screen or managed Web Clip.
+
+**Operational consequence:** If all approved external destinations are denied, the user cannot be told “Backup complete” merely because an `.lbk` was generated. Escalate an approved managed export destination or an alternative policy-compliant custody path to the airline/MDM administrator and Engineering. Do not propose bypassing managed-data controls by changing domain, encoding the ledger into QR, emailing a personal account or routing through an unmanaged share target.
+
+### 20.4 Proposed minimum export/import user journey [MINTTAP DECISION — PROPOSAL / B transfer]
+
+1. **Local data ready:** verified owner and READY database; explain that `.lbk` contains sensitive pilot records and that “Saved on this device” is not backup. No destructive cleanup instructions.
+2. **Generate snapshot:** explicit user request; consistent 37-store snapshot, format/owner/Replica metadata and digest. Fail safely on owner/deletion/capability gates; never mark external custody.
+3. **Request external save/share:** choose a capability- and policy-supported path without assuming `showSaveFilePicker`; handle cancel, permission denial, quota, no target, offline cloud provider, app suspension and file-name collision. Keep source intact.
+4. **Verify external readback:** independently choose the saved file from the **actual permitted destination**, re-open it, compare digest/size/schema/owner and complete 37-store registry. A file-name appearance or a share-sheet success is insufficient.
+5. **Recovery proof:** on a **disposable empty** matching-owner destination, restore 37 stores, retain fresh Replica ID, preserve pending Operation IDs, lock owner and require explicit unlock. Reject wrong UID, modified file, unsupported format and occupied destination without mutation. Do not overwrite unique data.
+6. **Truthful states:** `Local snapshot prepared` → `Save requested` → `File found and verified` → `Restore tested`. Only the latter two support a bounded **verified backup** claim; none implies cloud Sync, independent device-loss survival or server Receipt. Recovery UI must preserve keyboard/focus/assistive technology semantics and offer non-destructive retry.
+
+**Privacy / E+D:** Never log `.lbk` bytes, UID, real flight rows, action URLs, destination path or file contents into analytics, ad events, CI artifacts or support screenshots. A digest can help identify a test fixture but is not proof of ownership, encryption, authorization or independent custody. Explicitly classify allowed destinations and retention/encryption policy before real data export. Marketing 438's first-release PWA no-ad and Sync/feature claims HOLD remains unchanged.
+
+### 20.5 Existing EFB-C09/C10 acceptance refinement, not another synthetic suite [VALIDATION / DEPENDENCY]
+
+| Existing gate refinement | Positive oracle | Required negative / non-transfer |
+| --- | --- | --- |
+| **C09-A** un/managed Safari tab, Home Screen standalone, MDM Web Clip each recorded separately | On exact product build and recorded iPadOS/MDM policy, user generates `.lbk` and selects an approved destination | API present but save denied; icon installed but storage/file identity differs; no unsupported API assumptions |
+| **C09-B** destination custody | Independently re-select exact file from Files/provider; record byte count, digest, 37-store schema and verified owner **using synthetic pilot fixtures** | Cancel, blocked Managed Open In, offline cloud-only target, filename collision, truncated/modified file; do not declare PASS on click/Share Promise |
+| **C10-A** clean recovery | Restore on disposable empty database with same verified UID; 37 stores, local state and pending ops match; new Replica ID, locked owner, unverified remote ACK | Wrong UID, damaged digest, unsupported version, occupied destination, incomplete registry: reject with source unchanged |
+| **C10-B** failure-domain independence | Copy demonstrably accessible after controlled origin-data clear and separate device-loss/MDM-removal recovery drill when authorized | A file only in OPFS, Safari downloads list without readable file, same-device-only copy, unapproved personal destination; classify **UNKNOWN / FAIL** appropriately |
+| **C09/C10 UX+AT** truthful recovery | VoiceOver/focus/zoom, cancellation and offline retry observed; “verified” label only after readback | Do not equate local Save, file share, export, restore and Sync ACK |
+
+**Execution packet:** `{sourceSHA,normalArtifactDigest,hostingURL,iosVersion,browserMode,supervisionAndMDMPolicyVersion,managedDomainClassification,approvedDestinationClass,exportMechanism,exportBytes,digestMatch,readbackFromDestination,formatAnd37StoreCheck,restoreOwnerAndReplicaCheck,offlineState,negativeCase,verdict,evidenceLocation}`. Use synthetic data; never publish actual UID/path/file. Separate **PASS / FAIL / BLOCKED / NOT_EXECUTED**. No current row has physical-device PASS.
+
+### 20.6 Five-track reconciliation and adjacent-value stop rule [TRANSFER VALIDATION / OPEN]
+
+| Track | Maturity / dependency / priority | Owner-only contribution |
+| --- | --- | --- |
+| **E** | Stage 8 applied; source/Apple policy mature, actual managed external custody absent; **highest consequence bottleneck** | Own trust boundary, managed-domain classification, approved destination, release HOLD and escalation |
+| **A** | Web file APIs documented; iPadOS/Web Clip execution OPEN | Own capability distinction, transient activation, OPFS vs Files, browser context differences |
+| **C** | Host 37-store fixture and Chrome reopen PASS only in bounded environments; device recovery OPEN | Own independent readback/restore/negative oracle and device provenance |
+| **B** | Design Studio W121 demands runtime/human state evidence | Own exact save/verify/recover semantics and accessibility; no invented visual system |
+| **D** | Web acquisition/analytics generic gate mature; no production evidence | Own token/ledger-free measurement and truthful external-backup/Sync claims; Marketing owns ad platform decision |
+
+**CONTRADICTIONS resolved:** repository `Future<String>` export ≠ user-visible file; host `dart:io` rename ≠ iPad Files; `<a download>` ≠ completed write; Web Share resolved ≠ independently readable file; OPFS copy ≠ external backup; installed PWA ≠ Safari data container; Safari unmanaged Files PASS ≠ MDM-approved destination; self-contained SHA ≠ encryption/authentication; 37-store host restore ≠ physical iPad 37-store restore.
+
+**OPEN / blockers:** Engineering-owned actual browser file-I/O bridge and settings UX; authorized NORMAL archive/digest + HTTPS preview; exact iPadOS Safari/Home Screen/Web Clip export/import; real MDM managed-domain/Managed Open In restrictions and permitted provider; readback and full 37-store recovery; security decision for plaintext `.lbk` custody/encryption; physical lifecycle, server Receipt and Manual Sync. **No LogMate, Design Studio, Marketing or Software Engineering repo edits.**
+
+**Adjacent-value check:** This closes a previously under-specified **browser→OS→MDM→independent-file custody** prerequisite with exact product call-site evidence. Further synthetic browser micro-tests would not close the remaining managed-device/Engineering execution boundary. **Stage 8 applied ACTIVE; Production validation OPEN; PWA release HOLD.**
