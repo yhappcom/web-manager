@@ -1,0 +1,36 @@
+name: PWA NORMAL release inventory research gate (synthetic only)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pwa_normal_inventory_research.yml
+      - research/handoffs/pwa_release_inventory_gate.mjs
+      - research/handoffs/test_pwa_release_inventory_gate.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory-negative-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact triggering revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install pinned Node runtime
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22.16.0
+          package-manager-cache: false
+      - name: Syntax and fail-closed inventory negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check research/handoffs/pwa_release_inventory_gate.mjs
+          node --check research/handoffs/test_pwa_release_inventory_gate.mjs
+          node --test research/handoffs/test_pwa_release_inventory_gate.mjs
