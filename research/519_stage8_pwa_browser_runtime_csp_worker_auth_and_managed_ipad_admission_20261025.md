@@ -182,3 +182,47 @@ Rechecked 2026-10-25: W3C CSP Level 3 https://www.w3.org/TR/CSP/ (event disposit
 
 
 **Additional environment falsification (same run):** A second direct Chromium headless `--dump-dom` smoke against a static `data:text/html` URL also exceeded a six-second subprocess deadline with **zero stdout DOM** (exit 124 from the timeout wrapper). This removes local HTTP routing as a *necessary* explanation for this runner's observed noncompletion, but it does **not** identify the cause: D-Bus messages alone are insufficient for attribution. Neither attempt exercises the exact GitHub lab or a real product URL. The hosted Actions runner remains the next independent environment to examine.
+
+
+## 10. Chromium subprocess stdio completion and verdict integrity (2026-10-25) [SOURCE / SYNTHESIS / VALIDATION]
+
+### 10.1 Why this matters [SOURCE / HISTORY → FAILURE MODE]
+
+The §9 lab began requiring a zero-exit Chromium process before admitting a DOM CSP probe, but its transport still resolved the child on Node's `exit` event and immediately destroyed stdout. **Process termination is not output-stream completion.** Node.js explicitly documents that child `exit` can occur while inherited stdio remains open and that `close` follows termination **and** stream closure. Authoritative Node 22 documentation (checked 2026-10-25): https://nodejs.org/download/release/latest-jod/docs/api/child_process.html#event-close and https://nodejs.org/download/release/latest-jod/docs/api/child_process.html#event-exit .
+
+This is a different oracle boundary from §9's nonzero-process false green: a legitimate browser can terminate successfully while its final DOM bytes have not yet been consumed. Destroying the pipe on `exit` risks **truncated evidence → false UNKNOWN or FAIL**. It does not establish that any earlier Chromium timeout was caused by this race, and it does not prove an actual product/browser CSP outcome.
+
+### 10.2 Reproduction and bounded repair [VALIDATION]
+
+- **Independent Node 22.16.0 event-order falsification:** a disposable parent spawned a detached descendant sharing stdout, printed `EARLY` and exited with code 0; the descendant printed `LATE` afterward. The parent observer saw `exit: "EARLY"`, then `close: "EARLYLATE"`. This proves a possible ordering, not Chromium-specific behavior.
+- **Repair:** `research/handoffs/pwa_chromium_csp_runtime_lab.mjs` now resolves a successful process only on `close(code===0)`, after the output pipe has closed. The existing 12-second wall-clock watchdog, output cap, error handling and UNKNOWN classification for timeout/nonzero remain. Waiting indefinitely for a descendant holding the pipe is **not** allowed.
+- **Regression coverage added:** `test_pwa_chromium_csp_runtime_lab.mjs` now contains **11 declared test groups** (previously 9), including a synthetic executable whose descendant writes trailing output after its parent exits and a nonzero executable that emits plausible DOM. Both are disposable, no network access is requested, and Windows skips the POSIX shebang cases.
+- **Independent local smoke on an equivalent isolated `visit` implementation:** `HEADTAIL / COMPLETED` and `PRESENT_BUT_FAILED / CHROME_NONZERO` were observed, **2/2 expected**. This is a reconstructed-function transport smoke, **not** an execution of the exact GitHub module or the full 11-group suite.
+- **Exact persisted source and hosted verdict:** source/test files committed on `main`; complete `node --test` execution and GitHub Actions job/run logs **not observed in this cycle**. The available GitHub connector's commit-workflow query is limited to pull-request-triggered runs; empty results for push commits are **not** proof that no push run occurred. No hosted Chromium PASS or FAIL is inferred.
+
+### 10.3 Diagnostic matrix and trust boundaries [SYNTHESIS / MINTTAP DECISION]
+
+| Observation | Correct bounded verdict | Invalid promotion |
+| --- | --- | --- |
+| `exit(0)` observed; stdout still open | Pending; await `close` within watchdog | Process ended → complete DOM |
+| `close(0)` with full case-matching DOM and discriminating CSP effects | Synthetic browser-fixture PASS for that case | Product HTTPS/Safari/iPad PASS |
+| `close(nonzero)` with plausible DOM | UNKNOWN browser transport, preserve sanitized diagnostics | DOM resembles expected → PASS |
+| Browser never closes / descendants retain stdout past 12s | UNKNOWN timeout, terminate process group | CSP FAIL or network failure attribution |
+| DOM missing, wrong fixture marker or probe still PENDING | UNKNOWN/FAIL according to §9 oracle | Silent success from workflow-green |
+| Research fixture succeeds on hosted Chromium | **HOSTED_CHROMIUM_LOCAL_FIXTURE_ONLY** | Actual served NORMAL artifact, Safari or managed-iPad acceptance |
+
+**Operational choice:** do not weaken sandbox/network policies or skip TLS verification to obtain a green run. An allowed, isolated runner and an approved NORMAL build are prerequisites for the next trust tier. Browser DOM is not an HTTPS response capture; worker registration is not document control; cold offline reopen is not a warm-page cache hit; origin persistence is not an external 37-store restore.
+
+### 10.4 Cross-track allocation and transfer [DEPENDENCY / TRANSFER VALIDATION / CONTRADICTION]
+
+- **E (primary bottleneck):** owns subprocess completion, sanitized evidence custody, release-tier separation and fail-closed verdict propagation. Do not promote a research-tool fix to production security assurance.
+- **A:** supplies Node/browser process lifecycle and Service Worker control/update mechanics. The exact Chromium `--dump-dom` environment remains a browser-specific CHANGE WATCH, distinct from WebKit/Safari and OS-managed installation.
+- **C:** owns the two discriminating transport regressions, positive/negative CSP effects, exact test execution and independent browser/AT/device validation. An eleven-group test *definition* is not an eleven-group PASS.
+- **B:** consumes Design Studio W121/CD127 state/semantic requirements: no “secure”, “synced”, “offline-ready” or “restored” UX from an unknown test. Unique local ledger data must be preserved on recovery.
+- **D:** consumes Marketing D8/D10 claim/privacy HOLD: neither local synthetic CSP proof nor transport correction permits PWA installation, unattended Sync, durable storage or advertising claims. No tokens/pilot data in logs.
+
+### 10.5 Adjacent-question check and next checkpoint [OPEN / CHANGE WATCH]
+
+The adjacent `exit`→`close` regression was reproducible and fixed without requiring a product endpoint. The next high-information-gain question is **not another static fixture variant**: obtain the exact hosted Chromium workflow run/job logs and SHA, classify setup/runner/transport/fixture/oracle failures, and rerun the complete 11-group Node suite. Then Engineering-approved NORMAL archive and independent HTTPS preview enable 518 capture plus R01–R18 Chromium/Safari checks; R19–R30 still require actual storage, external `.lbk` file, assistive-tech and managed EFB iPad evidence. The live product's account-required/manual-Sync authority remains separate from generic platform knowledge.
+
+**Gate unchanged: Stage 8 ACTIVE; 517/518 hosted synthetic 41+41 PASS remains bounded; 519 local browser UNKNOWN; new isolated transport 2/2 expected; exact 11-group/hosted Chromium OPEN; Production validation OPEN; PWA release HOLD.**
