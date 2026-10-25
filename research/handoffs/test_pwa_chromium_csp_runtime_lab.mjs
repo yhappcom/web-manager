@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classifyDom,classifyBrowserOutcome,makeServer} from './pwa_chromium_csp_runtime_lab.mjs';
+import {classifyDom,classifyBrowserOutcome,makeServer,visit} from './pwa_chromium_csp_runtime_lab.mjs';
 const html=(baseline,inline,dispositions)=>'<pre id="probe-result">'+JSON.stringify({baseline,inline,dispositions})+'</pre>';
 test('enforce requires baseline success, inline blocked, enforce violation',()=>{
   assert.equal(classifyDom(html(true,false,['enforce']),'enforce').verdict,'PASS');
@@ -74,4 +74,45 @@ test('fixture serves a case-specific marker, not a caller-invented identity',asy
       assert.ok(body.includes('<meta name="fixture-case" content="'+id+'">'));
     }
   } finally {await new Promise(ok=>server.close(ok));}
+});
+
+import {mkdtemp,writeFile,rm} from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+
+// A synthetic executable can exit while a descendant still owns its stdout pipe.
+// The former 'exit' listener destroyed the pipe and lost TAIL. This is a
+// transport/lifecycle test only: no Chromium or product browser claim.
+test('browser subprocess waits for stdio close after exit', {skip:process.platform==='win32'}, async()=>{
+  const dir=await mkdtemp(path.join(os.tmpdir(),'pwa-csp-stdio-'));
+  const executable=path.join(dir,'synthetic-browser');
+  const script=[
+    '#!/usr/bin/env node',
+    "const {spawn}=require('node:child_process');",
+    "const child=spawn(process.execPath,['-e',\"setTimeout(()=>process.stdout.write('TAIL'),350)\"],{stdio:['ignore',process.stdout,'ignore'],detached:true});",
+    'child.unref();',
+    "process.stdout.write('HEAD');",
+    'process.exit(0);',
+  ].join('\\n');
+  try {
+    await writeFile(executable,script,{mode:0o755});
+    const result=await visit(executable,'http://127.0.0.1/fixture',path.join(dir,'profile'));
+    assert.equal(result.reason,'COMPLETED');
+    assert.equal(result.output,'HEADTAIL');
+  } finally {await rm(dir,{recursive:true,force:true});}
+});
+
+test('browser transport preserves nonzero process verdict', {skip:process.platform==='win32'}, async()=>{
+  const dir=await mkdtemp(path.join(os.tmpdir(),'pwa-csp-nonzero-'));
+  const executable=path.join(dir,'synthetic-browser');
+  try {
+    await writeFile(executable,[
+      '#!/usr/bin/env node',
+      "process.stdout.write('<html><meta name=\"fixture-case\" content=\"enforce\"><pre id=\"probe-result\">{\"baseline\":true,\"inline\":false,\"dispositions\":[\"enforce\"]}</pre></html>');",
+      'process.exit(7);',
+    ].join('\\n'),{mode:0o755});
+    const result=await visit(executable,'http://127.0.0.1/fixture',path.join(dir,'profile'));
+    assert.equal(result.reason,'CHROME_NONZERO');
+    assert.equal(classifyBrowserOutcome(result,'enforce').verdict,'UNKNOWN');
+  } finally {await rm(dir,{recursive:true,force:true});}
 });
