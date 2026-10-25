@@ -14,6 +14,9 @@ const REQUIRED_AUTH_REWRITES = new Map([
 ]);
 const sha256 = b => createHash('sha256').update(b).digest('hex');
 const ACCEPTANCE_MARKER = 'LOGMATE_PERSISTENCE_ACCEPTANCE_FLIGHT_V1';
+const ACCEPTANCE_MARKER_BYTES = Buffer.from(ACCEPTANCE_MARKER);
+const REVIEWED_HOSTING_KEYS = new Set(['public', 'ignore', 'headers', 'rewrites', 'redirects', 'cleanUrls', 'trailingSlash']);
+const REVIEWED_CACHE_HEADER = 'no-cache, no-store, must-revalidate';
 const digestPacket = p => sha256(Buffer.from(JSON.stringify({schema:p.schema,releaseMode:p.releaseMode,sourceSha:p.sourceSha,files:p.files})));
 async function assertNormal(root) {
   const js = await fs.readFile(path.join(root, 'main.dart.js'), 'utf8');
@@ -44,6 +47,7 @@ export async function inventory(root) {
       if (info.isDirectory()) await visit(absolute, rel + '/');
       else if (info.isFile()) {
         const bytes = await fs.readFile(absolute);
+        if (bytes.includes(ACCEPTANCE_MARKER_BYTES)) fail(`development acceptance marker in ${rel}`);
         rows.push({ path: rel.split(path.sep).join('/'), bytes: bytes.length, sha256: sha256(bytes) });
       } else fail(`special file forbidden: ${rel}`);
     }
@@ -81,6 +85,20 @@ function assertHostingRoutes(hosting) {
   }
 }
 
+function assertHostingHeadersAndOptions(hosting) {
+  // This is a pinned, source-level projection policy, not a served-header oracle.
+  for (const key of Object.keys(hosting)) {
+    if (!REVIEWED_HOSTING_KEYS.has(key)) fail(`unreviewed Hosting option: ${key}`);
+  }
+  if (!Array.isArray(hosting.headers) || hosting.headers.length !== 1) fail('unreviewed Hosting header rules');
+  const rule = hosting.headers[0];
+  if (!rule || Object.keys(rule).sort().join(',') !== 'headers,source' ||
+      rule.source !== '**' || !Array.isArray(rule.headers) || rule.headers.length !== 1) fail('unreviewed Hosting header rules');
+  const header = rule.headers[0];
+  if (!header || Object.keys(header).sort().join(',') !== 'key,value' ||
+      header.key !== 'Cache-Control' || header.value !== REVIEWED_CACHE_HEADER) fail('unreviewed Hosting response header');
+}
+
 function compare(expected, actual, label) {
   assertInventory(expected);
   assertInventory(actual);
@@ -109,12 +127,14 @@ export async function verify(packet, downloadedRoot, stagedRoot, firebaseConfigP
   const configPath = path.resolve(firebaseConfigPath);
   const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
   if (!config.hosting || Array.isArray(config.hosting) || typeof config.hosting.public !== 'string') fail('single Hosting target required');
-  if (!Array.isArray(config.hosting.ignore) || config.hosting.ignore.some(p => !SAFE_IGNORES.has(p))) fail('unreviewed Hosting ignore rule');
+  if (!Array.isArray(config.hosting.ignore) || config.hosting.ignore.length !== SAFE_IGNORES.size ||
+      new Set(config.hosting.ignore).size !== SAFE_IGNORES.size || config.hosting.ignore.some(p => !SAFE_IGNORES.has(p))) fail('unreviewed Hosting ignore rule');
   const actualPublic = path.resolve(path.dirname(configPath), config.hosting.public);
   if (actualPublic !== path.resolve(stagedRoot)) fail(`Hosting public directory mismatch: ${config.hosting.public}`);
   const [downloadedCanonical, stagedCanonical] = await Promise.all([fs.realpath(downloadedRoot), fs.realpath(stagedRoot)]);
   if (downloadedCanonical === stagedCanonical) fail('download and Hosting staging roots must be distinct real directories');
   assertHostingRoutes(config.hosting);
+  assertHostingHeadersAndOptions(config.hosting);
   compare(packet.files, await inventory(downloadedRoot), 'download');
   compare(packet.files, await inventory(stagedRoot), 'hosting');
   await assertNormal(downloadedRoot);
