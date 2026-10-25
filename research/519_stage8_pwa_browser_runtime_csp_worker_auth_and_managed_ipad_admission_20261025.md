@@ -437,3 +437,79 @@ Software Engineering Studio M006's Safari/browser research is a **bounded transf
 **Falsification table:** acceptance ZIP presented as NORMAL → **REJECT**; successful normal build but no retained bytes → **BUILD PASS / ARCHIVE OPEN**; archive digest without served-byte linkage → **PROVENANCE OPEN**; CSP header match without script-enforcement observation → **BROWSER OPEN**; installed icon without data restore → **DURABILITY OPEN**; feature-branch run with docs-only later main commits → **BOUNDED INPUT EQUIVALENCE / NOT EXACT-MAIN RUN**.
 
 **Adjacent-value check:** this run resolved the previously unverified **actual product workflow, normal-vs-acceptance split, archive inventory and source-drift** using GitHub-hosted job steps/logs/artifacts. The next meaningful boundary requires authorized, retained **NORMAL** product bytes and a permitted HTTPS/device test environment. **Stage 8 applied ACTIVE · hosted synthetic Chromium PASS · product NORMAL build-step PASS at recorded feature SHA · production validation OPEN · PWA release HOLD.**
+
+
+---
+
+## 18. 2026-10-26 — Managed-EFB installation, storage-container migration and external-custody admission (Stage 8 applied continuation)
+
+**Owner:** E (release/data custody and managed operations); A platform supplier; C independent acceptance; B state/IA transfer; D claims/measurement consumer. **Evidence class:** current primary platform SOURCE + read-only product/CI SOURCE + falsifiable operational SYNTHESIS. **Not a physical iPad test, product deployment or production PASS.** This is a distinct user-data-loss boundary, not another synthetic Auth/Referrer test.
+
+### 18.1 Fresh evidence and explicit authority boundaries [SOURCE / CHANGE WATCH]
+
+Primary sources rechecked **2026-10-26**:
+- WebKit, *WebKit Features in Safari 26.0*, https://webkit.org/blog/17333/webkit-features-in-safari-26-0/ : on iOS/iPadOS 26, adding a website to Home Screen defaults to **Open as Web App**, even without a manifest or Service Worker; the user can turn that option off. This is an **entry/presentation affordance**, not proof of offline content, installation permission on an EFB, data migration, or durable local storage.
+- WebKit, *WebKit Features in Safari 17.2*, https://webkit.org/blog/14787/webkit-features-in-safari-17-2/ : at web-app creation, **cookies** can be copied from the source browser; **other local storage is not copied**, and website data is not subsequently shared. Therefore a Safari session, an installed Home Screen web app, and a managed Web Clip cannot be treated as one shared ledger merely because they open the same URL. This source does not itself prove the exact storage partitioning behavior of every MDM-created Web Clip on every OS release.
+- WebKit, *Updates to Storage Policy*, https://webkit.org/blog/14403/updates-to-storage-policy/ : IndexedDB, Cache API, Service Worker and related site data have quota/eviction behavior; standalone web apps receive browser-app-style quota, but quota is a **ceiling**, not guaranteed available bytes. Eviction may be origin-wide. `navigator.storage.persisted()/persist()` are observable/request APIs, and WebKit grant decisions use heuristics including Home Screen use. Neither a successful `persist()` request nor a large quota is an external backup or clean-context restore.
+- Apple Deployment, *Web Clips device management payload settings*, https://support.apple.com/en-gb/guide/deployment/depbc7c7808/web : managed Web Clips can be provisioned with URL, removability and full-screen mode; the MDM provider determines effective settings. If Safari is hidden/restricted, behavior depends on those settings. This is **policy capability**, not proof a specific airline's EFB permits installation, Files export or background execution.
+- Apple Deployment, *Device management restrictions for supervised Apple devices*, https://support.apple.com/guide/deployment/restrictions-for-supervised-devices-dep6b5ae23e9/1/web/1.0 : Safari restriction can prevent opening Web Clips. Apple *Review device management restrictions*, https://support.apple.com/en-mide/guide/deployment/dep739685973/web , notes that app allowlisting may require `com.apple.webapp` to allow all Web Clips. The exact deployed policy and MDM implementation remain **UNKNOWN**.
+- MDN, *Background Synchronization API*, https://developer.mozilla.org/en-US/docs/Web/API/Background_Synchronization_API and *Web Periodic Background Synchronization API*, https://developer.mozilla.org/en-US/docs/Web/API/Web_Periodic_Background_Synchronization_API : both are **limited availability**, not portable iPadOS unattended synchronization guarantees. Feature detection alone does not prove OS execution opportunity, device-to-device reachability or authenticated remote ACK.
+
+**Product/source recheck, 2026-10-26:** LogMate `main@4101ec7380796300f68fa60dbc7e5b6061f00080`; `MASTER.md` states Firebase UID account-required and approved **Manual Delta Sync** while Production Sync remains incomplete. `web/manifest.json@8225e76` has `display:standalone`, `start_url: "."`, `orientation:portrait-primary`, no explicit `id/scope`; no conclusion of installation or landscape defect without device execution. `firebase.json` still targets `build/web` and has no source-declared Referrer-Policy/CSP. Latest listed LogMate Actions PWA run [40045842917](https://github.com/yhappcom/logmate/actions/runs/40045842917), source `95250e55`, is successful, but its **single retained artifact** is the **development Acceptance** archive (37,789,262 bytes), not the NORMAL archive. The workflow declares **7-day** Acceptance retention; this is not a durable NORMAL release escrow. Latest product `main` has no newer observed PWA run. These observations do not imply no other private deployment pipeline exists.
+
+### 18.2 Historical problem → operational principle [SYNTHESIS]
+
+The Web App Manifest and Home Screen affordance answer **how a website launches**. Service Worker and Cache API answer **which resources can be served without a network**. IndexedDB answers **where application data can be stored inside one browser-controlled context**. Cookie copying at installation addresses a narrow session-continuity case; it does **not** transfer IndexedDB flight records. MDM policy determines whether the relevant entrypoint, network, Files destination and interaction are allowed. External backup/verified restore answers **how irreplaceable data survives loss of that context**. Manual Sync requires a separately authorized transport, operation, remote acknowledgement and reconciliation. None of these propositions entails the next.
+
+A pilot who enters unsynced flight records in Safari and subsequently creates a Home Screen web app could observe an apparently familiar authenticated interface with **different local data**. A copied cookie, when applicable, may make that mismatch less obvious. Do not assert that this precise LogMate incident has occurred; it is a high-consequence, standards-supported **falsification target**. Never instruct a user to remove/reinstall a web app, clear website data, switch browser context, or reset a managed profile as a troubleshooting step before independently recoverable records are secured.
+
+### 18.3 Non-transitive evidence matrix [DEPENDENCY / VALIDATION]
+
+| Dimension | What must be observed | What does **not** prove it |
+| --- | --- | --- |
+| **Entry/install** | Safari tab, Home Screen web app or MDM Web Clip identified by OS version, install path, effective policy and launch mode | icon present; manifest `standalone`; Safari 26 generic support |
+| **Context identity** | exact origin, user UID, browser/container identity, storage inventory before/after transition | copied cookie; same URL; same icon |
+| **Local durability** | completed DB transaction, close/reopen, process/device restart, offline read/write and version migration | shell cache; `StorageManager.estimate()`; `persist()===true` |
+| **External custody** | independently retained export with source/version/record-count/integrity, allowed Files destination and clean-context **37-store** import verification | file-picker opened; local DB exists; cached worker |
+| **Connectivity/authority** | permitted network path, authenticated foreground Manual Delta Sync attempt, per-operation ACK and conflict/reconciliation result | `navigator.onLine`; Background Sync API availability; hotspot assumption |
+| **Release provenance** | retained NORMAL archive + trusted digest → authorized HTTPS bytes → observed browser/device behavior | green CI; development Acceptance ZIP; emulator PASS |
+
+**MINTTAP DECISION:** Gate promotion requires a *conjunction* of independent product, browser, device-policy, storage and recovery evidence; no single all-green aggregate can substitute for the missing dimension. An **UNKNOWN** outcome blocks the corresponding claim, not necessarily safe local capture when the product contract explicitly permits it.
+
+### 18.4 Executable product-owner acceptance packet, not an invented test result [VALIDATION]
+
+The following scenarios use **disposable synthetic flight records** and authorized test devices only. The result for every scenario is presently **NOT EXECUTED / OPEN**:
+
+| Case | Stimulus and controlled observation | Required independent oracle / failure consequence |
+| --- | --- | --- |
+| EFB-C01 | Write unique synthetic record in Safari, close, reopen Safari | same context and record identity; local-save state truthful |
+| EFB-C02 | With record in Safari, create Home Screen web app | record inventory compared in both contexts; **no silent shared-data assumption**; explain import/restore path if distinct |
+| EFB-C03 | Test signed-in cookie/session continuity during installation | UID/ledger binding checked separately from cookie presence; wrong-UID ledger remains inaccessible |
+| EFB-C04 | Open via MDM-provisioned Web Clip on approved device | record actual full-screen/URL, app allowlist, Safari restriction and MDM envelope; do not equate with user-installed app |
+| EFB-C05 | Record `persisted()`, `persist()` result and `estimate()` | classify each as diagnostic, not backup assurance; handle denied/unsupported/QuotaExceededError |
+| EFB-C06 | Cold offline restart after completed write and worker activation | separate app shell readiness, transaction persistence and local read/write; network disabled **before** fresh launch |
+| EFB-C07 | Apply an approved V1→V2 update with unsynced records | preserve unique records and migration rollback path; no forced `skipWaiting` promotion without safety |
+| EFB-C08 | Simulate storage loss in disposable context **after independent export** | detect missing ledger and offer recovery; never call missing records 'synced' |
+| EFB-C09 | Export using each permitted managed Files destination | file exists **outside** web-app origin, can be reopened, is complete and survives origin reset |
+| EFB-C10 | Restore to fresh context/approved second device | all **37 stores** plus schema/UID/record counts and integrity; negative corrupt/wrong-owner cases fail closed |
+| EFB-C11 | Foreground Manual Delta Sync with network permitted, then denied | distinguish local queued, remote accepted, ACKed, conflict and converged; no automatic/background claim |
+| EFB-C12 | Remove/reinstall Web Clip or change MDM profile in **test-only** fleet | document data retention/loss and recovery, without implying uniform behavior across airlines |
+| EFB-C13 | Safari ↔ Home Screen ↔ managed Web Clip handoff | three-way inventory and context labels; same-origin URL does not imply same data container |
+| EFB-C14 | Verify focus, orientation, offline/update/recovery wording on physical iPad | Design Studio semantic-state, touch, reflow, screen reader and user recovery acceptance; no screenshot-only PASS |
+
+**Negative controls:** deliberately present a different UID, incomplete/corrupt export, missing store, interrupted restore, stale worker, denied Files destination and absent network. Each must produce the **correct failure reason** rather than a generic nonzero status; avoid collecting flight records, tokens, auth codes or personal identifiers in CI. Retain test-device iPadOS/build, MDM policy version, Safari/Web Clip installation path, NORMAL source/build digest, storage context, timestamp, sanitized operation/ACK identifiers, pass/fail/unknown and responsible operator.
+
+**Sequence constraint:** first obtain authorized NORMAL bytes and an isolated HTTPS origin; then establish local-write and independent export; **only then** perform destructive test-only origin/profile transitions. Physical EFB policies and production-like credentials require explicit product/airline authorization. There is no authority here to deploy LogMate, change MDM profiles or wipe real user data.
+
+### 18.5 Five-track transfer and bounded handoff [TRANSFER VALIDATION / CONTRADICTION]
+
+- **E (highest-risk owner):** source→archive→HTTPS custody, context-loss threat model, external backup, recovery and MDM release admission. The retained Acceptance artifact is **not** a NORMAL candidate; no current source/run evidence closes this gate.
+- **A (prerequisite supplier):** explain Safari/WebKit storage container and worker/update behavior, separate manifest launch affordance from offline execution; distinguish Safari.app, Home Screen and managed Web Clip. The exact iPadOS/MDM interaction remains CHANGE WATCH.
+- **C (independent challenger):** run positive and negative controls with identity/count/digest oracles, offline cold restart, 37-store restore and real assistive-technology observations. Do not promote a successful `persist()` or cached shell to durability PASS.
+- **B (Design Studio consumer):** follow the canonical synthesis precedence: semantic data truth and recovery > aesthetic continuity. Design **requirements**, not speculative finished UI: `Saved on this device`, `Backup verified`, `Waiting to sync`, `Synced`, `Recovery required` each require a distinct product-defined event. Do not show `Synced` from a local transaction.
+- **D (Marketing consumer):** D8/D9 product/Store PWA, backup, automatic sync and EFB compatibility claims remain HOLD. Measure only redacted opt-in context and task outcomes; no token-bearing action URLs or flight records in analytics.
+- **Engineering handoff:** LogMate owns NORMAL build retention and digest, real Auth/Worker/IDB implementation, 37-store codec and Manual Delta Sync ACK. Software Engineering Studio's bounded macOS Safari/Chromium transfer does **not** certify managed iPad; no peer repo changed.
+
+**CONTRADICTION / operational judgment:** `Safari 26 Home Screen entry available` ≠ `company iPad permits entry`; `same origin` ≠ `same installed storage`; `cookie copied` ≠ `flight records copied`; `persist granted` ≠ `recoverable backup`; `offline shell` ≠ `offline ledger`; `background API exists somewhere` ≠ `unattended EFB sync`; `Acceptance artifact retained` ≠ `NORMAL release retained`.
+
+**Gate after this checkpoint:** Stage 8 applied ACTIVE; browser/Hosting synthetic security evidence remains PASS at its recorded versions; **NORMAL artifact custody, approved HTTPS, Safari/Home Screen/MDM, data preservation and 37-store restore remain OPEN; PWA release HOLD.** This resolves a *cross-context migration acceptance specification*, not a product runtime issue. **Adjacent-value check:** the next directly useful action is an Engineering-owned retained NORMAL archive plus approved isolated HTTPS/physical-iPad context. Further generic synthetic test inflation would not close that evidence boundary.
