@@ -64,7 +64,27 @@ async function runCase(name, port, withShadow) {
       const marker=body.includes('AUTH_SENTINEL')?'AUTH':body.includes('SHADOW_SENTINEL')?'SHADOW':body.includes('ROOT_SENTINEL')?'ROOT':'OTHER';
       result[route]={initialStatus:initial.status,location:initial.headers.get('location'),finalStatus:final.status,finalPath:new URL(final.url).pathname,marker};
     }
-    console.log(JSON.stringify({case:name,cliVersion:process.env.FIREBASE_CLI_PIN||'unknown',routes:result},null,2));
+    // Synthetic query probe only; never use real Firebase action codes or print URLs.
+    const fakeCode='SYNTHETIC_NON_SECRET';
+    const query='?mode=resetPassword&oobCode='+fakeCode;
+    const queryProbe={};
+    for(const route of ['/auth','/auth/action']){
+      const initial=await fetch(base+route+query,{redirect:'manual',signal:AbortSignal.timeout(4000)});
+      const final=await fetch(base+route+query,{redirect:'follow',signal:AbortSignal.timeout(4000)});
+      const body=await final.text();
+      const location=initial.headers.get('location');
+      queryProbe[route]={
+        initialStatus:initial.status,
+        redirectPreservedQuery:initial.status>=300&&initial.status<400
+          ? new URL(location,base).searchParams.get('oobCode')===fakeCode
+          : null,
+        finalPreservedQuery:new URL(final.url).searchParams.get('oobCode')===fakeCode,
+        finalStatus:final.status,
+        finalMarker:body.includes('AUTH_SENTINEL')?'AUTH':body.includes('SHADOW_SENTINEL')?'SHADOW':'OTHER',
+      };
+    }
+    console.log(JSON.stringify({case:name,cliVersion:process.env.FIREBASE_CLI_PIN||'unknown',routes:result,queryProbe},null,2));
+    result.queryProbe=queryProbe;
     return result;
   } finally {
     if (child && child.exitCode===null) {child.kill('SIGTERM');await Promise.race([new Promise(resolve=>child.once('exit',resolve)),sleep(3500)]);if(child.exitCode===null)child.kill('SIGKILL');}
@@ -82,4 +102,17 @@ for(const alias of ['/auth','/auth/','/auth/action','/auth/action/','/auth/actio
 }
 assert.equal(shadow['/'].marker,'ROOT','shadow must not change root');
 assert.equal(shadow['/auth/'].marker,'SHADOW','auth/index.html must expose static priority counterexample');
+assert.equal(baseline['/auth/action'].initialStatus,301,'existing auth/action directory should redirect in this pinned emulator');
+assert.equal(shadow['/auth'].initialStatus,301,'shadow auth/index.html should redirect /auth in this pinned emulator');
+for(const [label,observed] of [['baseline',baseline],['shadow',shadow]]){
+  for(const alias of ['/auth','/auth/action']){
+    assert.equal(observed.queryProbe[alias].finalPreservedQuery,true,label+' '+alias+' query must survive navigation');
+    assert.equal(observed.queryProbe[alias].finalStatus,200,label+' '+alias+' final HTTP 200');
+    if(observed.queryProbe[alias].redirectPreservedQuery!==null){
+      assert.equal(observed.queryProbe[alias].redirectPreservedQuery,true,label+' '+alias+' redirect must preserve synthetic query');
+    }
+  }
+}
+assert.equal(baseline.queryProbe['/auth/action'].finalMarker,'AUTH');
+assert.equal(shadow.queryProbe['/auth'].finalMarker,'SHADOW');
 console.log('EMULATOR ROUTE GATE PASS: baseline auth aliases and static shadow observed; live HTTPS/Safari/managed iPad remain OPEN');
