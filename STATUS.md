@@ -1,7 +1,7 @@
 # MintTap Web Manager Status
 
 Operating state: **ACTIVE — CONTINUOUS EXPERT MAINTENANCE / APPLICATION + FIVE-TRACK COORDINATION + PWA SPECIALIZATION**  
-Last sync: 2026-10-25
+Last sync: 2026-10-26
 
 ## Operating model
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete; curriculum completion is not production certification. Five specialist tracks remain mandatory; Web Manager coordinates rather than acting as a sixth specialist. PWA remains a strategic cross-track specialization.
@@ -502,3 +502,12 @@ Highest-value adjacent generic work is **318 — Account deletion authority reti
 
 
 - **2026-10-26 301 fail-closed regression follow-up:** [run 40205883570](https://github.com/yhappcom/web-manager/actions/runs/40205883570) at `e0a0e1a21405a75a7907958ffd09dd6f15fd0192` **SUCCESS**, job `121206591637`. The existing emulator harness now **asserts** `/auth/action` initial 301 `Referrer-Policy: no-referrer` and `Cache-Control: no-cache, no-store, must-revalidate`, final 200 no-store and absent-policy negative baseline; not merely logging them. No product/HTTPS/Safari/managed iPad validation.
+
+
+## 2026-10-26 Stage 8 applied browser `Referer` checkpoint — synthetic Chromium gate PASS
+
+- **Source/ownership:** [integrated 516 §§13–14](research/516_stage8_pwa_shared_origin_auth_action_csp_worker_and_third_party_execution_20261025.md) owns action-link privacy. Track **E** is the security/operations owner; **A** supplies Referrer Policy/HTML speculative parser mechanics; **C** owns executed network-request oracles; **B** consumes Design Studio Auth/recovery state truth; **D** consumes Marketing D8/D9 token-free measurement and claims HOLD. No equal-work allocation or peer-repo duplication.
+- **Actual hosted validation:** [run 40210704513](https://github.com/yhappcom/web-manager/actions/runs/40210704513), exact source `33cbf5c`, Node 22.16.0 **19/19 tests PASS**, Chrome 155.0.8059.39 **6/6 actual synthetic loopback network probes PASS**. Same-origin requests under default policy carried the synthetic action query; cross-origin carried origin only. `no-referrer` suppressed `Referer` on tested resources.
+- **Critical timing contradiction:** [initial browser run 40210568736](https://github.com/yhappcom/web-manager/actions/runs/40210568736) **FAIL** despite 17/17 classifier PASS: a static resource textually *after* `history.replaceState` still transmitted the old full URL in `Referer`. Revised independent post-cleanup dynamically generated resource omitted the synthetic query while parser-visible later static resource retained it. Thus late JS cleanup cannot substitute for response-header policy; parser/preload initiation requires actual network observation, not source order inference. No exact preload initiator trace or real product leak is claimed.
+- **Gate:** **Stage 8 ACTIVE · synthetic Hosting 301/header PASS · synthetic Chrome Referer PASS · Production validation OPEN · PWA release HOLD.** Still missing approved retained NORMAL artifact/digest, actual HTTPS Hosting/CDN responses, redacted access-log/Chrome/Safari evidence, Auth token lifecycle and successful action UX, physical managed EFB/iPad and 37-store external backup/restore. Do not infer unattended native↔PWA Sync or advertising support.
+- **Next major target:** Stop expanding synthetic case counts absent a new falsifiable blocker. Seek authorized NORMAL PWA artifact + HTTPS preview and real browser/managed-device evidence; maintain provider/browser/OS CHANGE WATCH. LogMate, Design Studio, Marketing and Software Engineering remain read-only.
