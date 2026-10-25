@@ -6,7 +6,7 @@ const ref=(present,hasToken=false,originOnly=false)=>({present,hasToken,originOn
 function fixture(header=false,cleanup=false,redirect=false){
   const c={id:'test',header,cleanup,redirect};
   const r={document:{queryPreserved:true},early:ref(!header,!header),
-    late:ref(!header,!header&&!cleanup),cross:ref(!header,false,!header)};
+    late:ref(!header,!header),post:ref(!header,!header&&!cleanup),cross:ref(!header,false,!header)};
   if(redirect)r.redirect={queryPreserved:true};
   return {c,r};
 }
@@ -21,7 +21,9 @@ for(const [name,h,clean,redir] of [
 for(const [name,mutate,reason] of [
   ['missing early',r=>delete r.early,'MISSING_REQUEST_EVIDENCE'],
   ['missing cross',r=>delete r.cross,'MISSING_REQUEST_EVIDENCE'],
-  ['wrong late token',r=>r.late.hasToken=false,'LATE_SAME_ORIGIN_REFERER_MISMATCH'],
+  ['wrong parser late token',r=>r.late.hasToken=false,'PARSER_PRELOAD_REFERER_MISMATCH'],
+  ['wrong post-cleanup token',r=>r.post.hasToken=false,'POST_CLEANUP_REFERER_MISMATCH'],
+  ['missing post-cleanup request',r=>delete r.post,'MISSING_REQUEST_EVIDENCE'],
   ['cross token leak',r=>r.cross.hasToken=true,'CROSS_ORIGIN_TOKEN_PRESENT'],
   ['cross full URL',r=>r.cross.originOnly=false,'CROSS_ORIGIN_NOT_ORIGIN_ONLY'],
   ['document query lost',r=>r.document.queryPreserved=false,'DOCUMENT_QUERY_NOT_RECEIVED'],
