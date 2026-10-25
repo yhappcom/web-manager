@@ -12,7 +12,7 @@ const phase=new URLSearchParams(location.search).get('phase')||'unknown';
 const result={phase,controller:!!navigator.serviceWorker?.controller,active:false,waiting:false,version:null,sentinel:false,cacheV1:false,cacheV2:false,registered:false};
 const out=()=>{document.getElementById('worker-result').textContent=JSON.stringify(result)};
 const db=()=>new Promise((resolve,reject)=>{const r=indexedDB.open('pwa-synthetic-ledger',1);r.onupgradeneeded=()=>r.result.createObjectStore('ledger');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
-const ledger=async(write)=>{const d=await db();return await new Promise((resolve,reject)=>{const t=d.transaction('ledger',write?'readwrite':'readonly');const s=t.objectStore('ledger');const q=write?s.put('SYNTHETIC-LOCAL-LEDGER-20261025','sentinel'):s.get('sentinel');q.onsuccess=()=>resolve(write?true:q.result==='SYNTHETIC-LOCAL-LEDGER-20261025');q.onerror=()=>reject(q.error);t.oncomplete=()=>d.close();});};
+const ledger=async(write)=>{const d=await db();return await new Promise((resolve,reject)=>{let t;try{t=d.transaction('ledger',write?'readwrite':'readonly');}catch(e){d.close();reject(e);return;}const s=t.objectStore('ledger');const q=write?s.put('SYNTHETIC-LOCAL-LEDGER-20261025','sentinel'):s.get('sentinel');let value=false;q.onsuccess=()=>{value=write?true:q.result==='SYNTHETIC-LOCAL-LEDGER-20261025';};t.oncomplete=()=>{d.close();resolve(value);};t.onabort=()=>{d.close();reject(t.error||Error('IDB_TRANSACTION_ABORT'));};t.onerror=()=>{};});};
 try {
  if(!('serviceWorker' in navigator))throw Error('NO_SERVICE_WORKER');
  let reg=await navigator.serviceWorker.getRegistration('/app/');
