@@ -14,7 +14,7 @@ async function fixture(fn) {
     for (const root of [normal, downloaded, staged]) {
       for (const name of required) { await fs.mkdir(path.dirname(path.join(root, name)), { recursive:true }); await fs.writeFile(path.join(root, name), 'content:' + name); }
     }
-    await fs.writeFile(config, JSON.stringify({hosting:{public:'staged',ignore:['firebase.json','**/.*','**/node_modules/**'],rewrites:[{source:'/auth',destination:'/auth/action/index.html'},{source:'/auth/',destination:'/auth/action/index.html'},{source:'/auth/action',destination:'/auth/action/index.html'}]}}));
+    await fs.writeFile(config, JSON.stringify({hosting:{public:'staged',ignore:['firebase.json','**/.*','**/node_modules/**'],headers:[{source:'**',headers:[{key:'Cache-Control',value:'no-cache, no-store, must-revalidate'}]}],rewrites:[{source:'/auth',destination:'/auth/action/index.html'},{source:'/auth/',destination:'/auth/action/index.html'},{source:'/auth/action',destination:'/auth/action/index.html'}]}}));
     await fn({dir,normal,downloaded,staged,config,packet:await snapshot(normal,SOURCE)});
   } finally { await fs.rm(dir,{recursive:true,force:true}); }
 }
@@ -136,4 +136,50 @@ test('symlinked parent alias cannot spoof independent roots', async () => fixtur
   const aliasParent = path.join(f.dir,'alias-parent');
   await fs.symlink(f.dir,aliasParent);
   await assert.rejects(verify(f.packet,path.join(aliasParent,'staged'),f.staged,f.config,SOURCE,f.packet.inventoryDigest),/distinct real directories/);
+}));
+
+test('changed, missing or additional Hosting response headers REJECT with identical files', async () => fixture(async f => {
+  const original = JSON.parse(await fs.readFile(f.config,'utf8'));
+  for (const mutate of [
+    c => { delete c.hosting.headers; },
+    c => { c.hosting.headers[0].headers[0].value = 'public, max-age=31536000'; },
+    c => { c.hosting.headers[0].source = '/auth/**'; },
+    c => { c.hosting.headers.push({source:'**',headers:[{key:'Content-Security-Policy',value:"default-src 'self'"}]}); },
+    c => { c.hosting.headers[0].headers.push({key:'X-Frame-Options',value:'DENY'}); },
+  ]) {
+    const config = structuredClone(original);
+    mutate(config);
+    await fs.writeFile(f.config,JSON.stringify(config));
+    await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/header/);
+  }
+}));
+test('unreviewed Hosting site/target/i18n/appAssociation options REJECT', async () => fixture(async f => {
+  const original = JSON.parse(await fs.readFile(f.config,'utf8'));
+  for (const [key,value] of [['site','another-site'],['target','prod'],['i18n',{root:'/i18n'}],['appAssociation','AUTO']]) {
+    const config = structuredClone(original);
+    config.hosting[key] = value;
+    await fs.writeFile(f.config,JSON.stringify(config));
+    await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/unreviewed Hosting option/);
+  }
+}));
+test('removed or duplicate Hosting ignore patterns REJECT', async () => fixture(async f => {
+  const original = JSON.parse(await fs.readFile(f.config,'utf8'));
+  for (const ignore of [['firebase.json'],['firebase.json','**/.*','**/.*']]) {
+    const config = structuredClone(original);
+    config.hosting.ignore = ignore;
+    await fs.writeFile(f.config,JSON.stringify(config));
+    await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/ignore/);
+  }
+}));
+test('acceptance marker outside main.dart.js REJECT for snapshot and downloaded bytes', async () => fixture(async f => {
+  const marker = 'LOGMATE_PERSISTENCE_ACCEPTANCE_FLIGHT_V1';
+  await fs.writeFile(path.join(f.normal,'index.html'),marker);
+  await assert.rejects(snapshot(f.normal,SOURCE),/development acceptance marker/);
+  await fs.writeFile(path.join(f.downloaded,'flutter_bootstrap.js'),marker);
+  await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/development acceptance marker/);
+}));
+test('acceptance marker in auxiliary asset REJECT', async () => fixture(async f => {
+  await fs.mkdir(path.join(f.normal,'assets'),{recursive:true});
+  await fs.writeFile(path.join(f.normal,'assets','debug.txt'),'LOGMATE_PERSISTENCE_ACCEPTANCE_FLIGHT_V1');
+  await assert.rejects(snapshot(f.normal,SOURCE),/development acceptance marker/);
 }));
