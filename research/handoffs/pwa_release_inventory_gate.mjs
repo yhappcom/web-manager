@@ -112,6 +112,8 @@ export async function verify(packet, downloadedRoot, stagedRoot, firebaseConfigP
   if (!Array.isArray(config.hosting.ignore) || config.hosting.ignore.some(p => !SAFE_IGNORES.has(p))) fail('unreviewed Hosting ignore rule');
   const actualPublic = path.resolve(path.dirname(configPath), config.hosting.public);
   if (actualPublic !== path.resolve(stagedRoot)) fail(`Hosting public directory mismatch: ${config.hosting.public}`);
+  const [downloadedCanonical, stagedCanonical] = await Promise.all([fs.realpath(downloadedRoot), fs.realpath(stagedRoot)]);
+  if (downloadedCanonical === stagedCanonical) fail('download and Hosting staging roots must be distinct real directories');
   assertHostingRoutes(config.hosting);
   compare(packet.files, await inventory(downloadedRoot), 'download');
   compare(packet.files, await inventory(stagedRoot), 'hosting');
