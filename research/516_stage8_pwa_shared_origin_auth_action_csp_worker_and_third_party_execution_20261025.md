@@ -214,3 +214,44 @@ All cases pin exact NORMAL build SHA, approved preview origin, initial URL/alias
 - **Software Engineering D006:** account-action success and a subsequent Manual Delta Sync receipt/apply are separate state transitions. Engineering owns product implementation and the authorized disposable runtime.
 
 **Next major checkpoint:** Engineering-approved disposable HTTPS auth preview and exact NORMAL artifact, then independent alias/header/referrer/CSP/network captures with negative controls. If this execution is unavailable, preserve the source-level risk as **OPEN**, not a production leak claim. **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.** No LogMate or peer repository was modified.
+
+
+## §12 — Auth action route-policy completeness, permanent redirect custody and negative-oracle execution (2026-10-26 KST)
+
+**Owner:** E security/Hosting response policy; A supplies HTTP/URL/browser mechanics; C owns execution and falsification; B/D consume UX/privacy implications. **Scope:** disposable Firebase Hosting Emulator and read-only LogMate source, not deployed HTTPS, real Auth, Safari or EFB. **Current gate:** Stage 8 applied ACTIVE / Production validation OPEN / PWA release HOLD.
+
+### SOURCE — exact product and standards
+
+- Re-read LogMate `web/auth/action/index.html@39d06a633ab7bee719b3401bc3ac744f8ba175d0` and `firebase.json@9ac0972e26749215c4a718360c66315c6caf3cc8` from `main`: the action document reads `mode` and `oobCode` from the query; the Hosting source has global `Cache-Control: no-cache, no-store, must-revalidate` but no explicit `Referrer-Policy`. Three aliases rewrite to the action document; `auth/action/index.html` exists as static content. No production response or disclosure was observed.
+- Firebase Hosting primary documentation (rechecked 2026-10-26): https://firebase.google.com/docs/hosting/full-config . Custom response-header rules match the **initial requested URL before rewrites**, and configured redirects/exact static precede rewrites. A header rule matching only `/auth/action/index.html` cannot be assumed to protect a browser request to `/auth` merely because that request is rewritten to that file.
+- RFC 9110 §15.4.2: https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4.2 . A `301` is heuristically cacheable **unless** explicit controls or method rules override it. This is a general property, **not evidence that the LogMate redirect was cached**. The product's global `no-store` declaration must be checked on the actual **redirect response**, not inferred from the final 200.
+- MDN Referrer-Policy (rechecked 2026-10-26): https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy . Default `strict-origin-when-cross-origin` can include the complete action URL/query on same-origin resource requests; `no-referrer` suppresses the `Referer` header but **does not remove the original navigation URL or redirect `Location` query**. OWASP password-reset guidance recommends `no-referrer` for reset pages with URL tokens: https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html .
+- Existing executed [504 emulator checkpoint](504_stage8_pwa_normal_artifact_custody_hosting_projection_execution_contract_20261023.md) established, on Firebase CLI 15.34.1 synthetic fixtures, that `/auth/action` returns `301 → /auth/action/ → 200 AUTH` with a **non-secret** query preserved. This is an HTTP emulator result, not a Chromium/Safari Referer trace.
+
+### SYNTHESIS — five document-entry paths plus the redirect hop
+
+| Initial request path | Prior synthetic baseline | Why separate policy admission is required |
+| --- | --- | --- |
+| `/auth` | 200 action HTML through rewrite (no shadow file) | Response-header matching uses `/auth`, not rewrite destination. |
+| `/auth/` | 200 action HTML through rewrite | Slash alias is a separate requested path; adding `auth/index.html` changes content. |
+| `/auth/action` | 301 to slash path | Redirect response and target response are **two** distinct HTTP-policy/caching observations. |
+| `/auth/action/` | 200 action HTML | This is the actual redirect target; it was omitted from the earlier four-path header proposal in §11. |
+| `/auth/action/index.html` | 200 exact static action HTML | A destination-only header rule can protect direct static requests but not the other aliases. |
+
+**CORRECTION to §11 proposal:** the earlier “all four action-document entry URLs” wording omitted `/auth/action/`. The **five** requested document paths above require individual admission or a proved equivalent matching expression. In addition, `/auth/action` has an initial **301 hop** whose own headers/cache behavior must be recorded. This is a research-proposal correction, not a product change or production vulnerability finding.
+
+**CONTRADICTIONS to reject:** `final 200 has no-referrer` ≠ `301 had no-referrer/no-store`; `rewrite destination protected` ≠ `all aliases protected`; `header attached` ≠ `query removed from initial request/redirect/provider logs`; `query preserved` ≠ `token leaked to third party`; `no-store configured` ≠ `all intermediaries and browsers demonstrably did not retain the redirect`; `policy applied` ≠ `correct Auth HTML served` (static-shadow counterexample).
+
+### VALIDATION — executable, credential-free negative controls
+
+Extended the **existing** `research/handoffs/test_firebase_hosting_auth_route_emulator.mjs` rather than creating a new micro-lab. The pinned workflow `.github/workflows/pwa_hosting_auth_route_emulator_research.yml` executes on pushes to this harness. Its five synthetic cases are: original baseline without policy; static-shadow baseline; five-alias route-scoped `no-referrer`; policy plus static shadow; and **rewrite-destination-only** policy as an intentional negative control. The script records initial/final status, policy and cache-control headers separately, tests final HTML identity, and logs only Boolean query preservation with a non-secret sentinel. It must not log real `oobCode` or a full query URL.
+
+**Falsifiable acceptance:** every protected alias must serve the intended AUTH sentinel and expose `Referrer-Policy: no-referrer` on the final document; root remains unmodified; baseline has no referrer policy; shadow is still rejected by content identity even if it carries the policy; destination-only policy must not masquerade as protection of rewrite aliases. Redirect-hop header/caching observations remain separately classified and are **not** inferred from the final 200. Source-only or pending Actions code is **not PASS**; exact run ID/conclusion and observed response fields are required before promoting this emulator gate.
+
+### MINTTAP DECISION — bounded proposal / OPEN
+
+For an Engineering-approved disposable preview, evaluate a route-scoped policy covering all **five** initial action-document URLs and test both 301 and 200 responses; do not automatically deploy a global policy or assume that rewriting to a protected destination is sufficient. Check 301 `Cache-Control`, `Location` query preservation, Referrer-Policy, redacted provider/CDN logs, browser history, same-origin icons/fonts, cross-origin module requests, CSP telemetry, real Auth error/retry and accessible return-to-app states. Do not change Firebase Auth handlers or remove `oobCode` before the password-reset form retains a valid in-memory code. A safer canonical email action-link path (avoiding a redirect) is a **candidate**, not an approved migration; email templates, Firebase authorized domains, old-link compatibility and operational rollback require Engineering/Auth ownership.
+
+**TRANSFER VALIDATION:** A supplies actual browser request/referrer semantics; C must reproduce negative controls in real Chromium then native Safari and distinguish initial 301 from final 200; B consumes Design Studio's mandatory semantic/focus/recovery gate, with password-reset completion separate from local ledger/Sync status; D consumes Marketing Manager D8/D10 claim HOLD and forbids query-bearing action links in analytics, campaign attribution or advertising surfaces. Product-specific managed-iPad/MDM/storage and 37-store recovery remain independent OPEN gates.
+
+**CHANGE WATCH:** Firebase CLI/Hosting redirect behavior, Chrome/Safari referrer policy, OS-managed Web Clip container, Firebase email-handler action URL shape and HTTP caching intermediaries. **Next meaningful evidence:** exact hosted emulator result, then an authorized NORMAL artifact + HTTPS response/browser capture; no synthetic HTTP pass may promote production or managed-iPad release.
