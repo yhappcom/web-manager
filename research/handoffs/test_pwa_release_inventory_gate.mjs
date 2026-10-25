@@ -183,3 +183,19 @@ test('acceptance marker in auxiliary asset REJECT', async () => fixture(async f 
   await fs.writeFile(path.join(f.normal,'assets','debug.txt'),'LOGMATE_PERSISTENCE_ACCEPTANCE_FLIGHT_V1');
   await assert.rejects(snapshot(f.normal,SOURCE),/development acceptance marker/);
 }));
+
+test('equal NORMAL/download/staged trees with auth/index.html shadow REJECT', async () => fixture(async f => {
+  // Firebase Hosting serves exact static content before applying rewrites.
+  // Without this guard, all three equal trees plus the unchanged rewrite set
+  // would satisfy the inventory gate while /auth/ could serve another page.
+  for (const root of [f.normal, f.downloaded, f.staged]) {
+    await fs.writeFile(path.join(root, 'auth', 'index.html'), '<h1>Shadow</h1>');
+  }
+  await assert.rejects(snapshot(f.normal, SOURCE), /shadows reviewed Auth rewrite/);
+  await assert.rejects(verify(f.packet, f.downloaded, f.staged, f.config, SOURCE, f.packet.inventoryDigest), /shadows reviewed Auth rewrite/);
+}));
+
+test('downloaded-only auth index shadow REJECT independently of hash mismatch', async () => fixture(async f => {
+  await fs.writeFile(path.join(f.downloaded, 'auth', 'index.html'), '<h1>Shadow</h1>');
+  await assert.rejects(verify(f.packet, f.downloaded, f.staged, f.config, SOURCE, f.packet.inventoryDigest), /shadows reviewed Auth rewrite/);
+}));
