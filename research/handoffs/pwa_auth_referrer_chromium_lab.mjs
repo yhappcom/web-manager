@@ -49,14 +49,15 @@ async function visit(binary,url,profile){
 }
 export function classifyCase(c,r,b){
   if(!b||b.reason!=='COMPLETED'||!b.domReady)return {verdict:'UNKNOWN',reason:'BROWSER_OR_DOCUMENT_INCOMPLETE'};
-  if(!r||!r.early||!r.late||!r.cross||!r.document)return {verdict:'FAIL',reason:'MISSING_REQUEST_EVIDENCE'};
-  if([r.early,r.late,r.cross].some(x=>x.invalid))return {verdict:'FAIL',reason:'INVALID_REFERER_VALUE'};
+  if(!r||!r.early||!r.late||!r.post||!r.cross||!r.document)return {verdict:'FAIL',reason:'MISSING_REQUEST_EVIDENCE'};
+  if([r.early,r.late,r.post,r.cross].some(x=>x.invalid))return {verdict:'FAIL',reason:'INVALID_REFERER_VALUE'};
   if(!r.document.queryPreserved)return {verdict:'FAIL',reason:'DOCUMENT_QUERY_NOT_RECEIVED'};
   if(c.redirect&&!r.redirect)return {verdict:'FAIL',reason:'REDIRECT_NOT_OBSERVED'};
   if(c.redirect&&!r.redirect.queryPreserved)return {verdict:'FAIL',reason:'REDIRECT_LOCATION_QUERY_LOST'};
   if(r.early.hasToken!==!c.header)return {verdict:'FAIL',reason:'EARLY_SAME_ORIGIN_REFERER_MISMATCH'};
-  if(r.late.hasToken!==(!c.header&&!c.cleanup))return {verdict:'FAIL',reason:'LATE_SAME_ORIGIN_REFERER_MISMATCH'};
-  if(r.early.present!==!c.header||r.late.present!==!c.header)return {verdict:'FAIL',reason:'SAME_ORIGIN_HEADER_PRESENCE_MISMATCH'};
+  if(r.late.hasToken!==!c.header)return {verdict:'FAIL',reason:'PARSER_PRELOAD_REFERER_MISMATCH'};
+  if(r.post.hasToken!==(!c.header&&!c.cleanup))return {verdict:'FAIL',reason:'POST_CLEANUP_REFERER_MISMATCH'};
+  if(r.early.present!==!c.header||r.late.present!==!c.header||r.post.present!==!c.header)return {verdict:'FAIL',reason:'SAME_ORIGIN_HEADER_PRESENCE_MISMATCH'};
   if(r.cross.hasToken)return {verdict:'FAIL',reason:'CROSS_ORIGIN_TOKEN_PRESENT'};
   if(r.cross.present!==!c.header)return {verdict:'FAIL',reason:'CROSS_ORIGIN_HEADER_PRESENCE_MISMATCH'};
   if(!c.header&&!r.cross.originOnly)return {verdict:'FAIL',reason:'CROSS_ORIGIN_NOT_ORIGIN_ONLY'};
@@ -87,8 +88,8 @@ export async function runLab(){
       if(c.hopPolicy!==false)h['Referrer-Policy']='no-referrer';
       res.writeHead(301,{...h,Location:location});return res.end();
     }
-    if(u.pathname==='/early.js'||u.pathname==='/late.js'){
-      r[u.pathname==='/early.js'?'early':'late']=ref(req.headers.referer);
+    if(['/early.js','/late.js','/post.js'].includes(u.pathname)){
+      r[u.pathname.slice(1,-3)]=ref(req.headers.referer);
       res.writeHead(200,{...h,'Content-Type':'application/javascript'});
       return res.end('window.__loaded=true;');
     }
@@ -96,8 +97,11 @@ export async function runLab(){
       r.document={queryPreserved:u.searchParams.get('oobCode')===SENTINEL};
       if(c.header)h['Referrer-Policy']='no-referrer';
       const cleanup=c.cleanup?'<script>history.replaceState(null,"",location.pathname);</script>':'';
+      // document.write creates a parser-blocking request only after cleanup executes;
+      // the static late script remains discoverable by the speculative preload scanner.
+      const dynamic='<script>document.write("<script src=\\\"/post.js?id='+id+'\\\"><"+"/script>");</script>';
       const html='<!doctype html><html><head><meta charset="utf-8"><title>synthetic</title>'+
-        '<script src="/early.js?id='+id+'"></script>'+cleanup+
+        '<script src="/early.js?id='+id+'"></script>'+cleanup+dynamic+
         '<script src="/late.js?id='+id+'"></script>'+
         '<script src="http://127.0.0.1:'+crossPort+'/cross.js?id='+id+'"></script>'+
         '</head><body><pre id="probe">REFERRER_PROBE_DONE</pre></body></html>';
@@ -115,8 +119,8 @@ export async function runLab(){
         const start=c.redirect?'/auth/action':'/auth';
         const url='http://127.0.0.1:'+main.address().port+start+'?id='+c.id+'&mode=resetPassword&oobCode='+SENTINEL;
         const b=await visit(browser.path,url,profile),r=seen.get(c.id),out=classifyCase(c,r,b);
-        cases.push({case:c.id,...out,process:b.reason,requestEvidence:!!(r.early&&r.late&&r.cross),
-          earlyToken:r.early?.hasToken??null,lateToken:r.late?.hasToken??null,
+        cases.push({case:c.id,...out,process:b.reason,requestEvidence:!!(r.early&&r.late&&r.post&&r.cross),
+          earlyToken:r.early?.hasToken??null,parserLateToken:r.late?.hasToken??null,postCleanupToken:r.post?.hasToken??null,
           crossOriginOnly:r.cross?.originOnly??null,redirectQueryPreserved:r.redirect?.queryPreserved??null});
       }finally{await rm(profile,{recursive:true,force:true});}
     }
