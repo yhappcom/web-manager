@@ -570,3 +570,50 @@ The inspected LogMate `main` `firebase.json` currently specifies one global `Cac
 **CONTRADICTION:** `equal files` ≠ `equal HTTP headers`; `reviewed firebase.json` ≠ `observed served response`; `Cache-Control: no-store` ≠ `Cache API unavailable` or `offline impossible`; `known Acceptance marker absent` ≠ `NORMAL build provenance proven`; `27 tests defined` ≠ `27 tests passed`; `synthetic browser PASS` ≠ `production release PASS`.
 
 **OPEN / CHANGE WATCH:** exact Node 27/27 and hosted run; product-approved retained NORMAL ZIP and externally trusted digest; Firebase Emulator and independent served HTTPS route/header proof; native Safari/Home Screen vs managed Web Clip/MDM capability; origin eviction and independent external 37-store backup/reopen/restore; current sync authority and replay behavior. Revisit Firebase configuration schema, CLI deploy semantics and action artifact handling when provider versions change. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+---
+
+## 2026-10-25 — Auth alias static-precedence shadow: source-verified custody counterexample
+
+**Stage/gate:** Stage 8 ACTIVE; Track E owns release/Hosting admission, A supplies URL and directory-resolution mechanics, C owns falsification, B/D consume. **Source-level guard implemented; exact Node suite, Firebase Emulator, HTTPS, Safari, managed iPad and product release validation OPEN.** No LogMate or other specialist repository changed.
+
+### Problem → rule → current-source consequence [SOURCE / SYNTHESIS]
+
+Firebase Hosting's primary configuration reference, checked 2026-10-25, orders reserved routes, redirects, **exact static content**, then configured rewrites, and explicitly says a rewrite applies only if no file or directory exists at the requested URL path: https://firebase.google.com/docs/hosting/full-config . A file-inventory equality check and exact rewrite-list equality do not prove that a rewrite actually wins response selection.
+
+LogMate source read-only at `main@4101ec7380796300f68fa60dbc7e5b6061f00080`:
+- `firebase.json` blob `9ac0972e26749215c4a718360c66315c6caf3cc8` defines `/auth`, `/auth/`, `/auth/action` -> `/auth/action/index.html`.
+- `web/auth/action/index.html` blob `39d06a633ab7bee719b3401bc3ac744f8ba175d0` exists; `web/auth/index.html` returned 404 from the source repository.
+- Because the `auth/` and `auth/action/` directories necessarily exist in the source layout, **directory-resolution and canonical-slash behavior for all aliases remain a real provider-runtime question**. Source layout and docs alone do not establish the actual HTTP status, redirect chain or served body for these aliases.
+
+**Concrete counterexample:** add `auth/index.html` with different HTML to each of the three otherwise byte-identical NORMAL, downloaded and Hosting-staged trees. The prior verifier's raw-tree, digest and three-rewrite checks can all be internally consistent while `/auth/` can resolve to the new static directory index instead of the intended action document. This is a **research-tool false-green class**, not a claim that the current LogMate repository contains the shadow file or that a production route is broken.
+
+### Implemented conservative guard and bounded validation [VALIDATION DESIGN]
+
+The integrated `research/handoffs/pwa_release_inventory_gate.mjs` now rejects `auth/index.html` in any inventoried tree with `static resource shadows reviewed Auth rewrite`. This is intentionally **project-specific**, not a general implementation of Firebase path normalization. The test file adds two new groups: (1) the shadow in all three equal trees, and (2) a downloaded-only shadow. Total defined Node test groups rise from **27 to 29**. These new cases are **defined, NOT_EXECUTED in this run**; the earlier exact 27-group suite and hosted run also remain unverified. No PASS is claimed from source code or a test definition.
+
+The guard cannot decide how Firebase handles the existing `auth/` directory when it has no `index.html`, whether `/auth` redirects to `/auth/`, or whether `/auth/action` resolves to its directory index before the rewrite. It also cannot prove actual response headers, MIME, cache, Referrer-Policy or CSP. These are **separate, falsifiable execution gates**, not reasons to speculate about a production incident.
+
+### High-value Emulator → preview → browser admission packet [DEPENDENCY / OPEN]
+
+1. **Exact build and origin:** Engineering supplies a pinned, independently retained NORMAL artifact, its trusted digest, reviewed `firebase.json`, Firebase CLI version and isolated project/target. Do not deploy the development Acceptance build. No actual email action code or flight record is permitted in test fixtures.
+2. **Baseline routes:** under the Firebase Hosting Emulator, request `/auth`, `/auth/`, `/auth/action`, `/auth/action/index.html`, plus `/auth/index.html` as a negative route. Record status, redirects/Location, final URL, Content-Type, relevant headers, response body SHA-256 and whether it equals the pinned action document. **An unexpected 301/302 or 404 is not automatically a security exploit; it is a product-routing acceptance question.**
+3. **Static precedence negative:** add a deliberately different `auth/index.html` only to a disposable fixture. Demonstrate the difference between static-directory resolution and rewrite behavior; ensure the source-level gate rejects this fixture even if all three compared inventories are equal.
+4. **Directory/alias counterfactuals:** in disposable copies only, remove or alter one rewrite; vary the `auth/` directory index while preserving the required action document; compare `/auth` vs `/auth/` vs `/auth/action`. Capture actual behavior rather than treating documentation as a runtime trace.
+5. **Preview and HTTPS:** repeat baseline on an **authorized, isolated** Hosting preview; verify effective initial-URL header matching for the four action entrypoints, `Referrer-Policy` and CSP where explicitly configured. Emulator parity alone does not prove CDN/HTTPS behavior. Provider documentation: https://firebase.google.com/docs/hosting/test-preview-deploy and https://firebase.google.com/docs/emulator-suite/use_hosting .
+6. **Browser and PWA:** on exact NORMAL bytes, verify that Worker-reserved `/auth` requests are not intercepted, that navigation never returns the Flutter shell instead of action HTML, and that same-origin token-bearing referrers are not sent under an approved `no-referrer` policy. Chromium, Safari.app, Home Screen and managed Web Clip are **different evidence tiers**. No token-bearing URLs in logs.
+7. **Negative-result governance:** a missing/blocked emulator, absent retained NORMAL archive, missing network trace, stale ref, unknown redirect or uncontrolled test environment yields **UNKNOWN/HOLD**, not PASS. No destructive origin reset or managed-device profile change.
+
+### Five-track integration and judgment [MINTTAP DECISION / TRANSFER VALIDATION / CONTRADICTION]
+
+- **E:** pin static-precedence shadow admission to the exact reviewed product routes; do not authorize release from equal bytes/config alone. Product Auth/Hosting owner must approve any URL change.
+- **A:** own exact static/directory/rewrites/redirect ordering and Service Worker reserved-route behavior; do not extrapolate Chromium to WebKit.
+- **C:** require baseline plus deliberately failing static-shadow fixture, real HTTP body/hash/status and browser trace; automated checks do not replace assistive-technology and human recovery testing.
+- **B:** consume Design Studio W121: account verification/reset must present the actual action result, not a shell, false success or silent 404; preserve keyboard/focus/error and return-to-app continuity.
+- **D:** discovery/analytics must not index action links or retain `oobCode`; marketing may not claim a verified password-reset/offline-PWA flow without execution evidence.
+- **Engineering:** owns actual Hosting Emulator, disposable Auth, NORMAL build provenance, production-safe deployment decision, and any code/config correction. Software Engineering D006 remains canonical for Sync apply/ACK; account-action success does not imply Sync completion.
+
+**CONTRADICTION:** `exact rewrite list` ≠ `rewrite wins`; `three equal static trees` ≠ `same effective route`; `directory exists` ≠ `known served status without testing`; `emulator pass` ≠ `preview HTTPS pass`; `auth HTML served` ≠ `one-time code protected`. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+**Adjacent-value check:** This integrated checkpoint addresses a concrete false-green and its test design, plus the more consequential existing-directory ambiguity and a bounded cross-track runtime packet. The next step requires a real NORMAL artifact and authorized Firebase execution; additional static speculation would have lower value than that boundary.
