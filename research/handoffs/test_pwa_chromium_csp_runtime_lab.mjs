@@ -93,7 +93,7 @@ test('browser subprocess waits for stdio close after exit', {skip:process.platfo
     'child.unref();',
     "process.stdout.write('HEAD');",
     'process.exit(0);',
-  ].join('\\n');
+  ].join('\n');
   try {
     await writeFile(executable,script,{mode:0o755});
     const result=await visit(executable,'http://127.0.0.1/fixture',path.join(dir,'profile'));
@@ -110,7 +110,7 @@ test('browser transport preserves nonzero process verdict', {skip:process.platfo
       '#!/usr/bin/env node',
       "process.stdout.write('<html><meta name=\"fixture-case\" content=\"enforce\"><pre id=\"probe-result\">{\"baseline\":true,\"inline\":false,\"dispositions\":[\"enforce\"]}</pre></html>');",
       'process.exit(7);',
-    ].join('\\n'),{mode:0o755});
+    ].join('\n'),{mode:0o755});
     const result=await visit(executable,'http://127.0.0.1/fixture',path.join(dir,'profile'));
     assert.equal(result.reason,'CHROME_NONZERO');
     assert.equal(classifyBrowserOutcome(result,'enforce').verdict,'UNKNOWN');
