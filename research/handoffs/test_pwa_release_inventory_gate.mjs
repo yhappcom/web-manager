@@ -128,3 +128,12 @@ test('unexpected catch-all rewrite REJECT even when all files match', async () =
   await fs.writeFile(f.config,JSON.stringify(config));
   await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/rewrite/);
 }));
+
+test('same directory cannot count as independent download and Hosting staging', async () => fixture(async f => {
+  await assert.rejects(verify(f.packet,f.staged,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/distinct real directories/);
+}));
+test('symlinked parent alias cannot spoof independent roots', async () => fixture(async f => {
+  const aliasParent = path.join(f.dir,'alias-parent');
+  await fs.symlink(f.dir,aliasParent);
+  await assert.rejects(verify(f.packet,path.join(aliasParent,'staged'),f.staged,f.config,SOURCE,f.packet.inventoryDigest),/distinct real directories/);
+}));
