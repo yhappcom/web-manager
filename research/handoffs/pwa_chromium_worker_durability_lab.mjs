@@ -36,8 +36,8 @@ const html='<!doctype html><html><head><meta charset="utf-8"><meta name="fixture
 const worker=v=>`const VERSION=${JSON.stringify(v)};const CACHE='synthetic-app-${v}';\n`+
 `self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/app/','/app/version.txt','/app/client.js'])))});\n`+
 `self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(u.origin!==self.location.origin)return;`+
-`if(e.request.mode==='navigate'&&u.pathname==='/app/'){e.respondWith(caches.match('/app/').then(r=>r||fetch(e.request)));return;}`+
-`if(u.pathname==='/app/version.txt'||u.pathname==='/app/client.js'){e.respondWith(caches.match(u.pathname).then(r=>r||fetch(e.request)));}});\n`;
+`if(e.request.mode==='navigate'&&u.pathname==='/app/'){e.respondWith(caches.open(CACHE).then(c=>c.match('/app/')).then(r=>r||fetch(e.request)));return;}`+
+`if(u.pathname==='/app/version.txt'||u.pathname==='/app/client.js'){e.respondWith(caches.open(CACHE).then(c=>c.match(u.pathname)).then(r=>r||fetch(e.request)));}});\n`;
 export function makeWorkerServer(){
  let version='v1';const hits=[];
  const server=http.createServer((req,res)=>{
