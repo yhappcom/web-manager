@@ -7,11 +7,13 @@ test('enforce requires baseline success, inline blocked, enforce violation',()=>
   assert.equal(classifyDom(html(true,true,['enforce']),'enforce').verdict,'FAIL');
   assert.equal(classifyDom(html(false,false,['enforce']),'enforce').verdict,'FAIL');
   assert.equal(classifyDom(html(true,false,[]),'enforce').verdict,'FAIL');
+  assert.equal(classifyDom(html(true,false,['enforce','report']),'enforce').verdict,'FAIL');
 });
 test('report-only must execute forbidden script and report rather than block',()=>{
   assert.equal(classifyDom(html(true,true,['report']),'report').verdict,'PASS');
   assert.equal(classifyDom(html(true,false,['report']),'report').verdict,'FAIL');
   assert.equal(classifyDom(html(true,true,['enforce']),'report').verdict,'FAIL');
+  assert.equal(classifyDom(html(true,true,['report','enforce']),'report').verdict,'FAIL');
 });
 test('multiple CSP policies intersect',()=>{
   assert.equal(classifyDom(html(true,false,['enforce']),'multi').verdict,'PASS');
