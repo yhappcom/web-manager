@@ -32,6 +32,21 @@ export function classifyDom(dom, id) {
     return { verdict: 'FAIL', reason: 'UNEXPECTED_VIOLATION' };
   return { verdict: 'PASS', reason: 'EXECUTION_AND_VIOLATION_ORACLES' };
 }
+
+// Actual browser admission requires successful process completion and a matching
+// server-issued fixture marker; a plausible DOM fragment alone is not a PASS.
+export function classifyBrowserOutcome(outcome, id) {
+  if (!Object.hasOwn(expected, id)) return { verdict: 'FAIL', reason: 'UNKNOWN_CASE' };
+  if (!outcome || typeof outcome.output !== 'string' || typeof outcome.reason !== 'string')
+    return { verdict: 'UNKNOWN', reason: 'NO_BROWSER_PROCESS_EVIDENCE' };
+  if (outcome.reason !== 'COMPLETED')
+    return { verdict: 'UNKNOWN', reason: 'BROWSER_PROCESS_' + outcome.reason.replace(/[^A-Z_]/g, '').slice(0, 32) };
+  const marker = '<meta name="fixture-case" content="' + id + '">';
+  if (!outcome.output.includes(marker) || !outcome.output.includes('<html'))
+    return { verdict: 'FAIL', reason: 'WRONG_OR_MISSING_FIXTURE_DOCUMENT' };
+  return classifyDom(outcome.output, id);
+}
+
 const bootstrap = "(()=>{const d=[];document.addEventListener('securitypolicyviolation',e=>d.push(e.disposition));window.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{document.querySelector('#probe-result').textContent=JSON.stringify({baseline:window.__allowedRan===true,inline:window.__inlineRan===true,dispositions:d})},400))})();";
 const documentHtml = '<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body><pre id="probe-result">PENDING</pre><script src="/bootstrap.js"></script><script>window.__inlineRan=true;</script><script src="/allowed.js"></script></body></html>';
 export function makeServer() {
@@ -51,7 +66,7 @@ export function makeServer() {
       "script-src 'self'; object-src 'none'",
       "script-src 'self' 'unsafe-inline'; object-src 'none'"
     ];
-    res.writeHead(200,h); res.end(documentHtml);
+    res.writeHead(200,h); res.end(documentHtml.replace('<head>', '<head><meta name="fixture-case" content="'+id+'">'));
   });
 }
 function findChrome() {
@@ -90,7 +105,7 @@ export async function runLab() {
       const profile=await mkdtemp(path.join(os.tmpdir(),'pwa-csp-lab-'));
       try {
         const result=await visit(chrome.path,'http://127.0.0.1:'+port+'/'+id,profile);
-        cases.push({id,...classifyDom(result.output,id),processReason:result.reason});
+        cases.push({id,...classifyBrowserOutcome(result,id),processReason:result.reason});
       } finally {
         try {await rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:200});}
         catch { /* restricted runners can retain a profile; no false PASS */ }
