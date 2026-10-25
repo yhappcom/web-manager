@@ -7,6 +7,10 @@ import { fileURLToPath } from 'node:url';
 
 const REQUIRED = ['index.html', 'flutter_bootstrap.js', 'manifest.json', 'logmate_service_worker.js', 'logmate-offline-manifest.json', 'auth/action/index.html', 'main.dart.js', 'canvaskit/canvaskit.js', 'canvaskit/canvaskit.wasm'];
 const SAFE_IGNORES = new Set(['firebase.json', '**/.*', '**/node_modules/**']);
+// Firebase serves matching static content before a rewrite. An auth/index.html
+// added to an otherwise identical release tree can shadow the /auth/ alias.
+// This is a conservative source-level guard, not a Firebase emulator oracle.
+const SHADOWING_AUTH_STATIC_PATHS = new Set(['auth/index.html']);
 const REQUIRED_AUTH_REWRITES = new Map([
   ['/auth', '/auth/action/index.html'],
   ['/auth/', '/auth/action/index.html'],
@@ -38,6 +42,7 @@ export async function inventory(root) {
       const rel = prefix + entry;
       // Firebase Hosting ignores this root file even when raw trees match.
       if (rel === 'firebase.json') fail('Hosting-ignored root firebase.json cannot be treated as a deployed asset');
+      if (SHADOWING_AUTH_STATIC_PATHS.has(rel.split(path.sep).join('/'))) fail(`static resource shadows reviewed Auth rewrite: ${rel}`);
       const folded = rel.toLowerCase();
       if (seen.has(folded)) fail(`case-fold collision: ${rel}`);
       seen.add(folded);
