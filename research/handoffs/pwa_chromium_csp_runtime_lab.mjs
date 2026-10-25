@@ -8,10 +8,12 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const expected = {
-  enforce: { baseline: true, inline: false, disposition: 'enforce' },
-  report: { baseline: true, inline: true, disposition: 'report' },
-  multi: { baseline: true, inline: false, disposition: 'enforce' },
-  unrestricted: { baseline: true, inline: true, disposition: null },
+  enforce: { baseline: true, inline: false, data: false, disposition: 'enforce' },
+  report: { baseline: true, inline: true, data: true, disposition: 'report' },
+  multiA: { baseline: true, inline: true, data: false, disposition: 'enforce' },
+  multiB: { baseline: true, inline: false, data: true, disposition: 'enforce' },
+  multi: { baseline: true, inline: false, data: false, disposition: 'enforce' },
+  unrestricted: { baseline: true, inline: true, data: true, disposition: null },
 };
 export function classifyDom(dom, id) {
   if (!Object.hasOwn(expected, id)) return { verdict: 'FAIL', reason: 'UNKNOWN_CASE' };
@@ -20,12 +22,13 @@ export function classifyDom(dom, id) {
   let x;
   try { x = JSON.parse(m[1].replaceAll('&amp;', '&')); }
   catch { return { verdict: 'FAIL', reason: 'INVALID_PROBE_JSON' }; }
-  if (!x || typeof x.baseline !== 'boolean' || typeof x.inline !== 'boolean' ||
+  if (!x || typeof x.baseline !== 'boolean' || typeof x.inline !== 'boolean' || typeof x.data !== 'boolean' ||
       !Array.isArray(x.dispositions) || x.dispositions.some(d => !['enforce','report'].includes(d)))
     return { verdict: 'FAIL', reason: 'INVALID_PROBE_SCHEMA' };
   const e = expected[id];
   if (x.baseline !== e.baseline) return { verdict: 'FAIL', reason: 'ALLOWED_BASELINE_MISMATCH' };
   if (x.inline !== e.inline) return { verdict: 'FAIL', reason: 'BLOCKED_EXECUTION_MISMATCH' };
+  if (x.data !== e.data) return { verdict: 'FAIL', reason: 'DATA_SCRIPT_EXECUTION_MISMATCH' };
   if (e.disposition && (!x.dispositions.length || x.dispositions.some(d => d !== e.disposition)))
     return { verdict: 'FAIL', reason: 'VIOLATION_DISPOSITION_MISSING' };
   if (!e.disposition && x.dispositions.length)
@@ -47,8 +50,8 @@ export function classifyBrowserOutcome(outcome, id) {
   return classifyDom(outcome.output, id);
 }
 
-const bootstrap = "(()=>{const d=[];document.addEventListener('securitypolicyviolation',e=>d.push(e.disposition));window.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{document.querySelector('#probe-result').textContent=JSON.stringify({baseline:window.__allowedRan===true,inline:window.__inlineRan===true,dispositions:d})},400))})();";
-const documentHtml = '<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body><pre id="probe-result">PENDING</pre><script src="/bootstrap.js"></script><script>window.__inlineRan=true;</script><script src="/allowed.js"></script></body></html>';
+const bootstrap = "(()=>{const d=[];document.addEventListener('securitypolicyviolation',e=>d.push(e.disposition));window.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{document.querySelector('#probe-result').textContent=JSON.stringify({baseline:window.__allowedRan===true,inline:window.__inlineRan===true,data:window.__dataRan===true,dispositions:d})},400))})();";
+const documentHtml = '<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body><pre id="probe-result">PENDING</pre><script src="/bootstrap.js"></script><script>window.__inlineRan=true;</script><script src="data:text/javascript,window.__dataRan%3Dtrue"></script><script src="/allowed.js"></script></body></html>';
 export function makeServer() {
   return http.createServer((req,res) => {
     const route = new URL(req.url,'http://127.0.0.1').pathname;
@@ -62,9 +65,11 @@ export function makeServer() {
     h['Content-Type']='text/html; charset=utf-8';
     if (id === 'enforce') h['Content-Security-Policy']="script-src 'self'; object-src 'none'";
     if (id === 'report') h['Content-Security-Policy-Report-Only']="script-src 'self'; report-uri /csp-report";
+    if (id === 'multiA') h['Content-Security-Policy']="script-src 'self' 'unsafe-inline'; object-src 'none'";
+    if (id === 'multiB') h['Content-Security-Policy']="script-src 'self' data:; object-src 'none'";
     if (id === 'multi') h['Content-Security-Policy']=[
-      "script-src 'self'; object-src 'none'",
-      "script-src 'self' 'unsafe-inline'; object-src 'none'"
+      "script-src 'self' 'unsafe-inline'; object-src 'none'",
+      "script-src 'self' data:; object-src 'none'"
     ];
     res.writeHead(200,h); res.end(documentHtml.replace('<head>', '<head><meta name="fixture-case" content="'+id+'">'));
   });

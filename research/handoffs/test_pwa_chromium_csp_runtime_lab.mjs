@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import http from 'node:http';
 import {classifyDom,classifyBrowserOutcome,makeServer,visit} from './pwa_chromium_csp_runtime_lab.mjs';
-const html=(baseline,inline,dispositions)=>'<pre id="probe-result">'+JSON.stringify({baseline,inline,dispositions})+'</pre>';
+const html=(baseline,inline,dispositions,data=inline)=>'<pre id="probe-result">'+JSON.stringify({baseline,inline,data,dispositions})+'</pre>';
 test('enforce requires baseline success, inline blocked, enforce violation',()=>{
   assert.equal(classifyDom(html(true,false,['enforce']),'enforce').verdict,'PASS');
   assert.equal(classifyDom(html(true,true,['enforce']),'enforce').verdict,'FAIL');
@@ -15,10 +16,34 @@ test('report-only must execute forbidden script and report rather than block',()
   assert.equal(classifyDom(html(true,true,['enforce']),'report').verdict,'FAIL');
   assert.equal(classifyDom(html(true,true,['report','enforce']),'report').verdict,'FAIL');
 });
-test('multiple CSP policies intersect',()=>{
-  assert.equal(classifyDom(html(true,false,['enforce']),'multi').verdict,'PASS');
-  assert.equal(classifyDom(html(true,true,['enforce']),'multi').verdict,'FAIL');
+test('each CSP header is independently discriminated before intersection',()=>{
+  assert.equal(classifyDom(html(true,true,['enforce'],false),'multiA').verdict,'PASS');
+  assert.equal(classifyDom(html(true,false,['enforce'],true),'multiB').verdict,'PASS');
+  assert.equal(classifyDom(html(true,false,['enforce'],false),'multi').verdict,'PASS');
+  assert.equal(classifyDom(html(true,true,['enforce'],false),'multi').verdict,'FAIL');
+  assert.equal(classifyDom(html(true,false,['enforce'],true),'multi').verdict,'FAIL');
 });
+
+test('combined policy is actually delivered as two distinct CSP header fields',async()=>{
+  const server=makeServer();
+  await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
+  try {
+    const url='http://127.0.0.1:'+server.address().port+'/multi';
+    const values=await new Promise((resolve,reject)=>{
+      http.get(url,res=>{
+        const fields=[];
+        for(let i=0;i<res.rawHeaders.length;i+=2) {
+          if(res.rawHeaders[i].toLowerCase()==='content-security-policy')fields.push(res.rawHeaders[i+1]);
+        }
+        res.resume();res.on('end',()=>resolve(fields));
+      }).on('error',reject);
+    });
+    assert.equal(values.length,2);
+    assert.ok(values.some(x=>x.includes('unsafe-inline')&&!x.includes('data:')));
+    assert.ok(values.some(x=>x.includes('data:')&&!x.includes('unsafe-inline')));
+  } finally {await new Promise(ok=>server.close(ok));}
+});
+
 test('unrestricted control must run both scripts without violation',()=>{
   assert.equal(classifyDom(html(true,true,[]),'unrestricted').verdict,'PASS');
   assert.equal(classifyDom(html(true,true,['report']),'unrestricted').verdict,'FAIL');
@@ -42,6 +67,13 @@ test('fixture serves distinct enforce, report-only, multiple, and baseline heade
     assert.ok(report.headers.get('content-security-policy-report-only')?.includes('report-uri'));
     const multi=await fetch(base+'/multi');
     assert.ok(multi.headers.get('content-security-policy')?.includes('unsafe-inline'));
+    assert.ok(multi.headers.get('content-security-policy')?.includes('data:'));
+    const a=await fetch(base+'/multiA');
+    const b=await fetch(base+'/multiB');
+    assert.ok(a.headers.get('content-security-policy')?.includes('unsafe-inline'));
+    assert.ok(!a.headers.get('content-security-policy')?.includes('data:'));
+    assert.ok(b.headers.get('content-security-policy')?.includes('data:'));
+    assert.ok(!b.headers.get('content-security-policy')?.includes('unsafe-inline'));
     const plain=await fetch(base+'/unrestricted');
     assert.equal(plain.headers.get('content-security-policy'),null);
     assert.equal((await fetch(base+'/bootstrap.js')).status,200);
@@ -69,7 +101,7 @@ test('fixture serves a case-specific marker, not a caller-invented identity',asy
   await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
   try {
     const base='http://127.0.0.1:'+server.address().port;
-    for (const id of ['enforce','report','multi','unrestricted']) {
+    for (const id of ['enforce','report','multiA','multiB','multi','unrestricted']) {
       const body=await (await fetch(base+'/'+id)).text();
       assert.ok(body.includes('<meta name="fixture-case" content="'+id+'">'));
     }
