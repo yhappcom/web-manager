@@ -15,7 +15,7 @@ const SHADOW = '<!doctype html><title>SHADOW_SENTINEL</title><h1>SHADOW_SENTINEL
 const ROUTES = ['/','/auth','/auth/','/auth/action','/auth/action/','/auth/action/index.html'];
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function runCase(name, port, withShadow) {
+async function runCase(name, port, withShadow, withPolicy=false) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'webmgr-hosting-route-'));
   const publicDir = path.join(dir, 'public');
   let child;
@@ -29,7 +29,12 @@ async function runCase(name, port, withShadow) {
       hosting: {
         public: 'public',
         ignore: ['firebase.json','**/.*','**/node_modules/**'],
-        headers: [{source:'**',headers:[{key:'Cache-Control',value:'no-cache, no-store, must-revalidate'}]}],
+        headers: [
+          {source:'**',headers:[{key:'Cache-Control',value:'no-cache, no-store, must-revalidate'}]},
+          ...(withPolicy ? ['/auth','/auth/','/auth/action','/auth/action/','/auth/action/index.html'].map(source=>({
+            source,headers:[{key:'Referrer-Policy',value:'no-referrer'}],
+          })) : []),
+        ],
         rewrites: [
           {source:'/auth',destination:'/auth/action/index.html'},
           {source:'/auth/',destination:'/auth/action/index.html'},
@@ -62,7 +67,14 @@ async function runCase(name, port, withShadow) {
       const final=await fetch(base+route,{redirect:'follow',signal:AbortSignal.timeout(4000)});
       const body=await final.text();
       const marker=body.includes('AUTH_SENTINEL')?'AUTH':body.includes('SHADOW_SENTINEL')?'SHADOW':body.includes('ROOT_SENTINEL')?'ROOT':'OTHER';
-      result[route]={initialStatus:initial.status,location:initial.headers.get('location'),finalStatus:final.status,finalPath:new URL(final.url).pathname,marker};
+      result[route]={
+        initialStatus:initial.status,location:initial.headers.get('location'),
+        finalStatus:final.status,finalPath:new URL(final.url).pathname,marker,
+        initialReferrerPolicy:initial.headers.get('referrer-policy'),
+        finalReferrerPolicy:final.headers.get('referrer-policy'),
+        initialCacheControl:initial.headers.get('cache-control'),
+        finalCacheControl:final.headers.get('cache-control'),
+      };
     }
     // Synthetic query probe only; never use real Firebase action codes or print URLs.
     const fakeCode='SYNTHETIC_NON_SECRET';
@@ -81,6 +93,9 @@ async function runCase(name, port, withShadow) {
         finalPreservedQuery:new URL(final.url).searchParams.get('oobCode')===fakeCode,
         finalStatus:final.status,
         finalMarker:body.includes('AUTH_SENTINEL')?'AUTH':body.includes('SHADOW_SENTINEL')?'SHADOW':'OTHER',
+        initialReferrerPolicy:initial.headers.get('referrer-policy'),
+        finalReferrerPolicy:final.headers.get('referrer-policy'),
+        initialCacheControl:initial.headers.get('cache-control'),
       };
     }
     console.log(JSON.stringify({case:name,cliVersion:process.env.FIREBASE_CLI_PIN||'unknown',routes:result,queryProbe},null,2));
@@ -93,6 +108,8 @@ async function runCase(name, port, withShadow) {
 }
 const baseline=await runCase('baseline',5511,false);
 const shadow=await runCase('auth-index-shadow',5512,true);
+const protectedBaseline=await runCase('auth-referrer-policy',5513,false,true);
+const protectedShadow=await runCase('auth-referrer-policy-shadow',5514,true,true);
 // Assertions are intentionally explicit: if Hosting serves different content
 // or redirects unexpectedly, the experiment FAILS rather than calling it PASS.
 assert.equal(baseline['/'].marker,'ROOT','root control must remain distinct');
@@ -115,4 +132,20 @@ for(const [label,observed] of [['baseline',baseline],['shadow',shadow]]){
 }
 assert.equal(baseline.queryProbe['/auth/action'].finalMarker,'AUTH');
 assert.equal(shadow.queryProbe['/auth'].finalMarker,'SHADOW');
-console.log('EMULATOR ROUTE GATE PASS: baseline auth aliases and static shadow observed; live HTTPS/Safari/managed iPad remain OPEN');
+// Referrer policy must be attached to each requested URL, not only to the rewrite
+// destination. The 301 is separately observed because final-200 policy cannot
+// prove redirect-hop policy. These are HTTP-emulator checks, not browser Referer.
+for (const alias of ['/auth','/auth/','/auth/action','/auth/action/','/auth/action/index.html']) {
+  assert.equal(baseline[alias].finalReferrerPolicy,null,alias+' negative-control policy must be absent');
+  assert.equal(protectedBaseline[alias].finalStatus,200,alias+' protected final response');
+  assert.equal(protectedBaseline[alias].marker,'AUTH',alias+' protected content identity');
+  assert.equal(protectedBaseline[alias].finalReferrerPolicy,'no-referrer',alias+' must have final response policy');
+}
+assert.equal(protectedBaseline['/'].finalReferrerPolicy,null,'root must not acquire auth-only policy');
+assert.equal(protectedShadow['/auth/'].marker,'SHADOW','policy must not mask static shadow');
+assert.equal(protectedShadow['/auth/'].finalReferrerPolicy,'no-referrer','static shadow still gets matched policy');
+for(const alias of ['/auth','/auth/action']){
+  assert.equal(protectedBaseline.queryProbe[alias].finalPreservedQuery,true,'policy does not remove initial query: '+alias);
+  assert.equal(protectedBaseline.queryProbe[alias].finalReferrerPolicy,'no-referrer','query probe final policy: '+alias);
+}
+console.log('EMULATOR ROUTE/POLICY GATE PASS: synthetic aliases, shadow, per-request referrer header and query continuity; redirect-hop header observations printed separately; HTTPS/browser/Safari/managed iPad OPEN');
