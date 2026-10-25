@@ -255,3 +255,22 @@ For an Engineering-approved disposable preview, evaluate a route-scoped policy c
 **TRANSFER VALIDATION:** A supplies actual browser request/referrer semantics; C must reproduce negative controls in real Chromium then native Safari and distinguish initial 301 from final 200; B consumes Design Studio's mandatory semantic/focus/recovery gate, with password-reset completion separate from local ledger/Sync status; D consumes Marketing Manager D8/D10 claim HOLD and forbids query-bearing action links in analytics, campaign attribution or advertising surfaces. Product-specific managed-iPad/MDM/storage and 37-store recovery remain independent OPEN gates.
 
 **CHANGE WATCH:** Firebase CLI/Hosting redirect behavior, Chrome/Safari referrer policy, OS-managed Web Clip container, Firebase email-handler action URL shape and HTTP caching intermediaries. **Next meaningful evidence:** exact hosted emulator result, then an authorized NORMAL artifact + HTTPS response/browser capture; no synthetic HTTP pass may promote production or managed-iPad release.
+
+
+### §12 executed hosted checkpoint — 2026-10-26 KST [VALIDATION]
+
+The exact GitHub Actions workflow at `8468a86dc9f8d3d4341476b92afbe756ea3eec29` completed **SUCCESS**: [run 40205657315](https://github.com/yhappcom/web-manager/actions/runs/40205657315), job `121205908261`, Node 22.16.0, Firebase CLI 15.34.1, five synthetic cases with independent negative controls. The earlier four-case intermediate [run 40205633796](https://github.com/yhappcom/web-manager/actions/runs/40205633796) also completed SUCCESS but is **not** the final destination-only counterexample source.
+
+**Observed from exact hosted job log, not assumed from source:**
+
+| Fixture | Initial requested path | Initial HTTP | Initial `Referrer-Policy` | Final `Referrer-Policy` | Distinct content/interpretation |
+| --- | --- | --- | --- | --- | --- |
+| No-policy baseline | `/auth`, `/auth/`, `/auth/action`, `/auth/action/` | 200 / 200 / 301 / 200 | absent | absent | AUTH HTML on final; demonstrates default exposure surface is not a configured header. |
+| Five-path protected | all five document paths | 200 except `/auth/action` 301 | `no-referrer` | `no-referrer` | All five final documents AUTH; root policy absent. |
+| Protected + static shadow | `/auth/` | 200 | `no-referrer` | `no-referrer` | **SHADOW**, not AUTH: header success alone cannot prove correct routing. |
+| Destination-only policy | `/auth/action/index.html` | 200 | `no-referrer` | `no-referrer` | Direct exact static request protected. |
+| Destination-only policy | `/auth`, `/auth/`, `/auth/action`, `/auth/action/` | 200 / 200 / 301 / 200 | **absent** | **absent** | Same AUTH bytes via alias do **not** inherit rewrite-destination-only header. |
+
+In the five-path protected fixture, the **initial 301** for `/auth/action` explicitly carried `Referrer-Policy: no-referrer` **and** `Cache-Control: no-cache, no-store, must-revalidate`; the final 200 carried both as well. This closes the **pinned emulator header observation** that §12 previously left unverified. It does **not** prove HTTPS CDN behavior, browser cache retention, absence of upstream request logs, or a real token's secrecy. The non-secret synthetic query remained in the navigation/redirect URL despite the policy, as expected.
+
+**Gate change, strictly bounded:** `synthetic Firebase Hosting route-scoped header / 301 policy / destination-only false-green NEGATIVE PASS`. No LogMate source or live Hosting configuration changed. **Production validation OPEN / PWA release HOLD.** Next material question is real Chromium/Safari same-origin `Referer` behavior and actual approved HTTPS action-link delivery; physical managed iPad/37-store restore remain separate evidence tiers.
