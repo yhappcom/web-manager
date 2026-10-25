@@ -1,5 +1,5 @@
 // Research-only Chromium CSP lab: loopback HTTP is NOT TLS or product evidence.
-// Node 22+, installed Chromium/Chrome. No dependencies, credentials or external requests.
+// Node 22+, installed Chromium/Chrome. No dependencies, credentials or fixture-initiated external requests.
 import http from 'node:http';
 import { spawn, execFileSync } from 'node:child_process';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -26,7 +26,7 @@ export function classifyDom(dom, id) {
   const e = expected[id];
   if (x.baseline !== e.baseline) return { verdict: 'FAIL', reason: 'ALLOWED_BASELINE_MISMATCH' };
   if (x.inline !== e.inline) return { verdict: 'FAIL', reason: 'BLOCKED_EXECUTION_MISMATCH' };
-  if (e.disposition && !x.dispositions.includes(e.disposition))
+  if (e.disposition && (!x.dispositions.length || x.dispositions.some(d => d !== e.disposition)))
     return { verdict: 'FAIL', reason: 'VIOLATION_DISPOSITION_MISSING' };
   if (!e.disposition && x.dispositions.length)
     return { verdict: 'FAIL', reason: 'UNEXPECTED_VIOLATION' };
