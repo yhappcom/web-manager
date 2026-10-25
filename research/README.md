@@ -368,3 +368,8 @@ Current adjacent Stage 8 target after 317: integrate account deletion, credentia
 
 
 - **2026-10-26 — 519 §18 managed-EFB context/data migration acceptance:** [Integrated PWA runtime study](519_stage8_pwa_browser_runtime_csp_worker_auth_and_managed_ipad_admission_20261025.md) reconciles WebKit Safari 26 Home Screen entry, Safari 17.2 cookies-only copy (not IndexedDB), storage persistence/eviction, Apple Web Clip/MDM restrictions and Background Sync non-portability. Defines **14 product-owned EFB-C01–C14 falsifiable** Safari→Home Screen→managed Web Clip, offline, Files/export, 37-store restore and Manual Sync ACK scenarios. Fresh LogMate Actions run inventory still retains **Acceptance only**, not NORMAL. **SOURCE/SYNTHESIS/VALIDATION PLAN, not executed product/device PASS; Stage 8 ACTIVE · Production OPEN · release HOLD.**
+
+
+
+### 2026-10-26 IndexedDB crash-durability and exact CI-depth checkpoint
+[519 §19 — IndexedDB commit durability, exact LogMate Core/Chrome/PWA CI evidence and 30→37-store restore boundary](519_stage8_pwa_browser_runtime_csp_worker_auth_and_managed_ipad_admission_20261025.md). **New source-grounded adjudication:** hosted Core 825 PASS/1 SKIP, Chrome 3 PASS at feature SHA; NORMAL PWA build/verifier PASS but NORMAL archive not retained; later main only docs/governance changes. W3C IndexedDB transaction completion is not guaranteed crash-proof disk persistence or external backup. Product HTTPS/Safari/managed EFB/37-store Files restore/Sync remain OPEN; release HOLD. Reuses 519, no micro-file.
