@@ -14,7 +14,7 @@ async function fixture(fn) {
     for (const root of [normal, downloaded, staged]) {
       for (const name of required) { await fs.mkdir(path.dirname(path.join(root, name)), { recursive:true }); await fs.writeFile(path.join(root, name), 'content:' + name); }
     }
-    await fs.writeFile(config, JSON.stringify({hosting:{public:'staged',ignore:['firebase.json','**/.*','**/node_modules/**'],rewrites:[{source:'/auth',destination:'/auth/action/index.html'}]}}));
+    await fs.writeFile(config, JSON.stringify({hosting:{public:'staged',ignore:['firebase.json','**/.*','**/node_modules/**'],rewrites:[{source:'/auth',destination:'/auth/action/index.html'},{source:'/auth/',destination:'/auth/action/index.html'},{source:'/auth/action',destination:'/auth/action/index.html'}]}}));
     await fn({dir,normal,downloaded,staged,config,packet:await snapshot(normal,SOURCE)});
   } finally { await fs.rm(dir,{recursive:true,force:true}); }
 }
@@ -93,4 +93,38 @@ test('CLI rejects wrong Hosting projection with nonzero exit', async () => fixtu
   const r = spawnSync(process.execPath,[cli,'verify',packetPath,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest],{encoding:'utf8'});
   assert.equal(r.status,1);
   assert.match(r.stderr,/public directory mismatch/);
+}));
+
+test('Hosting-ignored root firebase.json in identical raw trees REJECT', async () => fixture(async f => {
+  for (const root of [f.normal, f.downloaded, f.staged]) await fs.writeFile(path.join(root,'firebase.json'),'{"hosting":{}}');
+  await assert.rejects(snapshot(f.normal,SOURCE),/Hosting-ignored/);
+  await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/Hosting-ignored/);
+}));
+test('missing or changed auth rewrite alias REJECT', async () => fixture(async f => {
+  const config = JSON.parse(await fs.readFile(f.config,'utf8'));
+  config.hosting.rewrites = config.hosting.rewrites.slice(0,2);
+  await fs.writeFile(f.config,JSON.stringify(config));
+  await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/rewrite/);
+  config.hosting.rewrites.push({source:'/auth/action',destination:'/index.html'});
+  await fs.writeFile(f.config,JSON.stringify(config));
+  await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/rewrite/);
+  config.hosting.rewrites[2] = {source:undefined,destination:undefined};
+  await fs.writeFile(f.config,JSON.stringify(config));
+  await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/rewrite/);
+}));
+test('unreviewed redirect or URL normalization REJECT', async () => fixture(async f => {
+  const config = JSON.parse(await fs.readFile(f.config,'utf8'));
+  config.hosting.redirects = [{source:'/auth',destination:'https://example.invalid/',type:302}];
+  await fs.writeFile(f.config,JSON.stringify(config));
+  await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/redirect/);
+  delete config.hosting.redirects;
+  config.hosting.cleanUrls = true;
+  await fs.writeFile(f.config,JSON.stringify(config));
+  await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/normalization/);
+}));
+test('unexpected catch-all rewrite REJECT even when all files match', async () => fixture(async f => {
+  const config = JSON.parse(await fs.readFile(f.config,'utf8'));
+  config.hosting.rewrites.push({source:'**',destination:'/index.html'});
+  await fs.writeFile(f.config,JSON.stringify(config));
+  await assert.rejects(verify(f.packet,f.downloaded,f.staged,f.config,SOURCE,f.packet.inventoryDigest),/rewrite/);
 }));
