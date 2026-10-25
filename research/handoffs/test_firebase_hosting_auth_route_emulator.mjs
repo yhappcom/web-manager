@@ -142,6 +142,12 @@ for (const alias of ['/auth','/auth/','/auth/action','/auth/action/','/auth/acti
   assert.equal(protectedBaseline[alias].marker,'AUTH',alias+' protected content identity');
   assert.equal(protectedBaseline[alias].finalReferrerPolicy,'no-referrer',alias+' must have final response policy');
 }
+// Fail closed on the redirect itself; final-document policy is insufficient.
+assert.equal(protectedBaseline['/auth/action'].initialStatus,301,'action alias redirect hop exists in pinned emulator');
+assert.equal(protectedBaseline['/auth/action'].initialReferrerPolicy,'no-referrer','initial 301 must carry policy');
+assert.equal(protectedBaseline['/auth/action'].initialCacheControl,'no-cache, no-store, must-revalidate','initial 301 must carry no-store');
+assert.equal(protectedBaseline['/auth/action'].finalCacheControl,'no-cache, no-store, must-revalidate','final 200 must carry no-store');
+assert.equal(baseline['/auth/action'].initialReferrerPolicy,null,'baseline 301 negative policy control');
 assert.equal(protectedBaseline['/'].finalReferrerPolicy,null,'root must not acquire auth-only policy');
 assert.equal(protectedShadow['/auth/'].marker,'SHADOW','policy must not mask static shadow');
 assert.equal(protectedShadow['/auth/'].finalReferrerPolicy,'no-referrer','static shadow still gets matched policy');
