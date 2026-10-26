@@ -996,3 +996,101 @@ A deliberately simplified ASCII-only **non-browser model** using 36-character sy
 **MINTTAP DECISION (research gate only):** retain fail-closed version verification and preservation of prior assets, but classify **unbounded persistent client-build metadata plus mandatory root-navigation write** as a new source-level availability concern requiring product-owned runtime validation. No claim that current release is defective or that an automatic prune is safe. The release remains **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD** for pre-existing NORMAL/HTTPS/Safari/managed-EFB blockers.
 
 **CHANGE WATCH:** W3C FetchEvent client semantics, WebKit page restore/client IDs, browser Cache Storage quota/error behavior, Flutter worker generator, managed Web Clip policy and exact product Work status. **Adjacency/stop check:** this study completed the directly adjacent client lifecycle → persisted catalogue → shared quota → failure/repair → privacy/UX → execution-contract chain. Another paper-only map-pruning heuristic cannot resolve the real iPad lifecycle or Cache.put behavior; next useful evidence is approved Engineering W-031/W-036 exact-artifact runtime, then independent managed-iPad acceptance. No LogMate/peer changes.
+
+
+---
+
+## §26 — PWA warm-start verification amplification: bootstrap messages, repeated full-cache hashing and EFB runtime admission (2026-10-26 KST)
+
+**Evidence class:** SOURCE / SYNTHESIS / CONTRADICTION / MINTTAP DECISION (PROPOSED) / DEPENDENCY / VALIDATION (T0 ONLY) / TRANSFER VALIDATION / OPEN / CHANGE WATCH. **Primary owner:** Track C for runtime cost, accessibility/quality and falsification; Track E owns integrity/release admission and failure recovery; Track A supplies Service Worker/Cache/WebCrypto mechanics. Tracks B/D consume outcomes. This section adds a distinct *work-amplification* boundary to §25 and 508's already-established catalogue concurrency/retirement boundaries; it does **not** reopen those as new findings.
+
+### 26.1 Historical problem → security principle → platform standard [SOURCE / FOUNDATION]
+
+AppCache's opaque update behavior motivated explicit Service Worker install/cache/activate control. LogMate correctly pursues complete verified offline assets and refuses to substitute unverified newer bytes for an old pinned client. The new question is **how much repeated verification work is triggered by an otherwise routine warm startup**, and whether correctness checks compete with the pilot's local-ledger read/write, update and recovery liveness on an EFB iPad.
+
+A byte digest verifies bytes against an expected digest only for the checked buffer; it does not certify deployment provenance, data durability or a future cache read. The browser Cache API stores whole request/response pairs; `Response.arrayBuffer()` reads the body to completion, and `SubtleCrypto.digest()` accepts a complete buffer, not a streaming input. A Service Worker may be terminated for abnormal/overlong operations under the specification; `waitUntil()` extends an event's lifetime but is not a measured Safari/MDM unlimited execution budget. CacheStorage is origin storage, not an IndexedDB transaction or a release authority. None of these generic facts proves an actual LogMate slowdown.
+
+Primary sources checked **2026-10-26**:
+- W3C Service Workers (lifetime, install/activate/fetch, event extension): https://www.w3.org/TR/service-workers/
+- MDN Cache API: https://developer.mozilla.org/en-US/docs/Web/API/Cache
+- MDN Response.arrayBuffer: https://developer.mozilla.org/en-US/docs/Web/API/Response/arrayBuffer
+- MDN SubtleCrypto.digest (non-streaming): https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
+- Chromium-specific web.dev PWA caching guidance (avoid unnecessary all-at-once cache work): https://web.dev/learn/pwa/caching
+- MDN Service Worker lifecycle (active/waiting coexistence): https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+
+### 26.2 Exact source trace: bootstrap's normal READY path is not a cheap status check [SOURCE / STATIC VALIDATION]
+
+Pinned **product source**: `yhappcom/logmate main@26d2d7cf2c20` (not assumed deployed), generator `tool/pwa_precache.dart@90a67954af61`, bootstrap `web/flutter_bootstrap.js@a70625e8bda3`, tests `test/tool/pwa_precache_test.dart@e086b29fb11`. The source explicitly sets first Flutter paint **not** to wait for registration. Thus this is potential background CPU/Cache/latency interference, **not** a claim that all first paints are synchronously blocked.
+
+1. Bootstrap registers the owned Worker and requests `registration.update()`. On `navigator.serviceWorker.ready` it calls `promoteVerifiedCandidate()` **and** `start()`; on a one-time `controllerchange` it calls both again; `updatefound` may cause another `start()`. The two messages can be handled by the same or distinct Worker generations (waiting/active/controller choice); delivery and timing must be observed, not assumed.
+2. `promoteVerifiedCandidate()` sends API-2 `PROMOTE_VERIFIED_CANDIDATE`. Its Worker handler executes `updateControl(control => promoteInControl(...))` and **then** `status()` for the reply. When the local version exists and is marked verified, `promoteInControl` calls `inspect(manifest)` even when it is *already* `currentBuildId`. `status()` separately calls `inspect(OFFLINE_MANIFEST)` and, when a served version exists, `inspect(served)`. A stable current=own-manifest warm case therefore makes **three full inspections** for one promotion message.
+3. `start()` sends API-1 `START_PRECACHE`. The current Worker intentionally still accepts this as a legacy bridge. `precacheCandidate()` first runs `cacheGroup(fonts)` and `cacheGroup(notices)`, whose `valid()` reads and hashes each existing entry, and then performs another **full** `inspect(OFFLINE_MANIFEST)`. Concurrent START messages within *one* Worker are coalesced by `precachePromise`; this does not coalesce a separate promotion or a distinct Worker generation.
+4. `inspect` calls `check(shell)`, `check(fonts)` and `check(notices)` sequentially. `check` awaits each `valid(cache,item)`; a warm valid hit does `cache.match → response.arrayBuffer → SHA-256`. The generator requires **724 WOFF2 fonts**, exactly **144 OFL.txt** notice files, copies four additional top-level notice/manifest files, and requires at least **six shell assets**. More license files or generated shell resources can increase the real total.
+5. Independent of these bulk scans, `verifiedResponse()` re-hashes the requested asset on each intercepted verified shell/font response. This is an intentional per-response integrity guard, **not** equivalent to the repeated whole-manifest scans and not something to delete casually.
+
+**Conservative source-derived lower bounds, conditional on all entries present, both ready messages handled and one stable current version:**
+
+| Operation | Minimum `valid()/Cache.match` invocations | Why |
+| --- | ---: | --- |
+| One full `inspect` | **878** | ≥6 shell + 724 fonts + ≥148 notices |
+| API-2 promotion of already-current verified build, including reply status | **2,634** | 3 × 878 (promote verification + candidate status + served status) |
+| API-1 warm START_PRECACHE | **1,750** | 724+148 validity checks, then 878 full inspect |
+| One ordinary ready callback's promotion + precache pair | **4,384** | 2,634 + 1,750; no additional controllerchange/updatefound included |
+| Activation with changed current version, when verification/promotion both run | **1,756** | inspect in activate + inspect inside promotion |
+
+These are **counts of source-level validation invocations**, not measured SHA computations, milliseconds, bytes or disk I/O. Missing cache entries avoid the digest step but still cause a match attempt. The actual generated manifest can contain more entries; cache/browser optimizations may alter physical I/O. The lower-bound arithmetic was independently recomputed in a V8 deterministic T0 check: `R=6+724+(144+4)=878; 3R=2634; (724+148)+R=1750; total=4384`; all three arithmetic invariants passed. **No Flutter build, JS Worker, CacheStorage, Chrome, Safari or managed iPad was executed.**
+
+### 26.3 Failure-chain analysis and non-transitive evidence [SYNTHESIS / CONTRADICTION]
+
+- **Warm repeat amplification:** the app may be fully cached yet perform repeated full-body reads/digests, rather than a cheap metadata check. In a stable current-build case, promotion performs redundant identical full scans before returning a status. This is source-derived; actual startup frequency and duration are OPEN.
+- **Foreground contention:** the messages are not awaited by Flutter first paint, but Worker CPU, cache reads and memory allocations can compete with other browser work and local Sembast/IndexedDB activity. There is no evidence yet of dropped frames, flight-entry latency, battery drain, Safari termination or eviction.
+- **Serialized critical section:** `PROMOTE_VERIFIED_CANDIDATE` runs the full `inspect` inside the per-global `controlMutation` lock. Root navigation's `updateControl` can wait for that lock, while `START_PRECACHE` may independently scan the same entries. This compounds §25's mandatory navigation control write and 508's cross-generation shared-key problem; a lock cannot be removed without preserving version/mapping correctness.
+- **Install/activate liveness:** expensive inspection within `waitUntil` is a lifecycle gate; platform time budgets and failure behavior are browser/OS dependent. An install that does not finish cannot be counted as a successful update, even if old assets remain. An activation that fails cannot be promoted by a green static generator test.
+- **Integrity-versus-availability tension:** trusting `verified=true` forever would weaken the existing defense against later same-origin Cache mutation; conversely re-hashing every font and license on every ready/status request can be operationally disproportionate. An authorized redesign must preserve response-byte verification, generation pinning, old-client compatibility, failure-closed promotion and external ledger custody.
+- **Scope boundaries:** an offline shell READY flag is not client routing READY (§508), remote Sync success (§515/516), current LBK snapshot (§519 §24), or a proof that the browser has enough resources to re-open a populated ledger. One cached file being verified does not imply the full collection was checked at that same time.
+
+### 26.4 Decision comparison — options to falsify, not approved code changes [MINTTAP DECISION — PROPOSED / DEPENDENCY]
+
+| Candidate engineering direction | Potential benefit | Safety debt / falsification needed |
+| --- | --- | --- |
+| Keep exact current implementation until measured | Retains strongest source-visible verification; no premature regression | May pay repeated full scans; quantify actual warm, cold, failed and update paths before declaring acceptable |
+| Separate lightweight read-only status from explicit full verify | Cheap observability; avoids expensive full scan merely to reply | Must never label a metadata-only status as independently byte-verified READY; expose evidence age/scope and UNKNOWN |
+| Coalesce *equivalent* verification work within one Worker event window | Avoid duplicate concurrent hashing | Cannot merge different Worker generations or skip required fresh integrity check; invalidation, failure and Worker restart tests needed |
+| Stage verification by consequence, with bounded concurrency/resource budget | Prioritize runnable shell and protect foreground responsiveness | Must not promote incomplete candidate or serve unchecked same-URL asset; 724 fonts/notice licensing and true offline completeness contract must be reviewed |
+| Use a transactional/versioned control catalogue with explicit generation | Could address §508 cross-worker lost updates and §25 growth | CacheStorage lacks cross-global CAS; architecture/upgrade protocol and no-data-loss fallback require Engineering design and real browser proof |
+| Remove per-response `verifiedResponse` hash | Reduces per-asset CPU | **NOT ACCEPTABLE as an unreviewed optimization**: breaks explicit post-install cache-tamper defense; require independent trust proof first |
+
+**Operational priority:** first measure the existing implementation on exact approved NORMAL bytes and representative devices, then compare a reviewed candidate against **both** verified-byte integrity and warm-start latency/resource behavior. No arbitrary millisecond, byte, battery or quota threshold is invented without product workload and device evidence. Do not reduce the 724-font compliance bundle or omit notices solely for speed without Design Studio/licensing owner review.
+
+### 26.5 Integrated existing-Work acceptance overlay, not a new parallel suite [VALIDATION / OPEN]
+
+Attach to **LogMate W-031 installed PWA, W-036 release, W-012 ledger/backup**, and reuse **508 W17–W28** plus **519 CBG-01–12**. Quality/Engineering should run a controlled matrix with exact source SHA, full NORMAL archive digest, Worker script hash, actual manifest counts/bytes, browser/OS/MDM class, origin, active/waiting generations and sanitized synthetic ledger identity:
+
+| Scenario | Positive and negative oracle |
+| --- | --- |
+| Stable warm start | Capture actual ready/controllerchange/updatefound message counts, number of full scans and bytes hashed, p50/p95 time-to-shell and first editable local record, JS/Worker CPU and memory where instrumentable. No assumption that T0 4,384 maps to 4,384 physical disk reads. |
+| Cold install and interrupted candidate | Observe install/activate duration and old runnable version; force an incomplete asset/digest mismatch and ensure candidate not promoted, old ledger/backup preserved. |
+| Old active + new waiting | Instrument message target generation, overlapping precache/promote, §508 catalogue lost-update negatives, and old-client late assets. Preserve old build pinning and no false READY. |
+| Corrupt/missing cache and storage pressure | Compare typed REPAIR_REQUIRED/UNKNOWN, 503, rejected Cache.put, origin eviction and IndexedDB data; no blind site-data clear or unsupported recovery claim. |
+| Repeated warm opens / long dormancy | Compare 1, 10, 100 starts, no controllerchange vs one controllerchange, background/foreground/resume, offline cold reopen, 28D use cycle; no invented iPad task execution guarantee. |
+| Cross-engine tiers | Chrome/Chromium lab → real Safari tab → real Home Screen PWA → actual supervised MDM Web Clip. Keep macOS Safari M006 transfer separate from physical iPad; capture exact installed identity and Files recovery policy. |
+| Integrity-preserving optimization candidate | Deliberately tamper one cached asset *after* initial verification, then request it. Candidate must reject corrupted bytes while improving measured work; no green status based solely on a persisted verified flag. |
+| Accessibility and human state | Distinguish downloading/verifying, local ready, unassigned client, repair, local records present/unknown and remote Sync unverified; keyboard/VoiceOver and pilot comprehension require real evidence. |
+
+**Evidence tier:** this study is **T0 source/control-flow and arithmetic only**. CI string assertions in `test/tool/pwa_precache_test.dart` establish generated-code shape, not cache/crypto timing or Worker lifecycle. Software Engineering M006 has bounded macOS Safari Worker registration/update/restart evidence, with fresh-session origin-down contradiction; it does **not** transfer to LogMate/managed iPad. Q006 requires non-empty semantic verdicts rather than workflow success alone. A negative injected cache mutation and a successful preserved-ledger reopen must be present in any future promotion claim.
+
+### 26.6 Five-track balance, specialist transfer and change watch [TRANSFER VALIDATION / OPEN]
+
+| Track | Current depth/pressure | Ownership in this bundle |
+| --- | --- | --- |
+| **C — Performance/Accessibility/Quality** | Standards/source and model maturity high; *measured warm-start, failure, AT and managed iPad* missing; elevated runtime bottleneck | Own exact-artifact workload, CPU/latency/memory, fail controls, truthful quality verdict |
+| **E — Architecture/Security/Operations** | Highest consequence, existing 508/515/516/519 release/ledger/deletion blockers | Own non-negotiable integrity/rollback/data-custody constraints, version authority and release HOLD |
+| **A — Platform/Browser** | Lifecycle/Cache/crypto standards mature, engine-specific scheduling unknown | Own `ready`, message delivery, install/activate, Cache.match/arrayBuffer/digest and Safari/WebKit comparison |
+| **B — UX/IA/Content** | Design Studio CD115/W121 semantic guidance available, real pilot/VoiceOver evidence absent | Consume verified state-to-copy mapping; no false “offline ready/synced/recovered” |
+| **D — Search/Discovery/Analytics** | Generic measurement ready, live privacy-safe product telemetry/claim admission absent | Consume sanitized aggregate boot/repair metrics; do not emit UID, flight, client IDs or auth data; Marketing D8–D10 HOLD remains |
+
+**Design Studio** `CD115` forbids “Saved/Synced” claims without corresponding evidence and `W121` requires exact runtime/AT/human evidence rather than more manifests. **Marketing Manager** latest main status keeps LogMate PWA/offline, export/import and advertising claims on HOLD; this analysis is not advertising permission. **Software Engineering Studio** `M006` bounded Safari lifecycle, `Q006` semantic CI oracles and `D005/D006` recovery/concurrency models are reusable transfer, not LogMate production tests. All peers and product were **READ-ONLY**.
+
+**OPEN:** real NORMAL artifact manifest cardinality/byte totals; whether ready/promote/start messages actually run together per installed context; browser coalescing, CacheStorage read cost, WebCrypto throughput, peak heap, Worker termination limits, battery, latency, foreground DB contention, cold/warm iPad behavior, management restrictions, safe performance budget and any reviewed optimization implementation. **CHANGE WATCH:** Service Worker lifecycle/timeouts, Cache Storage and WebCrypto implementation, Safari/WebKit Home Screen/Web Clip behavior, Flutter bootstrap/Worker generator, Stage C font bundle, and product W-031/W-036 outcomes.
+
+**Adjacency/stop check:** traced bootstrap → message routing → Worker verification calls → source-derived lower bounds → lifecycle/lock/resource failure modes → security-preserving alternatives → existing executable Work/AT/MDM transfer. Further static micro-counting or an invented latency target cannot settle this question; the next valuable evidence class is actual NORMAL Worker instrumentation and device/browser execution. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**, unchanged. No LogMate, Design Studio, Marketing or Software Engineering writes.
