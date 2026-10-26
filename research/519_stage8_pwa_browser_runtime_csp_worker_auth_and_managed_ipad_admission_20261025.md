@@ -1755,3 +1755,90 @@ A separate disposable **Node 22.16.0 predicate-sketch model** gave **6/6 expecte
 **High-information-gain Engineering handoff, within existing W-036/W-031 and RI01–RI12:** on a disposable, independently retained NORMAL fixture, run the **actual Dart verifier** with (V1) untouched generated files (positive), (V2) external `appBuildId` mutated only, (V3) Worker embedded manifest changed without external manifest update, (V4) Worker policy changed while marker strings remain, (V5) actual shell file tampered, (V6) font-set mismatch, (V7) acceptance marker injected and (V8) approved release digest mismatched. Record expected and actual verdicts separately. Existing verifier passing V2–V4 under current predicates would demonstrate a **specific admission-coverage gap**, not an observed attacker exploit; the independently approved full-release inventory must reject V2–V4 regardless. A secure release gate should bind the **complete exact deployable bytes and intended served policy**, not merely check consistency with an untrusted, self-described manifest. Do not add an unreviewed signature/crypto system or modify LogMate from this Web Manager study.
 
 **Stop check:** The next adjacent question (verifier cross-file identity binding) was completed to source level and bounded model, with a discriminating real-Dart test packet. Further advancement needs the **exact NORMAL artifact and Engineering-owned executable validation**, not another micro-theory file. Gate remains **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**.
+
+
+## 34 — 2026-10-27: Service Worker message authority versus waiting/active lifecycle; cross-generation premature promotion [SOURCE / SYNTHESIS / CONTRADICTION / VALIDATION / OPEN]
+
+**Ownership and stage:** E owns shared release-control mutation, version admission and data-custody risk; A supplies Service Worker message/lifecycle semantics; C owns exact-browser falsification; B/D consume bounded truth/claim requirements. This is a **new source-grounded counterexample** adjacent to §31 lost updates and §33 shell/Worker identity, not another generic PWA primer. **Verdict:** source-confirmed handler admits a conditional premature promotion; extracted actual generated-handler logic reproduces the catalogue transition under mocks. **No live browser, managed EFB, NORMAL artifact, actual malicious execution or ledger loss has been observed.**
+
+### 34.1 History/problem → trust model → standards [SOURCE / SYNTHESIS]
+
+A Service Worker is an origin-scoped, event-driven agent, but **installed/waiting** and **active/controller** are different lifecycle roles. The browser's no-`skipWaiting()` behavior protects which Worker handles fetches while old clients exist; it does **not** make application-defined CacheStorage JSON immutable, nor does it authorize an arbitrary page message to change an application's current build pointer. W3C Service Workers Editor's Draft (2026-09-17) explicitly models installing/waiting/active workers as separate registration slots, exposes `registration.waiting` and `ServiceWorker.postMessage()`, dispatches `message` events to the targeted non-redundant Worker, and permits activation of a waiting Worker only when no old client uses the registration (unless skip-waiting is requested). The draft is evolving; browser-specific execution remains CHANGE WATCH.
+
+Primary sources (reviewed 2026-10-27):
+- W3C Service Workers, registration and postMessage algorithms: https://w3c.github.io/ServiceWorker/#service-worker-registration and https://w3c.github.io/ServiceWorker/#dom-serviceworker-postmessage-message-options ; activation: https://w3c.github.io/ServiceWorker/#try-activate .
+- MDN, `ServiceWorkerRegistration.waiting`: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/waiting ; `ServiceWorker.postMessage()`: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker/postMessage ; global `message`: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event .
+- W3C Service Workers Editor's Draft §3.1.5 explicitly checks Should Skip Event, then runs the target Worker and dispatches the message; §2.3/§3.2 distinguish the waiting Worker from the active Worker. These are **platform capabilities**, not a claim that LogMate's present UI intentionally invokes premature promotion.
+
+**Threat boundary:** possession of same-origin script execution and access to a registration/Worker reference is not the same as the user's informed approval of a release switch. A separate cross-origin attacker is **not** shown to have that access. No XSS, cross-origin messaging bypass, exposed credentials or production exploit has been demonstrated. An origin check by itself is insufficient to separate a legitimate LogMate UI from an unexpected same-origin script; an explicit operation/lifecycle/compatibility admission policy is still needed.
+
+### 34.2 Current pinned LogMate implementation [SOURCE]
+
+Read-only source: `yhappcom/logmate main@26d2d7cf2c20c55026c6f84b838dcb6442f7a3f1`; `tool/pwa_precache.dart` blob `90a67954af618a4e18199fa92555491c56167c17`; `web/flutter_bootstrap.js` blob `a70625e8bda32aafd5dd23822c017d05229f0e63`.
+
+- Generated Worker `install` verifies a candidate and writes it into shared `logmate-offline-control-v2`. It intentionally omits `skipWaiting()`; the old active Worker can remain controller while the new Worker is installed/waiting.
+- The generated Worker `message` handler accepts `api:2, type:'PROMOTE_VERIFIED_CANDIDATE'` without checking `event.source`, `event.origin`, caller URL, a user-approval token or whether the receiving Worker is the registration's **active** Worker. The handler calls `updateControl(control => promoteInControl(control, OFFLINE_MANIFEST.appBuildId))` and replies with a status.
+- `promoteInControl` requires a catalogue manifest, `verified:true` and `inspect(manifest).ready`; these are **real integrity/completeness safeguards**. But it sets shared `previousBuildId = currentBuildId`, `currentBuildId = buildId`, `candidateBuildId = null` when the IDs differ. It does not establish that the receiving Worker has activated, controls clients, or that the new app/DB is compatible with the old controller.
+- The old Worker's `fetch` handler chooses `control.currentBuildId` on **root navigation**, assigns it to the navigation client ID(s), then reads that build's manifest from the shared catalogue. Thus an old active Worker can begin assigning the new build's app shell to **new navigations** if the shared pointer was changed by a still-waiting Worker. Existing pinned clients retain their own mapping unless other races/overwrites occur.
+- The checked-in bootstrap's ordinary `start()` may send `START_PRECACHE` to `registration.waiting`, but its `promoteVerifiedCandidate()` targets `controller || registration.active` rather than the waiting Worker. Therefore **the documented premature-promotion path requires an additional same-origin message source**; it is not asserted to be an observed normal bootstrap behavior.
+- Explicit `ROLLBACK_TO_PREVIOUS` is intentionally fail-closed, yet the unrestricted `PROMOTE_VERIFIED_CANDIDATE` operation on the still-active OLD Worker can promote OLD again after NEW has been prematurely selected. The rollback guard does **not** prevent this reverse pointer transition while both generations can receive messages.
+
+### 34.3 Conditional two-generation trace and counterexamples [SYNTHESIS / CONTRADICTION]
+
+Initial state: OLD is active/controller, NEW has completed install and is waiting, both are verified in the shared catalogue, `currentBuildId=OLD`, and a still-open OLD page prevents NEW activation.
+
+1. A same-origin context with a reference to `registration.waiting` sends `{api:2,type:'PROMOTE_VERIFIED_CANDIDATE'}` to NEW. The NEW message handler can change `currentBuildId` to NEW and `previousBuildId` to OLD **without calling skipWaiting and without NEW activation**.
+2. An OLD-controlled root navigation subsequently consults the **shared** `currentBuildId=NEW`, pins its navigation client to NEW and selects the NEW shell manifest. Conditional on real verified NEW assets being present, the old fetch handler can serve NEW's shell while OLD still controls the navigation.
+3. A message to OLD's still-active `PROMOTE_VERIFIED_CANDIDATE` can restore `currentBuildId=OLD` and set `previousBuildId=NEW`. A later OLD-controlled navigation may then pin OLD. This is an **application catalogue switch**, not a browser controller transition or an approved rollback.
+4. Negative controls: an unknown API is ignored; `GET_STATUS` does not mutate the pointer; `ROLLBACK_TO_PREVIOUS` replies `NOT_ROLLED_BACK`; an unverified candidate is rejected. These controls reduce scope but do not close the cross-generation authority boundary.
+
+The safety invariant should be: **a waiting/installation candidate must not acquire active release-routing authority merely by receiving a message; verified bytes are necessary but not sufficient for active version admission.** Equally, active-worker identity alone does not prove that destructive data/schema transitions are safe. Preserve existing offline ledger and LBK before any recovery that might alter storage.
+
+### 34.4 Bounded actual-handler execution [VALIDATION — NOT PRODUCT PASS]
+
+Executed the **actual generated Worker JavaScript** extracted from the Dart `_workerSource` template in a disposable V8 isolate, replacing only the Dart-interpolated manifest with minimal OLD/NEW fixtures and the Dart-escaped JavaScript template markers with their emitted equivalents. Two distinct Worker global environments shared a mock CacheStorage; captured real `message` and `fetch` listeners ran with minimal event/Response/URL mocks. Both manifests deliberately had **empty shell/font/notice arrays** to isolate catalogue authority and avoid falsely claiming file-byte verification. This is **not** a generated NORMAL Worker, Dart build, HTTP response, real Cache API, browser lifecycle or actual client navigation.
+
+**11/11 expected assertions:** initial OLD; waiting NEW message changes current to NEW; predecessor OLD recorded; OLD handler assigns NEW to a new navigation client; OLD message re-promotes OLD; predecessor flips to NEW; later OLD navigation assigns OLD; explicit rollback stays disabled; unknown API ignored; GET_STATUS read-only; unverified NEW candidate rejected. Source blob pinned above. These are **observations of handler logic under synthetic lifecycle setup**, not proof that Chromium or Safari will reproduce the precise timing.
+
+**Critical distinction:** the mocked event delivery demonstrates handler behavior *if* a waiting Worker receives the message; the W3C/MDN platform contract supports such targeted messages, but real browser event ordering, client pinning, activation races, cache readiness, and any actual 503/recovery impact remain OPEN.
+
+### 34.5 Adjacent risk audit and safeguards [SYNTHESIS / MINTTAP DECISION / DEPENDENCY]
+
+**Admission and caller classification:** `GET_STATUS`/`VERIFY_CACHE` are observational (although expensive, cf. §26); `START_PRECACHE`/`REPAIR_CACHE` cause cache/network work; `PROMOTE_VERIFIED_CANDIDATE` changes release routing; `ROLLBACK_TO_PREVIOUS` currently refuses rollback. Treat them as **different consequence classes**. The message handler currently checks API version/type, not a trusted sender/operation policy. Same-origin script authority is a prerequisite for the proposed misuse; do not label it a cross-origin vulnerability or imply that an attacker exists.
+
+**Release-controller consistency:** do not equate `currentBuildId`, `candidateBuildId`, `previousBuildId`, `verified:true`, `registration.waiting`, `registration.active`, `navigator.serviceWorker.controller`, and actual bytes served. Capture each independently. A Worker-only update can retain the same `appBuildId` (§33), so a build-key comparison alone cannot establish Worker generation identity.
+
+**Candidate remediation requirements (not an approved code patch):** ensure a waiting Worker cannot mutate the active routing pointer through an ordinary page message; couple any activation/promotion transition to independently checked Worker lifecycle, exact release identity and compatibility/data-preservation policy. Consider an explicit active-only admission boundary and a separate candidate-status channel; source/origin validation is defense-in-depth, **not** proof of trusted application code. Avoid introducing a bearer secret stored in same-origin script or CacheStorage and treating it as independent organizational authority. The Engineering owner must choose an implementation and test old+new Worker coexistence; Web Manager does not change product code.
+
+**UX and observability:** B consumes Design Studio `progress/WEB_STATUS.md` W121 and LogMate IP01/IP05/IP08: distinguish “candidate downloaded/verified,” “update waiting,” “controller active,” “safe to restart,” and “data/backup preserved.” Never display “update complete” merely because `PROMOTED` was returned. D consumes Marketing Manager D8–D10: no installed/offline/Sync/ads/managed-iPad marketing claim is promoted by synthetic message tests. C records privacy-minimized event sequence, Worker script digests, current/previous/candidate IDs, controller identity, before/after cache hashes and separate 37-store/LBK oracles; do not log UID, flight records, auth codes or raw persistent client IDs.
+
+### 34.6 High-information-gain Engineering/QA acceptance packet [VALIDATION DESIGN / OPEN]
+
+Reuse existing LogMate W-031/W-036/W-012/013/014 and Web Manager 504/508/519 (not a new duplicate product test system). On a **retained exact NORMAL artifact**, run two release generations with known distinct shell and Worker digests, real CacheStorage, and real old-controlled tabs:
+
+| Case | Stimulus / negative control | Required evidence |
+| --- | --- | --- |
+| MP01 | OLD active + NEW waiting, no manual promotion | OLD stays current; OLD clients serve OLD; NEW stays waiting |
+| MP02 | Send PROMOTE to NEW waiting via same-origin test page | Actual message delivery and whether pointer changes **before activation** |
+| MP03 | Open new root navigation while OLD controls after MP02 | Controller generation, pinned build, actual served HTML/JS bytes and status |
+| MP04 | Send PROMOTE to OLD active after MP02 | Whether current pointer reverts while NEW remains waiting |
+| MP05 | Call explicit ROLLBACK | Must remain `NOT_ROLLED_BACK`; distinguish from MP04 |
+| MP06 | Send API 1 START_PRECACHE, API 2 START/REPAIR, unknown API, malformed message | Cache work, mutation, errors, no unintended routing promotion |
+| MP07 | Unverified/incomplete NEW candidate | Must not be promoted or served as verified shell |
+| MP08 | Close old tabs, allow normal activation | NEW active/controller/pointer/served bytes converge without losing unique local edits |
+| MP09 | Restart/airplane-mode/offline under both generations | Exact offline shell, no mixed resources, independent ledger/backup preservation |
+| MP10 | Safari tab versus Home Screen versus representative managed EFB iPad | Separate OS/browser/management envelopes; no assumed cross-context storage identity |
+| MP11 | Storage quota/failure and concurrent status/repair messages | Bounded failure, truthful response, no data destruction or uncontrolled retries |
+| MP12 | Repeat with Worker-only byte change but same appBuildId (§33) | Full Worker digest/controller identity, not build key alone, governs verdict |
+
+For every case record **NOT RUN / PASS / FAIL / UNKNOWN** at exact source/artifact/OS/browser/MDM state, expected versus observed, negative control, and retained sanitized evidence. Do not promote source/V8 evidence to real-device acceptance. Any reproduced MP02–MP04 mismatch is an Engineering release-admission defect candidate, not proof of attacker access. All actual code, browser harness and release-gate changes belong to Software Engineering/Product.
+
+### 34.7 Five-track relative-depth and stop check [TRANSFER VALIDATION / CHANGE WATCH / OPEN]
+
+- **E highest consequence/bottleneck:** lifecycle-agnostic control-catalogue mutation, safe promotion, release/backup authority and operational rollback policy. Strong generic foundations and source evidence; product admission OPEN.
+- **A major dependency:** W3C message targeting, waiting/active/controller distinction, client pinning and old/new coexistence. Current platform spec evidence strong; Chromium/WebKit and managed-policy transfer OPEN.
+- **C major dependency:** 11/11 handler-mock evidence is a *diagnostic* tier only; exact NORMAL/HTTP/browser/device/data oracles remain absent. Own MP01–MP12 and distinguish false-green tests.
+- **B bounded transfer:** source truth to update/recovery/error-state semantics; Design Studio W121 Stage 3 PRACTICE and physical/human/AT validation OPEN.
+- **D bounded transfer:** discovery/claims/telemetry; Marketing D8–D10 launch/PWA ads HOLD. No general acquisition duplication. Software Engineering Studio M006/Q006/D005/D006 is methodology transfer, not LogMate product proof.
+
+**Adjacent-question completion:** tested waiting→NEW, OLD re-promotion, old-controller new-navigation assignment, explicit rollback contrast, unsupported API and unverified-candidate negatives, and identified source/caller admission and status-work implications. Additional abstract permutations have less immediate value than real exact NORMAL/browser evidence. **Gate unchanged: Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** **CHANGE WATCH:** W3C Service Workers draft and browser message/lifecycle behavior; generated Worker/bootstrap and release identity changes; Safari/WebKit/iPadOS installed/MDM policy; actual 37-store/LBK durability. No LogMate/Design Studio/Marketing/Engineering writes.
