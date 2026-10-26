@@ -1651,3 +1651,90 @@ Record exact NORMAL artifact hash, served HTTPS origin, worker script hash and g
 - **D (consumer):** Marketing `STATUS.md` D8–D10 PWA/offline/sync/ads claims remain HOLD; no install-success/backup claims from model results. Software Engineering `research/README.md` D005/Q006/S007 boundaries remain separate.
   
 **Gate unchanged:** **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** The next highest-information-gain boundary is not another synthetic failure label: obtain an **Engineering-retained exact NORMAL build**, then inject FI01–FI09 on actual Chromium and Safari before physical/managed iPad, with independent ledger/backup evidence. Source-only and synthetic outcomes cannot be promoted. **CHANGE WATCH:** Service Worker install algorithm, Cache API lifetime/quota, WebKit install/update behavior, LogMate generator and Hosting/CI artifact identity. No LogMate/Design Studio/Marketing/Engineering writes.
+
+
+---
+
+## 33. A shell-derived `appBuildId` is not a complete PWA release identity: Worker-only updates, manifest replacement, Hosting policy and installed-app identity (2026-10-27)
+
+**Classification:** SOURCE / SYNTHESIS / CONTRADICTION / bounded VALIDATION / MINTTAP DECISION (PROPOSED) / DEPENDENCY / TRANSFER VALIDATION / OPEN / CHANGE WATCH. **Owner:** E release/security/operations; A supplies Worker/manifest/origin semantics; C owns artifact/browser falsification; B and D consume truth/claim boundaries. This continues §§27–32, not a claim of an observed deployment failure or a separate generic PWA primer.
+
+### 33.1 History → platform rule → current product question [SOURCE]
+
+AppCache-era confusion between a site's version, a browser's offline shell and its actual deployed executable motivates independent release identity. A Service Worker registration is updated by comparing the fetched **Worker script bytes**; it is not updated because an application-defined CacheStorage `appBuildId` changes. Conversely, an app-defined shell digest is not a browser registration identifier, an installed-app manifest `id`, an HTTPS origin, a publisher approval, or a server-side response-policy revision.
+
+Primary sources reviewed **2026-10-27**:
+- W3C Service Workers current draft (Update/Install/Activate, script-resource comparison and worker lifetime): https://w3c.github.io/ServiceWorker/ .
+- MDN `ServiceWorkerRegistration.update()` (new script byte difference triggers install): https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update .
+- MDN `ServiceWorkerRegistration.updateViaCache` (HTTP cache treatment during script/import updates; `none` is **not** publisher authorization): https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/updateViaCache .
+- web.dev PWA update/lifecycle (installed Worker and cached assets have different lifecycle boundaries): https://web.dev/learn/pwa/update and https://web.dev/articles/service-worker-lifecycle .
+- W3C Web App Manifest `id` (installed-app identity, same-origin constraints; not the app's shell build key): https://w3c.github.io/manifest/ .
+
+**Pinned read-only product:** `yhappcom/logmate main@26d2d7cf2c20c55026c6f84b838dcb6442f7a3f1`; `tool/pwa_precache.dart@90a67954af618a4e18199fa92555491c56167c17`; `tool/verify_pwa_artifact.dart@b39932796867ce2b6306937558e230697d503a72`; `web/flutter_bootstrap.js@a70625e8bda32aafd5dd23822c017d05229f0e63`; `firebase.json@9ac0972e26749215c4a718360c66315c6caf3cc8`; `web/manifest.json@8225e76fe032e792c30b0f22efa1f7cafab68119`. This is a source contract, not a retained NORMAL archive or observed Hosting/browser state.
+
+### 33.2 Exact source trace and identity matrix [SOURCE / CONTRADICTION]
+
+1. `_describeShell` deliberately **excludes** generated `logmate_service_worker.js`, `logmate-offline-manifest.json`, legacy `flutter_service_worker.js` and `font-fallback/` entries (generator lines 317–339). The generator sets `appBuildId = sha256(jsonEncode(shell))[0:32]` (line 101). This identifies the enumerated shell-file list and its hashes, **not all executable/release components**.
+2. `_workerSource(manifest)` embeds the offline manifest in Worker JavaScript; a Worker-source-only edit can change the script bytes while leaving the exact same shell list and `appBuildId`. The browser may install a new Worker generation after its byte comparison, while `shellCache(manifest)`, `control.versions[appBuildId]` and client pins continue using the same application build key. **This is a semantic release-identity collision, not a cryptographic SHA-256 collision.**
+3. `rememberManifest` overwrites `versions[appBuildId].manifest` while preserving an existing `verified:true` flag. If two **different offline manifest payloads** were ever generated under one shell-derived ID, the old client's identical key could resolve the replacement metadata. This requires such a mismatched-generation input; ordinary Worker-only source changes with an unchanged embedded manifest do **not** themselves alter the served asset hashes or prove corruption. §31's independent cross-global lost-update risk remains separate.
+4. The verifier checks shell/font/notice record bytes and several Worker **string/shape markers**, plus normal-vs-acceptance harness markers. It checks Worker presence, but does not add a Worker script digest, full offline-manifest digest, effective Hosting response headers or approved publisher-release membership to `appBuildId`. A successful verifier is useful bounded build evidence, not a full deployable-release attestation.
+5. The checked-in bootstrap calls `navigator.serviceWorker.register(..., {updateViaCache:'none'})` and `registration.update()`; neither makes the custom shell ID equal the browser's Worker script identity. The Hosting configuration's Cache-Control policy and the actually served security headers are separate from this shell digest; effective deployed headers remain UNKNOWN (§28).
+6. `web/manifest.json` currently lacks explicit `id` and has relative `start_url`. The Web App Manifest installed-app identity and the Origin-separated local IndexedDB custody (§515) must not be conflated with either `appBuildId` or the Service Worker script digest.
+
+| Controlled change | Shell-derived `appBuildId` | Browser Worker-script byte identity | What may actually change |
+| --- | --- | --- | --- |
+| Change a shell file's bytes/hash | **Changes** | Usually changes because embedded manifest changes | Shell/cache version, Worker script; still requires exact artifact proof |
+| Change **only Worker generator logic** while preserving all shell bytes and manifest fields | **Same** | **Changes** | Worker routing/security/lifecycle policy without a new shell build key |
+| Change offline manifest-only metadata while preserving shell list (synthetic/inconsistent-input case) | **Same** | Changes if embedded in Worker | Metadata may replace same-ID catalogue entry; do not claim normal production occurrence |
+| Change Firebase Hosting/header/CDN policy only | **Same** | Not necessarily changed | Effective response/security policy and origin delivery; capture separately |
+| Change the Stage-C font set through the **current** bootstrap's hard-coded font-set URL | **Changes if bootstrap is rebuilt consistently** | Usually changes | The bootstrap is part of shell; **not** a valid normal-path same-ID counterexample |
+| Change install manifest `id` or use a different hostname | Not a reliable release indicator | Independent | Installed-app identity/origin and local storage continuity; no automatic IndexedDB migration |
+
+**Expert distinction:** `same appBuildId` means the enumerated shell digest is equal, **not** `same Worker policy`, `same verified full artifact`, `same Hosting headers`, `same install context`, `same origin`, `same database authority`, or `same publisher-approved release`. Conversely, `different Worker script` does not establish an exploitable issue or broken user session: the browser still has its own installation/waiting/activation algorithm.
+
+### 33.3 Bounded deterministic challenge and honest limitations [VALIDATION / CONTRADICTION]
+
+Executed a disposable **Node.js v22.16.0** source-equivalent model on 2026-10-27 using SHA-256 of a synthetic ordered shell JSON list, two Worker source byte strings, two synthetic offline manifest payloads, and the generator's `rememberManifest` semantics. **14/14 assertions matched the predicted result**:
+- Stable shell gives stable 32-hex build key; a shell hash change or consistent bootstrap/font URL change changes that key.
+- Two distinct Worker byte strings have distinct Worker digests while a Worker-only change leaves the shell-derived build key unchanged.
+- Changing only offline-manifest metadata leaves the shell key unchanged, although the manifest's full digest differs.
+- With the **synthetic** same-ID/different-manifest fixture, `rememberManifest` preserves `verified:true`, replaces the manifest payload, and an old client's unchanged build key resolves the new metadata.
+- The catalogue fixture has no Worker-script digest, and its candidate key can equal the old/current build key.
+
+**Scope limit:** this is a synthetic JS model of the relevant identity/assignment expressions, **not** an execution of the Dart generator, compiled NORMAL Worker, CacheStorage, `registration.update()`, a real browser, Hosting, Safari or managed iPad. Dart's actual JSON serialization and product build must be checked on retained bytes before promotion. The different-manifest/same-ID fixture deliberately models a **possible inconsistent release input**, not an observed supported build path. No actual release collision, stale Worker, security downgrade, 503, ledger mutation, flight loss or user incident is asserted. This model cannot establish whether a browser schedules a particular two-generation overlap (§31) or a failed install's writes persist (§32).
+
+### 33.4 Security, availability, rollback and data-custody judgment [SYNTHESIS / MINTTAP DECISION — PROPOSED]
+
+- **Release authority (E):** define an independently reviewable *release envelope* binding exact source revision, NORMAL-vs-Acceptance flag, toolchain, Stage-C input, **complete deployable tree digest**, Worker script digest, offline-manifest digest, app-shell digest, intended Hosting origin/configuration and approved response-policy inventory. An external signed/approved release statement may attest to these, but signatures alone do not prove freshness, revocation, correct deployment or independent trust-root custody (§§27–28). Avoid circularly placing the Worker's own final hash inside the bytes being hashed; use a separate artifact inventory/attestation.
+- **Browser lifecycle (A):** distinguish the browser's installed/active/waiting Worker script generations from the app's `currentBuildId/previousBuildId/candidateBuildId`. A Worker-only update may legitimately have **same** app build key; if operational decisions require knowing Worker policy generation, record an independent Worker/release identity. Do not force `skipWaiting` or assume `updateViaCache:'none'` is an authorization control.
+- **Version metadata (E/A):** `verified:true` is currently an asset-candidate completeness flag; it is not proof of Worker policy generation, trusted release membership, security headers, compatible local DB schema, remote Sync authority or physical backup. A same-ID metadata overwrite is a falsifiable condition to prevent through release identity/manifest consistency admission, not a reason to delete caches or auto-roll back local records.
+- **Operations (E/C):** exact NORMAL build custody remains the highest-value blocker: CI's in-run NORMAL build success does not supply an independently retained NORMAL archive (§504). A full artifact inventory must distinguish a changed Worker with unchanged shell from unchanged Worker with changed Hosting policy. Compare approved manifest/Worker hashes **against served HTTPS bytes**; classify unexpected equality/difference as FAIL/UNKNOWN, not auto-GO.
+- **User data (E/B):** Worker shell identity, installed-app identity, IndexedDB's 37-store logical ledger, owner UID, intentional Replica-ID retention, external LBK recovery point and Manual Delta Sync admission are independent. A shell/Worker release discrepancy is **not** evidence that flight records were lost or restored. Preserve unique local state before any reset/host migration (§§515–516).
+- **Public claims (D):** Marketing D8–D10's unverified offline/install/Sync/ads claims remain HOLD. PWA remains ad-free by default under Marketing's current conditional research. A release ID, manifest install badge or synthetic model does not justify seamless-update or reliable-backup claims.
+
+**Rejected shortcuts:** treat `appBuildId` as the only release key; equate browser `registration.active` with approved publisher release; rely on a manifest `id` for storage migration; infer CSP from `firebase.json`; compare only source hashes without the served origin; clear `CacheStorage`/IndexedDB to resolve catalogue ambiguity; or use an Acceptance artifact as the missing NORMAL archive.
+
+### 33.5 Falsifiable integration packet (reuse W-031/W-036 and 504/508/519, no new product suite) [VALIDATION / DEPENDENCY / OPEN]
+
+| ID | Controlled evidence question | Required oracle |
+| --- | --- | --- |
+| RI01 | Two **exact** NORMAL builds differ only in Worker generator logic | Same shell-derived `appBuildId`; different full Worker/script/artifact digest; no accidental Acceptance marker |
+| RI02 | A shell-file byte changes | Build key and shell cache name change; both old/new verified bytes retained as policy permits |
+| RI03 | Current font-set/bootstrap changes consistently | Bootstrap shell digest changes; font-set and shell keys do not silently diverge |
+| RI04 | Synthetic mismatched same-ID manifest submitted to release verifier | Release admission **rejects** unapproved full-manifest/Worker pairing; existing verifier alone not assumed to do so |
+| RI05 | Worker-only update on real Chromium | Record script bytes, `installing/waiting/active`, `controller`, cache catalogue and served shell; do not infer update from appBuildId |
+| RI06 | Worker-only update on **native Safari** and installed iPadOS Home Screen | Separate OS/version/container evidence; do not promote Playwright WebKit to native Safari |
+| RI07 | Two-generation old/new tabs share app build key | Independent Worker-script generation identity and old-client byte correctness; no false old→new policy equivalence |
+| RI08 | Hosting response-policy changes with identical shell/Worker | Capture actual HTTPS headers, cached response headers and CSP positive/negative behavior (§28) |
+| RI09 | Distinct custom/default Hosting origins with identical artifact | Confirm per-Origin Worker/IndexedDB separation and old-origin LBK custody (§515) |
+| RI10 | Worker install failure / retry with same build key | Compare registration truth, orphan cache/candidate metadata and release envelope (§32), not candidate pointer alone |
+| RI11 | Source→NORMAL archive→approved Hosting deployment | Independent tree/Worker/manifest hashes, provenance and approved headers; `build/web` vs `build/web-normal` projection audited |
+| RI12 | Physical/representative managed EFB iPad upgrade and rollback | 37-store disposable ledger + external LBK independent readback/restore, UID/Replica authority, offline reopen, no destructive repair |
+
+Each case records exact source SHA, complete artifact/Worker/offline-manifest/shell digests, environment, origin, actual OS/browser/MDM mode, before/after Worker state, cache and ledger identity, negative control, PASS/FAIL/UNKNOWN and sanitized evidence location. Cases **NOT EXECUTED** on product. An unexpected Worker digest mismatch is not automatically an exploit; an appBuildId match is not a sufficient positive oracle. Engineering owns the exact build/browser harness and any implementation change, not Web Manager.
+
+### 33.6 Five-track allocation, peer transfer and stop rule [TRANSFER VALIDATION / CHANGE WATCH / OPEN]
+
+**E primary** because complete release provenance and rollback/data custody are highest consequence; **A substantial prerequisite** because browser script-byte update and custom shell identity are different mechanisms; **C substantial** for RI01–RI12 falsification and false-green prevention. **B bounded transfer** consumes Design Studio Web `progress/WEB_STATUS.md` W121 (Stage 3 PRACTICE, physical PWA/AT/human OPEN) for truthful update/offline/recovery state descriptions; no new visual system. **D bounded transfer** consumes Marketing `STATUS.md` D8–D10 / research 437–438: PWA ads default off, production offline/Sync/install claims HOLD; no new acquisition primer. Software Engineering Studio `research/README.md` M006/Q006/D005/D006 remains bounded executable-methodology transfer, not LogMate product proof.
+
+**Adjacent-question check completed:** The same-ID Worker-only case, the deliberately inconsistent manifest replacement case, the consistent-font negative control, the Hosting-header identity gap, and the installed-app/origin distinction were all examined in this integrated bundle. Additional abstract release-key permutations have lower value than a retained **exact NORMAL** archive and independently observed Worker/Hosting/browser/device behavior. **Gate unchanged: Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** No LogMate, Design Studio, Marketing or Software Engineering repository writes. **CHANGE WATCH:** Service Worker update comparison/cache behavior, Flutter build/generator/verifier changes, Apple/WebKit installed-app policy, manifest `id` handling, Firebase Hosting served headers and NORMAL artifact retention.
