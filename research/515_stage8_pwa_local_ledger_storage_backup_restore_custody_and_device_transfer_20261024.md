@@ -248,3 +248,127 @@ Allocation by risk: **E primary** (high consequence of pilot data loss and polic
 **NEXT DECISIVE ACTION:** Engineering should implement the *owner-approved minimal FILE task surface* and execute the populated, synthetic, 37-store external-file round trip on exact NORMAL Web artifacts; then run the physical managed-iPad policy envelope. This is a materially different implementation/runtime boundary, so another synthetic-only model is not a substitute.
 
 **Verdict:** Stage 8 applied security/trust remains ACTIVE; generic curriculum PASS unchanged; product FILE complete-flow **NOT IMPLEMENTED** per canonical roadmap; Production validation **OPEN**; PWA release **HOLD**. No LogMate, Design Studio, Marketing or Engineering files modified.
+
+
+## §11 — Canonical PWA origin, Firebase default-host aliases and offline-ledger continuity (2026-10-26 KST)
+
+**Evidence class:** SOURCE / SYNTHESIS / CONTRADICTION / MINTTAP DECISION (proposed release admission) / DEPENDENCY / VALIDATION (not executed) / TRANSFER VALIDATION / CHANGE WATCH. **Track E owns** release/domain/authority and irreversible local-data consequences; A owns origin/manifest/Worker mechanics; C owns falsifying runtime evidence; B/D consume the finding. This is a *new origin-topology contradiction* complementary to §§9–10 and 519 §24, not a new backup or Sync implementation.
+
+### 11.1 History/problem → principle → standard [SOURCE / FOUNDATION]
+
+Early web deployment treated a URL change as mostly a navigation/SEO problem. A local-first installed PWA changes the consequence: its service-worker registration, Cache Storage and IndexedDB live in a browser storage context keyed by origin (and potentially further partitioned by user agent). A hostname change can therefore strand the only copy of an offline ledger while showing the user the same app name, icon and authenticated Firebase account.
+
+- **Origin ≠ site ≠ Firebase project ≠ product identity.** A web origin is scheme + host + port; different subdomains are different origins. WHATWG Storage Standard storage keys currently include origin; partitioning implementation details are a separate browser change watch. The same Sembast database name on different origins does **not** refer to one physical IndexedDB database. Same Firebase project and even the same UID do not imply a shared local ledger.
+- **Worker/manifest separation.** Service workers register against same-origin script/scope. Web App Manifest \`id\` must be same-origin with \`start_url\`; if absent it defaults to \`start_url\`. A manifest ID cannot turn two origins into one IndexedDB or migrate an installed iPad app's data. HTTP redirects, \`rel=canonical\` and DNS CNAMEs change navigation/discovery/routing, **not** browser storage ownership.
+- **Historical evolution:** AppCache's implicit document-bound caching model was replaced by explicit Service Worker registration/fetch/lifecycle controls; neither model authorizes cross-origin access to another site's IndexedDB. For offline-first systems, URL topology is part of data-custody architecture, not merely branding.
+- **iPad extra dimension:** WebKit documents that a Home Screen web app's data is isolated from Safari; iOS/iPadOS 17.2 creation copies eligible *cookies only*, not IndexedDB. Safari 26 permits Home Screen creation as a web app by default or a browser bookmark by choice. Thus \`same origin\` is necessary but **not sufficient** to assert \`same storage container\` across Safari/Home Screen/MDM Web Clip.
+
+Primary current standards/platform sources checked 2026-10-26:
+- WHATWG Storage Standard: https://storage.spec.whatwg.org/
+- MDN same-origin policy: https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Same-origin_policy
+- W3C Web Application Manifest, \`id\`, \`start_url\`, scope: https://w3c.github.io/manifest/
+- W3C Service Workers: https://w3c.github.io/ServiceWorker/
+- WebKit Safari 17.2 one-time cookie copy: https://webkit.org/blog/14787/webkit-features-in-safari-17-2/
+- WebKit Safari 26 Home Screen installation choice: https://webkit.org/blog/17333/webkit-features-in-safari-26-0/
+
+### 11.2 Exact LogMate repository and host census [SOURCE / STATIC VALIDATION]
+
+Pinned read-only source: \`yhappcom/logmate main@26d2d7cf2c20c55026c6f84b838dcb6442f7a3f1\` (checked 2026-10-26). Source objects and their exact meanings:
+
+| Source | Observed exact property | Consequence / evidence limit |
+| --- | --- | --- |
+| \`docs/operations/domains-and-auth-email.md\` | Canonical PWA/public target \`logmate.minttap.app\`; Web \`authDomain\` same host; sender \`auth.logmate.minttap.app\`. Owner-observed signup verification at custom host 2026-10-04. | The *target* host is established; this is not a current live three-host HTTP response census. Sender subdomain is not the PWA origin. |
+| \`lib/repository/logbook/sembast_database_opener_web.dart\` | \`databaseFactoryWeb.openDatabase('logmate_ledger')\`. | Same database **name** under multiple origins yields different origin-local storage; the adapter does not implement cross-host migration. |
+| \`lib/firebase_options.dart\` | Web Firebase project \`logmate-pilot-logbook\`, \`authDomain: logmate.minttap.app\`. | One Auth backend can be used by pages at multiple origins, but the project/UID is not a browser-storage namespace. API keys and other configuration values are intentionally not copied into this study. |
+| \`web/manifest.json\` | \`start_url: "."\`, \`display: "standalone"\`; no explicit \`id\` or \`scope\`. | With root-hosted manifest, the standards fallback identity is the **root URL of each served origin**; no cross-origin identity continuity is established. This is a specification-level derivation, not an actual iPad install observation. |
+| \`web/index.html\` | Relative manifest link; Flutter base-href substitution; no inspected hostname restriction in this file. | The same generated site can be opened on multiple hosts if Hosting serves it; the actual deployed bytes/host policy remain OPEN. |
+| \`firebase.json\` | Hosting \`public: build/web\`, global \`no-cache, no-store, must-revalidate\` header, three \`/auth*\` rewrites; **no configured redirects** or host-specific routing in this source. | A source-level host-canonicalization gap, **not** proof all three hosts currently serve HTTP 200. Firebase Hosting's reserved \`/__/*\` namespace and redirect/asset/rewrite precedence matter. |
+| \`docs/specs/local-first-manual-delta-sync-contract.md\` | Backup-file transfer prioritized; manual delta sync approved but production Sync not implemented. | An alternate-host ledger cannot be presumed to reappear via unattended cloud/device sync. |
+
+Firebase Hosting's **default-site documentation**, updated in the 2026-10-15 default-site creation transition, says the default site has two provider domains (\`SITE_ID.web.app\`, \`SITE_ID.firebaseapp.com\`) that serve deployed site content. LogMate's existing project predates that creation-policy change; its documented default aliases are \`logmate-pilot-logbook.web.app\` and \`logmate-pilot-logbook.firebaseapp.com\`. The custom host is a third distinct origin. The repository's 2026-10-04 Firebase Authorized Domains inventory included all three. **An Authorized Domains allowlist is not a Hosting HTTP reachability/redirect observation.**
+
+Deterministic **URL-resolution diagnostic** (Python \`urllib.parse\`, not a browser run): applying the root \`manifest.json\` and relative \`start_url "."\` to the three documented URLs produces three distinct implicit IDs:
+
+| Candidate served origin | Implicit manifest ID, if the manifest is served at root |
+| --- | --- |
+| \`https://logmate.minttap.app\` | \`https://logmate.minttap.app/\` |
+| \`https://logmate-pilot-logbook.web.app\` | \`https://logmate-pilot-logbook.web.app/\` |
+| \`https://logmate-pilot-logbook.firebaseapp.com\` | \`https://logmate-pilot-logbook.firebaseapp.com/\` |
+
+**Live admission attempted, not established:** read-only GETs through the available web retrieval interface to all three hosts returned inaccessible-tool results, not trustworthy HTTP status/redirect/body evidence. A separate live-scrape provider failed with insufficient credits. Record **LIVE HOST RESPONSE = UNKNOWN**, not \`404\`, \`200\`, \`redirect verified\` or an outage. No browser, Dart, Firebase Console, deployment or physical iPad execution occurred.
+
+Provider sources:
+- Firebase default Hosting site and 2026-10-15 creation policy: https://firebase.google.com/docs/hosting/default-site
+- Firebase Hosting config and precedence (\`/__/*\` reserved → redirects → exact static → rewrites): https://firebase.google.com/docs/hosting/full-config
+- Firebase multisite/related domains: https://firebase.google.com/docs/hosting/multisites
+
+### 11.3 Threat/failure-mode chain and discriminating counterexamples [SYNTHESIS / CONTRADICTION]
+
+1. **Same product, different local ledger.** A pilot saves F1 offline at the provider host and later opens the branded host. Both pages could present LogMate and allow authentication with the same Firebase UID while the new host's \`logmate_ledger\` is empty. **Conditional source/platform consequence, not an observed lost flight.** This is distinct from ordinary account/UID mismatch.
+2. **A premature redirect can hide irreplaceable data.** Redirecting the old host before exporting its populated ledger may make the old origin difficult to reopen online; changing DNS or removing old Hosting content does not copy IndexedDB. A stale installed Worker may keep an offline old-origin app usable for a time, but that is neither a migration mechanism nor a recoverability guarantee.
+3. **Canonical metadata solves a different problem.** \`rel=canonical\` can consolidate search signals; it does not redirect human navigation or move storage. A \`301/308\` can direct users and search engines but **also does not transfer IndexedDB**. A CNAME is a DNS resolution alias, not a browser-origin alias. A common Firebase project/UID is not a storage bridge.
+4. **Manifest ID does not merge origins.** Adding \`"id": "/"\` can stabilize an app's identity *within one origin* under appropriate browser support; the standard's same-origin rule means \`id: "/"\` at the three hosts remains three identities. The missing explicit ID also deserves same-origin path/start URL change testing; it is not proof a current installed icon is broken.
+5. **Auth can succeed while local state remains absent.** The custom \`authDomain\` and \`/auth\` action handler can process verification independently of which origin contains the ledger. Same UID may be a necessary backup-restore ownership condition but is not proof that the source data is present, that a file was transferred, or that a Sync receipt exists.
+6. **Installed iPad multiplies the problem.** Safari tab, installed Home Screen web app, MDM Web Clip and another installed copy must not be assumed to share storage merely because their URL host strings match. Conversely, an MDM restriction may block the external Files handoff needed for migration. A “reinstall” instruction without a verified independent LBK is unsafe.
+7. **Old host remains a possible stale client.** If both hosts can launch, old-host clients may continue offline local writes under a different Worker/cache generation. Future Sync must reconcile authenticated operation lineage/replica and explicit receipts, not infer current authority from host, Firebase project or timestamp. Production Manual Sync remains OPEN.
+8. **A global redirect rule may break unrelated paths.** Firebase Hosting's reserved \`/__/*\` Auth helpers and custom \`/auth\` action routes need independent host/path behavior. A naive \`"source": "**"\` redirect applied to a shared Hosting site is not an approved solution; it may affect the canonical host as well as provider aliases, and redirects outrank rewrites/static files.
+9. **Duplicate search URLs ≠ duplicate data.** Google Search Central ranks redirects/canonical/sitemaps as canonicalization signals. Search de-duplication and attribution must be treated separately from browser ledger continuity; fixing SEO alone cannot authorize deleting an old-origin dataset.
+10. **Host policy must survive operational transitions.** A future custom-domain renewal, Hosting site split, CDN move, MDM bookmark update or incident rollback could reintroduce an alternate origin. Rollback to the previous hostname is not a data rollback or remote-authority reset; the old origin's storage and installed Worker may persist.
+
+**Security invariant:** Do not retire, redirect, erase or revoke an origin that may hold unique user data solely because another hostname serves a valid PWA build. Preserve user-owned data and a verifiable recovery path *before* switching navigation/installation authority. This is a **proposed release guard** pending product owner/Engineering/MDM approval, not permission to deploy a redirect or collect private flight data.
+
+### 11.4 One integrated remediation/operational decision [MINTTAP DECISION — PROPOSED, NOT IMPLEMENTED]
+
+**A. Canonical host admission first.** The already documented target is \`https://logmate.minttap.app/\`. Engineering/operations should verify exact live responses, redirect chains, \`/auth\` and Firebase reserved namespaces, Worker script/manifest, and installed launch origin on **each** documented host. Do not infer host behavior from Firebase Console Authorized Domains, DNS records or repository config alone. Distinguish which Hosting sites/targets actually serve which artifact.
+
+**B. If alternate hosts are empty/unreleased:** prefer one approved launch/install URL and a **host-aware** alternate-host navigation policy *after* verifying no real pilot ledger is stranded. A host-aware redirect may require separate Hosting site/configuration or infrastructure controls; \`firebase.json\` path rules alone are not an established host-specific switch. Preserve Auth helper behavior and signed action links. Document the chosen canonical host in user-facing instructions, Store links, QR codes and MDM Web Clip payloads.
+
+**C. If an alternate host may already contain data:** do not auto-redirect it away on first request. Provide a controlled *old-origin* read/export and independent file readback, confirm a permitted external custody destination, then establish matching verified owner and fresh empty staging at the canonical origin, restore/compare all 37 stores with the intentional Replica-ID and Sync-authority rules from 515/516/519, and only then retire the old launch path. A redirect-only cutover is a **FAIL**. Any later automatic Sync bridge is a distinct owner-approved product feature and cannot be substituted for verified file custody today.
+
+**D. Identity and installation governance.** Propose a stable explicit same-origin manifest \`id\` and \`scope\` **only** after Engineering validates compatibility with already installed versions, Worker scope and iPad behavior; changing manifest fields alone does not migrate storage. On managed EFB, obtain actual Web Clip/Managed Open In policy and allowed export destination. If policy prohibits a verified independent copy, mark migration **BLOCKED_BY_POLICY**, preserve the old origin and escalate rather than bypassing controls.
+
+**E. User/AT language.** B consumes Design Studio CD115 (local saved/synced/unknown) and CD052 (recovery authority). The product must distinguish \`This installation has no local records\` from \`Your records were deleted\`; \`Backup file verified\` from \`New installation restored\`; \`Signed in\` from \`Records transferred\`. Avoid inventing specific UI copy or promising recovery before Engineering provides a real path. C verifies focus/status/accessibility on real Web runtime; W121 keeps physical/human validation OPEN.
+
+**F. Search/analytics and privacy.** D consumes Google Search Central canonical/redirect evidence and Marketing D8/D9 HOLD. Publish canonical host references and prevent duplicate acquisition routing, but never put Firebase UID, flight record IDs, backup contents, action-link tokens or file paths into URL parameters, manifest start URL, referrer telemetry or analytics. A canonical URL signal is not proof of local-data migration.
+
+### 11.5 Falsifiable acceptance overlay on existing product Work [VALIDATION / DEPENDENCY]
+
+Reuse LogMate **W-012/013/014** for real B1 file round trip, **W-030** for account/UID continuity, **W-031** for installed PWA and **W-036** for release. This is one multi-host **variant of the existing campaign**, not another permanent parallel micro-test suite.
+
+| Boundary / negative control | Minimum independent evidence | Fail/UNKNOWN rule |
+| --- | --- | --- |
+| Three-host route inventory | DNS/TLS + final URL/status/headers/body hash + redirect chain for root, manifest, Worker, \`/auth\`, \`/__/*\`, privacy/account-deletion; exact approved NORMAL artifact identity | Unreachable tool, unapproved environment, missing route, or HTML-only assertion = UNKNOWN; no \`LIVE PASS\`. |
+| Same-origin storage separation | Disposable F1 created and DB transaction-completed on host A; independent clean host B read and host A reopen; separately capture browser profile/container | A visible F1 on B without a documented transfer requires investigation; absent F1 on B is expected isolation, not deletion proof. |
+| Same UID vs distinct local DB | Independently authenticate disposable same UID on both origins and compare *local* 37-store semantic state/replica, without remote Sync | Same UID alone cannot PASS data continuity; an empty B is not proof A lost data. |
+| Manifest/Worker/install identity | Fetch exact served manifest; assert effective \`id/start_url/scope\`, Worker registration/controller, browser display mode, launch URL, origin and container | \`Add to Home Screen\` screenshot or Worker \`active\` alone is not proof. |
+| Populated old-origin retirement | F1+F2 on old host; explicit LBK file export, independent readback, new-host fresh restore and semantic comparison; old Worker offline launch before/after cutover | Redirect before independent custody or loss of old-origin access without recovery = FAIL/HOLD. |
+| Wrong-owner and interrupted transfer | Wrong UID, corrupt/oversized file, canceled picker, mid-restore termination and DB reopen; no active-ledger overwrite | Digest match or picker close is not restore PASS; preserve original file and ledger. |
+| Auth and reserved-route parity | Firebase action links and \`/__/*\` behavior per host, no token leakage/redirect-loop, signup verified only where actually tested | Do not generalize 2026-10-04 signup smoke to reset/recover-email. |
+| Device/policy matrix | macOS Safari, iPad Safari tab, Home Screen web app, and actual supervised MDM Web Clip as **separate** tiers; allowed/denied managed Files destination | Desktop Chromium/Playwright WebKit does not certify managed iPad. |
+| User/AT and discovery | Exact state→action→result/accessible status; canonical Search/Store links, privacy-safe host/variant metrics | \`Synced\` or \`Recovered\` without proof, or canonical SEO PASS counted as ledger PASS = FAIL. |
+| Rollback/old-client | Reopen old-origin installed client offline after canonical switch, then reconnect under explicit current owner/Sync admission; inspect any old queued operations | Old client remote authority is not inherited; no blind replay or forced origin clearing. |
+
+Evidence tiers: **T0** repository source + deterministic URL derivation (this study); **T1** verified hosted responses/actual artifact; **T2** real browser/profile + data readback; **T3** physical Safari/Home Screen; **T4** representative MDM EFB + independent Files destination; **T5** production release and incident/recovery authorization. A tier never implies the next. **This run reaches T0 only.**
+
+### 11.6 Five-track allocation, cross-specialist transfer and checkpoint [TRANSFER VALIDATION / OPEN]
+
+| Track | Curriculum/evidence maturity and pressure | Owner/transfer |
+| --- | --- | --- |
+| **E — Security/Operations** | Stage 8 dominant; source evidence strong, host/runtime/MDM unknown; possible irrecoverable local ledger consequence | Own canonical-host, retirement order, old-origin custody, deployment/rollback, authority and release HOLD. |
+| **A — Platform/Browser** | Standards and exact manifest/opener available; installed-context behavior unresolved | Supply scheme/host/port, Worker origin/scope, manifest identity, IndexedDB and WebKit container distinction. |
+| **C — Quality/Accessibility** | High diagnostic pressure; no three-host or real iPad execution | Independently falsify host split, actual file recovery, AT/human and negative controls, provenance-bearing verdict. |
+| **B — UX/IA/Content** | CD115/CD052 state taxonomy mature, product migration UI absent | Consume data-presence/recovery truth; no premature deleted/synced/recovered language. |
+| **D — Search/Discovery/Analytics** | SEO primary standards mature; live canonical/Store metrics unknown | Consume canonical-host policy, check redirects/canonical links and privacy-minimized acquisition, Marketing owns claims. |
+
+**Cross-specialist evidence:** Design Studio \`research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md\`, \`research/content-design/CD115-runtime-status-recovery-language-20260920.md\`, \`research/content/CD052-delete-update-recovery-language-system.md\` (static semantic only; runtime/human OPEN); Software Engineering Studio \`research/README.md\` M006/D005/D006/Q006 (bounded lifecycle/recovery/Sync/CI transfer, not product execution); Marketing Manager \`STATUS.md\` D8/D9/D10 (PWA/import/export/Sync/ads claims HOLD). Peers are **read-only**; Web Manager does not duplicate or change their domain artifacts.
+
+**Additional primary discovery sources checked 2026-10-26:**
+- Firebase Hosting custom domain: https://firebase.google.com/docs/hosting/custom-domain
+- Google Search Central canonical methods (SEO only): https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls
+- Google Search Central site migration/redirect guidance: https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes
+- MDN Service Worker register same-origin requirement: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register
+- MDN Manifest \`id\` browser support watch: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/id
+
+**CHANGE WATCH:** 2026-10-15 Firebase default-site creation policy applies to new projects differently, not retrospectively to LogMate's older existing site; Firebase custom-host/redirect configuration; W3C Manifest identity and browser implementation; Chromium origin-migration experiments (do **not** assume Safari/managed-iPad support or storage transfer); WebKit iOS 26 Home Screen installation toggle; Apple MDM Managed Open In; exact LogMate NORMAL Hosting and Auth deployments; approved file-flow and Manual Sync implementations.
+
+**Adjacency check and stop:** This section resolves the previously unarticulated *same-app/multiple-origin/local-data split* with pinned source, current standards, explicit counterexamples and an existing-Work execution bridge. The immediately adjacent question—can any of the three hosts currently serve or redirect a populated, installed LogMate ledger?—requires live approved response/browser/MDM/FILE evidence unavailable in this run. More speculative host-specific redirect code or synthetic test cases would not close that gate. **Stage 8 ACTIVE; generic curriculum PASS unchanged; source-level host-topology contradiction newly recorded; production validation OPEN; PWA release HOLD.** No product, Marketing, Design Studio or Software Engineering modifications.
