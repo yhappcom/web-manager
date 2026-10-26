@@ -1453,3 +1453,104 @@ Peer boundary checked read-only: Design Studio progress/WEB_STATUS.md@265433c an
 **CHANGE WATCH:** W3C Service Worker draft and FetchEvent semantics, browser Clients.claim behavior, WebKit iPadOS background/tab and Home Screen storage, Chromium update handling, LogMate generator/bootstrap/Hosting changes. Product policy and MDM controls are not established by generic standards.
 
 **Adjacency and stop:** §29's incomplete shell repair led to a separate, source-executed **first-control admission gap** and an important non-shell 503 consequence. The directly adjacent failure and positive controls have now been falsified in the extracted handler; further promotion requires the **actual approved NORMAL Worker + real browser lifecycle**, not another mock. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**. No product, Design Studio, Marketing or Engineering repository writes.
+
+
+---
+
+## 31. Two-generation Service Worker control-catalogue lost-update boundary — install/fetch concurrency (2026-10-27)
+
+**Gate: PINNED PRODUCT SOURCE + PRIMARY STANDARD REVIEW + TWO-ISOLATE SOURCE-EQUIVALENT INTERLEAVING MODEL; NOT REAL CHROMIUM/SAFARI/MDM EXECUTION.** Starting Web Manager main `652ebe880b50f65735e070f9f9b164c2ebf4a299`; LogMate read-only `main@26d2d7cf2c20c55026c6f84b838dcb6442f7a3f1`; exact `tool/pwa_precache.dart` blob `90a67954af618a4e18199fa92555491c56167c17`. This extends §25's client-build catalogue, §26's acknowledged cross-worker concurrency option, §29's repair boundary and §30's unassigned-client admission. It is **not** a claim of observed user outage, exploit, data loss, or release regression.
+
+### 31.1 Historical problem → principle → standards [SOURCE / SYNTHESIS]
+
+The original Service Worker lifecycle intentionally permits an **installing replacement Worker alongside the currently active Worker**. The replacement does not need `skipWaiting()` to execute its `install` event while the old Worker handles already-controlled client fetches. The *active-controller exclusivity* intuition therefore does not imply that only one Worker global can access the origin's CacheStorage during an update. A Worker-global Promise mutex serializes work **within that global**, not across generations or independent window contexts. The browser may also terminate/restart Workers; process-local locks are not persistent consensus or durable transaction machinery.
+
+Primary/current sources checked 2026-10-27:
+- W3C Service Workers Editor's Draft, registration's installing/waiting/active Workers, lifecycle and Cache API: https://w3c.github.io/ServiceWorker/
+- Chrome-maintained lifecycle explanation: https://web.dev/articles/service-worker-lifecycle (and https://web.dev/learn/pwa/service-workers) — updated Worker installs alongside active, waits before activation.
+- MDN `Cache.put()`: https://developer.mozilla.org/en-US/docs/Web/API/Cache/put — an individual matching entry is overwritten; no multi-step compare-and-swap transaction is promised.
+- MDN Cache interface: https://developer.mozilla.org/en-US/docs/Web/API/Cache — same-origin windows and Workers may use the cache; author code owns update policy.
+- W3C IndexedDB 3.0: https://w3c.github.io/IndexedDB/ — overlapping `readwrite` transactions serialize, allowing conditional changes within a single transaction, but this does not establish physical durability or publisher authenticity.
+- Design Studio `progress/WEB_STATUS.md@265433c` (W121) and `progress/CONTENT_STATUS.md@be7ff67` (CD127), Marketing Manager `STATUS.md@ef50fae` D8–D10, Software Engineering Studio `research/README.md@87ee4eb` M006/Q006: all read-only transfer; none provides this product's exact two-Worker browser trace.
+
+**Core invariant:** immutable shell bytes, mutable per-client routing membership, candidate verification and approved-release authority are different things. A CacheStorage `put` can individually succeed while the application's *read → mutate → write* operation loses an independent concurrent change. Cache validity alone does not imply catalogue linearizability.
+
+### 31.2 Exact code and reachable overlap [SOURCE]
+
+The generated Worker defines a single `CONTROL_CACHE = 'logmate-offline-control-v2'` and `CONTROL_KEY = '/__logmate_offline_control_v2.json'`. `readControl()` retrieves the whole JSON; `writeControl()` replaces the **entire** JSON at one cache key with `cache.put`. `updateControl(change)` serializes callbacks using `let controlMutation = Promise.resolve()`, but that variable is declared in the individual Worker global. There is no inspected cross-global lock, CAS/version assertion, or IndexedDB transaction around read+write.
+
+Two distinct ordinary writers can overlap:
+1. **Old active Worker:** intercepted root navigation calls `updateControl`, reads the catalogue, and adds `event.clientId`/`resultingClientId` to `clientBuilds` for the current build (§30).
+2. **New installing Worker:** `install` caches shell, calls `updateControl(rememberManifest)`, then `precacheCandidate` performs a second `updateControl` setting candidate manifest/`verified` and possibly `currentBuildId`. The old Worker can continue to handle client navigation while this new Worker is installing. Both use the same origin-scoped control key but have separate `controlMutation` variables.
+
+A stale snapshot from either global can overwrite the other's **disjoint** update:
+- If the installer writes last after both read the same original control, a newly admitted old-version `clientBuilds[client]` mapping can disappear. A later old-Worker subresource GET for that client can hit §30's unassigned-client 503 branch. The *possibility of a later fetch* and its timing are runtime-dependent.
+- If the old navigation writes last, the installer's candidate manifest/`candidateBuildId` can disappear. A later installer write or activation may reconstruct some metadata, so **permanent failed installation is not inferred**. The point is that the intermediate catalogue is not guaranteed to preserve both independently successful mutations.
+- A failed `cache.put`, Worker restart, cache eviction or same-origin malicious writer adds different risks; none is necessary for this honest two-generation lost-update counterexample. This is distinct from §27's coordinated manifest/asset tampering and §28's header custody.
+- `no skipWaiting` protects old clients against premature **activation**; it does **not** serialize the new Worker's **installation-time** writes with the old active Worker's fetch writes. Nor does `clients.claim()` establish a cross-global mutex.
+
+**Precise reachability bound:** overlapping old-active navigation and new-install control writes are permitted by the lifecycle, but whether the exact byte-verified NORMAL artifact produces the conflicting schedule on a given browser/OS has **not** been observed. No physical data deletion or remote Sync implication follows.
+
+### 31.3 Bounded executable interleaving [VALIDATION / CONTRADICTION]
+
+Ran Node.js **v22.16.0**, disposable in-memory source-equivalent `readControl → change → writeControl` with **two independently scoped `controlMutation` Promises**, a single shared cache-key value and a barrier that makes both globals read the same starting snapshot before either writes. No browser CacheStorage, actual LogMate generated Worker, Worker update lifecycle, network or Sembast was executed.
+
+Fixture: initial `currentBuildId=OLD`, verified `versions.OLD`, `clientBuilds.tabA=OLD`; Worker A adds `tabB=OLD`; Worker B adds verified `versions.NEW` and `candidateBuildId=NEW`. Results:
+
+| Forced schedule | Final catalogue | Oracle |
+| --- | --- | --- |
+| Both read C0 → A writes client mapping → B writes candidate | NEW manifest retained, **tabB mapping lost** | Expected lost update reproduced |
+| Both read C0 → B writes candidate → A writes client mapping | tabB retained, **NEW manifest/candidate lost** | Expected lost update reproduced |
+| Same two changes applied sequentially to one current snapshot | Both independent changes retained | Positive serial control |
+| Single cache-key `put` completed | Last writer's JSON is present | Not a read-modify-write atomicity guarantee |
+| Two separate worker-global mutexes used | Neither orders the other global's critical section | Per-global locking boundary verified in model |
+
+**Five bounded assertions met expected results.** These are deterministic counterexamples to the proposition that a per-global Promise mutex is sufficient to preserve concurrent catalogue updates. They are **not five LogMate product tests**, not an observed Safari/Chrome failure and not a proof of frequency. The model deliberately does not simulate all `install` retries/second writes, promotion, browser scheduling or cross-process storage internals.
+
+### 31.4 Cross-domain consequences and safe design space [SYNTHESIS / MINTTAP DECISION — PROPOSED]
+
+**Track E primary:** control metadata is a release and availability decision surface. A catalogue that silently drops a client pin can reject otherwise valid offline shell access; one that silently drops a candidate can disrupt update admission. Preserve the local 37-store ledger and external `.lbk` custody independently; never clear IndexedDB or silently choose the newest build to paper over metadata loss. Lost control metadata does not by itself prove the ledger was erased.
+
+**Track A prerequisite:** separate browser registration (one active per scope) from simultaneous installing and active *executions*, per-global mutex lifetime, and origin-shared CacheStorage. A browser-specific scheduling guarantee would need exact-version primary evidence and test; no generic cross-worker serialization is assumed.
+
+**Track C execution:** test both forced write orders and a serial positive control, then actual Chromium and WebKit with deterministic pause hooks on the exact generated NORMAL Worker. Confirm observable 503/NOT_PROMOTED/UNKNOWN vs catalogue corruption and independent ledger preservation. Synthetic in-memory outcomes are diagnostic only.
+
+**Track B consumer:** Design Studio W121/CD127 requires real state→copy parity: `Offline version is not assigned` does not mean records are deleted, synchronized, backed up or recoverable. Accessible, keyboard/AT-testable recovery must distinguish local ledger status from shell routing and external-backup custody.
+
+**Track D consumer:** Marketing D8–D10 continues PRODUCT CLAIM HOLD. Do not describe offline update/recovery as seamless from CI or model results. If a product trace is later permitted, aggregate worker-generation/race outcome without client IDs, UIDs, flight details, filenames, query strings, Auth codes or release secrets.
+
+**Architectural alternatives for Engineering review, not authorized changes:**
+- **Transactional catalogue in a dedicated IndexedDB object store:** a short overlapping `readwrite` transaction can atomically merge per-client and candidate changes. Requires schema/version upgrade, old/new Worker compatibility, error/eviction handling, Safari/managed-iPad validation and a migration plan for existing CacheStorage metadata. IDB transactional serialization is **not** independent publisher authentication, storage persistence guarantee or rollback approval.
+- **Immutable per-generation records + derived projection:** avoids one shared whole-document overwrite but introduces record lifecycle, cross-generation merge/conflict rules, stale-client pruning, quota and verified current-release membership. Derived `currentBuildId` still needs an explicit single-authority transition protocol.
+- **Single designated catalogue writer / message handoff:** potentially simplifies mutation ownership but installer/active-worker availability, message loss, crash/restart and initial-install bootstrap must be proven. `BroadcastChannel`, `navigator.locks` or a window-owned coordinator must not be assumed available in all Service Worker contexts or managed WebKit policy envelopes.
+- **Re-read and retry after `put` without a true compare-and-swap:** **insufficient by itself**; two writers can both observe their own writes transiently, and last-writer replacement still loses a mutation. A mere generation integer stored in the same mutable JSON is also insufficient without an atomic conditional commit.
+- **No skipWaiting / add longer waits:** may reduce some activation conflicts but does not remove concurrent installing-worker writes; delaying release does not establish metadata atomicity.
+
+Do not combine a metadata refactor with unreviewed reduction of `verifiedResponse` body hashing (§27–28), forced cache cleanup (§29), or unverified client-to-current-build assignment (§30). Release-authority authenticity, catalogue concurrency, file integrity and local ledger recovery each require independent oracles.
+
+### 31.5 Integrated 12-scenario acceptance overlay [DEPENDENCY / VALIDATION]
+
+Reuse **LogMate W-031/W-036/W-012** and existing Web Manager 508/519 Worker packets, not a new parallel project. Proposed execution (all **NOT EXECUTED** on product):
+
+| ID | Fault/interleaving | Falsifiable oracle |
+| --- | --- | --- |
+| CW01 | Exact NORMAL v1 installed; v2 installation overlaps v1 root navigation | Record both Worker generations, reads/writes and catalogue before/after |
+| CW02 | Force old navigation write before installing candidate write after both read | Old client pin survives or explicit safe failure; no silent wrong-build serving |
+| CW03 | Reverse write order | Candidate metadata survives or explicit retry/reconstruction with verified authority |
+| CW04 | Sequential same-generation navigations | Both mappings retained (positive control for per-global mutex) |
+| CW05 | Multiple old tabs while new Worker waiting | Each old tab receives only its pinned verified bytes |
+| CW06 | Worker global restart during installation | No reliance on persistent in-memory lock |
+| CW07 | Quota/write rejection in one of two writers | No false READY; old shell and 37-store ledger independently intact |
+| CW08 | Cache control malformed/evicted during update | No automatic current-build guessing, destructive clear or false backup claim |
+| CW09 | Concurrent status/promotion verification and navigation | Measure critical-section delay and bounded user-visible outcome (§26) |
+| CW10 | New claimed client with no prior mapping (§30) | Distinguish admission failure from cross-worker lost update; no unapproved shell fallback |
+| CW11 | Chromium and Safari tab/Home Screen with actual version/OS | Separate browser behavior; never infer managed EFB policy from unmanaged PASS |
+| CW12 | Managed iPad policy-permitted install/update/offline + external LBK | Preserve matching-owner 37-store sentinel, export/readback and clean-context restore |
+
+Capture exact source commit, NORMAL archive/Worker hash, origin, browser/OS/MDM profile, active/installing/waiting identities (test-only sanitized), event type, read/write schedule, before/after catalogue, assigned version, verified response digest, network state, UI state, independent local-ledger and LBK readback, and PASS/FAIL/UNKNOWN. A reproducible real race must show **both successful mutations with one subsequently missing**, not merely a 503 whose cause could be §30's first-claim gap. Negative controls must discriminate cache miss, quota failure, unassigned client, stale-version mismatch and race loss.
+
+### 31.6 Integrated judgment, gate and next high-value boundary [OPEN / CHANGE WATCH]
+
+The adjacent question was completed: §30's client assignment can be lost not only because a page was newly claimed but also through **honest cross-generation whole-catalogue replacement**. The isolated model proves a possible lost-update interleaving; primary lifecycle evidence establishes why an installing and active Worker can access shared origin storage concurrently. It does **not** prove a particular browser will produce the schedule or that an actual LogMate client experienced a 503.
+
+**Gate remains Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.** The highest information gain is now **Engineering-retained NORMAL artifact + actual two-generation browser-controlled interleaving** (including first claim, repair, update and independent 37-store data-preservation evidence), followed by physical Safari and managed EFB iPad. Track E owns release/concurrency admission, A supplies lifecycle, C executes, B/D consume; Design Studio, Marketing, Software Engineering and LogMate remain read-only. **CHANGE WATCH:** Service Workers update/Cache API, IndexedDB transaction semantics, Chromium/WebKit Worker overlap and quota behavior, LogMate generator/bootstrap and CI artifact custody.
