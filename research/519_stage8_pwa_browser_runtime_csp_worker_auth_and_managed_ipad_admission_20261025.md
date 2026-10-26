@@ -1266,3 +1266,92 @@ A separate **abstract Node 22.16.0 release-admission exercise** ran **16/16 asse
 **OPEN:** real HTTPS response policy and source of any CSP/COOP/COEP; whether a cached response header can be altered in actual Chrome/Safari and what document policy results; exact generated NORMAL worker/archive; independent release membership root; header canonicalization, status/MIME expectations, compatibility and revocation policy; CSP/XSS entry-point reachability; iPadOS Safari/Home Screen/MDM; 37-store external backup and cold restore. **CHANGE WATCH:** W3C Service Workers 2026 CRD and SRI-2 WD, browser updateViaCache/Worker CSP support, WebKit storage/managed-context behavior, LogMate Worker generator/Hosting policy, signing-key rotation and release provenance.
 
 **Adjacency check:** §27's catalogue-forgery question led directly to an independent, newly demonstrated **header-only integrity gap** and a concrete trust-root alternatives/acceptance matrix. Further code-level remedy requires product-owned security/compatibility review and exact NORMAL browser/HTTPS evidence; another generic signature primer would not close a gate. **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** No production test, deploy, live exploit, pilot data access or product/peer writes.
+
+---
+
+## 29. Existing-worker shell corruption cannot be repaired by the advertised repair message — exact-source bounded execution (2026-10-26)
+
+**Gate: SOURCE + EXECUTED EXTRACTED-FUNCTION MODEL PASS / PRODUCT GENERATED-WORKER, CHROME, SAFARI, MANAGED-iPAD NOT_EXECUTED.** Canonical Web Manager `main@5cbf63d25bd9aee51c414f7de6a5175453258301`; LogMate read-only `main@26d2d7cf2c20c55026c6f84b838dcb6442f7a3f1`, `tool/pwa_precache.dart` blob `90a67954af618a4e18199fa92555491c56167c17`, `web/flutter_bootstrap.js` blob `a70625e8bda32aafd5dd23822c017d05229f0e63`. This section is a substantive adjacent repair/lifecycle extension to §§25–28, not a new PWA primer. Product release and data durability remain OPEN.
+
+### 29.1 History/problem → standard → concrete implementation [SOURCE / SYNTHESIS]
+
+A Service Worker install event runs on **installation/update**, not on each subsequent cache failure. MDN's Using Service Workers describes install-time `waitUntil` and its failure semantics; web.dev's update guide distinguishes an actual Worker update from a same-version page reopen. Cache Storage entries are not automatically refreshed when the server changes (web.dev Caching). This makes **initial complete installation** and **post-install targeted repair** different operations. Relevant primary/maintainer sources, reviewed 2026-10-26:
+
+- Service Worker standard: https://w3c.github.io/ServiceWorker/ ; MDN install lifecycle: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+- web.dev update: https://web.dev/learn/pwa/update ; cache update: https://web.dev/learn/pwa/caching
+- WHATWG Storage Standard: https://storage.spec.whatwg.org/ ; WebKit storage-policy changes: https://webkit.org/blog/14403/updates-to-storage-policy/
+
+**Exact LogMate control flow** (`tool/pwa_precache.dart`, line ranges from read-only main):
+1. `install` calls `cacheGroup(shellCache(OFFLINE_MANIFEST), OFFLINE_MANIFEST.shell)` at ~555, then `precacheCandidate(...)`. This is a valid initial-install shell population path.
+2. `precacheCandidate` at ~521–544 calls `cacheGroup` **only for fonts and font notices** (~525–526), then `inspect` verifies shell+fonts+notices (~497–502). It does not call `cacheGroup(shellCache(...))`.
+3. `message` dispatches **both** `START_PRECACHE` and `REPAIR_CACHE` to that same `precacheCandidate` (~584–588). There is no distinct shell repair operation. `web/flutter_bootstrap.js` sends `START_PRECACHE` and `PROMOTE_VERIFIED_CANDIDATE`, not a separate shell repair request.
+4. `activate` inspects and conditionally promotes; it does not download missing shell bytes (~561–574).
+5. For an assigned client and manifest shell resource, `fetch` returns a verified cached response or **503 'Offline asset repair required'**, with **no network fallback** for a missing/invalid shell item (~610–640). This intentionally avoids cross-version shell mixing but means ordinary online navigation cannot repair that missing byte.
+6. A same-byte Worker script may be checked for updates without running a new `install`; do not treat `registration.update()` as a guaranteed cache rebuild. A genuine newly installed Worker may re-run the shell caching step, but that is a different, conditional recovery path.
+
+**Conditional failure:** after a successful install, if a shell entry (e.g. `index.html` or a required JS asset) is individually missing or fails its expected hash while control and Worker remain, a subsequent START/REPAIR request can recheck but **cannot restore the shell**. The assigned navigation/subresource returns 503. This is a **source-confirmed incomplete repair path**, **not** proof that normal Safari quota eviction removes one shell entry, that an actual user has experienced a 503, or that ledger data has been deleted. Browser eviction often operates at origin scope; partial-entry loss must be induced and observed separately.
+
+### 29.2 Executable bounded falsification [VALIDATION / TRANSFER VALIDATION]
+
+Executed the **exact `async function precacheCandidate` body extracted from the GitHub source blob**, not a rewritten copy, in a V8 function harness with explicitly mocked `cacheGroup`, `inspect`, control, and CacheStorage outcomes. No real Service Worker, HTTP, browser, Dart, Flutter or Sembast was run. The harness records which cache groups the real function invokes and varies shell/font health:
+
+| Synthetic precondition | Exact-function `cacheGroup` calls | Result | What this establishes |
+| --- | --- | --- | --- |
+| shell valid; fonts valid | fonts, notices (same synthetic cache name) | READY | Baseline |
+| **shell missing; fonts valid** | fonts, notices only | **REPAIR_REQUIRED** | Shell never repaired |
+| shell valid; fonts missing | fonts, notices | READY | Mock permits font repair |
+| **shell missing; fonts missing** | fonts, notices only | **REPAIR_REQUIRED** | Font repair does not repair shell |
+
+Four of four expected branch outcomes observed. The harness deliberately returns a fixed inspect result based on mocked shell/font health; it does **not** prove browser caching, network success or any user-visible recovery. The source also contains the install-only shell `cacheGroup` call and message→precache wiring; both were independently checked against the full file.
+
+**Adjacent error-propagation contradiction:** the same exact function's `catch` returns `{...await status(), state, error}`. When `cacheGroup` fails but `status()` succeeds, the function returns a structured `FAILED` result. When CacheStorage is unavailable to **both** `cacheGroup` and `status()`, the catch path **rejects again** instead of returning that structured error. Both deterministic mock cases were executed (2/2 expected outcomes). The message event's `waitUntil(precachePromise.then(reply))` has no rejection handler; thus a persistent storage-read failure can leave no structured response. Actual event lifecycle and user UI impact are unverified. Note: current bootstrap uses fire-and-forget messages, so do not claim a displayed spinner or a confirmed end-user timeout.
+
+### 29.3 Threat/failure classification and dependency boundaries [SYNTHESIS / CONTRADICTION]
+
+| Trigger / state | Worker behavior supported by source | Important limitation |
+| --- | --- | --- |
+| Fresh install, online, approved bytes reachable | Install caches shell then fonts/notices, verifies before install success | Real NORMAL artifact/HTTPS/device still OPEN |
+| Installed Worker, font/notice entry missing, approved URL reachable | START/REPAIR attempts re-download for those groups | Same-URL deployment drift can fail hash; network may be unavailable |
+| Installed Worker, shell entry individually missing/corrupt, fonts intact | START/REPAIR does **not** fetch shell; assigned resource may return 503 | Actual partial corruption incidence unknown |
+| Installed Worker, shell missing, origin offline | No safe approved network source; cannot repair; 503 can be expected | Do not overwrite/erase unique IndexedDB ledger to 'fix' shell |
+| Installed Worker, shell missing, online origin now serves newer bytes | Existing expected SHA rejects newer bytes if an eventual repair is attempted | Version-addressed immutable retrieval or independently approved recovery protocol may be needed |
+| Cache API read/inspect persistently throws | `catch → status()` can reject; message reply not guaranteed | Actual browser failure and UX response unknown |
+| Worker script genuinely changes and new install succeeds | Install path may re-download shell and activate after lifecycle conditions | Does not prove prior local data continuity, compatibility or no mixed generations |
+| Origin-wide eviction or user clears site data | Local shell and ledger may both be gone | This is not the same as a single-entry shell repair defect; external backup required |
+
+**Security–availability tension:** The no-network-fallback rule for old assigned clients is defensible against serving a newer, unapproved app shell. Removing it merely to hide 503 could break same-build coherence, app schema compatibility and flight-ledger custody. Conversely, labeling `REPAIR_CACHE` as a complete repair without a shell recovery path is incorrect. Cache content integrity (§§27–28), approved release authority, data preservation (§515), and recoverability are separate predicates.
+
+### 29.4 Operational alternatives and rejected shortcuts [MINTTAP DECISION — PROPOSED / OPEN]
+
+**Preferred Engineering review direction, not an approved LogMate patch:** extend the explicit repair contract to classify `SHELL_MISSING`, `SHELL_HASH_MISMATCH`, `FONT_MISSING`, `STORAGE_UNAVAILABLE`, `NETWORK_UNAVAILABLE`, `APPROVED_BYTES_UNAVAILABLE`, and `UNKNOWN`. A repair path may attempt **only exact expected bytes for the assigned approved version** and verify hash and response metadata before changing readiness. Keep the current runnable version and all unique ledger/drafts/outbox/backup evidence; avoid origin-wide cache clearing, `unregister` as a default, `skipWaiting`, new-version URL fallback, or silently assigning an old client to the latest build.
+
+Evaluate two bounded recovery designs against an approved artifact: (A) re-run `cacheGroup(shellCache(currentCandidate), manifest.shell)` with strict version membership and independent release approval, handling concurrent Worker generations; (B) immutable version-addressed shell retrieval with an independently governed retention horizon, for cases where same-URL Hosting now serves newer bytes. Both need quota budget, old-client pinning, metadata validation, and clear offline-no-repair behavior. Neither is a generic fix for a compromised origin, expired release authority or missing independent backup. Error reporting must not call a failing storage API in its last-resort fallback; report a bounded failure without exposing pilot data.
+
+**Reject:** treating `registration.update()` as a cache refresh guarantee; calling the current `REPAIR_CACHE` path a shell repair; fetching newer `index.html` into an older client; clearing IndexedDB/CacheStorage as first-line recovery; treating a successful re-download as ledger restore or sync acknowledgement; treating one synthetic V8 test as Chrome/Safari/iPad PASS.
+
+### 29.5 Integrated cross-track ownership and 12-case execution packet [DEPENDENCY / VALIDATION]
+
+**Track E (primary bottleneck)** owns version-authorized recovery, data-preserving incident response, release artifact custody and no-destructive-fallback policy. **Track A** owns exact install/activate/message/fetch control, cache API and same-script update semantics. **Track C** owns falsifiable real-runtime oracles, quota/fault injection, performance and accessibility quality. **Track B** consumes Design Studio W121/CD127: 'offline shell unavailable' is not 'flight records deleted'; accessible recovery state must reflect actual action/outcome. **Track D** consumes Marketing D8/D10: no offline/recovery/installability advertising claim from a synthetic function PASS; telemetry must not contain records, Auth codes or private filenames. Software Engineering Studio M006/Q006 owns implementation-level harness/test transfer; no peer source modified.
+
+Reuse existing LogMate **W-031/W-036** and Web Manager 519 R13–R24 / 508 W01–W28; do not create a parallel product backlog:
+
+| Case | Setup and action | Required positive / negative oracle |
+| --- | --- | --- |
+| SR01 | Exact approved NORMAL Worker fresh install, full network | Shell/font/notice integrity and controlled reopen |
+| SR02 | Remove only `index.html` cache entry after successful install | STATUS not READY; REPAIR does not falsely claim READY; navigation outcome recorded |
+| SR03 | Corrupt one shell JS entry, preserve control/IndexedDB | Hash rejection and 503; no newer-byte fallback |
+| SR04 | Remove font only, approved version still served | REPAIR restores exact font and returns verified READY |
+| SR05 | Remove shell only, approved same-version URL reachable | Candidate repair must actually restore shell before claiming PASS; current source expected failure |
+| SR06 | Remove shell, online origin serves different-version bytes | Reject mismatched digest, preserve old ledger/client |
+| SR07 | Remove shell, server offline | No invented successful repair; local ledger preservation checked independently |
+| SR08 | Inject CacheStorage read failure into `status()` during repair failure | Bounded error/reply or explicit failed contract; no hanging false success |
+| SR09 | Multiple controlled clients pinned to different versions | Repair cannot overwrite another client's version or race control writes |
+| SR10 | New Worker install while old tabs remain | Waiting/activation and old-client resource continuity verified |
+| SR11 | Cold browser restart with persisted profile and shell failure | Distinguish cached page from actual cold start; preserve records and recovery path |
+| SR12 | Physical Safari/Home Screen + representative managed EFB iPad with policy-permitted external .lbk | Separate install/launch/offline/repair, local 37-store integrity and independent backup/restore evidence |
+
+**Evidence fields:** exact source SHA, NORMAL archive/Worker digest, origin, approved release roster, OS/browser/build, install/container/MDM policy, client ID/version, cache entry state, network availability, action/message, observed status/response bytes, negative-control result, retained 37-store snapshot/external backup proof, PASS/FAIL/UNKNOWN and sanitized trace. A source-expected failure is not a measured product failure. No LogMate tests or runtime environments were changed.
+
+### 29.6 Stop rule and next decisive boundary [OPEN / CHANGE WATCH]
+
+The adjacent source-level question **was completed now**: the exact repair function, message route, install-only shell write, fetch 503 and secondary catch-path failure were independently reconciled and mock-exercised. Additional speculative cache failure variants would add little without real runtime evidence. Next information gain requires an **approved NORMAL build** and browser-controlled selective CacheStorage corruption/recovery tests, followed by native Safari and managed EFB iPad. Recheck current WebKit/Chromium storage and update behavior by version; do not promote generic platform documentation to managed-fleet acceptance. **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
