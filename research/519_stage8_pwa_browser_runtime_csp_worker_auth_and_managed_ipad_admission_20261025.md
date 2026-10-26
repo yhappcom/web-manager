@@ -1355,3 +1355,101 @@ Reuse existing LogMate **W-031/W-036** and Web Manager 519 R13–R24 / 508 W01�
 ### 29.6 Stop rule and next decisive boundary [OPEN / CHANGE WATCH]
 
 The adjacent source-level question **was completed now**: the exact repair function, message route, install-only shell write, fetch 503 and secondary catch-path failure were independently reconciled and mock-exercised. Additional speculative cache failure variants would add little without real runtime evidence. Next information gain requires an **approved NORMAL build** and browser-controlled selective CacheStorage corruption/recovery tests, followed by native Safari and managed EFB iPad. Recheck current WebKit/Chromium storage and update behavior by version; do not promote generic platform documentation to managed-fleet acceptance. **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+---
+
+## 30. First-install Clients.claim versus per-client build admission — an unassigned-client 503 boundary (2026-10-26)
+
+**Gate: EXACT GENERATOR FETCH-HANDLER EXTRACTED + 14/14 DETERMINISTIC V8 BRANCH TESTS; REAL GENERATED NORMAL WORKER / CHROMIUM / SAFARI / MANAGED iPAD NOT EXECUTED.** Canonical Web Manager main at start: 36eaa6bd1559d162f78497e42d394ac9505872db. LogMate read-only main: 26d2d7cf2c20c55026c6f84b838dcb6442f7a3f1. Source blobs: tool/pwa_precache.dart 90a67954af618a4e18199fa92555491c56167c17 and web/flutter_bootstrap.js a70625e8bda32aafd5dd23822c017d05229f0e63. This extends §25 client-catalogue lifecycle and §29 repair failure into **client admission**, not a new generic Worker primer.
+
+### 30.1 Problem/history → platform principle → standard [SOURCE / SYNTHESIS]
+
+An initially network-loaded document can acquire a controlling Worker *after* its navigation. The Service Worker standard deliberately separates a worker's **active registration**, a document's **controller**, and the **client identity associated with each FetchEvent**. MDN Clients.claim explicitly warns that an active Worker can immediately control already-open in-scope pages originally loaded without that Worker. W3C FetchEvent.clientId identifies an initiating client; resultingClientId is associated with a resulting navigation document and is empty for subresources. Neither field is a permanent device or build identity. A page's acquisition of a controller does not, by itself, prove which byte-identical app shell originally loaded that page.
+
+Primary/maintainer sources checked 2026-10-26:
+- W3C Service Workers (current Editor's Draft), FetchEvent clientId/resultingClientId and Clients.claim: https://w3c.github.io/ServiceWorker/
+- MDN Clients.claim: https://developer.mozilla.org/en-US/docs/Web/API/Clients/claim
+- MDN FetchEvent.resultingClientId: https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent/resultingClientId
+- MDN Service Worker lifecycle: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+- WHATWG Storage Standard, origin-scoped quota/storage: https://storage.spec.whatwg.org/
+
+**Mechanism:** claiming a previously uncontrolled page is a platform action; assigning that page an **approved, coherent LogMate build** is a separate application action. Treating these as synonymous can cause availability failure; blindly assigning the newest build to a page loaded with different bytes can cause mixed-generation execution. Neither shortcut is acceptable without independent compatibility evidence.
+
+### 30.2 Exact LogMate source path and reachability [SOURCE]
+
+1. On initial install, the generator's install handler (~550–560) caches/verifies the candidate and may populate control.currentBuildId. The control schema (~406) begins with clientBuilds = {}.
+2. On activate (~561–577), it verifies/promotes the candidate and then calls self.clients.claim() (~573). **This handler does not enumerate or assign the newly claimed client IDs to control.clientBuilds.**
+3. On the root navigation fetch (~612–624), it records event.clientId and event.resultingClientId (when nonempty) against the current build. This is the only inspected route that assigns clientBuilds entries.
+4. On a **non-navigation same-origin GET** (~625–631), it looks up control.clientBuilds[event.clientId]. If missing, versionFor returns no manifest and responds HTTP 503 'Offline version is not assigned; reload required.'
+5. Crucially, the manifest admission check happens **before** shell/font classification (~632–640). Therefore a newly claimed but unassigned client can receive 503 for an unrelated same-origin GET that otherwise would have fallen through to fetch(request), **not only** for app shell or fonts. Cross-origin GET, non-GET, reserved auth and Firebase /__/ paths, and non-root navigations have earlier bypasses.
+6. The bootstrap's ready/controllerchange callbacks post PROMOTE_VERIFIED_CANDIDATE and START_PRECACHE. These messages verify/promote/download; they **do not register the source client into clientBuilds**. The controllerchange listener is once-only; this does not itself establish a first-install recovery route.
+7. A later intercepted root navigation with resultingClientId can establish a mapping, after which mapped requests may be served. A root navigation without either client ID can return approved index.html but leaves no assignment for a subsequent subresource. This last case is a model edge case; its real browser occurrence must be observed, not presumed.
+
+**Bounded failure precondition:** a page is loaded before initial Worker control, the new Worker activates and claims it, and that page subsequently issues an in-scope same-origin GET *before an intercepted root navigation has assigned its client ID*. The exact handler then has no build membership for that client. This is a **source-confirmed conditional 503**, not proof of a real first-install outage, Safari bug, ledger loss, or frequency. In particular, whether LogMate performs a qualifying request after claim is runtime-specific.
+
+### 30.3 Executed exact-handler branch falsification [VALIDATION / CONTRADICTION]
+
+Extracted the **2,516-character fetch event listener body** verbatim from the current generator's Dart-embedded JavaScript and registered it in a V8 Function harness. The harness supplied controlled URL parsing, CacheStorage/control state, Response, fetch, verifiedResponse, and event.respondWith; it did **not** execute a browser Worker, Clients.claim, Dart generation, actual caches or network. Initial harness fixture mistakenly substituted the shell URL for an empty root path (four false negatives); the fixture was corrected **before** final evidence admission. Final **14/14 expected branch results**:
+
+| Case | Controlled condition | Observed extracted-handler result |
+| --- | --- | --- |
+| C01 | Claimed client absent from clientBuilds requests shell JS | 503; no network fallback |
+| C02 | Same absent client requests unrelated same-origin JSON | **503; no network fallback** |
+| C03 | Same absent client requests font | 503 |
+| C04 | Mapped client requests verified shell | 200 |
+| C05 | Mapped client requests unrelated same-origin JSON | network fetch invoked (synthetic 299 sentinel) |
+| C06 | Mapped client requests corrupt shell | 503 |
+| C07 | Root navigation has resultingClientId | mapping recorded; verified index 200 |
+| C08 | Root navigation has neither client ID | verified index 200, control write, no client mapping |
+| C09 | Non-root navigation | no interception |
+| C10 | Reserved /auth/action | no interception |
+| C11 | Reserved /__/auth/handler | no interception |
+| C12 | Cross-origin request | no interception |
+| C13 | Root navigation with no current build | 503 |
+| C14 | Root navigation control-write rejection | intercepted promise rejects; no successful response |
+
+**Evidence boundary:** These tests prove conditional branches of the extracted handler under supplied assumptions. They do not prove the browser will issue those FetchEvents, the generated NORMAL artifact contains the same handler, or a user will see an error. An exception in a respondWith promise may yield a network error rather than an HTTP 503; C14 is deliberately not labeled a successful 503 response. No product release gate advances.
+
+### 30.4 Security–availability contradiction and alternatives [SYNTHESIS / MINTTAP DECISION — PROPOSED]
+
+The current per-client mapping protects old/new shell coherence after an intercepted root navigation, but **Clients.claim without admission** creates a gap for pre-existing uncontrolled pages. Three alternatives require Engineering threat-model review rather than an immediate Web Manager patch:
+
+- **A — Delay or avoid initial claim until an approved navigation admission:** prevents sudden interception of network-loaded clients, but delays offline control and requires precise handling of updates, waiting Workers, and future page navigations. Removing claim blindly is not a universal fix.
+- **B — Explicit claimed-client admission handshake:** identify the loaded document's actual approved build from trustworthy, version-bound evidence before assigning its client ID; handle lost/reordered messages and concurrent tabs. A page-supplied build string alone is not independent publisher authority; a network-loaded document might be stale or compromised.
+- **C — Narrow unaffiliated-client policy:** for a client with unknown build, bypass or reject *only with a reviewed resource classification*. Unconditionally fetching shell JS from latest Hosting would violate same-build coherence; unconditional 503 for all unrelated GETs may be unnecessarily disruptive. Reserved Auth /__/ behavior must remain independent.
+
+**Reject:** equating controllerchange with build admission; mapping every claimed page to currentBuildId without checking the bytes already running; treating 503 as proof of data deletion; resetting CacheStorage or IndexedDB to restore a mapping; promoting a waiting Worker with skipWaiting to mask the issue; using synthetic V8 PASS as physical iPad PASS.
+
+### 30.5 Cross-track diagnostic integration [DEPENDENCY / TRANSFER VALIDATION]
+
+| Track | Stage/depth/pressure and ownership | Transfer / diagnostic question |
+| --- | --- | --- |
+| **E (primary)** | Applied Stage 8, strongest product data/release consequence, source mature/runtime missing | Define approved client-generation admission, least-destructive incident recovery and release evidence; preserve 37-store ledger, outbox and independent LBK custody |
+| **A (prerequisite)** | Browser platform foundations established, first-install control timing device-specific OPEN | Determine first network navigation vs claim vs controlled subresource ordering, FetchEvent IDs, waiting/activation and Safari/WebKit deviations |
+| **C (execution lead)** | Model/CI methods mature; exact NORMAL/browser/MDM evidence missing | Capture positive and negative runtime traces and reject synthetic-only green; test keyboard/AT recovery states and cold restart |
+| **B (consumer)** | Generic IA mature; exact recovery-state comprehension OPEN | Apply Design Studio W121/CD127: 'version not assigned/reload needed' must not imply 'flight records lost', 'backup completed', or 'synced' |
+| **D (consumer)** | Search/analytics foundations mature; launch claim and production telemetry gates OPEN | Apply Marketing D8/D9/D10 HOLD; aggregate sanitized Worker failure class without URL query, flight record, UID, Auth token, client ID or filename |
+
+Peer boundary checked read-only: Design Studio progress/WEB_STATUS.md@265433c and progress/CONTENT_STATUS.md@be7ff67 (Stage 3 PRACTICE, runtime/human evidence OPEN); Marketing Manager STATUS.md@ef50fae (D8 PWA/offline acceptance not PASS, D10 ads HOLD); Software Engineering Studio research/README.md@87ee4eb (M006 browser lifecycle and Q006 negative-oracle methodology bounded; not LogMate PASS). No parallel peer discipline or product implementation authorized.
+
+### 30.6 Integrated real-runtime acceptance packet, existing W-031/W-036 and 508/519 [VALIDATION / OPEN]
+
+**Do not open a new duplicate Work stream.** Add these *distinct* first-control checks to the already proposed NORMAL-artifact/Worker/device acceptance:
+- **CA01** Fresh profile, online first load, register→install→activate→claim: capture controllerchange, client ID, control catalogue assignment and delayed same-origin shell/font/non-shell fetch outcomes.
+- **CA02** Positive control: explicit root reload after claim, capture resultingClientId mapping, then verified shell and non-shell GET; contrast with CA01.
+- **CA03** Delay an asset request until immediately after claim, with no root reload; assert whether browser dispatches it to Worker and whether it receives 503; do not manufacture a claim about frequency.
+- **CA04** Keep a network-loaded page open while a waiting Worker activates after other clients close; test whether its loaded binary matches any assigned build.
+- **CA05** Two tabs: first installed/claimed, second navigated/assigned; preserve separate IDs and no silent cross-assignment.
+- **CA06** Simulate Worker restart with persisted control catalogue, then control-cache corruption and quota-write failure; classify 503 vs rejected response and independent ledger survival.
+- **CA07** Test reserved Firebase Auth /__/ and /auth routes, cross-origin fetch and non-root navigation bypass under both assigned and unassigned clients.
+- **CA08** Compare online/offline with missing old-version shell, candidate update, and prior-version client; never fetch unapproved newer shell into old page.
+- **CA09** Test Chromium and Safari normal tabs, iPadOS Home Screen installation and representative managed Web Clip as separate platform/policy envelopes; capture OS/browser versions and actual permitted installation.
+- **CA10** Preserve synthetic nonempty 37-store ledger/outbox and external LBK readback across each controlled failure; independently verify recovery and owner/UID boundaries, not just page rendering.
+- **CA11** Test recovery UX with keyboard, focus, text scaling and screen reader; display only states backed by actual action outcomes.
+- **CA12** Compare exact generated NORMAL Worker digest, immutable artifact manifest, HTTPS response headers and controlled client trace; do not promote Acceptance build or V8 harness as production proof.
+
+**Minimum trace:** exact LogMate commit, NORMAL archive and Worker SHA, origin, browser/OS, registration.active/waiting/controller, navigation vs subresource, event.clientId/resultingClientId (ephemeral sanitized test IDs only), assigned build before/after, cache health, HTTP status or rejected promise, network state, recovery action, independent ledger and LBK evidence, PASS/FAIL/UNKNOWN. Real client IDs must not enter analytics.
+
+**CHANGE WATCH:** W3C Service Worker draft and FetchEvent semantics, browser Clients.claim behavior, WebKit iPadOS background/tab and Home Screen storage, Chromium update handling, LogMate generator/bootstrap/Hosting changes. Product policy and MDM controls are not established by generic standards.
+
+**Adjacency and stop:** §29's incomplete shell repair led to a separate, source-executed **first-control admission gap** and an important non-shell 503 consequence. The directly adjacent failure and positive controls have now been falsified in the extracted handler; further promotion requires the **actual approved NORMAL Worker + real browser lifecycle**, not another mock. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**. No product, Design Studio, Marketing or Engineering repository writes.
