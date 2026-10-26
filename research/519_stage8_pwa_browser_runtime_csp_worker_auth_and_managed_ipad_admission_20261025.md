@@ -1554,3 +1554,100 @@ Capture exact source commit, NORMAL archive/Worker hash, origin, browser/OS/MDM 
 The adjacent question was completed: §30's client assignment can be lost not only because a page was newly claimed but also through **honest cross-generation whole-catalogue replacement**. The isolated model proves a possible lost-update interleaving; primary lifecycle evidence establishes why an installing and active Worker can access shared origin storage concurrently. It does **not** prove a particular browser will produce the schedule or that an actual LogMate client experienced a 503.
 
 **Gate remains Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD.** The highest information gain is now **Engineering-retained NORMAL artifact + actual two-generation browser-controlled interleaving** (including first claim, repair, update and independent 37-store data-preservation evidence), followed by physical Safari and managed EFB iPad. Track E owns release/concurrency admission, A supplies lifecycle, C executes, B/D consume; Design Studio, Marketing, Software Engineering and LogMate remain read-only. **CHANGE WATCH:** Service Workers update/Cache API, IndexedDB transaction semantics, Chromium/WebKit Worker overlap and quota behavior, LogMate generator/bootstrap and CI artifact custody.
+
+
+---
+
+## 32. Rejected Service Worker installation is not a CacheStorage transaction: orphan candidate, partial writes and retry custody (2026-10-27)
+
+**Evidence classification:** SOURCE / SYNTHESIS / CONTRADICTION / bounded VALIDATION / DEPENDENCY / OPEN / CHANGE WATCH. **Track E owns release/storage/recovery; Track A owns lifecycle and Promise/Cache mechanics; Track C owns browser falsification; B/D consume.** This continues §31's cross-generation catalogue race without treating a failed `install` as automatic rollback of earlier CacheStorage writes. It is a substantial integrated *failure-lifecycle* checkpoint, not a new product test or a claim of an observed outage.
+
+### 32.1 Problem, history and standard boundary [SOURCE]
+
+Service Worker `install` + `event.waitUntil()` was designed to prevent an incomplete worker **from becoming installed/activated**. The standard does not thereby turn independent Cache API writes into one ACID transaction. A rejected `waitUntil` rejects the installing worker; previously completed origin-scoped `Cache.put` calls and control-catalogue mutations have a separate persistence/lifecycle boundary. Browser storage eviction may later remove them, but no automatic *per-install rollback* may be presumed.
+
+- W3C Service Workers Nightly, install lifetime / install algorithm, reviewed **2026-10-27**: https://www.w3.org/TR/service-workers/ — install failure on rejected extend-lifetime promise; an old active worker can continue during a new install.
+- MDN, Using Service Workers, reviewed **2026-10-27**: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers — cache population and failed installation are distinct operations; old active controller remains.
+- MDN, Cache / CacheStorage / Cache.put, reviewed **2026-10-27**: https://developer.mozilla.org/en-US/docs/Web/API/Cache , https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage , https://developer.mozilla.org/en-US/docs/Web/API/Cache/put — origin-shared named caches and individually committed entries, with developer-owned lifecycle.
+- MDN, Promise.all(), reviewed **2026-10-27**: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all — fail-fast rejection does **not** cancel sibling promises. Whether an unfinished browser-side cache operation subsequently completes after the worker is discarded depends on lifetime/scheduling and must be measured, not asserted.
+
+**History → design principle:** AppCache-style implicit lifecycle assumptions are unsafe for irreplaceable offline data. Worker registration state, immutable release membership, cached-byte integrity, candidate download progress, local ledger state and external backup custody are separate dimensions. `install FAILED` does not imply `all candidate files absent`; `candidate files present` does not imply `installed`, `activated`, `approved` or `restorable`.
+
+### 32.2 Exact LogMate source and failure-phase table [SOURCE / SYNTHESIS]
+
+Read-only canonical product snapshot **`yhappcom/logmate main@26d2d7c`**, generator **`tool/pwa_precache.dart` blob `90a67954af618a4e18199fa92555491c56167c17`**. Worker `install` calls `cacheGroup(shell)`, then `updateControl(rememberManifest)`, then `precacheCandidate` (fonts/notices → inspect → `updateControl` → result); if `installed.ready` is not true, it throws. `cacheGroup` writes individual entries with six concurrent workers and `Promise.all`. No install-failure handler deletes candidate shell/font caches or reverses the control record; the activation handler deliberately avoids automatic cache deletion. `rememberManifest` sets `candidateBuildId` and inserts `versions[build]` with `verified:false` unless already true. `precacheCandidate` catch may return FAILED (or itself reject if `status()` fails). This is **source-level reachability**, not a device observation.
+
+| Failure boundary | Previously completed writes may remain | What must NOT be inferred |
+| --- | --- | --- |
+| Shell `cacheGroup` fails before `rememberManifest` | Some new-shell entries; no new candidate pointer from this attempt | No orphan shell; atomic cache rollback; all concurrent puts canceled |
+| Shell succeeds; candidate `rememberManifest` commits; font/notices download fails | New shell + partial font/notice entries + `versions.NEW`/`candidateBuildId=NEW` | NEW installed, verified, promoted or available offline |
+| `precacheCandidate` inspection reports incomplete | Same retained shell/candidate/partial assets, candidate `verified:false` when final metadata write succeeds | READY because a manifest exists |
+| Final control `Cache.put` rejects after full candidate bytes were verified | Candidate bytes may be complete; earlier candidate record may survive, final `verified`/promotion write absent | Full cache implies worker install success |
+| Install retry for same build | `valid` can reuse correct retained bytes; missing bytes can be fetched | Retry automatically succeeds, is storage-safe or proves old-ledger durability |
+| Concurrent old Worker navigation (§31) | Old and new worker can independently mutate shared catalogue | Orphan pointer will remain unchanged or last-write-wins has no effect |
+
+**Bounded positive property:** if an old active Worker and its verified old shell are present, an ordinary rejected NEW install does not itself activate NEW or call a deletion of OLD; the old controller can remain operational. This does **not** prove quota safety, future navigation availability, correct old-client pins under §31 race, or IndexedDB survival under origin eviction.
+
+**New cross-section contradiction:** `candidateBuildId` is a **download/registration intent**, not a reliable assertion that the candidate's Service Worker is installed or waiting. In an old Worker `GET_STATUS`, `candidate` is inspected against **that Worker's embedded OFFLINE_MANIFEST**, while shared `candidateBuildId` can name the failed NEW attempt. A consumer that collapses `state: READY` and `candidateBuildId: NEW` into “NEW ready to install” would be semantically wrong. No such product UI misreport was observed; inspect the actual consumer before claiming it.
+
+### 32.3 Eight bounded deterministic checks [VALIDATION / CONTRADICTION]
+
+Executed a disposable **Node.js v22.16.0 source-equivalent in-memory model** on 2026-10-27; **8/8 assertions PASS**, no generated Worker/CacheStorage/browser/Flutter/Sembast/device involved:
+1. Shell + remembered candidate survive a simulated later font failure, while `currentBuildId` remains OLD.
+2. A successful individual shell write is not reversed merely because the encompassing operation rejects.
+3. NEW begins unverified; OLD's verified membership remains.
+4. A retry can reuse retained matching shell bytes and fill a missing entry.
+5. An ordinary failed install, absent §31 race, does not itself erase the old client pin.
+6. Failed NEW does not promote itself to current.
+7. `Promise.all` rejects on one failure while an already-running sibling may subsequently mutate shared state **if its execution context remains alive**.
+8. Separate `logmate-shell-OLD` and `logmate-shell-NEW` namespaces avoid direct same-key shell replacement in the fixture.
+
+These assertions test **model implications** and JS semantics, not whether Safari/Chromium preserves pending writes after a failed installation. The model deliberately excludes browser termination, Cache API quota, network failures, actual `waitUntil`, worker generations, UI, Sync and the 37-store ledger. Treating 8/8 as production PASS would be a false-green quality error.
+
+### 32.4 Integrated 12-question diagnosis, alternatives and operational judgment [SYNTHESIS]
+
+1. **Registration truth:** `installing` / `waiting` / `active` state must be read independently from the Cache catalogue; `candidateBuildId` is not browser registration authority.
+2. **Partial cache:** enumerate shell/fonts/notices per build, bytes and SHA; differentiate partial, complete and verified, never assume failed install means zero writes.
+3. **Concurrent writes:** six `cacheGroup` workers and `Promise.all` fail-fast mean one failure need not cancel sibling operations; observe settlement/lifetime before deleting any candidate namespace.
+4. **Old-client continuity:** preserve old pinned version and byte verification; no silent current-build fallback, forced `skipWaiting`, indiscriminate `caches.delete` or `Clear site data`.
+5. **Orphan accumulation:** repeated failed version IDs can retain shell/font files and metadata. Quantify bytes, retry frequency, quota headroom and browser eviction rather than claiming an actual leak/eviction.
+6. **Retry correctness:** distinguish same-build byte reuse from a *new* publisher-approved build; verify content-addressed bytes, policy headers (§28), independent release authority (§27) and idempotent control changes.
+7. **Status truth:** UI must distinguish failed install, cached partial candidate, old served version, unassigned client (§30), lost catalogue update (§31), and local-ledger/backup state. “READY” must be qualified by **which build**.
+8. **Rollback safety:** Worker lifecycle rollback does not roll back data schema, dirty outbox, owner identity or 37-store Sembast transactions; the existing `ROLLBACK_TO_PREVIOUS` fail-closed policy remains justified.
+9. **Origin isolation:** default Firebase host and custom host have independent caches/IndexedDB (§515); cleaning an “orphan” on one origin cannot recover records on another.
+10. **Managed EFB:** iPadOS Safari/Home Screen/MDM Web Clip policies, quota and offline execution must be measured separately; no inference from desktop Chromium or generic Apple backup.
+11. **Telemetry/privacy:** aggregate failed-install phase, build hash, cache size, retry count, registration state and validated recovery outcome; do not log client IDs, UID, flight details, backup paths or Auth tokens.
+12. **Incident/release:** an observed failure should block NEW promotion and prompt controlled investigation, but does not itself justify deleting OLD, resetting origin storage, declaring local flights lost, or marking external LBK current.
+
+**Design options for Engineering evaluation only:** (a) explicit candidate lifecycle states `STAGING / VERIFIED / REGISTERED / PROMOTABLE / FAILED` with independent registration oracle; (b) build-scoped immutable cache records and separately serialized/transactional metadata; (c) bounded orphan reclamation after proof that no active/waiting/client build references it, with an externally verified ledger backup; (d) staged retry with size/quota budgets and exact-byte verification. None is approved for LogMate, and none solves §27 publisher-authenticity or §31 cross-generation atomicity alone. Do not add `caches.delete` as a quick repair.
+
+### 32.5 Existing product validation packet extension [DEPENDENCY / VALIDATION / OPEN]
+
+Reuse **LogMate W-031/W-036/W-012/W-013/W-014** and Web Manager 508/519, with Software Engineering M006/Q006/D005/D006 for executable methodology. **NOT EXECUTED** product cases:
+
+| ID | Controlled experiment | Required independent oracle |
+| --- | --- | --- |
+| FI01 | NEW shell download fails after one successful put | Registration NEW rejected; enumerate surviving candidate entries |
+| FI02 | NEW font download fails after `rememberManifest` | OLD remains active; candidate pointer vs browser waiting state compared |
+| FI03 | NEW notice download fails after other candidate assets complete | Correct FAILED/not-READY semantics; no false promotion |
+| FI04 | Control `Cache.put` rejects after successful candidate inspection | Complete bytes are not mistaken for installed/approved worker |
+| FI05 | Force one of six concurrent fetches to fail while another is delayed | Capture late-write vs terminated-worker outcome, not assumed |
+| FI06 | Repeat failed install with same build, then network recovery | Byte reuse and full revalidation; no version mixing |
+| FI07 | Fail successive distinct builds under quota pressure | Orphan growth, `estimate()` uncertainty, OLD availability, origin-eviction sentinel |
+| FI08 | OLD active navigation overlaps rejected NEW candidate metadata write | Separate §31 lost-update from ordinary failed-install residue |
+| FI09 | Compare `GET_STATUS` from OLD with NEW failed candidate pointer | UI copy correctly identifies served/candidate/registration dimensions |
+| FI10 | Browser restart after rejected install, offline | OLD shell and ledger independently reopen; no accidental repair/clear |
+| FI11 | Real Chromium then Safari/Home Screen with exact OS/build | Platform-specific registration/cache lifetime; never infer managed policy |
+| FI12 | Authorized managed iPad + disposable 37-store ledger + external LBK | Original ledger, exported readback and clean-context restore independently verified |
+
+Record exact NORMAL artifact hash, served HTTPS origin, worker script hash and generation, fault injection phase, before/after cache-key inventory and control JSON, browser registration state, status message, active client mapping, independent 37-store sentinel, LBK readback/restore, and PASS/FAIL/UNKNOWN. A failed registration is **not** a PASS for orphan cleanup; an old shell serving is **not** a PASS for ledger persistence or backup freshness. Never run destructive quota/eviction experiments against a real pilot's data.
+
+### 32.6 Five-track transfer and checkpoint [TRANSFER VALIDATION / OPEN / CHANGE WATCH]
+
+- **E (dominant):** failure-domain/release-custody/rollback and data-preserving incident gate; candidate metadata is not registration authority.
+- **A (dependency):** standard `waitUntil` outcome, shared CacheStorage, `Promise.all` concurrency and worker lifetime; Chrome/WebKit details remain CHANGE WATCH.
+- **C (execution lead):** FI01–FI12 with both negative and positive controls, source/OS provenance and false-green audit; desktop-only results never close iPad.
+- **B (consumer):** Design Studio `progress/WEB_STATUS.md` W121 remains Stage 3 PRACTICE; its state/semantic contradiction gate applies to “failed update vs offline records safe” copy. No new visual design.
+- **D (consumer):** Marketing `STATUS.md` D8–D10 PWA/offline/sync/ads claims remain HOLD; no install-success/backup claims from model results. Software Engineering `research/README.md` D005/Q006/S007 boundaries remain separate.
+  
+**Gate unchanged:** **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** The next highest-information-gain boundary is not another synthetic failure label: obtain an **Engineering-retained exact NORMAL build**, then inject FI01–FI09 on actual Chromium and Safari before physical/managed iPad, with independent ledger/backup evidence. Source-only and synthetic outcomes cannot be promoted. **CHANGE WATCH:** Service Worker install algorithm, Cache API lifetime/quota, WebKit install/update behavior, LogMate generator and Hosting/CI artifact identity. No LogMate/Design Studio/Marketing/Engineering writes.
