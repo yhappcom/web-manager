@@ -1,7 +1,7 @@
 # 516 — Stage 8 PWA Shared-Origin Authority: Auth Action, CSP, Worker Bypass and Third-Party Execution
 
 Date: **2026-10-25 (Asia/Seoul)**  
-State: **SOURCE AUDIT + CROSS-TRACK SYNTHESIS + PROPOSED SECURITY ACCEPTANCE; NO LIVE HEADER/BROWSER/DEVICE PASS**  
+State: **SOURCE + SYNTHESIS; SYNTHETIC FIREBASE HOSTING/CHROMIUM EXECUTION PASS (bounded); ACTUAL LOGMATE HTTPS/SAFARI/MANAGED-IPAD/PRODUCTION VALIDATION OPEN**  
 Primary owner: **Track E (Security / Operations)**; Track A owns browser policy mechanics, C independent tests, B recovery/task meaning, D privacy and publisher claims.  
 Canonical Web Manager starting HEAD: `80d377f7be40946d1501321382931d0588f8a3bd`. Product inspected **read-only** at LogMate `main@4101ec7380796300f68fa60dbc7e5b6061f00080`. No product policy or source change is authorized by this study.
 
@@ -701,6 +701,7 @@ Extend §§15–17 **DEL-W01–12 / DEL-L01–18**; avoid another disconnected f
 
 Read-only at `yhappcom/logmate/main@4101ec7380796300f68fa60dbc7e5b6061f00080`:
 - `tool/pwa_precache.dart@90a67954` generated Worker defines install/activate/message/fetch listeners; inspected Worker source has **no push, notificationclick, sync or periodicsync listener**. This is a **bounded file observation**, not a whole-repository inventory or deployed-network claim.
+- **Independent read-only static census executed 2026-10-26:** parsed the exact generated Worker template for `self.addEventListener` calls: **4 listeners = install, activate, message, fetch; 0 push/sync/periodicsync**. Parsed the manifest `display=standalone`; direct `firebase_messaging` dependency absent from the inspected `pubspec.yaml`; approved Manual Sync contract explicitly says NOT IMPLEMENTED and forbids background/listener/polling Delta execution. These are **source assertions only**, not compiled-artifact, backend, or physical-device negative proofs.
 - `web/manifest.json@8225e76f` sets `display: standalone`, `start_url: .`; these fields do not establish push subscription, permission, installed context or MDM approval.
 - `pubspec.yaml@49ec62d1` includes `firebase_auth`; the inspected direct dependencies do not declare a Web Push service. This does not prove no indirect/future implementation.
 - `docs/specs/local-first-manual-delta-sync-contract.md@2240fc1b` explicitly says **Production Manual Delta Sync NOT IMPLEMENTED**. User-initiated Push/Pull is the approved contract; initial authenticated online launch may perform one read-only freshness check, while resume, network recovery, background/listener/polling **must not initiate automatic Delta Sync**. Do not confuse the contract's word **PUSH** (outbound logical operations during a manual Sync) with the browser **Push API** (notifications).
