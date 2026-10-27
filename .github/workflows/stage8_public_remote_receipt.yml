@@ -1,0 +1,26 @@
+name: Stage 8 public remote admission receipt probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'research/handoffs/pwa_remote_receipt_probe.mjs'
+      - '.github/workflows/stage8_public_remote_receipt.yml'
+permissions:
+  contents: read
+jobs:
+  synthetic-http:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Exact ref and runtime
+        run: |
+          echo "HEAD=$(git rev-parse HEAD)"
+          node --version
+      - name: Node syntax
+        run: node --check research/handoffs/pwa_remote_receipt_probe.mjs
+      - name: Execute 18 bounded HTTP tests
+        run: node --test research/handoffs/pwa_remote_receipt_probe.mjs

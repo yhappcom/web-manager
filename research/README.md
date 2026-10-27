@@ -2,6 +2,8 @@
 
 This directory is the source-grounded learning and decision-support layer for the MintTap company website and strategic web-app/PWA capability. Canonical curriculum: `../LEARNING_ROADMAP.md`; horizontal ownership: `../SPECIALIST_TRACKS.md`.
 
+**2026-10-28 Stage 8 remote-admission bridge:** [523 — PWA remote admission, receipt ambiguity and Owner-fence boundary](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) adds an 18-case public Node HTTP fixture and exact-ref workflow. Its fake token/in-memory server does **not** verify Firebase Auth, Firestore durable receipts, LogMate Manual Sync or managed EFB. Hosted result initially OPEN; product gate HOLD.
+
 Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`, `DEPENDENCY`, `VALIDATION`, `CHANGE WATCH`, `TRANSFER VALIDATION`, `CONTRADICTION`.
 
 **2026-10-28 hosted independent-tab checkpoint:** [521 §14](521_stage8_pwa_sembast_cross_tab_replay_wasm_web_opener_admission_20261027.md) — [run 40574988642](https://github.com/yhappcom/web-manager/actions/runs/40574988642) at f8b9: TB01/TB02/TB04/TB05 **4/4 PASS**, conditional TB03 **observed PASS**, real callback replay (2 invocations) and third-tab raw-IDB inventory; **exact-target raw-oracle correction f03074bb verified at [run 40583569941](https://github.com/yhappcom/web-manager/actions/runs/40583569941): 4/4 + TB03 PASS; target-only raw IDB `entry:3`, `info:2`**. Synthetic Chrome only; LogMate/Safari/managed EFB/production HOLD.
