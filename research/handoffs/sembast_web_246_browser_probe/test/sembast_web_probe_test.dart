@@ -121,4 +121,64 @@ void main() {
       await reopened.close();
     }
   });
+
+  test('SB05 same-page two opens: concurrent stable-ID retry converges', () async {
+    final name = _newDbName();
+    final first = await databaseFactoryWeb.openDatabase(name);
+    final second = await databaseFactoryWeb.openDatabase(name);
+    try {
+      final outcomes = await Future.wait([
+        _applyStableOperation(first, 'op-shared', 'digest-A'),
+        _applyStableOperation(second, 'op-shared', 'digest-A'),
+      ]);
+      expect(outcomes.where((value) => value == 'NEW').length, 1);
+      expect(outcomes.where((value) => value == 'REPLAY').length, 1);
+    } finally {
+      await first.close();
+      await second.close();
+    }
+    final reopened = await databaseFactoryWeb.openDatabase(name);
+    try {
+      expect((await _outbox.find(reopened)).length, 1);
+      expect((await _revisions.find(reopened)).length, 1);
+      expect((await _flights.find(reopened)).length, 1);
+    } finally {
+      await reopened.close();
+    }
+  });
+
+  test('SB06 same-page two opens: conflicting digest has one winner', () async {
+    final name = _newDbName();
+    final first = await databaseFactoryWeb.openDatabase(name);
+    final second = await databaseFactoryWeb.openDatabase(name);
+    try {
+      Future<String> attempt(Database db, String digest) async {
+        try {
+          return await _applyStableOperation(db, 'op-collision', digest);
+        } on StateError {
+          return 'REJECTED';
+        }
+      }
+
+      final outcomes = await Future.wait([
+        attempt(first, 'digest-A'),
+        attempt(second, 'digest-B'),
+      ]);
+      expect(outcomes.where((value) => value == 'NEW').length, 1);
+      expect(outcomes.where((value) => value == 'REJECTED').length, 1);
+    } finally {
+      await first.close();
+      await second.close();
+    }
+    final reopened = await databaseFactoryWeb.openDatabase(name);
+    try {
+      final row = await _outbox.record('op-collision').get(reopened);
+      expect(['digest-A', 'digest-B'], contains(row?['digest']));
+      expect((await _outbox.find(reopened)).length, 1);
+      expect((await _revisions.find(reopened)).length, 1);
+      expect((await _flights.find(reopened)).length, 1);
+    } finally {
+      await reopened.close();
+    }
+  });
 }

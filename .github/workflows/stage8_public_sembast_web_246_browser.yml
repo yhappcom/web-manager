@@ -44,13 +44,13 @@ jobs:
       - name: Analyze exact fixture
         run: |
           set -euo pipefail
-          dart format --output=none test
+          dart format --output=show test
           dart analyze --fatal-infos
       - name: Execute browser assertions in headless Chrome
         run: |
           set -euo pipefail
           dart test -p chrome -r json > /tmp/stage8-sembast-browser-events.jsonl
-          node -e "const fs=require('fs'); const a=fs.readFileSync('/tmp/stage8-sembast-browser-events.jsonl','utf8').trim().split('\\n').map(s=>JSON.parse(s)); const d=a.filter(x=>x.type==='testDone'&&!x.hidden); console.log('SB01-SB04 completed:',d.length,'results:',d.map(x=>x.result).join(',')); if(d.length!==4||d.some(x=>x.result!=='success')) process.exit(1);"
+          node -e "const fs=require('fs'); const a=fs.readFileSync('/tmp/stage8-sembast-browser-events.jsonl','utf8').trim().split('\\n').map(s=>JSON.parse(s)); const d=a.filter(x=>x.type==='testDone'&&!x.hidden); console.log('SB01-SB06 completed:',d.length,'results:',d.map(x=>x.result).join(',')); if(d.length!==6||d.some(x=>x.result!=='success')) process.exit(1);"
       - name: Evidence boundary
         if: always()
         run: echo "Chrome exact-package synthetic only. LogMate 37-store, multi-tab replay, Safari, installed/managed iPad, physical durability, remote Sync and production remain OPEN."
