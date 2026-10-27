@@ -117,3 +117,37 @@ Reuse W-031/W-036 browser/PWA release, W-012/013/014 backup, W-030 deletion and 
 **CHANGE WATCH:** pinned 2.4.6 vs upstream updates; Flutter/Dart Wasm and no-deprecated flags; IndexedDB durability/partition changes; LogMate callback/caller/Sync writers and release topology.
 
 **Stop check:** This integrated cycle read latest governance and commits, version-matched upstream behavior, exact web opener/fallback/lockfile, 54 transaction-site lexical inventory, identity/CAS/receipt/outbox and test-hook positives, Dart/Flutter Wasm contradiction, W-001 bounded evidence, browser standards and all five tracks. Remaining decisive evidence requires **actual Dart/browser/physical-device execution**, not more T0 mock studies. **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+---
+
+## 10. 2026-10-28 exact-version browser execution bridge — fixture committed, execution not yet verified
+
+**Why this continuation:** The earlier 54-transaction-site lexical review, W-001 native-file Sembast tests and upstream `sembast_web` package statement are not a browser execution of the exact web adapter. Rather than add another synthetic Node-only model or repeat the package primer, this checkpoint creates a **real Dart/Chrome browser probe** against the exact package versions, with a narrow independently observable transaction/reopen contract.
+
+### SOURCE / version and standards boundaries
+
+- [sembast_web 2.4.6 author documentation](https://pub.dev/packages/sembast_web/versions/2.4.6): IndexedDB-backed web DB, cross-tab synchronization and transaction-callback replay warning. Package documentation is not evidence that this specific application was executed.
+- [Dart official browser-test instructions](https://dart.dev/web/debugging): `dart test -p chrome` is a supported browser-test route. Browser execution is not equivalent to Node executing dart2js.
+- [W3C IndexedDB 3.0 transaction durability](https://www.w3.org/TR/IndexedDB/): `strict`, `relaxed` and `default` are **durability hints**; a transaction completion or close/reopen in a running browser does not establish physical power-loss durability, independent backup or storage-eviction immunity.
+- Exact product dependency versions from LogMate `main@d3bc214f`: `sembast_web 2.4.6`, `sembast 3.8.11`, `idb_shim 2.9.9`. This standalone research package declares those exact direct versions, but **does not preserve a resolved transitive lockfile**. A hosted `dart pub deps` output is required before any stronger dependency-provenance claim.
+
+### Executable research artifact / VALIDATION status
+
+- [Fixture source](handoffs/sembast_web_246_browser_probe/test/sembast_web_probe_test.dart), [package definition](handoffs/sembast_web_246_browser_probe/pubspec.yaml), [scope README](handoffs/sembast_web_246_browser_probe/README.md), [read-only GitHub Actions workflow](../.github/workflows/stage8_public_sembast_web_246_browser.yml).
+- `SB01`: one transaction writes three synthetic stores; close/reopen and read each value. Oracle: explicit values and identities after reopen.
+- `SB02`: deliberately throw inside a three-store transaction; close/reopen and independently require absence of all three attempted writes. Oracle: no partial logical publication.
+- `SB03`: fixture-defined stable operation ID and digest; identical retry returns `REPLAY` and only one synthetic revision/outbox/flight remains. **This is a test of the fixture's own idempotency algorithm atop the package, not proof of LogMate's production algorithm.**
+- `SB04`: fixture-defined same ID with different digest rejects; reopen and require the original digest and exactly one revision/outbox. This is a bounded identity-collision control, not authenticated server or LBK behavior.
+- The workflow pins Dart **3.12.0**, runs on **Ubuntu 24.04** in headless **Chrome**, checks `dart analyze`, records the dependency graph and requires exactly four non-hidden successful browser test results. It has no private checkout, token, product data or Firebase connection.
+- **At documentation checkpoint, no completed hosted job log or PASS has been retrieved.** The public fixture and workflow are committed, but execution is **UNKNOWN / NOT PROMOTED**. A workflow file's existence, or a green commit unrelated to this job, is not execution evidence. Record exact run ID, job log, package resolution and browser build before changing the verdict. A failure before browser tests is NON-EXECUTION; a browser assertion failure is a real bounded fixture failure.
+
+### Interpretation / CONTRADICTION / transfer
+
+The tests can close a **narrow exact-package Chrome same-tab persistence/rollback** question if they actually execute. They cannot settle cross-tab callback replay (TX02–TX05), UNKNOWN crash durability (TX10–TX11), stale owner/deletion tab authority (TX08–TX09), Safari/Home Screen/managed EFB (TX12–TX13), exact LogMate 37-store LBK recovery, future Wasm selection or Manual Delta Sync. Reopening with the same Sembast API is also not a fully independent raw IndexedDB oracle; exact product tests must add independent store-level inspection and failure injection.
+
+**E** owns transaction/authority/release limits; **A** supplies package/browser/IndexedDB mechanics; **C** owns executed Chrome evidence, raw-store negative oracles and later Safari/physical-device transfer. **B** consumes UNKNOWN/saved-locally/restore UX boundaries from Design Studio W121; **D** consumes Marketing D8 claim HOLD and must not call a synthetic Chrome probe EFB readiness. Software Engineering's [validation evidence contract](https://github.com/yhappcom/software-engineering-studio/blob/main/methods/VALIDATION_STANDARD.md) supplies CLAIM→TARGET→ORACLE→ENVIRONMENT→OBSERVATION→VERDICT discipline; implementation and product test modifications remain Engineering-owned.
+
+**MINTTAP DIRECTION (research, not product approval):** treat this as a dependency-level execution bridge. First obtain actual hosted results; next run TX02–TX05 with independent tabs and raw-store commit counts, then exact LogMate W-012/W-013 and Safari/managed EFB. Do not infer physical durability or cross-device sync from local transaction success.
+
+**Gate unchanged:** Applied Stage 8 ACTIVE; exact-package Chrome **execution verdict OPEN**; LogMate product validation OPEN; PWA release HOLD. **Adjacent-question check:** tested scope, negative rollback, identity replay, package provenance, physical durability and peer transfer are included here; remaining decisive work requires browser execution evidence and product-authorized tests rather than further speculative micro-studies.
