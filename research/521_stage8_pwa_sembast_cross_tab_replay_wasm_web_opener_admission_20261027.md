@@ -299,3 +299,72 @@ The corrected source at [f03074bb](https://github.com/yhappcom/web-manager/commi
 - The [exact upstream Sembast Web 2.4.6 package documentation](https://pub.dev/packages/sembast_web/versions/2.4.6) explicitly says concurrent cross-tab transactions **may rerun the transaction callback**, and describes in-memory state, IndexedDB persistence and BroadcastChannel coordination. The executed TB03/TB04/TB05 traces now independently instantiate that stated failure mode in Chrome; they do not establish its frequency or every browser's behavior.
 - The [package catalog](https://pub.dev/packages/sembast_web/versions/2.4.6%2B1) now exposes `2.4.6+1`. This is a **version CHANGE WATCH**, not a recommendation to update LogMate or proof that behavior changed. Direct-version comparison and lockfile/reproducibility are separate Engineering gates.
 - [MDN IndexedDB usage](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB) and [IDBDatabase.transaction](https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase/transaction) distinguish a completed transaction and readback from physical flush/OS-power-loss durability. A native raw API inventory still shares the same browser storage failure domain.
+
+
+---
+
+## 15. 2026-10-28 Stage 8 transaction replay → owner-epoch admission → side-effect boundary
+
+**Checkpoint at authoring:** SOURCE + SYNTHESIS + executable synthetic fixture **committed but new TB06–TB08 execution OPEN**. The previously executed [f03074bb run 40583569941](https://github.com/yhappcom/web-manager/actions/runs/40583569941) remains evidence for TB01/TB02/TB04/TB05 and conditional TB03 **only**. Track E owns authority and remote-admission interpretation; A owns Sembast/browser transaction mechanics; C owns the falsifiable experiment; B/D consume the boundaries.
+
+### HISTORY / PROBLEM / STANDARD / CURRENT IMPLEMENTATION
+
+A database transaction provides atomicity for its own supported storage operations, not for arbitrary callback side effects, external HTTP requests, analytics events, timers or server mutation. Sembast Web 2.4.6 explicitly documents that cross-tab concurrent writes may cause a transaction callback to run again. In the executed Chrome TB03/TB04/TB05, a callback ran twice while the final logical outbox row remained one. This creates a practical separation: **callback attempts, local commits, remote effects, receipts and authorized remote consequences are five different events**.
+
+Primary sources rechecked 2026-10-28:
+- [Sembast Web exact 2.4.6](https://pub.dev/packages/sembast_web/versions/2.4.6): in-memory Sembast representation, IndexedDB persistence, BroadcastChannel cross-tab updates and idempotent callback requirement.
+- [W3C Indexed Database API 3.0](https://www.w3.org/TR/IndexedDB/): transaction scope/commit, durability hints and distinct persistence semantics.
+- [Chrome 121 default IndexedDB relaxed durability change, 2023-11-03](https://developer.chrome.com/blog/indexeddb-durability-mode-now-defaults-to-relaxed/): Chrome's default commit durability is not a physical power-loss guarantee; `strict` remains a hint, not a device backup.
+- [MDN Service Worker lifecycle](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope): worker globals are not persisted across idle termination/restart; background worker execution cannot be the sole owner of unique unsynced state.
+- [Approved LogMate Manual Delta Sync contract, 2026-10-17](https://github.com/yhappcom/logmate/blob/main/docs/specs/local-first-manual-delta-sync-contract.md): authenticated UID Owner, immutable Operation ID/digest, durable pending outbox, manual push/pull, remote admission, owner check, receipt, applied cursor and convergence are separate obligations; production Manual Sync remains NOT IMPLEMENTED.
+
+### Threat and failure taxonomy [SYNTHESIS]
+
+1. **Callback replay without duplicate local rows:** correct transactional dedup can coexist with repeated callback execution.
+2. **External effect inside callback:** a request, notification or analytics increment may run twice or escape a transaction later rejected. Do not put a remote push or irreversible effect inside a replayable callback.
+3. **Owner revoked between read and write:** a transaction that reads a stale local owner can become invalid when another tab changes owner state. Guard must be checked in the same transaction and evaluated on any replay; external server still must independently authenticate and authorize.
+4. **Owner epoch changes but state remains ACTIVE:** a simple boolean ACTIVE check is insufficient for stale operation admission if the authority lineage changes.
+5. **Old operation retry after revocation:** immutable Operation ID and matching digest prove retry identity, **not current remote authority**. A valid old local outbox entry may remain recoverable without being remotely admissible.
+6. **Ungarded write:** Sembast cross-tab consistency is not an authorization system. A local storage engine cannot prove Firebase UID or server Owner authority.
+7. **Delete/revoke vs preserve evidence:** denial of new remote material effects must not automatically destroy the local ledger, outbox, tombstones or backup provenance.
+8. **ACK lost vs transaction status UNKNOWN:** an absent response does not prove noncommit. A retry must use the original identity and be re-adjudicated by the server.
+9. **Tab termination before/after commit:** local transaction completion, reopen and raw IndexedDB inventory do not prove physical durability or remote acknowledgement.
+10. **Service Worker update or stale shell:** worker activation and cached policy material cannot self-elect current server authority; queued work needs revalidation on explicit Manual Sync.
+11. **Safari/managed EFB transfer:** browser/OS/MDM differences and network restrictions require exact-device tests; Chrome same-profile tabs are not an EFB certification.
+12. **Analytics and release claims:** callback attempts, pending outbox, successful local transaction and actual authenticated remote convergence must not be conflated in UI or acquisition claims.
+
+### New executable falsification matrix [VALIDATION — SOURCE COMMITTED / NOT YET RUN]
+
+The existing public three-store Dart/Chrome fixture now includes a **fourth synthetic authority store**, an ACTIVE/REVOKED state and an integer epoch, plus a guarded local write method. The policy store is **test data, not Firebase Auth, not a LogMate field and not a proposed product schema**.
+
+| Test | Independent tabs / transition | Required positive oracle | Negative/control oracle |
+| --- | --- | --- | --- |
+| TB06 | A reads ACTIVE epoch 1, pauses; B commits REVOKED epoch 2; A resumes | A rejects; callback attempts >1; third-tab 0 flights/0 revisions/0 outbox; revoked state retained | Nontransactional callback attempt counter is not a durable row or a server effect |
+| TB07 | ACTIVE epoch 1 permits operation, then B rotates to ACTIVE epoch 2 | Old epoch rejects; epoch 2 accepts; two immutable operation rows remain | An ACTIVE boolean alone must not admit stale epoch |
+| TB08 | Valid epoch 1 operation saved, then REVOKED epoch 2 | Old same-ID/same-digest retry denied; old row preserved; third-tab raw target inventory | Deliberately unguarded fixture method can still write: **storage ≠ authorization** |
+
+All cases require an exact target database and third-tab semantic readback; native IndexedDB inventory is a second API path, not independent media. TB06 explicitly requires observed callback replay, not a timeout interpreted as success. A failed compile, CI checkout or browser startup is **NON-EXECUTION**, not evidence of the intended fence. A test failure is **fixture FAIL**, not automatically a LogMate production defect.
+
+**Important limitation:** the synthetic local owner epoch can be set by any fixture tab and is not cryptographically authenticated. Therefore even a PASS establishes only *conditional local transaction behavior when a trusted transition is supplied*. It cannot prove a remote server denies a stale UID, revoked grant, deleted ledger or stale replica. Production remote admission must derive current Owner/stream policy from authenticated server-side authority; client-reported epoch is an untrusted hint. This distinction is essential to avoid using a passing local fence as a security proof.
+
+### Operational judgment and cross-track transfer [MINTTAP DECISION — RESEARCH GUARDS, NOT PRODUCT CHANGE]
+
+- **E:** enforce server-side owner/stream/grant currentness before remote material effects; preserve immutable id/digest receipts and rejected evidence; classify `DENIED`, `REPLAY`, `UNKNOWN`, `PENDING` separately. Never assume a local ACTIVE flag or cached PWA policy authorizes remote publication.
+- **A:** do not assume a service worker will stay alive to finish a push, that BroadcastChannel proves all tabs are synchronized, or that browser storage persistence creates a second backup failure domain.
+- **C:** record commit SHA, browser build, exact direct dependency graph, callback attempts, transaction outcomes, raw DB name/counts, owner transition order and negative controls. Execute a browser termination and ACK-loss campaign separately.
+- **B:** map local Save, pending Sync, denied remote operation, unknown receipt and recoverable losing revision to distinguishable task states. Design Studio W121/CD127 Stage 3 remains practice, not measured product UX.
+- **D:** retain Marketing D8–D10 PWA/offline/managed-iPad claim HOLD until exact product and physical managed-device evidence. Instrument privacy-preserving aggregate outcomes without turning telemetry into authorization proof.
+- **Software Engineering dependency:** exact LogMate Dart/Sembast 37-store, authenticated Firebase server admission, tombstone/Owner deletion, operation retry and compiled Flutter Web need product-owned tests. No peer repository writes or product-policy changes are authorized here.
+
+### Evidence ladder / next checkpoint [OPEN / CHANGE WATCH]
+
+- **V1:** hosted exact Dart/Chrome TB06–TB08, with negative control and failure-first logs.
+- **V2:** local interrupted commit/close/reopen and post-commit side-effect dispatcher under deterministic injected errors; prove outbox recovery without duplicate external effects.
+- **V3:** actual LogMate local 37-store transaction, owner lock, LBK v1/v2 restore, cursor and operation-id provenance.
+- **V4:** authenticated server tests for revoked UID/Owner, stale replica, same-ID retry and changed digest; two clients and receipt loss.
+- **V5:** Safari tab vs Home Screen installed PWA vs managed Web Clip on named iPadOS/MDM configuration; destructive storage/backup/restore and user-visible recovery.
+- **V6:** physical managed EFB restrictions, network path, no-hotspot policy and native↔PWA file/manual sync evidence.
+
+**Change watch:** upstream Sembast Web package releases, Chromium IndexedDB durability defaults, Safari/WebKit storage policy, managed iPad restrictions and exact product sync implementation. A passing synthetic browser fixture never promotes these independent gates.
+
+**Adjacency decision:** after TB06–TB08 execution, the next high-information-gain question is **what happens when the browser process is killed between a local commit and the external ACK**; this requires a separate fault-injection and server receipt oracle rather than more source-only security prose.

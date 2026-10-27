@@ -9,6 +9,10 @@ import 'package:sembast_web/sembast_web.dart';
 external set probeOpen(JSFunction callback);
 @JS('probeApply')
 external set probeApply(JSFunction callback);
+@JS('probeApplyGuarded')
+external set probeApplyGuarded(JSFunction callback);
+@JS('probeSetOwner')
+external set probeSetOwner(JSFunction callback);
 @JS('probeRead')
 external set probeRead(JSFunction callback);
 @JS('probeClose')
@@ -25,6 +29,7 @@ external set probeReady(JSBoolean value);
 final _flights = stringMapStoreFactory.store('flights');
 final _revisions = stringMapStoreFactory.store('revisions');
 final _outbox = stringMapStoreFactory.store('outbox');
+final _authority = stringMapStoreFactory.store('authority');
 Database? _db;
 bool _holdNext = false;
 bool _holdEntered = false;
@@ -47,13 +52,36 @@ void _releaseHold() {
   if (_release != null && !_release!.isCompleted) _release!.complete();
 }
 
-Future<Map<String, Object?>> _apply(String id, String digest) async {
+// Fixture-only local policy transition. This is NOT Firebase/UID authority.
+Future<String> _setOwner(int epoch, String state) async {
+  if (epoch < 1 || (state != 'ACTIVE' && state != 'REVOKED')) {
+    throw StateError('invalid fixture owner state');
+  }
+  await _db!.transaction((txn) async {
+    await _authority.record('current').put(txn, {
+      'epoch': epoch, 'state': state
+    });
+  });
+  return 'OWNER_SET';
+}
+
+Future<Map<String, Object?>> _apply(String id, String digest,
+    {int? expectedEpoch}) async {
   final db = _db!;
   var calls = 0;
   try {
     final outcome = await db.transaction((txn) async {
       calls++;
       _callbackCount++;
+      // The counter is intentionally outside the transaction: it demonstrates
+      // that callback attempts can outnumber durable writes after replay/abort.
+      if (expectedEpoch != null) {
+        final owner = await _authority.record('current').get(txn);
+        if (owner == null || owner['state'] != 'ACTIVE' ||
+            owner['epoch'] != expectedEpoch) {
+          throw StateError('owner fence denied');
+        }
+      }
       final existing = await _outbox.record(id).get(txn);
       if (_holdNext) {
         _holdNext = false;
@@ -90,7 +118,8 @@ Future<Map<String, Object?>> _read() async {
     'revisions': (await _revisions.find(db)).length,
     'outbox': outbox.length,
     'digest': outbox.isEmpty ? null : outbox.first.value['digest'],
-    'callbackCount': _callbackCount
+    'callbackCount': _callbackCount,
+    'owner': await _authority.record('current').get(db)
   };
 }
 
@@ -106,6 +135,12 @@ void main() {
   probeApply = ((JSString id, JSString digest) =>
     _apply(id.toDart, digest.toDart)
       .then((v) => jsonEncode(v).toJS).toJS).toJS;
+  probeApplyGuarded = ((JSString id, JSString digest, JSNumber epoch) =>
+    _apply(id.toDart, digest.toDart, expectedEpoch: epoch.toDartInt)
+      .then((v) => jsonEncode(v).toJS).toJS).toJS;
+  probeSetOwner = ((JSNumber epoch, JSString state) =>
+    _setOwner(epoch.toDartInt, state.toDart)
+      .then((v) => v.toJS).toJS).toJS;
   probeRead = (() => _read()
     .then((v) => jsonEncode(v).toJS).toJS).toJS;
   probeClose = (() => _close()

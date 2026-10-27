@@ -169,14 +169,136 @@ async function overlapAttempt() {
     await Promise.allSettled([a.close(),b.close()]);
   }
 }
+
+async function verifyOwner(name, owner, counts, label) {
+  const observer = await page();
+  try {
+    await call(observer,'probeOpen',name);
+    const state = await call(observer,'probeRead');
+    assert.deepEqual(state.owner,owner,label+' fixture owner');
+    for (const [field,count] of Object.entries(counts)) {
+      assert.equal(state[field],count,label+' '+field);
+    }
+    const raw = await rawIndexedDbSnapshot(observer,name);
+    assert.equal(raw.supported,true,label+' raw inventory');
+    assert.equal(raw.databases.length,1,label+' exact target DB');
+    assert.ok(Object.values(raw.databases[0].stores).some(n => n > 0),
+      label+' target raw entries');
+    return {...state,rawIndexedDb:raw};
+  } finally {
+    await call(observer,'probeClose');
+    await observer.close();
+  }
+}
+let fencePass = 0;
+// TB06: A reads ACTIVE owner and waits. B revokes. A must rerun the
+// callback and reject; nontransactional callback attempts are not writes.
+async function heldRevocation() {
+  const name = 'stage8_owner_revoke_' + Date.now();
+  const a = await page(), b = await page();
+  try {
+    await Promise.all([call(a,'probeOpen',name),call(b,'probeOpen',name)]);
+    await call(b,'probeSetOwner',1,'ACTIVE');
+    await call(a,'probeArmHold');
+    const pending = call(a,'probeApplyGuarded','op-fenced','digest-A',1);
+    await a.waitForFunction(() => window.probeHasEntered() === true, null,
+      {timeout:15000});
+    await call(b,'probeSetOwner',2,'REVOKED');
+    await call(a,'probeReleaseHold');
+    const result = await pending;
+    assert.equal(result.outcome,'REJECTED','TB06 stale writer denied');
+    assert.match(result.error,/owner fence denied/,'TB06 denial reason');
+    assert.ok(result.calls > 1,'TB06 observed callback replay');
+    await Promise.all([call(a,'probeClose'),call(b,'probeClose')]);
+    const observer = await verifyOwner(name,{epoch:2,state:'REVOKED'},
+      {flights:0,revisions:0,outbox:0},'TB06');
+    fencePass++;
+    console.log(JSON.stringify({label:'TB06 held writer vs owner revocation',
+      verdict:'PASS',result,observer,
+      note:'Fixture local owner guard only; no authenticated server admission.'}));
+  } finally {
+    await Promise.allSettled([a.close(),b.close()]);
+  }
+}
+// TB07: a still-active but changed epoch fences stale writes; current
+// epoch can write. No identity/session proof is inferred from the epoch.
+async function activeEpochRotation() {
+  const name = 'stage8_owner_rotate_' + Date.now();
+  const a = await page(), b = await page();
+  try {
+    await Promise.all([call(a,'probeOpen',name),call(b,'probeOpen',name)]);
+    await call(b,'probeSetOwner',1,'ACTIVE');
+    const first = await call(a,'probeApplyGuarded','op-epoch1','digest-A',1);
+    assert.equal(first.outcome,'NEW','TB07 first accepted');
+    await call(b,'probeSetOwner',2,'ACTIVE');
+    const stale = await call(a,'probeApplyGuarded','op-stale','digest-B',1);
+    assert.equal(stale.outcome,'REJECTED','TB07 stale epoch rejected');
+    assert.match(stale.error,/owner fence denied/);
+    const current = await call(b,'probeApplyGuarded','op-epoch2','digest-C',2);
+    assert.equal(current.outcome,'NEW','TB07 current epoch accepted');
+    await Promise.all([call(a,'probeClose'),call(b,'probeClose')]);
+    const observer = await verifyOwner(name,{epoch:2,state:'ACTIVE'},
+      {flights:1,revisions:2,outbox:2},'TB07');
+    fencePass++;
+    console.log(JSON.stringify({label:'TB07 active epoch rotation',
+      verdict:'PASS',first,stale,current,observer}));
+  } finally {
+    await Promise.allSettled([a.close(),b.close()]);
+  }
+}
+// TB08: even an identical already-present operation is not authorized by
+// its old receipt/identity after revocation. A deliberately unguarded
+// fixture call is a negative control: Sembast does not provide auth.
+async function replayAfterRevocation() {
+  const name = 'stage8_owner_replay_' + Date.now();
+  const a = await page(), b = await page();
+  try {
+    await Promise.all([call(a,'probeOpen',name),call(b,'probeOpen',name)]);
+    await call(b,'probeSetOwner',1,'ACTIVE');
+    const first = await call(a,'probeApplyGuarded','op-old','digest-A',1);
+    assert.equal(first.outcome,'NEW','TB08 initial durable record');
+    await call(b,'probeSetOwner',2,'REVOKED');
+    const stale = await call(a,'probeApplyGuarded','op-old','digest-A',1);
+    assert.equal(stale.outcome,'REJECTED','TB08 old identity not authority');
+    assert.match(stale.error,/owner fence denied/);
+    await Promise.all([call(a,'probeClose'),call(b,'probeClose')]);
+    const preserved = await verifyOwner(name,{epoch:2,state:'REVOKED'},
+      {flights:1,revisions:1,outbox:1},'TB08 preserved local evidence');
+    const negative = await page();
+    let bypass;
+    try {
+      await call(negative,'probeOpen',name);
+      bypass = await call(negative,'probeApply','op-unguarded','digest-B');
+      assert.equal(bypass.outcome,'NEW',
+        'TB08 negative control: unguarded fixture still writes');
+    } finally {
+      await call(negative,'probeClose');
+      await negative.close();
+    }
+    const after = await verifyOwner(name,{epoch:2,state:'REVOKED'},
+      {flights:1,revisions:2,outbox:2},'TB08 unguarded counterexample');
+    fencePass++;
+    console.log(JSON.stringify({label:'TB08 old retry fenced; unguarded negative control',
+      verdict:'PASS',first,stale,preserved,bypass,after,
+      note:'Negative control is intentionally insecure synthetic code, NOT LogMate.'}));
+  } finally {
+    await Promise.allSettled([a.close(),b.close()]);
+  }
+}
+
 try {
   await baseline('TB01 two-tab same digest propagation','digest-A','digest-A','REPLAY');
   await baseline('TB02 two-tab conflicting digest rejection','digest-A','digest-B','REJECTED');
   await race('TB04 concurrent same-digest race','digest-A','digest-A',['NEW','REPLAY']);
   await race('TB05 concurrent conflicting-digest race','digest-A','digest-B',['NEW','REJECTED']);
   await overlapAttempt();
+  await heldRevocation();
+  await activeEpochRotation();
+  await replayAfterRevocation();
+  assert.equal(fencePass,3,'exact synthetic owner-fence cases');
   assert.equal(pass,4,'exact deterministic two-tab baseline count');
-  console.log('DETERMINISTIC TWO-TAB BASELINE:',pass,'/4 PASS; TB03 overlap reported separately');
+  console.log('DETERMINISTIC TWO-TAB BASELINE:',pass,
+    '/4 PASS; OWNER-FENCE FIXTURE:',fencePass,'/3 PASS; TB03 separately');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
