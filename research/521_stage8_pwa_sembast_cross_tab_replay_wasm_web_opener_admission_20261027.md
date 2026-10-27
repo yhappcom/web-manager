@@ -170,3 +170,42 @@ The tests can close a **narrow exact-package Chrome same-tab persistence/rollbac
 **OPEN / next discriminating campaign:** TX02/TX04 require two independent same-origin Chrome tabs with a controlled interleaving, callback-invocation counters **separate from durable row counts**, and process/transaction abort controls; TX08/TX09 owner/deletion fences; TX10/TX11 quota/crash/UNKNOWN; TX12/TX13 Safari Home Screen and managed EFB; W-012/013/014 exact LogMate 37-store LBK/file/restore. No actual LogMate code, remote Firebase Sync, physical durability or installed PWA was executed. **Stage 8 ACTIVE · Public exact-package Chrome synthetic 6/6 PASS · Production validation OPEN · PWA release HOLD.**
 
 **Post-checkpoint CI confirmation [VALIDATION — 2026-10-28]:** [strict final run 40556727926](https://github.com/yhappcom/web-manager/actions/runs/40556727926), job `122374651411`, exact `b5d31da3b3e5b2020f01e980057d61f152740678`, Ubuntu 24.04, Dart 3.12.0, Chrome **155.0.8059.39**: strict `dart format --output=none --set-exit-if-changed test` **0 changed**, analyzer **0 issues**, **SB01–SB06 6/6 PASS**. No new fixture source mutation occurred between the formatted code commit and this run. Exact LogMate `main@d3bc214fe9b4b7bf84702f898b4e6993a4127e2f` read-only recheck confirms the web opener still selects `dart.library.html`; no product runtime executed. The public fixture still lacks a committed full transitive lockfile; repeatability is bounded by recorded resolved versions and source ref. Stage 8 and product HOLD unchanged.
+
+---
+
+## 12. Independent Chrome tabs / Sembast 2.4.6 controlled interleaving campaign — executable bridge, outcome OPEN [SOURCE / SYNTHESIS / DEPENDENCY / VALIDATION / OPEN / CHANGE WATCH — 2026-10-28]
+
+### Why §11's green result is not enough
+
+The six-case Chrome job exercised two `openDatabase` calls **inside one browser page**. The version-matched [Sembast Web 2.4.6 author contract](https://pub.dev/packages/sembast_web/versions/2.4.6) explicitly describes cross-tab synchronization through BroadcastChannel and warns that concurrent writes can **re-execute transaction callbacks**. An application that sends remote requests, increments nontransactional counters, or displays irreversible success from a callback could therefore create side effects even when durable local rows remain deduplicated. This is a **risk model**, not a finding that LogMate does so.
+
+[MDN Broadcast Channel](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API) scopes communication to compatible origin/**storage partition**, not merely identical URL text; [IndexedDB 3.0](https://www.w3.org/TR/IndexedDB/) separates logical transaction completion from a guarantee of physical power-loss survival. WebKit's [storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) discusses quota and eviction but does not transfer Chrome-tab evidence to Safari Home Screen or managed iPad. These standards and platform facts remain distinct.
+
+### Executable fixture and independent evidence chain [VALIDATION — NOT YET EXECUTED]
+
+A new, public, **product-independent** bridge was committed under `research/handoffs/sembast_web_246_browser_probe/`:
+
+- `web/two_tab_probe.dart`: compiled Dart-to-JavaScript adapter using the same declared direct dependencies as the prior fixture; exposes test-only open/apply/hold/release/read/close functions. Stable Operation ID/digest logic is **fixture-owned**, not copied from LogMate.
+- `web/index.html` and `scripts/two_tab_probe.mjs`: a local same-origin HTTP server and **two distinct Playwright Chrome pages** in one browser context, followed by a **fresh third page** for reopened ledger counts. The third-page readback is stronger than same-page two opens, but it still uses the same Sembast adapter and is **not a raw independent IndexedDB oracle**.
+- `.github/workflows/stage8_public_sembast_web_246_two_tab.yml`: public-only Ubuntu 24.04 / Dart 3.12.0 / installed Chrome / pinned direct `playwright-core@1.56.1` execution; no LogMate checkout, private secrets, Firebase or real flight data. `dart compile js -O2` builds the test-only bridge. The browser-driver dependency's full transitive graph and Chrome version must be recorded from an actual job before repeatability is promoted.
+
+**TB01** opens two actual tabs on the same origin and DB, commits operation/digest B, then retries identical digest in A. Expected `NEW` then `REPLAY`, with one flight/revision/outbox after closing both and reopening in a third tab.
+
+**TB02** repeats the same two-tab sequence with different digests. Expected B `NEW`, A `REJECTED`, and the original digest preserved with one durable row per synthetic store. These two baselines test cross-tab observation and fixture-level identity admission; **they do not force a concurrent callback replay**.
+
+**TB03** holds A inside a transaction callback after reading its existing record, attempts a conflicting write from B, and releases A after a bounded window. It records whether B actually committed **before** A resumed. If the desired ordering is not established, the result is **INCONCLUSIVE**, not a replay PASS. The callback count is separate from the durable row count: `calls > 1` is required to claim observed callback re-execution. A no-replay observation is not proof that replay cannot occur.
+
+**Execution verdict at this checkpoint:** source and workflow **COMMITTED; no completed hosted job log or actual test output retrieved**. Compile, two-tab baseline and overlap remain **OPEN**. In particular, the earlier six-case [run 40556727926](https://github.com/yhappcom/web-manager/actions/runs/40556727926) must not be reused as proof for this new fixture. CI checkout/analyze/compile failures must be classified as **NON-EXECUTION** of the browser assertions.
+
+### Eight connected operational judgments [SYNTHESIS / TRANSFER VALIDATION / CONTRADICTION]
+
+1. **Platform (A):** same-page DB handles, independent tabs, separate browser profiles, Safari tab vs installed Home Screen, and managed EFB are five different isolation experiments. Neither BroadcastChannel delivery nor IndexedDB origin sharing proves the next tier.
+2. **Transaction authority (E):** retry identity and digest must be admitted in the transaction; callback invocation count is not durable commit count. Post-commit remote effects require separate idempotency and current authority.
+3. **Quality oracle (C):** require independent tab objects, controlled order, reopen/row counts, raw IndexedDB inspection later, reproducible versions and a negative control that fails when digest is changed.
+4. **Failure injection (E/C):** browser/tab termination before/after commit, quota exhaustion, UNKNOWN commit receipt and stale tab after owner deletion remain separate TX08–TX11 gates.
+5. **UX transfer (B):** `Saved locally`, `Unknown`, `Retry`, `Backed up`, and `Synced` must not collapse into one green success state. Design Studio W121/CD127 remains Stage 3 practice, not runtime-certified UI.
+6. **Discovery/claims (D):** Marketing D8's LogMate PWA/managed-iPad claim HOLD remains valid even if Chrome two-tab fixture succeeds; installation, backup, synchronization and fleet support require independent evidence.
+7. **Device durability (A/E):** a Chrome reopen proves neither OS power-loss durability nor Safari/WebKit storage retention. EFB no-App-Store/no-hotspot constraints must be checked against actual management/network policies.
+8. **Engineering ownership:** general instrumentation and exact product 37-store W-012/W-013/W-014 execution belong to Software Engineering/Product. This public fixture is a dependency-level experiment; do not modify peers or LogMate to make the test green.
+
+**Stop/next decision:** Obtain exact hosted compile and two-tab results; if TB03 is inconclusive, refine the interleaving rather than claim replay. Then add independent raw IndexedDB counts, stale-owner/deletion fencing and physical Safari/managed-EFB transfer. **Stage 8 ACTIVE · Public same-page Chrome 6/6 PASS (previous ref) · New independent-tab execution OPEN · Production validation OPEN · PWA release HOLD.**
