@@ -1,15 +1,33 @@
-// Public synthetic browser bridge. NOT LogMate production source.
-// Legacy JS bridge is confined to this dart2js diagnostic, not a PWA/Wasm recommendation.
+// Public synthetic browser bridge; not LogMate production source.
+// Modern JS interop keeps this diagnostic compatible with Dart's current web APIs.
 import 'dart:async';
-import 'dart:js' as js;
-import 'dart:js_util' as js_util;
+import 'dart:convert';
+import 'dart:js_interop';
 import 'package:sembast_web/sembast_web.dart';
+
+@JS('probeOpen')
+external set probeOpen(JSFunction callback);
+@JS('probeApply')
+external set probeApply(JSFunction callback);
+@JS('probeRead')
+external set probeRead(JSFunction callback);
+@JS('probeClose')
+external set probeClose(JSFunction callback);
+@JS('probeArmHold')
+external set probeArmHold(JSFunction callback);
+@JS('probeReleaseHold')
+external set probeReleaseHold(JSFunction callback);
+@JS('probeHasEntered')
+external set probeHasEntered(JSFunction callback);
+@JS('probeReady')
+external set probeReady(JSBoolean value);
 
 final _flights = stringMapStoreFactory.store('flights');
 final _revisions = stringMapStoreFactory.store('revisions');
 final _outbox = stringMapStoreFactory.store('outbox');
 Database? _db;
 bool _holdNext = false;
+bool _holdEntered = false;
 Completer<void>? _release;
 int _callbackCount = 0;
 
@@ -21,8 +39,8 @@ Future<String> _open(String name) async {
 
 void _armHold() {
   _holdNext = true;
+  _holdEntered = false;
   _release = Completer<void>();
-  js.context['probeHoldEntered'] = false;
 }
 
 void _releaseHold() {
@@ -39,7 +57,7 @@ Future<Map<String, Object?>> _apply(String id, String digest) async {
       final existing = await _outbox.record(id).get(txn);
       if (_holdNext) {
         _holdNext = false;
-        js.context['probeHoldEntered'] = true;
+        _holdEntered = true;
         await _release!.future;
       }
       if (existing != null) {
@@ -83,17 +101,17 @@ Future<String> _close() async {
 }
 
 void main() {
-  js.context['probeOpen'] = js.allowInterop(
-    (String name) => js_util.futureToPromise(_open(name)));
-  js.context['probeApply'] = js.allowInterop(
-    (String id, String digest) => js_util.futureToPromise(
-      _apply(id, digest).then((value) => js_util.jsify(value))));
-  js.context['probeRead'] = js.allowInterop(
-    () => js_util.futureToPromise(
-      _read().then((value) => js_util.jsify(value))));
-  js.context['probeClose'] = js.allowInterop(
-    () => js_util.futureToPromise(_close()));
-  js.context['probeArmHold'] = js.allowInterop(_armHold);
-  js.context['probeReleaseHold'] = js.allowInterop(_releaseHold);
-  js.context['probeReady'] = true;
+  probeOpen = ((JSString name) =>
+    _open(name.toDart).then((v) => v.toJS).toJS).toJS;
+  probeApply = ((JSString id, JSString digest) =>
+    _apply(id.toDart, digest.toDart)
+      .then((v) => jsonEncode(v).toJS).toJS).toJS;
+  probeRead = (() => _read()
+    .then((v) => jsonEncode(v).toJS).toJS).toJS;
+  probeClose = (() => _close()
+    .then((v) => v.toJS).toJS).toJS;
+  probeArmHold = (() { _armHold(); return true.toJS; }).toJS;
+  probeReleaseHold = (() { _releaseHold(); return true.toJS; }).toJS;
+  probeHasEntered = (() => _holdEntered.toJS).toJS;
+  probeReady = true.toJS;
 }
