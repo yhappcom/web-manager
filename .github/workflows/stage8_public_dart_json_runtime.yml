@@ -58,7 +58,7 @@ jobs:
         run: |
           set -euo pipefail
           node research/handoffs/lbk_dart_json_runtime_oracle.mjs /tmp/stage8-dart-vm.json /tmp/stage8-dart-web.json | tee /tmp/stage8-dart-compare.log
-          grep -Fq 'DART_VM_VS_DART2JS 14/14 PASS' /tmp/stage8-dart-compare.log
+          grep -Fq 'DART_VM_VS_DART2JS 17/17 PASS' /tmp/stage8-dart-compare.log
       - name: Evidence limitation
         if: always()
         run: echo "Dart VM and dart2js synthetic probe only. Actual LogMate LBK v1/v2, Safari, installed PWA, managed EFB and production remain OPEN."
