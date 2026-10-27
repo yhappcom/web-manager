@@ -1,0 +1,64 @@
+name: Stage 8 public Dart VM vs compiled-Web JSON boundary
+
+# Public standalone diagnostic only. No private LogMate source or fixture checkout.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/handoffs/lbk_dart_json_runtime_probe.dart'
+      - 'research/handoffs/lbk_dart_json_runtime_oracle.mjs'
+      - '.github/workflows/stage8_public_dart_json_runtime.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stage8-public-dart-json-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  dart-json-parity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact public research ref
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Setup pinned Dart SDK
+        uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
+        with:
+          sdk: '3.12.0'
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.16.0'
+      - name: Record environment and syntax
+        run: |
+          set -euo pipefail
+          echo "PUBLIC RESEARCH ONLY; NOT LOGMATE PRODUCT OR MANAGED IPAD"
+          git rev-parse HEAD
+          dart --version
+          node --version
+          node --check research/handoffs/lbk_dart_json_runtime_oracle.mjs
+          dart format --output=none --set-exit-if-changed research/handoffs/lbk_dart_json_runtime_probe.dart
+      - name: Run native Dart VM JSON diagnostic
+        run: |
+          set -euo pipefail
+          dart run research/handoffs/lbk_dart_json_runtime_probe.dart > /tmp/stage8-dart-vm.json
+          cat /tmp/stage8-dart-vm.json
+      - name: Compile Dart to JavaScript and execute under Node
+        run: |
+          set -euo pipefail
+          dart compile js -O2 -o /tmp/stage8-dart-web.js research/handoffs/lbk_dart_json_runtime_probe.dart
+          node /tmp/stage8-dart-web.js > /tmp/stage8-dart-web.json
+          cat /tmp/stage8-dart-web.json
+      - name: Independent expected observations and explicit divergence
+        run: |
+          set -euo pipefail
+          node research/handoffs/lbk_dart_json_runtime_oracle.mjs /tmp/stage8-dart-vm.json /tmp/stage8-dart-web.json | tee /tmp/stage8-dart-compare.log
+          grep -Fq 'DART_VM_VS_DART2JS 14/14 PASS' /tmp/stage8-dart-compare.log
+      - name: Evidence limitation
+        if: always()
+        run: echo "Dart VM and dart2js synthetic probe only. Actual LogMate LBK v1/v2, Safari, installed PWA, managed EFB and production remain OPEN."
