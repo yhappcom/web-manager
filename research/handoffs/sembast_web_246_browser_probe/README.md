@@ -14,3 +14,10 @@
 ## 2026-10-28 independent-tab adversarial extension — execution OPEN
 
 The separate `scripts/two_tab_probe.mjs` now defines **TB01/TB02** sequential cross-tab propagation/collision, **TB04/TB05** simultaneous independent-tab same/different digest races, and **TB03** conditional controlled overlap. Four baseline/race cases must pass with third-tab Sembast semantic readback. The observer also enumerates raw IndexedDB databases/object-store entry counts using native browser APIs, refusing database creation/upgrades. This is a second API-path inventory, **not** independent physical durability or a raw semantic decoder. TB03 reports INCONCLUSIVE unless its required ordering is observed; callback replay needs `calls > 1`. Source is committed but **no upgraded-workflow run log was retrieved**, so no new PASS is claimed. See [research 521 §13](../../521_stage8_pwa_sembast_cross_tab_replay_wasm_web_opener_admission_20261027.md). Prior 6/6 Chrome result remains scoped to the earlier same-page fixture.
+
+
+## 2026-10-28 hosted two-tab execution and target-bound raw oracle
+
+[Run 40574988642](https://github.com/yhappcom/web-manager/actions/runs/40574988642), job `122438893368`, checkout `f8b9e0c4`, Dart 3.12.0 / Chrome 155.0.8059.39: **TB01/TB02/TB04/TB05 4/4 PASS; TB03 conditional overlap PASS**, with callback replay `calls=2` in TB03/TB04/TB05. Third-tab Sembast readback found one synthetic flight/revision/outbox record per case; native IndexedDB inventory returned `entry:3, info:2` per synthetic database. This is a browser fixture, not LogMate or physical durability. Earlier failure run 40566298388 ended with a closed-page evaluate error; not an observed product defect.
+
+**Correction:** The original raw-IDB oracle accepted a positive entry from *any* database, including prior scenarios. Commit `f03074bb` binds native inventory to the exact target scenario name, asserts one matching DB and positive target entries. **This new source has no verified execution result yet**; do not transfer the earlier f8b9 PASS to it. See [research 521 §14](../../521_stage8_pwa_sembast_cross_tab_replay_wasm_web_opener_admission_20261027.md).
