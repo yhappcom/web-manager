@@ -513,3 +513,51 @@ The current `WholeLedgerBackup.decode(String source)` immediately calls `jsonDec
 **CONTRADICTIONS:** “valid SHA-256” ≠ “bounded work”; “37 registered stores” ≠ “bounded rows”; “decode failed before transaction” ≠ “browser process survived”; “host fixture passed” ≠ “Safari EFB accepted”; “file adapter planned” ≠ “file import shipped.” **CHANGE WATCH:** product W-012–015 state, codec/registry, Flutter/Dart runtime, WebKit memory policy and real EFB device limits.
 
 **Checkpoint/adjacent-value decision:** The previously unrecorded *preparse resource admission* requirement is now tied to actual pinned decoder/restore code, primary guidance, positive existing rollback protection and twelve falsifiable tests. The next high-information-gain step requires Engineering-approved fixture/limits and actual browser/device execution; further speculative numeric ceilings or malicious-file narratives would be filler. **Stage 8 ACTIVE · source-level conditional resource risk · production file-ingress validation OPEN · PWA release HOLD.**
+
+## 2026-10-27 Stage 8 — LBK JSON interchange ambiguity, canonical digest and future cross-runtime admission (JA01–JA13)
+
+**Evidence status:** SOURCE + SYNTHESIS + executed **synthetic Node 22.16.0 JavaScript JSON diagnostic 13/13 PASS**; **LogMate Dart parser acceptance, actual LBK restore, JS/Wasm build, physical/managed iPad and production validation OPEN**. Pinned source: LogMate `main@d3bc214fe9b4b7bf84702f898b4e6993a4127e2f`, `lib/repository/logbook/whole_ledger_backup.dart@711f7845` and `lib/repository/logbook/sembast_logbook_repository.dart@d7e4efd4`. This is an adjacent **interchange semantics** checkpoint, not another file-size/DoS primer or an allegation of a shipped exploit. User-facing W-013 file import/export remains **NOT IMPLEMENTED**.
+
+### History/problem → principle → standard [SOURCE]
+
+JSON's portability is weaker than “every parser sees the same data.” [RFC 8259 §4](https://www.rfc-editor.org/rfc/rfc8259.html#section-4) says object member names SHOULD be unique and warns that duplicate-name receivers differ. [RFC 7493 §2.3](https://www.rfc-editor.org/rfc/rfc7493.html#section-2.3) strengthens this to **MUST NOT contain duplicate names** after unescaping, while §2.2 limits interoperable numeric precision to the IEEE-754 range and recommends strings for exact larger integers. [RFC 8785](https://www.rfc-editor.org/rfc/rfc8785.html) defines a particular interoperable JSON Canonicalization Scheme (JCS) requiring I-JSON input, Unicode validity, ECMAScript-compatible number serialization, UTF-16 code-unit property sorting and UTF-8 output. **Sorting JSON keys alone is not a claim of RFC 8785/JCS conformance.** These sources were checked 2026-10-27.
+
+### Exact current implementation [SOURCE]
+
+- `WholeLedgerBackup.decode(String source)` invokes Dart `jsonDecode` first, then converts already-parsed root/manifest/stores and row objects into maps/lists. It does not inspect raw JSON member-token multiplicity before map construction. This is a **source-visible absence of a duplicate-member admission step**, not proof of Dart's exact duplicate-member runtime behavior.
+- `_validateLbkContainer` checks format/version/UID/replica, recomputes `snapshotDigest` from `WholeLedgerBackup(manifest: unsigned, stores: backup.stores).encode()`, validates 30/37 registry entries, row shape and **duplicate row IDs**. The latter is a different concept from duplicate **JSON object property names** that may already have been collapsed by parsing. Exact source lines 5807–5880.
+- `WholeLedgerBackup.encode()` recursively sorts map entries then calls Dart `jsonEncode`; `lbkSha256` hashes UTF-8 bytes of that **post-parse canonical representation**. It is an unkeyed checksum, not author authentication, and it does not attest the exact originally selected raw file bytes. This does not by itself mean current valid LogMate-generated backups contain duplicate members.
+- The current codec is Dart on native and web builds. A **hypothetical external JS parser, verifier, WebAssembly path, independent recovery tool or future file format** introduces additional cross-runtime semantic risk; it is not proof of present Native↔PWA mismatch.
+
+### Bounded executed diagnostic [VALIDATION — SYNTHETIC ONLY]
+
+A Web Manager-owned, dependency-free Node diagnostic `research/handoffs/lbk_json_interop_ambiguity_lab.mjs` was executed under Node **22.16.0**. **13/13 PASS**. It verifies: (JA01–04) duplicate vs unique JSON texts can have different raw SHA-256 but identical parsed/canonicalized **synthetic JS** digest; (JA05) escaped/literal duplicate member-name collision; (JA06–07) row/nested member collapse; (JA08–11) IEEE-754 safe boundary and precision loss above it, and numeric spelling normalization; (JA12) JS parsing of a lone surrogate escape that RFC 8785/JCS rejects; (JA13) deterministic ASCII property order for the lab's **own** sorter. This is **not** an implementation of JCS, LogMate's Dart canonicalizer or an LBK acceptance harness. No LogMate source was executed in this diagnostic.
+
+**Counterexample:** `{"ownerUid":"A","ownerUid":"B"}` and `{"ownerUid":"B"}` are different raw texts. JavaScript `JSON.parse` yields the same object; a digest over a post-parse JS serialization cannot distinguish their raw source. A valid LogMate digest is recomputable by an author; **actual crafted-file acceptance by Dart remains untested**. Another example: JavaScript parses `9007199254740993` as `9007199254740992`; whether any actual LogMate field ever uses such a JSON number is **OPEN**, not presumed.
+
+### Expert operational judgment [MINTTAP DECISION — PROPOSED, NOT PRODUCT APPROVAL]
+
+1. Preserve the existing v1/v2 LBK format and historical digest contract until owner-approved migration evidence exists. **Do not silently replace its canonicalization with JCS**: doing so may invalidate historical backups even if both algorithms are reasonable. If a stricter future format is approved, version it, specify exact byte/number/Unicode semantics and keep a bounded historical verifier.
+2. For W-012 Engineering validation, test **both generated genuine LBK fixtures** and crafted duplicates at root/manifest/row/value nesting; escaped-equivalent keys; large integer, fractional, exponent and Unicode/surrogate cases. Separate **raw file bytes**, **decoded semantic object**, **canonical checksum**, **owner/registry/row/reference validation** and **destination transaction** verdicts. A syntactically parseable JSON document must not automatically be treated as a supported LBK.
+3. For W-013 future file ingress, if the product requires I-JSON uniqueness, enforce it with a parser/tokenizer that can see duplicate member tokens **before they are lost**. Checking `map.keys.toSet().length` after `jsonDecode` cannot prove the original source had no duplicate property names. Keep byte/work limits from RA01–RA12 as a separate first-stage gate.
+4. Do not assume JavaScript numbers preserve Dart integer semantics for all inputs. Inventory actual manifest/row numeric fields and values before selecting whether future cross-runtime exchange needs bounded numbers or decimal strings; no arbitrary schema change is authorized.
+5. For future authentication/integrity, define whether the assurance target is **exact source bytes**, **canonical semantic content**, **authenticated origin**, **current owner authority** or **recovery freshness**. These are independent and a checksum does not supply them all.
+
+### Falsifiable next acceptance campaign [VALIDATION PLAN — NOT RUN]
+
+| Case | Required oracle |
+| --- | --- |
+| JA14 | Actual Dart `jsonDecode` and LBK `decode` duplicate-member behavior on disposable fixture, with exception class and no destination mutation |
+| JA15 | Valid generated v1/v2 LBK round-trip under exact Dart native and compiled JS; verify byte/digest/semantic agreement |
+| JA16 | Same-name escaped keys at manifest, row and nested value; reject or explicitly document normalization, without false-green |
+| JA17 | Unsafe JSON integer and exponent/decimal input; compare Dart JIT, compiled JS, and only if targeted Wasm |
+| JA18 | Unicode surrogate/non-BMP key and value; exact hash and semantic or typed rejection, no silent replacement |
+| JA19 | Parser/format migration: historical genuine backup accepted with historical verifier; new strict format cannot downgrade into old acceptance |
+| JA20 | Hash-correct but wrong owner/registry/revision/Sync references still fail before any destination write |
+| JA21 | Safari/Home Screen/managed Web Clip import path separately exercises chosen parser and preserves unique existing data after negative cases |
+
+**Five-track ownership/transfer:** **E** owns trust-format/version/restore admission and no silent digest migration; **A** supplies JS/Dart/Wasm/browser number/Unicode/stream mechanics; **C** independently tests raw-vs-semantic oracles, negative cases and exact runtime; **B** consumes Design Studio W121/CD127 for distinguishable “unsupported/invalid backup” versus “wrong account” versus “too large” recovery UX; **D** consumes Marketing D8–D10, prohibiting “secure, universally portable backup” or “PWA transfer complete” claims without runtime proof. Software Engineering owns actual Dart/JS parser and format-version implementation, not Web Manager. No peer/product writes.
+
+**CONTRADICTION:** “digest matches reconstructed JSON” ≠ “raw file bytes authenticated”; “duplicate row IDs rejected” ≠ “duplicate JSON property names rejected”; “sorted keys” ≠ “RFC 8785 JCS”; “JS 13/13 PASS” ≠ “Dart LBK acceptance”; “safe in JS” ≠ “exact Dart integer transfer”; “old verifier works” ≠ “new format approved.”
+
+**CHANGE WATCH:** Dart JSON parser behavior, Flutter JS/Wasm compilation, actual LBK field value ranges, format/codec version, Safari/Wasm support, file-ingress W-012–W-014 status. **Meaningful checkpoint:** The prior RA resource gate addressed *bounded work*; this JA continuation addresses *semantic identity and historical verifier compatibility*, a separate pre-release risk. Next high-value evidence is the exact Dart/compiled-JS fixture rather than more speculative format diagrams. **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
