@@ -10,7 +10,7 @@ const bytes = readFileSync(fixturePath);
 const raw = bytes.toString('utf8');
 const original = JSON.parse(raw);
 const sha256 = (v) => createHash('sha256').update(v).digest('hex');
-const gitBlob = (buf) => createHash('sha1').update(Buffer.from('blob ' + buf.length + '\\0')).update(buf).digest('hex');
+const gitBlob = (buf) => createHash('sha1').update(Buffer.from('blob ' + buf.length + '\0')).update(buf).digest('hex');
 const canonical = (v) => {
   if (Array.isArray(v)) return v.map(canonical);
   if (v && typeof v === 'object') {
@@ -93,7 +93,7 @@ test('11 parsed genuine fixture has no unsafe JS numeric values', () => {
   assert.ok(numbers > 0);
 });
 test('12 historical Dart VM test receipt records two focused successes only', () => {
-  const events = readFileSync(evidencePath,'utf8').trim().split('\\n').map(line=>JSON.parse(line));
+  const events = readFileSync(evidencePath,'utf8').trim().split('\n').map(line=>JSON.parse(line));
   const named = events.filter(x=>x.type === 'testStart' && x.test?.name?.startsWith('F1-B01') || x.type === 'testStart' && x.test?.name?.startsWith('B1 native'));
   assert.equal(named.length, 2);
   for (const entry of named) {
