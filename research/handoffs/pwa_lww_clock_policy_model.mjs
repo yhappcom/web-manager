@@ -6,10 +6,12 @@
 import assert from 'node:assert/strict';
 
 const iso = (s) => {
-  assert.match(s, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/);
-  const ms = Date.parse(s);
+  const m = s.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,6}))?Z$/);
+  assert.ok(m, `invalid UTC wire timestamp ${s}`);
+  const ms = Date.parse(`${m[1]}Z`);
   assert.ok(Number.isFinite(ms), `invalid timestamp ${s}`);
-  return ms;
+  assert.equal(new Date(ms).toISOString().slice(0,19), m[1], `nonexistent date ${s}`);
+  return BigInt(ms) * 1000n + BigInt((m[2] ?? '').padEnd(6, '0') || '0');
 };
 const opCmp = (a,b) => Buffer.compare(Buffer.from(a, 'utf8'), Buffer.from(b,'utf8'));
 function choose(a,b) {
@@ -44,7 +46,9 @@ test('T12','Timestamp ordering is distinct from UTC operational flight date',()=
 test('T13','Equal timestamps can arise from bounded timestamp precision',()=>{const first=operation('a',at(10),'A');const second=operation('b',at(10),'B');assert.equal(choose(first,second).operationId,'b')});
 test('T14','Offset-form and Z-form denote same instant under RFC3339 but strict wire contract is undecided',()=>{assert.equal(Date.parse('2026-10-27T19:00:00+09:00'),Date.parse(at(10)));assert.throws(()=>iso('2026-10-27T19:00:00+09:00'))});
 test('T15','A server receipt sequence is not a user edit-time winner',()=>{const newer={...B,serverSequence:101};const older={...A,serverSequence:102};assert.equal(choose(newer,older).operationId,'b')});
-test('T16','Clock anomaly warning is independent from LWW selection',()=>{const candidate=operation('fast',at(10,0,'2026-10-28'),'F');const trustedReference=Date.parse(at(10));const anomaly=iso(candidate.modifiedAtUtc)-trustedReference>6*60*60*1000;assert.equal(anomaly,true);assert.equal(choose(candidate,A).operationId,'fast')});
+test('T16','Clock anomaly warning is independent from LWW selection',()=>{const candidate=operation('fast',at(10,0,'2026-10-28'),'F');const trustedReference=iso(at(10));const anomaly=iso(candidate.modifiedAtUtc)-trustedReference>6n*60n*60n*1000000n;assert.equal(anomaly,true);assert.equal(choose(candidate,A).operationId,'fast')});
 test('T17','Wrong-owner rejection must be outside this ordering function',()=>{const wrong={...B,ownerUid:'other'};const correct={...A,ownerUid:'owner'};assert.equal(choose(correct,wrong).operationId,'b');assert.notEqual(correct.ownerUid,wrong.ownerUid)});
 test('T18','History custody must be separate from winner projection',()=>{const history=[A,B];assert.equal(choose(...history).operationId,'b');assert.equal(history.length,2)});
+test('T19','Sub-millisecond wire times compare by exact microseconds, not Date.parse millisecond truncation',()=>{const early=operation('z','2026-10-27T10:00:00.123001Z','EARLY');const late=operation('a','2026-10-27T10:00:00.123999Z','LATE');assert.equal(choose(early,late).operationId,'a')});
+test('T20','Invalid calendar date must reject before comparison',()=>{const bad=operation('bad','2026-02-30T10:00:00Z','BAD');assert.throws(()=>choose(A,bad))});
 console.log(JSON.stringify({model:'research-only UTC LWW consequence model',node:process.version,tests:records.length,passed,results:records},null,2));
