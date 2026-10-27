@@ -351,12 +351,15 @@ async function interruptedPendingTab() {
     const writer = await persistentPage(ctx);
     await call(writer,'probeOpen',name);
     await call(writer,'probeArmHold');
-    const pending = call(writer,'probeApply','op-interrupted','digest-A');
+    // Attach both outcomes BEFORE closing the page: Node 22 treats an
+    // unhandled page.evaluate rejection as a fatal runner error.
+    const pending = call(writer,'probeApply','op-interrupted','digest-A')
+      .then(() => 'UNEXPECTED_RESOLUTION',
+        e => 'PAGE_CLOSED: '+String(e).slice(0,150));
     await writer.waitForFunction(() => window.probeHasEntered() === true,
       null,{timeout:15000});
     await writer.close({runBeforeUnload:false});
-    const interrupted = await pending.then(
-      () => 'UNEXPECTED_RESOLUTION',e => 'PAGE_CLOSED: '+String(e).slice(0,150));
+    const interrupted = await pending;
     assert.match(interrupted,/PAGE_CLOSED/,'TB10 pending evaluation interrupted');
     const observer = await persistentPage(ctx);
     await call(observer,'probeOpen',name);
