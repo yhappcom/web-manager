@@ -16,6 +16,11 @@ void main() {
     if (key != null) reviverKeys.add(key.toString());
     return value;
   });
+  final escapedReviverKeys = <String>[];
+  jsonDecode(escapedDuplicate, reviver: (key, value) {
+    if (key != null) escapedReviverKeys.add(key.toString());
+    return value;
+  });
   final ordered = <String>['\uE000', '\u{10000}']..sort();
   final encodedBig = jsonEncode({'value': big});
   final report = <String, Object?>{
@@ -23,6 +28,8 @@ void main() {
     'duplicateOwner': duplicateValue,
     'escapedDuplicateOwner': escapedValue,
     'duplicateReviverOwnerVisits': reviverKeys.where((x) => x == 'owner').length,
+    'escapedDuplicateReviverOwnerVisits':
+        escapedReviverKeys.where((x) => x == 'owner').length,
     'largeIntegerDecodedString': big.toString(),
     'largeIntegerEncoded': encodedBig,
     'largeIntegerRuntimeType': big.runtimeType.toString(),
