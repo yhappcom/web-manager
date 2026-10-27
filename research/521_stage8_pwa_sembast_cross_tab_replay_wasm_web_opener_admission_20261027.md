@@ -209,3 +209,51 @@ A new, public, **product-independent** bridge was committed under `research/hand
 8. **Engineering ownership:** general instrumentation and exact product 37-store W-012/W-013/W-014 execution belong to Software Engineering/Product. This public fixture is a dependency-level experiment; do not modify peers or LogMate to make the test green.
 
 **Stop/next decision:** Obtain exact hosted compile and two-tab results; if TB03 is inconclusive, refine the interleaving rather than claim replay. Then add independent raw IndexedDB counts, stale-owner/deletion fencing and physical Safari/managed-EFB transfer. **Stage 8 ACTIVE · Public same-page Chrome 6/6 PASS (previous ref) · New independent-tab execution OPEN · Production validation OPEN · PWA release HOLD.**
+
+
+---
+
+## 13. 2026-10-28 two-tab adversarial oracle upgrade — source committed, hosted verdict OPEN
+
+**Why another adjacent block was warranted [SYNTHESIS]:** §12 created a true independent-tab bridge, but its first two baselines were sequential, its third-tab reader reused the same Sembast abstraction, and its conditional overlap might report INCONCLUSIVE while the process exited successfully. A passing workflow could therefore be misread as evidence for callback replay or raw IndexedDB integrity. This continuation closes part of that *evidence-quality* gap rather than writing another package primer.
+
+### SOURCE — browser standards and platform boundaries (rechecked 2026-10-28)
+
+- [W3C Indexed Database API 3.0](https://www.w3.org/TR/IndexedDB/) and [MDN IDBFactory](https://developer.mozilla.org/en-US/docs/Web/API/IDBFactory) define browser-side database discovery/opening; [IDBDatabase.transaction](https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase/transaction) permits read-only object-store inspection. The inspection is independent of Sembast's high-level `find` path, but shares the same browser, origin, IndexedDB implementation and failure domain.
+- [MDN Broadcast Channel](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API) limits delivery by storage partition, not URL equality alone. Two pages in one browser context are a useful same-partition test, **not** two independent devices or browser profiles.
+- [MDN IndexedDB usage](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB) distinguishes transaction completion from physical power-loss persistence. Even a raw read-only inspection after close/reopen does **not** prove fsync, storage survival after eviction, or backup recoverability.
+- [Sembast Web 2.4.6](https://pub.dev/packages/sembast_web/versions/2.4.6) warns about transaction callback reexecution under concurrent writes; this is an upstream contract, not an observed LogMate incident or a guarantee that a particular artificial interleaving will reproduce replay.
+
+### VALIDATION — new exact public fixture (NOT EXECUTED in this checkpoint)
+
+The existing `research/handoffs/sembast_web_246_browser_probe/scripts/two_tab_probe.mjs` was extended without changing LogMate or the public Dart adapter:
+
+1. **Raw read-only IndexedDB inventory:** after both writers close, the fresh third tab calls `indexedDB.databases()`, opens each discovered DB without requesting an upgrade, enumerates object stores and reads their **raw entry counts** through native IndexedDB transactions. It asserts that the browser exposes the inventory and at least one physical object-store entry exists, in addition to the previous Sembast semantic flight/revision/outbox/digest assertions. The inventory records only synthetic database names, versions and counts, not flight payloads.
+2. **TB04 — simultaneous same-digest race:** two independent tabs call the fixture's same logical operation at once; expected unordered outcomes are exactly `NEW` and `REPLAY`, followed by one semantic row per synthetic store and a raw-IDB inventory.
+3. **TB05 — simultaneous conflicting-digest race:** the same concurrency shape uses different digests; expected unordered outcomes are `NEW` and `REJECTED`, with the winner's digest retained after third-tab reopen. The winning tab is deliberately **not predetermined**.
+4. **TB03 remains a distinct conditional experiment:** it only promotes the desired ordering when B completes as `NEW` before A is released and A rejects. It reports **INCONCLUSIVE** otherwise; `calls > 1` is separately required for an observed callback-replay claim. A TB03 INCONCLUSIVE does not invalidate a genuine TB01/TB02/TB04/TB05 baseline PASS, but must not be advertised as a TB03 PASS.
+5. **Explicit deterministic count:** exactly four baseline/race cases must complete. Failure of a race expectation, native-IDB inventory or semantic readback should produce a nonzero process exit, rather than a merely optimistic log.
+
+**Evidence limitations / possible diagnostic false positives [CONTRADICTION]:** Raw IndexedDB object-store **entry counts are not Sembast logical row counts**; a journal, metadata or shared store may encode multiple semantic records in one entry. The raw snapshot is an *independent API path*, not an independent physical storage medium or an independent product parser. Likewise, two Playwright pages share a browser profile/storage partition, and simultaneous Promise scheduling does not force a particular IndexedDB conflict window. Neither TB04/TB05 nor a TB03 INCONCLUSIVE can prove that callback replay never happens. The full transitive Dart/npm dependency graph remains unpinned in this fixture.
+
+**Exact result state:** Source change committed, **no completed hosted execution/job logs obtained for the upgraded fixture**; compilation, TB01/TB02/TB04/TB05 and raw-IDB assertions remain **OPEN**. The previous 6/6 same-page Chrome PASS at run 40556727926 is valid **only for the previous fixture**. Do not transfer it to this change.
+
+### Five-track integration, project transfer and expert judgment [DEPENDENCY / TRANSFER VALIDATION]
+
+| Track | Owns/consumes | Consequence |
+| --- | --- | --- |
+| **E (primary)** | Transaction authority, stable intent/digest, owner/deletion fences, durable backup/recovery and release admission | A raw entry count or local callback success is not remote authorization, durable receipt, or safe restore |
+| **A (major)** | Browser IndexedDB, partition/origin, BroadcastChannel and Sembast package mechanics | Two same-origin tabs can share local DB without establishing Safari Home Screen or managed Web Clip continuity |
+| **C (major)** | Test provenance, independent native-IDB inspection, concurrency/failure controls and falsifiable PASS/FAIL/INCONCLUSIVE | Preserve exact commit, package graph, browser version, tab identity, raw counts, callback attempts and durable rows separately |
+| **B (consumer)** | Design Studio W121/CD127 truthful saving/UNKNOWN/recovery states | Do not show `Synced` or `Backed up` merely because a local write completed |
+| **D (consumer)** | Marketing D8–D10 web/install/discovery claim gate | Public PWA/managed-iPad/offline-sync claims remain HOLD pending product/device evidence |
+
+**External specialist boundary:** Design Studio `progress/WEB_STATUS.md` and `progress/LAYOUT_STATUS.md` remain Stage 3 PRACTICE with actual runtime/AT/physical-device evidence OPEN; Marketing `STATUS.md` retains LogMate D8 product-claim HOLD. Software Engineering owns exact product implementation and product-grade instrumentation. Public dependency fixture findings can be handed off, but no peer repository or LogMate source was modified.
+
+### Adjacent diagnostic and release gate
+
+1. Retrieve the exact GitHub Actions job for the upgraded two-tab fixture, distinguish compile/test NON-EXECUTION from test FAIL and record Chrome/Dart/resolved packages/commit and all four baseline outcomes.
+2. If TB04/TB05 fail, preserve their failure-first traces and investigate Sembast transaction ordering, callback attempts, raw-IDB rows and fixture semantics before modifying expectations. If TB03 is inconclusive, design a stronger deterministic conflict window; do not silently promote it.
+3. Follow with stale-tab owner/deletion fencing, crash/UNKNOWN-commit and quota controls, actual LogMate 37-store LBK W-012/013/014, then Safari installed PWA and managed-EFB physical evidence. A browser fixture cannot substitute for any of these.
+
+**MINTTAP DIRECTION (research only):** Keep public exact-package synthetic evidence separate from actual LogMate release authority. Preserve Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. **CHANGE WATCH:** IndexedDB browser implementations, Sembast callback replay/version, Dart JS/Wasm selector, Safari partition/storage policy and enterprise iPad management.
