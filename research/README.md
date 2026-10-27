@@ -4,6 +4,8 @@ This directory is the source-grounded learning and decision-support layer for th
 
 Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`, `DEPENDENCY`, `VALIDATION`, `CHANGE WATCH`, `TRANSFER VALIDATION`, `CONTRADICTION`.
 
+**2026-10-28 applied Stage 8 checkpoint:** [521 §11 exact Sembast Web Chrome execution](521_stage8_pwa_sembast_cross_tab_replay_wasm_web_opener_admission_20261027.md) — public pinned-direct-dependency fixture **6/6 Chrome PASS** at [run 40556384695](https://github.com/yhappcom/web-manager/actions/runs/40556384695); same-page two opens ≠ independent tabs, fixture identity rules ≠ LogMate implementation, product/Safari/managed-EFB remain OPEN.
+
 ## Sequential curriculum — COMPLETE
 - Stage 1 Web Foundations: 027–033 — **PASS**
 - Stage 2 Website Anatomy / Content / IA: 034–038 — **PASS**

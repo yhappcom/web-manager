@@ -37,115 +37,136 @@ Future<String> _applyStableOperation(
 }
 
 void main() {
-  test('SB01 exact package: multi-store commit survives close/reopen', () async {
-    final name = _newDbName();
-    final db = await databaseFactoryWeb.openDatabase(name);
-    try {
-      await db.transaction((txn) async {
-        await _flights.record('f1').put(txn, {'value': 123});
-        await _revisions.record('r1').put(txn, {'flightId': 'f1'});
-        await _outbox.record('o1').put(txn, {'revisionId': 'r1'});
-      });
-    } finally {
-      await db.close();
-    }
+  test(
+    'SB01 exact package: multi-store commit survives close/reopen',
+    () async {
+      final name = _newDbName();
+      final db = await databaseFactoryWeb.openDatabase(name);
+      try {
+        await db.transaction((txn) async {
+          await _flights.record('f1').put(txn, {'value': 123});
+          await _revisions.record('r1').put(txn, {'flightId': 'f1'});
+          await _outbox.record('o1').put(txn, {'revisionId': 'r1'});
+        });
+      } finally {
+        await db.close();
+      }
 
-    final reopened = await databaseFactoryWeb.openDatabase(name);
-    try {
-      expect((await _flights.record('f1').get(reopened))?['value'], 123);
-      expect((await _revisions.record('r1').get(reopened))?['flightId'], 'f1');
-      expect((await _outbox.record('o1').get(reopened))?['revisionId'], 'r1');
-    } finally {
-      await reopened.close();
-    }
-  });
+      final reopened = await databaseFactoryWeb.openDatabase(name);
+      try {
+        expect((await _flights.record('f1').get(reopened))?['value'], 123);
+        expect(
+          (await _revisions.record('r1').get(reopened))?['flightId'],
+          'f1',
+        );
+        expect((await _outbox.record('o1').get(reopened))?['revisionId'], 'r1');
+      } finally {
+        await reopened.close();
+      }
+    },
+  );
 
-  test('SB02 exact package: thrown transaction rolls back all stores', () async {
-    final name = _newDbName();
-    final db = await databaseFactoryWeb.openDatabase(name);
-    try {
-      await expectLater(
-        db.transaction((txn) async {
-          await _flights.record('f2').put(txn, {'value': 999});
-          await _revisions.record('r2').put(txn, {'flightId': 'f2'});
-          await _outbox.record('o2').put(txn, {'revisionId': 'r2'});
-          throw StateError('synthetic abort');
-        }),
-        throwsStateError,
-      );
-    } finally {
-      await db.close();
-    }
+  test(
+    'SB02 exact package: thrown transaction rolls back all stores',
+    () async {
+      final name = _newDbName();
+      final db = await databaseFactoryWeb.openDatabase(name);
+      try {
+        await expectLater(
+          db.transaction((txn) async {
+            await _flights.record('f2').put(txn, {'value': 999});
+            await _revisions.record('r2').put(txn, {'flightId': 'f2'});
+            await _outbox.record('o2').put(txn, {'revisionId': 'r2'});
+            throw StateError('synthetic abort');
+          }),
+          throwsStateError,
+        );
+      } finally {
+        await db.close();
+      }
 
-    final reopened = await databaseFactoryWeb.openDatabase(name);
-    try {
-      expect(await _flights.record('f2').get(reopened), isNull);
-      expect(await _revisions.record('r2').get(reopened), isNull);
-      expect(await _outbox.record('o2').get(reopened), isNull);
-    } finally {
-      await reopened.close();
-    }
-  });
+      final reopened = await databaseFactoryWeb.openDatabase(name);
+      try {
+        expect(await _flights.record('f2').get(reopened), isNull);
+        expect(await _revisions.record('r2').get(reopened), isNull);
+        expect(await _outbox.record('o2').get(reopened), isNull);
+      } finally {
+        await reopened.close();
+      }
+    },
+  );
 
-  test('SB03 exact package: stable operation retry does not duplicate', () async {
-    final db = await databaseFactoryWeb.openDatabase(_newDbName());
-    try {
-      expect(await _applyStableOperation(db, 'op1', 'digest-A'), 'NEW');
-      expect(await _applyStableOperation(db, 'op1', 'digest-A'), 'REPLAY');
-      expect((await _outbox.find(db)).length, 1);
-      expect((await _revisions.find(db)).length, 1);
-      expect((await _flights.find(db)).length, 1);
-    } finally {
-      await db.close();
-    }
-  });
+  test(
+    'SB03 exact package: stable operation retry does not duplicate',
+    () async {
+      final db = await databaseFactoryWeb.openDatabase(_newDbName());
+      try {
+        expect(await _applyStableOperation(db, 'op1', 'digest-A'), 'NEW');
+        expect(await _applyStableOperation(db, 'op1', 'digest-A'), 'REPLAY');
+        expect((await _outbox.find(db)).length, 1);
+        expect((await _revisions.find(db)).length, 1);
+        expect((await _flights.find(db)).length, 1);
+      } finally {
+        await db.close();
+      }
+    },
+  );
 
-  test('SB04 exact package: same operation ID/different digest rejected', () async {
-    final name = _newDbName();
-    final db = await databaseFactoryWeb.openDatabase(name);
-    try {
-      expect(await _applyStableOperation(db, 'op1', 'digest-A'), 'NEW');
-      await expectLater(
-        _applyStableOperation(db, 'op1', 'digest-B'),
-        throwsStateError,
-      );
-    } finally {
-      await db.close();
-    }
-    final reopened = await databaseFactoryWeb.openDatabase(name);
-    try {
-      expect((await _outbox.record('op1').get(reopened))?['digest'], 'digest-A');
-      expect((await _outbox.find(reopened)).length, 1);
-      expect((await _revisions.find(reopened)).length, 1);
-    } finally {
-      await reopened.close();
-    }
-  });
+  test(
+    'SB04 exact package: same operation ID/different digest rejected',
+    () async {
+      final name = _newDbName();
+      final db = await databaseFactoryWeb.openDatabase(name);
+      try {
+        expect(await _applyStableOperation(db, 'op1', 'digest-A'), 'NEW');
+        await expectLater(
+          _applyStableOperation(db, 'op1', 'digest-B'),
+          throwsStateError,
+        );
+      } finally {
+        await db.close();
+      }
+      final reopened = await databaseFactoryWeb.openDatabase(name);
+      try {
+        expect(
+          (await _outbox.record('op1').get(reopened))?['digest'],
+          'digest-A',
+        );
+        expect((await _outbox.find(reopened)).length, 1);
+        expect((await _revisions.find(reopened)).length, 1);
+      } finally {
+        await reopened.close();
+      }
+    },
+  );
 
-  test('SB05 same-page two opens: concurrent stable-ID retry converges', () async {
-    final name = _newDbName();
-    final first = await databaseFactoryWeb.openDatabase(name);
-    final second = await databaseFactoryWeb.openDatabase(name);
-    try {
-      final outcomes = await Future.wait([
-        _applyStableOperation(first, 'op-shared', 'digest-A'),
-        _applyStableOperation(second, 'op-shared', 'digest-A'),
-      ]);
-      expect(outcomes.where((value) => value == 'NEW').length, 1);
-      expect(outcomes.where((value) => value == 'REPLAY').length, 1);
-    } finally {
-      await first.close();
-      await second.close();
-    }
-    final reopened = await databaseFactoryWeb.openDatabase(name);
-    try {
-      expect((await _outbox.find(reopened)).length, 1);
-      expect((await _revisions.find(reopened)).length, 1);
-      expect((await _flights.find(reopened)).length, 1);
-    } finally {
-      await reopened.close();
-    }
-  });
+  test(
+    'SB05 same-page two opens: concurrent stable-ID retry converges',
+    () async {
+      final name = _newDbName();
+      final first = await databaseFactoryWeb.openDatabase(name);
+      final second = await databaseFactoryWeb.openDatabase(name);
+      try {
+        final outcomes = await Future.wait([
+          _applyStableOperation(first, 'op-shared', 'digest-A'),
+          _applyStableOperation(second, 'op-shared', 'digest-A'),
+        ]);
+        expect(outcomes.where((value) => value == 'NEW').length, 1);
+        expect(outcomes.where((value) => value == 'REPLAY').length, 1);
+      } finally {
+        await first.close();
+        await second.close();
+      }
+      final reopened = await databaseFactoryWeb.openDatabase(name);
+      try {
+        expect((await _outbox.find(reopened)).length, 1);
+        expect((await _revisions.find(reopened)).length, 1);
+        expect((await _flights.find(reopened)).length, 1);
+      } finally {
+        await reopened.close();
+      }
+    },
+  );
 
   test('SB06 same-page two opens: conflicting digest has one winner', () async {
     final name = _newDbName();

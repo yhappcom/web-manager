@@ -39,12 +39,13 @@ jobs:
           git rev-parse HEAD
           dart --version
           command -v google-chrome || command -v chromium || true
+          google-chrome --version || true
           dart pub get
           dart pub deps --style=compact
       - name: Analyze exact fixture
         run: |
           set -euo pipefail
-          dart format --output=show test
+          dart format --output=none --set-exit-if-changed test
           dart analyze --fatal-infos
       - name: Execute browser assertions in headless Chrome
         run: |
