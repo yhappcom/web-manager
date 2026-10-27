@@ -257,3 +257,33 @@ The existing `research/handoffs/sembast_web_246_browser_probe/scripts/two_tab_pr
 3. Follow with stale-tab owner/deletion fencing, crash/UNKNOWN-commit and quota controls, actual LogMate 37-store LBK W-012/013/014, then Safari installed PWA and managed-EFB physical evidence. A browser fixture cannot substitute for any of these.
 
 **MINTTAP DIRECTION (research only):** Keep public exact-package synthetic evidence separate from actual LogMate release authority. Preserve Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. **CHANGE WATCH:** IndexedDB browser implementations, Sembast callback replay/version, Dart JS/Wasm selector, Safari partition/storage policy and enterprise iPad management.
+
+
+---
+
+## 14. 2026-10-28 hosted independent-tab execution — callback replay observed, target-bound oracle follow-up
+
+### VALIDATION — exact hosted execution (promoted only within synthetic Chrome scope)
+
+- [GitHub Actions run 40574988642](https://github.com/yhappcom/web-manager/actions/runs/40574988642), job `122438893368`, checkout `f8b9e0c4b9f41e54714ce23dae1481dc44e308e1`, completed **SUCCESS** at 2026-10-27 20:06 UTC. Logs explicitly show Dart SDK **3.12.0**, Chrome **155.0.8059.39**, direct `sembast_web 2.4.6` and Playwright `1.56.1` (workflow pin), on GitHub-hosted Ubuntu 24.04. Transitive lockfile is not committed.
+- **TB01 PASS:** independent tab A/B same-digest sequential retry -> `NEW` then `REPLAY`, one semantic record in each of three synthetic stores after third-tab reopen.
+- **TB02 PASS:** changed digest -> `NEW` then `REJECTED`, first digest retained.
+- **TB04 PASS:** concurrent same-digest -> `NEW` and `REPLAY`, losing callback invoked **twice** (`calls=2`), one semantic record/store after reopen.
+- **TB05 PASS:** concurrent different-digest -> `NEW` and `REJECTED`, losing callback invoked **twice**, one semantic record/store after reopen.
+- **TB03 conditional overlap PASS in this run:** B completed `NEW` before held A was released; A rejected with `calls=2`; third tab retained B's digest. This is an **observed interleaving**, not a promise that every run or browser will reproduce it.
+- Raw read-only IndexedDB inventory returned synthetic database versions `2` with object stores `entry:3`, `info:2` in the run. These are physical API-path counts, **not** semantic row counts, independent storage, fsync, backup, Safari evidence or product behavior. The original raw assertion was too broad: it accepted *any* previously created DB with a positive count. It did not independently require the current scenario's target DB.
+
+### CONTRADICTION / corrective oracle improvement
+
+A source follow-up at [commit f03074bb](https://github.com/yhappcom/web-manager/commit/f03074bb4ca6e854dabc2e5bb68fcb195e759a95) now restricts native IndexedDB inventory to the **exact scenario database name**, asserts exactly one matching DB and requires a positive entry in that DB. This prevents earlier successful scenario databases from satisfying a later scenario's raw inventory. **The previous hosted PASS applies to the earlier f8b9 fixture only**; the strengthened source requires a new exact-commit CI run before its own PASS can be claimed.
+
+### Failure-first provenance and five-track transfer
+
+- Earlier [run 40566298388](https://github.com/yhappcom/web-manager/actions/runs/40566298388) reached the browser step but failed after `page.evaluate: Target page, context or browser has been closed`; this is a failed fixture execution, not evidence of a Sembast data-integrity defect. [Run 40566347623](https://github.com/yhappcom/web-manager/actions/runs/40566347623) subsequently passed the earlier TB01/TB02/TB03 fixture. The later f8b9 run establishes the upgraded four-baseline + conditional-overlap result.
+- **E owns** atomic admission and idempotency boundaries: the observed callback replay is direct evidence that callback side effects cannot be equated to one durable commit. Any future LogMate transaction callback must avoid irreversible external effects or rely on separately proven idempotency/current authority.
+- **A supplies** Chrome/IndexedDB/Sembast browser mechanics and strict isolation-tier labels; same browser-context tabs do not transfer to independent profiles, Safari Home Screen or managed iPad.
+- **C owns** exact-commit reproducibility, scenario-specific raw oracle, callback-count versus committed-row distinction and failure-first controls. Repeatability under browser updates and fault injection remains OPEN.
+- **B consumes** Design Studio W121/CD127 local-save/retry/UNKNOWN recovery-state requirements; a local transaction is not a remote Sync or verified backup.
+- **D consumes** Marketing D8 claim HOLD; no public managed-EFB/offline cross-device Sync or durability claim is justified by this synthetic result.
+
+**Gate decision [MINTTAP DIRECTION / OPEN]:** **Synthetic independent Chrome tabs: TB01/TB02/TB04/TB05 4/4 PASS + TB03 observed PASS at f8b9; strengthened exact-target raw oracle execution OPEN until its own CI run.** Product 37-store LBK, owner/deletion, crash/quota, Safari installed PWA, managed EFB, remote Sync and physical durability remain OPEN. Stage 8 ACTIVE; PWA release HOLD. Next: verify the f03074bb workflow, then test stale-owner/deletion fences and crash/UNKNOWN receipt without conflating fixture admission with LogMate implementation.
