@@ -1,8 +1,9 @@
 // Real independent Chrome tabs (separate pages, shared origin/context) plus fresh third-tab readback.
 // This tests the public Sembast adapter and fixture-owned admission, NOT LogMate production.
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { readFile, mkdtemp, rm } from 'node:fs/promises';
+import { resolve, join } from 'node:path';
+import { tmpdir } from 'node:os';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright-core';
 
@@ -286,6 +287,96 @@ async function replayAfterRevocation() {
   }
 }
 
+
+let lifecyclePass = 0;
+async function persistentPage(ctx) {
+  const p = await ctx.newPage();
+  p.on('pageerror',e => console.error('PERSISTENT PAGE ERROR:',e.message));
+  await p.goto(origin,{waitUntil:'load'});
+  await p.waitForFunction(() => window.probeReady === true);
+  return p;
+}
+async function launchProfile(profile) {
+  return chromium.launchPersistentContext(profile,{
+    executablePath:process.env.CHROME_BIN || '/usr/bin/google-chrome',
+    headless:true,args:['--no-sandbox']
+  });
+}
+// TB09: explicit browser-process close/relaunch with the SAME profile and
+// origin, followed by original-ID retry. Not power-loss or backup proof.
+async function browserRestartRetry() {
+  const profile = await mkdtemp(join(tmpdir(),'stage8-restart-'));
+  const name = 'stage8_restart_' + Date.now();
+  let ctx;
+  try {
+    ctx = await launchProfile(profile);
+    const firstPage = await persistentPage(ctx);
+    await call(firstPage,'probeOpen',name);
+    const first = await call(firstPage,'probeApply','op-restart','digest-A');
+    assert.equal(first.outcome,'NEW','TB09 initial commit');
+    await call(firstPage,'probeClose');
+    await ctx.close(); ctx = null;
+    ctx = await launchProfile(profile);
+    const secondPage = await persistentPage(ctx);
+    await call(secondPage,'probeOpen',name);
+    const before = await call(secondPage,'probeRead');
+    assert.equal(before.flights,1,'TB09 flight survives restart');
+    assert.equal(before.revisions,1,'TB09 revision survives restart');
+    assert.equal(before.outbox,1,'TB09 outbox survives restart');
+    assert.equal(before.digest,'digest-A','TB09 digest survives restart');
+    const retry = await call(secondPage,'probeApply','op-restart','digest-A');
+    assert.equal(retry.outcome,'REPLAY','TB09 same-ID retry');
+    const after = await call(secondPage,'probeRead');
+    assert.equal(after.outbox,1,'TB09 retry creates no second row');
+    const raw = await rawIndexedDbSnapshot(secondPage,name);
+    assert.equal(raw.databases.length,1,'TB09 exact raw DB');
+    await call(secondPage,'probeClose');
+    lifecyclePass++;
+    console.log(JSON.stringify({label:'TB09 browser process restart and same-ID retry',
+      verdict:'PASS',first,before,retry,after,raw,
+      note:'Graceful browser close/relaunch, not crash/power loss or remote ACK.'}));
+  } finally {
+    if (ctx) await ctx.close();
+    await rm(profile,{recursive:true,force:true});
+  }
+}
+// TB10: close a tab while its transaction callback is suspended BEFORE
+// writes. Reopen in the same persistent profile and verify zero partial rows.
+async function interruptedPendingTab() {
+  const profile = await mkdtemp(join(tmpdir(),'stage8-interrupt-'));
+  const name = 'stage8_interrupt_' + Date.now();
+  let ctx;
+  try {
+    ctx = await launchProfile(profile);
+    const writer = await persistentPage(ctx);
+    await call(writer,'probeOpen',name);
+    await call(writer,'probeArmHold');
+    const pending = call(writer,'probeApply','op-interrupted','digest-A');
+    await writer.waitForFunction(() => window.probeHasEntered() === true,
+      null,{timeout:15000});
+    await writer.close({runBeforeUnload:false});
+    const interrupted = await pending.then(
+      () => 'UNEXPECTED_RESOLUTION',e => 'PAGE_CLOSED: '+String(e).slice(0,150));
+    assert.match(interrupted,/PAGE_CLOSED/,'TB10 pending evaluation interrupted');
+    const observer = await persistentPage(ctx);
+    await call(observer,'probeOpen',name);
+    const state = await call(observer,'probeRead');
+    assert.equal(state.flights,0,'TB10 no partial flight');
+    assert.equal(state.revisions,0,'TB10 no partial revision');
+    assert.equal(state.outbox,0,'TB10 no partial outbox');
+    const raw = await rawIndexedDbSnapshot(observer,name);
+    assert.equal(raw.databases.length,1,'TB10 exact raw DB');
+    await call(observer,'probeClose');
+    lifecyclePass++;
+    console.log(JSON.stringify({label:'TB10 pending transaction tab closure',
+      verdict:'PASS',interrupted,state,raw,
+      note:'Tab closed before writes; no OS crash or after-commit ambiguity.'}));
+  } finally {
+    if (ctx) await ctx.close();
+    await rm(profile,{recursive:true,force:true});
+  }
+}
+
 try {
   await baseline('TB01 two-tab same digest propagation','digest-A','digest-A','REPLAY');
   await baseline('TB02 two-tab conflicting digest rejection','digest-A','digest-B','REJECTED');
@@ -295,10 +386,14 @@ try {
   await heldRevocation();
   await activeEpochRotation();
   await replayAfterRevocation();
+  await browserRestartRetry();
+  await interruptedPendingTab();
+  assert.equal(lifecyclePass,2,'exact lifecycle cases');
   assert.equal(fencePass,3,'exact synthetic owner-fence cases');
   assert.equal(pass,4,'exact deterministic two-tab baseline count');
   console.log('DETERMINISTIC TWO-TAB BASELINE:',pass,
-    '/4 PASS; OWNER-FENCE FIXTURE:',fencePass,'/3 PASS; TB03 separately');
+    '/4 PASS; OWNER-FENCE FIXTURE:',fencePass,
+    '/3 PASS; LIFECYCLE FIXTURE:',lifecyclePass,'/2 PASS; TB03 separately');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));

@@ -368,3 +368,16 @@ All cases require an exact target database and third-tab semantic readback; nati
 **Change watch:** upstream Sembast Web package releases, Chromium IndexedDB durability defaults, Safari/WebKit storage policy, managed iPad restrictions and exact product sync implementation. A passing synthetic browser fixture never promotes these independent gates.
 
 **Adjacency decision:** after TB06–TB08 execution, the next high-information-gain question is **what happens when the browser process is killed between a local commit and the external ACK**; this requires a separate fault-injection and server receipt oracle rather than more source-only security prose.
+
+
+---
+
+## 16. Adjacent Stage 8 interruption/restart experiment — 2026-10-28
+
+**Execution at authoring: OPEN.** The same synthetic Chrome fixture now defines TB09/TB10 in addition to the owner-fence tests. The code is committed as a single major-domain continuation, not a new unrelated primer.
+
+**TB09 — same-profile browser process restart.** Commit a synthetic flight/revision/outbox operation, close the entire persistent Chrome context, relaunch a fresh Chrome process with the **same user-data directory and exact same origin**, inspect all three stores and original digest, retry the original ID and assert REPLAY with one outbox row. This tests normal browser-process lifecycle and idempotent local re-entry, **not** forced crash, OS power loss, Safari/iPadOS storage retention, backup or authenticated server ACK.
+
+**TB10 — interruption before local commit.** Start a transaction callback, pause it before writes, close the writer tab, confirm the Playwright evaluation was interrupted, open a new tab in the same persistent profile, and require zero flight/revision/outbox rows. This is a narrow atomicity-negative case: it cannot establish what happens when the browser dies *after* an IndexedDB commit but *before* the caller receives a response. That UNKNOWN-commit boundary requires a separate fault-injection barrier and receipt oracle.
+
+**Evidence discipline:** A PASS is scoped to named Chrome build, test SHA, exact direct package versions, process lifecycle and synthetic stores. Persistent profile storage is still the same device and origin failure domain. Chrome's IndexedDB default relaxed durability, the Sembast abstraction and graceful browser closure cannot certify physical durability or EFB deployment. If either test fails, inspect source/runner before inferring a platform defect. The true next blocker is a product-owned authenticated server receipt/owner fence, plus exact physical managed-device backup/recovery.
