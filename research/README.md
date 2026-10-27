@@ -2,7 +2,7 @@
 
 This directory is the source-grounded learning and decision-support layer for the MintTap company website and strategic web-app/PWA capability. Canonical curriculum: `../LEARNING_ROADMAP.md`; horizontal ownership: `../SPECIALIST_TRACKS.md`.
 
-**2026-10-28 Stage 8 remote-admission bridge:** [523 — PWA remote admission, receipt ambiguity and Owner-fence boundary](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) adds an 18-case public Node HTTP fixture and exact-ref workflow. Its fake token/in-memory server does **not** verify Firebase Auth, Firestore durable receipts, LogMate Manual Sync or managed EFB. Hosted result initially OPEN; product gate HOLD.
+**2026-10-28 Stage 8 remote-admission bridge:** [523 — PWA remote admission, receipt ambiguity and Owner-fence boundary](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) adds an 18-case public Node HTTP fixture and exact-ref workflow. Its fake token/in-memory server does **not** verify Firebase Auth, Firestore durable receipts, LogMate Manual Sync or managed EFB. **Exact hosted Node CI 18/18 PASS** at [run 40599506021](https://github.com/yhappcom/web-manager/actions/runs/40599506021), checkout 012799eb; product gate HOLD.
 
 Evidence vocabulary: `SOURCE`, `SYNTHESIS`, `MINTTAP DECISION/DIRECTION`, `OPEN`, `DEPENDENCY`, `VALIDATION`, `CHANGE WATCH`, `TRANSFER VALIDATION`, `CONTRADICTION`.
 
