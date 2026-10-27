@@ -1889,3 +1889,73 @@ Candidate Engineering design requirements: separate candidate verification, wait
 Next decisive evidence: (1) retrieve and adjudicate the hosted research workflow result; (2) if synthetic Chromium passes, run the **exact generated LogMate OLD/NEW Worker** with retained NORMAL bytes and real catalogue; (3) independently record controller/waiting state, pointer, served JS/HTML, old-client continuity and 37-store/LBK safety; (4) transfer only then to Safari and approved physical/managed iPad. The local browser-policy block is an execution-environment limitation, not a reason to relax product admission.
 
 **Stop check:** This work advances §34's model to a reproducible real-browser experiment with ten causal observations and eleven locally executed unit/negative/syntax tests. Further abstract variations are lower value than hosted execution and product-owned NORMAL/device evidence. **Applied Stage 8 ACTIVE · Product validation OPEN · PWA release HOLD.**
+
+
+---
+
+## 36. 2026-10-27 — Hosted Chromium waiting-worker experiment independently adjudicated: platform counterexample observed, LogMate production gate unchanged [SOURCE / VALIDATION / SYNTHESIS / CONTRADICTION / DEPENDENCY / TRANSFER VALIDATION / OPEN]
+
+### 36.1 Evidence promotion with exact run custody [SOURCE / VALIDATION]
+
+The §35 experiment was subsequently **executed in real hosted Chromium**. This resolves the specific §35 UNKNOWN about whether a waiting Worker can receive a targeted message and alter shared CacheStorage while an OLD Worker still controls a navigation. It does **not** execute the generated LogMate Worker, NORMAL artifact, Firebase, Sembast or iPadOS.
+
+- Exact [GitHub Actions run 40453378252](https://github.com/yhappcom/web-manager/actions/runs/40453378252), job **122020997869**, run start **2026-10-27 05:05:59 UTC**, completed **05:06:32 UTC**, conclusion **success**.
+- Runner checked out source **8c458ea0957833a828e508b6128a2bf5137189c6a**. This is the source of the observed browser experiment, not the later docs-only Web Manager HEAD.
+- Actual runner: **Node 22.16.0**; **Google Chrome 155.0.8059.39**, Ubuntu 24.04 runner, disposable **127.0.0.1 HTTP loopback** origin, temporary browser profile. No production hostname, HTTPS certificate, credentials, LogMate flight data, managed device or deployment.
+- Independent direct reading of the job's raw logs (not just green workflow status) confirmed the semantic JSON object: tier **SYNTHETIC_CHROMIUM_LOOPBACK_NO_TLS**, verdict **PASS**, reason **TEN_INDEPENDENT_OBSERVATIONS**, processReason **COMPLETED**; exactly **10/10** ordered observations have boolean true. Separately the job's Node TAP report shows **11/11** synthetic oracle/negative-control/server/served-JavaScript tests PASS. The hosted log is the run-bound evidence; the 11 unit tests are not ten additional browser observations.
+- Primary platform contracts rechecked 2026-10-27: [W3C Service Workers](https://w3c.github.io/ServiceWorker/), [MDN registration.waiting](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/waiting), [MDN ServiceWorker.postMessage](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker/postMessage), [MDN clients.claim](https://developer.mozilla.org/en-US/docs/Web/API/Clients/claim). Standards support lifecycle/message distinctions; **Chrome 155** is the only observed browser for this fixture. Do not infer Safari/WebKit parity.
+
+### 36.2 Independent causal trace — ten browser observations [VALIDATION]
+
+| Observation | Actual hosted Chrome output | Bounded inference |
+| --- | --- | --- |
+| 1. OLD controlled | active state = activated, controller exists | OLD Worker controls the test page |
+| 2. Initial OLD | receiver OLD; current OLD; previous null | Shared catalogue starts OLD |
+| 3. NEW waiting | active activated; waiting installed | Two Worker generations coexist |
+| 4. Waiting receives STATUS | receiver NEW; current OLD | Direct message delivery to installed/waiting NEW is real |
+| 5. Before promotion | OLD&#124;OLD | OLD-controlled navigation reads OLD pointer |
+| 6. Waiting receives PROMOTE | receiver NEW; current NEW; previous OLD | NEW can write shared pointer without activation in this fixture |
+| 7. Still waiting | waiting installed; active activated | Pointer changed while NEW was still waiting |
+| 8. New navigation after change | OLD&#124;NEW | OLD fetch handler serves a response selected using NEW pointer |
+| 9. OLD re-promotes | receiver OLD; current OLD; previous NEW | Active OLD can reverse the application pointer |
+| 10. Final navigation | OLD&#124;OLD | Subsequent OLD-controlled navigation reads reverted pointer |
+
+**This is a reproducible browser-level counterexample to the general assumption that waiting automatically prevents all shared application release-state changes.** Waiting prevents normal Worker controller replacement; it does not make origin-shared CacheStorage immutable or automatically confer application-level release authorization. The fixture deliberately sends the message to the waiting Worker; it does not claim that the current LogMate bootstrap does so. The fixture's response is a synthetic text marker, not verified LogMate HTML/JS bytes.
+
+**Negative/admission controls:** the same hosted job executed the eleven Node tests that reject wrong fixture, missing/reordered/malformed observations, a false observation and an unavailable browser. The browser verdict is not inferred solely from a process exit code. Independent reparse confirmed the expected ten names and true flags, but the test does not prove that a browser other than Chrome 155 or a different Worker implementation behaves identically.
+
+### 36.3 Exact LogMate source bridge, without overpromoting [SOURCE / CONTRADICTION]
+
+Read-only current LogMate main checked at **6180fd80c1b084bd4347534c0770fe425f707768**. The Worker generator and bootstrap are still the source blobs previously pinned in §34: tool/pwa_precache.dart **90a67954af618a4e18199fa92555491c56167c17** and web/flutter_bootstrap.js **a70625e8bda32aafd5dd23822c017d05229f0e63**. Later LogMate commits in this interval are documentation/evidence, not an observed change to those two files.
+
+The actual generator's install flow registers a verified candidate and intentionally does not call skipWaiting; the message handler's PROMOTE_VERIFIED_CANDIDATE calls updateControl → promoteInControl with verified/ready checks but **without an active/controlling lifecycle admission check**; the OLD fetch handler reads shared currentBuildId for root navigation and assigns it to navigation client IDs. The real bootstrap ordinarily targets controller or registration.active for PROMOTE, while it may target registration.waiting for START_PRECACHE. Thus:
+
+- **SOURCE:** the product has the logical prerequisites for a waiting-targeted promotion to change the shared routing pointer.
+- **BROWSER VALIDATION:** the separate simplified Chrome fixture proves the browser allows the necessary waiting-message/shared-cache/OLD-fetch ordering.
+- **OPEN:** actual LogMate-generated Worker with real verified manifests, actual same-origin caller reachability, served LogMate HTML/JS, cache failure, migration effects and user exposure have **not** been executed. No product incident, XSS, cross-origin exploit or data loss is claimed.
+- **CONTRADICTION:** verified candidate bytes, application currentBuildId, Worker activated state, controlling Worker, served release bytes and ledger/schema capability are **six different claims**. No one value substitutes for the others.
+
+Additional trust-boundary caution: CacheStorage catalogue metadata and cached bytes are same-origin mutable state; verifying bytes against digests stored in that same mutable catalogue is not independent organizational provenance. It is useful accidental-corruption/consistency detection, but does not itself elect a release authority or protect against an already-compromised same-origin script. No compromise is alleged.
+
+### 36.4 Engineering decision alternatives and failure analysis [SYNTHESIS / MINTTAP DECISION — PROPOSED]
+
+**Preferred design direction for Engineering review, not an approved product patch:** keep candidate download/verification and active release routing as distinct phases. Remove ordinary page-message authority to promote a waiting generation; commit the candidate to active routing only at an explicit lifecycle-compatible admission boundary (e.g., reviewed activation path), after exact manifest/Worker identity and data/schema/dirty-outbox compatibility checks. Continue to preserve old verified bytes and unique local ledger; a cache-ready result cannot approve destructive rollback or account rebind.
+
+| Candidate | Advantage | Remaining failure / trade-off |
+| --- | --- | --- |
+| Activation-bound promotion, candidate messages read-only | Waiting NEW cannot commit current pointer through the observed message path | Activation still requires idempotence, cross-Worker catalogue coordination, compatibility and data-preserving migration |
+| Active-only promotion message | Restricts waiting-worker message effect | OLD active can still re-promote OLD or race with activation; source/origin check alone cannot authenticate an approved release |
+| Immutable per-client release mapping and separate candidate state | Old client keeps coherent bytes despite pointer change | First-claim/unmapped clients, catalogue corruption, pruning, missing assets and storage pressure still require tests |
+| Explicit authorized rollback protocol | Can recover from a bad release with measured conditions | Schema/data downgrade and unacknowledged local edits make cache-only rollback unsafe; fail closed until independent proof |
+
+Operational failure tree: waiting NEW writes shared pointer → OLD navigation pins NEW build → potential mixed generation or 503 if assets/client mapping/manifest are incomplete → old binary may encounter incompatible local data; **each downstream arrow is conditional until actual NORMAL product evidence**. A reverse OLD promotion is not the same as approved rollback. Safe recovery must preserve user-created offline records and a separately restorable LBK before destructive repair. The same-origin script boundary is not a demonstrated external attacker path.
+
+### 36.5 Five-track transfer and next falsifiable release campaign [DEPENDENCY / TRANSFER VALIDATION / CHANGE WATCH]
+
+**Track E** remains the highest-risk owner: release authority, rollback/data preservation, immutable NORMAL deployment custody and incident containment. **Track A** now has **hosted Chrome 155 platform execution** for targeted waiting messages, shared CacheStorage and OLD-controller fetch routing; Safari, WebKit, lifecycle edge cases and actual LogMate Worker are OPEN. **Track C** upgrades the fixture tier from local Node/mock to run-bound browser PASS while preserving exact source/browser/oracle boundaries; product/37-store and physical-device quality remain OPEN. **Track B** consumes Design Studio W121/CD127 for honest update-waiting/verified/active/safe-restart/recovery states; human/AT validation OPEN. **Track D** consumes Marketing D8–D10 and must not count this as an install, offline recovery, backup, Sync, ad or EFB feature success.
+
+The next **Engineering-owned** test should use **two independently hashed exact NORMAL LogMate Worker generations**, retained OLD-controlled tabs, a complete verified NEW candidate, actual root and JS bytes, independent CacheStorage/Worker/controller traces and a nonempty 37-store synthetic ledger with pending edits. Run MP01–MP12 from §34; prioritize MP02–MP04 (waiting promotion and reverse pointer), MP08 (natural activation), MP09 (offline/restart), MP11 (quota/concurrency), MP12 (Worker-only change). Include negative controls for unverified NEW, malformed messages, unavailable cache, worker process restart and owner/backup integrity. An actual reproduced mixed-generation response is a release-admission defect candidate, not proof of an attacker.
+
+**Product-scope change watch:** LogMate W-031's 2026-10-27 owner decision scopes **iPadOS Simulator PWA pre-acceptance to Safari**, with Simulator Chrome **DEFERRED BY OWNER / NOT VERIFIED**; this does not exclude desktop/CI Chromium as a generic diagnostic or remove final product Chrome support. W-031's iPadOS 26.1 Safari Simulator synthetic-harness partial PASS in research 520 is a **different environment and different question**. Neither it nor this hosted Chrome fixture certifies Home Screen, managed Web Clip, actual EFB, normal authenticated ledger, W-012/013/014 backup, or native↔PWA Sync.
+
+**Stop/checkpoint decision:** The previously missing hosted browser outcome was retrieved and independently parsed, its causal counterexample reconciled with current product source, alternative admission policies challenged, and exact product/device falsifiers identified. Additional synthetic permutations now have lower value than Engineering's exact NORMAL two-generation run and device/data custody. **Applied Stage 8 ACTIVE · synthetic Chrome platform fixture PASS · Production validation OPEN · PWA release HOLD.** No product or peer repository was modified.
