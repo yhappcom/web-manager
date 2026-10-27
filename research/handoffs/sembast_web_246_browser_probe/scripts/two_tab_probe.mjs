@@ -35,6 +35,46 @@ async function call(p, method, ...args) {
   const value = await p.evaluate(([method, args]) => window[method](...args), [method, args]);
   return typeof value === 'string' && value.startsWith('{') ? JSON.parse(value) : value;
 }
+// Independent, read-only IndexedDB API inventory. Counts physical object-store entries,
+ // not semantic Sembast rows or fsync durability; Chrome-only diagnostic.
+async function rawIndexedDbSnapshot(p) {
+  return p.evaluate(async () => {
+    if (typeof indexedDB.databases !== 'function') {
+      return {supported:false, databases:[]};
+    }
+    const catalog = await indexedDB.databases();
+    const databases = [];
+    for (const info of catalog) {
+      if (!info.name) continue;
+      const db = await new Promise((resolve, reject) => {
+        const req = indexedDB.open(info.name);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+        req.onupgradeneeded = () => {
+          req.transaction.abort();
+          reject(new Error('Raw inspection refused to create or upgrade a DB'));
+        };
+      });
+      try {
+        const stores = {};
+        for (const storeName of Array.from(db.objectStoreNames)) {
+          stores[storeName] = await new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const req = tx.objectStore(storeName).count();
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+            tx.onabort = () => reject(tx.error || new Error('Raw count aborted'));
+          });
+        }
+        databases.push({name:info.name, version:db.version, stores});
+      } finally {
+        db.close();
+      }
+    }
+    return {supported:true, databases};
+  });
+}
+
 async function verify(name, expectedDigest, label) {
   const observer = await page();
   try {
@@ -44,7 +84,11 @@ async function verify(name, expectedDigest, label) {
     assert.equal(state.revisions,1,label+' revision count');
     assert.equal(state.outbox,1,label+' outbox count');
     assert.equal(state.digest,expectedDigest,label+' persisted digest');
-    return state;
+    const raw = await rawIndexedDbSnapshot(observer);
+    assert.equal(raw.supported,true,label+' raw IndexedDB inventory available');
+    assert.ok(raw.databases.some(db => Object.values(db.stores).some(n => n > 0)),
+      label+' at least one physical IndexedDB object-store entry');
+    return {...state, rawIndexedDb:raw};
   } finally {
     await call(observer,'probeClose');
     await observer.close();
@@ -69,6 +113,32 @@ async function baseline(label, aDigest, bDigest, expectedA) {
     await Promise.allSettled([a.close(),b.close()]);
   }
 }
+// Two independent tabs launch writes without a deterministic winner. This is a
+// concurrency diagnostic, NOT a guaranteed callback-reexecution interleaving.
+async function race(label, aDigest, bDigest, expectedOutcomes) {
+  const name = 'stage8_twotab_race_' + Date.now() + '_' + pass;
+  const a = await page(), b = await page();
+  try {
+    assert.notEqual(a,b,'two distinct Chrome tabs required');
+    await Promise.all([call(a,'probeOpen',name),call(b,'probeOpen',name)]);
+    const [aResult,bResult] = await Promise.all([
+      call(a,'probeApply','op-shared',aDigest),
+      call(b,'probeApply','op-shared',bDigest)
+    ]);
+    const outcomes = [aResult.outcome,bResult.outcome].sort();
+    assert.deepEqual(outcomes,[...expectedOutcomes].sort(),label+' race outcomes');
+    const winner = aResult.outcome === 'NEW' ? aDigest : bDigest;
+    await Promise.all([call(a,'probeClose'),call(b,'probeClose')]);
+    const state = await verify(name,winner,label);
+    pass++;
+    console.log(JSON.stringify({label,verdict:'PASS',outcomes:[aResult,bResult],
+      observer:state,origin,context:'two distinct concurrent Chrome tabs; third-tab reopen',
+      callbackReplayObserved:aResult.calls > 1 || bResult.calls > 1}));
+  } finally {
+    await Promise.allSettled([a.close(),b.close()]);
+  }
+}
+
 async function overlapAttempt() {
   const name = 'stage8_twotab_overlap_' + Date.now();
   const a = await page(), b = await page();
@@ -100,8 +170,11 @@ async function overlapAttempt() {
 try {
   await baseline('TB01 two-tab same digest propagation','digest-A','digest-A','REPLAY');
   await baseline('TB02 two-tab conflicting digest rejection','digest-A','digest-B','REJECTED');
+  await race('TB04 concurrent same-digest race','digest-A','digest-A',['NEW','REPLAY']);
+  await race('TB05 concurrent conflicting-digest race','digest-A','digest-B',['NEW','REJECTED']);
   await overlapAttempt();
-  console.log('DETERMINISTIC TWO-TAB BASELINE:',pass,'/2 PASS; overlap reported separately');
+  assert.equal(pass,4,'exact deterministic two-tab baseline count');
+  console.log('DETERMINISTIC TWO-TAB BASELINE:',pass,'/4 PASS; TB03 overlap reported separately');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
