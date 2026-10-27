@@ -1,7 +1,13 @@
 # MintTap Web Manager Status
 
 Operating state: **ACTIVE — CONTINUOUS EXPERT MAINTENANCE / APPLICATION + FIVE-TRACK COORDINATION + PWA SPECIALIZATION**  
-Last sync: 2026-10-27
+Last sync: 2026-10-28
+
+
+## 2026-10-28 Applied Stage 8 — executed Dart VM vs dart2js JSON portability checkpoint (298 JA36–JA51)
+- **New real cross-runtime evidence:** [GitHub Actions run 40537232811](https://github.com/yhappcom/web-manager/actions/runs/40537232811), exact public research ref `54a59914564aa2b373dad35935dee74fc9e71725`, Dart 3.12.0 VM and `dart compile js -O2` executed in Node 22.16.0: **17/17 bounded independent assertions PASS**. Plain/escaped duplicate JSON member names both collapse to the last value, but Dart VM `jsonDecode` reviver sees **2** member callbacks whereas compiled Web sees **1**. Thus a reviver-only duplicate detector is **not portable**. Native JSON integer `9007199254740993` survives, compiled JS rounds to `9007199254740992`. This is **synthetic language-runtime evidence, NOT actual LogMate LBK/Flutter Web/Safari/managed-iPad restore PASS**.
+- **Failure-first evidence:** initial format-only CI non-execution; subsequent actual runtime oracle falsified an incorrect VM callback assumption; corrected independent expectations now green. [298 integrated evidence](research/298_pwa_durable_local_state_device_backup_restore_failure_domain_contract.md) records logs, RFC 8259/7493/8785, Dart platform docs, exact LogMate codec, JA36–JA51 and non-promotable scope.
+- **E highest bottleneck; A/C validation suppliers; B/D consumers:** pre-map-collapse duplicate rejection, versioned numeric format compatibility, raw-vs-semantic integrity and resource limits require Engineering-owned W-012→W-013→W-014 exact-product execution. Design Studio W121 Stage 3 and Marketing D8 claims remain HOLD. `String.compareTo` JSON key ordering (UTF-16) is distinct from approved Sync Operation-ID UTF-8 tie-break; neither is interchangeable. **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** No peer-repository writes.
 
 ## Operating model
 GitHub is canonical memory. Sequential curriculum Stages 1–12 are complete; curriculum completion is not production certification. Five specialist tracks remain mandatory; Web Manager coordinates rather than acting as a sixth specialist. PWA remains a strategic cross-track specialization.
