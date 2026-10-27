@@ -37,15 +37,15 @@ async function call(p, method, ...args) {
 }
 // Independent, read-only IndexedDB API inventory. Counts physical object-store entries,
  // not semantic Sembast rows or fsync durability; Chrome-only diagnostic.
-async function rawIndexedDbSnapshot(p) {
-  return p.evaluate(async () => {
+async function rawIndexedDbSnapshot(p, targetName) {
+  return p.evaluate(async (targetName) => {
     if (typeof indexedDB.databases !== 'function') {
       return {supported:false, databases:[]};
     }
     const catalog = await indexedDB.databases();
     const databases = [];
     for (const info of catalog) {
-      if (!info.name) continue;
+      if (info.name !== targetName) continue;
       const db = await new Promise((resolve, reject) => {
         const req = indexedDB.open(info.name);
         req.onsuccess = () => resolve(req.result);
@@ -72,7 +72,7 @@ async function rawIndexedDbSnapshot(p) {
       }
     }
     return {supported:true, databases};
-  });
+  }, targetName);
 }
 
 async function verify(name, expectedDigest, label) {
@@ -84,10 +84,12 @@ async function verify(name, expectedDigest, label) {
     assert.equal(state.revisions,1,label+' revision count');
     assert.equal(state.outbox,1,label+' outbox count');
     assert.equal(state.digest,expectedDigest,label+' persisted digest');
-    const raw = await rawIndexedDbSnapshot(observer);
+    const raw = await rawIndexedDbSnapshot(observer,name);
     assert.equal(raw.supported,true,label+' raw IndexedDB inventory available');
-    assert.ok(raw.databases.some(db => Object.values(db.stores).some(n => n > 0)),
-      label+' at least one physical IndexedDB object-store entry');
+    assert.equal(raw.databases.length,1,label+' exactly one target IndexedDB database');
+    assert.equal(raw.databases[0].name,name,label+' target IndexedDB name');
+    assert.ok(Object.values(raw.databases[0].stores).some(n => n > 0),
+      label+' target IndexedDB has at least one physical object-store entry');
     return {...state, rawIndexedDb:raw};
   } finally {
     await call(observer,'probeClose');
