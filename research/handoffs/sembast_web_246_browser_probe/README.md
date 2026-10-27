@@ -9,3 +9,8 @@
 **Run:** `dart pub get && dart format --output=none --set-exit-if-changed test && dart analyze --fatal-infos && dart test -p chrome -r expanded` from this directory. The workflow pins SDK and direct dependencies, logs the resolved graph and browser version, and checks exactly six completed tests. A generated `pubspec.lock`/transitive hashes are not committed, so this is not an immutable full dependency graph.
 
 **Never promote:** Chrome headless fixture PASS to Safari, iPadOS, Home Screen installation, managed Web Clip, LogMate 37-store restoration, native↔PWA Sync, physical power-loss durability, true multi-tab callback replay, deletion/owner fences, or production release. No private repository checkout, credentials, user data or LBK files.
+
+
+## 2026-10-28 independent-tab adversarial extension — execution OPEN
+
+The separate `scripts/two_tab_probe.mjs` now defines **TB01/TB02** sequential cross-tab propagation/collision, **TB04/TB05** simultaneous independent-tab same/different digest races, and **TB03** conditional controlled overlap. Four baseline/race cases must pass with third-tab Sembast semantic readback. The observer also enumerates raw IndexedDB databases/object-store entry counts using native browser APIs, refusing database creation/upgrades. This is a second API-path inventory, **not** independent physical durability or a raw semantic decoder. TB03 reports INCONCLUSIVE unless its required ordering is observed; callback replay needs `calls > 1`. Source is committed but **no upgraded-workflow run log was retrieved**, so no new PASS is claimed. See [research 521 §13](../../521_stage8_pwa_sembast_cross_tab_replay_wasm_web_opener_admission_20261027.md). Prior 6/6 Chrome result remains scoped to the earlier same-page fixture.
