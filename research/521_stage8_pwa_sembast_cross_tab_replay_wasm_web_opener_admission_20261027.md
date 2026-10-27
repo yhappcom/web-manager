@@ -381,3 +381,44 @@ All cases require an exact target database and third-tab semantic readback; nati
 **TB10 — interruption before local commit.** Start a transaction callback, pause it before writes, close the writer tab, confirm the Playwright evaluation was interrupted, open a new tab in the same persistent profile, and require zero flight/revision/outbox rows. This is a narrow atomicity-negative case: it cannot establish what happens when the browser dies *after* an IndexedDB commit but *before* the caller receives a response. That UNKNOWN-commit boundary requires a separate fault-injection barrier and receipt oracle.
 
 **Evidence discipline:** A PASS is scoped to named Chrome build, test SHA, exact direct package versions, process lifecycle and synthetic stores. Persistent profile storage is still the same device and origin failure domain. Chrome's IndexedDB default relaxed durability, the Sembast abstraction and graceful browser closure cannot certify physical durability or EFB deployment. If either test fails, inspect source/runner before inferring a platform defect. The true next blocker is a product-owned authenticated server receipt/owner fence, plus exact physical managed-device backup/recovery.
+
+
+---
+
+## 17. 2026-10-28 exact hosted execution, first failure and gate decision [VALIDATION]
+
+### Reproducible result
+
+[GitHub Actions run 40592684809](https://github.com/yhappcom/web-manager/actions/runs/40592684809), job `122500671719`, checkout `9b8f9e92fa45d26d6b49f09e8c52e19f968f6636`, completed **SUCCESS**. Environment: Ubuntu 24.04, Dart SDK 3.12.0, Google Chrome 155.0.8059.39, exact direct Sembast Web 2.4.6 (newer 2.4.6+1 listed but not adopted), Node 22.23.3. Full transitive lockfile/browser binary hashes are not committed. [The independent older six-case browser workflow](https://github.com/yhappcom/web-manager/actions/runs/40592684987) also completed SUCCESS on this checkout; its scope must not be conflated with the independent-tab test.
+
+| Executed case | Result | Observed evidence | What it does NOT prove |
+| --- | --- | --- | --- |
+| TB01 / TB02 | **2/2 PASS** | Sequential cross-tab same-ID REPLAY and changed-digest REJECTED; third-tab 1 flight/revision/outbox | Remote authenticated admission |
+| TB04 / TB05 | **2/2 PASS** | Concurrent two-tab same/different digest races; callback replay observed (`calls=2`); one logical operation row | Physical crash safety, Safari behavior |
+| TB03 | **observed PASS** | B committed before held A, A reran callback and rejected | Guaranteed interleaving in every execution |
+| TB06 | **PASS** | A's callback reran twice after B changed fixture owner ACTIVE epoch 1→REVOKED epoch 2; A rejected; third tab saw **0 flight/0 revision/0 outbox**, owner REVOKED | Firebase UID authorization, remotely propagated revocation |
+| TB07 | **PASS** | Stale epoch rejected while current ACTIVE epoch accepted; retained two operation rows | Legitimate authority issuance or identity proof |
+| TB08 | **PASS with negative control** | Old same-ID/digest retry denied after fixture revocation; old row preserved; **unguarded** method then wrote despite REVOKED | A LogMate vulnerability (this was deliberately insecure synthetic fixture code) |
+| TB09 | **PASS** | Persistent Chrome profile closed and relaunched; flight/revision/outbox each survived as 1; retry same original ID returned REPLAY, no duplicate | Forced process crash, OS power loss, backup/restore, remote ACK |
+| TB10 | **PASS** | Writer tab closed while callback paused **before writes**; evaluation rejected as PAGE_CLOSED; new tab found **0/0/0**; native IDB `entry:0, info:1` | Ambiguous after-commit failure or device durability |
+
+**Exact deterministic count:** TB01, TB02, TB04, TB05, TB06, TB07, TB08, TB09, TB10 = **9/9 PASS**. TB03 is reported separately as an **observed conditional PASS**. Raw IDB inventories are bound to the target database; they corroborate API-path visibility but are not physical-media or independent parser proof.
+
+### Failure-first evidence / test-harness correction [CONTRADICTION / VALIDATION]
+
+[First expanded run 40592556730](https://github.com/yhappcom/web-manager/actions/runs/40592556730), checkout `72f804907e49ff67e11e2d2b1d02a188e9616351`, compiled and passed TB01–TB09 but exited with a Node 22 unhandled rejection: `page.evaluate: Target page, context or browser has been closed` while intentionally closing the TB10 writer tab. The failure was **not** evidence that IndexedDB partially committed or that Sembast lost records. It was a runner bug: the promise rejection handler was attached **after** the page close, allowing Node to treat it as unhandled. Commit `9b8f9e92` attaches both resolution and rejection handlers **before** closing the tab, explicitly asserts PAGE_CLOSED, and then checks the reopened stores. Exact rerun passed. Do not erase the failure; it is evidence that an interruption test needs its own failure oracle, not just a thrown exception.
+
+### Operational synthesis and five-track review
+
+- **E / primary:** local transaction callback reexecution is real. The exact public fixture demonstrates how a same-transaction owner guard can reject a stale writer after local policy transition, but its owner store is writable by the test itself. **Current authenticated server admission is still mandatory** for UID, stream, replica, operation identity, digest and owner deletion. Keep rejected/losing local evidence without remotely accepting it. Never put non-idempotent external effects inside a replayable callback.
+- **A / major:** the experiment distinguishes same-profile independent tabs, same-profile browser-process restart and installed PWA/managed Web Clip. All tested Chrome contexts used the same origin; neither service worker background execution nor storage persistence was inferred.
+- **C / major:** record callback attempts, durable logical rows, third-tab Sembast readback, exact target native IndexedDB inventory, process/reopen lifecycle and failure-first CI separately. A green job with a deliberately unguarded negative control demonstrates the guard's scope, not universal authorization.
+- **B / consumer:** locally saved, pending sync, stale-owner denied, unknown receipt, backed up and converged require distinct states. Design Studio's Web/Layout Stage 3 practice evidence remains below runtime product validation.
+- **D / consumer:** Marketing's 2026-10-28 D8 report includes bounded LogMate native/simulator subgates (W-001/W-031) but still marks installed PWA/managed EFB and actual product-claim verification OPEN/HOLD. The synthetic Chrome result does not override that product boundary.
+- **Software Engineering transfer:** test exact LogMate 37-store atomicity and LBK restore, authenticated Firebase Owner/receipt admission, same-ID replay, deletion/tombstone and after-commit ACK loss. Preserve the approved Manual Delta Sync/UTC LWW policy; do not infer an owner policy change from a test-only epoch model.
+
+### Stage and next major boundary
+
+**Stage 8 ACTIVE · synthetic Chrome independent tabs 9/9 + conditional TB03 observed PASS · Production validation OPEN · PWA release HOLD.** No Safari/iPadOS/MDM physical EFB, installed PWA, remote Sync, authenticated owner deletion, postcommit ACK-loss or actual LogMate 37-store validation has been performed by this fixture. The next adjacent work requiring new authority is a server-side admission/receipt oracle (or authorized product integration) and destructive/after-commit fault injection. Further fixture-only local owner flags would be diminishing returns without crossing that boundary.
+
+**Source/change watch:** [Sembast Web 2.4.6](https://pub.dev/packages/sembast_web/versions/2.4.6), [W3C IndexedDB 3.0](https://www.w3.org/TR/IndexedDB/), [Chrome default relaxed durability](https://developer.chrome.com/blog/indexeddb-durability-mode-now-defaults-to-relaxed/), [LogMate approved contract](https://github.com/yhappcom/logmate/blob/main/docs/specs/local-first-manual-delta-sync-contract.md). Browser build drift between runs (155 vs another runner's 156) is environment evidence, not proof of a product compatibility regression.
