@@ -1,0 +1,48 @@
+name: Stage 8 public Sembast Web 2.4.6 independent Chrome tabs
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/handoffs/sembast_web_246_browser_probe/web/**'
+      - 'research/handoffs/sembast_web_246_browser_probe/scripts/two_tab_probe.mjs'
+      - '.github/workflows/stage8_public_sembast_web_246_two_tab.yml'
+permissions:
+  contents: read
+concurrency:
+  group: stage8-sembast-two-tab-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  independent-tabs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: research/handoffs/sembast_web_246_browser_probe
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
+        with:
+          sdk: '3.12.0'
+      - name: Compile exact public Sembast Web Dart to JavaScript
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          dart --version
+          google-chrome --version
+          dart pub get
+          dart pub deps --style=compact
+          dart compile js -O2 web/two_tab_probe.dart -o web/two_tab_probe.js
+      - name: Install pinned browser driver without downloading a browser
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock playwright-core@1.56.1
+      - name: Two independent Chrome tabs plus third-tab readback
+        run: |
+          set -euo pipefail
+          node scripts/two_tab_probe.mjs
+      - name: Evidence boundary
+        if: always()
+        run: echo "Research fixture only; true two-tab Chrome test is NOT LogMate 37-store, Safari, managed EFB, remote Sync, physical durability, owner/deletion admission, or product validation."
