@@ -1,0 +1,14 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {classify,names,makeServer} from './pwa_waiting_worker_promotion_lab.mjs';
+const valid=()=>'<html><pre id="worker-result">'+JSON.stringify({fixture:'waiting-worker-v1',checks:names.map(name=>({name,ok:true}))})+'</pre></html>';
+test('all ten independent observations admit bounded synthetic PASS',()=>assert.equal(classify(valid(),'COMPLETED').verdict,'PASS'));
+test('blocked browser is UNKNOWN, not product failure',()=>assert.equal(classify(valid(),'NAV_ERR_BLOCKED_BY_ADMINISTRATOR').verdict,'UNKNOWN'));
+test('missing browser probe is UNKNOWN',()=>assert.equal(classify('','COMPLETED').verdict,'UNKNOWN'));
+test('wrong fixture is rejected',()=>assert.equal(classify(valid().replace('waiting-worker-v1','other'),'COMPLETED').verdict,'FAIL'));
+test('one false observation fails',()=>assert.equal(classify(valid().replace('"old_routes_new","ok":true','"old_routes_new","ok":false'),'COMPLETED').verdict,'FAIL'));
+test('missing expected observation fails',()=>{const x={fixture:'waiting-worker-v1',checks:names.slice(0,-1).map(name=>({name,ok:true}))};assert.equal(classify('<pre id="worker-result">'+JSON.stringify(x)+'</pre>','COMPLETED').verdict,'FAIL')});
+test('reordered observations fail',()=>{const x={fixture:'waiting-worker-v1',checks:names.slice().reverse().map(name=>({name,ok:true}))};assert.equal(classify('<pre id="worker-result">'+JSON.stringify(x)+'</pre>','COMPLETED').verdict,'FAIL')});
+test('malformed JSON fails',()=>assert.equal(classify('<pre id="worker-result">{bad}</pre>','COMPLETED').verdict,'FAIL'));
+test('harness error is UNKNOWN',()=>{const x={fixture:'waiting-worker-v1',checks:names.map(name=>({name,ok:true})),error:'WAIT_TIMEOUT'};assert.equal(classify('<pre id="worker-result">'+JSON.stringify(x)+'</pre>','COMPLETED').verdict,'UNKNOWN')});
+test('synthetic server changes Worker bytes only when instructed',async()=>{const {server,getVersion}=makeServer();await new Promise(ok=>server.listen(0,'127.0.0.1',ok));try{const base='http://127.0.0.1:'+server.address().port;const a=await(await fetch(base+'/sw.js')).text();assert.equal(getVersion(),'OLD');assert.match(a,/VERSION="OLD"/);await fetch(base+'/admin/update');const b=await(await fetch(base+'/sw.js')).text();assert.equal(getVersion(),'NEW');assert.match(b,/VERSION="NEW"/);assert.notEqual(a,b)}finally{await new Promise(ok=>server.close(ok))}});
