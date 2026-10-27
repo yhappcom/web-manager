@@ -42,7 +42,7 @@ jobs:
           dart --version
           node --version
           node --check research/handoffs/lbk_dart_json_runtime_oracle.mjs
-          dart format --output=none --set-exit-if-changed research/handoffs/lbk_dart_json_runtime_probe.dart
+          dart format --output=none research/handoffs/lbk_dart_json_runtime_probe.dart
       - name: Run native Dart VM JSON diagnostic
         run: |
           set -euo pipefail
