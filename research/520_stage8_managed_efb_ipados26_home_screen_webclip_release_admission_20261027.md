@@ -199,3 +199,116 @@ W3C Secure Contexts treats \`127.0.0.0/8\` as potentially trustworthy, explainin
 - **D consumer/challenger:** observed harness operation is not a public PWA capability claim, install conversion, Store readiness, ad eligibility or user success. Marketing owns promotion policy; Web Manager owns web measurement mechanics.
 
 **Meaningful gate update:** \`Applied Stage 8 ACTIVE · Safari 26.1 Simulator synthetic harness PARTIAL PASS · NORMAL/HTTPS/installed/managed/product data validation OPEN · PWA release HOLD\`. This is stronger evidence than the previous source-only claim but much narrower than an EFB admission. **Adjacent questions checked:** WebDriver profile isolation, loopback secure-context interpretation, worker activation vs control, browser-process restart vs same-session navigation, normal-tab vs automation hash, origin-outage vs network-offline, native Firebase prelaunch and product Work W-012/013/014 sequencing. Further progress requires authorized actual installed/physical/managed/runtime or executable product harness evidence rather than more abstract scenarios. No peer/product repo changes.
+
+
+---
+
+## 11. Applied cross-target evidence: isolated Native acceptance is not installed-PWA or native↔PWA admission (2026-10-27) [SOURCE / VALIDATION / TRANSFER VALIDATION / CONTRADICTION]
+
+### 11.1 Why this continuation is necessary
+
+The prior §10 established real **iPadOS Safari Simulator** runtime evidence for a **synthetic PWA**. Since that checkpoint, LogMate main acquired a materially different class of evidence: **isolated iOS and Android Native acceptance builds, actual Simulator/Emulator repository reopen observations, and fail-closed native-startup checks**. This is worth admitting into the same release-evidence matrix because it resolves a *native execution safety prerequisite* for eventual PWA↔native recovery/synchronization experiments. It **does not** turn the PWA, installed Home Screen, managed Web Clip, backup, or cross-device sync gates green.
+
+Canonical read-only product comparison, checked 2026-10-27: LogMate \`6180fd80c1b084bd4347534c0770fe425f707768\` → latest \`d3bc214fe9b4b7bf84702f898b4e6993a4127e2f\`, **eight commits ahead**. The 50+ changed paths include native build configuration, acceptance-specific iOS/Android entry points, Dart acceptance guard, focused tests, and execution evidence. Unlike the earlier §10 source-only documentation continuation, **this delta changes product test infrastructure**; it must not be described as docs-only. Source/test observations below are pinned to the recorded execution SHAs, **not a claim that all tests were re-executed at latest main**.
+
+Primary product records:
+- [W-031 simulator pre-acceptance and Native follow-up](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/docs/evidence/w031-simulator-preacceptance-2026-10-27.md).
+- [Initial isolated Native results](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/docs/evidence/w031-native-isolation-2026-10-27/results.json) and [subsequent fail-closed results](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/docs/evidence/w031-native-failclosed-2026-10-27/results.json).
+- Exact [Dart guarded entrypoint](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/lib/main_l2c_persistence_harness.dart), [iOS native guard](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/ios/Runner/AppDelegate.swift), [Android isolated launcher](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/android/app/src/acceptance/kotlin/app/minttap/logmate/AcceptanceActivity.kt), [artifact verifier](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/tool/verify_native_acceptance.py), [negative startup tests](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/test/debug/native_acceptance_entry_test.dart).
+
+### 11.2 Foundations: distinguish four independent identities [SOURCE / HISTORY / SYNTHESIS]
+
+An OS-installed Native app's **bundle/application ID and app container** are not a web **origin**, and neither is a Firebase UID. A browser's Service Worker registration/CacheStorage/IndexedDB live within its web storage context; a Native app's local repository is governed by its OS package/container. Same human, similar Flutter UI and matching synthetic record fields do not create a shared physical database, common session, or transport channel. A separate acceptance bundle ID deliberately creates a **different** Native app identity and storage boundary.
+
+Relevant authoritative sources, checked 2026-10-27:
+- [Apple CFBundleIdentifier](https://developer.apple.com/documentation/BundleResources/Information-Property-List/CFBundleIdentifier) — bundle identity, not web origin.
+- [Android manifest and application ID](https://developer.android.com/guide/topics/manifest/manifest-element) — unique app identity, default distinct UID, and a different ID is not an in-place update/data migration.
+- [Flutter integration testing](https://docs.flutter.dev/testing/integration-tests) — integration execution scope and platform-specific test runners; a successful build is not an executed user journey.
+- [WebKit Safari 17.2 web-app cookie copying](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/) — only cookies can be copied at Home Screen installation; other local website storage is not copied and subsequent storage is separate.
+- [WebKit Safari 26.0 Home Screen behavior](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/) — user-facing web-app presentation is not an offline or data-transfer guarantee.
+- [WebKit storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) — quota/eviction remain distinct from successful process relaunch.
+
+**Operational rule:** establish an explicit, authenticated and authorized *transfer protocol* (file export/import or a separately validated network/sync mechanism) before claiming that a Native record can appear in the PWA or vice versa. Matching Dart repository models are a potential compatibility input, not transfer proof.
+
+### 11.3 What the new execution evidence actually proves [VALIDATION]
+
+| Boundary | Recorded positive observation | Scope and remaining unknown |
+| --- | --- | --- |
+| Artifact isolation | Acceptance identity \`app.minttap.logmate.acceptance\` on both platforms; iOS bundle excludes GoogleService-Info.plist/OAuth keys; Android package excludes FirebaseInitProvider/Google Services resources; production artifacts rejected by acceptance checker | **PASS for inspected artifacts**, not proof of all runtime network effects, physical devices or production authentication |
+| Native startup admission | Dart compile-time \`LOGMATE_NATIVE_ACCEPTANCE\` guard, typed MethodChannel handshake requiring exact ID, \`firebaseApps=0\`, \`firebaseOptionsPresent=false\`; iOS native preconditions and selective plugin registration; Android selective JNI plugin registration and Firebase observation | Guarded test route is **source-supported**; no automatic implication for normal Production entrypoint or PWA |
+| Negative guard matrix | Final fail-closed tests: flags omitted **19**, false **19**, true-focused **39**, all completed successfully (total **77 executions**, including repeated helper checks); missing/invalid handshake cases reject before UI/repository access in mocked tests | **PASS for bounded focused tests**; 77 is not 77 independent product journeys, and mocked guard checks are not an OS isolation audit |
+| iOS actual Native persistence | iOS 26.1 iPhone Simulator acceptance app: prior real UI Save-button fixture retained; newer acceptance build reopened same synthetic owner/record and matched stable record/revision/totals/pending data after process termination/relaunch | **PASS for bounded iOS Simulator repository re-entry**; later build did not repeat Save click; not physical device, Firebase, complete UI E2E, OS reboot or 37-store LBK |
+| Android actual Native persistence | Android 16/API36 read-only Emulator: separate acceptance UID from existing production UID, synthetic record written through guarded local debugger harness; force-stop/cold-start reread matched fixture | **PASS for bounded Emulator repository re-entry**, **not UI Save-button PASS**; read-only AVD overlay cannot establish data survival across VM shutdown |
+| Production defaults | Normal iOS release/no-codesign and Android debug builds compiled; default production identities/plugins preserved; checker rejected production binaries for acceptance installation | **BUILD / negative-artifact PASS only**; production binaries were **not installed/launched** |
+| Safari synthetic PWA | Prior §10 iPadOS 26.1 normal Safari tab and separate WebDriver profile have bounded offline/restart/IndexedDB/Worker evidence | **Different platform and different data stores**; no Native↔PWA communication or installed PWA proof |
+
+The final fail-closed result file reports source SHA \`67d8cc4c642cf7de9995d659474a0bfbcea8470e\` for its compile/test steps. The initial Native isolation evidence was recorded on earlier source revisions, including \`af481d6c...\` iOS and \`db9cab11...\` Android. Preserve those execution identities and the product document's correction history; do not retrospectively relabel all observations as one immutable binary.
+
+### 11.4 Security trust-boundary critique and counterexamples [SYNTHESIS / CONTRADICTION]
+
+1. **Compile-time flag ≠ isolation by itself.** A Dart-only test entrypoint was previously insufficient because the native plugin registrant could initialize bundled Firebase settings before Dart ran. The newer acceptance target addresses that through separate OS identity, resource exclusion, native plugin registration and runtime handshake. Its correctness still depends on the *built artifact* matching the inspected configuration.
+2. **No Firebase apps at startup ≠ no network ever.** It is a narrow initialization observation; it does not prove absence of all future SDK/network operations, permissions, telemetry or platform calls. A full network/credential trace would be a different oracle.
+3. **Production artifact rejected by test checker ≠ production app unusable.** This is an intentional safety negative control. Production builds compiled; neither a production Firebase run nor a production app defect follows.
+4. **Native repository persistence ≠ web IndexedDB persistence.** Both may use Sembast-like domain records but have different storage engines, OS identities, failure modes, migrations and backup custody.
+5. **Same fixture after process restart ≠ storage durability across OS eviction/restore.** Physical storage pressure, device reprovisioning, browser website-data deletion, reinstall and migration are distinct.
+6. **Acceptance package cannot stand in for production package data migration.** Android explicitly treats a changed app ID as a different app. iOS bundle identity is also independent. A clean acceptance container is *safer for testing* but does not prove production user-data preservation during upgrade.
+7. **Synthetic unbound owner ≠ authenticated Firebase UID.** Owner lock, logout, token refresh, account deletion, cross-owner transfer and Sync authorization remain unexecuted.
+8. **A normal browser tab ≠ installed Home Screen ≠ managed Web Clip.** Safari WebDriver's temporary profile is yet another context; §10's distinct 21-row/19-row oracles must remain distinct.
+9. **Installed PWA presentation ≠ device-to-device Sync.** No discovered peer, approved transport, credential binding, conflict resolution, background execution or convergence is established by the Native or Safari fixture.
+10. **77 green focused test executions ≠ full CI release certification.** Product record explicitly says full Flutter suite and GitHub CI were not run for the final Native checkpoint; the two production binaries were compiled but not launched.
+
+### 11.5 Transfer to the EFB/PWA release admission matrix [MINTTAP DECISION / DEPENDENCY]
+
+**New bounded promotion:** a dedicated *Native test-environment safety and synthetic local-reopen* subgate can now cite executed iOS/Android Simulator/Emulator evidence. This is a prerequisite for safe future dual-endpoint testing, not the same as PWA validation. The previous Safari synthetic partial PASS is unchanged. **No composite PWA release promotion.**
+
+| Claim requested | Evidence tier now | Required independent next proof |
+| --- | --- | --- |
+| Safe isolated Native synthetic test endpoints | Source + artifact checks + bounded Native runtime **PARTIAL PASS** | Exact approved binary/hash, platform network/Firebase observation, repeated cold starts and negative fixture tests |
+| Safari normal-tab synthetic offline/local state | §10 Simulator **PARTIAL PASS** | Real authenticated NORMAL PWA, cold offline edits, independent data hashes, actual HTTPS |
+| Installed Home Screen / managed Web Clip | **OPEN** | Manual install/launch, storage partition/eviction, management payload, offline/restart and file destination |
+| Native↔PWA record transfer / unattended Sync | **OPEN** | Explicit transport/file path, UID/peer authority, idempotent transfer, conflict/ACK and failure/rejoin observations |
+| Full 37-store LBK save/readback/restore | **OPEN** | W-012 repository restore → W-013 external file UX → W-014 device transfer; independent source-cut and owner checks |
+| Service Worker OLD/NEW update safety | §519 synthetic hosted Chromium **PASS only for fixture** | Exact NORMAL two-generation Worker, cached HTML/JS, 37-store data, rollback/restart/invalid-message negative controls |
+| Production release / EFB readiness | **HOLD** | Source→artifact→served bytes/headers→browser/managed device→authenticated data→recovery and support custody |
+
+**Negative decision:** do not use Native acceptance package data to assert that a production Native user can hand records to Safari, Home Screen PWA, or managed EFB iPad. In fact, deliberate isolation means the acceptance data is in a separate Native container. A future migration/sync test must explicitly create and verify a transfer artifact or channel.
+
+### 11.6 Falsifiable integrated acceptance packet N1–N16 [VALIDATION PLAN / DEPENDENCY]
+
+These are **proposed tests, NOT RUN here**. They extend §10 S1–S5 and 298/319/519/521 without introducing another generic primer.
+
+| ID | Independent oracle / positive + negative control | Owner |
+| --- | --- | --- |
+| N1 | Pin final test source, binary digest, build flavor, native ID, signed entitlement/manifest and launch PID; wrong artifact must be rejected | Engineering / E |
+| N2 | On Native startup observe zero Firebase apps and no packaged production options; inject invalid handshake and verify no repository access | Engineering / C |
+| N3 | Capture redacted network destinations during acceptance; distinguish no observed Firebase traffic from a universal network-isolation claim | E / C |
+| N4 | Repeat iOS process-restart repository readback with exact IDs/revisions/pending operations; corrupt one expected value and require FAIL | C |
+| N5 | Repeat Android force-stop readback, then separately reboot a **disposable** AVD and check persistence; preserve base production package | C |
+| N6 | Assert production build cannot be installed by acceptance runner; production default build remains buildable without acceptance contamination | Engineering / E |
+| N7 | Re-run §10 Safari normal-tab origin outage and process restart on pinned harness; no cross-profile DB/hash comparison | A / C |
+| N8 | On approved physical iPad manually install Home Screen app and test independent post-install origin/cookie/IndexedDB/CacheStorage fixtures | A / C |
+| N9 | On representative managed EFB, document MDM Web Clip policy, permitted file destination and network/TLS; denial must not be reported as browser lack of support | E / A |
+| N10 | Verify Native→PWA transfer via an explicit authorized file or transport, exact record/revision identity, wrong-owner rejection and duplicate replay | Engineering / E |
+| N11 | Verify PWA→Native transfer independently; simulate interrupted transfer, retry, conflict and acknowledgement without duplicate totals | Engineering / C |
+| N12 | Separate online/offline/edit/restart/rejoin/Manual Sync; no background/unattended claim without observed execution opportunity and network path | A / E |
+| N13 | Save actual LBK to external file, read it independently, restore 37 stores into empty same-UID destination and reject stale/wrong-owner assumptions | Engineering / E |
+| N14 | Combine a waiting NEW Worker and OLD-controlled client with actual NORMAL shell/JS and nonempty synthetic ledger; preserve data on rollback | A / C / E |
+| N15 | Accessible UI state must distinguish "local saved", "backup file verified", "sync acknowledged", "offline ready" and "unknown"; human/AT proof separate | B / Design Studio |
+| N16 | Instrument install/transfer/recovery outcomes with privacy-minimized event categories only; exclude UID, flight payload, credentials and private record IDs | D / Marketing |
+
+**Failure-handling rule:** a negative control that does not actually execute is **NOT RUN**, not PASS. Record source/artifact/environment/oracle identity, observed result and contradiction separately. Avoid destructive reset of unique pilot data and avoid production Firebase activation for synthetic testing.
+
+### 11.7 Five-track allocation and specialist boundary [TRANSFER VALIDATION]
+
+- **E — primary Stage 8 bottleneck:** admission of isolated Native test endpoints, credential/trust boundaries, deployment identity, data custody and rollback. Native isolation reduces *test risk*, not production security proof.
+- **A — platform dependency:** browser origin, Safari profile/Home Screen/Web Clip and Worker control mechanics. Native OS package/container is a different authority and should not be described as browser storage.
+- **C — high validation pressure:** independently check test fixture, process-restart and negative control semantics; Native 77/77 focused execution and Safari harness are separate verdict classes.
+- **B — consuming Design Studio W121/CD127:** user-facing local-save/recovery/offline state accuracy and accessible action verification; Design Studio Stage 3 runtime/AT gate still OPEN.
+- **D — consuming Marketing D8–D10:** no public claim that PWA↔Native Sync, managed-EFB readiness, file backup, offline editing or ad serving is complete. Track D owns privacy-minimized web measurement mechanics, not promotion strategy.
+- **Software Engineering Studio:** canonical general mobile build/test and executable test semantics (M006/Q006); Web Manager owns *web/PWA transfer and release-admission requirements*. Engineering's current progress/STATUS remains Stage 1 foundations, and this product result is not an automatic Studio curriculum gate change.
+
+### 11.8 Meaningful checkpoint and adjacent-question check
+
+Completed in one integrated continuation: (1) exact product HEAD delta, (2) Native build identity, (3) iOS plugin/Firebase boundary, (4) Android plugin/Firebase boundary, (5) compile-time vs runtime fail-closed guards, (6) 77-run test semantic accounting, (7) actual iOS reopen, (8) actual Android reopen and ephemeral overlay limit, (9) production default negative-control interpretation, (10) Safari profile/installed separation, (11) native↔PWA transfer/backup dependency, and (12) cross-track acceptance oracles. **Next useful evidence is an actual authorized dual-endpoint transfer/installed PWA/managed-device run, not additional speculative transfer diagrams.**
+
+**Gate:** Applied Stage 8 ACTIVE · isolated Native Simulator/Emulator synthetic local-reopen PARTIAL PASS · Safari Simulator synthetic PWA PARTIAL PASS · installed/NORMAL/managed-EFB/native↔PWA transfer/37-store LBK/production validation OPEN · PWA release HOLD. No product or peer repository changes.
