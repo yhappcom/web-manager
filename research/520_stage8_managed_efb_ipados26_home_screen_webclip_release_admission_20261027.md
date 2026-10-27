@@ -1,6 +1,6 @@
 # 520 — Stage 8 managed-EFB PWA admission: iPadOS 26 Home Screen, managed Web Clips, offline and release custody
 
-Date: **2026-10-27**. State: **SOURCE + SYNTHESIS + product-source transfer / generic platform decision gate; actual NORMAL artifact, HTTPS, browser, managed-device and ledger validation OPEN**. Owner: **E Web Architecture, Security & Operations**, with **A** platform prerequisites, **C** acceptance evidence, **B** task/recovery semantics, **D** claim/measurement controls. This is a **major cross-track domain integration**, not a sixth PWA track or an implementation change.
+Date: **2026-10-27**. State: **SOURCE + SYNTHESIS + product-source transfer / generic platform decision gate; exact NORMAL/HTTPS/installed/managed-device validation OPEN; bounded iPadOS Safari Simulator harness evidence now observed**. Owner: **E Web Architecture, Security & Operations**, with **A** platform prerequisites, **C** acceptance evidence, **B** task/recovery semantics, **D** claim/measurement controls. This is a **major cross-track domain integration**, not a sixth PWA track or an implementation change.
 
 ## 1. Evidence boundary and why this domain matters [SOURCE / HISTORY / OPEN]
 
@@ -131,3 +131,71 @@ Verdicts: **NOT RUN / PASS / FAIL / UNKNOWN / NOT APPLICABLE**, with reason. A g
 **OPEN:** actual managed EFB fleet and OS versions; MDM restrictions and Web Clip payload; Safari/Home Screen installation; exact current NORMAL artifact and HTTPS deployment; 37-store backup/restore; multi-origin and multiple Home Screen copies; offline/online, Sync, auth, storage eviction, update and physical-device/human/AT validation. No production vulnerability, data loss, enterprise installation authorization, advertising viability or unattended Sync asserted.
 
 **Adjacent-question check completed:** (i) Safari 26 presentation vs older Safari, (ii) user-installed vs managed Web Clip, (iii) manifest ID vs origin/storage identity, (iv) secure-context Worker vs app startup, (v) lifecycle/first-control and waiting versions, (vi) storage eviction/cookie-copy, (vii) data export/recovery, (viii) Sync authority, (ix) Hosting/CI artifact chain, (x) UX/claims/measurement, (xi) MDM/Shared iPad restrictions, and (xii) independent executable oracle design. Further abstract scenarios have lower information gain than **real NORMAL archive + actual device/MDM/runtime evidence**. Stop at this substantive domain checkpoint; do not manufacture a micro-test. **Stage 8 applied ACTIVE · Production validation OPEN · PWA release HOLD**. No LogMate/Design Studio/Marketing/Engineering writes.
+
+
+---
+
+## 10. Applied Safari Simulator evidence promotion — W-031, 2026-10-27 [SOURCE / VALIDATION / TRANSFER VALIDATION]
+
+**Why this is a material checkpoint:** The prior 520 admission matrix had no actual iPadOS Safari runtime. Canonical LogMate now contains **real iPadOS 26.1 Simulator Safari tab and Safari WebDriver observations**, but **only for a purpose-built synthetic PWA harness**, not the NORMAL authenticated app, installed Home Screen web app, or managed company iPad. This promotes a **narrow platform/runtime subclaim** from OPEN to bounded PASS; it does not change the release gate.
+
+### 10.1 Exact source, artifact and evidence custody
+
+- Product authority: LogMate \`MASTER.md\`; execution evidence: \`docs/evidence/w031-simulator-preacceptance-2026-10-27.md\`, \`docs/evidence/w031-simulator-2026-10-27/runtime-summary.json\`, \`docs/evidence/w031-safari-followup-2026-10-27/results.json\`, and W-031 card. Read-only main checked 2026-10-27 at \`6180fd80c1b084bd4347534c0770fe425f707768\`. Direct GitHub compare \`7caaee998251602e72159eeebda61f701bdea270...6180fd80c1b084bd4347534c0770fe425f707768\` returned **8 commits, 17 changed paths, all documentation/evidence**, no lib/test/web/tool/lockfile modifications. This preserves code identity for the recorded harness, not a new execution at HEAD.
+- Original build/source SHA: \`7caaee998251602e72159eeebda61f701bdea270\`. Follow-up execution HEAD: \`d346694ea17a57a093ede203a94c70aa98738f7f\`, with no relevant product source changes as recorded. PWA acceptance appBuildId \`2b515d6c9cf282b2a42b186f45c7b5ea\`, \`main.dart.js\` SHA-256 \`46d9015b61e097713349b9c5bc463e33a3188f65471c6b1d56f646d368dbff76\`. This is a **PWA acceptance/harness artifact** and not a verified NORMAL release archive.
+- Device/runtime: iPad Pro 11-inch M5 **Simulator**, iPadOS **26.1 / 23B86**, Safari **26.1**; loopback \`http://127.0.0.1:49331\`. Local Mac host and Safari WebDriver test sessions; not physical iPad, not enterprise enrollment/MDM, not a production HTTPS hostname.
+- Exact observed product scope: \`LOGMATE_PERSISTENCE_ACCEPTANCE=true\` bypasses SessionGate and uses a **synthetic unbound owner**. It writes one synthetic Flight with known revision/outbox/page data. It is **not** verified Firebase UID, full Add/Edit/Custom UI, account deletion, LBK export/restore or Manual Sync acceptance.
+
+### 10.2 Claims that now have bounded runtime evidence
+
+| Claim / environment | Observed oracle | Verdict and exact limit |
+| --- | --- | --- |
+| iPadOS Safari normal tab can run synthetic PWA harness | Safari launched at fresh loopback origin, synthetic Flight \`ACCEPT1\` / revision / pending operation / page shown | **PASS — Safari Simulator harness**, not full product |
+| IndexedDB state survives Safari process restart in that normal tab | Same-origin \`logmate_ledger\` database/version2 and read-only raw 21-row hash before/after \`a06c90de776388addc77ddbbf2e585897f5ef7ec208fe024206063d3f3796470\` | **PASS — this simulator/origin/data class**, not storage pressure, origin migration or device loss |
+| Cached shell/record can relaunch while test origin server unavailable | Task-owned loopback server stopped; curl exit7; Safari terminated/reopened at root without create flag; synthetic record still shown | **PASS — origin-unavailable relaunch only**; not full network isolation, fresh offline edit, remote Auth or A0–A3 |
+| Worker activation in Safari WebDriver context | \`navigator.serviceWorker.ready\` initially returned \`activating\`; explicit statechange observed \`activated\` | **PASS — automation context only** |
+| Current document controlled by worker | After navigation/reload, \`navigator.serviceWorker.controller\` script \`/logmate_service_worker.js\`, state \`activated\` | **PASS — automation context only**; do not infer control in the normal Safari tab |
+| Secure context on HTTP loopback | \`isSecureContext === true\` in WebDriver | **PASS — loopback potentially trustworthy**; **NOT** TLS, certificate chain or approved HTTPS deployment |
+| Synthetic DB survives navigation in WebDriver session | \`entry\` rows 15 before fixture, 19 after; independent \`getAllKeys/getAll\` SHA-256 \`730c2c1363bbec2109a516d7656db4457ebcbd73d5775e31205d31b87761e424\` before/after root re-navigation | **PASS — same automation session/navigation**, not Safari process restart or persistent user data |
+| WebDriver UI interaction / accessible content | native accessibility element click returned HTTP400 \`click intercepted\`; DOM text empty, screenshot blank | **INCONCLUSIVE for UI**; no product rendering/accessibility PASS or established product defect |
+| Home Screen install / installed storage | Share sheet appeared; installation control inaccessible to automation; no installation | **NOT RUN / NOT VERIFIED** |
+| Native iOS/Android app runtime | Builds succeeded, but native artifacts retained production Firebase initialization paths; existing Android app present | **NOT RUN by safety decision**; no native runtime PASS |
+
+### 10.3 New cross-domain diagnostic — WebDriver storage isolation is *expected*, not a PWA partition experiment [SOURCE / CONTRADICTION]
+
+WebKit's primary explanation of iOS Safari WebDriver explicitly states that automation windows have **separate tabs, preferences and persistent storage**, start clean, and their session state is destroyed when the session ends: https://webkit.org/blog/9395/webdriver-is-coming-to-safari-in-ios-13/ (2019-07-08; rechecked 2026-10-27). Apple Safari WebDriver: https://developer.apple.com/documentation/webkit/testing-with-webdriver-in-safari . This directly explains why the normal Safari tab's raw **21-row** store and the WebDriver session's **15→19-row** store must **not** be compared as one database, and why the automation session cannot prove Home Screen PWA storage separation. Different hash methods (raw SQLite bytes vs browser \`getAllKeys/getAll\` JSON) also prohibit direct digest equality comparisons.
+
+**Negative-control rule:** \`Safari normal tab ≠ Safari WebDriver profile ≠ installed Home Screen web app ≠ managed Web Clip\`. Cross-context copying, cookies, origin storage, and independent file recovery each require their own explicit fixture/observations. Do not claim that a blank WebDriver frame is a user-facing blank-screen defect while the normal Safari tab still displays the fixture; investigate render/AX/automation independently.
+
+W3C Secure Contexts treats \`127.0.0.0/8\` as potentially trustworthy, explaining loopback \`isSecureContext=true\` without HTTPS: https://www.w3.org/TR/secure-contexts/ . W3C Service Workers requires secure-context clients but separates registration, activation and current client control: https://www.w3.org/TR/service-workers/ . These standards support interpreting the observations, not a production TLS/Service Worker policy pass. WebKit storage quota/eviction remains independent: https://webkit.org/blog/14403/updates-to-storage-policy/ .
+
+### 10.4 Why installed-PWA/MDM and native safety remain blocked [DEPENDENCY / OPEN]
+
+1. **Installation:** WebDriver is web-content automation, not general-purpose iPad OS UI automation; WebKit documents suppression of system-level actions. Share sheet appearance and an AX/coordinate automation failure do not show lack of platform install support. Need authorized manual or suitable system-level installed-app test, with app identity, launch mode, storage origin and independent readback.
+2. **Managed EFB:** The simulator lacks actual supervision/MDM restrictions, enterprise Web Clip payload, managed network path, Open In file custody, device storage pressure and physical lifecycle. No transfer of Safari Simulator PASS to a company EFB.
+3. **Authentication:** Harness bypasses Firebase SessionGate. Real verified UID/owner locking, sign-out across contexts, session expiry and provider redirect/popup are untested. The normal Safari synthetic fixture is not real user data.
+4. **Offline:** Origin-server outage is weaker than physical network disablement and cannot prove Auth token/remote Sync behavior or an offline edit. Run controlled online→offline→cold-start→edit→restart→rejoin tests with independent record/operation oracle and actual Manual Sync only.
+5. **Native Firebase:** Resolved \`firebase_core 4.15.0\` iOS plugin may auto-configure bundled production options during registration; Android merged manifest has \`FirebaseInitProvider\`. Native artifacts were deliberately not installed/launched. A test entrypoint that does not call Firebase in Dart does not prove the native binary is Firebase-isolated. Product Engineering must separately authorize/verify isolated build resources and package identity.
+6. **Data safety:** No W-012 37-store LBK restore, W-013 actual external file I/O, W-014 device migration, account deletion, multi-tab replay, storage eviction, rollback or native↔PWA reconciliation was executed. Their existing gates remain OPEN.
+
+### 10.5 Integrated next acceptance campaign, prioritized by information gain [MINTTAP DECISION / VALIDATION PLAN]
+
+**Campaign S1 — exact artifact and reproducibility (Engineering owner, E/C challenge).** Preserve source/build/served hashes, WebDriver capability payload, test origin, fixture seed, fresh profile and oracle. Distinguish harness from NORMAL; capture actual response headers and SW/controller. Positive and negative: wrong artifact, missing worker, uncontrolled initial navigation, worker activating, origin unavailable, cache removed, deliberate fixture mismatch. PASS/FAIL/UNKNOWN per case.
+
+**Campaign S2 — genuine installed Home Screen (A/C/E).** On approved unmanaged physical iPad first, install via user-visible OS path, record manifest identity, launch display mode, fresh DB and cookies, independent file/record sentinel, close/relaunch, origin outage, update and uninstall/reinstall. Do not use WebDriver's temporary store as the pre-install source; protect unique data before destructive tests.
+
+**Campaign S3 — actual managed EFB (E/A/C).** Repeat only after the employer/device policy envelope is documented: supervision/MDM, Safari/Web Clip restrictions, network/proxy/TLS, Files managed/unmanaged destination, permitted app actions, lifecycle and support. A managed Web Clip is a separate installation class and must not inherit unmanaged Home Screen verdicts.
+
+**Campaign S4 — authenticated data and recovery (Engineering + E/C/B).** Verified UID, owner lock, synthetic records with independent IDs, offline mutation/restart, explicit Manual Sync/ACK, export-to-external-file and clean 37-store restore, cancellation/blocked file share, wrong owner and partial failure; require no loss or silent cross-owner import. Reconcile LBK source-cut/currentness and Sync \`unbound/unverified\` semantics from 298/319/521; never infer backup from IndexedDB persistence.
+
+**Campaign S5 — truthful user/measurement transfer (B/D).** Design Studio W121/CD127 retains visual/AX/human gates; do not write "Offline Ready", "Installed", "Backed Up" or "Synced" from harness-only observations. Marketing D8–D10 public PWA/ads claims remain HOLD. Measure each distinct installation/runtime context without flight content, UID, token or identifying payload.
+
+### 10.6 Five-track depth/gate assessment and adjacent-question stop check
+
+- **E primary:** generic Stage 8 high maturity; release-admission/MDM/Auth/backup authority remains the bottleneck. **No production promotion.**
+- **A strong source + new bounded simulator runtime:** loopback secure context, worker activation and client control demonstrated in one automation context; installation, OS policy and cross-container behavior remain OPEN.
+- **C high pressure:** genuine Safari Simulator harness observations now exist; independent oracles and normal-tab restart hash are useful, but WebDriver AX/render failure, full UI/AT, physical/managed and data-loss negatives remain OPEN.
+- **B consumer:** actual UI state and accessible action outcome are missing; Design Studio Stage 3 PRACTICE/W121 and CD127 remain the owners of visual/semantic validation.
+- **D consumer/challenger:** observed harness operation is not a public PWA capability claim, install conversion, Store readiness, ad eligibility or user success. Marketing owns promotion policy; Web Manager owns web measurement mechanics.
+
+**Meaningful gate update:** \`Applied Stage 8 ACTIVE · Safari 26.1 Simulator synthetic harness PARTIAL PASS · NORMAL/HTTPS/installed/managed/product data validation OPEN · PWA release HOLD\`. This is stronger evidence than the previous source-only claim but much narrower than an EFB admission. **Adjacent questions checked:** WebDriver profile isolation, loopback secure-context interpretation, worker activation vs control, browser-process restart vs same-session navigation, normal-tab vs automation hash, origin-outage vs network-offline, native Firebase prelaunch and product Work W-012/013/014 sequencing. Further progress requires authorized actual installed/physical/managed/runtime or executable product harness evidence rather than more abstract scenarios. No peer/product repo changes.
