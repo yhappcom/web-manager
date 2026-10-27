@@ -1,0 +1,57 @@
+name: Stage 8 public synthetic oracles
+
+# Research-only: runs public, self-contained Node diagnostics.
+# No private LogMate checkout, fixtures, credentials or production claims.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/handoffs/pwa_sync_identity_order_lab.mjs'
+      - 'research/handoffs/pwa_lww_clock_policy_model.mjs'
+      - 'research/handoffs/lbk_json_interop_ambiguity_lab.mjs'
+      - 'research/handoffs/lbk_restore_hold_collision_lab.mjs'
+      - '.github/workflows/stage8_public_synthetic_oracles.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stage8-public-oracles-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bounded-models:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact triggering commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.16.0'
+      - name: Print evidence boundary
+        run: |
+          echo "RESEARCH ONLY; public synthetic diagnostics; NOT LogMate Dart, Flutter Web, Firebase, Safari or EFB."
+          node --version
+          git rev-parse HEAD
+      - name: Static syntax check
+        run: |
+          node --check research/handoffs/pwa_sync_identity_order_lab.mjs
+          node --check research/handoffs/pwa_lww_clock_policy_model.mjs
+          node --check research/handoffs/lbk_json_interop_ambiguity_lab.mjs
+          node --check research/handoffs/lbk_restore_hold_collision_lab.mjs
+      - name: LWW identity / Unicode / tie-break (18 checks)
+        run: node research/handoffs/pwa_sync_identity_order_lab.mjs
+      - name: Offline UTC clock / tombstone (20 checks)
+        run: node research/handoffs/pwa_lww_clock_policy_model.mjs
+      - name: JSON semantic ambiguity (13 checks)
+        run: node research/handoffs/lbk_json_interop_ambiguity_lab.mjs
+      - name: Repeated restore hold-key model (10 checks)
+        run: node --test research/handoffs/lbk_restore_hold_collision_lab.mjs
+      - name: Boundary reminder
+        if: always()
+        run: echo "Model green != product validation. Production validation OPEN; PWA release HOLD."
