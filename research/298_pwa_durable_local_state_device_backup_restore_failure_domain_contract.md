@@ -311,3 +311,82 @@ A 2026-10-27 direct-source structural check of the pinned adapter and LBK encode
 **OPEN:** current file-export UI/path and OS file-provider behavior; actual two-tab Sembast read-cut; user-owned external file existence, independent custody, snapshot age after edits, source-currentness marker, v1/v2 compatibility after any schema change, loss/reprovision recovery, managed MDM policy, 37-store restore execution and native/server reconciliation. **CHANGE WATCH:** IndexedDB/WebKit/Sembast transaction behavior, File System Access support, iPadOS/MDM Files and share paths, LogMate backup schema and source head, public backup claims.
 
 **Stop/adjacent check:** reconciled read-cut, metadata, digest/author authenticity, file save, file re-open, two-tab race, v1/v2 restore, Sync authority, Safari/installed partition, managed EFB, data loss, UX and privacy/claims. The next adjacent high-value question is **exact product file I/O and two-tab/managed-device runtime evidence**; another speculative static scenario has lower value. **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**. No product or peer repository writes.
+
+
+---
+
+## 2026-10-27 Stage 8 continuation — LBK plaintext custody, share-target authority and managed-iPad data egress
+
+**Gate:** SOURCE / SYNTHESIS / CONTRADICTION / actionable VALIDATION design. **No actual browser export, OS share sheet, iPad MDM, cryptographic implementation, live file or data exposure was tested.** This extends the existing 298 snapshot/freshness study at a **different trust boundary**: an externally portable, valid recovery file can be simultaneously useful for durability and unsafe for confidentiality. Track E owns the web-specific trust and custody contract; Track A supplies API semantics; C owns runtime/independent oracles; B/D consume the result. No product/peer writes.
+
+### 1. History, threat and exact source [SOURCE]
+
+- **Pinned LogMate main:** \`7caaee998251602e72159eeebda61f701bdea270\` (latest reviewed in this integrated 298 continuation); exact blobs \`lib/repository/logbook/sembast_logbook_repository.dart@d7e4efd4f6dc85220a2f67ca8af956e8abf01aeb\`, lines 419–592, and \`lib/repository/logbook/whole_ledger_backup.dart@711f784534bc686a4d8edd6617ac4d1ac362e0a7\`. The exporter returns a **JSON string** containing the complete v2 **37-store** registry, \`ownerUid\`, \`sourceReplicaId\`, registry names/counts and a SHA-256 \`snapshotDigest\`. Store rows are copied as \`key\`/\`value\` objects; \`WholeLedgerBackup.encode()\` canonicalizes map order and calls \`jsonEncode\`. No encryption or keyed authentication step is present in these inspected exporter/codec methods. The source itself calls the checksum integrity-only. **This is a plaintext-container property of the inspected method, not proof that a caller never encrypts the returned text before writing it.** The exact current caller/file I/O route remains OPEN.
+- \`lib/repository/logbook/sync_persistence.dart@fed4f6600f1c0581ddb85c8d1c0730f94f1e0363\` encodes eligible Sync operation maps with \`ownerUid\`, \`recordId\`, \`revisionId\`, \`canonicalPayload\`, \`payloadDigest\` and binding status. Since v2 exports the Sync stores as part of the registry, **populated source fixtures may contain identifiable record/Sync content in the LBK**, subject to actual stored rows. Do not claim all stores are always populated or that an actual user's data has escaped.
+- **Platform references, reviewed 2026-10-27:** MDN Web Share API https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API ; \`navigator.share()\` https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share ; \`canShare()\` https://developer.mozilla.org/en-US/docs/Web/API/Navigator/canShare ; \`showSaveFilePicker()\` https://developer.mozilla.org/en-US/docs/Web/API/Window/showSaveFilePicker . File sharing and picker support vary, require secure contexts/user activation where specified, and can fail, be cancelled or hand data to an OS-selected target. **Share promise resolution is not an independent durable readback or an assurance that the user chose an approved storage location.**
+- **Apple management primary sources:** https://support.apple.com/en-gb/guide/deployment/depaa73a4973/web (Managed Open In / managed data flow restrictions) and https://support.apple.com/en-gb/guide/deployment/depbc7c7808/web (managed Web Clip payload/FullScreen). Managed Open In can restrict managed→unmanaged document flows; **a Web Clip payload being installed by MDM does not, without an actual management-policy/runtime check, prove that its generated/downloaded file is classified and protected like a managed native-app document**. Actual enrollment, management domain, Safari/Web Clip mode, Files provider, share destinations and policies are unknown.
+- **Security guidance:** OWASP MASVS storage https://mas.owasp.org/MASVS/controls/MASVS-STORAGE-1/ and leakage https://mas.owasp.org/MASVS/controls/MASVS-STORAGE-2/ ; backup exposure weakness https://mas.owasp.org/MASWE-0006/ . These are general risk-control references, not proof of a specific LogMate incident or a legal compliance conclusion.
+- **Peer transfer:** Design Studio \`progress/WEB_STATUS.md\` W121 and \`progress/CONTENT_STATUS.md\` CD127 require exact action/state/accessibility runtime before promotion; Marketing Manager D8–D10 retain public PWA/backup/Sync claim HOLD; Software Engineering Studio \`methods/VALIDATION_STANDARD.md\` requires an independent oracle and exact target/environment. Reuse rather than duplicate their disciplines.
+
+### 2. Mechanism and failure-domain separation [SYNTHESIS]
+
+The recovery chain is now two-dimensional, not one “backup successful” Boolean:
+
+1. **Content validity:** parseable 37-store v2 container; declared owner/capability/schema/row counts; digest matches bytes.
+2. **Source authority:** actual owner-unlocked export admission; current source cut; no assertion of other-device/server currentness.
+3. **Confidentiality at rest:** whether the actual external copy is encrypted and whether keys are recoverable *independently of the lost iPad*.
+4. **Destination authorization:** which OS share/save destination receives the file; whether personal/unmanaged destinations are permitted for company EFB data.
+5. **External durability:** whether a complete file was actually persisted, re-opened and independently verified outside the origin/device failure domain.
+6. **Recovery authority:** whether the importer is entitled to admit the old file to the new owner/device; no implicit Sync/server trust from an old cursor or receipt.
+7. **Lifecycle and deletion:** whether stale copies remain in Files, cloud, Downloads, email, shared targets or managed repositories after app-account deletion, and who is responsible for their retention/erasure.
+
+A file can PASS (1) while FAILING (3), (4) or (5). A file can PASS (3) but FAIL (5) because a forgotten key makes it unrecoverable. A file can PASS (1)–(5) but remain stale relative to edits after its source cut (previous 298 BF01/BF12). An external file survives the app origin's storage eviction **only if its custody is actually independent**. The SHA-256 checksum is neither a secret nor a signature; replacing data and recalculating it is not prevented by the codec alone. These distinctions do **not** imply a production exploit.
+
+### 3. Operational alternatives and trade-offs [MINTTAP DIRECTION — NOT PRODUCT APPROVAL]
+
+| Candidate export model | Durability advantage | Confidentiality / operability cost | Release admission |
+| --- | --- | --- | --- |
+| Plaintext LBK to user-selected file | Simple, portable and inspectable; already source-compatible at codec level | Sensitive contents readable to anyone obtaining file; uncontrolled share destinations and retention | Do not describe as encrypted/private. Require explicit sensitivity notice, destination policy, independent file readback and retention controls before claiming safe EFB backup. |
+| Encrypted portable LBK with user-held recovery secret | Limits disclosure after file compromise when cryptography/key handling are sound | Lost secret can destroy recoverability; password-strength, KDF, algorithm agility, versioning and key migration need independent review | Only a design option. Requires Engineering/cryptography review, negative tamper/wrong-key tests, recovery drills and an independently durable key strategy. |
+| Organization-managed encrypted backup destination | Potentially centralized policy, retrieval, retention and incident response | MDM/network/offline availability, account lifecycle, provider and organizational custody become failure domains | Only when the actual airline EFB administrator permits and tests the exact source→destination flow; cannot infer from “MDM installed.” |
+| Native/server-assisted cross-device backup | May offer a second failure domain and reconciliation | Authentication, remote authorization, transport, receipt and Sync conflicts; cockpit connectivity not assumed | Not equivalent to unattended PWA↔native sync; must prove actual approved transport, custody, owner and restore. |
+
+**Security vs recoverability contradiction:** “encrypt every export” without recoverable keys may improve confidentiality while worsening irreplaceable flight-record loss. “Save to any Files destination” may improve portability while increasing uncontrolled copies. “Delete all backup files on account deletion” may conflict with independently owned lawful/operational retention and may be technically impossible for previously exported files. Resolve these as explicit owner/operator policy choices, not unqualified product defaults. The Web Manager does **not** mandate an encryption algorithm, KDF or key storage implementation.
+
+### 4. Concrete misuse/failure cases and nontransitive oracles [CONTRADICTION / VALIDATION — NOT RUN]
+
+| Case | Stimulus / negative control | Independent evidence needed |
+| --- | --- | --- |
+| EC01 | Export nonempty v2 fixture; inspect returned LBK before caller I/O | Confirm plaintext JSON shape, presence/absence of known synthetic flight and Sync sentinel; do not log real records. |
+| EC02 | Mutate synthetic row and recompute unkeyed digest | Container may pass checksum; distinguish structural integrity from independent author authentication; no claim that this bypasses all restore guards. |
+| EC03 | Share/saving UI on Chromium, Safari tab, Home Screen, managed Web Clip | Exact supported API, user gesture, file MIME/name, share targets, OS outcome, actual file existence; no feature assumed across platforms. |
+| EC04 | Cancel share sheet / picker or choose unsupported file target | No “backup verified” or destructive source cleanup; distinguish cancellation, API failure and target unavailability. |
+| EC05 | Share promise resolves but destination file is absent/inaccessible after restart | UI does not infer durable custody from promise resolution; independent file reopen is required. |
+| EC06 | Save to permitted managed destination, then attempt unmanaged/personal target | Actual MDM policy enforcement and data classification measured; do not assume Web Clip == managed native app. |
+| EC07 | Files/cloud destination inaccessible offline or after MDM reprovision | Verified recovery from a separate approved location; not merely a filename or local share receipt. |
+| EC08 | External file copied outside device, then local ledger deleted/evicted | Independently restore 37 stores from external bytes; owner lock, Sync \`unbound/unverified\`, record semantics and no fabricated remote ACK. |
+| EC09 | Wrong owner UID, altered schema, truncated file, unsupported version | Reject before destination mutation; independent clean-staging before/after store diff. |
+| EC10 | Old valid file replayed after newer edits on another device | Mark historical/possibly stale; do not auto-overwrite or auto-publish remote authority. |
+| EC11 | Optional encrypted export prototype with wrong/missing recovery secret | Wrong key/tamper rejects; lost-key recovery objective and support burden evaluated before adoption. |
+| EC12 | Account deletion with prior exported copies in Files/share/cloud | Separate local/remote account deletion from independently exported-file retention; demonstrate only controls actually owned by app/operator. |
+| EC13 | Screen reader/VoiceOver, 200% zoom, interrupted export | Announce truthful stages “snapshot prepared”, “file handoff requested”, “external file verified” without false completion; Design Studio owns copy/interaction evidence. |
+| EC14 | Synthetic analytics/incident trace | Record status code/OS class/artifact digest only where safe; no UID, record payload, file contents, recovery secret, private file path or share-target identity in telemetry. |
+| EC15 | Compare export paths with browser and iPadOS versions | Confirm \`navigator.canShare\`, \`share\`, picker/download fallback and actual behavior separately; update support matrix, do not assume MDN “limited availability” is permanent. |
+| EC16 | EFB managed profile update, removal, device replacement | Show independent backup/key custody and full recovery despite lost Web Clip/local origin; record actual management envelope. |
+
+**Evidence contract:** CLAIM → spec/property → exact LogMate ref + NORMAL artifact digest → synthetic prestate/37-store inventory → OS/browser/MDM/share policy → independent expected oracle → observed saved bytes and destination → reopen/restore → verdict PASS/FAIL/UNKNOWN/NOT RUN → limitations. Preserve both **successful** and **blocked** destination controls. A passing native host LBK codec test, V8 model or generic Safari API support does not prove managed Web Clip file export. A successful download is not proof of encryption, authorization, retention or recoverability.
+
+### 5. Five-track allocation, transfer and next decision [DEPENDENCY / TRANSFER VALIDATION / OPEN / CHANGE WATCH]
+
+- **E — primary bottleneck:** source/destination trust boundary, external-file privacy/custody, recovery-key governance, EFB MDM policy, incident/retention and backup release admission. Existing 298 and 319 remain canonical for durability and deletion; this section adds confidentiality/egress without another primer.
+- **A — major prerequisite:** web file/share/picker capability and user activation; WebKit/Chromium distinctions, origin storage versus external Files. A supports E's decision rather than owning data policy.
+- **C — major execution bottleneck:** EC01–EC16, actual approved NORMAL and representative iPad, accessibility/negative controls and independent restore. **No browser or physical device evidence** yet.
+- **B — focused transfer:** use Design Studio W121/CD127 to prevent misleading “encrypted”, “backed up”, “synced” or “saved” labels; verify actual action semantics and accessible state on exact runtime.
+- **D — focused transfer:** Marketing D8–D10 backup/offline/managed-iPad claims remain HOLD; only privacy-minimal aggregate failure modes, no record or share-target leakage.
+- **Engineering:** owns any implementation, encryption/key design, file I/O harness, test fixtures and release code. Product repos remain read-only.
+
+**OPEN:** actual LogMate LBK UI caller and whether it encrypts the returned string; actual file MIME/download/share path; OS-specific support; real MDM managed/unmanaged classification; EFB data classification/retention policy; independent external backup/key storage; real 37-store file restore; Safari/installed Web Clip/physical managed iPad; consent/telemetry and owner-deletion interaction. **Do not label the whole product's backup “unencrypted” until the caller path is inspected; the inspected B1 codec output is plaintext.**
+
+**CHANGE WATCH:** MDN file/share/picker availability and success semantics, WebKit/iPadOS Home Screen/Web Clip behavior, Apple Managed Open In policy, LogMate export UI/caller, LBK schema, organizational backup and retention requirements.
+
+**Stop/adjacent-value check:** This continuation resolves the **previously under-specified external confidentiality and destination-authorization dimension**, links the actual JSON/Sync fields to Web Share and MDM evidence, evaluates four architecture alternatives and defines falsifiable tests. The next decisive question is the **exact file-export caller and physical managed-iPad destination/readback**; another generic storage or encryption primer would have lower information gain. **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
