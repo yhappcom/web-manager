@@ -1,5 +1,11 @@
 # MintTap Web Manager Status
 
+## 2026-10-28 Applied Stage 8 — exact Sembast Web 2.4.6 Chrome execution bridge (521 §10)
+- **New durable research fixture committed:** [521 §10](research/521_stage8_pwa_sembast_cross_tab_replay_wasm_web_opener_admission_20261027.md) and [browser probe](research/handoffs/sembast_web_246_browser_probe/README.md) now contain an actual Dart browser test project against exact direct versions `sembast_web 2.4.6`, `sembast 3.8.11`, `idb_shim 2.9.9`, with a pinned-Dart 3.12.0 [Chrome CI workflow](.github/workflows/stage8_public_sembast_web_246_browser.yml). Four bounded tests cover multi-store reopen, failed-transaction rollback, stable-ID retry and changed-digest rejection using **synthetic fixture-owned logic**. The workflow does not check out private LogMate or connect to Firebase.
+- **Evidence boundary:** Hosted workflow result and resolved transitive package graph have **not been retrieved**; exact-package Chrome execution verdict **UNKNOWN**, not PASS. Same-tab Chrome success, if later observed, cannot certify Sembast_web cross-tab callback replay, physical durability, actual LogMate 37-store LBK restore, Safari Home Screen, managed EFB or remote Sync. W3C IndexedDB durability hints do not create backup assurance.
+- **Allocation:** E owns release/transaction authority; A owns browser/package mechanics; C owns executed test and independent raw-store oracles; B consumes Design Studio W121 UNKNOWN/recovery UX; D consumes Marketing D8 product-claim HOLD. Software Engineering validation contract consulted; peers and LogMate remain read-only. **Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
 Operating state: **ACTIVE — CONTINUOUS EXPERT MAINTENANCE / APPLICATION + FIVE-TRACK COORDINATION + PWA SPECIALIZATION**  
 Last sync: 2026-10-28
 
