@@ -1842,3 +1842,50 @@ For every case record **NOT RUN / PASS / FAIL / UNKNOWN** at exact source/artifa
 - **D bounded transfer:** discovery/claims/telemetry; Marketing D8–D10 launch/PWA ads HOLD. No general acquisition duplication. Software Engineering Studio M006/Q006/D005/D006 is methodology transfer, not LogMate product proof.
 
 **Adjacent-question completion:** tested waiting→NEW, OLD re-promotion, old-controller new-navigation assignment, explicit rollback contrast, unsupported API and unverified-candidate negatives, and identified source/caller admission and status-work implications. Additional abstract permutations have less immediate value than real exact NORMAL/browser evidence. **Gate unchanged: Applied Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** **CHANGE WATCH:** W3C Service Workers draft and browser message/lifecycle behavior; generated Worker/bootstrap and release identity changes; Safari/WebKit/iPadOS installed/MDM policy; actual 37-store/LBK durability. No LogMate/Design Studio/Marketing/Engineering writes.
+
+
+---
+
+## 35. 2026-10-27 — Waiting-worker release-pointer browser admission: executable research fixture, negative oracles and policy-blocked local runtime [SOURCE / SYNTHESIS / VALIDATION / CONTRADICTION / OPEN]
+
+### 35.1 History, standard and exact new evidence
+
+§34 executed the **actual generated LogMate message/fetch handler in a disposable V8 model** and exposed a conditional OLD-active/NEW-waiting release-pointer transition. That model did **not** establish actual browser delivery to a waiting Worker, or an OLD-controlled navigation observing a changed shared CacheStorage pointer. The W3C Service Workers specification distinguishes waiting, active and controlling workers, and targeted ServiceWorker.postMessage() can address a particular Worker instance. MDN's waiting and messaging references support the platform contract, not a LogMate exploit or Safari/MDM proof.
+
+Primary sources rechecked **2026-10-27**: [W3C Service Workers](https://w3c.github.io/ServiceWorker/), [MDN ServiceWorker.postMessage](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker/postMessage), [MDN ServiceWorkerRegistration.waiting](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/waiting), [MDN FetchEvent.resultingClientId](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent/resultingClientId).
+
+New **Web Manager-owned** reproducible evidence, committed without editing LogMate or specialist peers:
+- [Synthetic two-generation Worker and Chrome CDP experiment](handoffs/pwa_waiting_worker_promotion_lab.mjs), exact blob **bcd7c318bd42b3848a8d07c667e543658a75960f**.
+- [Fail-closed Node oracle, negative cases and generated-JS syntax checks](handoffs/test_pwa_waiting_worker_promotion_lab.mjs), exact blob **03ddb0ab2f5fa6eba422054f1f1563a42dafc022**.
+- [Read-only hosted Chromium workflow](https://github.com/yhappcom/web-manager/blob/main/.github/workflows/pwa_waiting_worker_promotion_research.yml), exact blob **1d4c315d01200f0027b764c7ab0add252b8f4d6a**. It pins Node 22.16.0, checks out the exact triggering revision, selects installed Chrome/Chromium and uses only a disposable localhost origin. It does not use production credentials, flight records, remote LogMate URLs or deployments.
+
+This is a **simplified synthetic Worker**, not the generated LogMate Worker, a verified product shell catalogue, a NORMAL archive or a live deployment. It reuses the existing Web Manager CDP browser runner. A local server changes served Worker bytes from OLD to NEW; OLD controls a page, NEW waits without skipWaiting, and both access a shared CacheStorage pointer. The page sends STATUS/PROMOTE to the explicit waiting or active Worker; navigation iframes independently reveal the responding Worker generation and selected pointer.
+
+### 35.2 Ten independent causal observations [VALIDATION DESIGN]
+
+| Order | Required observation | Distinguishing question |
+| --- | --- | --- |
+| 1–2 | OLD controls the page; current=OLD | Controller and pointer baseline |
+| 3–4 | NEW is installed/waiting while OLD active; NEW receives STATUS | Waiting-worker message delivery without activation |
+| 5 | OLD serves OLD pointer | Positive navigation baseline |
+| 6–7 | Waiting NEW receives PROMOTE and changes current=NEW while still waiting | Shared application state versus browser lifecycle |
+| 8 | OLD responds to a new navigation with OLD/NEW | OLD controller can select NEW pointer |
+| 9–10 | OLD receives PROMOTE, changes pointer back to OLD, then serves OLD/OLD | Reverse selection distinct from explicit rollback |
+
+The independent oracle rejects missing/reordered observations, wrong fixture, malformed JSON and nonboolean outcomes. An observed false invariant is FAIL; missing browser completion, blocked navigation and harness timeout are UNKNOWN, not product FAIL. A successful message reply alone is never release approval. Future real-browser evidence must preserve exact Chrome version, Worker identities, active/waiting states, selected pointer and actual served response.
+
+**Executed local evidence, 2026-10-27:** the exact Git-blob-identical source and test file passed **11/11 Node unit/negative/served-JavaScript syntax tests**. This validates only the research fixture and admission logic. A local Chromium **144.0.7559.96** attempt to navigate a disposable localhost origin was blocked by managed browser policy with **ERR_BLOCKED_BY_ADMINISTRATOR** before page load; **no real browser lifecycle assertion executed**. Do not bypass that policy or reinterpret the block as Service Worker incompatibility. The hosted GitHub Actions workflow is committed and configured for push, but **its actual run/result was not independently retrieved at this checkpoint**; hosted Chromium remains **NOT VERIFIED**, not PASS. Even a later hosted ten-observation PASS would be synthetic Chromium evidence only.
+
+### 35.3 Security interpretation and alternatives [SYNTHESIS / CONTRADICTION / MINTTAP DECISION — PROPOSED]
+
+A same-origin page's ability to message its registration is ordinary platform behavior. Same-origin script execution can often access the same origin's CacheStorage independently. This research does **not** demonstrate a cross-origin exploit, XSS, credential compromise or browser privilege escalation. It tests **application-defined release authority and version correctness**: a verified waiting candidate must not gain active release-routing authority merely by mutating a shared pointer, and a response from an OLD Worker must not be mistaken for authorized rollback.
+
+Candidate Engineering design requirements: separate candidate verification, waiting/active/controller adoption, release-pointer commit, client-build pinning, data/schema compatibility and rollback authorization; record Worker script digests even when appBuildId remains unchanged (§33); preserve unique offline ledger/LBK before any destructive recovery. Checking event.origin or adding a JavaScript-readable bearer token is not independent release authorization. Concurrent CacheStorage updates (§31), rejected install partial writes (§32), old/new clients and storage quota remain separate negative controls.
+
+### 35.4 Five-track transfer, next gate and stop check [DEPENDENCY / TRANSFER VALIDATION / CHANGE WATCH]
+
+**E** remains the primary release/security/rollback/data-custody owner. **A** supplies Worker lifecycle/message/CacheStorage mechanics; **C** owns real-browser observation, false-green controls and 37-store independent readback. **B** consumes Design Studio W121/CD127 for truthful downloaded/verified/waiting/activated/safe-to-restart states. **D** consumes Marketing D8–D10 and must not promote offline/installed/Sync claims from a synthetic result. Software Engineering's validation standard controls exact claim, target, oracle, observation and evidence limit. Product Engineering owns code changes and real NORMAL/HTTPS/Chromium/Safari/physical-managed EFB validation; all peer/product repositories remained read-only.
+
+Next decisive evidence: (1) retrieve and adjudicate the hosted research workflow result; (2) if synthetic Chromium passes, run the **exact generated LogMate OLD/NEW Worker** with retained NORMAL bytes and real catalogue; (3) independently record controller/waiting state, pointer, served JS/HTML, old-client continuity and 37-store/LBK safety; (4) transfer only then to Safari and approved physical/managed iPad. The local browser-policy block is an execution-environment limitation, not a reason to relax product admission.
+
+**Stop check:** This work advances §34's model to a reproducible real-browser experiment with ten causal observations and eleven locally executed unit/negative/syntax tests. Further abstract variations are lower value than hosted execution and product-owned NORMAL/device evidence. **Applied Stage 8 ACTIVE · Product validation OPEN · PWA release HOLD.**
