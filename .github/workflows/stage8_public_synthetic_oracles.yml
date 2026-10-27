@@ -45,13 +45,36 @@ jobs:
           node --check research/handoffs/lbk_json_interop_ambiguity_lab.mjs
           node --check research/handoffs/lbk_restore_hold_collision_lab.mjs
       - name: LWW identity / Unicode / tie-break (18 checks)
-        run: node research/handoffs/pwa_sync_identity_order_lab.mjs
+        run: |
+          node research/handoffs/pwa_sync_identity_order_lab.mjs | tee /tmp/stage8-identity.log
+          grep -Fq '18/18 PASS' /tmp/stage8-identity.log
       - name: Offline UTC clock / tombstone (20 checks)
-        run: node research/handoffs/pwa_lww_clock_policy_model.mjs
+        run: |
+          node research/handoffs/pwa_lww_clock_policy_model.mjs | tee /tmp/stage8-clock.log
+          grep -Fq '"tests": 20' /tmp/stage8-clock.log
+          grep -Fq '"passed": 20' /tmp/stage8-clock.log
       - name: JSON semantic ambiguity (13 checks)
-        run: node research/handoffs/lbk_json_interop_ambiguity_lab.mjs
+        run: |
+          node research/handoffs/lbk_json_interop_ambiguity_lab.mjs | tee /tmp/stage8-json.log
+          grep -Fq 'SYNTHETIC_NODE_JSON_DIAGNOSTIC 13/13 PASS' /tmp/stage8-json.log
       - name: Repeated restore hold-key model (10 checks)
-        run: node --test research/handoffs/lbk_restore_hold_collision_lab.mjs
+        run: |
+          node --test research/handoffs/lbk_restore_hold_collision_lab.mjs | tee /tmp/stage8-restore.log
+          grep -Eq '^# tests 10
+      - name: Boundary reminder
+        if: always()
+        run: echo "Model green != product validation. Production validation OPEN; PWA release HOLD."
+ /tmp/stage8-restore.log
+          grep -Eq '^# pass 10
+      - name: Boundary reminder
+        if: always()
+        run: echo "Model green != product validation. Production validation OPEN; PWA release HOLD."
+ /tmp/stage8-restore.log
+          grep -Eq '^# fail 0
+      - name: Boundary reminder
+        if: always()
+        run: echo "Model green != product validation. Production validation OPEN; PWA release HOLD."
+ /tmp/stage8-restore.log
       - name: Boundary reminder
         if: always()
         run: echo "Model green != product validation. Production validation OPEN; PWA release HOLD."
