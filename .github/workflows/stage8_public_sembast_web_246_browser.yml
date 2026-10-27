@@ -1,0 +1,56 @@
+name: Stage 8 public exact-version Sembast Web Chrome diagnostic
+
+# Public dependency-only browser fixture; never checks out private LogMate.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/handoffs/sembast_web_246_browser_probe/**'
+      - '.github/workflows/stage8_public_sembast_web_246_browser.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stage8-sembast-web-246-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  chrome-sembast:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: research/handoffs/sembast_web_246_browser_probe
+    steps:
+      - name: Checkout exact public research ref
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Setup pinned Dart SDK
+        uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260 # v1.7.2
+        with:
+          sdk: '3.12.0'
+      - name: Environment and package graph
+        run: |
+          set -euo pipefail
+          echo "PUBLIC RESEARCH FIXTURE; NOT LOGMATE PRODUCT"
+          git rev-parse HEAD
+          dart --version
+          command -v google-chrome || command -v chromium || true
+          dart pub get
+          dart pub deps --style=compact
+      - name: Analyze exact fixture
+        run: |
+          set -euo pipefail
+          dart format --output=none test
+          dart analyze --fatal-infos
+      - name: Execute browser assertions in headless Chrome
+        run: |
+          set -euo pipefail
+          dart test -p chrome -r json > /tmp/stage8-sembast-browser-events.jsonl
+          node -e "const fs=require('fs'); const a=fs.readFileSync('/tmp/stage8-sembast-browser-events.jsonl','utf8').trim().split('\\n').map(s=>JSON.parse(s)); const d=a.filter(x=>x.type==='testDone'&&!x.hidden); console.log('SB01-SB04 completed:',d.length,'results:',d.map(x=>x.result).join(',')); if(d.length!==4||d.some(x=>x.result!=='success')) process.exit(1);"
+      - name: Evidence boundary
+        if: always()
+        run: echo "Chrome exact-package synthetic only. LogMate 37-store, multi-tab replay, Safari, installed/managed iPad, physical durability, remote Sync and production remain OPEN."
