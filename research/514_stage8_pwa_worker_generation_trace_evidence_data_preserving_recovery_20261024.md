@@ -404,3 +404,57 @@ Use the exact product **NORMAL** artifact, immutable source/build/manifest/serve
 - **Software Engineering owns** any LogMate implementation change, 37-store Apply+Cursor, exact NORMAL build and device acceptance. [Engineering M006](https://github.com/yhappcom/software-engineering-studio/blob/main/progress/MOBILE_STATUS.md) has bounded generic Safari lifecycle evidence, not this product repair path. No peer repository writes.
 
 **Adjacent-value check:** The next high-information-gain step is not another invented Worker primer: it is Engineering-authorized **RL02–RL08 on actual NORMAL Worker bytes**, followed by RL09–RL14 on physical Safari/managed EFB and 37-store backup. A private product source cannot be silently embedded into a public research CI fixture. Stop at this explicit evidence/authorization boundary. **Stage 8 ACTIVE · new source-level repair-liveness diagnostic · product execution OPEN · PWA release HOLD.**
+
+
+## 17. 2026-10-28 — Non-destructive shell repair: failure-first executable experiment and release policy [SOURCE / SYNTHESIS / VALIDATION OPEN]
+
+### 17.1 New question and exact evidence boundary
+
+§16 identified a **source-derived liveness gap**: an already-installed, missing/corrupt shell resource is refused by the LogMate generated Worker, but the message-driven `precacheCandidate` repairs only fonts/notices. The next useful question is not whether returning 503 is secure; it is whether a **separate online, exact-hash shell repair protocol** can recover availability *without* replacing old-client bytes with a newer release, deleting user storage, or declaring false offline readiness.
+
+Read-only recheck on 2026-10-28: LogMate latest `main@1c4fb1baea98a6195679a64c7088ee1cced5caa0`, `tool/pwa_precache.dart` blob `90a67954af618a4e18199fa92555491c56167c17` (unchanged from §16). This is not an approved LogMate patch. The new **public research-only synthetic** [Chrome fixture](handoffs/pwa_shell_repair_liveness_browser_probe.py) and [pinned GitHub Actions workflow](../.github/workflows/stage8_pwa_shell_repair_liveness.yml) contain *invented* HTML, JS and font bytes, synthetic IDB sentinel, and a miniature Worker with an intentionally font-only message plus a candidate hash-verified full-repair message. No private product code, Stage-C fonts, flight data, Owner/Auth, 37-store database or production secrets are copied.
+
+### 17.2 Standards and design distinction [SOURCE / CONTRADICTION]
+
+- [MDN `ServiceWorkerRegistration.update()`](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update), consulted 2026-10-28: an update **attempts** to refetch the Worker script; if bytes are unchanged, there is no newly installed Worker. Therefore `registration.update()` is not an active-shell-cache repair guarantee.
+- [Service Worker standard](https://w3c.github.io/ServiceWorker/), consulted 2026-10-28: lifecycle/install/update and fetch interception are distinct; the currently controlling Worker may keep serving an older release while a new Worker waits.
+- [MDN `fetch` event](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/fetch_event), consulted 2026-10-28: a Worker can intercept client requests and respond with verified cached bytes or explicit failure. An unverified network fallback for a same-URL old-build asset would defeat the per-client build boundary.
+- [MDN storage quota/eviction](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria), consulted 2026-10-28: Cache API and IndexedDB are both subject to origin storage policy; `navigator.storage.persist()` is browser-dependent and is not a portable user backup. Browser quota/eviction and an individual missing cache entry are distinct failure domains.
+- [MDN Worker-global lifecycle](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope), consulted 2026-10-28: a Worker can be terminated/restarted; a global Promise or transient repair status is not a durable recovery transaction.
+
+**Architectural inference:** an old-client repair must use that client's *pinned old manifest and expected digest*, never whatever file is currently served at the same URL without verifying it. If an older immutable asset is no longer available at the host, an online repair must explicitly fail rather than adopt newer bytes. A separate user-consented, schema-compatible navigation to a newer release is a different operation. The cached shell's integrity and the Sembast ledger's durability must be evaluated separately.
+
+### 17.3 Failure-first research fixture [VALIDATION — EXECUTION PENDING]
+
+The disposable fixture has ten named checks, with independent response-status, origin-request-count, message result and IDB sentinel assertions:
+
+| Case | Adversarial condition and expected bounded result |
+| --- | --- |
+| RL-S01 | Initial verified synthetic shell returns 200 |
+| RL-S02 | Delete one active shell JS cache entry → fail-closed 503 |
+| RL-S03 | Font-only repair message makes no shell network request; JS remains 503 |
+| RL-S04 | Online **full** repair fetches expected bytes, validates SHA-256, restores 200 |
+| RL-S05 | Replace cached JS with wrong bytes → 503 |
+| RL-S06 | Origin now serves modified JS at the same URL → digest rejection and 503, not a silent upgrade |
+| RL-S07 | Restore exact origin bytes → verified repair and 200 |
+| RL-S08 | Remove JS, force browser offline → repair reports failure; 503 persists |
+| RL-S09 | Synthetic IndexedDB sentinel remains unchanged across all repair attempts |
+| RL-S10 | Reconnect and restore exact bytes → 200 |
+
+**No product equivalence:** the synthetic fixture deliberately omits LogMate's `clientBuilds`, old/new Worker generation, 724 fonts, manifest/Bootstrap, 37 Sembast stores, Auth, physical EFB, WebKit, MDM and native sync. RL-S09 proves only one synthetic IDB record was not deliberately cleared, not data-loss safety or power-loss durability.
+
+**Execution record:** local container had Chromium 144.0.7559.96 and Playwright available, but a loopback navigation was blocked with `net::ERR_BLOCKED_BY_ADMINISTRATOR` *before any test case ran*. This is **NON-EXECUTION**, not a failed browser oracle or a LogMate defect. GitHub-hosted workflow [run 40654354761](https://github.com/yhappcom/web-manager/actions/runs/40654354761), exact initial checkout `9c5a9e0fb0eede1fe06c2b66f9d6374ed9c52ebc`, was **IN PROGRESS at first inspection**. Do not claim RL-S01–S10 PASS until exact logs/artifact are reviewed; if it fails, preserve the first failure and correct only the fixture, not the expected verdict.
+
+### 17.4 Candidate safe-repair contract [MINTTAP DIRECTION CANDIDATE / DEPENDENCY]
+
+A potential Engineering-owned implementation must separate **repair eligibility** (authenticated-to-release-context, client pinned to verified build, known manifest), **download** (online origin request with no-store, exact size/hash, bounded retries), **publication** (stage then verify cache entry before replacing missing/corrupt old-build bytes), **postcondition** (independently fetch and hash the actual bytes served to the mapped client), and **data custody** (never clear IDB/Sembast/outbox or misreport backup/Sync). Repair must fail closed if manifest identity is missing, version was retired, network is unavailable, digest differs, quota fails or the active client cannot be safely mapped.
+
+This is a **candidate protocol**, not a patch recommendation to apply blindly: cross-generation catalogue writes can still race (§14); CacheStorage and IDB have no joint transaction (§15); release approval, schema compatibility and actual backup are independent. `REPAIR_CACHE` currently has a narrower contract; changing its behavior would require an explicit API/UI version and backward-compatibility audit. A safe fallback may be to preserve the current ledger, show an accessible recoverable error and offer a controlled reload *only when a compatible verified build is available*.
+
+### 17.5 Five-track ownership, operational judgement and next gate [TRANSFER VALIDATION / OPEN / CHANGE WATCH]
+
+**E (primary):** recovery authority, immutable release retention, cache publication, rollback safety, storage/backup and incident runbook. **A (dependency):** Worker fetch/update/lifecycle, origin/partition and Safari vs Chromium transfer. **C (independent oracle):** execute/diagnose the hosted synthetic browser test, then Engineering-owned RL02–RL10 on exact NORMAL bytes with network/hash/controller/IDB negative controls; accessible recovery and physical-device tests remain separate. **B (consumer):** Design Studio W121 requires truthful 503, reload, offline and backup language; do not tell a user that a font-only repair restores the whole app. **D (consumer):** Marketing D8 offline/EFB/automatic-sync claims stay HOLD; measure anonymized failure class, not flight records or client identifiers.
+
+**Cross-specialist:** Engineering M006's bounded Safari Worker experiments do not establish this product repair path; LogMate W-012 Native backup restore is a separate subgate and not PWA/37-store external-device acceptance. No changes to LogMate, Design Studio, Marketing or Engineering repositories.
+
+**Next meaningful evidence:** exact hosted RL-S01–S10 verdict and first-failure diagnosis; then **actual NORMAL Worker** missing/corrupt-shell experiment with source/served-byte hashes and preserved real schema sentinel, followed by two-generation stress, populated 37-store LBK, Safari Home Screen vs MDM Web Clip and physical managed EFB. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** An additional generic PWA primer is lower-value than this execution boundary.
