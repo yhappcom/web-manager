@@ -121,7 +121,7 @@ async function expectStatus(promise, status) {
   await assert.rejects(promise, e => e.status === status);
 }
 
-test('Stage 8 authenticated emulator admission — FE01–FE13', { timeout: 180000 }, async t => {
+test('Stage 8 authenticated emulator admission — FE01–FE16', { timeout: 180000 }, async t => {
   const a = await signUp('owner-a@stage8.example');
   const b = await signUp('owner-b@stage8.example');
   await t.test('FE01 emulator token verified to its actual UID', async () => {
