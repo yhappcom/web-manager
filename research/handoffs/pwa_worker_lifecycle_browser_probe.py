@@ -195,11 +195,18 @@ def run():
                 check('SW10_PROCESS_REOPEN_OFFLINE_IDB',
                     state(d)=={'build':'v2','source':'worker-cache'} and
                     read_db(d)=={'id':'synthetic-op-01','pending':True})
-                ctx.set_offline(False);VERSION['value']='v3'
+                ctx.set_offline(False)
+                d.reload(wait_until='load',timeout=20000)
+                d.wait_for_function('navigator.serviceWorker.controller!==null',timeout=20000)
+                check('SW10B_CONTROLLED_OLD_CLIENT_BEFORE_UPDATE',
+                    state(d)=={'build':'v2','source':'worker-cache'} and
+                    asset(d)['body']['version']=='v2')
+                VERSION['value']='v3'
                 d.evaluate("async()=>await (await navigator.serviceWorker.getRegistration()).update()")
                 waiting(d)
                 d.evaluate("""async()=>{
                   const r=await navigator.serviceWorker.getRegistration();
+                  if(!r?.waiting)throw new Error('waiting worker vanished before skipWaiting');
                   r.waiting.postMessage('SKIP_WAITING');
                 }""")
                 d.wait_for_function("""async()=>{
