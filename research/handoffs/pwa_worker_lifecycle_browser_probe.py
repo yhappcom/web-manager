@@ -34,7 +34,10 @@ self.addEventListener('activate',e=>e.waitUntil((async()=>{
  await Promise.all(keys.filter(k=>k.startsWith('stage8-shell-')&&k!==C).map(k=>caches.delete(k)));
  await self.clients.claim();
 })()));
-self.addEventListener('message',e=>{if(e.data==='SKIP_WAITING')self.skipWaiting();});
+self.addEventListener('message',e=>{
+ if(e.data==='SKIP_WAITING')self.skipWaiting();
+ if(e.data==='WHO'&&e.ports?.[0])e.ports[0].postMessage({version:V});
+});
 self.addEventListener('fetch',e=>{
  const path=new URL(e.request.url).pathname;
  if(e.request.mode==='navigate'&&path==='/')
@@ -106,6 +109,17 @@ def read_db(p):
  });
  db.close();return value;
 }""")
+
+def controller_version(p):
+    return p.evaluate("""async()=>{
+      if(!navigator.serviceWorker.controller)return null;
+      return await new Promise((resolve,reject)=>{
+        const ch=new MessageChannel();
+        ch.port1.onmessage=e=>resolve(e.data.version);
+        navigator.serviceWorker.controller.postMessage('WHO',[ch.port2]);
+        setTimeout(()=>reject(new Error('controller WHO timeout')),3000);
+      });
+    }""")
 
 def waiting(p):
     p.wait_for_function("""async()=>{
@@ -203,13 +217,17 @@ def run():
                 d.wait_for_function('navigator.serviceWorker.controller!==null',timeout=20000)
                 check('SW10B_CONTROLLED_OLD_CLIENT_BEFORE_UPDATE',
                     state(d)=={'build':'v2','source':'worker-cache'} and
-                    asset(d)['body']['version']=='v2')
+                    asset(d)['body']['version']=='v2' and controller_version(d)=='v2')
+                e=ctx.new_page();e.goto(origin+'/',wait_until='load',timeout=20000)
+                e.wait_for_function('navigator.serviceWorker.controller!==null',timeout=20000)
+                check('SW10C_SECOND_CONTROLLED_V2_CLIENT',
+                    state(e)['build']=='v2' and controller_version(e)=='v2')
                 VERSION['value']='v3'
                 d.evaluate("async()=>await (await navigator.serviceWorker.getRegistration()).update()")
                 waiting(d)
                 d.evaluate("""async()=>{
                   const r=await navigator.serviceWorker.getRegistration();
-                  if(!r?.waiting)throw new Error('waiting worker vanished before skipWaiting');
+                  if(!r?.waiting)throw new Error('waiting vanished; active='+r?.active?.state);
                   r.waiting.postMessage('SKIP_WAITING');
                 }""")
                 d.wait_for_function("""async()=>{
@@ -218,7 +236,9 @@ def run():
                   const x=await fetch('/asset.json');return (await x.json()).version==='v3';
                 }""",timeout=20000)
                 check('SW11_FORCED_UPDATE_MIXES_DOCUMENT_AND_ASSET',
-                    state(d)['build']=='v2' and asset(d)['body']['version']=='v3')
+                    state(d)['build']=='v2' and asset(d)['body']['version']=='v3' and
+                    controller_version(d)=='v3' and state(e)['build']=='v2')
+                e.close()
                 check('SW12_FORCED_UPDATE_IDB_SURVIVES',
                     read_db(d)=={'id':'synthetic-op-01','pending':True})
                 d.reload(wait_until='load',timeout=20000)
