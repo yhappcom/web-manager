@@ -1,0 +1,36 @@
+name: Stage 8 PWA Release Recovery State Model (Synthetic)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/handoffs/pwa_release_recovery_state_model.mjs'
+      - '.github/workflows/stage8_pwa_release_recovery_state_model.yml'
+permissions:
+  contents: read
+jobs:
+  model:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Syntax and exact fixture execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --version
+          node --check research/handoffs/pwa_release_recovery_state_model.mjs
+          node research/handoffs/pwa_release_recovery_state_model.mjs | tee /tmp/recovery-model-evidence.log
+          node -e 'const fs=require("fs");const s=fs.readFileSync("/tmp/recovery-model-evidence.log","utf8").trim().split("\n").at(-1);const v=JSON.parse(s);if(v.passed!==16||v.total!==16||v.browser!==false||v.product!==false)process.exit(1);'
+      - name: Preserve exact model output
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pwa-release-recovery-model-evidence
+          path: /tmp/recovery-model-evidence.log
+          if-no-files-found: ignore
