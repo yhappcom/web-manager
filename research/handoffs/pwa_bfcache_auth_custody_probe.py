@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Research-only bfcache/privacy probe. Synthetic state and content; no LogMate code/data."""
+"""Research-only BFCache probe; synthetic data only. Opts out of Playwright 1.57 BFCache-disabling default. Unsupported driver lifecycle: admission remains explicit."""
 import json
 import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -77,7 +77,7 @@ def run_case(browser, base, name, guarded, after_auth, unreachable, expected):
         page.wait_for_function("document.querySelector('#secret').textContent === 'SYNTHETIC PRIVATE LEDGER'")
         page.goto(base + "/neutral")
         state.update(authenticated=after_auth, unreachable=unreachable)
-        page.go_back(wait_until="load")
+        page.go_back(wait_until="commit")
         page.wait_for_function("window.trace && trace.some(e => e[0] === 'pageshow')")
         # The page may have been restored or reloaded. A reloaded page is not
         # evidence of the bfcache hazard or its mitigation.
@@ -101,7 +101,9 @@ def main():
         with sync_playwright() as p:
             browser = p.chromium.launch(
                 executable_path=os.environ.get("CHROMIUM_PATH", "/usr/bin/chromium"),
-                headless=os.environ.get("HEADLESS", "1") != "0", args=["--no-sandbox"])
+                headless=os.environ.get("HEADLESS", "1") != "0",
+                ignore_default_args=["--disable-back-forward-cache"],
+                args=["--no-sandbox"])
             version = browser.version
             cases = [
                 ("BF01_UNSAFE_STALE_AFTER_SIGNOUT", False, False, False, "SYNTHETIC PRIVATE LEDGER"),
