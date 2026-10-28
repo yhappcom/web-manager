@@ -478,6 +478,8 @@ A one-file source audit cannot exclude browser/Flutter/Firebase listeners elsewh
 
 ### 16.4 Executed falsification attempt: no BFCache hit, no false PASS [VALIDATION / OPEN]
 
+**2026-10-29 correction:** This §16.4 non-admission is superseded as a test-harness admission failure: pinned Playwright 1.57.0 launches Chromium with --disable-back-forward-cache by default. See §17 for exact source, explicit opt-out, and two hosted 4/4 BFCache runs. The old 0/4 observation remains historically accurate but is **not** evidence that Chrome or this fixture was BFCache-ineligible.
+
 Created disposable **research-only synthetic** Chrome probe at [pwa_bfcache_auth_custody_probe.py](handoffs/pwa_bfcache_auth_custody_probe.py) and [pinned CI workflow](../.github/workflows/stage8_pwa_bfcache_auth_custody.yml). Its four distinct hypotheses are: BF01 deliberately UNSAFE stale private DOM after a synthetic server-authority flip while the page is away; BF02 masked/guarded sign-out; BF03 guarded unavailable authority; BF04 guarded unchanged owner. The test only admits a result when pageshow.persisted=true. A fresh page load is **not** a substitute for a BFCache hit.
 
 **Observed:** local Chromium loopback was blocked by ERR_BLOCKED_BY_ADMINISTRATOR before navigation. Hosted Chrome 156.0.8078.47 tests at [40741881841](https://github.com/yhappcom/web-manager/actions/runs/40741881841), [40742004211](https://github.com/yhappcom/web-manager/actions/runs/40742004211), [40742114471](https://github.com/yhappcom/web-manager/actions/runs/40742114471), and [40742266774](https://github.com/yhappcom/web-manager/actions/runs/40742266774) **failed the BFCache-admission gate**: **0/4 ADMITTED** in the final headed Chrome/Xvfb run. The experiment removed an initial no-store response confound and retried headed Chrome. The last run recorded navigation.type=back_forward but pageshow.persisted=false in all four cases, with fresh script verification; notRestoredReasons=null did not explain non-restoration. All runs preserve bounded evidence JSON; **none is PASS**, none proves an unsafe BFCache restoration or successful mitigation, and none executes LogMate. This is an evidence-blocker, not a discovered product defect.
@@ -503,3 +505,61 @@ Extend existing AS01–AS14 rather than creating another implementation campaign
 Completed an independent adjacent question (BFCache/frozen-page privacy), primary-source reconciliation, exact current product-source contrast, four falsifiable browser hypotheses, hosted diagnostic retries, and cross-track acceptance mapping. **The meaningful checkpoint is a verified non-admission, not a successful browser test.** Next is a BFCache-eligible runtime with actual persisted=true provenance and then Engineering-authorized exact NORMAL two-tab/first-frame testing. Further synthetic repetition without that prerequisite would not advance the gate.
 
 **Stage 8 ACTIVE · Synthetic BFCache 0/4 ADMITTED (not PASS) · Production validation OPEN · PWA release HOLD.** Product and peer repositories read-only.
+
+
+## 17. BFCache test-instrument root cause and real restored-entry DOM custody (2026-10-29 KST) [SOURCE / DEBUG / VALIDATION / SYNTHESIS / CONTRADICTION / TRANSFER VALIDATION / DEPENDENCY / CHANGE WATCH]
+
+### 17.1 Canonical read-first, question and source correction
+
+**Question:** Why did four earlier hosted Chrome 156 attempts show zero actual BFCache restorations, and can a corrected experiment distinguish stale private DOM from an immediately masked restored document?
+
+Read-first Web Manager main at e0a428baa38bb0eaddbbf7ac4d8076154ae91a1f: AGENTS, SPECIALIST_TRACKS, LEARNING_ROADMAP, STATUS, research index, 523 §§14–16, 515, current fixture/workflow and latest commits. Read-only product main at 2f78e7310dfe2c46c1f1cba0583e2abdd269ffdf, including web/index.html and firebase.json. Peers: Design Studio WEB_STATUS W121 / CONTENT_STATUS CD127, Marketing D8/D9, Software Engineering Studio S007 and VALIDATION_STANDARD. No peer/product write.
+
+**SOURCE — decisive missing prerequisite:** Exact upstream Playwright **v1.57.0** has a default Chromium launcher argument **--disable-back-forward-cache** at line 55 of chromiumSwitches.ts, blob 28d6928455ad24daa57517eeab68addb8c32e0f7. The previous fixture called Playwright chromium.launch without excluding this default. Upstream Playwright v1.57.0's own BFCache test, blob c60f4befaf475e99dce3c034d211bdf5aae393e2, excludes that precise default argument and uses goBack with waitUntil commit. Primary sources:
+- https://github.com/microsoft/playwright/blob/v1.57.0/packages/playwright-core/src/server/chromium/chromiumSwitches.ts
+- https://github.com/microsoft/playwright/blob/v1.57.0/tests/library/chromium/bfcache.spec.ts
+- https://playwright.dev/python/docs/navigations#backforward-cache-bfcache (consulted 2026-10-29)
+
+Playwright explicitly says its default disables BFCache and that **BFCache restore testing is not generally supported** because the usual navigation/load lifecycle events do not fire. The earlier fixture also waited for **load** after Back, unsuitable for a true restore. Removing an HTTP no-store confound and switching headed mode could not override the launcher default. Thus §16's 0/4 was an accurate observation of an **instrument that disabled the target behavior**, not evidence of browser or LogMate ineligibility. The exact cause of each prior failed navigation is not uniquely reconstructed from old logs; the pinned default and controlled repaired success provide convergent causal evidence.
+
+### 17.2 Exact repair and two hosted browser executions [VALIDATION]
+
+Existing synthetic BF01–BF04 fixture updated in place: launch excludes **only --disable-back-forward-cache** from Playwright defaults, while preserving other defaults; Back waits for **commit** as in upstream's own bounded test. Positive admission still requires **pageshow.persisted === true**. The second revision records the **synchronous DOM text at the persisted pageshow handler entry**, before asynchronous authority recheck, as well as eventual DOM. This is an entry-DOM oracle, **not** a compositor or first-painted-frame proof.
+
+| Run and exact checkout | Observed job result | Scope |
+| --- | --- | --- |
+| [40751433378](https://github.com/yhappcom/web-manager/actions/runs/40751433378), 1008c27b01cc9009c98a4e3b60260d46aa5c6203, job 123038862593 | SUCCESS; **BF01–BF04 4/4**, each with pageshow.persisted true | Synthetic Chrome restored-document admission |
+| [40751522119](https://github.com/yhappcom/web-manager/actions/runs/40751522119), 96fb79a8b3d55754fb4f8073561edae2f3add878, job 123039176838 | SUCCESS; **BF01–BF04 4/4**, each with entry-DOM and eventual-DOM oracle | Synthetic Chrome stronger DOM-custody comparison |
+
+Both exact job logs were read: per-case JSON records, RESULT 4 / 4 and successful execution step. Workflow uses Ubuntu 24.04, Python 3.13, Playwright 1.57.0, headed Google Chrome under Xvfb. Prior hosted Chrome 156.0.8078.47 version evidence remains separate. No real LogMate/Firebase authentication, 37-store ledger, Sync, physical Safari or managed EFB was executed.
+
+| Case | Actual BFCache restoration | DOM at restored pageshow entry | Eventual DOM | Verdict meaning |
+| --- | --- | --- | --- | --- |
+| BF01 deliberately **UNSAFE** | TRUE | SYNTHETIC PRIVATE LEDGER | SYNTHETIC PRIVATE LEDGER after synthetic sign-out | Modeled stale private DOM reproduced; PASS means negative control succeeded, **not** safe behavior |
+| BF02 guarded sign-out | TRUE | LOCKED | LOCKED after authority rejects | Synthetic mask-before-suspend and revalidation |
+| BF03 guarded unavailable authority | TRUE | LOCKED | LOCKED after simulated 503 | Fail-closed synthetic check, not a LogMate offline-signout policy |
+| BF04 guarded unchanged owner | TRUE | LOCKED | SYNTHETIC PRIVATE LEDGER after check | Private DOM withheld until synthetic authority reconfirmed |
+
+**Important independent contradiction:** All four positive restored pages reported PerformanceNavigationTiming.type = **navigate** and notRestoredReasons = null. Thus navigation.type is neither a necessary nor sufficient BFCache oracle; direct pageshow.persisted is the admission evidence. A post-200ms locked screenshot alone would also miss whether a private DOM was exposed earlier. This experiment records DOM at handler entry, but does not establish the first *painted* frame.
+
+### 17.3 Fundamentals to expert operational judgment [A platform owns, E consumes]
+
+**History/problem:** WebKit Page Cache and modern BFCache suspend and later resume a live document/DOM/JavaScript heap. A previously authorized private route can therefore outlive the session that originally allowed it. Primary historical explanations: https://webkit.org/blog/427/webkit-page-cache-i-the-basics/ and https://webkit.org/blog/516/webkit-page-cache-ii-the-unload-event/ . They establish the mechanism, not current iPadOS behavior.
+
+**Principle/standard:** HTTP cache and BFCache are different. Chromium's evolving limited support for BFCache on no-store pages means a global no-store Hosting header is not a universal private-view safety guarantee. LogMate's firebase.json declares global no-cache/no-store, but deployed headers and product first-frame behavior are unverified. Current sources reviewed 2026-10-29: https://developer.chrome.com/docs/web-platform/bfcache-ccns and https://web.dev/articles/bfcache .
+
+**Lifecycle:** pageshow.persisted=true is positive restoration; pagehide.persisted=true is only intent to cache. pageshow is not a universal visibility/background event. A pagehide-only mask does not prove background-tab, frozen app or OS resume behavior. Chrome sign-out guidance discusses pageshow/pagehide and BroadcastChannel; a broadcast is latency optimization, not durable Owner authority. Sources: https://developer.mozilla.org/en-US/docs/Web/API/Window/pageshow_event and https://web.dev/articles/sign-out-best-practices .
+
+**Failure/alternative:** Waiting for asynchronous network authentication before masking can expose stale DOM. Masking before suspension and re-reading a durable local Owner lock/verified UID before reveal is a candidate; it is not yet approved LogMate code. Broad Clear-Site-Data storage cleanup threatens the offline 37-store IndexedDB ledger and must not be substituted for non-destructive explicit sign-out. Remote Auth revocation, local lock, wrong UID, offline UNKNOWN and account deletion remain separate trust states.
+
+**Cross-browser boundary:** Playwright's Chromium launcher default and successful Chrome synthetic run do not prove Safari/WebKit behavior. WebKit page-cache events exist, but Safari tab, user-installed Home Screen and managed Web Clip/full-screen EFB require independent physical evidence. WebKit Safari 17.2's one-time eligible cookie copy without IndexedDB is not a blanket MDM assertion: https://webkit.org/blog/14787/webkit-features-in-safari-17-2/ .
+
+### 17.4 Five-track transfer and production gate [DEPENDENCY / OPEN]
+
+**E primary:** own non-destructive ledger access custody, UID/Owner lock, wrong-UID isolation and deployment/session operations. **A:** own BFCache/HTTP-cache distinctions, launcher flags, pageshow/pagehide, Chrome/WebKit differences and CHANGE WATCH. **C:** independent positive BFCache control, deliberate unsafe negative control, exact NORMAL first-painted-frame and 37-store oracle; a driver that disables BFCache must be classified NON-ADMISSION. **B:** consume Design Studio W121/CD127 for accessible locked/checking/offline/reauthenticated states, focus and text scaling, not invented copy or design promotion. **D:** privacy-safe restoration measurement and Marketing D8/D9 claim HOLD; no private data, UID, token or synthetic-to-production claims.
+
+Reuse existing **AS15–AS22** rather than multiplying test IDs. Engineering must execute exact LogMate NORMAL Web/Worker hash with two real tabs, disposable owner and populated 37-store ledger; compare explicit sign-out, actual BFCache restored first frame, background/freeze, offline UNKNOWN, same-UID reauth and wrong-UID route, plus independent third-connection ledger census. A **video/compositor first-painted-frame** oracle remains distinct from synchronous pageshow DOM. Then test physical Safari tab, installed Home Screen, managed Web Clip/full-screen EFB with exact OS and MDM policy. Do not treat Playwright's repaired 4/4 as a generally supported test API or as product security evidence.
+
+**STOP CHECK:** An adjacent valuable question was resolved in this run: source-level launcher diagnosis, controlled BFCache admission repair, two successful hosted runs and stronger entry-DOM negative/positive observations. Further synthetic case-count expansion will not close the exact product/physical-device boundary.
+
+**Gate: Stage 8 ACTIVE · Synthetic Chrome BFCache 4/4 ADMITTED and fixture expectations PASS (one deliberately unsafe case) · Production validation OPEN · PWA release HOLD.** Only Web Manager research and fixture changed; product and peer repositories remain read-only.
