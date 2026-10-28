@@ -46,7 +46,7 @@ window.mergeState = async (kind, value, abort=false) => {
     };
     tx.oncomplete=()=>{db.close();resolve('committed')};
     tx.onabort=()=>{db.close();resolve('aborted')};
-    tx.onerror=()=>{db.close();reject(tx.error)};
+    tx.onerror=()=>{if(!abort){db.close();reject(tx.error||new Error('transaction error'))}};
   });
 };
 """
