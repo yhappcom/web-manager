@@ -21,9 +21,9 @@ const D1 = 'a'.repeat(64), D2 = 'b'.repeat(64);
 const TIME = '1793180000000000';
 
 function fail(status, message) { const e = new Error(message); e.status = status; throw e; }
-async function principal(token) {
+async function principal(token, checkRevoked=false) {
   if (typeof token !== 'string' || !token) fail(401, 'missing bearer');
-  try { return (await auth.verifyIdToken(token)).uid; }
+  try { return (await auth.verifyIdToken(token, checkRevoked)).uid; }
   catch { fail(401, 'invalid bearer'); }
 }
 function operation(id=ID1, digest=D1, generation=1) {
@@ -44,13 +44,13 @@ async function admitVerified(token, ledgerId, op) {
       typeof op.digest !== 'string' || op.digest !== fixtureDigest(op)) {
     fail(400, 'fixture payload digest mismatch');
   }
-  return admit(token, ledgerId, op);
+  return admit(token, ledgerId, op, true);
 }
 async function seed(name, ownerUid) {
   await db.doc('ledgers/' + name).set({ ownerUid, generation: 1, status: 'active', nextSequence: 0 });
 }
-async function admit(token, ledgerId, op) {
-  const uid = await principal(token);
+async function admit(token, ledgerId, op, checkRevoked=false) {
+  const uid = await principal(token, checkRevoked);
   if (!/^[a-z0-9-]{1,60}$/.test(ledgerId)) fail(400, 'bad ledger');
   if (!op || !idPattern.test(op.id) || !digestPattern.test(op.digest) ||
       !microsPattern.test(op.modifiedAtUtcMicros) ||
@@ -100,12 +100,14 @@ async function signUp(email) {
 function httpServer() {
   return createServer(async (req, res) => {
     try {
-      if (req.method !== 'POST' || req.url !== '/admit') fail(404, 'unknown route');
+      if (req.method !== 'POST' || !['/admit', '/admit-verified'].includes(req.url)) fail(404, 'unknown route');
       let body = '';
       for await (const chunk of req) { body += chunk; if (body.length > 4096) fail(413, 'oversize'); }
       const data = JSON.parse(body);
       const token = (req.headers.authorization || '').replace(/^Bearer /, '');
-      const receipt = await admit(token, data.ledgerId, data.operation);
+      const receipt = req.url === '/admit-verified'
+        ? await admitVerified(token, data.ledgerId, data.operation)
+        : await admit(token, data.ledgerId, data.operation);
       if (req.headers['x-drop-after-commit'] === 'yes') { req.socket.destroy(); return; }
       res.writeHead(200, { 'content-type': 'application/json' });
       res.end(JSON.stringify(receipt));
@@ -249,12 +251,15 @@ test('Stage 8 authenticated emulator admission — FE01–FE19', { timeout: 1800
     assert.equal((await db.collection('ledgers/conflict-race/operations').get()).size, 1);
     assert.equal((await db.collection('ledgers/conflict-race/receipts').get()).size, 1);
   });
-  await t.test('FE17 disabled emulator user: token identity check alone is not session-status check', async () => {
+  let disabledOwner;
+  await t.test('FE17 disabled emulator account rejected by both verification paths in this exact emulator', async () => {
     const c = await signUp('owner-c@stage8.example');
+    disabledOwner = c;
     assert.equal((await auth.verifyIdToken(c.token, true)).uid, c.uid);
     await auth.updateUser(c.uid, { disabled: true });
-    // This deliberately weak check can still decode an otherwise valid ID token.
-    assert.equal((await auth.verifyIdToken(c.token)).uid, c.uid);
+    assert.equal((await auth.getUser(c.uid)).disabled, true);
+    // Observed in Firebase Auth Emulator + Admin 14.5.0, NOT a production default-verification guarantee.
+    await assert.rejects(auth.verifyIdToken(c.token), e => e.code === 'auth/user-disabled');
     await assert.rejects(auth.verifyIdToken(c.token, true), e => e.code === 'auth/user-disabled');
   });
   await seed('digest-gap', a.uid);
@@ -280,5 +285,40 @@ test('Stage 8 authenticated emulator admission — FE01–FE19', { timeout: 1800
       { ...changed, digest: fixtureDigest(changed) }), 409);
     assert.equal((await db.collection('ledgers/digest-verified/operations').get()).size, 1);
     assert.equal((await db.doc('ledgers/digest-verified').get()).data().nextSequence, 1);
+  });
+  await seed('verified-http', a.uid);
+  await t.test('FE20 secured HTTP endpoint binds payload digest and current owner', async () => {
+    const original = { id: ID1, generation: 1, modifiedAtUtcMicros: TIME };
+    const signed = { ...original, digest: fixtureDigest(original) };
+    const server = httpServer();
+    const url = (await listen(server)).replace(/\/admit$/, '/admit-verified');
+    try {
+      const accepted = await post(url, a.token, 'verified-http', signed);
+      assert.equal(accepted.status, 200);
+      assert.equal((await accepted.json()).status, 'ACCEPTED');
+      const replay = await post(url, a.token, 'verified-http', signed);
+      assert.equal(replay.status, 200);
+      assert.equal((await replay.json()).status, 'REPLAY');
+      const changed = { ...signed, modifiedAtUtcMicros: '1793180000000001' };
+      assert.equal((await post(url, a.token, 'verified-http', changed)).status, 400);
+      assert.equal((await post(url, a.token, 'verified-http', { ...signed, ownerUid: a.uid })).status, 400);
+      const other = { ...changed, digest: fixtureDigest(changed) };
+      assert.equal((await post(url, a.token, 'verified-http', other)).status, 409);
+      assert.equal((await post(url, b.token, 'verified-http', signed)).status, 403);
+      assert.equal((await db.doc('ledgers/verified-http').get()).data().nextSequence, 1);
+      assert.equal((await db.collection('ledgers/verified-http/operations').get()).size, 1);
+    } finally { await close(server); }
+  });
+  await seed('disabled-http', disabledOwner.uid);
+  await t.test('FE21 secured HTTP endpoint denies disabled emulator account without write', async () => {
+    const original = { id: ID1, generation: 1, modifiedAtUtcMicros: TIME };
+    const signed = { ...original, digest: fixtureDigest(original) };
+    const server = httpServer();
+    const url = (await listen(server)).replace(/\/admit$/, '/admit-verified');
+    try {
+      assert.equal((await post(url, disabledOwner.token, 'disabled-http', signed)).status, 401);
+      assert.equal((await db.doc('ledgers/disabled-http').get()).data().nextSequence, 0);
+      assert.equal((await db.collection('ledgers/disabled-http/operations').get()).size, 0);
+    } finally { await close(server); }
   });
 });
