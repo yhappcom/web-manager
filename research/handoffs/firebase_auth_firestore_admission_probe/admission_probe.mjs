@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test, after } from 'node:test';
 import { createServer } from 'node:http';
+import { createHash } from 'node:crypto';
 import { initializeApp, deleteApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
@@ -27,6 +28,23 @@ async function principal(token) {
 }
 function operation(id=ID1, digest=D1, generation=1) {
   return { id, digest, generation, modifiedAtUtcMicros: TIME };
+}
+// Research-only fixed-width ASCII digest; NOT the LogMate canonical wire codec.
+function fixtureDigest(op) {
+  return createHash('sha256').update(
+    'web-manager-fixture-v1|' + op.id + '|' + op.generation + '|' + op.modifiedAtUtcMicros,
+    'utf8'
+  ).digest('hex');
+}
+async function admitVerified(token, ledgerId, op) {
+  if (!op || typeof op !== 'object' || Array.isArray(op) ||
+      Object.keys(op).sort().join(',') !== 'digest,generation,id,modifiedAtUtcMicros' ||
+      !idPattern.test(op.id) || !microsPattern.test(op.modifiedAtUtcMicros) ||
+      !Number.isSafeInteger(op.generation) || op.generation < 1 ||
+      typeof op.digest !== 'string' || op.digest !== fixtureDigest(op)) {
+    fail(400, 'fixture payload digest mismatch');
+  }
+  return admit(token, ledgerId, op);
 }
 async function seed(name, ownerUid) {
   await db.doc('ledgers/' + name).set({ ownerUid, generation: 1, status: 'active', nextSequence: 0 });
@@ -121,7 +139,7 @@ async function expectStatus(promise, status) {
   await assert.rejects(promise, e => e.status === status);
 }
 
-test('Stage 8 authenticated emulator admission — FE01–FE16', { timeout: 180000 }, async t => {
+test('Stage 8 authenticated emulator admission — FE01–FE19', { timeout: 180000 }, async t => {
   const a = await signUp('owner-a@stage8.example');
   const b = await signUp('owner-b@stage8.example');
   await t.test('FE01 emulator token verified to its actual UID', async () => {
@@ -230,5 +248,37 @@ test('Stage 8 authenticated emulator admission — FE01–FE16', { timeout: 1800
     assert.equal((await db.doc('ledgers/conflict-race').get()).data().nextSequence, 1);
     assert.equal((await db.collection('ledgers/conflict-race/operations').get()).size, 1);
     assert.equal((await db.collection('ledgers/conflict-race/receipts').get()).size, 1);
+  await t.test('FE17 disabled emulator user: token identity check alone is not session-status check', async () => {
+    const c = await signUp('owner-c@stage8.example');
+    assert.equal((await auth.verifyIdToken(c.token, true)).uid, c.uid);
+    await auth.updateUser(c.uid, { disabled: true });
+    // This deliberately weak check can still decode an otherwise valid ID token.
+    assert.equal((await auth.verifyIdToken(c.token)).uid, c.uid);
+    await assert.rejects(auth.verifyIdToken(c.token, true), e => e.code === 'auth/user-disabled');
+  });
+  await seed('digest-gap', a.uid);
+  await t.test('FE18 UNSAFE negative control: unchanged caller digest conceals changed body', async () => {
+    assert.equal((await admit(a.token, 'digest-gap', operation())).status, 'ACCEPTED');
+    const changed = { ...operation(), modifiedAtUtcMicros: '1793180000000001' };
+    assert.equal((await admit(a.token, 'digest-gap', changed)).status, 'REPLAY');
+    assert.equal((await db.doc('ledgers/digest-gap/operations/' + ID1).get()).data().modifiedAtUtcMicros, TIME);
+    // A REPLAY here is an exposed fixture design gap, NOT a secure validation PASS.
+  });
+  await seed('digest-verified', a.uid);
+  await t.test('FE19 fixture server-side digest binding rejects body substitution and unknown fields', async () => {
+    const original = { id: ID1, generation: 1, modifiedAtUtcMicros: TIME };
+    const signed = { ...original, digest: fixtureDigest(original) };
+    assert.equal((await admitVerified(a.token, 'digest-verified', signed)).status, 'ACCEPTED');
+    assert.equal((await admitVerified(a.token, 'digest-verified', signed)).status, 'REPLAY');
+    await expectStatus(admitVerified(a.token, 'digest-verified',
+      { ...signed, modifiedAtUtcMicros: '1793180000000001' }), 400);
+    await expectStatus(admitVerified(a.token, 'digest-verified',
+      { ...signed, ownerUid: a.uid }), 400);
+    const changed = { ...original, modifiedAtUtcMicros: '1793180000000001' };
+    await expectStatus(admitVerified(a.token, 'digest-verified',
+      { ...changed, digest: fixtureDigest(changed) }), 409);
+    assert.equal((await db.collection('ledgers/digest-verified/operations').get()).size, 1);
+    assert.equal((await db.doc('ledgers/digest-verified').get()).data().nextSequence, 1);
+  });
   });
 });
