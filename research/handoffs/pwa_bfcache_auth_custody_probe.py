@@ -101,7 +101,7 @@ def main():
         with sync_playwright() as p:
             browser = p.chromium.launch(
                 executable_path=os.environ.get("CHROMIUM_PATH", "/usr/bin/chromium"),
-                headless=True, args=["--no-sandbox"])
+                headless=os.environ.get("HEADLESS", "1") != "0", args=["--no-sandbox"])
             version = browser.version
             cases = [
                 ("BF01_UNSAFE_STALE_AFTER_SIGNOUT", False, False, False, "SYNTHETIC PRIVATE LEDGER"),
