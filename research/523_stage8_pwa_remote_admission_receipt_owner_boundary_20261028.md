@@ -436,3 +436,70 @@ A disconnected EFB may satisfy #2 while #3 is temporarily unobservable. It must 
 **E** remains primary: prevent security cleanup from becoming data loss, preserve UID/Owner/Receipt authority, and define server/client logout lifecycle. **A** owns Auth persistence, tab/container boundaries and Clear-Site-Data mechanics; **C** independently executes AS01–AS14 with exact build/negative controls; **B** consumes Design Studio [W121](https://github.com/yhappcom/design-studio/blob/main/progress/WEB_STATUS.md) and [CD127](https://github.com/yhappcom/design-studio/blob/main/progress/CONTENT_STATUS.md) for truthful accessible state language, not an invented visual system; **D** consumes Marketing [D8 HOLD](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) and does not claim offline transfer, secure logout or automatic Sync without real proof. Software Engineering [S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_logmate_auth_onboarding_integrated_product_contract_2026-09-24.md) and its [Validation Standard](https://github.com/yhappcom/software-engineering-studio/blob/main/methods/VALIDATION_STANDARD.md) own product execution and independent oracles.
 
 **Contradiction resolved at research level:** generic OWASP/MDN advice to clear browser storage on logout conflicts with the product's explicit preserve-and-lock local-first ledger contract. Resolve by separating credential revocation, local lock, destructive deletion and backup—not by blindly deleting site data. This is **not** evidence that LogMate currently sends Clear-Site-Data. **Next meaningful gate:** Engineering-authorized exact NORMAL sign-out/cross-tab/storage-header inspection, then physical Safari Home Screen/managed EFB and W-013 external file custody; no more synthetic case-count expansion without a discriminating new question. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+## 16. BFCache, suspended-tab re-entry and cross-context ledger custody (2026-10-29 KST) [SOURCE / SYNTHESIS / CONTRADICTION / MINTTAP DECISION / DEPENDENCY / VALIDATION / CHANGE WATCH]
+
+### 16.1 Material question and exact product-source boundary
+
+**Question:** After tab A signs out, can tab B's already-rendered private ledger view be restored from a suspended/history-cached document before the current durable Owner lock is reconciled? This differs from §15 credential retention and from ordinary active-tab database concurrency. **No actual LogMate private-data exposure has been observed.**
+
+Read at start: AGENTS, SPECIALIST_TRACKS, LEARNING_ROADMAP, STATUS, research index, studies 523/515/516, latest commits, and read-only LogMate main **2f78e7310dfe2c46c1f1cba0583e2abdd269ffdf**. Direct product observations:
+- SessionGate (lib/app/session_gate.dart blob 5bcd6bf2) observes Flutter app lifecycle. On resumed it starts eligible remote-session validation; explicit sign-out increments an **instance-local** auth-mutation epoch, delegates to the owner-aware sign-out, and re-resolves startup. Local deletion lock routes to a locked screen. This Dart file does not itself define a JavaScript pageshow handler, prove Flutter Web's BFCache event mapping, or establish a cross-tab epoch.
+- LocalLedgerAuthAccessService (blob a6e74cd1) delegates explicit sign-out to the local access coordinator; remote rejected-session clearing is deliberately a separate path and does not itself create the durable explicit-sign-out lock. The earlier lock-before-Firebase-sign-out product contract remains intact.
+- AuthEngine, Engineering Studio S007 and the product Manual Sync contract separate Firebase session, durable Owner/access state, offline continuity, remote authority, and deletion phase. Offline/remote unknown for an established owner is **not** an automatic destructive logout.
+- firebase.json (blob 9ac0972e) declares a global no-store response header. That is source configuration, **not** deployed-header evidence or a browser-independent proof of BFCache exclusion.
+
+A one-file source audit cannot exclude browser/Flutter/Firebase listeners elsewhere. The current production/installed runtime and first-frame behavior remain OPEN.
+
+### 16.2 History → standard → implementation differences [SOURCE]
+
+1. **BFCache is not the HTTP cache.** A browser may freeze and later restore a complete DOM and JavaScript heap without network revalidation. A private frame can therefore outlive the Auth session that originally authorized its rendering. Source: Chrome/web.dev BFCache, **updated 2026-10-16**, https://web.dev/articles/bfcache .
+2. **Observe the correct lifecycle.** pageshow runs on both initial load and history restoration; event.persisted=true is the positive BFCache-restoration oracle. pagehide.persisted=true is only an intent to cache, not proof of a later hit. Chrome-specific freeze/resume event behavior is not a universal Safari/WebKit contract. Source: https://developer.mozilla.org/en-US/docs/Web/API/Window/pageshow_event .
+3. **A tab broadcast is not durable authority.** Chrome's sign-out guidance recommends pageshow/pagehide and BroadcastChannel to reconcile multiple tabs, but a frozen/discarded/not-yet-created or separately installed context cannot be assumed to have processed a transient message. The durable local owner lock must be checked again on re-entry; a broadcast is a latency optimization, not the security source of truth. Source: https://web.dev/articles/sign-out-best-practices (updated 2023-12-04).
+4. **Firebase Auth persistence is not a UI/ledger gate.** LOCAL state can synchronize across browser tabs, while SESSION/NONE behave differently; changing persistence may sign out other tabs. These are SDK persistence rules, not evidence that a previously rendered Flutter route has atomically reconciled local Owner metadata. Firebase primary page **updated 2026-10-21**: https://firebase.google.com/docs/auth/web/auth-state-persistence .
+5. **No-store and diagnostics are not universal guarantees.** Chrome BFCache eligibility for no-store documents has evolved. PerformanceNavigationTiming.notRestoredReasons is Chrome-oriented and limited-availability; a null diagnostic does not mean a BFCache hit. A navigation type of back_forward also does not establish restoration. Sources: https://developer.chrome.com/docs/web-platform/bfcache-notrestoredreasons and https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/notRestoredReasons .
+6. **Installed Safari is a separate data container.** WebKit's Safari 17.2 documentation states that eligible cookies may be copied once at Home Screen creation but IndexedDB/other script storage is not copied and subsequent website data is not shared. Actual iPadOS 26.x/MDM behavior remains device-specific CHANGE WATCH. Source: https://webkit.org/blog/14787/webkit-features-in-safari-17-2/ .
+
+### 16.3 Operational failure model and cross-track judgment [SYNTHESIS / CONTRADICTION]
+
+| Boundary | False inference | Required evidence |
+| --- | --- | --- |
+| A signs out, B remains visible | Auth SDK cross-tab propagation automatically hides B's existing ledger frame | B's first visible frame, current UID, durable Owner lock, retained ledger; no false data deletion |
+| B goes Back after A signs out | HTTP no-store guarantees no stale private DOM | Confirm actual pageshow.persisted=true and inspect before-reveal frame; full reload is a different result |
+| B is frozen while A signs out | BroadcastChannel delivery is sufficient | Re-read durable lock on resume/visibility/history entry even if broadcast was missed |
+| Offline sign-out versus remote unknown | Both should wipe data or both should permit access | Explicit local sign-out stays locked offline; remote uncertainty for established owner is separately classified |
+| A then B different UID | In-memory route/owner can be reused | Verified UID and persisted Owner epoch must match; no email-based rebind or A data flash |
+| Worker cached shell | Asset integrity means private DOM/Auth state is cleared | Worker cache, document heap, IDB Owner, Auth, backup and server receipts are separate authorities |
+| Safari tab / Home Screen / MDM Web Clip | One context's logout deletes every copy | Independently classify each local container and remote revocation |
+| UX/performance | Reload or announce “deleted” to resolve uncertainty | Non-destructive lock/mask, accessible focus/status, measured first-frame privacy and recovery latency |
+
+**MINTTAP DECISION (research recommendation only):** require a **re-entry privacy gate** based on the current durable Owner/access state and verified UID before revealing a previously protected ledger view. A visibility/pagehide mask plus revalidation is one candidate, not an approved LogMate implementation. Never copy generic Clear-Site-Data "storage" logout advice into an offline-first ledger, and do not turn temporary network failure into data erasure. Exact Flutter Web lifecycle and offline contract require Engineering execution.
+
+### 16.4 Executed falsification attempt: no BFCache hit, no false PASS [VALIDATION / OPEN]
+
+Created disposable **research-only synthetic** Chrome probe at [pwa_bfcache_auth_custody_probe.py](handoffs/pwa_bfcache_auth_custody_probe.py) and [pinned CI workflow](../.github/workflows/stage8_pwa_bfcache_auth_custody.yml). Its four distinct hypotheses are: BF01 deliberately UNSAFE stale private DOM after another tab's sign-out; BF02 masked/guarded sign-out; BF03 guarded unavailable authority; BF04 guarded unchanged owner. The test only admits a result when pageshow.persisted=true. A fresh page load is **not** a substitute for a BFCache hit.
+
+**Observed:** local Chromium loopback was blocked by ERR_BLOCKED_BY_ADMINISTRATOR before navigation. Hosted Chrome 156.0.8078.47 tests at [40741881841](https://github.com/yhappcom/web-manager/actions/runs/40741881841), [40742004211](https://github.com/yhappcom/web-manager/actions/runs/40742004211), [40742114471](https://github.com/yhappcom/web-manager/actions/runs/40742114471), and [40742266774](https://github.com/yhappcom/web-manager/actions/runs/40742266774) **failed the BFCache-admission gate**: **0/4 ADMITTED** in the final headed Chrome/Xvfb run. The experiment removed an initial no-store response confound and retried headed Chrome. The last run recorded navigation.type=back_forward but pageshow.persisted=false in all four cases, with fresh script verification; notRestoredReasons=null did not explain non-restoration. All runs preserve bounded evidence JSON; **none is PASS**, none proves an unsafe BFCache restoration or successful mitigation, and none executes LogMate. This is an evidence-blocker, not a discovered product defect.
+
+Further synthetic case-count inflation without a positive restoration oracle is not justified. Retain this reproducible non-admission gate and move to a BFCache-eligible browser/runtime and actual product/physical-device evidence.
+
+### 16.5 One product-owned acceptance extension [VALIDATION — NOT EXECUTED]
+
+Extend existing AS01–AS14 rather than creating another implementation campaign:
+- **AS15:** active A/B tabs, A explicit sign-out while B displays a private view; first-frame privacy, durable lock, and preserved 37-store ledger.
+- **AS16:** history Back in B with **confirmed** pageshow.persisted=true; no stale private content before reconciliation; separately record full-reload cases.
+- **AS17:** B frozen/backgrounded during A sign-out; record Flutter lifecycle event, missed broadcast, durable lock re-read, and first frame.
+- **AS18:** offline explicit sign-out, cold restart, same-UID verified reauthentication; no data erasure or premature unlock.
+- **AS19:** A→B different UID while old A document suspended; reject stale A route/Owner, preserve old owner's data isolation.
+- **AS20:** Safari tab, Home Screen PWA and managed Web Clip separately; no all-device deletion inference.
+- **AS21:** Design Studio W121/CD127 focus, accessible lock status, large-text/reduced-motion and truthful “locked,” “offline,” “saved,” “synced” distinctions.
+- **AS22:** redacted evidence with exact NORMAL archive digest, browser/OS, persisted flag, first-frame classification, owner-lock transition, Worker generation and MDM class; no real UID, tokens, emails or flight data.
+
+**E** owns retention/authority; **A** browser navigation/Auth/WebKit primitives; **C** independent first-frame and actual BFCache hit oracle; **B** consumes Design Studio interaction/content authority; **D** consumes Marketing D8 claim HOLD and only validated privacy-safe aggregate measurement. Software Engineering S007 and LogMate W-030/W-031 own actual implementation and product execution.
+
+### 16.6 Stop-check and gate [OPEN / CHANGE WATCH]
+
+Completed an independent adjacent question (BFCache/frozen-page privacy), primary-source reconciliation, exact current product-source contrast, four falsifiable browser hypotheses, hosted diagnostic retries, and cross-track acceptance mapping. **The meaningful checkpoint is a verified non-admission, not a successful browser test.** Next is a BFCache-eligible runtime with actual persisted=true provenance and then Engineering-authorized exact NORMAL two-tab/first-frame testing. Further synthetic repetition without that prerequisite would not advance the gate.
+
+**Stage 8 ACTIVE · Synthetic BFCache 0/4 ADMITTED (not PASS) · Production validation OPEN · PWA release HOLD.** Product and peer repositories read-only.
