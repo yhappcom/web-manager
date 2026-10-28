@@ -236,3 +236,44 @@ This checkpoint independently **reads** existing product-recorded simulator evid
 **Gate:** Applied Stage 8 ACTIVE · **Chrome synthetic 17/17 PASS** at exact prior ref · **LogMate Safari Simulator ACCEPTANCE HARNESS PARTIAL** (product-recorded) · **Production validation OPEN · PWA release HOLD**. This run adds SOURCE/TRANSFER reconciliation only; no new browser execution, NORMAL product validation or peer-repository changes.
 
 **Adjacent-value check:** Another generic Worker synthetic variation has lower information gain than the exact NORMAL artifact, 37-store runtime and physical/managed iPad. Stop at this substantive source-evidence checkpoint rather than manufacture filler.
+
+
+## 14. 2026-10-28 — Cross-generation control-catalogue concurrency: Chrome falsification harness [SOURCE / SYNTHESIS / VALIDATION / OPEN]
+
+### Why this is a different failure class
+
+The ordinary Service Worker update lifecycle allows a new Worker to **install while the previous Worker still controls an open tab**. This is not `skipWaiting()` and not the mixed-document problem from §12. The two Worker global scopes may both access origin-shared Cache Storage. A JavaScript promise queue scoped to **one** Worker global does not establish a cross-generation atomic read/modify/write. Primary references: [Service Workers specification](https://w3c.github.io/ServiceWorker/) (lifecycle and event lifetime), [MDN Service Worker lifecycle](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers) (new installing/waiting Worker coexists with old active controller), [MDN Cache interface](https://developer.mozilla.org/en-US/docs/Web/API/Cache) (origin-shared Request/Response storage, application-owned update policy). These sources describe the mechanism; they do not certify any LogMate defect.
+
+### Exact product-source review [SOURCE / CONDITIONAL CONTRADICTION]
+
+Read-only `yhappcom/logmate@d3bc214fe9b4b7bf84702f898b4e6993a4127e2f`, `tool/pwa_precache.dart` blob `90a67954af618a4e18199fa92555491c56167c17`, generated Worker template lines 382–646:
+
+- Lines 388–389 store a shared `logmate-offline-control-v2` JSON catalogue; lines 413–423 read and overwrite the whole object.
+- Lines 425–441 explicitly acknowledge CacheStorage has no compare-and-swap and use `controlMutation`, a Promise queue **local to the current Worker global**. This protects concurrent handlers *within that global*; no inter-generation lock or transaction is visible in these source lines.
+- Lines 545–560 allow the installing candidate to write the shared catalogue before activation; lines 602–643 allow the old active Worker to update client-build assignments on navigation. Thus overlapping mutation windows are **source-plausible**, but exact timing, subsequent repair and reachable impact on LogMate are not established.
+- The design deliberately does **not** use `skipWaiting()` or automatic cache deletion, and verifies served asset bytes against manifest digests. Those are genuine safeguards; they do not themselves make the shared JSON update atomic across Worker generations.
+- A lost `candidateBuildId` or `clientBuilds` entry would be a **control metadata** problem, not proof of Flight/IndexedDB data loss. The generated Worker returns a 503 repair/reload response when no valid build mapping exists; do not relabel that as a destructive data incident.
+
+### Independent actual-browser diagnostic [VALIDATION — SYNTHETIC, CI EXECUTION SEPARATE]
+
+A disposable [Chrome research fixture](handoffs/pwa_cross_generation_cache_control_probe.py) and [SHA-pinned CI workflow](../.github/workflows/stage8_pwa_cross_generation_cache_control.yml) model the **same architectural pattern**, not the proprietary/product Worker source. The test deliberately holds a v1 event after reading a shared CacheStorage JSON snapshot, installs a v2 Worker which writes a new candidate to that JSON key while v1 still controls the page, then releases v1 to write its stale snapshot. Independent page-context CacheStorage reads check both intermediate and final states.
+
+| Case | Independent assertion | Limit |
+| --- | --- | --- |
+| CG01 | Sequential read/modify/write retains both fields | Control only; not concurrency |
+| CG02 | v2 waiting Worker can write shared metadata while v1 controls a tab | Synthetic Worker; not LogMate |
+| CG03 | Delayed v1 write can erase v2 candidate from shared JSON | Demonstrates mechanism, not product exploit |
+| CG04 | Distinct immutable per-version keys survive this particular overwrite | Does **not** prove atomic current-version pointer |
+| CG05 | v2 remains waiting; no forced activation is needed | Not a Safari/iPadOS result |
+
+**Failure-first evidence:** [initial hosted run 40636043414](https://github.com/yhappcom/web-manager/actions/runs/40636043414) reached Chrome but failed because the test installed its page message listener *before* a navigation and then tried to read the vanished `window.events` array. This is a **test-oracle lifecycle defect**, not a Worker/CacheStorage counterexample. The corrected fixture rebinds its listener after reload; [follow-up run 40636099341](https://github.com/yhappcom/web-manager/actions/runs/40636099341) must be checked for its own exact-ref result before promoting any CG01–CG05 PASS claim. The local execution container blocked loopback Chrome navigation (`ERR_BLOCKED_BY_ADMINISTRATOR`), so no local-browser PASS is claimed.
+
+### Product-grade acceptance and possible remediation [MINTTAP DIRECTION / DEPENDENCY / OPEN]
+
+**Engineering implementation owner; Web Manager only supplies the web-specific failure model.** On an authorized exact LogMate NORMAL artifact, instrument Worker vN/vN+1 with two barrier points around `readControl` and `writeControl`; keep one vN-controlled client alive, install vN+1 and independently read the shared catalogue before and after releasing vN. Repeat with vN+1 install failure, browser restart, offline re-entry and Safari Home Screen (separately from a managed Web Clip). Assert *both* old client→build mapping and candidate/current/previous version identities, actual SHA-verified shell bytes, 503 repair states, untouched IndexedDB and recoverable LBK. No global cache clear or hidden data reset is an acceptable test repair.
+
+Potential architecture choices, **not approved product changes**: (1) immutable version-specific manifest/control records plus a separately protected pointer; (2) IndexedDB `readwrite` transaction for shared mutable control state with exact Safari/Chrome tests; (3) a single authoritative activation-phase writer with carefully defined waiting-worker staging and recovery. Each needs failure-injection for crash, quota, old clients and schema compatibility; merely moving the same JSON to a different cache name is not a transaction.
+
+**Five-track handoff:** **E** owns cross-generation release integrity, atomic control authority and non-destructive rollback/recovery; **A** owns Worker lifecycle, storage semantics and Chrome↔WebKit differences; **C** owns exact browser race barriers, independent state/asset oracles and negative controls; **B** consumes Design Studio W121 for accessible 503/reload/restore without claiming data loss; **D** consumes Marketing D8 claim HOLD and must not count an installed icon or Worker activation as offline-safe readiness. Engineering owns code changes and exact 37-store restore; no peer repository is modified.
+
+**Gate remains:** Stage 8 ACTIVE · LogMate NORMAL product race **OPEN** · Safari Home Screen/managed EFB **OPEN** · Production validation OPEN · PWA release HOLD. The synthetic Chrome result, even if green, cannot advance product release.
