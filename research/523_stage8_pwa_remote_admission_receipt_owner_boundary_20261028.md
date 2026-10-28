@@ -344,3 +344,95 @@ Software Engineering owns the product code, canonical digest, process-kill/ACK a
 **Five-track transfer:** A owns this Fetch/Cache API distinction; E owns route/Owner authority and release review; C has independent real-browser negative controls; B consumes UNKNOWN/receipt-vs-Apply states; D preserves Marketing D8 automatic Sync/EFB claim HOLD. The synthetic Chrome boundary now has **16/16 PASS**, while **production Functions, actual LogMate canonical wire, Safari installed/managed EFB, full 37-store Apply/Cursor and user file custody remain OPEN**. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
 
 **Adjacency stop:** The remaining adjacent question is not another generic cache fixture. It is whether the *future deployed* W-020/W-021 route on the exact LogMate NORMAL build retains these exclusions while enforcing server Owner and immutable receipt. That requires Engineering implementation and exact runtime evidence. No product or peer repository changes.
+
+
+## 15. Auth-session persistence, destructive logout and installed-PWA custody [2026-10-29; SOURCE / SYNTHESIS / PRODUCT TRANSFER]
+
+**Scope and authority.** Track E owns the security/operational trust boundary. A supplies Firebase/browser storage and WebKit mechanics; C owns runtime falsification; B consumes the state/recovery contract; D consumes privacy and claims restrictions. This is a **source-level security and failure-mode analysis**, not an observed deployed LogMate defect, executed Chrome test, or a new product policy. LogMate product [MASTER](https://github.com/yhappcom/logmate/blob/main/MASTER.md) and [approved Manual Sync contract](https://github.com/yhappcom/logmate/blob/main/docs/specs/local-first-manual-delta-sync-contract.md) supersede research suggestions.
+
+### 15.1 History → design principle → primary standards/platform [SOURCE / CHANGE WATCH]
+
+Traditional server-centric logout often clears browser session state and cached private responses. Offline-first PWA changes the data model: the browser origin can hold the **only working copy of a user's unsynchronized flight ledger**, not merely a cache of remote data. Therefore, **credential invalidation, local ledger access lock, data deletion, and independent backup are four separate operations**. The blanket "clear all site data on logout" recipe is unsafe for a locally authoritative ledger.
+
+Primary/current evidence reviewed 2026-10-29:
+- [Firebase Auth Web persistence](https://firebase.google.com/docs/auth/web/auth-state-persistence), page updated **2026-10-21 UTC**: LOCAL persists across browser closure and synchronizes same-origin tabs; SESSION is tab/session scoped; NONE is memory-only; default browser behavior is LOCAL when supported. Firebase explicitly distinguishes Auth persistence from Firestore offline persistence. **This documents the JavaScript SDK, not a measured Flutter Web FirebaseAuth persistence setting.**
+- [Firebase Admin session management](https://firebase.google.com/docs/auth/admin/manage-sessions): locally present ID tokens and refresh-token revocation are different; server-side revocation checks require the documented additional validation path. A locally restored currentUser is not proof of current server Owner authority.
+- [WebKit Safari 17.2 Home Screen](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/): at Home Screen creation, login **cookies** may be copied once, but **other local storage is not**; subsequent web-app and Safari data do not share a store. This does **not** certify MDM Web Clip behavior or all future iPadOS releases.
+- [MDN Clear-Site-Data](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Clear-Site-Data): the "storage" directive deletes IndexedDB and unregisters service workers; the "*" wildcard broadens clearing. MDN gives an ordinary logout example using "cache", "cookies", "storage", etc. **That example is not safe to adopt wholesale for LogMate** because its Web ledger is IndexedDB-backed.
+- [Firebase App Check callable enforcement](https://firebase.google.com/docs/app-check/cloud-functions) and [2nd-gen callable options](https://firebase.google.com/docs/reference/functions/2nd-gen/node/firebase-functions.https.callableoptions): App Check proves a different property from user UID authorization; consumed limited-use token state is exposed to the handler and does not by itself implement immutable Operation/Receipt idempotency. Replay protection adds a verification round trip and has rollout/latency implications.
+- [Firebase Service Worker sessions](https://firebase.google.com/docs/auth/web/service-worker-sessions) documents an **optional** Auth-token management pattern. Its existence does not mean the current LogMate generated Worker implements it.
+- [OWASP Session Management](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html) is useful for XSS/token exposure, explicit logout, and session invalidation, but a server-session cleanup pattern must be adapted to an offline-first user-data store.
+
+### 15.2 Exact product source reconciliation [SOURCE / CONTRADICTION]
+
+Read-only LogMate **main@2f78e7310dfe2c46c1f1cba0583e2abdd269ffdf** (2026-10-28 10:28 UTC) was checked, including:
+- [MASTER §0](https://github.com/yhappcom/logmate/blob/main/MASTER.md): account required, Firebase UID is Owner, matching UID plus durable local access governs offline use, network/token-refresh failure is **not** explicit Sign out, explicit Sign out locks locally before Firebase sign-out; Manual Delta Sync not implemented.
+- [auth_engine.dart](https://github.com/yhappcom/logmate/blob/main/lib/auth/auth_engine.dart), blob fcc23dcf: locally restored Auth is separate from fresh remote acceptance; network failure maps to temporarily unreachable/indeterminate, while explicit deleted/disabled outcomes have different types. A stale remote result must not clear a newly changed UID.
+- [local_ledger_auth_access_service.dart](https://github.com/yhappcom/logmate/blob/main/lib/application/logbook/local_ledger_auth_access_service.dart), blob a6e74cd1: explicit sign-out delegates to local coordinator; remote rejection clearing is intentionally **not** the explicit local lock or ledger deletion.
+- [local_ledger_access_coordinator.dart](https://github.com/yhappcom/logmate/blob/main/lib/application/logbook/local_ledger_access_coordinator.dart): signOutExplicitly awaits durable lockForExplicitSignOut **before** invoking Auth signOut; local lock failure prevents Auth sign-out; Auth sign-out failure leaves the lock intact. Account-required startup distinguishes unverified, mismatched, deletion-locked, explicit-signout-locked and locally usable offline states.
+- [sembast Web opener](https://github.com/yhappcom/logmate/blob/main/lib/repository/logbook/sembast_database_opener_web.dart) and [515 §14](515_stage8_pwa_local_ledger_storage_backup_restore_custody_and_device_transfer_20261024.md): browser local ledger is an IndexedDB-backed database containing a 37-store logical registry; the W-013 external file workflow is not implemented at this checked source.
+- [firebase.json](https://github.com/yhappcom/logmate/blob/main/firebase.json): Hosting currently declares Cache-Control no-cache/no-store and auth-action rewrites, **not** a Clear-Site-Data logout header or a Manual Sync rewrite. [firestore.rules](https://github.com/yhappcom/logmate/blob/main/firestore.rules) deny direct client reads/writes. These files do **not** prove what any deployed CDN/Functions response actually emits.
+
+**Important correction against generic logout advice:** A future blanket Clear-Site-Data "storage" or "*" response on the same app origin could remove the very IndexedDB ledger the product's explicit sign-out is designed to preserve. This is a **source-and-standard-derived high-consequence integration hazard**, not a currently observed LogMate implementation bug. Avoid recommending that header as a generic logout fix. Conversely, do not infer that a Firebase Auth sign-out erases local flight records: the checked product explicitly separates them.
+
+### 15.3 Five independently owned states [SYNTHESIS / OPERATIONAL JUDGMENT]
+
+1. **AUTH_PRESENT**: Firebase client has a locally restored session. This is not a fresh server grant, not Owner match, not a guarantee of token validity, and not data durability.
+2. **LEDGER_OWNER_MATCHED_AND_UNLOCKED**: durable local Owner binding and local lock permit access under the product's offline policy. This is not a server Sync grant. A different UID is a hard mismatch, not a migration opportunity.
+3. **REMOTE_AUTHORITY_ACCEPTED**: backend verifies current authenticated subject, revocation/disabled/deletion state and current ledger Owner/generation. An Auth token, App Check token or Origin header alone is insufficient.
+4. **REMOTE_OPERATION_ACCEPTED**: immutable Operation ID/digest and current Owner checks result in a durable receipt; lost ACK remains UNKNOWN. This is not a local Apply/Cursor commit.
+5. **DATA_CUSTODY_VERIFIED**: independent external file readback plus semantic restore of the 37-store ledger, or a separately proven remote recovery path. Neither LOCAL Auth persistence nor a cached Worker shell meets this predicate.
+
+A disconnected EFB may satisfy #2 while #3 is temporarily unobservable. It must not fabricate #3–#5 or start an unrequested background Push/Pull. An offline-auth outage is not an instruction to wipe data; a confirmed wrong UID/deletion lock is not a license to show another Owner's ledger.
+
+### 15.4 Browser containers, persistence, and cross-tab hazards [A → E / CHANGE WATCH]
+
+- Same-origin browser tabs may share Firebase Auth LOCAL state and Sembast Web IndexedDB, but an explicit sign-out in one tab must be verified against a second tab with an already rendered sensitive screen and in-flight transaction. Auth synchronization is not a proof of immediate local UI redaction or durable lock propagation.
+- Switching Firebase Auth LOCAL↔SESSION/NONE has documented cross-tab consequences; no app should infer that one browser profile's Auth mode also determines ledger storage lifecycle.
+- Safari tab → user Home Screen installation is a **new data-custody boundary**: cookie copy is not ledger copy; even a successfully copied cookie does not carry the Firebase SDK's script-storage session or the 37-store IndexedDB ledger. The exact Firebase Flutter Web provider behavior must be measured, not inferred from the cookie rule.
+- Managed Web Clip, user Home Screen and Safari tab are separate acceptance targets. Managed device policy, browser engine version, OAuth redirect/popup, cookie transfer, storage persistence, local owner binding and file export may differ. No unattended direct P2P, background Sync or hotspot guarantee follows from installability.
+
+### 15.5 Revocation, App Check and response ambiguity [E / A / C]
+
+- Firebase refresh-token revocation is not a magic synchronous offline notification. A disconnected client may have locally readable data under the approved offline policy; the next online privileged request must independently verify current authority. Do not call a network failure a revoked account.
+- A signed-out or revoked user's **old receipt** must not authorize new writes or leak another Owner's receipt. Server-side UID, ledger Owner/generation and receipt ownership checks remain mandatory even with a valid App Check token.
+- If callable App Check replay protection is enabled, a repeated request may need a **fresh limited-use App Check token** while preserving the **same original Operation ID/digest** for safe idempotent reconciliation. An already-consumed App Check token is not evidence that the operation committed; a new App Check token is not a new user edit. The handler's alreadyConsumed decision and server receipt state must be tested independently.
+- Do not silently replace Manual Sync with a service-worker token-interception architecture. The current Worker is shell-focused; adding Auth handling increases credential exposure, route, cache and deployment requirements. Any future privileged response must remain outside shell CacheStorage.
+- Authentication failure, App Check rejection, Owner rejection, lost ACK, local Apply failure and verified backup completion need separate status/error codes and privacy-safe observability. Never log tokens, UID, ledger payload or backup bytes.
+
+### 15.6 Operational alternatives and release choice [SYNTHESIS / MINTTAP DIRECTION, NOT PRODUCT DECISION]
+
+**A. Current product-preserving logout:** durable local lock → Auth sign-out → remove privileged in-memory UI state and in-flight remote capability; retain IndexedDB flight ledger for same-UID recovery. This matches current LogMate contract; runtime cross-tab/device behavior remains OPEN.
+
+**B. Destructive account deletion:** separate authenticated/resumable deletion saga with explicit local wipe **only at the approved terminal stage**; do not substitute a broad HTTP header or browser clear-data action for that saga.
+
+**C. Shared-device stricter session policy:** consider shorter Auth persistence/reauthentication only after actual managed-EFB deployment requirements, usability and offline-recovery trade-offs are known. Do not impose SESSION/NONE solely from generic shared-computer advice; it can change cold-start/offline access without proving better data custody.
+
+**D. Cookie/BFF architecture:** can reduce script-readable token exposure in some web deployments but introduces cookie CSRF, server session, separate Home Screen cookie-copy, offline and hosting requirements. It is **not** a drop-in replacement for the approved Firebase client/Manual Sync contract.
+
+### 15.7 Discriminating acceptance packet [VALIDATION — DEFINED, NOT EXECUTED]
+
+| Case | Exact future product/runtime oracle |
+| --- | --- |
+| AS01 | NORMAL Web, 37-store synthetic owner ledger; explicit Sign out persists local lock, leaves all ledger stores intact after close/reopen, clears authenticated UI. |
+| AS02 | Two same-origin tabs, one sign-out during the other's rendered Home/in-flight write; no stale privileged display/write after durable lock; third connection reads unchanged data. |
+| AS03 | Auth sign-out fails after durable lock; next startup stays locked; same UID reauth can unlock without re-creating ledger. |
+| AS04 | Local lock fails before Auth sign-out; no false "signed out" success and no destructive partial state. |
+| AS05 | Browser cold restart offline with previously verified matching UID; distinguish local use, remote UNKNOWN and explicit lock. |
+| AS06 | Different Firebase UID signs into an existing owner-bound browser profile; no auto-rebind, read, mutation or backup disclosure. |
+| AS07 | Revoked/disabled/deleted remote subject and stale response race; server denies privileged operations; client preserves appropriate non-destructive local state pending approved recovery. |
+| AS08 | Safari tab → installed Home Screen: independently measure cookie, Firebase Auth state, IndexedDB store inventory, new Replica ID, and file-based restore; no inferred automatic transfer. |
+| AS09 | Managed Web Clip on physical EFB: record iPadOS/MDM policy, session mode, offline cold launch, file export and removal/reinstall data custody. |
+| AS10 | Inject a **test-only** Clear-Site-Data "storage" response on a disposable synthetic origin and independently observe IndexedDB loss; never test this destructively on real flight records or production. |
+| AS11 | Future callable App Check consumed-token retry after lost ACK: new attestation + same immutable Operation ID; one durable receipt; consumed-token handler decision, current Owner and revocation independent. |
+| AS12 | Verify deployed Hosting/Functions/edge headers and exact Worker route: no blanket storage wipe on ordinary logout, no privileged receipt CacheStorage replay, no automatic Sync on resume. |
+| AS13 | Accessible recovery UX distinguishes signed out, locked locally, wrong UID, offline remote UNKNOWN, Auth rejected, pending outbox and independently verified external backup. |
+| AS14 | Check sanitized telemetry and CI logs: no UID, bearer/refresh token, original Operation ID, flight payload or .lbk bytes; success metrics are not conflated. |
+
+**Evidence ladder:** CLAIM = non-destructive local sign-out plus independent remote authority and PWA custody; PROPERTY = product MASTER + Firebase/WebKit/MDN; TARGET = exact future LogMate NORMAL Web and physical EFB; INPUT = synthetic 37-store data/disposable UIDs and controlled failures; ORACLE = separate third-connection IDB inventory, Auth/server response and external file readback; ENV/OBSERVATION = **not executed**; VERDICT = **OPEN**; LIMIT = current source and standards do not certify shipped browser, managed iPad, deployed headers, App Check or Sync.
+
+### 15.8 Cross-track allocation, contradiction and next gate
+
+**E** remains primary: prevent security cleanup from becoming data loss, preserve UID/Owner/Receipt authority, and define server/client logout lifecycle. **A** owns Auth persistence, tab/container boundaries and Clear-Site-Data mechanics; **C** independently executes AS01–AS14 with exact build/negative controls; **B** consumes Design Studio [W121](https://github.com/yhappcom/design-studio/blob/main/progress/WEB_STATUS.md) and [CD127](https://github.com/yhappcom/design-studio/blob/main/progress/CONTENT_STATUS.md) for truthful accessible state language, not an invented visual system; **D** consumes Marketing [D8 HOLD](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) and does not claim offline transfer, secure logout or automatic Sync without real proof. Software Engineering [S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_logmate_auth_onboarding_integrated_product_contract_2026-09-24.md) and its [Validation Standard](https://github.com/yhappcom/software-engineering-studio/blob/main/methods/VALIDATION_STANDARD.md) own product execution and independent oracles.
+
+**Contradiction resolved at research level:** generic OWASP/MDN advice to clear browser storage on logout conflicts with the product's explicit preserve-and-lock local-first ledger contract. Resolve by separating credential revocation, local lock, destructive deletion and backup—not by blindly deleting site data. This is **not** evidence that LogMate currently sends Clear-Site-Data. **Next meaningful gate:** Engineering-authorized exact NORMAL sign-out/cross-tab/storage-header inspection, then physical Safari Home Screen/managed EFB and W-013 external file custody; no more synthetic case-count expansion without a discriminating new question. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
