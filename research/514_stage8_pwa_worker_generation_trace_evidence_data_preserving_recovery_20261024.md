@@ -1,7 +1,7 @@
 # 514 — Stage 8 PWA Worker Generation, Trace Evidence Admission and Data-Preserving Recovery
 
 Date: 2026-10-24 KST
-Status: **SOURCE/SYNTHESIS + executable V8-adjudication model (24/24 synthetic cases) / PRODUCT BROWSER EXECUTION OPEN / Production validation OPEN / PWA release HOLD**
+Status: **SOURCE/SYNTHESIS + Chrome synthetic 17/17 executed / LogMate W-031 iPadOS Safari Simulator ACCEPTANCE HARNESS PARTIAL (product-recorded) / NORMAL + physical/managed EFB OPEN / Production validation OPEN / PWA release HOLD**
 Canonical owner: **Track E — Web Architecture, Security & Operations**; Track A supplies browser lifecycle mechanics, Track C independently owns trace fidelity and test execution; B/D consume conclusions without duplicating E.
 
 ## 0. Canonical source refresh, scope and evidence boundary [SOURCE]
@@ -173,3 +173,66 @@ The next fixture revision adds an explicit Service Worker MessageChannel version
 **What the correction teaches:** Worker lifecycle tests must bind the **actual controller generation of each live client** before asserting waiting/activation semantics. A page displaying cached v2 HTML or receiving a v2 asset alone is not sufficient. The first failed run at SW07 and the pinned-run disappearance of waiting are not grounds to weaken the oracle to a green status; they motivated new independent version identification and two-client admission. This is a substantive A/C→E transfer, not a change to product policy.
 
 **Final evidence gate:** Applied Stage 8 ACTIVE; **synthetic actual Chrome 17/17 PASS** at a066d603; actual LogMate NORMAL/Worker/client map, 37-store Sembast restore, HTTPS host, Safari/iPadOS Home Screen/MDM Web Clip and native-mobile Sync **OPEN**; PWA release **HOLD**. The next useful work requires real product build/runtime and managed-device evidence, not additional generic synthetic Worker iterations.
+
+
+## 13. 2026-10-28 — LogMate W-031 iPadOS Safari Simulator product-evidence transfer and NORMAL release differential [SOURCE / VALIDATION / CONTRADICTION / TRANSFER VALIDATION]
+
+### A. Provenance and exact source continuity [SOURCE]
+
+This checkpoint independently **reads** existing product-recorded simulator evidence and exact product source blobs. It does not execute a new browser, build or physical-device test. Earlier blanket wording that LogMate has no browser runtime evidence is too broad: there is **bounded LogMate ACCEPTANCE HARNESS Safari Simulator evidence**, not NORMAL production validation.
+
+- Read-only product HEAD: [LogMate main d3bc214](https://github.com/yhappcom/logmate/commit/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f). W-031 PWA artifact source: **7caaee998251602e72159eeebda61f701bdea270**; later follow-up execution: **d346694ea17a57a093ede203a94c70aa98738f7f**. A later documentation/Native merge is not a new PWA build.
+- Evidence: [W-031 narrative](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/docs/evidence/w031-simulator-preacceptance-2026-10-27.md), [initial structured runtime](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/docs/evidence/w031-simulator-2026-10-27/runtime-summary.json) blob **9fae1dccc8c69b7e1bee2831ebee8419574c0968**, and [Safari follow-up JSON](https://github.com/yhappcom/logmate/blob/d3bc214fe9b4b7bf84702f898b4e6993a4127e2f/docs/evidence/w031-safari-followup-2026-10-27/results.json) blob **0f04987eb71742222166d5fe0dcc520afd8f2be2**. These are product-reported observations, not newly independently executed results.
+- GitHub blob SHA comparison between artifact-source ref and current product HEAD: **tool/pwa_precache.dart** 90a67954af618a4e18199fa92555491c56167c17; **web/flutter_bootstrap.js** a70625e8bda32aafd5dd23822c017d05229f0e63; **web/manifest.json** 8225e76fe032e792c30b0f22efa1f7cafab68119; **lib/debug/persistence_acceptance_harness.dart** 226a6ccce2aca8dc38bc21622359050b925b89da. All four source blobs match across refs; this does NOT prove full tree/dependencies, generated artifacts or NORMAL entrypoint are unchanged.
+- Recorded PWA ACCEPTANCE artifact: **appBuildId 2b515d6c9cf282b2a42b186f45c7b5ea**, **databaseCapability 17**, **API version 2**, **main.dart.js SHA-256 46d9015b61e097713349b9c5bc463e33a3188f65471c6b1d56f646d368dbff76**. Environment: iPad Pro 11-inch M5 Simulator, iPadOS 26.1 build 23B86, Safari 26.1, origin http://127.0.0.1:49331. Acceptance entrypoint bypasses SessionGate and uses an unbound synthetic Flight; it is not a matching-Firebase-UID product test.
+- Source bootstrap registers the owned /logmate_service_worker.js with updateViaCache none. Generated Worker maintains verified versions, deliberately avoids automatic skipWaiting and cache deletion. Therefore §12's **intentionally forced** Chrome mixed-version counterexample is not proof that LogMate takes the same path. The cross-generation control-cache race described in §3 remains a conditional hypothesis, not a W-031 observation.
+
+### B. What is observed vs what is still OPEN [VALIDATION / CONTRADICTION]
+
+| Evidence layer | W-031 observation | Narrow admissible conclusion |
+| --- | --- | --- |
+| Build | make build-pwa-acceptance exited 0; generated Worker/font/shell checks | Acceptance artifact build only; NORMAL build and deployed HTTPS bytes OPEN |
+| Safari runtime | Actual iPadOS 26.1 Simulator Safari tab opened loopback harness | Simulator Safari tab, not physical managed EFB |
+| Worker activation | WebDriver ready initially activating; later statechange to activated; registration scope and script observed | WebDriver-context activation PASS; ready alone is not activation |
+| Client control | WebDriver root reload observed active controller /logmate_service_worker.js | WebDriver context PASS; ordinary Safari-tab controller and first-claim late asset G02 OPEN |
+| Storage | Ordinary Safari raw 21 Sembast entries retained across process reopen; WebDriver context independently 15→19 entries and same-session stable read | Two separate context-specific fixture observations; not 37-store NORMAL restore |
+| Offline | Test-owned loopback server stopped, curl failed, Safari terminated/reopened root showing cached fixture | Origin-unavailable cached relaunch only; not airplane mode, OS reboot or offline authenticated edit |
+| UI and accessibility | WebDriver click intercepted, semantic text empty, unusable UI screenshot | UI/AT/interaction NOT VERIFIED despite Worker and IndexedDB observations |
+| Home Screen | Share sheet appeared, installation action unavailable to automation | Installed PWA NOT VERIFIED; no Safari→Home Screen data transfer claim |
+| Managed Web Clip | No MDM profile, airline policy, full-screen Web Clip or physical EFB involved | NOT RUN |
+| Owner/Sync | SessionGate bypass, unbound fixture, no verified Firebase UID or remote server | Auth/Owner/Manual Sync/Receipt/Cursor NOT RUN |
+| Data recovery | Local process restart, not backup→loss→restore or reprovision | Bounded same-origin persistence, not independent recovery or indefinite durability |
+| Native | Separate acceptance-flavor iOS/Android Simulator process-persistence evidence; Production default compile-only | Native harness does not transfer to installed PWA or production Sync |
+
+**Independent-oracle warning:** ordinary Safari read-only 21-entry hash **a06c90de776388addc77ddbbf2e585897f5ef7ec208fe024206063d3f3796470** and WebDriver context 19-entry hash **730c2c1363bbec2109a516d7656db4457ebcbd73d5775e31205d31b87761e424** arise from different storage contexts and hashing procedures. Their inequality does not show corruption; their separate persistence does not show Home Screen data sharing. Raw Sembast entries are not the count of LogMate's 37 logical stores or Flights.
+
+### C. Platform standard and managed-iPad policy boundary [SOURCE / CHANGE WATCH]
+
+- [WebKit Safari 26.0, 2025-09-15](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/): Home Screen entry on iOS/iPadOS 26 can open as a web app without a manifest or Service Worker. This is entry behavior, not offline support or airline MDM permission.
+- [WebKit Safari 17.2, 2023-12-11](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/): newly created Home Screen web apps may copy login cookies, but no other local storage; later website data is not shared. Cookie/session continuity, ledger migration and current Owner authority require separate evidence.
+- [WebKit storage policy, 2023-08-10](https://webkit.org/blog/14403/updates-to-storage-policy/): IndexedDB, Cache Storage and Service Worker storage face quota and eviction conditions; a local write or persist grant is not backup.
+- [Apple WebClip payload](https://developer.apple.com/documentation/DeviceManagement/WebClip?language=swift) and [Apple deployment guide](https://support.apple.com/en-gb/guide/deployment/depbc7c7808/web): managed com.apple.webClip.managed and FullScreen are distinct provisioning controls; neither guarantees airline permission, PWA data migration or unattended Sync.
+- W-031 WebDriver reported secureContext true for loopback. That is NOT evidence for production HTTPS host, TLS/CSP, deployed Worker scope, Firebase authenticated endpoint or storage continuity across origin change.
+
+### D. Next integrated product acceptance, with negative controls [MINTTAP DIRECTION / DEPENDENCY / OPEN]
+
+1. **NORMAL artifact custody (E/A/C):** Engineering-owned clean NORMAL Flutter Web build, locked dependency graph, generated Worker SHA separate from shell appBuildId, manifest, asset digest/count, served HTTPS inventory, base href and acceptance-marker negative control. W-031 Acceptance appBuildId is not a NORMAL release identity.
+2. **First-control and update (A/C/E):** On exact NORMAL build, first network page → Worker install/claim → late same-origin shell/unknown asset → controlled root reload; capture controller generation, clientId/resultingClientId, mapping, response status and digest. Add old/new Worker write barriers, waiting/activation and failed-update independent control-cache oracle; never clear IndexedDB or Cache Storage to make a test pass.
+3. **Context migration (A/E/C):** On disposable iPad profile, seed a non-sensitive known record/operation nonce in Safari, then separately create Home Screen app and policy-approved MDM Web Clip. In each context independently inventory origin, install identity, cookies, IndexedDB store list/nonce, Worker controller, offline cold launch, storage quota and verified restore. Assume no data copy; if absent, use explicit product-authorized import while retaining old data.
+4. **Ledger/authority (E/C; Engineering implementation owner):** matching verified UID, locked/wrong Owner, 37-store whole-ledger LBK restore, stable identity/revision/tombstone/outbox/cursor, repeated-restore collisions, offline edit/reopen and current Owner check. Local commit, pending Sync, server receipt and convergence must be distinct oracles.
+5. **Failure and recovery (E/A/C):** On disposable data with independent backup, distinguish origin-down from all-network-down, failed Worker install, quota pressure, corruption, OS reboot, app deletion, reprovision, token expiry and Owner transfer. Only policy-approved foreground Manual Sync may be tested; do not infer hotspot or unattended background communication.
+6. **UX and claims (B/D):** Design Studio W121 owns human/AT validation of Saved locally, Backup verified, Pending Manual Sync, Owner verification required and Offline shell ready. Marketing D8 retains public claim HOLD; privacy-minimal measurement must not collapse icon, cold offline, restored ledger, receipt and convergence into one install metric.
+
+### E. Five-track allocation and exit judgment [SYNTHESIS / TRANSFER VALIDATION]
+
+| Track | Evidence maturity and gap | Responsibility |
+| --- | --- | --- |
+| E primary | Synthetic Chrome and Firebase security evidence mature; NORMAL release identity, authenticated data custody and managed EFB not validated | Security/release authority, data-preserving recovery, context transition |
+| A dependency | Product Worker source verified and W-031 Safari harness controller observed; first-claim, Home Screen and MDM still OPEN | Browser mechanics, Worker generations and OS/browser separation |
+| C independent oracle | Chrome 17/17 and product-recorded Safari harness are different scopes; WebDriver UI oracle failed | Exact artifact, store, response, accessibility and failure-negative evidence |
+| B consumer | Design Studio Web Stage 3 PRACTICE / W121 human/AT OPEN | Truthful offline/update/restore/denial states, not speculative visual PASS |
+| D consumer | Marketing D8 product-claim HOLD | Separate install, offline, backup, owner, receipt and convergence measurement |
+
+**Gate:** Applied Stage 8 ACTIVE · **Chrome synthetic 17/17 PASS** at exact prior ref · **LogMate Safari Simulator ACCEPTANCE HARNESS PARTIAL** (product-recorded) · **Production validation OPEN · PWA release HOLD**. This run adds SOURCE/TRANSFER reconciliation only; no new browser execution, NORMAL product validation or peer-repository changes.
+
+**Adjacent-value check:** Another generic Worker synthetic variation has lower information gain than the exact NORMAL artifact, 37-store runtime and physical/managed iPad. Stop at this substantive source-evidence checkpoint rather than manufacture filler.

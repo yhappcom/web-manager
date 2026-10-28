@@ -1,5 +1,8 @@
 # MintTap Web Manager Research Index
 
+**2026-10-28 LogMate W-031 iPadOS Safari transfer:** [514 §13](514_stage8_pwa_worker_generation_trace_evidence_data_preserving_recovery_20261024.md) reconciles read-only LogMate main d3bc214, exact W-031 Acceptance source 7caaee9, structured iPadOS 26.1 Safari Simulator evidence and four unchanged PWA source blobs. **HARNESS PARTIAL:** Worker activation/control in WebDriver context, synthetic IndexedDB, Safari same-origin reopen and origin-unavailable cached relaunch. **NOT** NORMAL/Owner/37-store, installed Home Screen, MDM Web Clip, physical EFB, HTTPS, backup or Sync. Chrome synthetic 17/17 is separate. Production/PWA release gates unchanged.
+
+
 **2026-10-28 Stage 8 payload/auth falsification (execution OPEN):** [523 §10](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) — FE17 disabled-session status vs plain UID verification; FE18 deliberately unsafe unchanged-digest/changed-payload negative control; FE19 fixture-only server-recomputed SHA-256 digest with unknown-field and collision rejection. Source and V8 parse check recorded; **new hosted FE17–FE19 results OPEN**. Previous FE01–FE16 16/16 at exact `5594585a` remains separately scoped. Product/Functions/Safari/managed EFB HOLD.
 
 
