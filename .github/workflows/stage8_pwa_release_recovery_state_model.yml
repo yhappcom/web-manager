@@ -26,7 +26,7 @@ jobs:
           node --version
           node --check research/handoffs/pwa_release_recovery_state_model.mjs
           node research/handoffs/pwa_release_recovery_state_model.mjs | tee /tmp/recovery-model-evidence.log
-          node -e 'const fs=require("fs");const s=fs.readFileSync("/tmp/recovery-model-evidence.log","utf8").trim().split("\n").at(-1);const v=JSON.parse(s);if(v.passed!==16||v.total!==16||v.browser!==false||v.product!==false)process.exit(1);'
+          node -e 'const fs=require("fs");const s=fs.readFileSync("/tmp/recovery-model-evidence.log","utf8").trim().split("\n").at(-1);const v=JSON.parse(s);if(v.passed!==24||v.total!==24||v.browser!==false||v.product!==false)process.exit(1);'
       - name: Preserve exact model output
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

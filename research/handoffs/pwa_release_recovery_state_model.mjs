@@ -143,6 +143,74 @@ test('M16 unknown mapped build fails closed',()=>{
   const s=fresh();s.control.clientBuilds.tab1='missing';
   assert.equal(serve(s,'tab1','index.html').status,503);
 });
+
+test('M17 UNSAFE stale whole-catalogue write loses v2 promotion',()=>{
+  const s=fresh(),stale=copy(s.control),r=stage(s,'v2',Object.keys(files.v2));
+  assert.ok(commit(s,'v2',r.cacheName));
+  stale.clientBuilds.legacy='v1';s.control=stale;
+  assert.equal(s.control.active,'v1');
+  assert.equal(s.control.cacheFor.v2,undefined);
+});
+test('M18 fresh serialized catalogue merge preserves promotion and old client',()=>{
+  const s=fresh(),r=stage(s,'v2',Object.keys(files.v2));
+  assert.ok(commit(s,'v2',r.cacheName));
+  const next=copy(s.control);next.clientBuilds.legacy='v1';s.control=next;
+  assert.equal(s.control.active,'v2');
+  assert.equal(serve(s,'legacy','main.dart.js').bytes,'v1-js');
+  assert.equal(serve(s,'tab2','main.dart.js').bytes,'v2-js');
+});
+test('M19 UNSAFE stale repair snapshot can erase newer active pointer',()=>{
+  const s=fresh(),stale=copy(s.control),repairStage=stage(s,'v1',Object.keys(files.v1));
+  const upgrade=stage(s,'v2',Object.keys(files.v2));
+  assert.ok(commit(s,'v2',upgrade.cacheName));
+  stale.cacheFor.v1=repairStage.cacheName;s.control=stale;
+  assert.equal(s.control.active,'v1');
+  assert.equal(s.control.cacheFor.v2,undefined);
+});
+test('M20 fresh merge of old-build repair retains new active build',()=>{
+  const s=fresh(),r=stage(s,'v2',Object.keys(files.v2));
+  assert.ok(commit(s,'v2',r.cacheName));
+  delete s.caches['shell-v1']['main.dart.js'];
+  assert.ok(repair(s,'v1'));
+  assert.equal(s.control.active,'v2');
+  assert.equal(serve(s,'tab1','main.dart.js').bytes,'v1-js');
+  assert.equal(serve(s,'tab2','main.dart.js').bytes,'v2-js');
+});
+test('M21 UNSAFE missing old-client mapping silently switches to active build',()=>{
+  const s=fresh(),r=stage(s,'v2',Object.keys(files.v2));
+  assert.ok(commit(s,'v2',r.cacheName));
+  delete s.control.clientBuilds.tab1;
+  assert.equal(serve(s,'tab1','main.dart.js').bytes,'v2-js');
+});
+test('M22 ambiguous known-client mapping must deny rather than remap',()=>{
+  const s=fresh(),r=stage(s,'v2',Object.keys(files.v2));
+  assert.ok(commit(s,'v2',r.cacheName));
+  const knownBeforeLoss=new Set(['tab1']);
+  delete s.control.clientBuilds.tab1;
+  const serveWithKnownClientFence=(client,path)=>
+    knownBeforeLoss.has(client)&&!Object.hasOwn(s.control.clientBuilds,client)
+      ? {status:503,reason:'AMBIGUOUS_CLIENT_BUILD'}:serve(s,client,path);
+  assert.equal(serveWithKnownClientFence('tab1','main.dart.js').status,503);
+  assert.equal(serveWithKnownClientFence('tab2','main.dart.js').bytes,'v2-js');
+});
+test('M23 UNSAFE verified old bytes alone permit implicit active downgrade',()=>{
+  const s=fresh(),r=stage(s,'v2',Object.keys(files.v2));
+  assert.ok(commit(s,'v2',r.cacheName));
+  assert.equal(commit(s,'v1','shell-v1',{expectedActive:'v2'}),true);
+  assert.equal(s.control.active,'v1');
+});
+test('M24 explicit release policy fence blocks unapproved downgrade',()=>{
+  const s=fresh(),r=stage(s,'v2',Object.keys(files.v2));
+  assert.ok(commit(s,'v2',r.cacheName));
+  const allowed=(from,to)=>!(from==='v2'&&to==='v1');
+  const guardedCommit=(build,cache,expected)=>
+    allowed(s.control.active,build)&&commit(s,build,cache,{expectedActive:expected});
+  assert.equal(guardedCommit('v1','shell-v1','v2'),false);
+  assert.equal(s.control.active,'v2');
+  assert.equal(serve(s,'tab1','main.dart.js').bytes,'v1-js');
+  assert.equal(serve(s,'tab2','main.dart.js').bytes,'v2-js');
+});
+
 let passed=0;
 for(const [name,fn] of tests){
   try{fn();passed++;console.log('PASS '+name);}

@@ -541,3 +541,36 @@ Each product case requires exact \`repo/ref/build/device/OS/browser/fixture\`, i
 - **D consumer:** distinguish install, cached shell, local ledger availability, verified recovery, independent backup and completed Manual Sync in any telemetry/claim. Marketing D8 EFB/offline/automatic Sync claims remain HOLD.
 
 **MINTTAP DECISION:** no release-policy change and no LogMate implementation approval in this research. **OPEN:** exact NORMAL RP01–RP10, Safari Home Screen/Web Clip, physical EFB, actual 37-store backup and Owner/authenticated Sync. **CHANGE WATCH:** Safari/WebKit storage policy, installation behavior, worker lifecycle implementations, browser quota/eviction and managed-device restrictions. **Next high-information-gain step:** Engineering-authorized exact NORMAL RP01–RP07 with real Worker source and barrier-controlled two-generation interleaving, followed by physical iPad/backup acceptance. Additional synthetic-only variants should not displace those tests.
+
+
+## 19. 2026-10-28 — Model false-green audit: stale catalogue, lost client identity and downgrade authority [SOURCE / VALIDATION / CONTRADICTION]
+
+### 19.1 Exact prior execution and limitation
+[GitHub Actions run 40661266365](https://github.com/yhappcom/web-manager/actions/runs/40661266365), job `122724588482`, checked out exact commit `1f6854b230cb845a3feeaa1183a469b69a2f3fbd`. Inspected actual job logs: **M01–M16 16/16 PASS**, JSON `{"passed":16,"total":16,"kind":"PURE_STATE_SYNTHETIC","browser":false,"product":false}`, workflow SUCCESS. This closes the **prior exact-model execution** gate only. No browser/IndexedDB/CacheStorage/LogMate/Safari run follows from this PASS.
+
+The original `commit()` and `repair()` are synchronous, in-memory design functions; their comments about conceptual serialization are **not implemented IndexedDB transactions**. In particular `repair()` reads and replaces the entire control object without a cross-generation concurrency fence, and `commit()` validates bytes but does not impose an explicit release-epoch/downgrade policy. `serve()` falls back to `active` when a client mapping is absent; a genuinely new client and a known old client whose mapping was lost are therefore indistinguishable in that simplified function. These are **model limitations and design questions**, not newly verified LogMate defects.
+
+### 19.2 Eight new counterexamples and safe-policy comparators [VALIDATION — EXECUTION OPEN]
+Added `M17–M24` to the same **public synthetic pure-state model**, bringing the proposed suite to 24 cases. `M17`, `M19`, `M21`, `M23` are explicitly **UNSAFE negative controls**: their PASS means the bad outcome was reproduced in the model, **not** that the unsafe behavior is approved.
+
+| Case | Question / expected result |
+| --- | --- |
+| M17 UNSAFE | Stale whole-object control write after v2 promotion erases v2 metadata |
+| M18 | A fresh serialized merge preserves v2 active and an old-client mapping |
+| M19 UNSAFE | Stale repair control snapshot erases a newer active pointer |
+| M20 | Old-build repair merged against current state retains both v1 and v2 served bytes |
+| M21 UNSAFE | Loss of old-client mapping silently falls back to the newer active build |
+| M22 | A **separately established known-client identity** makes missing mapping fail closed; unknown new client can use active |
+| M23 UNSAFE | Verified old bytes plus a current-active CAS alone can permit an implicit downgrade |
+| M24 | An explicit release-policy fence blocks an unapproved downgrade while preserving old pinned clients |
+
+**Important qualifiers:** M22's `knownBeforeLoss` set is an *independent synthetic oracle*, not an existing LogMate persistence mechanism. M18/M20 model the result of a fresh serialized merge, not the browser transaction scheduler. M24 is an example policy for this fixture, not a universal ban on emergency rollback: a controlled, authenticated, compatibility-checked rollback could be separately authorized. The next executable acceptance must verify actual generation/epoch ownership, transaction boundaries, client mapping recovery and release authority.
+
+### 19.3 Standards, transfer and gates
+**SOURCE (checked 2026-10-28):** [IndexedDB 3.0 transaction scheduling](https://w3c.github.io/IndexedDB/#transaction-scheduling) specifies ordering for overlapping-scope `readwrite` transactions. That protection does **not** apply to a snapshot read before the transaction or to a CacheStorage write performed outside it. [Service Workers standard](https://w3c.github.io/ServiceWorker/) distinguishes installing, waiting and active Workers and their client relationships. The two APIs do not offer a shared atomic commit.
+
+**CONTRADICTION:** An earlier green 16/16 model was insufficient to establish cross-generation control correctness; the four deliberately unsafe controls make false reassurance visible. A hash match is a byte-integrity check against a supplied expected digest, not origin authenticity, owner authorization or approval to activate an older release.
+
+**Five-track integration:** E owns publication authority, stale-catalogue and rollback policy; A supplies Worker/IDB lifecycle mechanics and WebKit differences; C owns exact CI logs, negative-control labeling and future product runtime oracles; B consumes fail-closed but accessible ambiguous-client/offline recovery states (Design Studio W121 still PRACTICE); D retains Marketing D8 EFB/offline/automatic-Sync claims HOLD. Software Engineering owns any product implementation, populated 37-store backup and authenticated Manual Delta Sync. No peer-repository writes.
+
+**OPEN:** Exact M01–M24 hosted CI verdict for the revised code; Engineering-authorized LogMate NORMAL RP01–RP12, real multi-worker interleaving, installed Safari Home Screen/MDM Web Clip, physical managed EFB, backup and Sync. **MINTTAP DIRECTION:** keep PWA release HOLD and do not transfer model results to product claims. **Adjacent-value checkpoint:** after exact CI, prioritize product runtime evidence over further synthetic case-count expansion.
