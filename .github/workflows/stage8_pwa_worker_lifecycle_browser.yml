@@ -1,0 +1,40 @@
+name: Stage 8 PWA Chromium Worker Lifecycle Research
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/handoffs/pwa_worker_lifecycle_browser_probe.py'
+      - '.github/workflows/stage8_pwa_worker_lifecycle_browser.yml'
+permissions:
+  contents: read
+jobs:
+  synthetic-chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact Playwright Python
+        run: python -m pip install playwright==1.57.0
+      - name: Record actual browser and runner
+        run: |
+          python --version
+          python -m pip show playwright
+          command -v google-chrome
+          google-chrome --version
+          python -m py_compile research/handoffs/pwa_worker_lifecycle_browser_probe.py
+      - name: Run disposable browser and storage oracle
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          EVIDENCE_OUT: /tmp/stage8-pwa-worker-browser-evidence.json
+        run: python research/handoffs/pwa_worker_lifecycle_browser_probe.py
+      - name: Upload bounded evidence even on test failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage8-pwa-worker-browser-evidence
+          path: /tmp/stage8-pwa-worker-browser-evidence.json
+          if-no-files-found: ignore
