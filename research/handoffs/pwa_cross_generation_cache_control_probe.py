@@ -78,6 +78,8 @@ def main():
             }""")
             page.reload()
             page.wait_for_function('navigator.serviceWorker.controller !== null')
+            # A navigation creates a new Window global; rebind the event oracle.
+            page.evaluate("window.events=[]; navigator.serviceWorker.addEventListener('message',e=>window.events.push(e.data))")
             baseline=page.evaluate("""async()=>{
               const c=await caches.open('research-control-cache');
               const s=await(await c.match('/research-control.json')).json();
