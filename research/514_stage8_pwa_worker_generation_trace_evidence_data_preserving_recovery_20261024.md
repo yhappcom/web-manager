@@ -467,3 +467,77 @@ This is a **candidate protocol**, not a patch recommendation to apply blindly: c
 **Observed transfer:** a missing or corrupt synthetic shell asset correctly returned 503; a font-only repair did not restore it; an explicitly separate, hash-verified online full-shell repair restored 200; an origin response with different bytes at the same URL was rejected; offline repair did not falsely claim success; the synthetic IDB sentinel remained; reconnecting allowed verified recovery. The synthetic Worker uses a single build and deliberately simple path routing. **This is a bounded feasibility demonstration, not a LogMate NORMAL run, not proof of a LogMate bug, and not a recommendation to replace its current Worker.**
 
 **Next blocker remains:** actual LogMate generated Worker/client-build mapping, two-generation catalogue race, retained immutable old-release bytes, real 37-store backup/restore, authenticated Owner, Safari Home Screen and managed physical EFB. Do not promote the Stage 8 product or PWA release gate on the strength of a research fixture.
+
+
+## 18. Recovery as a cross-storage publication protocol, not merely a download [2026-10-28, Stage 8 integrated checkpoint]
+
+**Scope/evidence identity:** Web Manager source review at \`yhappcom/logmate main@1c4fb1baea98a6195679a64c7088ee1cced5caa0\`, generated Worker source \`tool/pwa_precache.dart\` blob \`90a67954af618a4e18199fa92555491c56167c17\`; previous actual Chrome **synthetic** §17 10/10 at [run 40654354761](https://github.com/yhappcom/web-manager/actions/runs/40654354761). This section adds an explicit **proposed protocol, failure model and deterministic pure-state executable** at [pwa_release_recovery_state_model.mjs](handoffs/pwa_release_recovery_state_model.mjs). Its [CI workflow](../.github/workflows/stage8_pwa_release_recovery_state_model.yml) is a *separate execution gate*: source publication is not CI PASS. **No LogMate code, build or product decision changed.**
+
+### 18.1 History/problem → standards → operational implication [SOURCE]
+
+AppCache's old manifest-driven application-cache lifecycle could produce surprising update and consistency behavior; modern Service Workers separate the install/wait/activate lifecycle from developer-managed CacheStorage and from application data. The [current Service Worker specification](https://w3c.github.io/ServiceWorker/spec/service_worker/) describes \`install\`'s \`waitUntil\` failure as preventing successful installation, while \`skipWaiting()\` permits activation despite existing controlled clients. These are **worker lifecycle guarantees**, not an atomic commit across CacheStorage, IndexedDB, app records and device backups.
+
+The [Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache) is an origin-accessible Request/Response store, not a transaction coordinator; [Cache.put](https://developer.mozilla.org/en-US/docs/Web/API/Cache/put) replaces a matching entry and is not a multi-entry compare-and-swap. The [IndexedDB 3.0 transaction specification](https://www.w3.org/TR/IndexedDB/#transactions) gives overlapping-scope \`readwrite\` transactions serial ordering and conditional updates **inside their transaction**, but a read before opening the transaction can still be stale. IDB cannot atomically commit CacheStorage bytes. Even an IDB committed pointer may later refer to missing CacheStorage content after eviction or independent mutation. [WebKit's storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) explicitly allows best-effort origin eviction and quota pressure. A browser's best-effort local state is not an external .lbk backup.
+
+The [Safari 26 Home Screen change](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/) changes entry/install UX, **not** these atomicity/durability limitations. Home Screen, Safari tab and managed MDM Web Clip are distinct deployment contexts; no unattended EFB background sync, iPad storage retention or install permission is inferred.
+
+### 18.2 Actual LogMate source boundary [SOURCE, not product runtime]
+
+The read-only generator's \`install\` first fills/verifies \`shellCache(OFFLINE_MANIFEST)\`, then records candidate metadata and invokes \`precacheCandidate\`. That latter path downloads **fonts/notices**, checks full manifest readiness and conditionally records current/candidate. \`REPAIR_CACHE\` and legacy \`START_PRECACHE\` invoke \`precacheCandidate\`, **not** a full shell download. A missing or corrupt active shell byte can therefore be served as verified-only **503** while this message path does not restore it. \`verifiedResponse\` hashes the bytes it returns, avoiding a second cache lookup TOCTOU. The generator deliberately avoids \`skipWaiting()\` and automatic cache cleanup, and its whole-control JSON mutation queue is scoped to one Worker global. Source inspection alone cannot prove actual two-generation collision or product failure.
+
+**Independent risk:** candidate metadata can be written during an install that later rejects. A candidate pointer is not proof of a runnable installed worker. Do not equate \`verified:true\`, \`currentBuildId\`, \`clientBuilds\`, cache presence, browser controller or actual data-schema compatibility. Each is a separate observable.
+
+### 18.3 Candidate operational contract [SYNTHESIS / ENGINEERING HANDOFF — NOT APPROVED IMPLEMENTATION]
+
+1. **Immutable release identity:** a build ID binds an exact asset manifest (path, byte count, digest and relevant MIME/response constraints). The origin must retain those exact bytes for an explicitly supported repair window. A later deployment returning changed bytes at the same URL must not silently repair an old build with a newer binary. Stronger *publisher authenticity* is separate: an origin that can replace both manifest and assets defeats an unkeyed SHA-256 consistency check; signed provenance, deployment trust and incident policy are separate Track E concerns.
+2. **Stage, then verify:** fetch each shell resource into a **new, build-scoped staging namespace**; reject non-OK/opaque/redirect or wrong byte count/digest as appropriate for the manifest's response policy. Never set READY or move the served pointer because some files downloaded. Installation may reject on failure. A subsequent repair may target the **same immutable build**; it is not a disguised upgrade.
+3. **Atomic *metadata* publication only:** after the staged namespace is complete, open a single overlapping-scope IDB \`readwrite\` transaction to read current generation, check the expected generation and publish the new namespace pointer plus client/build mapping changes. Do not perform network I/O or await unrelated async work inside that transaction. A CAS failure must retry from fresh metadata or remain unpromoted. This transaction **does not** atomically publish CacheStorage bytes.
+4. **Client generation fence:** an existing v1-controlled tab must continue receiving v1 resources until a separately safe transition; a new v2 tab may receive v2. Avoid unconditional \`skipWaiting\`, blind \`clients.claim\` inference, or deleting old assets just because v2 is active. Bind every response to the requesting client's validated build, not the newest origin URL.
+5. **Verify at point of use:** even after publication, re-read and hash exact cached response bytes before returning them. A missing/corrupt referenced cache yields a truthful 503/REPAIR_REQUIRED; never fall back to a newer same-URL shell. Recover online only with the original build's trusted manifest/bytes; offline failure must not display READY.
+6. **Crash/eviction reconciliation:** startup examines IDB pointers and referenced CacheStorage namespaces independently. Orphan staging caches can be garbage-collected *only* when not referenced. Dangling published pointers must fail closed and offer recovery; a full-origin eviction may remove both IDB and caches and must be handled as a **data-custody incident**, not a clean reinstall of the same ledger.
+7. **User data stays separate:** app-shell repair must not rewrite Sembast, reset Replica ID, advance applied Cursor, fabricate a Manual Sync Receipt, or claim backup completion. Actual LogMate .lbk restore, 37-store atomicity, Auth Owner binding and rollback/schema compatibility remain Software Engineering/product decisions.
+
+**Non-obvious trade-off:** retaining every previous build avoids breaking live tabs but can exhaust storage; eager garbage collection saves quota but can break an old client. A safe collector requires conservative reachability, an explicit retention horizon, verified backups and negative tests for unknown/stale clients. Do not infer that \`clients.matchAll()\` alone proves every recoverable app state or that a persisted client ID is forever valid.
+
+### 18.4 Deterministic failure-model packet [VALIDATION — pure state only]
+
+The [Node 22 fixture](handoffs/pwa_release_recovery_state_model.mjs) is intentionally **not** a browser simulation of CacheStorage/IDB scheduling. It models immutable manifest hashes, staged namespaces, a conceptual serialized pointer commit, pinned clients and hash-at-serve. Its 16 named cases are a reproducible *design-consistency diagnostic*:
+
+| Cases | Oracle / falsification |
+| --- | --- |
+| M01–M03 | Old/new clients stay on their respective exact binaries; every incomplete staging prefix and wrong digest fails promotion |
+| M04–M06 | Offline repair cannot claim READY; online exact-build repair succeeds; changed-origin bytes are rejected |
+| M07–M09 | Stale-generation compare-and-swap fails; a published pointer whose cache later disappears returns 503; post-verification same-origin mutation is not served |
+| M10–M12 | Conservative cleanup retains referenced old/new builds; orphan staging can be removed; deliberately **UNSAFE** old-cache deletion demonstrates why new active ≠ old client retired |
+| M13–M16 | Uncommitted staging across model restart does not imply activation; interrupted candidate cleanup preserves active; a user-data sentinel remains unchanged; unknown build mapping fails closed |
+
+**Evidence ceiling:** this model's conceptual IDB commit is an in-memory object assignment, with no real IDB transaction lifetime, Cache API, process death, browser scheduler, WebKit, quota/eviction, actual LogMate generated Worker or 37-store ledger. A model PASS is **not** cross-generation browser PASS, data-durability PASS, NORMAL product PASS or release approval. Exact GitHub Actions logs must be checked separately before recording hosted PASS. The deliberate M12 negative control passes by proving a failure, not by endorsing cache deletion.
+
+### 18.5 Engineering-owned product acceptance matrix [DEPENDENCY / VALIDATION]
+
+| ID | Exact product injection | Required independent oracle |
+| --- | --- | --- |
+| RP01 | NORMAL build, delete active \`main.dart.js\` while online | 503 or safe state before repair; verified exact-old-build bytes after explicit recovery; no newer URL fallback |
+| RP02 | Same missing asset, network fully unavailable | truthful OFFLINE/REPAIR_REQUIRED; unchanged local ledger; no false READY |
+| RP03 | Serve changed bytes at old URL while repairing | digest rejection and no active-build mutation |
+| RP04 | Two live old tabs + new waiting Worker + controlled metadata interleaving | old tab still gets old bytes, candidate pointer and client assignments survive; no lost update |
+| RP05 | Crash/close between last CacheStorage put and IDB pointer commit | orphan-only state; prior active runnable; safe restart reconciliation |
+| RP06 | Delete referenced CacheStorage namespace after pointer commit | 503 and recoverable repair, no unverified fallback |
+| RP07 | Repeated repair while an update is installing | serializable or CAS-rejected metadata; no stale overwrite |
+| RP08 | Storage quota exhaustion/eviction and cache cleanup | no data-loss claims, no deletion of live client bytes, independent .lbk custody |
+| RP09 | Auth session expires during offline repair and online reconnect | shell status and authenticated Owner/Manual Sync states not conflated |
+| RP10 | Real 37-store LBK restore + schema mismatch/rollback | no partial Apply/Cursor; explicit recovery, preserved original IDs and provenance |
+| RP11 | Safari tab vs Home Screen install vs managed Web Clip | separate actual contexts, cold offline relaunch, storage and UI/AT evidence |
+| RP12 | Physical company-managed EFB with approved network policy | no assumed hotspot, unattended P2P, background execution or MDM permissions |
+
+Each product case requires exact \`repo/ref/build/device/OS/browser/fixture\`, injection trace, positive and negative oracles, independent store/asset evidence and explicit rollback decision. Product team/Software Engineering owns implementation and acceptance. **Do not copy private LogMate source into public Web Manager CI.**
+
+### 18.6 Five-track integration and decision boundary
+
+- **E owner (highest risk):** cross-storage release identity, versioned repair, deploy/rollback, CDN retention, secure origin provenance, quota and incident response; model is a design review aid, not a product patch.
+- **A supplier:** Service Worker install/wait/activate/fetch, Cache API, IDB transaction lifetime, Safari/Chromium lifecycle and Home Screen/Web Clip differences.
+- **C independent oracle:** fail-closed execution, model negative control, exact hosted job logs, product RP01–RP12 and real accessibility/offline checks. A green workflow without semantic assertions is insufficient.
+- **B consumer:** offline usable vs shell repair required vs online verified recovery vs authentication needed vs data restore required. Preserve local edits and offer non-destructive actions; Design Studio W121 Stage 3 PRACTICE remains authoritative for accessible recovery interaction.
+- **D consumer:** distinguish install, cached shell, local ledger availability, verified recovery, independent backup and completed Manual Sync in any telemetry/claim. Marketing D8 EFB/offline/automatic Sync claims remain HOLD.
+
+**MINTTAP DECISION:** no release-policy change and no LogMate implementation approval in this research. **OPEN:** exact NORMAL RP01–RP10, Safari Home Screen/Web Clip, physical EFB, actual 37-store backup and Owner/authenticated Sync. **CHANGE WATCH:** Safari/WebKit storage policy, installation behavior, worker lifecycle implementations, browser quota/eviction and managed-device restrictions. **Next high-information-gain step:** Engineering-authorized exact NORMAL RP01–RP07 with real Worker source and barrier-controlled two-generation interleaving, followed by physical iPad/backup acceptance. Additional synthetic-only variants should not displace those tests.
