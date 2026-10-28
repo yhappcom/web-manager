@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'research/handoffs/pwa_idb_control_transaction_probe.py'
+      - 'research/handoffs/pwa_worker_generation_idb_probe.py'
       - '.github/workflows/stage8_pwa_idb_control_transaction.yml'
 permissions:
   contents: read
@@ -25,16 +26,23 @@ jobs:
         run: |
           python --version
           google-chrome --version
-          python -m py_compile research/handoffs/pwa_idb_control_transaction_probe.py
+          python -m py_compile research/handoffs/pwa_idb_control_transaction_probe.py research/handoffs/pwa_worker_generation_idb_probe.py
       - name: Execute research-only two-tab IDB probe
         env:
           CHROMIUM_PATH: /usr/bin/google-chrome
           EVIDENCE_OUT: /tmp/pwa-idb-control-evidence.json
         run: python research/handoffs/pwa_idb_control_transaction_probe.py
+      - name: Execute synthetic actual two-generation Worker IDB probe
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          EVIDENCE_OUT: /tmp/pwa-worker-idb-evidence.json
+        run: python research/handoffs/pwa_worker_generation_idb_probe.py
       - name: Preserve bounded evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: pwa-idb-control-evidence
-          path: /tmp/pwa-idb-control-evidence.json
+          path: |
+            /tmp/pwa-idb-control-evidence.json
+            /tmp/pwa-worker-idb-evidence.json
           if-no-files-found: ignore
