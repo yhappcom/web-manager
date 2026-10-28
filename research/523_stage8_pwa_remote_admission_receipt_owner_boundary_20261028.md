@@ -248,3 +248,73 @@ The same research-only fixture now exposes **two explicitly distinct HTTP routes
 **Negative-control discipline:** FE18's “PASS” is the successful demonstration of a deliberately **unsafe** baseline accepting a changed body as REPLAY under a caller-supplied digest; only FE19–FE23 use the strict fixture-specific path. FE17's observed default `auth/user-disabled` is an Auth Emulator behavior, not an excuse to omit `checkRevoked=true` in a production threat model. A SHA-256 consistency check does not authenticate the author. A successful remote receipt does not prove local convergence, backup or data custody.
 
 **Cross-track decision:** E's *research admission composition* now has an executed checkpoint; C can close **only this synthetic emulator oracle**. A continues Safari/Chromium runtime and offline/Service Worker prerequisites; B continues local/UNKNOWN/denied/recovery state requirements; D maintains Marketing D8 PWA/EFB/automatic Sync claim HOLD. The next decisive step is a product-owned **real Functions/Firestore/LogMate canonical payload** and atomic 37-store Apply+Cursor, followed by Safari 26 Home Screen vs managed WebClip and physical offline restore tests. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+## 14. Browser CORS, admission and same-origin deployment boundary — 2026-10-29 [SOURCE / SYNTHESIS / CONTRADICTION / VALIDATION / DEPENDENCY / CHANGE WATCH]
+
+**Owner:** Track E (Web API authority, operations); A supplies Fetch/CORS/Service Worker mechanics, C independent browser oracles, B recovery-state semantics, D privacy-minimized measurement and claim boundaries. This continues FE01–FE23 without implying a deployed LogMate endpoint. The prior [FE01–FE23 Auth/Firestore Emulator 23/23](https://github.com/yhappcom/web-manager/actions/runs/40618722032) was invoked through Node loopback HTTP. Node fetch does not enforce browser CORS, so that PASS does **not** establish browser reachability or cross-origin security.
+
+### 14.1 Exact current product topology and problem [SOURCE / CONTRADICTION]
+
+Read-only LogMate main [2f78e731](https://github.com/yhappcom/logmate/commit/2f78e7310dfe2c46c1f1cba0583e2abdd269ffdf), inspected 2026-10-29: functions/index.js (blob 2c967ec5) contains only the AUTH-E4 retired account-lookup comment, not a Manual Sync admission Function. Other operator report scripts are not the Sync endpoint. firebase.json (blob 9ac0972e) configures build/web Hosting, auth-action HTML rewrites and a global no-store header, **not** a Manual Sync Functions rewrite. firestore.rules (blob b698b2d6) denies all direct client reads/writes. The [approved Manual Delta Sync contract](https://github.com/yhappcom/logmate/blob/2f78e731/docs/specs/local-first-manual-delta-sync-contract.md) (blob 2240fc1b) specifies explicit user Manual Push/Pull/Apply, one authenticated lightweight start read, immutable Operation ID/digest, current UID Owner, server Receipt and atomic local applied Cursor. Its server implementation and product E2E are **NOT IMPLEMENTED/VERIFIED**. No checked source selects direct HTTP onRequest, callable onCall or Hosting rewrite as the future Sync transport. Source absence cannot prove a previously deployed remote Function has been deleted.
+
+The core threat is *authority confusion*: a successful browser preflight, valid token, App Check attestation, immutable server receipt, locally applied cursor and external backup are six different predicates. None implies the others. A strict server may also be unreachable from the PWA if its CORS preflight is misconfigured.
+
+### 14.2 History, standard and operational boundary [SOURCE / SYNTHESIS]
+
+The same-origin policy restricts cross-origin response access; the [WHATWG Fetch Living Standard](https://fetch.spec.whatwg.org/) (updated 2026-10-19 at review) defines CORS and preflight. Cross-origin POST using Authorization and application/json normally causes an OPTIONS preflight naming the requested method and headers. **Preflight carries no bearer token**; a server must decide CORS policy there without interpreting it as a user operation. The actual POST still needs authentication and authorization. See [MDN CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS) and [preflight](https://developer.mozilla.org/en-US/docs/Glossary/Preflight_request).
+
+**Distinct control layers:**
+1. **CORS/origin:** browser sharing/preflight policy; not authentication, not a firewall against curl/native/nonbrowser clients. Exact scheme/host/port matters; Origin null and loose suffix matching are unsafe allowlist assumptions. Dynamic origin responses need Vary: Origin when relevant.
+2. **Auth:** validate Firebase ID-token signature/audience/expiry, and explicitly decide disabled/revoked session policy. [Firebase Admin ID-token docs](https://firebase.google.com/docs/auth/admin/verify-id-tokens) say ordinary token verification does not check revocation by default. FE17's unexpected disabled-user result was **Auth Emulator-specific**, not a production permission to omit status-aware verification.
+3. **Current Owner:** verify active ledger, UID and generation **inside** the same transaction that admits an operation; do not disclose old receipt to a former Owner. A valid UID token alone does not confer ledger ownership.
+4. **Payload/receipt:** recompute a real canonical operation digest server-side, enforce same-ID/same-digest replay, changed-digest conflict, immutable receipt and sequence. FE19's ASCII fixture hash is not LogMate wire compatibility or a signature.
+5. **App attestation:** [Firebase App Check callable Functions](https://firebase.google.com/docs/app-check/cloud-functions) can enforce app tokens, optionally limited-use replay protection, but it does not authenticate a user or Owner. Extra token-verification latency/cost/quota and old-client compatibility need explicit rollout decisions.
+6. **Caching:** HTTPS and Cache-Control: no-store / fetch cache no-store are HTTP-cache controls ([MDN Request.cache](https://developer.mozilla.org/en-US/docs/Web/API/Request/cache)); they do **not** prove a controlling Service Worker cannot deliberately store or synthesize an authenticated response through CacheStorage.
+
+**CSRF versus bearer:** Cookie-based ambient authority can be sent by a browser without the application's explicit authorization header and requires appropriate CSRF mitigations (Origin/CSRF token/SameSite and policy). A JavaScript-supplied bearer in Authorization is not automatically attached by an unrelated site, but XSS/token theft and server authorization remain threats. CORS does not replace CSRF defenses for a cookie-authenticated endpoint. [OWASP CSRF](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) explicitly cautions against permissive subdomain allowlists, null Origin and missing source-origin evidence.
+
+### 14.3 Deployment alternatives and non-transferable assumptions [SOURCE / OPEN]
+
+| Option | Browser contract | Risk / required decision |
+| --- | --- | --- |
+| Direct cross-origin HTTPS onRequest | Explicit preflight and response CORS policy; bearer Auth and Owner in handler | [Firebase HTTP Functions](https://firebase.google.com/docs/functions/http-events) says CORS defaults false for HTTP functions; cors:true permits all origins. Select exact origins, status and version, not wildcard-by-convenience. |
+| SDK onCall | Callable protocol/SDK handles supported Auth and App Check context; callable CORS defaults differ | [Firebase callable guide](https://firebase.google.com/docs/functions/callable), [callable options](https://firebase.google.com/docs/reference/functions/2nd-gen/node/firebase-functions.https.callableoptions). Handler still owns Owner, digest, receipt, rate limits and ambiguous ACK. Flutter Web/native SDK and App Check rollout unverified. |
+| Same-origin Firebase Hosting rewrite | Removes cross-origin preflight caused only by different host | [Firebase Hosting Functions rewrite](https://firebase.google.com/docs/hosting/functions) can route a reserved path and pin 2nd-gen Function revision. Same-origin does **not** remove Auth/CSRF/XSS/Service Worker or Owner risks. No such LogMate Sync rewrite currently declared. |
+
+A credentialed browser request cannot combine Access-Control-Allow-Origin:* with Access-Control-Allow-Credentials:true. Whether the actual request uses cookies or an explicit bearer, and its fetch credentials mode, must be inspected; do not automatically add credentialed CORS for an Authorization header. Preflight is not a security grant. If a same-origin API route is selected, explicitly reserve it outside offline navigation fallback and verify that the exact generated Worker does not cache, fabricate or replay privileged receipts. A stale offline receipt is not fresh authorization. A Service Worker is event-driven and cannot promise unattended managed-iPad Sync.
+
+### 14.4 Actual browser falsification bridge [VALIDATION]
+
+New [disposable Chromium browser probe](handoffs/pwa_cors_admission_browser_probe.py) and [pinned GitHub Actions workflow](../.github/workflows/stage8_pwa_browser_cors_admission.yml), committed at [aec2a69b](https://github.com/yhappcom/web-manager/commit/aec2a69b8b76b92ce39aff3e61345df3401b47d1). Three independent localhost origins (allowed page, hostile page, API) use **fake bearer**, a synthetic fixed digest and in-memory immutable receipt. The fixture is **not Firebase, Functions, LogMate, Safari or managed EFB**. Local Chromium was blocked by administrator policy; only a completed hosted run can establish execution.
+
+| Case | Independent oracle / failure class |
+| --- | --- |
+| BP01–BP02 | Authorized browser POST succeeds; OPTIONS preflight observed without state mutation |
+| BP03 | Same ID/digest returns immutable REPLAY |
+| BP04 | Allowed browser origin + invalid bearer returns 401: CORS ≠ Auth |
+| BP05 | Same ID + changed digest returns 409 without mutation |
+| BP06 | Missing bearer returns 401 |
+| BP07 | Unallowlisted header fails preflight without POST |
+| BP08 | Hostile browser origin cannot POST through failed preflight |
+| BP09 | Nonbrowser bad bearer denied: CORS does not protect server |
+| BP10 | Nonbrowser valid bearer/no Origin succeeds under **this fixture's** explicit policy, proving CORS ≠ Auth |
+| BP11 | Literal Origin:null rejected under this fixture's policy |
+| BP12 | Response no-store observed and OPTIONS lacks Authorization; **not** a Service Worker cache exclusion test |
+
+Do not mistake an intentionally permitted nonbrowser request for a recommended production access policy. This fixture does not cover cookie CSRF, WebKit, Service Worker interception, App Check, real revocation, deployed Functions or real LogMate wire. **Hosted BP01–BP12 execution is OPEN until exact logs are verified.**
+
+### 14.5 Product-owned vertical acceptance and cross-track transfer [DEPENDENCY / MINTTAP DIRECTION]
+
+Engineering's existing W-020/W-021 implementation and W-031 Safari/EFB acceptance should eventually use an **approved exact NORMAL artifact** with real test Functions/Firestore, source/served Function version, canonical wire and disposable Owners. The next discriminating campaign should cover:
+
+- **Browser ingress:** chosen direct URL/onCall/rewrite only, OPTIONS/POST headers, allowed/hostile origins, raw nonbrowser Auth control, no implicit wildcard credentials and no undocumented redirect.
+- **Server admission:** valid/expired/disabled/revoked token, current/former Owner, stale generation, changed digest and immutable receipt, HTTP loss after commit, rate/size abuse and safe no-disclosure errors. A token or App Check PASS must not authorize another Owner.
+- **PWA state:** exact Worker control and API routing, offline outbox without automatic Push, old/new Worker generation, network failure and no privileged response served from shell cache. Manual Sync is **user initiated**; only the contract's separate lightweight start read is automatic.
+- **Convergence:** ambiguous response remains UNKNOWN and retains original Operation ID; fresh receipt/requery, Pull and atomic 37-store Apply+Cursor are separate oracles. Never show Synced from HTTP 200 alone.
+- **Cross-device:** Safari tab, Home Screen, MDM Web Clip and actual managed iPad independently validate endpoint, session, local ledger and policy; Chrome Emulator PASS cannot transfer.
+- **Human and privacy:** Design Studio [CD115](https://github.com/yhappcom/design-studio/blob/main/research/content-design/CD115-runtime-status-recovery-language-20260920.md) requires Saved locally / Pending / Unknown / Retry / Synced distinction; [W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md) demands runtime/AT evidence. Marketing [D8](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) keeps automatic-Sync/EFB claims HOLD. Count sanitized status transitions, never payload, UID, token, file name or Operation ID in public logs.
+
+Software Engineering owns the product code, canonical digest, process-kill/ACK and Apply+Cursor validation under its [Validation Standard](https://github.com/yhappcom/software-engineering-studio/blob/main/methods/VALIDATION_STANDARD.md). Web Manager supplies the browser/hosting/transport acceptance boundary and does not modify other repositories.
+
+**Current verdict:** SOURCE and threat separation established; research-only Chromium fixture submitted, **execution pending**; LogMate Functions Manual Sync and production deployment remain unimplemented/unverified in the checked source. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** After hosted evidence, another generic synthetic case-count expansion is lower value than an Engineering-owned actual Function and exact product browser/iPad execution. **CHANGE WATCH:** Firebase callable/onRequest defaults, App Check replay, Fetch/CORS, Hosting rewrite and WebKit/managed-device policy.
