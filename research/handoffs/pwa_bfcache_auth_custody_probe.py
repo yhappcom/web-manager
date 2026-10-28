@@ -27,6 +27,7 @@ async function verify() {
 }
 addEventListener('pageshow', event => {
   trace.push(['pageshow', event.persisted]);
+  trace.push(['pageshow-view', event.persisted, document.querySelector('#secret').textContent]);
   if (guarded && event.persisted) verify();
 });
 addEventListener('pagehide', event => {
@@ -86,8 +87,11 @@ def run_case(browser, base, name, guarded, after_auth, unreachable, expected):
         navigation = page.evaluate("""() => { const n=performance.getEntriesByType('navigation')[0]; return {type:n?.type, notRestoredReasons:n?.notRestoredReasons ?? null}; }""")
         restored = any(x == ["pageshow", True] for x in trace)
         observed = page.locator("#secret").inner_text()
-        passed = restored and observed == expected
+        restored_views = [x[2] for x in trace if x[0] == "pageshow-view" and x[1] is True]
+        expected_entry = "LOCKED" if guarded else "SYNTHETIC PRIVATE LEDGER"
+        passed = restored and observed == expected and restored_views == [expected_entry]
         return {"case":name, "passed":passed, "bfcache_restored":restored,
+                "restored_pageshow_dom":restored_views, "expected_pageshow_dom":expected_entry,
                 "observed":observed, "expected":expected, "trace":trace, "navigation":navigation}
     finally:
         context.close()
