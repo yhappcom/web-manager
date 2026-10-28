@@ -1,5 +1,8 @@
 # MintTap Web Manager Research Index
 
+**2026-10-28 Stage 8 payload/auth falsification (execution OPEN):** [523 §10](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) — FE17 disabled-session status vs plain UID verification; FE18 deliberately unsafe unchanged-digest/changed-payload negative control; FE19 fixture-only server-recomputed SHA-256 digest with unknown-field and collision rejection. Source and V8 parse check recorded; **new hosted FE17–FE19 results OPEN**. Previous FE01–FE16 16/16 at exact `5594585a` remains separately scoped. Product/Functions/Safari/managed EFB HOLD.
+
+
 **2026-10-28 Firebase Emulator execution checkpoint:** [523 §9](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) — actual [run 40606283235](https://github.com/yhappcom/web-manager/actions/runs/40606283235), exact checkout `29f7bf7a`, Auth/Firestore emulator **FE01–FE13 13/13 subtests PASS** (Node TAP 14/14 including suite); extended FE14–FE16 revoked-ledger/ledger-isolation/conflicting-digest source committed, **16/16 PASS at [run 40613397937](https://github.com/yhappcom/web-manager/actions/runs/40613397937), exact `5594585a`**. This is research-emulator evidence, **not** Functions/product/Safari/managed EFB.
 
 
