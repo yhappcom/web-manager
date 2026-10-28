@@ -12,6 +12,7 @@ from urllib.parse import urlsplit
 from playwright.sync_api import sync_playwright
 
 VERSION = {"value": "v1"}
+SW_FETCHES = {}
 CASES = []
 
 def shell(v, source):
@@ -49,7 +50,9 @@ class Handler(BaseHTTPRequestHandler):
         v=VERSION['value']
         path=urlsplit(self.path).path
         if path=='/': data,mime=shell(v,'network').encode(),'text/html'
-        elif path=='/sw.js': data,mime=worker(v).encode(),'text/javascript'
+        elif path=='/sw.js':
+            SW_FETCHES[v]=SW_FETCHES.get(v,0)+1
+            data,mime=worker(v).encode(),'text/javascript'
         elif path=='/asset.json': data,mime=json.dumps({'version':v,'source':'network'}).encode(),'application/json'
         else:
             self.send_response(404);self.end_headers();return
@@ -229,9 +232,11 @@ def run():
                   return !r?.installing&&!r?.waiting;
                 }""",timeout=20000)
                 check('SW14_FAILED_INSTALL_KEEPS_ACTIVE_AND_IDB',
+                    SW_FETCHES.get('v4-broken',0)>=1 and
                     asset(d)['body']['version']=='v3' and
                     'stage8-shell-v4-broken' not in caches(d) and
-                    read_db(d)=={'id':'synthetic-op-01','pending':True})
+                    read_db(d)=={'id':'synthetic-op-01','pending':True},
+                    broken_worker_fetches=SW_FETCHES.get('v4-broken',0))
                 storage=d.evaluate("""async()=>({
                   persisted:await navigator.storage.persisted(),
                   estimate:await navigator.storage.estimate()
