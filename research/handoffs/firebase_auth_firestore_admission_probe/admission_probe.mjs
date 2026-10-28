@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import { createServer } from 'node:http';
-import { initializeApp } from 'firebase-admin/app';
+import { initializeApp, deleteApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 
@@ -11,6 +11,7 @@ assert.equal(process.env.FIRESTORE_EMULATOR_HOST, '127.0.0.1:8080');
 const app = initializeApp({ projectId: PROJECT });
 const auth = getAuth(app);
 const db = getFirestore(app);
+after(async () => { await db.terminate(); await deleteApp(app); });
 const idPattern = /^[0-9a-f]{32}$/;
 const digestPattern = /^[0-9a-f]{64}$/;
 const microsPattern = /^[0-9]{16}$/;
