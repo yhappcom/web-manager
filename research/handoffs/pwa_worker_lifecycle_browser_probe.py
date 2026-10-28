@@ -159,10 +159,16 @@ def run():
                   const r=await navigator.serviceWorker.getRegistration();
                   return r?.active?.state==='activated'&&!r.waiting;
                 }""",timeout=20000)
+                c.wait_for_function('navigator.serviceWorker.controller!==null',timeout=20000)
                 c.reload(wait_until='load',timeout=20000)
+                observed_state=state(c)
+                observed_asset=asset(c)
+                observed_controlled=c.evaluate('navigator.serviceWorker.controller!==null')
                 check('SW07_ACTIVATION_AFTER_CLOSE',
-                    state(c)=={'build':'v2','source':'worker-cache'} and
-                    asset(c)['body']['version']=='v2')
+                    observed_state=={'build':'v2','source':'worker-cache'} and
+                    observed_asset['body']['version']=='v2' and observed_controlled,
+                    observed_state=observed_state,observed_asset=observed_asset,
+                    controlled=observed_controlled,cache_names=caches(c))
                 check('SW08_CACHE_GC_PRESERVES_IDB',
                     caches(c)==['stage8-shell-v2'] and
                     read_db(c)=={'id':'synthetic-op-01','pending':True})
