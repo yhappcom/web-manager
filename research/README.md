@@ -1,6 +1,6 @@
 # MintTap Web Manager Research Index
 
-**2026-10-28 Firebase Emulator execution checkpoint:** [523 §9](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) — actual [run 40606283235](https://github.com/yhappcom/web-manager/actions/runs/40606283235), exact checkout `29f7bf7a`, Auth/Firestore emulator **FE01–FE13 13/13 subtests PASS** (Node TAP 14/14 including suite); extended FE14–FE16 revoked-ledger/ledger-isolation/conflicting-digest source committed, execution pending. This is research-emulator evidence, **not** Functions/product/Safari/managed EFB.
+**2026-10-28 Firebase Emulator execution checkpoint:** [523 §9](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) — actual [run 40606283235](https://github.com/yhappcom/web-manager/actions/runs/40606283235), exact checkout `29f7bf7a`, Auth/Firestore emulator **FE01–FE13 13/13 subtests PASS** (Node TAP 14/14 including suite); extended FE14–FE16 revoked-ledger/ledger-isolation/conflicting-digest source committed, **16/16 PASS at [run 40613397937](https://github.com/yhappcom/web-manager/actions/runs/40613397937), exact `5594585a`**. This is research-emulator evidence, **not** Functions/product/Safari/managed EFB.
 
 
 This directory is the source-grounded learning and decision-support layer for the MintTap company website and strategic web-app/PWA capability. Canonical curriculum: `../LEARNING_ROADMAP.md`; horizontal ownership: `../SPECIALIST_TRACKS.md`.
