@@ -789,3 +789,107 @@ Use disposable Firebase identities and a disposable 37-store ledger, exact LogMa
 **Stop-check:** pinned source contradiction, domain/helper conditionality, popup timing hypothesis, WebKit install separation, failure/recovery policy and twelve discriminating product oracles are integrated. The next adjacent high-value question requiring different evidence is **actual LogMate Flutter Web method invocation and installed Safari/managed EFB OAuth return**, with Engineering approval and provider accounts. This section did not execute that runtime, change external configuration or perform product writes.
 
 **Gate: Stage 8 ACTIVE · Apple Web link/reauth exact-source incompatibility CONFIRMED at pinned code path · actual UI reachability/runtime OPEN · Production validation OPEN · PWA release HOLD.**
+
+
+---
+
+## 21. Account-deletion public promise versus callable product entry; Apple Web method reachability and provider-independent recovery (2026-10-29 KST) [SOURCE / SYNTHESIS / CONTRADICTION / MINTTAP DIRECTION / DEPENDENCY / VALIDATION OPEN / CHANGE WATCH]
+
+### 21.1 Why this is the adjacent Stage-8 bottleneck; evidence scope
+
+§20 established a *conditional* exact-version Apple Web method-dispatch incompatibility. Before treating it as an active user-facing failure, the next higher-information-gain question is **whether current application UI invokes those methods**, and whether the published account-deletion instructions accurately describe an available path. These are different propositions. E owns the trust/deletion/operations decision; A owns browser OAuth and installed-container constraints; B owns truthful public/in-app task architecture; C owns exact runtime and accessibility oracles; D consumes the result for Store/public claims. Web Manager coordinates; it does not take over Engineering's implementation or Marketing's campaign work.
+
+**Fresh pinned inputs:** Web Manager \`main@af1e8a231cf680de856cb884db71222f477a416a\`, LogMate read-only \`main@2f78e7310dfe2c46c1f1cba0583e2abdd269ffdf\`, 1,321-entry nontruncated tree, Design Studio \`main@b6557f0\` CD115/W074, Marketing \`main@f67d1e1\` D8 status, Software Engineering Studio \`main@20aa7c5\` S007 deletion/provider and M006 Safari. Re-read AGENTS/SPECIALIST_TRACKS/LEARNING_ROADMAP/STATUS/research index and current 523, latest commits before analysis. **37 specifically selected LogMate \`lib/**/*.dart\` app/entry/auth/screen/application files were fetched and keyword-inspected; this is NOT a claim of an exhaustive 171-file call graph or a Dart analyzer execution.** No live Firebase, Apple provider, mailbox, actual account deletion, installed PWA, managed iPad or product runtime was exercised. Product and peer repositories remain read-only.
+
+### 21.2 Exact UI → provider operation graph [SOURCE / SCOPE-LIMITED NEGATIVE]
+
+- [OpeningScreen](https://github.com/yhappcom/logmate/blob/2f78e731/lib/screens/welcome/welcome_screen.dart) lines 75–82 calls **only** \`_providerEngine.authenticate(provider)\`; lines 124–126 wire Apple and Google buttons to that method. It does **not** call \`link\`, \`reauthenticate\` or \`unlink\`.
+- [SessionGate](https://github.com/yhappcom/logmate/blob/2f78e731/lib/app/session_gate.dart) lines 529–535 passes the provider engine into OpeningScreen; its owner-authentication route at lines 491–505 opens **EmailEntryScreen**, not a provider link/reauth UI.
+- [SettingsScreen](https://github.com/yhappcom/logmate/blob/2f78e731/lib/screens/settings_screen.dart) has Import (no-op), Previous Total setup (conditional), and Sign out. There is **no account-deletion, provider-link, provider-unlink or recent-login action** in its 71 lines.
+- [FirebaseProviderAuthEngine](https://github.com/yhappcom/logmate/blob/2f78e731/lib/auth/provider_auth_engine.dart) lines 118–130 defines callable authenticate/reauthenticate/link/unlink, but a defined method is not evidence of a current UI entry. §20's Apple Web \`reauthenticateWithProvider\`/\`linkWithProvider\` inherited \`UnimplementedError\` remains **deterministically incompatible if called** on the pinned Web SDK, not an observed normal Welcome sign-in failure.
+- [AccountDeletionCoordinator](https://github.com/yhappcom/logmate/blob/2f78e731/lib/application/account_deletion_coordinator.dart) defines a resumable deletion *driver* and five injected ports. It has no built-in Firebase/provider/remote erasure implementations. Its presence is not evidence that Settings has an executable deletion command. [LocalLedgerAuthAccessService](https://github.com/yhappcom/logmate/blob/2f78e731/lib/application/logbook/local_ledger_auth_access_service.dart) uses the phrase \`completeVerifiedOwnerReauthentication\` for local Owner access; **that is not proof of a Firebase recent-login OAuth provider exchange**.
+
+**Bounded result:** within the 37 audited application/entry/UI files, the current Welcome calls provider **authenticate**; no UI caller of provider link/reauth/unlink or concrete deletion coordinator invocation was found. The 37-file audit and [product W-029/W-030 status](https://github.com/yhappcom/logmate/blob/2f78e731/docs/stage3-product-integration-acceptance-checklist.md) jointly support **NOT WIRED / planned integration** at this source ref. They do not exclude dynamic code outside the audited files, future branches, or a deployed artifact from another commit. This **narrows §20 risk priority**: source incompatibility is a required pre-exposure fix, not evidence that the currently visible Welcome Apple sign-in is broken.
+
+### 21.3 The stronger current contradiction: public deletion instructions versus Settings [SOURCE / CONTRADICTION]
+
+[Tracked public account-deletion page](https://github.com/yhappcom/logmate/blob/2f78e731/web/account-deletion/index.html) blob \`f8558e92\` lines 23–26 says a user **can delete from the app** and instructs them to open Settings and choose an account-deletion option. [SettingsScreen](https://github.com/yhappcom/logmate/blob/2f78e731/lib/screens/settings_screen.dart) blob \`4affdb26\` has no such option. [Product W-030](https://github.com/yhappcom/logmate/blob/2f78e731/docs/stage3-product-integration-acceptance-checklist.md) is **NOT STARTED** for deletion adapters/Settings; [roadmap](https://github.com/yhappcom/logmate/blob/2f78e731/docs/roadmap-reconciliation-2026-10-24.md) calls DELETE partial and remote revoke/erase operational acceptance open. **This is an exact tracked-source public-copy/product-UI contradiction**, not merely an abstract policy concern.
+
+The public page also says manual requests may be emailed to \`support@minttap.app\`, and describes intended removal of account, remote data, Sync/backup, local data and revocation. The page's conditional wording and mailbox link do **not** prove that the mailbox is operated, identity verified, request tracked, provider token revoked or server data erased. No real request was sent. The 2026-10-04 operational note records earlier public HTTP 200, but **today's direct web open of /account-deletion and /support was unavailable through the browsing tool: NON-EXECUTION, not 404**. Do not label the current deployed page confirmed live or identical to tracked source.
+
+**Decision implication:** an external public page must not describe an in-app deletion control as already available until the exact supported app release exposes and passes that path. Web Manager can flag copy/operational truth and recommend a coordinated change; **do not edit the product public page from this research-only assignment**. Avoid publishing a replacement claim that deletion is complete until request/identity/remote-erasure evidence exists.
+
+### 21.4 Primary platform-policy distinctions [SOURCE / CHANGE WATCH]
+
+- [Google Play account deletion requirements](https://support.google.com/googleplay/android-developer/answer/13327111), read 2026-10-29: account-creating apps require an in-app deletion initiation path **and** a web resource for users without the app. Google explicitly allows the in-app path to **link directly to the deletion web resource** (FAQ), and allows a web resource to use a **customer-service email or form** to submit a request. Therefore **do not incorrectly call the external \`mailto:\` route inherently noncompliant**. The path must be functional, conspicuous, relevant, identity-verifiable and able to fulfill requests. A Settings screen with **no deletion option/link** does not meet the source-described in-app entry requirement for a submitted account-creating app.
+- [Apple App Review guideline 5.1.1(v)](https://developer.apple.com/help/app-review/guideline-reference/5-1-1-account-deletion), read 2026-10-29: account-creating App Store apps must permit **initiation within the app**; for ordinary apps, requiring a call/email/chat support flow is generally not acceptable, while highly regulated apps may use additional customer-service steps. Reauthentication/confirmation may be appropriate without unnecessary obstacles. Do not transfer a Google Play web-email allowance into an Apple in-app support-only acceptance. Exact store submission/review state remains unknown.
+- The same Apple guideline explicitly mentions Sign in with Apple token revocation and says **developers based in the Republic of Korea must provide a server-to-server notification endpoint when registering a new Services ID**. This is a **conditional Apple Services ID registration/operations CHANGE WATCH**, not evidence that LogMate's already configured Services ID lacks an endpoint or that registration occurred on a particular date. Check current Apple account configuration with authorized owner evidence before declaring compliance.
+- [Firebase Apple Web Auth](https://firebase.google.com/docs/auth/web/apple) distinguishes popup/redirect reauth and link, and Apple user consent for linking. [Firebase redirect best practices](https://firebase.google.com/docs/auth/web/redirect-best-practices) requires correct app-serving/auth-helper origin and notes mobile popup limitations. Neither an email verification page nor a Google chooser start establishes Apple account-deletion reauth/revocation success.
+
+**No premature legal or store compliance verdict:** exact released binary, Store declaration, app distribution, managed EFB policies, live mailbox operations and real deletion completion are unverified. The policy comparison identifies a **release-blocking acceptance dependency** if LogMate is submitted with account creation, not an observed enforcement action.
+
+### 21.5 Identity, privacy and account-recovery trust model [E lead; A/B transfer]
+
+The public page currently asks a requester to email **from the address associated with their account**. Apple private relay, changed email, account lockout, inaccessible mailbox and a different Google/Apple sign-in identifier make that an unreliable **sole** identity method. A received email address is **not** Firebase UID/Owner proof. Treat incoming email as an **untrusted deletion request**, not authorization to erase an arbitrary UID. An operator must use a separately verified same-owner process, minimal data collection, audit trail, abuse controls and an idempotent server-side request identifier. Never ask for passwords, one-time codes, full flight history, ID tokens or raw ledger export in a support email.
+
+The account-deletion saga crosses independent authorities: request accepted → current owner verified/recent-auth if required → provider-specific revocation (Apple where applicable) → remote data erase and authoritative receipt → Firebase identity delete → local wipe → completion notice. These are **distinct facts**, not one boolean. [Engineering S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) owns the implementation-level saga, replay and failure-first contract; Web Manager owns the web request/identity-verification/status/operational surface. In particular, Firebase identity deletion must not be called complete while remote data still has unverified erasure; a transient email acknowledgement must not say deletion is complete.
+
+For a local-first 37-store PWA, **ordinary sign-out and failed reauthentication must preserve a locked local ledger**, while a confirmed voluntary account-deletion terminal phase requires its approved local data disposition. A manual request from another device cannot magically wipe an offline managed iPad; define the operational limit, later local enforcement and what can/cannot be guaranteed. WebKit Home Screen Safari data is independent of a Safari tab, so a browser email/request confirmation cannot be promoted to an installed-PWA local-wipe oracle.
+
+### 21.6 Content, accessibility, discovery and operational transfer [B/C/D]
+
+**B (web task architecture):** keep the account-deletion route discoverable without requiring reinstallation. Separate (a) submit request, (b) verify identity, (c) request accepted, (d) deletion pending, (e) deletion completed, and (f) unable to verify. Every message needs the next action and consequence. The current tracked page's instruction to use a missing Settings control is a concrete task dead-end; update only with product-owner approval and synchronized application release evidence.
+
+**C (quality/accessibility):** a \`mailto:\` click is not proof that an email client exists, a draft was sent, a support inbox received it or the request was processed. Test keyboard/zoom/screen-reader access, mobile default-mail failure, user with no email client, broken link, non-English browser/locale, error/retry and explicit submission/acknowledgement. Track **delivered** receipt rather than mere link activation; no analytics or public logs containing user email/UID/request content.
+
+**D (discovery/claims):** a public canonical deletion URL, correct product name and indexability are useful but do not certify the function or Store declaration. The Google Play web-link slot, served response and release-linked copy require separate evidence. Marketing D8 remains PRODUCT CLAIM HOLD; no App Store/Play account-deletion readiness, managed EFB reliability, offline backup or Sync claim is promoted by a source audit.
+
+**A (platform):** OAuth popup/redirect is distinct from \`mailto:\` external app navigation; a standalone PWA may background/terminate when opening mail. Preserve the request state outside a fragile in-memory tab. Do not assume a managed iPad can open Mail, has an associated address, permits external navigation or can silently send requests.
+
+### 21.7 Threat and failure counterexamples [SYNTHESIS / TRANSFER VALIDATION]
+
+| Scenario | False conclusion to reject | Correct oracle |
+| --- | --- | --- |
+| Apple Web initial sign-in popup works | Provider link/reauth and deletion are therefore implemented | Separate exact provider-method call and UI entry evidence |
+| \`AccountDeletionCoordinator\` class exists | User can delete from Settings | Actual route, injected adapters, server receipt and completion |
+| Public page says “go to Settings” | Settings has that control | Exact release UI traversal + page text match |
+| \`mailto:\` opens | Support received and accepted a request | Mailbox delivery + authenticated request ID + status |
+| Requester knows email address | Requester owns Firebase UID | Independent same-owner verification; private-relay recovery |
+| Google permits web support email | Apple accepts email-only in-app deletion | Separate Google/Apple policy paths and Store evidence |
+| Firebase user.delete succeeds | Provider revoked, remote data erased, 37-store iPad wiped | Independent per-boundary evidence and offline device custody |
+| Safari tab confirms deletion | Installed Home Screen PWA has no data | Independent installed-container storage census |
+| Failed reauth or sign-out | Wipe IndexedDB immediately | Preserve locked ledger until approved deletion terminal state |
+| Static page returns HTTP 200 | Deletion is operable/compliant | Exact served copy, request delivery, operator procedure and end-to-end execution |
+
+### 21.8 Engineering/Operations acceptance packet — AD01–AD16 [VALIDATION DEFINED, NOT EXECUTED]
+
+Use disposable Firebase identities, test mailbox, test server data and a disposable 37-store ledger. No real account deletion, personal pilot data or destructive production operation without separately approved Engineering Work.
+
+| ID | Required independent observation |
+| --- | --- |
+| AD01 | Exact app build and Settings screen: discoverable in-app deletion action or approved direct web-resource link; source/public text agrees with actual release. |
+| AD02 | Served \`/account-deletion\` HTTPS URL: anonymous mobile load, HTTP/final URL/canonical, app name, prominent action and relevant retention explanation. |
+| AD03 | \`mailto:\` with no mail app/managed mail restriction: accessible fallback path; no false “request sent”. |
+| AD04 | Email/request reaches controlled mailbox; receipt ID and acknowledgement after delivery; duplicates deduped; no raw credential collection. |
+| AD05 | Apple private-relay, inaccessible prior email and alternate same-UID provider: independent verification and no email-to-UID auto-merge. |
+| AD06 | Spoofed sender/UID, wrong account and stale session: no unauthorized deletion or ledger rebind. |
+| AD07 | Exact NORMAL Apple Web reauth/link invoked only from authorized action: pinned unsupported method returns typed fail; after Engineering fix same UID and recent-auth reobserved. |
+| AD08 | Provider collision/cancel/popup blocked/redirect interrupted: no false account deletion success, no ledger unlock/wipe. |
+| AD09 | Reauth success → provider revoke failure → resume: durable locked phase and no false completion. |
+| AD10 | Provider revoke success → remote erase timeout → retry with same request ID: no duplicate/destructive ambiguity. |
+| AD11 | Remote erase receipt → Firebase delete failure → restart: recovery continues without lost request authority. |
+| AD12 | Firebase delete succeeds → local wipe fails: completion withheld, local ledger remains inaccessible, recovery path exists. |
+| AD13 | Browser tab versus installed Home Screen and managed iPad: independent 37-store data/Owner before and after terminal deletion; offline devices reported separately. |
+| AD14 | Public route keyboard/200% zoom/AT/focus/status and email-client fallback; no false screen-reader success announcement. |
+| AD15 | Provider-console Apple Services ID, relevant Korean server-notification condition, deployed auth helper, and privacy-safe operational logging verified by authorized operator. |
+| AD16 | Store policy/readiness: Google in-app + external route, Apple in-app initiation, actual release SHA, Play Console URL/Store declarations and completed deletion evidence all independently checked. |
+
+**Evidence ladder:** tracked source contradiction → approved implementation and UI → exact test Firebase/Auth/Apple sandbox → served production-like public route and mailbox → Safari/managed EFB device transfer → Store/release and operational acceptance. Source text, simulator, synthetic browser or policy document cannot skip rungs.
+
+### 21.9 Cross-track allocation, risk priority and stop-check
+
+**E primary:** the public-copy-versus-Settings contradiction and missing W-030 adapters are more immediate release-truth blockers than the latent Apple Web reauth method mismatch alone. **A:** browser/OAuth/helper and installed-container dependency. **B:** missing user task and truthful request status, consuming Design Studio CD115. **C:** executable same-UID, external mailbox, negative security, AT and physical device oracles; consume W074 evidence taxonomy. **D:** Google/Apple submission claim and Marketing D8 HOLD; no duplication of acquisition research. Engineering S007 remains canonical for provider/deletion implementation and M006 for Safari runtime.
+
+**MINTTAP DIRECTION (recommendation, not product authorization):** (1) do not promote deletion readiness; (2) Engineering W-030 should first establish an in-app entry and real verified request/revoke/erase completion with durable failure recovery; (3) align public copy with **actual** supported release, not future planned controls; (4) fix Apple Web link/reauth dispatch before exposing those operations; (5) validate public mail/request custody and physical PWA storage separately. Preserve Google Play's explicit allowance for an external support-email request while respecting Apple's different in-app constraints.
+
+**Stop-check:** adjacent valuable questions completed now: UI reachability narrowed; public page contradiction grounded; policy distinction corrected; Apple Korea conditional notification requirement identified; email/private-relay trust, offline PWA custody, cross-track handoff and 16 falsifying acceptance cases integrated. The next evidence class requires an **owner-approved product Work**, an operated mailbox, deployed-hosting evidence and exact browser/physical device execution. No new product runtime PASS, no actual deletion, no repository writes outside Web Manager. **Stage 8 ACTIVE · public-copy/Settings source CONTRADICTION CONFIRMED · Apple Web link/reauth latent incompatible path CONFIRMED · operational/production validation OPEN · PWA release HOLD.**
