@@ -248,6 +248,7 @@ test('Stage 8 authenticated emulator admission — FE01–FE19', { timeout: 1800
     assert.equal((await db.doc('ledgers/conflict-race').get()).data().nextSequence, 1);
     assert.equal((await db.collection('ledgers/conflict-race/operations').get()).size, 1);
     assert.equal((await db.collection('ledgers/conflict-race/receipts').get()).size, 1);
+  });
   await t.test('FE17 disabled emulator user: token identity check alone is not session-status check', async () => {
     const c = await signUp('owner-c@stage8.example');
     assert.equal((await auth.verifyIdToken(c.token, true)).uid, c.uid);
@@ -279,6 +280,5 @@ test('Stage 8 authenticated emulator admission — FE01–FE19', { timeout: 1800
       { ...changed, digest: fixtureDigest(changed) }), 409);
     assert.equal((await db.collection('ledgers/digest-verified/operations').get()).size, 1);
     assert.equal((await db.doc('ledgers/digest-verified').get()).data().nextSequence, 1);
-  });
   });
 });
