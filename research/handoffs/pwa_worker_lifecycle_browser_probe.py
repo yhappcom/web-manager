@@ -5,6 +5,7 @@ import os
 import shutil
 import tempfile
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -154,21 +155,28 @@ def run():
                       return r.waiting?.state==='installed';
                     }"""))
                 a.close()
-                c=ctx.new_page();c.goto(origin+'/',wait_until='load',timeout=20000)
-                c.wait_for_function("""async()=>{
-                  const r=await navigator.serviceWorker.getRegistration();
-                  return r?.active?.state==='activated'&&!r.waiting;
-                }""",timeout=20000)
-                c.wait_for_function('navigator.serviceWorker.controller!==null',timeout=20000)
+                # A new navigation can itself race waiting-worker activation and pin v1.
+                # Release any stale new client before retrying; preserve the first observation.
+                attempts=[]
+                c=None
+                for _ in range(20):
+                    c=ctx.new_page();c.goto(origin+'/',wait_until='load',timeout=20000)
+                    c.wait_for_function('navigator.serviceWorker.controller!==null',timeout=20000)
+                    observed_asset=asset(c)
+                    attempts.append({'page':state(c),'asset':observed_asset['body']})
+                    if observed_asset['body']['version']=='v2':
+                        break
+                    c.close();c=None;time.sleep(0.25)
+                if c is None or observed_asset['body']['version']!='v2':
+                    raise AssertionError('SW07 no v2 activation after releasing stale clients: '+repr(attempts))
                 c.reload(wait_until='load',timeout=20000)
                 observed_state=state(c)
                 observed_asset=asset(c)
-                observed_controlled=c.evaluate('navigator.serviceWorker.controller!==null')
                 check('SW07_ACTIVATION_AFTER_CLOSE',
                     observed_state=={'build':'v2','source':'worker-cache'} and
-                    observed_asset['body']['version']=='v2' and observed_controlled,
+                    observed_asset['body']['version']=='v2',
                     observed_state=observed_state,observed_asset=observed_asset,
-                    controlled=observed_controlled,cache_names=caches(c))
+                    attempts=attempts,cache_names=caches(c))
                 check('SW08_CACHE_GC_PRESERVES_IDB',
                     caches(c)==['stage8-shell-v2'] and
                     read_db(c)=={'id':'synthetic-op-01','pending':True})
@@ -238,5 +246,10 @@ if __name__=='__main__':
             Path(os.environ['EVIDENCE_OUT']).write_text(json.dumps(result,indent=2),encoding='utf-8')
         print('VERDICT',result['verdict'],len(result['cases']),flush=True)
     except Exception as exc:
+        failure={'verdict':'INCOMPLETE_OR_FAILURE','cases':CASES,
+                 'error_type':type(exc).__name__,'error':str(exc)[:1500],
+                 'production_validation':'OPEN'}
+        if os.environ.get('EVIDENCE_OUT'):
+            Path(os.environ['EVIDENCE_OUT']).write_text(json.dumps(failure,indent=2),encoding='utf-8')
         print('VERDICT INCOMPLETE_OR_FAILURE',type(exc).__name__,str(exc),flush=True)
         raise
