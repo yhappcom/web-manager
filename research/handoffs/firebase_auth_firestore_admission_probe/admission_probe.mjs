@@ -141,7 +141,7 @@ async function expectStatus(promise, status) {
   await assert.rejects(promise, e => e.status === status);
 }
 
-test('Stage 8 authenticated emulator admission — FE01–FE19', { timeout: 180000 }, async t => {
+test('Stage 8 authenticated emulator admission — FE01–FE23', { timeout: 180000 }, async t => {
   const a = await signUp('owner-a@stage8.example');
   const b = await signUp('owner-b@stage8.example');
   await t.test('FE01 emulator token verified to its actual UID', async () => {
@@ -307,6 +307,43 @@ test('Stage 8 authenticated emulator admission — FE01–FE19', { timeout: 1800
       assert.equal((await post(url, b.token, 'verified-http', signed)).status, 403);
       assert.equal((await db.doc('ledgers/verified-http').get()).data().nextSequence, 1);
       assert.equal((await db.collection('ledgers/verified-http/operations').get()).size, 1);
+    } finally { await close(server); }
+  });
+  await seed('verified-ack', a.uid);
+  await t.test('FE22 strict HTTP route preserves immutable receipt after lost ACK and server restart', async () => {
+    const original = { id: ID1, generation: 1, modifiedAtUtcMicros: TIME };
+    const signed = { ...original, digest: fixtureDigest(original) };
+    let server = httpServer();
+    let url = (await listen(server)).replace(/\/admit$/, '/admit-verified');
+    try { await assert.rejects(post(url, a.token, 'verified-ack', signed, true)); }
+    finally { await close(server); }
+    assert.equal((await db.doc('ledgers/verified-ack').get()).data().nextSequence, 1);
+    server = httpServer();
+    url = (await listen(server)).replace(/\/admit$/, '/admit-verified');
+    try {
+      const response = await post(url, a.token, 'verified-ack', signed);
+      assert.equal(response.status, 200);
+      assert.deepEqual(await response.json(), { status: 'REPLAY', sequence: 1, id: ID1 });
+      assert.equal((await db.collection('ledgers/verified-ack/receipts').get()).size, 1);
+      assert.equal((await db.collection('ledgers/verified-ack/operations').get()).size, 1);
+    } finally { await close(server); }
+  });
+  await seed('verified-transfer', a.uid);
+  await t.test('FE23 strict HTTP route denies old owner receipt after transfer and rejects stale generation', async () => {
+    const original = { id: ID1, generation: 1, modifiedAtUtcMicros: TIME };
+    const signed = { ...original, digest: fixtureDigest(original) };
+    const server = httpServer();
+    const url = (await listen(server)).replace(/\/admit$/, '/admit-verified');
+    try {
+      assert.equal((await post(url, a.token, 'verified-transfer', signed)).status, 200);
+      await rotate('verified-transfer', b.uid);
+      assert.equal((await post(url, a.token, 'verified-transfer', signed)).status, 403);
+      assert.equal((await post(url, b.token, 'verified-transfer', signed)).status, 409);
+      const generationTwo = { id: ID2, generation: 2, modifiedAtUtcMicros: TIME };
+      assert.equal((await post(url, b.token, 'verified-transfer',
+        { ...generationTwo, digest: fixtureDigest(generationTwo) })).status, 200);
+      assert.equal((await db.doc('ledgers/verified-transfer').get()).data().nextSequence, 2);
+      assert.equal((await db.collection('ledgers/verified-transfer/operations').get()).size, 2);
     } finally { await close(server); }
   });
   await seed('disabled-http', disabledOwner.uid);
