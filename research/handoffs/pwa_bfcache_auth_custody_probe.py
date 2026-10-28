@@ -14,7 +14,7 @@ const guarded = new URLSearchParams(location.search).get('guard') === '1';
 window.trace = [];
 async function verify() {
   try {
-    const response = await fetch('/state', {cache:'no-store'});
+    const response = await fetch('/state', {cache:'reload'});
     if (!response.ok) throw new Error('unreachable');
     const state = await response.json();
     document.querySelector('#secret').textContent =
@@ -60,7 +60,7 @@ class Handler(BaseHTTPRequestHandler):
             body = b"missing"
             mime = "text/plain"
         self.send_header("Content-Type", mime)
-        self.send_header("Cache-Control", "public, max-age=600" if path in ("/app","/neutral") else "no-store")
+        self.send_header("Cache-Control", "public, max-age=600" if path in ("/app","/neutral") else "no-cache")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
