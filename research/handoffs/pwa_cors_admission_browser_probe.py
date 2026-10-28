@@ -18,6 +18,7 @@ OUTPUT = Path(os.environ.get("EVIDENCE_OUT", "/tmp/pwa-cors-admission-evidence.j
 
 class State:
     good_origin = ""
+    receipt_value = "v1"
     requests = None
     receipts = None
 
@@ -39,9 +40,31 @@ def op(op_id, value):
 
 class AppHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        body = b"<!doctype html><title>Disposable PWA API origin probe</title>"
+        if self.path == "/sw.js":
+            body = b"""self.addEventListener('install', e => self.skipWaiting());
+self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+self.addEventListener('fetch', e => {
+  if (new URL(e.request.url).pathname !== '/api-receipt') return;
+  e.respondWith((async () => {
+    const cache = await caches.open('synthetic-unsafe-receipt');
+    const hit = await cache.match(e.request);
+    if (hit) return hit;
+    const response = await fetch(e.request);
+    await cache.put(e.request, response.clone());
+    return response;
+  })());
+});"""
+            mime = "text/javascript; charset=utf-8"
+        elif self.path == "/api-receipt":
+            body = json.dumps({"value": state.receipt_value}).encode()
+            mime = "application/json"
+        else:
+            body = b"<!doctype html><title>Disposable PWA API origin probe</title>"
+            mime = "text/html; charset=utf-8"
         self.send_response(200)
-        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Type", mime)
+        if self.path == "/api-receipt":
+            self.send_header("Cache-Control", "no-store")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
@@ -233,6 +256,44 @@ def main():
             check("BP12", first.get("cacheControl") == "no-store" and
                   all(not x["authorization_present"] for x in state.requests if x["method"] == "OPTIONS"),
                   "response no-store and preflight carries no Authorization header")
+            # Separate deliberately UNSAFE Service Worker control: HTTP no-store is
+            # not an automatic veto on explicit CacheStorage.put().
+            page.goto(state.good_origin + "/", wait_until="domcontentloaded")
+            controlled = page.evaluate("""async () => {
+              await navigator.serviceWorker.register('/sw.js');
+              await navigator.serviceWorker.ready;
+              if (!navigator.serviceWorker.controller) {
+                await new Promise((resolve, reject) => {
+                  const timer = setTimeout(() => reject(new Error('control timeout')), 10000);
+                  navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    clearTimeout(timer); resolve();
+                  }, {once: true});
+                });
+              }
+              return !!navigator.serviceWorker.controller;
+            }""")
+            check("BP13", controlled, "disposable Service Worker controls allowed-origin page")
+            first_receipt = page.evaluate("""async () => {
+              const r = await fetch('/api-receipt', {cache: 'no-store'});
+              return {value: (await r.json()).value, cacheControl: r.headers.get('cache-control')};
+            }""")
+            check("BP14", first_receipt == {"value": "v1", "cacheControl": "no-store"},
+                  "first synthetic receipt has HTTP no-store response")
+            state.receipt_value = "v2"
+            second_receipt = page.evaluate("""async () => {
+              const r = await fetch('/api-receipt', {cache: 'no-store'});
+              const cached = await (await caches.open('synthetic-unsafe-receipt')).match('/api-receipt');
+              return {seen: (await r.json()).value, cached: cached && (await cached.json()).value};
+            }""")
+            check("BP15", second_receipt == {"seen": "v1", "cached": "v1"},
+                  "UNSAFE negative control: Worker explicitly caches no-store response and serves stale receipt")
+            cleared_receipt = page.evaluate("""async () => {
+              await caches.delete('synthetic-unsafe-receipt');
+              const r = await fetch('/api-receipt', {cache: 'no-store'});
+              return (await r.json()).value;
+            }""")
+            check("BP16", cleared_receipt == "v2",
+                  "deleting disposable CacheStorage entry restores fresh synthetic response")
             browser.close()
         report = {
             "target": "disposable browser/HTTP origin and bearer fixture, NOT Firebase or LogMate",
@@ -244,7 +305,7 @@ def main():
                 "Synthetic localhost origins and fixed fake bearer only",
                 "No deployed Functions, Firebase Auth, real LogMate canonical wire, Safari or EFB",
                 "CORS is a browser read/preflight mechanism, not authentication or nonbrowser access control",
-                "Cache-Control no-store alone does not prove Service Worker Cache API cannot store a response",
+                "BP15 deliberately proves this synthetic Service Worker can cache and replay no-store response; not a LogMate defect",
             ],
         }
         OUTPUT.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
