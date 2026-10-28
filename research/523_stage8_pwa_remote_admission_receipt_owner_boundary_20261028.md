@@ -690,3 +690,102 @@ Extend existing AS15–AS22 and W-013/014/031, without inventing a new product W
 - **Stop-check:** adjacent high-value questions resolved at standards/source level: source-defined sign-out latency window; distinction between origin, Worker scope and app-level Owner; domain migration as a 37-store data-custody event; concrete product and cross-origin falsification criteria. Next evidence class is **Engineering-authorized actual NORMAL Web and deployed-hosting inventory**, not another generic synthetic BFCache or arbitrary test-count expansion.
 
 **Gate unchanged: Stage 8 ACTIVE · Same-origin deployment/trust decision OPEN · Product two-tab and initiating-tab sign-out first-frame OPEN · Production validation OPEN · PWA release HOLD.** No LogMate, Design Studio, Marketing or Software Engineering repository modifications.
+
+
+## 20. PWA federated Auth: pinned FlutterFire Apple reauthentication/linking method mismatch, popup admission, and custom-domain custody (2026-10-29 KST) [SOURCE / SYNTHESIS / CONTRADICTION / DEPENDENCY / TRANSFER VALIDATION / MINTTAP DIRECTION / VALIDATION OPEN / CHANGE WATCH]
+
+### 20.1 Stage-8 selection, history and exact provenance
+
+**Why this block now:** §§15–19 separated Firebase sessions, durable Owner locks, origin isolation, BFCache and storage. A directly adjacent, more discriminating question is whether the *authentication operation itself* has a supported Web implementation for every required account-recovery action. This is a security/availability prerequisite for a pilot-logbook PWA, not a new product feature or a sixth specialist track. **E** owns the trust/reauth/release boundary, **A** owns browser popup and origin mechanics, **C** owns exact-version executable falsification, **B** consumes Design Studio recovery/AT semantics, and **D** consumes Marketing D8 claim limits.
+
+**Read-first audit:** Web Manager main 1edcb4d811aaf38c0f7ef736da5e998d1150c52e (AGENTS, SPECIALIST_TRACKS, LEARNING_ROADMAP, STATUS, research index, recent commits, §523); read-only LogMate main 2f78e7310dfe2c46c1f1cba0583e2abdd269ffdf (AGENTS, MASTER, provider engine, startup/auth contract, operations, lockfile, tests, Hosting, Firebase config); Design Studio main ac8943c9 (CD115, W074, Web status); Marketing main f170599d (D8 and ad/PWA contract); Software Engineering Studio current main (S007, M006, status). Product and peer repositories were **not modified**.
+
+**Pinned package evidence, not a latest-version guess:** LogMate pubspec.lock blob 746ef9de pins firebase_auth **6.7.0**, firebase_auth_web **6.3.0**, firebase_auth_platform_interface **9.1.0**. The upstream FlutterFire annotated tags firebase_auth-v6.7.0 and firebase_auth_web-v6.3.0 both resolve to source commit [9d5c7e7](https://github.com/firebase/flutterfire/commit/9d5c7e7a7eebbcf402d5786f6a8ee854b96c35e1). This enables a stronger source-level result than comparing product code with unpinned current documentation.
+
+### 20.2 Exact provider operation graph and discovered incompatibility [SOURCE / HIGH-PRIORITY ENGINEERING HANDOFF]
+
+At LogMate provider_auth_engine.dart blob ae9fa89c, **Google Web** sign-in/reauth/link explicitly uses signInWithPopup / reauthenticateWithPopup / linkWithPopup. **Apple Web sign-in** also uses signInWithPopup. **But Apple Web reauthentication** calls currentUser.reauthenticateWithProvider and **Apple Web linking** calls currentUser.linkWithProvider without a kIsWeb split. The Apple branches are reached by the typed engine when those operations are requested; whether any current production UI reaches them is a **separate OPEN call-graph question**.
+
+The *exact pinned upstream implementation* is decisive:
+1. [firebase_auth User wrapper](https://github.com/firebase/flutterfire/blob/9d5c7e7a7eebbcf402d5786f6a8ee854b96c35e1/packages/firebase_auth/firebase_auth/lib/src/user.dart) blob 4e40dd0a delegates both Provider methods to UserPlatform.
+2. [firebase_auth_web UserWeb](https://github.com/firebase/flutterfire/blob/9d5c7e7a7eebbcf402d5786f6a8ee854b96c35e1/packages/firebase_auth/firebase_auth_web/lib/src/firebase_auth_web_user.dart) blob 20c345d9 extends UserPlatform, **does not override** linkWithProvider or reauthenticateWithProvider, but **does implement** linkWithPopup and reauthenticateWithPopup.
+3. [platform-interface UserPlatform](https://github.com/firebase/flutterfire/blob/9d5c7e7a7eebbcf402d5786f6a8ee854b96c35e1/packages/firebase_auth/firebase_auth_platform_interface/lib/src/platform_interface/platform_interface_user.dart) blob bc8060fd implements both missing Provider methods by throwing UnimplementedError.
+4. [Firebase's Flutter federated Auth guide](https://firebase.google.com/docs/auth/flutter/federated-auth), **updated 2026-10-20**, explicitly branches Web to linkWithPopup/reauthenticateWithPopup and native to linkWithProvider/reauthenticateWithProvider.
+
+**SOURCE-DERIVED CONCLUSION:** if these exact LogMate Apple link/reauth branches execute on Web with these pinned FlutterFire packages, they reach the inherited UnimplementedError before any successful provider exchange. The product adapter's catch-all maps unexpected exceptions to generic ProviderAuthFailure. This is a **deterministic code-path incompatibility** in the inspected source/package combination, not a claimed observed user failure, not evidence that current UI exposes the path, and not a full product runtime test. Web Apple *initial sign-in* is a different popup branch and is **not** implicated by this specific mismatch. No provider-console/Apple-credential operation was executed.
+
+**Engineering handoff (proposal, not authorized patch):** give Apple Web link and reauth their appropriate Web popup branch, retain native Provider branches, preserve exact UID-before/after checks, and add tests at the real FirebaseProviderAuthEngine Web adapter boundary rather than only mock ProviderAuthEngine widgets. Do not silently convert a reauthentication/link failure into account switching, account merge or ledger rebind. Any change belongs to LogMate's owner-approved Work, not Web Manager.
+
+### 20.3 Why a correct method still needs browser admission [A platform foundation → E application]
+
+Web popup authentication depends on a browser-created auxiliary browsing context and a user gesture. [MDN Window.open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) documents popup blockers, transient activation and a possible null return; [UserActivation](https://developer.mozilla.org/en-US/docs/Web/API/UserActivation) distinguishes transient from sticky activation. [Firebase redirect best practices](https://firebase.google.com/docs/auth/web/redirect-best-practices) explicitly says popups can be blocked or inconvenient on mobile.
+
+The current LogMate provider entry calls async initialize() and obtains FirebaseAuth before invoking popup APIs. This **does not prove** transient activation is lost: timing, event-task behavior and SDK popup orchestration matter. It creates a **testable browser/platform risk**, especially on iPadOS installed Home Screen and managed EFB. Do not replace popup with redirect without evaluating redirect return, third-party storage, the standalone container and UID/ledger recovery. A popup-blocked outcome is neither a signed-out Owner decision nor permission to delete IndexedDB.
+
+**Platform distinctions:** Web standards describe user activation and browsing-context creation; Chromium behavior needs a real Chrome execution; Safari/WebKit Home Screen/managed-device behavior requires exact iPadOS and management provenance. No general guarantee of Safari popup success, return-to-app routing or unattended background authentication is made.
+
+### 20.4 Custom-domain redirect helper: configuration, observed public site, and missing runtime [SOURCE / CONTRADICTION RESOLVED]
+
+The operational target is **https://logmate.minttap.app** for the PWA/public pages, with Web authDomain **logmate.minttap.app** and OAuth callback **https://logmate.minttap.app/__/auth/handler**. LogMate [domains-and-auth-email.md](https://github.com/yhappcom/logmate/blob/main/docs/operations/domains-and-auth-email.md) records owner-observed successful **email verification** at /auth on 2026-10-04; [federated-auth-providers.md](https://github.com/yhappcom/logmate/blob/main/docs/operations/federated-auth-providers.md) records configured Google/Apple custom-domain redirect values and Google account-chooser start, but **full Google/Apple PWA sign-in, link, reauth and installed return are NOT VERIFIED**. The public /auth email action handler and Firebase-reserved /__/auth/handler are **different paths and jobs**. A successful verification email is not OAuth acceptance.
+
+**Correction/refinement of §19's uncertainty:** there is dated owner-observed public action-page reachability and configured target domain; there is still **no proven deployed NORMAL PWA origin/build/Worker/installed-container OAuth result**. The configured authDomain alone never establishes actual app-serving origin. A direct external attempt in this study to fetch /auth and /__/auth/handler was unavailable through the browsing tool; it was **NON-EXECUTION**, not a 404 or a deployed regression.
+
+Firebase's [third-party storage/redirect guide](https://firebase.google.com/docs/auth/web/redirect-best-practices) explains why a custom Firebase Hosting domain must match the app-serving domain for the iframe-based redirect helper to avoid third-party storage blocking. If the actual PWA runs on logmate.minttap.app and the same Firebase Hosting custom domain serves its helper, the configured pattern aligns with **Option 1 in principle**. If it runs on a *different* origin, this conclusion does not transfer; reverse proxy is not an HTTP 302 redirect, and self-hosting helper files is explicitly not a generic Apple-sign-in replacement. Confirm Hosting mapping, reserved helper route, Firebase Auth authorized domains, Google OAuth redirect allowlist, Apple Services ID return URL and the **actual** page origin together.
+
+### 20.5 Installed WebKit container, offline Owner and recovery [A/E, with B/C transfer]
+
+[WebKit Safari 17.2](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/) documents that Home Screen creation may copy eligible cookies but **does not copy IndexedDB or other script storage**. [WebKit Safari 26.0](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/) changes Home Screen web-app default behavior, not the need to test provider return, storage partition, or managed-device policy. Firebase Web Auth local persistence must not be equated with cookie-based portability. Safari tab login success does not establish installed PWA login, nor does installed login imply 37-store ledger migration.
+
+For an already-established matching owner, transient offline/remote UNKNOWN must remain separate from explicit local sign-out and from positive server rejection, consistent with Engineering S007 and LogMate MASTER. A failed Apple popup/link/reauth cannot unlock an explicitly locked ledger, change its UID, mark Sync successful, or silently erase data. Account deletion still requires an independently successful recent-reauth and revocation/remote-erase saga; a provider-method failure must leave that saga recoverably locked.
+
+### 20.6 Auth/Hosting/Worker security composition and failure modes [E lead; A/C dependencies]
+
+A successful OAuth popup is **identity evidence**, not an automatic authorization to open an unrelated local Owner ledger or to accept a remote Sync operation. Keep the chain separate: provider success → Firebase UID → current local Owner comparison and durable lock state → verified remote Owner/generation for online admission → immutable operation/receipt → local Apply/Cursor. Cross-origin redirects, browser popups, Firebase Authorized Domains, Apple return URLs, OAuth account chooser branding and Firebase Auth persistence are distinct gates.
+
+A future CSP/COOP/COEP hardening plan must be tested with actual Firebase popup/redirect helper flows; COOP can sever opener relationships (see MDN Window.open), and blanket third-party-script blocking can affect Firebase action pages. This is a **compatibility acceptance requirement**, not a claim that the current deployed headers break Auth. Likewise do not CacheStorage-cache /__/auth helper responses, OAuth callbacks, tokens, account-action responses or authenticated Sync receipts as ordinary offline shell resources; compare exact generated Worker fetch rules and deployed headers after each change. A PWA must remain usable for approved local offline tasks when provider/network is unavailable without fabricating a fresh authenticated server session.
+
+### 20.7 Diagnostic counterexamples and explicit cross-track transfer
+
+| Counterexample / trap | Correct judgment | Owner/consumer |
+| --- | --- | --- |
+| Apple initial popup opens, so Apple reauth/link must work | **False:** different methods; pinned UserWeb lacks Provider overrides | E source; C exact adapter test |
+| Firebase Auth Web authDomain equals intended hostname, so installed OAuth works | **False:** target/config ≠ served NORMAL origin, helper reachability or installed return | E/A; C physical oracle |
+| Google chooser appears, so Firebase UID/Owner ready | **False:** chooser-start ≠ completed provider sign-in or local Owner match | E; B status truth |
+| Popup blocked or canceled, so delete local data | **False:** preserve Owner ledger; distinguish cancel, blocked, unavailable, unknown | E; B CD115; C |
+| A redirect works in Safari tab, so Home Screen inherits login/ledger | **False:** distinct storage container; cookie-copy rules do not copy IDB | A/E; C EFB |
+| Provider email matches, so UID can be merged | **False:** only Firebase UID is local Owner authority | E; Engineering S007 |
+| CSP/COOP looks stronger, so ship without OAuth regression | **False:** popup/opener/iframe/action-helper must be tested | E; A/C |
+| PWA installed and Auth succeeded, so offline backup/Sync claim is safe | **False:** W-013/014/031 and remote Sync remain independent OPEN gates | D Marketing D8 HOLD |
+
+Design Studio CD115 owns truthful Offline/Unknown/Retry/Locked copy and AT/focus implications; W074 warns that a green browser subtest inside a red workflow and an unexecuted harness must not be conflated. Marketing D8 continues to prohibit public promises of installed EFB reliability, user-file recovery or production Sync. Software Engineering S007/M006 owns general implementation and session/portable-runtime transfer; Web Manager does not duplicate those curricula.
+
+### 20.8 Engineering-authorized acceptance packet — extend existing AUTH-E7/AS/W-031, do not create an unapproved Work [VALIDATION DEFINED]
+
+Use disposable Firebase identities and a disposable 37-store ledger, exact LogMate NORMAL build/Worker SHA, pinned dependency lock, independent browser/OS and management profile. No real pilot data, provider token, raw email or UID in public logs. The following are **proposed cases, NOT EXECUTED**:
+
+| ID | Discriminating case and required oracle |
+| --- | --- |
+| PA01 | Google Web initial sign-in: popup starts **and** completes with Firebase UID; local Owner policy evaluated separately; cancellation is not success. |
+| PA02 | Apple Web initial sign-in: provider/Services ID configured, popup/return completes; no inference from Google or email verification. |
+| PA03 | Apple Web **reauth** on pinned current build: capture exact typed outcome and underlying method exception; source predicts UnimplementedError path, but record actual runtime before labeling product EXECUTED-FAIL. |
+| PA04 | Apple Web **link** on pinned current build: same oracle; preserve existing UID and provider set; never silently create a new owner. |
+| PA05 | If Engineering changes Apple branches, rerun PA03/04 with exact new build and assert UID invariance, provider-data reobservation, recent-login requirement and no catch-all false success. |
+| PA06 | Google and Apple popup cancel/block/closed and slow initialization: distinguish typed outcomes and verify no ledger unlock, no account merge, no false reauth. |
+| PA07 | Actual served origin, /__/auth/handler and /__/auth/iframe, redirect allowlists and reserved-path routing; record HTTP status, final URL, headers and exact Firebase project; /auth email action is a separate control. |
+| PA08 | Safari tab versus **installed Home Screen** on exact iPadOS: sign-in/return, cold reopen, stored UID and 37-store Owner census; do not assume shared localStorage/IDB. |
+| PA09 | Managed EFB Web Clip versus user-installed app: test allowed popup/redirect/navigation, network/MDM restrictions and return-to-app; unavailable capabilities are explicit UNKNOWN/UNSUPPORTED. |
+| PA10 | Offline established-owner versus explicit sign-out lock versus positive remote rejection: prove no provider attempt changes local custody; no auto Sync. |
+| PA11 | Account deletion/linking reauth failure or interrupted return: durable saga remains locked and resumable; no local wipe until all approved prerequisites succeed. |
+| PA12 | CSP/COOP/Worker regression: popup opener/return and Firebase helper continue to work while authenticated routes/receipts are not cached; test first-frame/focus/AT recovery and privacy-safe logs. |
+
+**Admission ladder:** (1) exact source/SDK method dispatch, (2) disposable Flutter Web adapter runtime, (3) hosted NORMAL provider/UID and Owner gate, (4) Safari tab and installed Home Screen, (5) physical managed EFB, (6) production authorization and release decision. No ladder rung may be silently promoted by a synthetic Chrome fixture, an OAuth console screenshot, or an owner-observed email verification.
+
+### 20.9 Expert judgment, dependency priority and stop-check
+
+**Priority change within Stage 8:** the Apple Web reauth/link method mismatch is a **higher-information-gain source-level Engineering handoff** than another synthetic BFCache repetition. It potentially blocks account recovery/linking/deletion flows **if exposed**, even though Apple Web initial sign-in uses the supported popup path. Resolve exact UI call graph and implement/test only with product authorization; in parallel verify the actual custom-domain helper and popup/installed-PWA return. Do not change LogMate code from this research repository.
+
+**Five-track balance:** E receives primary allocation (provider trust, UID custody, logout/deletion, Hosting/CSP/COOP); A supplies activation, popup/redirect, helper origin, Safari partition; C defines method-level negative controls and exact physical oracles; B consumes CD115/W074 for cancellation, locked and unknown states without claiming AT PASS; D consumes Marketing D8 and keeps install/offline/Sync claims on HOLD. One reusable source proof, multiple transfer consumers; no duplicate primers.
+
+**Stop-check:** pinned source contradiction, domain/helper conditionality, popup timing hypothesis, WebKit install separation, failure/recovery policy and twelve discriminating product oracles are integrated. The next adjacent high-value question requiring different evidence is **actual LogMate Flutter Web method invocation and installed Safari/managed EFB OAuth return**, with Engineering approval and provider accounts. This section did not execute that runtime, change external configuration or perform product writes.
+
+**Gate: Stage 8 ACTIVE · Apple Web link/reauth exact-source incompatibility CONFIRMED at pinned code path · actual UI reachability/runtime OPEN · Production validation OPEN · PWA release HOLD.**
