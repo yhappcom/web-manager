@@ -83,11 +83,12 @@ def run_case(browser, base, name, guarded, after_auth, unreachable, expected):
         # evidence of the bfcache hazard or its mitigation.
         page.wait_for_timeout(200)
         trace = page.evaluate("window.trace")
+        navigation = page.evaluate("""() => { const n=performance.getEntriesByType('navigation')[0]; return {type:n?.type, notRestoredReasons:n?.notRestoredReasons ?? null}; }""")
         restored = any(x == ["pageshow", True] for x in trace)
         observed = page.locator("#secret").inner_text()
         passed = restored and observed == expected
         return {"case":name, "passed":passed, "bfcache_restored":restored,
-                "observed":observed, "expected":expected, "trace":trace}
+                "observed":observed, "expected":expected, "trace":trace, "navigation":navigation}
     finally:
         context.close()
 
