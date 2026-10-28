@@ -198,4 +198,37 @@ test('Stage 8 authenticated emulator admission — FE01–FE13', { timeout: 1800
     await expectStatus(admit(a.token, 'owner', operation('BAD', D1)), 400);
     await expectStatus(admit(a.token, 'owner', { ...operation(ID3), modifiedAtUtcMicros: 'bad' }), 400);
   });
+  await seed('revoked', a.uid);
+  await admit(a.token, 'revoked', operation());
+  await db.doc('ledgers/revoked').update({ status: 'revoked' });
+  await t.test('FE14 same UID loses write and latest access when ledger revoked', async () => {
+    await expectStatus(admit(a.token, 'revoked', operation()), 403);
+    await expectStatus(admit(a.token, 'revoked', operation(ID2)), 403);
+    await expectStatus(latest(a.token, 'revoked'), 403);
+    assert.equal((await db.doc('ledgers/revoked').get()).data().nextSequence, 1);
+    assert.equal((await db.collection('ledgers/revoked/operations').get()).size, 1);
+  });
+  await seed('isolated', b.uid);
+  await t.test('FE15 same ID is scoped to ledger and its current owner', async () => {
+    assert.deepEqual(await admit(b.token, 'isolated', operation()), { status: 'ACCEPTED', sequence: 1, id: ID1 });
+    await expectStatus(admit(a.token, 'isolated', operation()), 403);
+    assert.equal((await db.collection('ledgers/isolated/receipts').get()).size, 1);
+    assert.equal((await db.collection('ledgers/owner/receipts').get()).size, 1);
+  });
+  await seed('conflict-race', a.uid);
+  await t.test('FE16 concurrent same ID but different digest yields one acceptance and one conflict', async () => {
+    const settled = await Promise.allSettled([
+      admit(a.token, 'conflict-race', operation(ID1, D1)),
+      admit(a.token, 'conflict-race', operation(ID1, D2))
+    ]);
+    const accepted = settled.filter(x => x.status === 'fulfilled');
+    const rejected = settled.filter(x => x.status === 'rejected');
+    assert.equal(accepted.length, 1);
+    assert.equal(rejected.length, 1);
+    assert.equal(accepted[0].value.status, 'ACCEPTED');
+    assert.equal(rejected[0].reason.status, 409);
+    assert.equal((await db.doc('ledgers/conflict-race').get()).data().nextSequence, 1);
+    assert.equal((await db.collection('ledgers/conflict-race/operations').get()).size, 1);
+    assert.equal((await db.collection('ledgers/conflict-race/receipts').get()).size, 1);
+  });
 });
