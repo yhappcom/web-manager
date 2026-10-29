@@ -204,3 +204,57 @@ Twelve independent intended observations: old origin seeded; same-origin public 
 The next concrete decision is whether the **five static informational pages** can leave the ledger origin without breaking canonical/Store/deletion/support tasks **while residual Auth Action and Worker authority are separately hardened**. This source-and-browser preflight can advance now; a full Auth Action move is a materially different security/session migration and must not be silently bundled with it. Actual deployed hosts, Firebase provider console, exact NORMAL artifact, Safari/managed EFB, 37-store Files roundtrip and production release authority remain UNKNOWN.
 
 **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** No origin split, Firebase config change, product code change, real pilot data or physical-device execution. Next: inspect hosted Chrome job, correct fixture failures if any, then Engineering-approved exact product route/Auth/Worker and physical EFB evidence.
+
+
+## 12. Hosted Chrome 156 execution adjudication and deployment-decision falsifiers (2026-10-29)
+
+**Evidence:** SOURCE (GitHub Actions log + fixture), VALIDATION (synthetic only), SYNTHESIS, CONTRADICTION, DEPENDENCY, MINTTAP DIRECTION (provisional), OPEN, CHANGE WATCH. **Owner:** E; A owns browser mechanics; C independently judges test scope; B/D consume release wording. No product or external-repository changes.
+
+### 12.1 Execution provenance and precise result [SOURCE / VALIDATION]
+
+The §11 workflow previously marked **NOT VERIFIED** has now been inspected at [Actions run 40879792008](https://github.com/yhappcom/web-manager/actions/runs/40879792008), executed **2026-10-29 13:12 UTC** (22:12 KST). Its checked-out commit was [a29a40e2](https://github.com/yhappcom/web-manager/commit/a29a40e2cf45e73c7e36ee6b69207711b4fa56cd), job **123467938364**, Python **3.13.17**, Playwright **1.57.0**, Chrome **156.0.8078.47**, status **completed/success**. The job log explicitly prints **12/12 synthetic origin-split checks PASS**; artifact **12898724347**, named **pwa-origin-split-synthetic-evidence**, was uploaded (807-byte compressed archive; workflow log reports ZIP SHA-256 **4ad70b3c020c153cca784721c4f2e04bdd96dbf4787a36b7bf5179b91be7424a**). The **job log and artifact listing** were inspected; the archive payload was not independently downloaded and rehashed. Do not upgrade artifact existence to independent payload inspection.
+
+The twelve logged checks, each using only disposable local synthetic values, are: old-origin IDB/Cache seed; same-origin public-path read of seeded IDB; new-origin no automatic IDB/Cache copy; cookie shared across ports of one host; cross-origin Worker registration SecurityError; old Worker controls old origin; old Worker does not control new origin; redirect does not transfer IDB; old source retains IDB after redirect; postMessage origin-filter comparator; handshake alone does not restore ledger; relative manifest start URL resolves independently per origin. A test passing is **confirmation of the deliberately bounded comparator**, not proof of a secure product configuration. An old-origin public path successfully reading a synthetic record is the *expected risk demonstration*, not a product leak.
+
+**Important source-level scope correction:** the two origins were **http://127.0.0.1:port-A** and **http://127.0.0.1:port-B**. Loopback is treated as a trustworthy context for Worker testing, but this is **not** a real HTTPS deployment, sibling-subdomain cookie test, production CSP/redirect, Apple Safari or an installed/MDM iPad. The cookie check demonstrates **ports are not a cookie boundary**, not that a parent-Domain cookie exists on MintTap. The postMessage comparator checks the event's origin against a synthetic peer; it does **not** prove a production bridge's source-window binding, nonce/replay protection, UID binding or backup admission. The manifest comparator resolves URLs from JSON but does **not** install a PWA or measure an OS app ID. The fixture's Worker only installs/claims clients; it is **not** LogMate's generated Worker or an offline shell integrity test.
+
+**Outcome:** synthetic platform validation **12/12 PASS**. **OM01–OM24 exact-product tests remain NOT RUN**, including real hosted origins, Auth Action, 37-store migration, Safari tab/Home Screen, physical/managed EFB, Files readback, remote Owner and rollback. **Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD**.
+
+### 12.2 Failure-first browser-to-production transfer [SYNTHESIS / CONTRADICTION]
+
+| Proven in this reduced fixture | What it explicitly does **not** prove | Next independent oracle |
+| --- | --- | --- |
+| Path-only page can read same-origin synthetic IDB | Real LogMate public/auth script compromise or real ledger read | Exact deployed script/CSP/Worker inventory and authorized negative test; no real records |
+| Different port origin lacks seeded IDB/Cache | HTTPS sibling subdomain behavior under actual cookies/CORS/CSRF | Two real controlled HTTPS sibling origins; inspect Set-Cookie, request credentials, Origin/CSRF checks |
+| Redirect does not copy IDB | 301 caching, old Worker update, source access under offline/MDM policy | Versioned rollback drill with old launch retained and separate backup |
+| Old Worker controls old, not new | Current LogMate root Worker fetch behavior, stale clients.claim, shell hashes or header policy | Exact approved NORMAL Web build and served registration/controller/fetch trace |
+| Origin-filtered postMessage comparator | Secure cross-origin data migration or Firebase UID proof | source + exact targetOrigin + ephemeral challenge + schema/digest + explicit user action + independent .lbk custody; no implicit bridge approval |
+| Manifest relative start resolves differently | Installed Safari/Chromium app identity, standalone state or data transfer | Inspect parsed installed manifest, actual start/scope/id, container storage and offline relaunch on physical device |
+
+**Counterexample to overgeneralization:** two HTTPS sibling subdomains are cross-origin, but may be same-site; SameSite does not automatically prevent every sibling-origin state-changing request. A cookie with a parent Domain may be sent across sibling hosts, whereas host-only cookies are narrower. Distinguish cookie *delivery* from CORS *response visibility* and from server-side *authorization/CSRF*. See [MDN Same-origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Same-origin_policy), [MDN Set-Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie), and [Firebase redirect best practices](https://firebase.google.com/docs/auth/web/redirect-best-practices) (checked 2026-10-29). None establishes that LogMate uses cookie sessions or signInWithRedirect.
+
+### 12.3 Non-destructive origin-split deployment sequence [MINTTAP DIRECTION — NOT APPROVED]
+
+**Gate P0 — provenance before configuration:** Engineering identifies exact deployed old app origin(s), all alias hosts, CDN/Hosting headers and rewrites, Auth Action/email links, Firebase provider methods and authorized domains, Worker script/scope/control, manifest resolved ID/scope, 5 static canonicals, account-deletion and support URLs. Unknown is **OPEN**, not a guessed default.
+
+**Gate P1 — preserve private origin and owner:** keep the ledger origin, existing offline shell and original IDB unchanged. Do not introduce a 301/308 for app routes, unregister the old Worker, clear CacheStorage/IDB or silently force new onboarding. Capture synthetic 37-store semantic digest and independently recoverable .lbk first. An app-origin migration is a separate high-risk proposal.
+
+**Gate P2 — public-only experiment:** host informational pages at a distinct origin; verify canonical/robots/sitemap/internal links/relative assets and account-deletion/support reachability. Do not claim full public/auth execution isolation while Auth Action or another executable public page remains at the ledger origin. Do not place third-party/public scripts into the app document merely because their URLs changed.
+
+**Gate P3 — auth and request trust:** inspect actual cookie attributes and cross-host requests; validate state-changing endpoints with server authority/CSRF controls, Firebase action links, redirect handler/session persistence, CSP and report sanitization. Exercise one-time-code URL/referrer/history/error/telemetry negative tests. Keep synthetic test tokens only.
+
+**Gate P4 — installation and recoverability:** test Safari tab, separately installed Home Screen PWA, managed Web Clip and native app as distinct storage/Replica contexts. Export a real independently retained synthetic .lbk to Files, reopen its bytes, restore into empty same-UID destination with new Replica ID and unchanged Operation IDs, verify full schema, relaunch offline, interrupt mid-transfer, roll back while old source remains. A successful Share sheet handoff, auth login or redirect is not a backup/restore pass.
+
+**Gate P5 — operational/claim acceptance:** independent quality evidence (keyboard/VoiceOver, task continuity, update/rollback), search continuity and privacy-safe acquisition metrics; Marketing D8/D9 product claims remain HOLD until physical/project proof. Never say "seamless" or "automatic" on synthetic evidence alone.
+
+### 12.4 Five-track allocation and outside discipline boundary [DEPENDENCY / TRANSFER VALIDATION]
+
+- **E (lead):** trust boundary, cookies/CSRF/redirect/auth/CSP, non-destructive release/rollback; highest consequence and missing production evidence.
+- **A (foundational dependency):** origin versus site, port versus cookie scope, Worker control and manifest/install semantics; evidence is standards + synthetic Chrome, not Safari/OS.
+- **C (independent validation):** fixture audit, exact source/browser/device acceptance, offline/file/37-store/VoiceOver failure oracles; synthetic success is not production closure.
+- **B:** distinguish "redirected", "signed in", "backup saved", "restored", "offline ready", "synced" as separate user states; consume Design Studio WEB W121 (Stage 3 PRACTICE, physical/human OPEN), not duplicate visual research.
+- **D:** old/new public canonicals, redirects, support/deletion discovery and measurement continuity; consume Marketing D8/D9 claim HOLD rather than claiming acquisition lift. Marketing's 2026-10-29 22:33 KST status independently acknowledged this same 12/12 synthetic run without upgrading product claims.
+
+**Software Engineering:** owns code changes, exact build, fixture provenance and product test execution. LogMate's approved 2026-10-17 manual-delta contract preserves .lbk-first transfer and user-initiated Sync; the Web Manager cannot silently change it. Peer repositories read-only.
+
+**Adjacent-question completion check:** the run resolved the previously unverified hosted fixture result, audited its negative controls and noncoverage, derived a release-safe migration sequence and cross-track acceptance boundary. Further claims about live HTTPS subdomains, real Auth provider behavior or managed EFB are blocked on distinct deployment/device/Engineering evidence, not more generic browser theory. Reopen on new evidence; do not manufacture a second redundant primer.
