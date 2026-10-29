@@ -271,3 +271,45 @@ All tests use synthetic/disposable ledgers, never real pilot records. For RT04, 
 **CHANGE WATCH (checked 2026-10-30):** sembast_web 2.4.6+1 is published, while the checked LogMate lockfile remains 2.4.6; platform/browser storage policies and physical durability behavior must be rechecked against actual shipped versions.
 
 **Meaningful stopping boundary:** static source and package-level uncertainty narrowed; the next high-value question is now a **different evidence class**—Engineering-approved compiled Web/Sembast retry and real-device fault execution. Repeating more abstract model green checks would not promote the gate. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+---
+
+## 21. Pinned Sembast Web browser escalation — 2026-10-30 [SOURCE / VALIDATION DEFINED]
+
+Prior 17/17 checks were STATIC SOURCE-PATTERN only. A new executable research instrument is committed at [pinned-package harness](handoffs/pwa_pinned_sembast_probe/) with [GitHub Actions workflow](../.github/workflows/stage8_pinned_sembast_web.yml). It compiles actual Dart package dependencies, pinned directly to **sembast_web 2.4.6** and **sembast 3.8.11** (the versions observed in LogMate's lockfile), then opens a synthetic Sembast database in two independent same-origin Chromium tabs. It is **not LogMate code, a LogMate fixture, or product validation**.
+
+**SOURCE:** [sembast_web 2.4.6 documentation](https://pub.dev/packages/sembast_web/versions/2.4.6) describes IndexedDB-backed memory-loaded data, BroadcastChannel notification, cross-tab-safe transactions and the possibility of callback re-execution on concurrent change; callback idempotence is a requirement, not proof that a particular overlap always retries. [W3C IndexedDB](https://www.w3.org/TR/IndexedDB/) specifies physical database transaction/version semantics, not Sembast's logical capability marker. [Dart browser test documentation](https://github.com/dart-lang/test/blob/master/pkgs/test/README.md) provides browser test background. The new harness uses compiled Dart JS plus Playwright to coordinate two tabs explicitly.
+
+**Fixture design:** one synthetic store holds logical capability 17, counter 0, and fixed SYNTHETIC-REPLICA; both tabs open the same named database. Concurrent increment callbacks have a deliberate overlap, each records invocation count, and the final committed counter is inspected. A deliberately thrown transaction tests rollback, close/reopen tests browser-session persistence, and indexedDB.databases() separately records physical IDB database versions. The CI workflow records Dart dependency resolution, Chrome version, compiled JS SHA-256 and uploads a JSON result plus generated pubspec.lock. **Direct dependency versions are pinned; transitive dependencies may differ from LogMate's full lockfile** until independently compared.
+
+## 22. PS01–PS06 evidence oracles [VALIDATION — EXECUTION UNVERIFIED]
+
+| Oracle | Required observation | What it does not prove |
+| --- | --- | --- |
+| PS01 seed | Marker 17, counter 0 and synthetic Replica committed together | Product v16→v17 migration |
+| PS02 tab visibility | Already-open second tab observes seed | BroadcastChannel timing SLA |
+| PS03 overlap | Two concurrent increments yield final counter 2; report each callback invocation count | A correct result does not necessarily mean a retry occurred |
+| PS04 thrown transaction | Intentional exception does not publish counter 999 | Power-loss/quota durability |
+| PS05 reopen | Closing and reopening preserves committed state | External Files backup or managed iPad persistence |
+| PS06 physical IDB | Browser database names/versions recorded separately from marker 17 | Deployed LogMate physical database version |
+
+**Failure-first adjudication:** dependency-resolution/compile failure is NON-EXECUTION; browser launch or page-readiness failure is NON-EXECUTION; executed assertion violation is FAIL SYNTHETIC; successful cases are PASS SYNTHETIC only after actual job log/artifact/commit inspection. Preserve the actual retry-observed boolean even if final counter is 2. A failing synthetic harness requires fixture diagnosis before inferring any product problem.
+
+**Execution status:** local Chromium loopback navigation was blocked by ERR_BLOCKED_BY_ADMINISTRATOR before execution. Hosted workflow source is committed and push-triggered, but no hosted run/job/artifact has yet been verified here. **No new runtime PASS is claimed.**
+
+## 23. Cross-track integration and contradiction controls [DEPENDENCY / TRANSFER VALIDATION]
+
+- **A platform owner:** Sembast callback retry, BroadcastChannel propagation, physical IndexedDB version and logical capability marker are separate mechanisms; 2.4.6+1 remains CHANGE WATCH, not the pinned product version.
+- **E lead/security/operations:** candidate random Replica generation during a retry is not itself a defect. Required product invariants concern final committed Replica, Sync State, Owner and Outbox consistency and absence of duplicate external effects. A Sembast commit is not OS-crash durability or independently retained backup.
+- **C quality/validation:** first adjudicate exact hosted package fixture, then request Engineering-approved exact compiled LogMate old/new Web builds, real migration-failure seam, competing tabs and disposable 37-store data. Physical Safari tab, installed Home Screen and managed EFB/VoiceOver require distinct evidence.
+- **B UX architecture:** consume Design Studio W121; distinguish local committed save, migration complete, Files backup verified, restore complete and cloud Manual Sync. Do not call one state another.
+- **D discovery/claims:** consume Marketing D8/D9 HOLD; no seamless update, background sync, guaranteed offline persistence, safe rollback or recoverable EFB backup claims.
+
+**CONTRADICTION:** a correct synthetic final counter 2 does not establish that callback re-execution happened unless attempts show it. A browser physical version differing from 17 does not identify LogMate's deployed physical version. Successful reopen is weaker than crash survival, which is weaker than independent external backup. SQLite D003 is a reasoning transfer, not Sembast/WebKit runtime evidence.
+
+## 24. Next evidence boundary [OPEN / MINTTAP DIRECTION / CHANGE WATCH]
+
+First verify hosted workflow execution, dependency lock, compiled JS hash and PS01–PS06 observed outcomes. If valid, hand the resulting concrete retry/propagation behavior to Engineering for exact-product RT01–RT10 (v16/v17, migration failure, old/new shell, two-tab write, Replica/Owner/Outbox and unsupported downgrade). Then verify an external LBK file saved, independently read back and restored to an empty same-UID 37-store destination, followed by physical iPad Safari/Home Screen/managed EFB, offline relaunch, storage pressure, Files/MDM restrictions and VoiceOver. No changes to LogMate or other specialist repositories.
+
+**MINTTAP DIRECTION:** instrument first, claim only observed evidence. **OPEN:** hosted result, exact-product migration and physical backup. **CHANGE WATCH:** Dart/Chrome versions, Sembast Web releases, WebKit storage. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
