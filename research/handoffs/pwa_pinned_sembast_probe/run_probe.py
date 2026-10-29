@@ -61,6 +61,31 @@ def main():
         with sync_playwright() as p:
             browser = p.chromium.launch(executable_path=CHROME, headless=True, args=["--no-sandbox"])
             context = browser.new_context()
+            # Observational instrumentation only: record native IndexedDB transaction
+            # options actually requested by the pinned package. Never force strict.
+            context.add_init_script("""() => {
+              window.__idbTransactionTrace = [];
+              window.__idbTraceState = 'NOT_INSTALLED';
+              try {
+                const original = IDBDatabase.prototype.transaction;
+                IDBDatabase.prototype.transaction = function(...args) {
+                  const txn = original.apply(this, args);
+                  const trace = window.__idbTransactionTrace;
+                  if (trace.length < 100) {
+                    trace.push({
+                      database: this.name,
+                      mode: args[1] ?? null,
+                      requestedDurability: args[2]?.durability ?? null,
+                      observedDurability: txn.durability ?? null
+                    });
+                  }
+                  return txn;
+                };
+                window.__idbTraceState = 'INSTALLED';
+              } catch (e) {
+                window.__idbTraceState = 'UNAVAILABLE:' + String(e);
+              }
+            }""")
             a, b = context.new_page(), context.new_page()
             start(a, url)
             start(b, url)
@@ -82,12 +107,33 @@ def main():
             fault = receive(b, "fault")
             assert fault["caught"] and fault["counter"] == 2, fault
             evidence["checks"].append({"id": "THROWN_TRANSACTION_NOT_PUBLISHED", "observed": fault})
+            # Cross-tab visibility is a separate oracle from the faulting tab's view.
+            after_fault, polls = converge(a, "after-fault", final)
+            evidence["checks"].append({"id": "OTHER_TAB_SEES_NO_ABORTED_WRITE", "observed": after_fault, "polls": polls})
             send(a, "reopen", "reopen")
             reopen = receive(a, "reopen")
             assert reopen == final, (reopen, final)
             evidence["checks"].append({"id": "REOPEN_PRESERVES_COMMITTED_STATE", "observed": reopen})
             physical = a.evaluate("indexedDB.databases().then(x => x.map(d => ({name:d.name,version:d.version})))")
             evidence["checks"].append({"id": "PHYSICAL_IDB_VERSION_RECORDED_SEPARATELY", "observed": physical})
+            traces = {
+                "a": a.evaluate("({state:window.__idbTraceState,transactions:window.__idbTransactionTrace})"),
+                "b": b.evaluate("({state:window.__idbTraceState,transactions:window.__idbTransactionTrace})")
+            }
+            evidence["checks"].append({
+                "id": "NATIVE_IDB_DURABILITY_HINT_OBSERVATION",
+                "observed": traces,
+                "interpretation": "OBSERVED" if any(v["transactions"] for v in traces.values()) else "NOT_OBSERVED"
+            })
+            # Fresh page in the SAME browser context/profile, not an OS crash test.
+            a.close()
+            b.close()
+            c = context.new_page()
+            start(c, url)
+            send(c, "fresh", "inspect")
+            fresh = receive(c, "fresh")
+            assert fresh == final, (fresh, final)
+            evidence["checks"].append({"id": "FRESH_TAB_SAME_PROFILE_REOPEN", "observed": fresh})
             evidence["result"] = "PASS_SYNTHETIC"
             context.close()
             browser.close()
