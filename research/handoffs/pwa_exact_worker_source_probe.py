@@ -149,11 +149,20 @@ def main():
             page.goto(base + "/account-deletion/", wait_until="load")
             record("P01_DIRECT_PUBLIC_CSS", page.evaluate(
                 "getComputedStyle(document.body).backgroundColor"), "rgb(1, 2, 3)")
+            preexisting = context.new_page()
+            preexisting.goto(base + "/account-deletion/", wait_until="load")
+            record("P15_PREEXISTING_PUBLIC_UNCONTROLLED", preexisting.evaluate(
+                "!!navigator.serviceWorker.controller"), False)
 
             page.goto(base + "/", wait_until="load")
             page.wait_for_function("document.body.dataset.registered === 'yes'")
             page.wait_for_function("navigator.serviceWorker.controller !== null")
             page.reload(wait_until="load")
+            preexisting.wait_for_function("navigator.serviceWorker.controller !== null")
+            record("P16_PREEXISTING_PUBLIC_CLAIMED", preexisting.evaluate(
+                "!!navigator.serviceWorker.controller"), True)
+            record("P17_CLAIMED_PUBLIC_GET_UNASSIGNED",
+                   observed_fetch(preexisting, "/api/ping")["status"], 503)
             record("P02_ROOT_CONTROLLED", page.evaluate(
                 "!!navigator.serviceWorker.controller"), True)
             root_css = observed_fetch(page, "/public.css")
@@ -208,8 +217,8 @@ def main():
     }
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(evidence, f, indent=2)
-    assert len(obs) == 14
-    print("14/14 source-generated synthetic Chrome assertions PASS")
+    assert len(obs) == 17
+    print("17/17 source-generated synthetic Chrome assertions PASS")
 
 
 if __name__ == "__main__":
