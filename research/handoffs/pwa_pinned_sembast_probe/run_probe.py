@@ -134,6 +134,42 @@ def main():
             fresh = receive(c, "fresh")
             assert fresh == final, (fresh, final)
             evidence["checks"].append({"id": "FRESH_TAB_SAME_PROFILE_REOPEN", "observed": fresh})
+            # PS10: uninstrumented control in a separate browser context. This is
+            # semantic parity only, not timing equivalence or crash durability.
+            control = browser.new_context()
+            d, e = control.new_page(), control.new_page()
+            start(d, url)
+            start(e, url)
+            send(d, "control-seed", "reset")
+            control_seed = receive(d, "control-seed")
+            assert control_seed == seed, (control_seed, seed)
+            converge(e, "control-observe", seed)
+            send(d, "control-d1", "increment", 350)
+            send(e, "control-e1", "increment", 350)
+            control_d, control_e = receive(d, "control-d1"), receive(e, "control-e1")
+            control_final, control_polls = converge(d, "control-final", final)
+            converge(e, "control-converge-e", final)
+            send(e, "control-fault", "throw_before_commit")
+            control_fault = receive(e, "control-fault")
+            assert control_fault["caught"] and control_fault["counter"] == 2, control_fault
+            converge(d, "control-after-fault", final)
+            d.close()
+            e.close()
+            f = control.new_page()
+            start(f, url)
+            send(f, "control-fresh", "inspect")
+            control_fresh = receive(f, "control-fresh")
+            assert control_fresh == final, (control_fresh, final)
+            evidence["checks"].append({
+                "id": "UNINSTRUMENTED_CONTEXT_SEMANTIC_PARITY",
+                "observed": {
+                    "seed": control_seed, "a": control_d, "b": control_e,
+                    "final": control_final, "convergence_polls": control_polls,
+                    "fault": control_fault, "fresh": control_fresh
+                },
+                "interpretation": "One-run semantic parity only; retry count/timing need not match"
+            })
+            control.close()
             evidence["result"] = "PASS_SYNTHETIC"
             context.close()
             browser.close()
