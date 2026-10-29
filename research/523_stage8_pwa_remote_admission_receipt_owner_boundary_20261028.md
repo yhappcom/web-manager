@@ -1291,3 +1291,18 @@ Added [disposable Python/Playwright probe](handoffs/pwa_cached_header_integrity_
 **E primary (highest risk/dependency):** release/policy trust anchor, origin isolation, CSP headers, incident/rollback and data-preserving repair. **A:** Response headers, Fetch/CacheStorage, navigation, Worker CSP and WebKit/Chromium boundaries. **C:** independent browser tests, accessibility, storage and exact-build reproducibility. **B:** Design Studio W121/CD127 remains pre-runtime; preserve truthful public deletion/support/recovery UX. **D:** Marketing D8 claims remain HOLD pending real app/managed-EFB evidence. Engineering [Validation Standard](https://github.com/yhappcom/software-engineering-studio/blob/main/methods/VALIDATION_STANDARD.md) owns independent oracles for the real product. Product/peer repositories remain read-only.
 
 **Current decision:** no CSP or Worker modification authorized in LogMate; require Engineering approval and exact runtime evidence before release promotion. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** Adjacent question completed in this bundle: the body-hash catalogue audit was extended to *response-header* authority, CSP policy delivery, MIME semantics, a falsifiable Chrome fixture, and non-destructive recovery. The next decisive evidence is the hosted browser run plus authorized exact NORMAL deployment/physical EFB, not another static checklist.
+
+
+### 26.7 Hosted Chrome result admitted after authoring (2026-10-29 KST) [VALIDATION / CONTRADICTION / EVIDENCE LIMIT]
+
+**Exact evidence:** [GitHub Actions run 40815565641](https://github.com/yhappcom/web-manager/actions/runs/40815565641), job **123255675818**, checkout **79eb3b67cf7af08003724a68feeb3f63ee9fbc0e**, Ubuntu 24.04, Python 3.13.17, Playwright 1.57.0, **Google Chrome 156.0.8078.47**, completed **SUCCESS**. Actual job logs and uploaded artifact metadata inspected. Evidence artifact **12872521086** (pwa-cached-header-integrity-evidence, zip digest sha256:c22dd02eaf6798a861422c82c01315f84ac3f0433795b91841d6dc93738be653). Five expected bounded cases all observed: **5/5 PASS**.
+
+| Case | Observed navigation / CSP / DOM | Verdict scope |
+| --- | --- | --- |
+| BASELINE | HTTP 200; strict CSP present; inline sentinel **not executed** | Pristine synthetic policy enforcement |
+| CSP_HEADER_STRIPPED | HTTP 200; CSP **absent**; **identical verified body SHA**; inline sentinel **executed** | Confirms synthetic header-only policy mutation bypasses body-only integrity check |
+| WORKER_REAPPLIES_CSP | HTTP 200; trusted Worker CSP restored; sentinel **not executed** | Synthetic comparator, not an approved product remediation |
+| BODY_CHANGED | HTTP **503**; sentinel not executed | Genuine body-hash rejection |
+| MIME_ONLY_CHANGED | HTTP 200; CSP retained; Content-Type **text/plain**; sentinel not executed | Same body hash does not attest MIME semantics |
+
+All five server responses used **Cache-Control: no-store**, yet explicit Cache API storage and response-header mutation were observed. The fixture SHA was 67c54ab4534ae17e5fce6f2fd960d350776e6b6e9c8741bd9e16f11d3381aefb in every admitted case. This **closes the reduced Chrome mechanism oracle**, not the LogMate product trust anchor, deployed CSP, Firebase Hosting configuration, exact Worker generated source execution, Safari/WebKit or EFB data custody. The intentional unsafe control is a **successful negative control**, not a security PASS. The initial local browser administrator block remains a distinct NON-EXECUTION. **Stage 8 ACTIVE · Synthetic Chrome 5/5 ADMITTED · Production validation OPEN · PWA release HOLD.**
