@@ -47,7 +47,7 @@ navigator.serviceWorker.register('/sw.js').then(() => navigator.serviceWorker.re
 .then(() => {document.body.dataset.ready='yes';});
 </script></body></html>"""
                 mime = "text/html"
-            elif path in ("/account-deletion", "/account-deletion/"):
+            elif path in ("/account-deletion", "/account-deletion/", "/auth/action", "/auth/action/"):
                 data = b"""<!doctype html><html><head><link rel="stylesheet" href="/public.css"></head>
 <body><h1>Account deletion</h1><p>Request deletion</p></body></html>"""
                 mime = "text/html"
@@ -99,9 +99,29 @@ def main():
                 expected = 200 if safe else 503
                 assert css_status and css_status[-1] == expected, (safe, css_status, responses)
                 assert style == ("rgb(1, 2, 3)" if safe else "rgba(0, 0, 0, 0)"), style
-                observations.append({"case": "SAFE" if safe else "SOURCE_DERIVED_UNSAFE",
+                observations.append({"case": "SAFE_SAME_TAB" if safe else "UNSAFE_SAME_TAB",
                                      "controlled": controlled, "html": html_status[-1],
                                      "css": css_status[-1], "computedBackground": style})
+
+                # Independent controlled tab: the root navigation did not assign its client ID.
+                other = context.new_page()
+                other_responses = []
+                other.on("response", lambda r: other_responses.append(
+                    {"path": r.url.split(base)[-1], "status": r.status}))
+                for route, label in (("/account-deletion/", "NEW_TAB_PUBLIC"),
+                                     ("/auth/action/", "RESERVED_AUTH_DOCUMENT")):
+                    other_responses.clear()
+                    other.goto(base + route, wait_until="load")
+                    assert other.evaluate("!!navigator.serviceWorker.controller"), (label, "uncontrolled")
+                    css = [r["status"] for r in other_responses if r["path"] == "/public.css"]
+                    html = [r["status"] for r in other_responses if r["path"] == route]
+                    computed = other.evaluate("getComputedStyle(document.body).backgroundColor")
+                    assert html and html[-1] == 200, (label, other_responses)
+                    assert css and css[-1] == expected, (label, other_responses)
+                    assert computed == ("rgb(1, 2, 3)" if safe else "rgba(0, 0, 0, 0)"), (label, computed)
+                    observations.append({"case": ("SAFE_" if safe else "UNSAFE_") + label,
+                                         "controlled": True, "html": html[-1], "css": css[-1],
+                                         "computedBackground": computed})
                 context.close()
             finally:
                 server.shutdown(); server.server_close()
@@ -110,7 +130,7 @@ def main():
         json.dump({"fixture": "synthetic source-derived; not LogMate compiled worker",
                    "observations": observations}, file, indent=2)
     print(json.dumps(observations, indent=2))
-    print("2/2 controlled-route comparisons PASS (unsafe is intentional negative control)")
+    print("6/6 controlled-route comparisons PASS (unsafe cases are intentional negative controls)")
 
 if __name__ == "__main__":
     main()
