@@ -63,7 +63,7 @@ def main():
             context = browser.new_context()
             # Observational instrumentation only: record native IndexedDB transaction
             # options actually requested by the pinned package. Never force strict.
-            context.add_init_script("""() => {
+            context.add_init_script("""(() => {
               window.__idbTransactionTrace = [];
               window.__idbTraceState = 'NOT_INSTALLED';
               try {
@@ -85,7 +85,7 @@ def main():
               } catch (e) {
                 window.__idbTraceState = 'UNAVAILABLE:' + String(e);
               }
-            }""")
+            })();""")
             a, b = context.new_page(), context.new_page()
             start(a, url)
             start(b, url)
