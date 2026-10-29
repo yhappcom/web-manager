@@ -53,6 +53,8 @@ navigator.serviceWorker.register('/sw.js').then(() => navigator.serviceWorker.re
                 mime = "text/html"
             elif path in ("/public.css", "/app.css"):
                 data, mime = CSS.encode(), "text/css"
+            elif path == "/api/ping":
+                data, mime = b'{"ok":true}', "application/json"
             elif path == "/sw.js":
                 data, mime = worker(safe).encode(), "application/javascript"
             else:
@@ -84,11 +86,32 @@ def main():
                 page.goto(base + "/account-deletion/", wait_until="load")
                 baseline = page.evaluate("getComputedStyle(document.body).backgroundColor")
                 assert baseline == "rgb(1, 2, 3)", ("baseline", baseline)
+                # A public page opened before registration can be claimed mid-session.
+                preexisting = context.new_page()
+                preexisting.goto(base + "/account-deletion/", wait_until="load")
+                assert not preexisting.evaluate("!!navigator.serviceWorker.controller")
                 page.goto(base + "/", wait_until="load")
                 page.wait_for_function("document.body.dataset.ready === 'yes'")
                 page.wait_for_function("navigator.serviceWorker.controller !== null")
                 page.reload(wait_until="load")
                 assert page.evaluate("!!navigator.serviceWorker.controller")
+                preexisting.wait_for_function("navigator.serviceWorker.controller !== null")
+                api_status = preexisting.evaluate("fetch('/api/ping').then(r => r.status)")
+                css_after_claim = preexisting.evaluate("fetch('/public.css').then(r => r.status)")
+                retained_style = preexisting.evaluate(
+                    "getComputedStyle(document.body).backgroundColor")
+                assert api_status == 503, ("claimed public GET", safe, api_status)
+                assert css_after_claim == (200 if safe else 503), (
+                    "claimed public CSS", safe, css_after_claim)
+                assert retained_style == "rgb(1, 2, 3)", retained_style
+                observations.append({"case": ("SAFE_" if safe else "UNSAFE_") +
+                                     "PREEXISTING_PUBLIC_CLAIMED_GET",
+                                     "controlled": True, "api": api_status,
+                                     "retainedBackground": retained_style})
+                observations.append({"case": ("SAFE_" if safe else "UNSAFE_") +
+                                     "PREEXISTING_PUBLIC_CLAIMED_CSS",
+                                     "controlled": True, "css": css_after_claim,
+                                     "retainedBackground": retained_style})
                 responses.clear()
                 page.goto(base + "/account-deletion/", wait_until="load")
                 controlled = page.evaluate("!!navigator.serviceWorker.controller")
@@ -126,11 +149,12 @@ def main():
             finally:
                 server.shutdown(); server.server_close()
         browser.close()
+    assert len(observations) == 10, len(observations)
     with open(OUT, "w", encoding="utf-8") as file:
         json.dump({"fixture": "synthetic source-derived; not LogMate compiled worker",
                    "observations": observations}, file, indent=2)
     print(json.dumps(observations, indent=2))
-    print("6/6 controlled-route comparisons PASS (unsafe cases are intentional negative controls)")
+    print("10/10 controlled-route comparisons PASS (unsafe cases are intentional negative controls)")
 
 if __name__ == "__main__":
     main()
