@@ -95,3 +95,67 @@ After owner isolation, run OC11–OC16 on physical Safari tab, Home Screen PWA a
 **OPEN:** no approved paired product Web builds, no executable A/B deletion saga, no independently retained LBK Files readback, no enrolled iPad/MDM policy, no physical offline/VoiceOver acceptance. **Gate: Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
 
 **Adjacent-question check:** owner-wipe/backup asymmetry, Safari 26 install changes and MDM custody were integrated in this checkpoint. Next promotion requires Engineering-owned product fixtures and actual enrolled-device evidence, not another generic synthetic Sembast green check.
+
+
+---
+
+## 8. Completed A deletion marker and B second-deletion liveness [SOURCE / REPLICATION, 2026-10-30]
+
+**Higher-confidence conditional source-path finding:** The earlier section described the completed-A marker as possibly interfering with B. The exact pinned repository chain gives a stronger deterministic branch **if** A completes, the same database is reused, B binds, and no intervening repair/reset occurs. This is **not** a product-runtime result.
+
+- [LogMate main@9cc0cd43, repository lines 1007–1034](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1007-L1034): requestAccountDeletion(B, requestB) requires B-bound owner and permits a new request only when phase=none; for any non-none phase, it accepts only exact same UID and requestId replay.
+- [Terminal wipe lines 1071–1125](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1071-L1125): the deletion-state store is among 29 dropped stores; fresh initialization occurs; **then completed(A, requestA) is deliberately written back** within the transaction. It is not merely an accidentally undropped old row.
+- [AccountDeletionState type](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/domain/account_deletion_state.dart) and [codec](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/account_deletion_state_codec.dart): completed is excluded from locksNormalAccess, but ownerUid and requestId are retained.
+- [Owner binding lines 1674–1720](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1674-L1720): createOwnedLedger(B) and bindOwner(B) do not read or clear the completed A marker in their own transactions.
+- [Coordinator](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/account_deletion_coordinator.dart) delegates request to repository; resume has no completed-to-none transition. [Existing coordinator tests](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/test/application/account_deletion_coordinator_test.dart) cover same-UID completion, retry and reauth mismatch, but not completed A -> B -> second deletion.
+
+**Conditional logical result:** with persisted completed(A, requestA) and successful B binding on the same database, requestAccountDeletion(B, requestB) follows invalidInitialSetupTransition before the remote B deletion saga. This is a source-level branch deduction, **not** proof B startup is reachable, user exposure, or an observed incident. The eight undropped Replica/Sync stores are a separate discrepancy: repairing their drop parity alone does not resolve the completed-marker liveness branch.
+
+## 9. Export / restore / second-delete are independent gates [SOURCE / CONTRADICTION]
+
+[Export lines 422–481](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L422-L481) checks READY, matching unlocked owner B, and deletion locksNormalAccess, then serializes all 37 stores with an unkeyed SHA-256 integrity digest. Export does not invoke the recursive nested Sync owner-reference validator. Completed A is not a normal-access lock, so it need not block a later B export **if** B can bind and pass other guards.
+
+[Restore validation lines 5830–6010](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L5830-L6010) validates manifest owner B and rejects explicit foreign ownerUid in nested Sync evidence. Restore subsequently reads the deletion marker, but the reviewed checks do not prove a completed A marker is reconciled to B. Do not claim universal restore success or failure without executing both no-Sync and seeded A-Sync cases.
+
+| Conditional scenario | Export | Restore / B deletion | Required evidence |
+| --- | --- | --- | --- |
+| A completed; no residual A Sync; B binds | Shown B-owner/deletion checks can pass; completed A receipt included | B second-delete follows reject branch; B restore outcome unexecuted | Empty-Sync A -> B control |
+| A completed; residual A binding/receipt/cursor/hold with explicit or nested UID | No nested-owner precheck at export | Foreign-owner restore can fail closed depending on exact rows; second-delete guard remains | A canaries, B LBK, empty B staging |
+| B startup/binding refused elsewhere | No B export | Safe refusal possible, but B activation blocked | Full Auth/Startup trace |
+| B uses genuinely independent browser origin/profile | No presumed inheritance of A state | No implied cross-container erasure or transfer | Physical container/MDM test |
+
+**Dual failure mode:** rejecting a foreign-owner restore can be secure while revealing that an earlier accepted export cannot be restored. Export accepted, Files saved, Files independently re-read, restore owner-safe, and B can later delete are separate release oracles. The checksum proves byte integrity, not owner authority.
+
+## 10. Generic browser reset is not a safe unreviewed repair [SOURCE / PLATFORM / CHANGE WATCH]
+
+[W3C Clear Site Data Working Draft (2017-11-30)](https://www.w3.org/TR/clear-site-data/) specifies origin-local IndexedDB and Service Worker removal; it is a Working Draft, not current universal implementation proof. [MDN Clear-Site-Data, consulted 2026-10-30](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Clear-Site-Data) documents the storage directive clearing IndexedDB and Service Worker registrations, cookies directive extending across the registered domain and subdomains, and browser-dependent cache behavior. Current compatibility documents Safari/iOS Safari support since 17; exact directive behavior in Safari tab, installed Home Screen and managed Web Clip still needs device tests. Older mirrored compatibility pages disagree with current upstream and are not authoritative. [WebKit storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) and [Apple Safari data-clearing guidance](https://support.apple.com/en-us/105082) do not establish automatic clearing of all separately installed containers or independent Files backups.
+
+**MINTTAP DIRECTION (not product authorization):** do not use a blanket Clear-Site-Data wildcard or storage directive on ordinary sign-out, account switching, public pages, Auth Action, or generic error routes. It can destroy the only offline ledger and unregister the Worker before independent backup; the cookies directive can affect sibling-domain sessions. Conversely, deleting 29 Sembast stores is not a complete per-owner deletion protocol. An approved terminal erasure design must explicitly address remote authority, all local stores, completion-receipt lifecycle, separately installed contexts, independent Files copies and user-facing outcome. A broad reset, if ever justified, requires narrowly scoped explicit consent, rollback/recovery design and physical browser/MDM tests.
+
+## 11. Five-track allocation and specialist transfer [SYNTHESIS / DEPENDENCY]
+
+| Track | Evidence maturity | Remaining bottleneck / work |
+| --- | --- | --- |
+| **E lead** | Pinned 29/37 mismatch and completed A -> B request guard; severe potential privacy/availability impact | Engineering-owned A/B execution, deletion/receipt contract, incident and recovery policy |
+| **A** | W3C/MDN/WebKit origin, Worker and Clear-Site-Data semantics; hosted Chrome Sembast 11/11 synthetic | Safari tab vs Home Screen vs MDM Web Clip, actual header and storage behavior |
+| **C** | Hosted package provenance and OC01–OC16 negative-control plan | Exact LogMate tests, failure injection, cross-browser/VoiceOver adjudication |
+| **B** | Design Studio W121 Stage 3 practice; no physical task evidence | Truthful distinct sign-out, account deleted, local data erased, Files saved/readback and recovery states |
+| **D** | Marketing D1–D9 public claims HOLD | Never promise global erasure, durable external backup, unattended EFB sync or universal install |
+
+**TRANSFER VALIDATION:** Engineering D003 migration protocol emphasizes explicit validation before publication; apply that judgment to account lifecycle but do not implement Engineering code here. Marketing owns acquisition; Web D owns web measurement/claims. Design Studio owns visual patterns, Web B owns task/state wording. No specialist repository is modified.
+
+## 12. Prioritized executable acceptance and negative controls [VALIDATION DEFINED / NOT RUN]
+
+**Gate 1, Engineering-approved disposable Sembast fixture:** (a) A with empty Sync -> completed saga -> close/reopen -> B bind -> B deletion request; (b) A with nested A-owned binding/receipt/cursor/hold -> terminal deletion -> B bind -> B export -> inspect 37-store manifest -> B empty-staging restore -> B deletion; (c) failures before/after local terminal transaction and retry; (d) independent fresh B database control. Assert exact typed error, whether any B remote call was reached, no foreign-owner export, no silent reset, and preservation of legitimate same-UID resume. Use synthetic Firebase test identities, not production pilot data.
+
+**Gate 2, exact Web/Files/MDM:** Pin commit, compiled Web artifact, Worker, served HTTPS headers, browser/iPadOS version and MDM profile. For each test, retain before/after owner/deletion/Replica/Sync snapshots, redacted canary fingerprints, external LBK bytes and independent Files readback hash. Run Safari tab, Home Screen app and managed Web Clip as distinct containers. Test offline reopen, network/identity deletion interruption, storage pressure, app-icon removal, blocked managed-to-unmanaged file export, wrong UID, corrupt checksum and two-tab races.
+
+**Gate 3, UX and operations:** Distinguish account deletion initiated, remote deletion completed, local erasure completed, external backups still user-controlled, save requested, saved destination independently verified, restore refused and Manual Sync pending. Never equate an in-memory LBK string or Share Sheet completion with an independently retained file. Do not claim all copies erased when an external backup remains.
+
+**Engineering handoff summary:** P0 LogMate same-profile A -> delete -> B -> export/restore -> B delete. Source confirms 29/37 explicit wipe and completed A marker retained after fresh init; if B binds, B deletion request rejects non-none marker. Verify with empty and seeded nested Sync, exact builds and before/after snapshots. This is a conditional source finding, not a product incident. Web Manager must not patch LogMate.
+
+**Static predicate audit:** 7/7 manually evaluated source-path predicates on pinned repository/type/coordinator files, including negative export nested-owner check; **no Dart/Flutter runtime execution, no managed iPad, no real remote deletion and no external Files readback.** Production validation OPEN, PWA release HOLD.
+
+## 13. Adjacent-question checkpoint
+
+The added source trace resolves a material ambiguity in §7: the completed A marker is written **after** fresh initialization, while B's new deletion requires none or exact same-request replay. The browser-header analysis rejects a tempting but destructive global reset shortcut. Further material advancement now depends on Engineering-owned executable product fixtures and enrolled-device evidence rather than another generic package-level primer. No LogMate/Design Studio/Marketing/Engineering writes.
