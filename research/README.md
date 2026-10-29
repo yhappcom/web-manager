@@ -1,3 +1,6 @@
+## 2026-10-30 Stage 8 — pinned Sembast instrumentation control and provenance (528 §§28–29)
+- **[528 §§28–29](528_stage8_pwa_update_schema_rollback_storage_custody_20261030.md):** added PS10 uninstrumented browser-context semantic comparison to PS01–PS09. A native IDB transaction wrapper can alter timing; a one-run control tests seed/overlap/rollback/new-page parity but cannot establish causal non-interference, retry occurrence, disk persistence or product safety. PS08 is an ephemeral same-context new page, **not** process restart. Hosted execution and artifacts remain **UNVERIFIED**; Stage 8 ACTIVE / Production OPEN / PWA release HOLD. No LogMate/peer writes.
+
 ## 2026-10-30 Stage 8 — pinned Sembast IDB durability/rollback observability (528 §§25–27)
 - **[528 §§25–27](528_stage8_pwa_update_schema_rollback_storage_custody_20261030.md):** expanded the [pinned-package two-tab probe](handoffs/pwa_pinned_sembast_probe/run_probe.py) to PS07 cross-tab rollback visibility, PS08 fresh-tab same-profile reopen and PS09 native IndexedDB transaction durability-hint observation. Chrome 121 relaxed default and W3C/MDN hint semantics distinguish committed state from physical flush and independent backup. **PS01–PS09 execution not verified; no PASS claimed.** Product/managed EFB/37-store/Files still OPEN, PWA release HOLD; peer/product repos read-only.
 
