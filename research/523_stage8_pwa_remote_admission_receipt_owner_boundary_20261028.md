@@ -1221,3 +1221,73 @@ These are Web Manager **research directions**, not authorization to modify LogMa
 - **Engineering:** authorized private checkout, exact NORMAL Web and 37-store/UID integration, CSP/Hosting/deployment and physical EFB acceptance; [Validation Standard](https://github.com/yhappcom/software-engineering-studio/blob/main/methods/VALIDATION_STANDARD.md) supplies the independent-oracle contract. Peer/product repositories are read-only.
 
 **Change watch:** Service Worker Cache API and storage quota/eviction behavior, WebKit Home Screen isolation, Firebase Hosting headers, CSP compatibility with Flutter, and any change to LogMate Worker source or deployment origin. Re-audit on source SHA change. **Stage 8 ACTIVE · source-level mutable-catalogue trust boundary IDENTIFIED · product runtime OPEN · PWA release HOLD.** The next adjacent high-value question requires an **authorized exact-source/browser execution** or a new material implementation/deployment change; repeating the existing reduced Chrome fixture alone would not resolve this trust anchor.
+
+
+## 26. Cached response headers are an independent PWA trust surface: CSP/MIME versus verified body bytes (2026-10-29 KST) [SOURCE / SYNTHESIS / CONTRADICTION / DEPENDENCY / VALIDATION / CHANGE WATCH]
+
+**Decision question.** §25 established that a historical digest catalogue stored in origin-writable CacheStorage cannot independently authenticate a release after a hypothetical same-origin script compromise. A second, *logically independent* boundary now emerges: **even when the expected body digest remains genuine and the cached body remains byte-for-byte unchanged, the HTTP response headers used to execute or render that body may be mutable.** E owns the trust/policy boundary; A owns Fetch/Cache/Service Worker semantics; C owns browser oracles; B/D consume truthful support and product claims. This is **source-derived conditional risk, not a demonstrated LogMate exploit or deployed CSP defect**.
+
+### 26.1 First principles, history and authority [SOURCE]
+
+HTTP response headers influence document execution and interpretation independently of the response body. A Service Worker can supply a cached or synthesized Response to a navigation through FetchEvent.respondWith. The Cache API stores script-managed Response objects, including headers; Window and Worker share origin storage under the Service Workers standard. The CSP Level 3 specification says the user agent parses and enforces policies received in the Content-Security-Policy **response header**. A CSP meta element inside a document is a different, limited delivery channel: it does not support report-only, frame-ancestors or sandbox directives, and its position in the HTML matters. Thus hashing **only** HTML bytes cannot by itself attest the CSP policy applied to that HTML.
+
+Primary/current sources checked 2026-10-29:
+- [W3C Service Workers §5 Cache API and lifetime](https://w3c.github.io/ServiceWorker/#cache-objects): Window/Worker script-managed caches, independent of HTTP cache; updating Worker script does not automatically delete Cache API entries.
+- [W3C CSP Level 3 §3 policy delivery](https://w3c.github.io/webappsec-csp/#policy-delivery): policy in HTTP response header; meta-delivered policy has important limitations.
+- [MDN ServiceWorkerGlobalScope fetch event](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/fetch_event): navigations and subresources can receive cached/synthetic Response objects.
+- [MDN CSP guide](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP): nonce/hash strict CSP, limits, defense-in-depth rather than a substitute for input safety.
+- [WebKit storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) and [MDN quotas/eviction](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria): independent offline persistence/eviction boundary; storage durability is not an integrity guarantee.
+
+**Distinctions:** Web standards describe Response/CSP semantics; Chrome synthetic observations are browser-specific when admitted; WebKit physical Home Screen/MDM behavior remains OPEN; company EFB install policy, deployment headers and actual PWA origin remain UNKNOWN. HTTP Cache-Control no-store and script-managed CacheStorage are different mechanisms.
+
+### 26.2 Exact current LogMate source and positive protections [SOURCE / STATIC VALIDATION]
+
+Read-only LogMate main pinned at the last confirmed source baseline (tool/pwa_precache.dart blob **90a67954af618a4e18199fa92555491c56167c17**, 2026-10-29). The generated Worker:
+1. Embeds an initial build-time OFFLINE_MANIFEST, checks candidate shell/font/notices bytes, and fails incomplete installation. This is a **positive** release-candidate property.
+2. On a GET navigation, selects a manifest from CacheStorage control, resolves the shell item, and calls verifiedResponse.
+3. In verifiedResponse, hashes the cached Response **body**, checks its byte count and SHA-256 against the selected manifest, then constructs a new Response using **new Headers(response.headers)** after removing only content-encoding and content-length. It does **not** bind CSP, content-type or other response headers to the expected digest, nor replace them with a trusted policy.
+4. Returns the reconstructed Response to the navigation. Thus a header-only cache modification is not rejected by this body-only hash check.
+5. The checked firebase.json blob **9ac0972e** declares global Cache-Control no-cache/no-store/must-revalidate but no Content-Security-Policy entry. The checked web/index.html blob **01be7758** has no CSP meta declaration. **Neither observation proves what headers a real deployed Hosting/edge response currently has.** Generated Flutter Web HTML/hosting transformations and live response headers remain OPEN.
+
+This is **not** the same as §25's paired digest+body forgery: a header-only mutation could pass a **genuine** body digest. The ability to mutate cache headers presupposes same-origin script write authority; that precondition is already a serious security breach. The independent risk is that offline re-navigation may preserve an altered execution policy or MIME treatment, not that SHA-256 itself is broken. A pre-existing CSP meta in verified body could continue enforcing its supported directives; actual LogMate compiled document and deployed policy must be inspected.
+
+### 26.3 Counterexamples and controls [SYNTHESIS / CONTRADICTION]
+
+| Scenario | Expected behavior from checked source/standards | Distinguish carefully |
+| --- | --- | --- |
+| Change one cached HTML/JS body byte, keep expected hash | Reject on byte count/hash and fail closed | Positive body-integrity property; exact browser still required |
+| **Keep body identical, strip cached CSP header** | Hash still matches; reconstructed Response inherits stripped headers | Conditional policy-authority weakness; CSP existed only if deployment supplied it |
+| Keep body identical, change cached Content-Type to text/plain | Hash still matches; browser interpretation may change | Availability/semantics, not necessarily code execution; browser oracle required |
+| Keep body identical, alter security-sensitive headers or add redirect-related metadata | Body hash does not authenticate header set | Each header has different fetch/browser semantics; do not generalize from CSP alone |
+| Reapply independently trusted CSP to reconstructed navigation Response | Header mutation in cache need not control effective document policy | **Research comparator**, not approved product fix; must be tested against Flutter/Firebase |
+| Add CSP only to original Hosting response | Does not by itself prove an offline cached/synthetic Response will retain the intended policy | Need online/offline response-header equivalence tests |
+| Use meta CSP in HTML | May protect supported directives if body is genuinely verified | Does not substitute for header-only frame-ancestors, report-only or sandbox |
+| Clear all site storage to eliminate compromised cache | Can also remove IndexedDB ledger | **Forbidden as routine recovery** without verified external backup/owner-approved destructive action |
+
+**CSP scope nuance:** a document's CSP and a Service Worker's own CSP are distinct policies. A worker script response may require its own CSP, and a page's policy does not automatically secure all Worker code. A strict CSP can prevent many XSS paths but cannot serve as a proof that an already-authorized same-origin script cannot call CacheStorage. Do not recommend a blanket CSP header without validating Flutter bootstrap, WebAssembly/CanvasKit, Firebase auth popup/redirect, public pages, accessibility and offline update.
+
+### 26.4 Independent synthetic browser oracle [VALIDATION PENDING HOSTED CI]
+
+Added [disposable Python/Playwright probe](handoffs/pwa_cached_header_integrity_probe.py) and [GitHub Actions workflow](../.github/workflows/stage8_pwa_cached_header_integrity.yml). Five *research-only* conditions share an independently known immutable HTML SHA-256: pristine CSP blocks a sentinel inline script; cached header-only CSP removal permits it; a trusted Worker-side CSP reapplication blocks it; a changed body is rejected with 503; a MIME-only header mutation changes interpretation without changing the body hash. The HTTP server sets **Cache-Control: no-store**, explicitly testing the Cache API distinction. The oracle checks both actual returned headers and browser-observed script execution, rather than relying on the Worker's own “verified” flag.
+
+**Execution state at authoring:** Python syntax compilation succeeded in the local sandbox. Local Chromium navigation to 127.0.0.1 was blocked by administrator policy before any browser observation: **NON-EXECUTION**. Hosted GitHub Actions was initiated; its outcome must be checked by exact run/job/checkout SHA and logs before any PASS claim. This fixture is a reduced Worker, not exact LogMate generator, real Hosting CSP, Flutter compiled app, Safari or pilot data. Negative-control PASS would mean the deliberately unsafe header path behaved as expected, **not** a product security PASS.
+
+### 26.5 Release/incident acceptance packet [VALIDATION DEFINED / NOT PRODUCT EXECUTED]
+
+- **HI01 — Provenance:** exact authorized LogMate source SHA, compiled NORMAL Web index/bootstrap/Worker bytes, Firebase Hosting version, response headers, effective origin and Worker registration scope.
+- **HI02 — Header/body separation:** on disposable origin, mutate cached body only, CSP header only, MIME header only, and body+catalogue separately; independently record byte digest, effective response headers, DOM/script execution and network path.
+- **HI03 — Policy persistence:** compare online first load, offline cold launch, Worker restart, previous-version navigation, old/new clients and failed update; verify effective CSP across all routes.
+- **HI04 — CSP coverage:** enforce/report-only policy and Worker-script policy separately; test Flutter bootstrap, wasm, CanvasKit/fonts, Firebase Apple/Google flows, public deletion/support/auth-action pages, external links and third-party resources.
+- **HI05 — CSP robustness:** exercise inline/script URL, dynamic import, workers, trusted-types where supported, frame-ancestors/clickjacking, MIME nosniff, report transport and privacy-redacted violation payloads. Avoid false blanket claims for Safari/WebKit support.
+- **HI06 — Release authenticity:** immutable/signed release metadata for historical versions, independent of Window-writable CacheStorage, including key rotation and offline rollback; header policy authority must be covered too.
+- **HI07 — Recoverability:** 37 logical ledger-store before/after independent readback, external .lbk custody, schema/UID owner lock, quota pressure, interrupted update and storage eviction. No Clear-Site-Data storage as an automatic repair.
+- **HI08 — EFB device:** physical Safari Home Screen and managed iPad cold launch, install restrictions, offline operation, update/rollback, CSP effectiveness and backup/restore; distinguish OS policy from browser feature.
+- **HI09 — Cross-track:** B requires truthful repair/deletion state and keyboard/screen-reader recovery; C measures actual first render and failure; D holds “tamper-proof/guaranteed offline” claims; Engineering owns actual fix and tests.
+
+**Evidence ladder:** CLAIM = verified executable bytes *and* independently trusted execution policy survive offline navigation; PROPERTY = W3C CSP/Service Workers, exact source, approved LogMate custody; TARGET = exact future NORMAL/managed EFB; INPUT = disposable header/body mutations plus offline/upgrade state; ORACLE = independent SHA + browser effective CSP + DOM + 37-store snapshot; ENV = **hosted synthetic pending, product not executed**; VERDICT = **OPEN**. Source-level header gap identified, production security incident **not asserted**.
+
+### 26.6 Five-track allocation, dependencies and stop-check [DEPENDENCY / TRANSFER VALIDATION / CHANGE WATCH]
+
+**E primary (highest risk/dependency):** release/policy trust anchor, origin isolation, CSP headers, incident/rollback and data-preserving repair. **A:** Response headers, Fetch/CacheStorage, navigation, Worker CSP and WebKit/Chromium boundaries. **C:** independent browser tests, accessibility, storage and exact-build reproducibility. **B:** Design Studio W121/CD127 remains pre-runtime; preserve truthful public deletion/support/recovery UX. **D:** Marketing D8 claims remain HOLD pending real app/managed-EFB evidence. Engineering [Validation Standard](https://github.com/yhappcom/software-engineering-studio/blob/main/methods/VALIDATION_STANDARD.md) owns independent oracles for the real product. Product/peer repositories remain read-only.
+
+**Current decision:** no CSP or Worker modification authorized in LogMate; require Engineering approval and exact runtime evidence before release promotion. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** Adjacent question completed in this bundle: the body-hash catalogue audit was extended to *response-header* authority, CSP policy delivery, MIME semantics, a falsifiable Chrome fixture, and non-destructive recovery. The next decisive evidence is the hosted browser run plus authorized exact NORMAL deployment/physical EFB, not another static checklist.
