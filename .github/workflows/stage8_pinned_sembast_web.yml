@@ -29,6 +29,8 @@ jobs:
           dart pub get
           dart pub deps --style=compact
           dart compile js -O2 web_probe.dart -o web_probe.js
+          sha256sum web_probe.js
+          cp pubspec.lock /tmp/pinned-sembast-pubspec.lock
       - run: python -m pip install playwright==1.57.0
       - name: Execute pinned-package two-tab browser probe
         env:
@@ -43,5 +45,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: pinned-sembast-web-synthetic-evidence
-          path: /tmp/pinned-sembast-evidence.json
+          path: |
+            /tmp/pinned-sembast-evidence.json
+            /tmp/pinned-sembast-pubspec.lock
           if-no-files-found: ignore
