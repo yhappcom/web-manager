@@ -4,6 +4,7 @@ import http.server
 import json
 import os
 import pathlib
+import tempfile
 import threading
 import traceback
 from playwright.sync_api import sync_playwright
@@ -171,10 +172,48 @@ def main():
                 "interpretation": "One-run semantic parity only; retry count/timing need not match"
             })
             control.close()
-            evidence["phase"] = "COMPLETE"
-            evidence["result"] = "PASS_SYNTHETIC"
             context.close()
             browser.close()
+            # PS11: distinct graceful Chrome launches, same disk-backed profile.
+            # This is NOT OS-crash, eviction, WebKit or independent backup proof.
+            with tempfile.TemporaryDirectory(prefix="wm-sembast-profile-") as profile:
+                first = p.chromium.launch_persistent_context(
+                    user_data_dir=profile, executable_path=CHROME,
+                    headless=True, args=["--no-sandbox"]
+                )
+                first_page = first.new_page()
+                start(first_page, url)
+                send(first_page, "persistent-seed", "reset")
+                persistent_seed = receive(first_page, "persistent-seed")
+                assert persistent_seed == seed, (persistent_seed, seed)
+                send(first_page, "persistent-write", "increment", 0)
+                persistent_write = receive(first_page, "persistent-write")
+                expected_persistent = {
+                    "logicalCapability": 17, "counter": 1,
+                    "replica": "SYNTHETIC-REPLICA"
+                }
+                assert persistent_write["counter"] == 1, persistent_write
+                first.close()
+                second = p.chromium.launch_persistent_context(
+                    user_data_dir=profile, executable_path=CHROME,
+                    headless=True, args=["--no-sandbox"]
+                )
+                second_page = second.new_page()
+                start(second_page, url)
+                send(second_page, "persistent-read", "inspect")
+                persistent_reopen = receive(second_page, "persistent-read")
+                assert persistent_reopen == expected_persistent, persistent_reopen
+                evidence["checks"].append({
+                    "id": "DISK_PROFILE_GRACEFUL_PROCESS_RESTART",
+                    "observed": {
+                        "seed": persistent_seed, "write": persistent_write,
+                        "after_restart": persistent_reopen
+                    },
+                    "interpretation": "Graceful separate-process same-profile reopen only; not crash or external backup"
+                })
+                second.close()
+            evidence["phase"] = "COMPLETE"
+            evidence["result"] = "PASS_SYNTHETIC"
     except Exception as exc:
         evidence["result"] = {"SETUP": "NON_EXECUTION", "ASSERTIONS_STARTED": "FAIL_SYNTHETIC", "COMPLETE": "POST_ASSERTION_CLEANUP_FAILURE"}.get(evidence["phase"], "UNCLASSIFIED_FAILURE")
         evidence["error"] = repr(exc)
