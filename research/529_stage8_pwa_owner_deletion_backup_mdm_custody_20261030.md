@@ -154,7 +154,7 @@ After owner isolation, run OC11–OC16 on physical Safari tab, Home Screen PWA a
 
 **Engineering handoff summary:** P0 LogMate same-profile A -> delete -> B -> export/restore -> B delete. Source confirms 29/37 explicit wipe and completed A marker retained after fresh init; if B binds, B deletion request rejects non-none marker. Verify with empty and seeded nested Sync, exact builds and before/after snapshots. This is a conditional source finding, not a product incident. Web Manager must not patch LogMate.
 
-**Static predicate audit:** 7/7 manually evaluated source-path predicates on pinned repository/type/coordinator files, including negative export nested-owner check; **no Dart/Flutter runtime execution, no managed iPad, no real remote deletion and no external Files readback.** Production validation OPEN, PWA release HOLD.
+**Static predicate audit:** 8/8 expected source-path predicates (seven present guards and one expected absent export validator) on pinned repository/type/coordinator files, including negative export nested-owner check; **no Dart/Flutter runtime execution, no managed iPad, no real remote deletion and no external Files readback.** Production validation OPEN, PWA release HOLD.
 
 ## 13. Adjacent-question checkpoint
 
