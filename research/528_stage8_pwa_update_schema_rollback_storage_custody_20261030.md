@@ -209,3 +209,65 @@ This continuation closes a material ambiguity in §§4–8. **The product's \`Lo
 - **D:** no user-facing promise of "automatic backup", "safe rollback", "seamless updates" or "automatic device sync"; [Marketing D8/D9](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) retains claim HOLD. Public origin/canonical changes remain separately gated under 527.
 
 **Checkpoint / decision:** Stage 8 **ACTIVE**; one misleading mechanism-level inference corrected; stronger product source evidence admitted. **Production validation OPEN · PWA release HOLD.** No LogMate/Design Studio/Marketing/Engineering writes; no new runtime test. The next adjacent valuable work is an Engineering-authorized paired-binary + actual Sembast Web retry/fault exercise. Without a compiled artifact and physical enrolled iPad, repeating abstract green synthetic cases would not close the gate.
+
+
+---
+
+## 15. Exact pinned dependency, retryable logical migration and durable-custody audit [SOURCE / 2026-10-30]
+
+**Provenance.** Read-only LogMate main source at repository blob `021d9001ae1240a824c5df570fb679597edc3875`, capability codec `f82b49da619e2fc861edf133eb9e66b195017a03`, `pubspec.yaml` blob `49ec62d16f0db7e6e69ad2d19366510711548176`, and **`pubspec.lock` blob `746ef9de51b1096fb1d64784d098ae188abdbd43`**. The lockfile resolves **sembast 3.8.11 and sembast_web 2.4.6**, with package integrity hashes; `^2.4.6` in pubspec.yaml is a constraint, **not proof that a newly published 2.4.6+1 was installed or compiled**. The actual deployed Flutter Web artifact and its lockfile/build provenance remain UNKNOWN. Package author [sembast_web 2.4.6](https://pub.dev/packages/sembast_web/versions/2.4.6) explicitly warns that cross-tab transactions may rerun and must be idempotent; [version history](https://pub.dev/packages/sembast_web/versions) and [changelog](https://pub.dev/packages/sembast_web/changelog) were checked 2026-10-30. The latest 2.4.6+1 listing is **CHANGE WATCH**, not an authorized dependency update.
+
+**SOURCE-confirmed ordering of the v16 branch** in [the repository](https://github.com/yhappcom/logmate/blob/main/lib/repository/logbook/sembast_logbook_repository.dart): the application opens through `_prepareDatabase()`, starts a Sembast transaction, validates the exact v16 capability and canonical/Owner/Replica/Outbox state, requires all seven new Sync stores empty, writes deterministic legacy hold records, invokes the **test-only** prepublication probe, and publishes the v17 capability marker **in that same transaction**. A later open of a v17 marker uses the current decoder/validation path. A failed callback is expected to reject the transaction; **actual WebKit/Chromium rollback, retry, process termination and durable persistence are not established by source reading**.
+
+**Important narrower result:** the v16 classifier does not turn legacy audit timestamps into verified remote Sync operations. It preserves the original outbox rows and writes holds keyed from existing operation/store keys, with explicit legacy-unproven/review/deferred classifications. The code does not show a network receipt, server acknowledgement or file handoff inside this classifier. That is evidence of *logical re-execution tolerance for these writes*, **not proof that the entire migration or every repository transaction is idempotent**.
+
+## 16. Replica identity and retry semantics: a bounded contradiction test [SOURCE / SYNTHESIS]
+
+`_publishCurrentCapability` first ensures local Replica identity, then ensures Sync State, then writes the schema marker. `_ensureLocalReplicaIdentity` returns if an existing valid record is present; otherwise it generates a 32-byte identifier using `Random.secure()` and writes it inside the transaction. `_ensureSyncState` creates its default row only when absent, linking its originReplicaId to the identity read in the same transaction.
+
+**CONTRADICTION resolved:** the phrase “a transaction callback must produce the same result if run twice” cannot be applied as a literal claim that the random **candidate bytes** are identical across retries. The stronger, relevant invariant is that only the **committed** identity is published and Sync State agrees with it; a discarded candidate must not escape into an external receipt or a different committed row. The source supports that *intended internal ordering*, not browser crash durability or every cross-tab interleaving. The package's idempotence warning therefore warrants a paired-tab test, rather than an automatic defect claim against `Random.secure()`.
+
+**Separate trust boundaries:** `Random.secure()` supplies unpredictable local identity generation; it does not authenticate Firebase UID, prove a device is enrolled in airline MDM, encrypt the ledger, or authorize P2P transport. A new Replica on a *fresh restored destination* is intentional; a retry on the *same already initialized ledger* must not silently rotate a committed Replica or original Operation IDs. Source-generated candidate identities discarded on transaction retry are not themselves an identity-rotation incident.
+
+## 17. 17 deterministic source predicates [VALIDATION — STATIC ONLY]
+
+A connector-backed read of the exact four blobs above was subjected to **17/17 deterministic source-pattern assertions** on 2026-10-30: (1–2) logical current v17 and historical v16 constants; (3) `_prepareDatabase` Sembast transaction wrapper; (4–6) v16 decoder, Owner read and seven-Sync-store-empty guard; (7–8) classification before fault seam before marker publication; (9–10) deterministic legacy record/custom hold-key patterns; (11) no explicit network/file operation tokens inside the bounded classifier; (12) Replica→Sync State→marker source ordering; (13) `Random.secure()`; (14) conditional test-only probe; (15) pubspec caret constraint; (16–17) exact locked sembast_web 2.4.6 and sembast 3.8.11.
+
+**Adjudication:** 17/17 is **STATIC SOURCE-PATTERN PASS**, not Dart analyzer/test, browser execution, Sembast cross-tab retry reproduction, cryptographic audit, physical iPad evidence, 37-store backup/restore, or a product release gate. Negative token absence is **not** a proof of absence of side effects in transitive helper calls. No test fixture, source data or private LogMate code was copied into this public research repository.
+
+## 18. High-information-gain fault and concurrency exercise [VALIDATION DESIGN — NOT RUN]
+
+| Case | Controlled setup and intervention | Required independent oracle |
+| --- | --- | --- |
+| RT01 | Exact lockfile-resolved Web build; pristine disposable v16 with bound Owner, legacy record/custom outbox and a known Replica | Pre-state full 37-store inventory, original Operation IDs, payload digests and Owner fingerprint retained |
+| RT02 | Inject `beforeCapabilityPublication` failure after legacy holds, then close/reopen | v16 marker and all original rows unchanged; **no partial Sync holds**, no false success |
+| RT03 | Retry same migration without fault after RT02 | One v17 marker, one hold per original operation, correct classification and original Replica/Owner |
+| RT04 | Two tabs concurrently open the same v16 ledger with a controlled competing write | Record actual callback invocation count, committed marker, no lost outbox/duplicate holds; do not assume IDB `versionchange` |
+| RT05 | Concurrent first initialization of an empty disposable ledger | Exactly one committed Replica, Sync State originReplicaId matches, no externally visible discarded candidate |
+| RT06 | One tab already at v17 while an old compiled v16-capability binary attempts to read/write | Explicit compatibility/refusal behavior and preserved unsaved edit; no silent schema downgrade |
+| RT07 | Force quota/write failure while migrating; reopen from a fresh browser process | No falsely published marker or lost source rows; classify any partial persistence as FAIL |
+| RT08 | Kill browser/process at chosen stages before/after completion; repeat across engines | Commit acknowledgement, reopened ledger and independently exported backup agree; distinguish atomicity from crash durability |
+| RT09 | Save .lbk outside origin storage, independently read bytes, restore empty same-UID target | 37-store semantics, Owner, original Operation IDs, new destination Replica and no implicit server Sync |
+| RT10 | Repeat RT02–RT09 on Safari tab, installed Home Screen and managed EFB separately | Device/iPadOS/MDM provenance, Files/Open In restrictions, VoiceOver and offline relaunch recorded |
+
+All tests use synthetic/disposable ledgers, never real pilot records. For RT04, **count callback retries**, not merely final row count; a passing final state may conceal a non-idempotent external effect. For RT07/RT08, separate a browser transaction's atomic commit from the OS/flash persistence and storage-eviction guarantees. The [W3C IndexedDB 3.0 specification](https://www.w3.org/TR/IndexedDB/) defines atomic transaction commit and optional `strict`/`relaxed` durability hints, but **no evidence establishes which hint the pinned Sembast Web/idb_shim path uses or whether Safari honors a requested hint for this build**. [WebKit storage policy, 2023-08-10](https://webkit.org/blog/14403/updates-to-storage-policy/) separately documents quota, eviction and best-effort storage. A transaction commit is **not** an external backup.
+
+## 19. Five-track integrated decision and operational response [DEPENDENCY / TRANSFER VALIDATION]
+
+- **E — lead and owner:** establish a release-state proof ledger distinguishing source migration, committed logical marker, cross-tab retry, independently retained backup, crash reopen and managed-device durability. HOLD unsafe old-binary downgrade and unverifiable restore.
+- **A — platform prerequisite:** own Sembast-Web-over-IndexedDB mechanics, BroadcastChannel notification, physical IDB schema versus logical marker, transaction durability hints, Safari/Chromium differences and package version CHANGE WATCH. Do not conflate BroadcastChannel delivery with durable commit.
+- **C — independent validation:** execute RT01–RT10 with pinned compiled binaries, exact lockfile, controlled fault injection, multi-tab telemetry and physical enrolled iPad; publish expected/observed evidence and falsification cases. A 17/17 source scan is insufficient.
+- **B — UX/task architecture:** distinguish “update downloaded”, “local data migration finished”, “external backup verified”, “restore succeeded” and “cloud Sync completed”. Under failure, show recoverable review state without hiding pending edits; consume Design Studio [W121 Stage 3 PRACTICE](https://github.com/yhappcom/design-studio/blob/main/progress/WEB_STATUS.md), not a claimed validated UI.
+- **D — discovery/claims:** maintain [Marketing D8/D9](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) HOLD on seamless update, automatic backup, safe downgrade and EFB readiness; do not claim field reliability from synthetic source checks.
+
+**Engineering transfer:** [D003 schema evolution](https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D003_schema_evolution_migration_rollback_compatibility.md) establishes a useful expand/backfill/contract mental model but its SQLite experiment is not Sembast-Web product evidence. Engineering owns LogMate code changes and release fixtures. No peer repository modifications.
+
+## 20. Checkpoint and adjacent-work decision [MINTTAP DIRECTION / OPEN / CHANGE WATCH]
+
+**MINTTAP DIRECTION, not product approval:** retain the existing logical migration guards and source Owner/Outbox custody; demand evidence of *committed-state invariants under actual Sembast Web retries*, rather than demanding literal deterministic random candidates or inventing an IndexedDB v17 physical upgrade. Keep the approved .lbk-first and user-triggered Manual Sync boundary. Do not silently upgrade dependencies, modify LogMate, change deployed origins, prune caches or advertise automatic rollback.
+
+**OPEN:** actual paired old/new compiled binaries; whether migration callback retries occur under specific competing writes; actual persistence after kill/quota; live Worker/app/DB sequencing; external Files readback; same-UID full 37-store restore; installed/managed iPad, MDM, VoiceOver, release provenance and Sync. **Production validation remains OPEN.**
+
+**CHANGE WATCH (checked 2026-10-30):** sembast_web 2.4.6+1 is published, while the checked LogMate lockfile remains 2.4.6; platform/browser storage policies and physical durability behavior must be rechecked against actual shipped versions.
+
+**Meaningful stopping boundary:** static source and package-level uncertainty narrowed; the next high-value question is now a **different evidence class**—Engineering-approved compiled Web/Sembast retry and real-device fault execution. Repeating more abstract model green checks would not promote the gate. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
