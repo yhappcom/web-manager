@@ -1,0 +1,47 @@
+name: Stage 8 Pinned Sembast Web Browser Probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/handoffs/pwa_pinned_sembast_probe/**'
+      - '.github/workflows/stage8_pinned_sembast_web.yml'
+permissions:
+  contents: read
+jobs:
+  pinned-sembast:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.13'
+      - name: Compile exact pinned Dart browser fixture
+        working-directory: research/handoffs/pwa_pinned_sembast_probe
+        run: |
+          dart --version
+          dart pub get
+          dart pub deps --style=compact
+          dart compile js -O2 web_probe.dart -o web_probe.js
+      - run: python -m pip install playwright==1.57.0
+      - name: Execute pinned-package two-tab browser probe
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          EVIDENCE_OUT: /tmp/pinned-sembast-evidence.json
+        run: |
+          python -m py_compile research/handoffs/pwa_pinned_sembast_probe/run_probe.py
+          google-chrome --version
+          python research/handoffs/pwa_pinned_sembast_probe/run_probe.py
+      - name: Upload bounded evidence, including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pinned-sembast-web-synthetic-evidence
+          path: /tmp/pinned-sembast-evidence.json
+          if-no-files-found: ignore
