@@ -40,6 +40,18 @@ def receive(page, ident):
     assert result["ok"], result
     return result["result"]
 
+def converge(page, prefix, expected, attempts=25):
+    """Wait for asynchronous cross-tab propagation; report observed poll count."""
+    last = None
+    for n in range(attempts):
+        ident = f"{prefix}-{n}"
+        send(page, ident, "inspect")
+        last = receive(page, ident)
+        if last == expected:
+            return last, n + 1
+        page.wait_for_timeout(160)
+    raise AssertionError({"expected": expected, "last": last, "polls": attempts})
+
 def main():
     evidence = {"scope": "SYNTHETIC pinned sembast_web 2.4.6 / sembast 3.8.11; two Chromium tabs; NOT LogMate", "checks": []}
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
@@ -57,17 +69,15 @@ def main():
             seed = receive(a, "seed")
             assert seed == {"logicalCapability": 17, "counter": 0, "replica": "SYNTHETIC-REPLICA"}, seed
             evidence["checks"].append({"id": "PINNED_LOGICAL_MARKER_SEED", "observed": seed})
-            send(b, "observe", "inspect")
-            observed = receive(b, "observe")
-            assert observed == seed, observed
-            evidence["checks"].append({"id": "SECOND_TAB_OBSERVES_SEED", "observed": observed})
+            observed, polls = converge(b, "observe", seed)
+            evidence["checks"].append({"id": "SECOND_TAB_OBSERVES_SEED", "observed": observed, "polls": polls})
             send(a, "a1", "increment", 350)
             send(b, "b1", "increment", 350)
             ra, rb = receive(a, "a1"), receive(b, "b1")
-            send(a, "final", "inspect")
-            final = receive(a, "final")
-            assert final["counter"] == 2 and final["replica"] == "SYNTHETIC-REPLICA" and final["logicalCapability"] == 17, (ra, rb, final)
-            evidence["checks"].append({"id": "TWO_TAB_TRANSACTION_FINAL_STATE", "observed": {"a": ra, "b": rb, "final": final}, "retry_observed": ra["attempts"] > 1 or rb["attempts"] > 1})
+            final, polls = converge(a, "final", {"logicalCapability": 17, "counter": 2, "replica": "SYNTHETIC-REPLICA"})
+            assert final["counter"] == 2, (ra, rb, final)
+            evidence["checks"].append({"id": "TWO_TAB_TRANSACTION_FINAL_STATE", "observed": {"a": ra, "b": rb, "final": final, "convergence_polls": polls}, "retry_observed": ra["attempts"] > 1 or rb["attempts"] > 1})
+            converge(b, "before-fault", final)
             send(b, "fault", "throw_before_commit")
             fault = receive(b, "fault")
             assert fault["caught"] and fault["counter"] == 2, fault
