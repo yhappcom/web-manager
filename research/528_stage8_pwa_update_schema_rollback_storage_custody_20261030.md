@@ -403,3 +403,65 @@ The strongest defensible chain is **exact-source provenance → actual browser e
 **TRANSFER VALIDATION:** Software Engineering D003's reader/writer/schema compatibility framework is reusable for the *acceptance matrix* but its SQLite results cannot certify Sembast Web, Chromium durability or WebKit. Design Studio W121 and Marketing D9 are read-only consumers; no changes to those repositories or LogMate were made.
 
 **Adjacent-question check:** the remaining high-value question is not another theoretical IndexedDB primer but actual CI execution and product/device evidence. PS10 resolves a concrete instrumentation-control design gap; further source-only assertion expansion has diminishing value until PS01–PS10 are executed and their failures classified. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+---
+
+## 30. Hosted pinned Sembast PS01–PS10 adjudication — 2026-10-30 KST [VALIDATION / SOURCE]
+
+**Material checkpoint:** Previously unverified push-triggered GitHub Actions runs were retrieved through the repository Actions runs collection, and their exact jobs, decoded execution logs and artifact metadata were inspected. The PR-filtered commit-workflow helper was not used to infer absence. This is actual hosted execution of a research-only pinned-package fixture, NOT LogMate product runtime.
+
+| Run (UTC 2026-10-29) | Checkout | Job | Semantic verdict | Artifact ZIP SHA-256 |
+| --- | --- | --- | --- | --- |
+| [40946201094](https://github.com/yhappcom/web-manager/actions/runs/40946201094), 20:07:30 | 247c39725512fd1e8e61d5a9587a7072af9636f6 | 123702088611 | PASS_SYNTHETIC | artifact 12928643135; b73e0213c9df1bfc7ba228afaff815f477054a884c7a820965adb45ea19a4176 |
+| [40946412967](https://github.com/yhappcom/web-manager/actions/runs/40946412967), 20:08:56 | caa7eb26513e564ed5ea4955ab89875a3abaacd3 | 123702834889 | PASS_SYNTHETIC | artifact 12928702798; 284a8ffde492a13e1c2e5b1cdac0ac42672f46fd6287d0dad000009a25109b83 |
+| [40946454593](https://github.com/yhappcom/web-manager/actions/runs/40946454593), 20:09:13 | 8fbb9810713d391d20f3aa60478c35a8ea1f7aab | 123702979614 | PASS_SYNTHETIC | artifact 12928678634; f44a7bc4bbf218b4407b30b51e48125abca65581103fda40f0472185386b1be2 |
+
+All three jobs completed successfully, with ten named checks and final PASS_SYNTHETIC in decoded JSON. The ZIP digest is reported by GitHub Actions upload logs and artifact metadata; the archive bytes were not independently downloaded/rehashed. Recorded environment: Ubuntu 24.04, Dart 3.13.7, Chrome 156.0.8078.47, Playwright 1.57.0, direct sembast_web 2.4.6 / sembast 3.8.11, idb_shim 2.11.1. All three logs print the same compiled JS SHA-256: 31c67b26f7a21b5b930cffd11cfba36bf5b724a2d3d31b26526e936871f65a23. Resolved dependencies were inspected in logs, but full lockfile artifact bytes were not independently hashed. The latest run precedes the documentation-only HEAD 84f61474.
+
+**Observed in all three successful runs:**
+
+1. PS01: synthetic logical marker 17, counter 0, Replica SYNTHETIC-REPLICA seeded.
+2. PS02: second-tab seed visibility after bounded convergence (1 poll).
+3. PS03: overlapping 350-ms increment callbacks, tab A 1 attempt, tab B 2 attempts, final counter 2, Replica unchanged. A real callback retry was observed, not inferred solely from the final value.
+4. PS04 and PS07: deliberate thrown transaction was caught; counter remained 2 in both the faulting and other tab. This is synthetic rollback visibility, not LogMate Owner/Outbox proof.
+5. PS05: same-page Sembast close/open retained marker 17, counter 2 and Replica.
+6. PS06: physical IndexedDB database wm-pinned-sembast-246 had version 2 while the application-level marker was 17. They are independent version spaces.
+7. PS09: native IDB transaction wrapper installed on both tabs and recorded read/write calls with requestedDurability null and observedDurability default. This is an exposed hint, NOT measured disk flush or strict durability.
+8. PS08: after closing original pages, a new page in the same ephemeral Chromium browser context read marker 17/counter 2/Replica.
+9. PS10: independent uninstrumented Chromium context reproduced seed, overlapping increments, exception rollback, other-tab visibility and fresh-page reopen; final counter 2, A attempts 1/B attempts 2. Three runs support bounded semantic parity, not universal non-interference.
+
+**Negative comparator preserved:** [run 40928346908](https://github.com/yhappcom/web-manager/actions/runs/40928346908), job 123639800675, checkout 8761ec55757952cca847c1144e2c1683026d11e9, FAILED a reached assertion: immediate second-tab read showed logicalCapability null, counter 0, Replica visible. This is a synthetic fixture assertion failure at that revision, NOT evidence of LogMate data loss. Later bounded convergence passed; the precise cause of the earlier partial observation was not conclusively diagnosed.
+
+**Gate verdict:** PS01–PS10 move from EXECUTION UNVERIFIED to HOSTED CHROME SYNTHETIC PASS in three inspected runs. They do not close exact LogMate v16→v17 migration, old/new mixed clients, UID/Replica/Operation/Outbox integrity, 37-store external backup, OS crash, WebKit, installed Home Screen or managed EFB. Stage 8 ACTIVE; Production validation OPEN; PWA release HOLD.
+
+## 31. Mechanism, failure modes and falsification [SYNTHESIS / CONTRADICTION]
+
+- **Author contract versus observed occurrence:** Sembast Web 2.4.6 documents possible concurrent callback re-execution. In the synthetic fixture, tab B actually executed twice in all three runs. Transaction callback idempotence is therefore a concrete implementation requirement. It does not prove LogMate's migration callback retried or that every concurrent transaction retries.
+- **Transaction isolation versus external side effects:** the counter remained 2 after deliberate throw and other-tab observation. The test does not exercise random Replica generation, external network/file/analytics side effects, Owner admission or Outbox mutation within a retryable product callback. Committed Replica→Sync State→capability invariants require Engineering-owned product execution.
+- **Version distinction:** observed physical IndexedDB version 2 and logical marker 17 coexist correctly. Native versionchange/blocked must not be misrepresented as the observed LogMate logical v16→v17 migration.
+- **Durability ladder:** native IDB default hint, same-page read, other-tab read, fresh page in ephemeral context, separate process with persistent profile, forced termination, OS crash and independently retained Files backup are distinct evidence classes. PS01–PS10 cover only the first four.
+- **Instrumentation:** three runs showed semantic parity with and without the IDB wrapper, but the two contexts have separate storage and run sequentially. This is limited reproducibility, not proof that interception never changes timing.
+- **Provenance:** exact direct package versions and JS hash were logged. Dart stable and runner Chrome are mutable, and transitive bytes were not independently rehashed. A release-grade reproducibility manifest is still needed.
+
+**Primary sources:** [W3C IndexedDB 3.0](https://www.w3.org/TR/IndexedDB/), [Chrome IndexedDB relaxed-default announcement (2023-11-03)](https://developer.chrome.com/blog/indexeddb-durability-mode-now-defaults-to-relaxed/), [MDN IDBTransaction.durability](https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction/durability), [Sembast Web 2.4.6](https://pub.dev/packages/sembast_web/versions/2.4.6), [GitHub Actions workflow-runs API](https://docs.github.com/en/rest/actions/workflow-runs). All observed runtime claims are Chrome 156 synthetic, not normative WebKit behavior.
+
+## 32. PS11: persistent-profile graceful Chromium process restart [VALIDATION DESIGN / OPEN]
+
+The next adjacent oracle is stronger than PS08. A research-only change to [the pinned Sembast probe](handoffs/pwa_pinned_sembast_probe/run_probe.py) uses Playwright launch_persistent_context with a disposable disk-backed user-data directory. It seeds marker 17/counter 0/Replica, increments to counter 1, gracefully closes the first Chromium context/process, launches a separate Chromium process with the same profile, and asserts marker 17/counter 1/Replica. No LogMate data is used.
+
+**Acceptance:** inspect exact new push Actions run, checkout SHA, compiled JS, dependencies, Chrome, semantic JSON and artifact. A failure requires fixture/environment diagnosis rather than an automatic product-defect claim. A pass means only graceful separate-process same-profile persistence of this synthetic fixture. It is NOT forced kill, OS crash, fsync, eviction, Safari, MDM or independent .lbk Files proof. PS11 execution OPEN at this checkpoint; an eligible push is not a completed run.
+
+## 33. Five-track transfer and production gate [DEPENDENCY / TRANSFER VALIDATION / MINTTAP DIRECTION]
+
+| Track | Evidence maturity and pressure | Owner action |
+| --- | --- | --- |
+| E (lead) | Stage 8 release/security bottleneck; package retry observed, product ledger custody unproven | Keep PWA HOLD; own UID/Replica/Outbox, migration, independent backup, rollback and non-destructive release criteria |
+| A | Strong Worker/IDB foundations; Chrome pinned-package retry, version and hint observed; Safari/install/eviction OPEN | Own browser difference and PS11 process lifecycle interpretation |
+| C | Hosted synthetic evidence stronger; exact-product/physical EFB/VoiceOver/crash still major validation gap | Adjudicate PS11; then Engineering-approved RT01–RT10 |
+| B | [Design Studio W121](https://github.com/yhappcom/design-studio/blob/main/progress/WEB_STATUS.md) Stage 3 PRACTICE/NOT PASSED | Consume distinct locally saved, migrated, externally backed up, restored and manually synced states |
+| D | [Marketing D8/D9](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) claims HOLD | Withhold guaranteed retention, unattended sync, seamless update and recovery claims |
+
+**Engineering transfer:** [D003](https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D003_schema_evolution_migration_rollback_compatibility.md) demonstrates generic old-reader/schema-publication issues in SQLite, not LogMate Web behavior. [Q006](https://github.com/yhappcom/software-engineering-studio/blob/main/progress/QUALITY_STATUS.md) distinguishes green CI shells from inspected semantic assertions; PS01–PS10 now satisfy a synthetic semantic checkpoint only. LogMate [MASTER.md](https://github.com/yhappcom/logmate/blob/main/MASTER.md) retains Firebase UID authority, local-first Manual Sync and incomplete production Sync. No product policy change authorized.
+
+**Next:** adjudicate PS11; then prioritize Engineering-approved exact old/new LogMate compiled RT01–RT10 (interrupted migration, mixed clients, Owner/Replica/Outbox, unsupported downgrade), independently saved/read-back .lbk and same-UID empty-destination 37-store restore. Separately test physical iPad Safari tab versus installed Home Screen versus managed Web Clip under actual MDM, offline relaunch, storage pressure and VoiceOver. Stage 8 ACTIVE; Production validation OPEN; PWA release HOLD. Product and peer repositories read-only.
