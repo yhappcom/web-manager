@@ -1081,7 +1081,7 @@ The current LogMate [source-generated Worker](https://github.com/yhappcom/logmat
 
 New research-only [pwa_exact_worker_source_probe.py](handoffs/pwa_exact_worker_source_probe.py) is intentionally **different** from the reduced six-case fixture. On GitHub-hosted Chrome it downloads the exact public source at pinned LogMate commit 2f78e731, verifies the Git blob SHA-1 against 90a67954af618a4e18199fa92555491c56167c17, extracts the literal Dart-generated JavaScript template, substitutes a tiny SHA-256-manifest with index.html/public.css and zero fonts, and serves it on a loopback HTTP origin. The script does not patch the fetch handler, inject a synthetic public-asset bypass, or download private LogMate assets. It deliberately preserves source install/activate/CacheStorage/verifiedResponse/clientBuilds behavior. This increases mechanism fidelity but **does not** reproduce the complete production manifest, 724 fonts, actual Flutter bootstrap, Hosting rewrites, network failures or iPadOS.
 
-The workflow [.github/workflows/stage8_pwa_public_route_worker.yml](../.github/workflows/stage8_pwa_public_route_worker.yml) now runs both the prior reduced six-case fixture and this new exact-template fixture. Fourteen **assertions**, not fourteen distinct real product user journeys, cover:
+The workflow [.github/workflows/stage8_pwa_public_route_worker.yml](../.github/workflows/stage8_pwa_public_route_worker.yml) now runs both the prior reduced six-case fixture and this new exact-template fixture. Seventeen **assertions**, not seventeen distinct real product user journeys, cover:
 
 | Probe | Falsifiable expectation | Evidence meaning |
 | --- | --- | --- |
@@ -1094,8 +1094,11 @@ The workflow [.github/workflows/stage8_pwa_public_route_worker.yml](../.github/w
 | P10 | Reserved /__/health GET bypasses to network | Distinguishes explicit reserved path from broad GET interception |
 | P11–P12 | Independent controlled public tab gets HTML but CSS 503 | New-client identity boundary |
 | P13–P14 | Reserved auth-like document navigates, while synthetic CSS dependency remains intercepted | The actual Auth Action uses fonts/icons; transfer requires exact asset graph |
+| P15–P17 | A public page loaded **before** Worker registration is initially uncontrolled, becomes controlled via clients.claim, then its later same-origin GET returns 503 without a build assignment | New lifecycle edge: **existing public tabs can be claimed mid-session**, not only newly opened tabs |
 
 **Verdict discipline:** Until the new run's checkout, job log and per-case observations are inspected, this remains **VALIDATION IN PROGRESS**. If the source download, SHA pin, install/activation or assertion fails, record the actual failing layer; a green workflow wrapper without the exact-template step is not admission. The previous §23 six-case result remains valid only for its reduced Worker. If the new test passes, call it **pinned-source-template + synthetic-manifest Chrome**, never production/LogMate NORMAL/Safari PASS.
+
+**Lifecycle source/standard cross-check:** The generator invokes `self.clients.claim()` in `activate` after its verified candidate promotion. [MDN Clients.claim](https://developer.mozilla.org/en-US/docs/Web/API/Clients/claim) explicitly warns that the call can immediately control previously network-loaded pages inside the registration scope, without a reload. The three added P15–P17 assertions distinguish initial network state, later controller adoption and subsequent GET authority. **This is a hypothesis for the pinned-source Chrome test until the hosted run confirms it**; it is not an assertion about current Safari/MDM behavior.
 
 ### 24.4 Failure-mode analysis and integrated judgment [SYNTHESIS / MINTTAP DIRECTION — recommendation, not product authorization]
 
