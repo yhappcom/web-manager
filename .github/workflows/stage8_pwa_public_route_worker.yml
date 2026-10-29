@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - 'research/handoffs/pwa_public_route_worker_probe.py'
-      - 'research/handoffs/pwa_exact_worker_source_probe.py'
       - '.github/workflows/stage8_pwa_public_route_worker.yml'
 permissions:
   contents: read
@@ -38,17 +37,3 @@ jobs:
           path: /tmp/pwa-public-route-evidence.json
           if-no-files-found: ignore
 
-      - name: Execute pinned source-generated Worker boundary comparison
-        env:
-          CHROMIUM_PATH: /usr/bin/google-chrome
-          EVIDENCE_OUT: /tmp/pwa-exact-worker-source-evidence.json
-        run: |
-          python -m py_compile research/handoffs/pwa_exact_worker_source_probe.py
-          python research/handoffs/pwa_exact_worker_source_probe.py
-      - name: Upload pinned Worker source comparison evidence
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: pwa-exact-worker-source-evidence
-          path: /tmp/pwa-exact-worker-source-evidence.json
-          if-no-files-found: ignore
