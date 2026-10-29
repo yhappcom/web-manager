@@ -176,7 +176,7 @@ def main():
             context.close()
             browser.close()
     except Exception as exc:
-        evidence["result"] = "FAIL_SYNTHETIC" if evidence["phase"] == "ASSERTIONS_STARTED" else "NON_EXECUTION"
+        evidence["result"] = {"SETUP": "NON_EXECUTION", "ASSERTIONS_STARTED": "FAIL_SYNTHETIC", "COMPLETE": "POST_ASSERTION_CLEANUP_FAILURE"}.get(evidence["phase"], "UNCLASSIFIED_FAILURE")
         evidence["error"] = repr(exc)
         evidence["traceback"] = traceback.format_exc()[-6000:]
         raise
