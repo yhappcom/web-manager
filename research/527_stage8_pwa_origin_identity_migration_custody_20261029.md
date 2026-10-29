@@ -137,3 +137,68 @@ No OM test was executed in this study. Browser standards, source inspection and 
 **OPEN:** actual served LogMate domain(s), Firebase provider flow/authorized domains, managed EFB MDM and Files policy, installed-app manifest identity, old/new Worker runtime, full-schema migration/backup implementation and independent user acceptance. Engineering owns any code/production test. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
 
 **CHANGE WATCH:** W3C manifest ID/scope WD 2026-10-26; WebKit installed container and Safari26 user toggle; Firebase Auth redirect behavior; browser storage partitioning/eviction; Google indexing moves. Re-check primary sources when an actual deployment proposal or version change arises.
+
+
+## 11. Applied origin-split preflight: Auth, cookies, routes and synthetic browser falsifiers (2026-10-29)
+
+**Evidence classification:** SOURCE / SYNTHESIS / CONTRADICTION / MINTTAP DIRECTION (provisional) / DEPENDENCY / VALIDATION DESIGN / CHANGE WATCH. **Owner:** E security and operations; A browser/origin mechanics; B task continuity; C browser and physical-device quality; D discovery/canonical/measurement. **No product changes, production tests or approval.**
+
+### 11.1 Exact current LogMate source and route inventory [SOURCE]
+
+Read-only LogMate main **9cc0cd432a317d5dfebbe90e318fb219e53e024a**, checked 2026-10-29:
+
+| Source (Git blob) | Observed source fact | Consequence for proposed public-only split |
+| --- | --- | --- |
+| firebase.json (9ac0972e) | Single tracked Hosting public root **build/web**, global no-store header, three Auth Action rewrite aliases: /auth, /auth/, /auth/action | No second public host, DNS mapping or deployment is established. Served aliases/headers remain unknown. |
+| web/auth/action/index.html (39d06a63) | Inline module/style, Firebase gstatic 11.10.0 imports, **authDomain = logmate.minttap.app**, URL **oobCode** consumption | Auth Action is an authenticated, executable surface, not a generic marketing page. Moving it requires separate provider, action-link, redirect, session and CSP validation. |
+| web/about/index.html (947aae88), support (d185fc88), privacy (ca465aaa), terms (2c83da66), account-deletion (f8558e92) | **5/5** selected pages contain hard-coded canonical URLs on https://logmate.minttap.app; navigation, CSS and icons are root-relative | Copying HTML to a new host without rewriting canonical/internal routes and assets can leave wrong discovery targets or broken user tasks. This is a tracked-source census, not a live crawl. |
+| web/public.css (755b5c73), web/index.html (01be7758) | Public pages request /public.css; Flutter shell has build-time base href and relative manifest/bootstrap | Public assets must exist on the new host; shell base/entry cannot be silently repointed. |
+| web/manifest.json (8225e76f) | Relative start_url "." and no explicit id or scope | Resolved start URL/derived manifest ID can differ after host/base-path changes; actual installed identity still requires browser/device evidence. |
+| tool/pwa_precache.dart (90a67954) | Root-scoped Worker generator reserves Auth paths, calls clients.claim and uses client-build mapping for other GETs | Old public tabs and old-host redirects can remain subject to Worker control/asset routing. See 523 §§22–26. |
+
+**Important contradiction:** Option B in §4 can isolate the **five informational pages** without moving the private ledger, but if Auth Action stays on the ledger origin, its Firebase imports still execute in a document with that origin's privileges. This does **not** establish malicious Firebase code, XSS, a ledger read or a product breach. It prevents the broader claim that moving static public pages automatically isolates *all* public/auth executable content. Moving Auth Action too is a materially different authenticated-product migration.
+
+### 11.2 Four distinct security/continuity boundaries [SOURCE / SYNTHESIS]
+
+1. **Origin** (scheme/host/port): IndexedDB, CacheStorage and Service Worker authority are origin-specific; paths are not storage principals. Distinct ports can create distinct script-storage origins, but are not equivalent to production subdomains for every browser feature.
+2. **Cookie scope** differs: cookies are host/domain/path scoped and do **not** include port. A host-only cookie does not automatically reach sibling subdomains, but an explicit parent-Domain cookie can. A public/private origin split is **not** sufficient proof of credential-cookie isolation. Audit actual Set-Cookie Domain, Path, SameSite, Secure, HttpOnly, prefix and server CSRF/session policy; do not assume LogMate currently uses a particular cookie.
+3. **Installed container** differs: WebKit Safari 17.2 documents one-time cookie copying into a new Home Screen web app while other local storage is not copied. A changed origin and a new installed browser container are separate migration axes. MDM Web Clip classification is still open.
+4. **Account authority** differs: Firebase sign-in on a new host, verified same UID, successful 37-store restore, independent backup and cloud Sync ACK are separate assertions. An origin handshake is not identity authentication or ledger migration.
+
+Primary sources checked 2026-10-29: [W3C Web Application Manifest](https://www.w3.org/TR/appmanifest/), [MDN Service Workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers), [MDN Set-Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie), [MDN Storage Access API](https://developer.mozilla.org/en-US/docs/Web/API/Storage_Access_API), [Firebase redirect best practices](https://firebase.google.com/docs/auth/web/redirect-best-practices), [Google Identity Platform custom handler](https://docs.cloud.google.com/identity-platform/docs/show-custom-domain), [WebKit Safari 17.2](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/). Cookie/partition, manifest installation, provider redirect and WebKit behavior are **CHANGE WATCH**, not universal cross-platform guarantees.
+
+### 11.3 Architecture choices and failure-first judgment [SYNTHESIS / MINTTAP DIRECTION — NOT APPROVED]
+
+| Candidate | Advantage | Residual/new risk | Gate |
+| --- | --- | --- | --- |
+| B1 — move **five static informational pages only**, keep ledger and Auth Action at original origin | Keeps original local ledger origin; reduces unrelated public-page script exposure if no old executable copies remain | Auth Action/gstatic scripts remain on ledger origin; root Worker and cookie/auth routes need separate hardening; canonical/Store links may break | **Preferred bounded experiment**, not complete Auth isolation |
+| B2 — move informational pages **and Auth Action** | More complete document-origin separation | Hard-coded authDomain, action-link destination, /__/auth/handler, authorized domains, popup/redirect and session transfer, CSP/report privacy; unproven cross-origin credential handoff | **HOLD** until Engineering-specific threat model and real provider/browser validation |
+| B3 — keep all routes, harden CSP/Worker | Avoids origin/data migration | Same-origin public/private storage authority persists; cached-header/catalogue threats not automatically fixed | Possible containment, not storage isolation |
+| C — move private ledger origin | Could isolate if complete | IDB/Cache/Worker/manifest/owner continuity lost unless independent Files backup and same-UID 37-store restore verified | **HOLD** under OM13–OM24 |
+
+Firebase Auth helper routes and the Auth Action rewrite are not interchangeable. Firebase's primary documentation explicitly requires correct authDomain/handler/provider configuration and notes that a plain HTTP 302 is not an equivalent transparent helper proxy. Do not infer that every LogMate platform uses redirect sign-in merely because the Auth Action file contains Firebase imports.
+
+### 11.4 Synthetic Chrome mechanism experiment [VALIDATION — LOCAL NON-EXECUTION / HOSTED OUTCOME OPEN]
+
+Committed [research-only 12-case browser probe](handoffs/pwa_origin_split_browser_probe.py) and [hosted CI](../.github/workflows/stage8_pwa_origin_split.yml) to **Web Manager only**. The fixture creates two HTTP loopback servers with the **same hostname and different ports**, disposable IndexedDB/CacheStorage, a synthetic Worker, redirect, cookie and postMessage handshake. It intentionally contains no LogMate source, pilot data, credentials or Firebase project.
+
+Twelve independent intended observations: old origin seeded; same-origin public path can read synthetic IDB; different origin lacks both IDB and CacheStorage; host cookie is shared across ports despite different origins; cross-origin Worker registration rejects; old Worker controls only old origin; redirect does not transfer IDB; old source survives redirect; exact sender-origin postMessage check rejects a wrong-origin message; a handshake alone does not restore IDB; and relative manifest start URLs resolve separately. This is a **mechanism falsification suite**, not a production migration test.
+
+**Execution truth:** Python 3.13 syntax compilation PASS on draft. Local Chromium navigation to loopback failed at the first request with **ERR_BLOCKED_BY_ADMINISTRATOR**, so **zero local browser cases ran**. Hosted workflow targets Ubuntu 24.04 / Python 3.13 / Playwright 1.57 / installed Chrome; **hosted result not verified at this checkpoint**, so no synthetic 12/12 PASS is claimed. A future hosted PASS requires inspecting exact checkout, job logs, browser observations and artifact. Even then, distinct-port cookie behavior does **not** prove actual HTTPS sibling-subdomain cookies, nor Safari, Home Screen, MDM, LogMate Auth, real 37-store or installed identity.
+
+### 11.5 Existing OM01–OM24 acceptance amendments, not a duplicate test catalogue [VALIDATION / DEPENDENCY]
+
+- **OM01/07:** enumerate exact served old/new origins and root Worker registration/control; test old-host redirects with controlled old tabs, public CSS, auth fonts/icons and unrelated GET.
+- **OM08/09:** after a proposed B1 split, enumerate *all remaining executable app-origin documents* (especially Auth Action and Firebase imports), old aliases and CSP. Public-static separation must not be represented as all-script separation.
+- **OM10/23:** disposable email verify/reset, Apple/Google popup/redirect/link/reauth, authDomain, provider authorized URLs, initial query, Referer/CSP-report/edge-log custody. A successful HTTP redirect is not successful Auth.
+- **OM11–16/20:** distinguish Safari tab, installed Home Screen and managed Web Clip; require independently retained .lbk Files bytes, same-UID empty-destination full 37-store semantic restore, rollback and no silent Sync.
+- **OM22:** verify **5/5** canonical tags, root-relative navigation/asset paths, Store/support/privacy/account-deletion URLs, redirects and real Search Console continuity. Do not canonicalize the new host back to the old unintentionally.
+- **OM23 cookie negative controls:** host-only vs parent-Domain, HttpOnly/Secure/SameSite, same-site subdomain requests, CSRF/session fixation, logout continuity on **real HTTPS**. Synthetic port test is only a prompt for these oracles.
+
+**RELATED DOMAIN CHECK:** Design Studio progress/WEB_STATUS.md is Stage 3 PRACTICE / W121 runtime gate; do not duplicate visual design. Software Engineering methods/VALIDATION_STANDARD.md requires claim→target→oracle→environment→observation→limit and owns actual product code/build/MDM tests. Marketing STATUS D8 product claims HOLD and D9 deferred; do not advertise seamless migration. All peer/product repositories read-only.
+
+### 11.6 Adjacent-question check and next checkpoint [OPEN / MINTTAP DIRECTION]
+
+The next concrete decision is whether the **five static informational pages** can leave the ledger origin without breaking canonical/Store/deletion/support tasks **while residual Auth Action and Worker authority are separately hardened**. This source-and-browser preflight can advance now; a full Auth Action move is a materially different security/session migration and must not be silently bundled with it. Actual deployed hosts, Firebase provider console, exact NORMAL artifact, Safari/managed EFB, 37-store Files roundtrip and production release authority remain UNKNOWN.
+
+**Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** No origin split, Firebase config change, product code change, real pilot data or physical-device execution. Next: inspect hosted Chrome job, correct fixture failures if any, then Engineering-approved exact product route/Auth/Worker and physical EFB evidence.
