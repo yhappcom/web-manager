@@ -53,7 +53,7 @@ def converge(page, prefix, expected, attempts=25):
     raise AssertionError({"expected": expected, "last": last, "polls": attempts})
 
 def main():
-    evidence = {"scope": "SYNTHETIC pinned sembast_web 2.4.6 / sembast 3.8.11; two Chromium tabs; NOT LogMate", "checks": []}
+    evidence = {"scope": "SYNTHETIC pinned sembast_web 2.4.6 / sembast 3.8.11; two Chromium tabs; NOT LogMate", "checks": [], "phase": "SETUP"}
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     url = f"http://127.0.0.1:{server.server_port}/index.html"
@@ -89,6 +89,7 @@ def main():
             a, b = context.new_page(), context.new_page()
             start(a, url)
             start(b, url)
+            evidence["phase"] = "ASSERTIONS_STARTED"
             evidence["browser"] = browser.version
             send(a, "seed", "reset")
             seed = receive(a, "seed")
@@ -170,11 +171,12 @@ def main():
                 "interpretation": "One-run semantic parity only; retry count/timing need not match"
             })
             control.close()
+            evidence["phase"] = "COMPLETE"
             evidence["result"] = "PASS_SYNTHETIC"
             context.close()
             browser.close()
     except Exception as exc:
-        evidence["result"] = "FAIL_OR_NON_EXECUTION"
+        evidence["result"] = "FAIL_SYNTHETIC" if evidence["phase"] == "ASSERTIONS_STARTED" else "NON_EXECUTION"
         evidence["error"] = repr(exc)
         evidence["traceback"] = traceback.format_exc()[-6000:]
         raise
