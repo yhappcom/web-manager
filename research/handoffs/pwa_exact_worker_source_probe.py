@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Exact-source-generated LogMate Worker, synthetic tiny manifest/HTTP assets.
 
-Research-only: exercises the unmodified JS template extracted from pinned
-tool/pwa_precache.dart; not a compiled Flutter NORMAL build or real deployment.
+Research-only: requires a read-only, authorized local LogMate source file,
+verifies its exact Git blob SHA, and extracts the unmodified Worker JS template.
+Do not copy private product source to a public repository or public CI artifact.
+Not a compiled Flutter NORMAL build or real deployment.
 """
 import hashlib
 import http.server
@@ -10,16 +12,12 @@ import json
 import os
 import socketserver
 import threading
-import urllib.request
 
 from playwright.sync_api import sync_playwright
 
 SOURCE_COMMIT = "2f78e731"
 SOURCE_BLOB_SHA = "90a67954af618a4e18199fa92555491c56167c17"
-SOURCE_URL = (
-    "https://raw.githubusercontent.com/yhappcom/logmate/"
-    + SOURCE_COMMIT + "/tool/pwa_precache.dart"
-)
+SOURCE_PATH = os.environ.get("LOGMATE_WORKER_SOURCE_PATH")
 CHROME = os.environ.get("CHROMIUM_PATH", "/usr/bin/google-chrome")
 OUT = os.environ.get("EVIDENCE_OUT", "/tmp/pwa-exact-worker-source-evidence.json")
 
@@ -39,8 +37,13 @@ def git_blob_sha(raw):
 
 
 def extract_exact_worker():
-    with urllib.request.urlopen(SOURCE_URL, timeout=20) as response:
-        raw = response.read()
+    if not SOURCE_PATH:
+        raise RuntimeError(
+            "NON-EXECUTION: set LOGMATE_WORKER_SOURCE_PATH to a read-only "
+            "authorized private LogMate checkout file; public CI has no access"
+        )
+    with open(SOURCE_PATH, "rb") as source_file:
+        raw = source_file.read()
     actual = git_blob_sha(raw)
     assert actual == SOURCE_BLOB_SHA, ("source blob mismatch", actual)
     source = raw.decode("utf-8")
