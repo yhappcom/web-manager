@@ -980,3 +980,68 @@ Local Chromium loopback attempt on 2026-10-29 returned \`net::ERR_BLOCKED_BY_ADM
 **MINTTAP DIRECTION (recommendation):** Treat *public-page Worker/subresource coherence* as a separate release acceptance gate alongside W-030 public-copy/Settings truth. Prefer a small, explicit public-resource bypass over silently reusing the app's private per-client version map, subject to Engineering's exact browser validation. Do not advance Stage 8 or PWA release based on this source review or a synthetic browser fixture.
 
 **Stop-check:** this run resolved the adjacent source composition across navigation, CSS, icons, auth fonts, public route availability, Hosting slash policy, offline expectations and cross-track operational truth. The next evidence rung is **hosted synthetic Chrome result**, then Engineering-approved exact NORMAL and physical Safari/managed EFB execution; more unexecuted static conjecture has lower information gain. **Stage 8 ACTIVE · source-derived conditional public-resource 503 path IDENTIFIED · actual product/runtime OPEN · PWA release HOLD.**
+
+
+---
+
+## 23. Public-route Worker admission: hosted Chrome negative controls, cross-tab/auth transfer and release adjudication [VALIDATION / SYNTHESIS]
+
+**Evidence checkpoint:** 2026-10-29 KST. **E owner**, A platform mechanism, C browser-oracle validation, B truthful support/deletion task, D public discovery/claim transfer. The preceding §22 remains the **pre-execution historical state**; this section admits later CI results without retroactively rewriting it. Product/Design Studio/Marketing/Software Engineering sources remained read-only.
+
+### 23.1 Exact executed evidence and what actually passed [VALIDATION — SYNTHETIC CHROME]
+
+The research-only fixture [pwa_public_route_worker_probe.py](handoffs/pwa_public_route_worker_probe.py) was executed in GitHub-hosted **Ubuntu 24.04.5, Python 3.13.17, Playwright 1.57.0, Google Chrome 156.0.8078.47**. The test server used localhost, synthetic HTML/CSS, a reduced in-memory client-build mapping and an intentionally simplified Worker; **no LogMate compiled artifact or actual generated Worker was executed**.
+
+- **First exact run:** [Actions 40792307136](https://github.com/yhappcom/web-manager/actions/runs/40792307136), checkout \`4b184c5075f55de6d814fa6294e0e79f65b8b776\`, job \`123180230627\`, completed SUCCESS. **2/2 controlled-route comparisons PASS:** deliberately unsafe Worker allowed public HTML **200** but intercepted \`/public.css\` as **503** with computed background \`rgba(0, 0, 0, 0)\`; research-only public-asset bypass yielded HTML **200**, CSS **200** and expected \`rgb(1, 2, 3)\`. Job log and uploaded bounded evidence artifact \`12862336933\` were confirmed.
+- **Expanded exact run:** [Actions 40798432669](https://github.com/yhappcom/web-manager/actions/runs/40798432669), checkout \`91bd8b91a4ed477ff1d87ca6fa5ca1ea493724ec\`, job \`123200432892\`, completed SUCCESS. **6/6 PASS**, artifact \`12864717619\` (435-byte ZIP) present; actual job log independently inspected. This extended the original same-tab scenario to a separately opened **controlled new tab** and a **reserved \`/auth/action/\` document**. The latter is a synthetic HTML+CSS analogue, **not** LogMate's actual Auth Action font/icon graph.
+
+| Case | Synthetic Worker | Document | CSS | Rendered background | What the PASS means |
+| --- | --- | --- | --- | --- | --- |
+| UNSAFE_SAME_TAB | non-root navigation bypass; CSS gated on missing client build | 200 | **503** | transparent | Intentional negative control reproduces mismatch after root→public navigation |
+| UNSAFE_NEW_TAB_PUBLIC | same unsafe policy, independent controlled tab | 200 | **503** | transparent | Root assignment cannot be assumed for a different client |
+| UNSAFE_RESERVED_AUTH_DOCUMENT | reserved auth navigation bypass, public stylesheet still intercepted | 200 | **503** | transparent | Reserving a document URL does not reserve its assets |
+| SAFE_SAME_TAB | fixture-only explicit public-asset bypass | 200 | 200 | \`rgb(1, 2, 3)\` | Comparator avoids this particular stylesheet interception |
+| SAFE_NEW_TAB_PUBLIC | same comparator, new controlled tab | 200 | 200 | \`rgb(1, 2, 3)\` | Comparator transfers to independent client |
+| SAFE_RESERVED_AUTH_DOCUMENT | same comparator, reserved auth document | 200 | 200 | \`rgb(1, 2, 3)\` | Comparator transfers to synthetic reserved route |
+
+**PASS semantics:** Three of six cases are intentionally *unsafe* and succeed by producing the expected 503. This is a falsification of the assumption that a navigation bypass alone protects public subresources; it is **not** evidence that LogMate has six passing product tests, or that the safe comparator is a production-ready patch. The fixture also verifies the initial unregistered direct-public CSS baseline, active Worker control and actual response/computed-style observations.
+
+### 23.2 Mechanism and standards: why the result is coherent [SOURCE / A→E TRANSFER]
+
+[W3C Service Workers §4.6](https://www.w3.org/TR/service-workers/) distinguishes \`FetchEvent.clientId\` (initiating client) from \`resultingClientId\` (reserved client of navigation); the latter is empty for subresources. [MDN fetch event](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/fetch_event) confirms that both navigation and subresource fetches may be intercepted and that not calling \`respondWith()\` leaves the default network handling in place. [MDN resultingClientId](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent/resultingClientId) describes the navigation-created client. The exact platform distinction is **navigation route control ≠ all subresource policy**.
+
+The current LogMate [source-generated Worker](https://github.com/yhappcom/logmate/blob/2f78e731/tool/pwa_precache.dart) returns early on a non-root navigation but intercepts other same-origin GETs, resolves \`control.clientBuilds[event.clientId]\`, and can synthesize **503 before checking whether the resource is in the shell manifest**. This makes \`/public.css\`, favicon, touch icons and Auth Action font requests relevant even when the public document is network-served. A root \`clients.claim()\` is control admission, **not** assignment of an app build to every public document. The real Worker stores the mapping in a shared CacheStorage JSON control catalogue; the fixture uses a simpler in-memory mapping and cannot reproduce catalogue races, restarts or version verification.
+
+**HTTP caching is not the answer:** The synthetic server sent \`Cache-Control: no-store\`, yet its Worker still returned a generated 503 because the fetch handler chose to answer. In LogMate, the Hosting config's no-store header does not override \`respondWith()\` or force public CSS to bypass Worker logic. Conversely, blindly allowing network fallback for **private version-pinned Flutter shell assets** could defeat the older-client verified-byte guarantee. The correct policy must separate public-site resource ownership from version-pinned app-shell ownership, not merely replace 503 with unconditional network fallback.
+
+### 23.3 Diagnostic critique: false greens and untested branches [CONTRADICTION / OPEN]
+
+1. **Source-derived ≠ product reproduction.** Fixture Worker calls \`skipWaiting()\` and has a short in-memory mapping; LogMate deliberately avoids \`skipWaiting()\` and uses verified shell/font caches, control metadata and multi-generation updates. These differences preclude treating the fixture as an exact Worker test.
+2. **The safe comparator is narrow.** It bypasses \`/public.css\`, \`/icons/*\`, favicon; the actual public resource inventory must also include Auth Action font URLs, possible CSS \`@import\` or URL-referenced assets, future support imagery and route-specific dependencies. A hard-coded partial allowlist can create another HTML-200/CSS-or-font-503 regression.
+3. **No mixed-generation proof.** The fixture does not deploy public HTML v2 with an old verified CSS v1, test a controlled old tab during Worker update, verify a stale catalogue, or exercise missing/evicted cache bytes. Old-client pinning remains a separate valuable safety property; do not relax it to repair a public page.
+4. **No platform/Hosting transfer.** Loopback is a secure-context development exception, not evidence of production HTTPS, Firebase Hosting rewrites, \`/account-deletion\` slash/canonical behavior, Safari Home Screen, iPadOS MDM Web Clip or offline EFB access. The fixture's \`/auth/action/\` page uses CSS whereas actual LogMate Auth Action uses inline styling and font/icon requests. No real auth flow, token, private data or deletion was used.
+5. **Accessibility and discoverability remain unproven.** A stylesheet failure may remove visual focus treatment, responsive layout or brand hierarchy; the HTML may remain semantically readable. Neither the 503 nor the comparator's computed color establishes a WCAG failure/PASS, task completion, crawler indexing or Store policy compliance.
+6. **Artifact custody:** the workflow log proves exact checkout, environment, six per-case outputs and artifact upload. The artifact metadata was independently checked; the ZIP's inner JSON was **not** independently decoded here. The job log is sufficient for the bounded six assertions, not for broader performance/AT/device claims.
+
+### 23.4 Ownership and release alternatives [SYNTHESIS / MINTTAP DIRECTION — recommendation only]
+
+| Approach | Benefit | Risk or validation dependency |
+| --- | --- | --- |
+| **Explicit public-document + dependency bypass** | Smallest potential Worker-policy change; keeps public legal/support pages network-served | Inventory every same-origin CSS/font/icon/import asset and prevent overlap with pinned app shell; test offline and old/new versions; cannot imply offline public-page support |
+| **Distinct origin or non-overlapping Worker scope** | Stronger ownership separation, reduces shared-origin script/storage coupling | Auth helper, cookie/CORS, Hosting/DNS/TLS, canonical/Store URLs, PWA install entry, old IndexedDB migration and managed-device restrictions must be checked before change |
+| **Separate public asset version policy** | Can preserve controlled offline public resources when explicitly required | More catalogue complexity, update and cache-eviction states; unnecessary until public offline availability is a documented requirement |
+
+**Recommendation:** First require Engineering to enumerate the exact built public asset graph and test the smallest explicit route/resource ownership fix **without** weakening the verified app shell or erasing IndexedDB. Treat the separate-origin option as a strategic deployment decision, not an emergency change or assumed production topology. Do not claim public deletion/support is operable merely because its HTML returns 200; §21's **Settings deletion action missing** remains an independent tracked-source contradiction.
+
+### 23.5 Cross-track transfer and next high-information-gain gate [DEPENDENCY / VALIDATION / CHANGE WATCH]
+
+- **E (primary):** reconcile Worker route/asset ownership, auth-path safety, release/rollback, incident recovery and deployed security headers; no \`Clear-Site-Data: "storage"\` as an ad-hoc CSS fix.
+- **A:** maintain W3C client ID/navigation/fetch mechanics and Safari/WebKit differences as CHANGE WATCH; do not generalize Chrome 156 to installed iPadOS.
+- **B:** require truthful, reachable account-deletion/support instructions and a resilient HTML-first fallback; consume Design Studio Content/Interaction evidence rather than inventing visual criteria.
+- **C:** execute PR01–PR14 on exact NORMAL build, including a two-tab old/new Worker upgrade, resource status+computed style+keyboard focus, explicit offline failure and physical Safari/managed EFB; separate functional from accessibility oracles.
+- **D:** validate final canonical URL, crawlable content and actual Store-deletion request path; distinguish a page view from request delivery and completed deletion. Marketing D8/D9 release claims remain HOLD.
+- **Software Engineering:** owns any LogMate Worker/Hosting/auth/deletion implementation change and product tests. Web Manager did not modify peer/product repositories.
+
+**Next acceptance packet (Engineering-approved, no speculative production facts):** pin NORMAL build/Worker/manifest SHA; collect real served public route + every same-origin dependency with response status and controller/client mapping; compare new-tab, same-tab, auth action, offline, v1→v2 mixed-generation, Safari installed PWA and MDM Web Clip; independently inspect 37-store custody and actual W-030 deletion request truth. A repair that fixes CSS but regresses root shell offline/verified-byte safety is **REJECT**. A public page whose CSS passes but whose deletion action is unavailable is also **REJECT** for deletion readiness.
+
+**Stop-check:** adjacent high-value work completed here: prior unexecuted CI was admitted with exact job/artifact; two additional client/route families were executed, the unsafe-vs-safe oracle was audited, source/standards transfer reconciled, and three architecture options plus cross-track release gates evaluated. Further claims now require a **different evidence class** (actual compiled product, deployed Hosting, Safari/managed EFB and operator-controlled deletion). **Stage 8 ACTIVE · synthetic Chrome public-route 6/6 PASS (three intentionally unsafe) · product/runtime OPEN · PWA release HOLD.**
