@@ -1045,3 +1045,77 @@ The current LogMate [source-generated Worker](https://github.com/yhappcom/logmat
 **Next acceptance packet (Engineering-approved, no speculative production facts):** pin NORMAL build/Worker/manifest SHA; collect real served public route + every same-origin dependency with response status and controller/client mapping; compare new-tab, same-tab, auth action, offline, v1→v2 mixed-generation, Safari installed PWA and MDM Web Clip; independently inspect 37-store custody and actual W-030 deletion request truth. A repair that fixes CSS but regresses root shell offline/verified-byte safety is **REJECT**. A public page whose CSS passes but whose deletion action is unavailable is also **REJECT** for deletion readiness.
 
 **Stop-check:** adjacent high-value work completed here: prior unexecuted CI was admitted with exact job/artifact; two additional client/route families were executed, the unsafe-vs-safe oracle was audited, source/standards transfer reconciled, and three architecture options plus cross-track release gates evaluated. Further claims now require a **different evidence class** (actual compiled product, deployed Hosting, Safari/managed EFB and operator-controlled deletion). **Stage 8 ACTIVE · synthetic Chrome public-route 6/6 PASS (three intentionally unsafe) · product/runtime OPEN · PWA release HOLD.**
+
+
+---
+
+## 24. Exact-source Worker admission: unassigned-client request fan-out, verified-byte freshness and public task availability (2026-10-29 KST) [SOURCE / SYNTHESIS / DEPENDENCY / VALIDATION IN PROGRESS / CHANGE WATCH]
+
+**Curriculum allocation:** Stage 8 ACTIVE; **E primary** (Worker routing/trust and operational safety), **A** browser/client-ID mechanics and standards, **C** executable oracle and accessibility, **B** support/deletion task architecture, **D** public discovery/claim continuity. Web Manager coordinates; no sixth specialty. This extends §22–23 with a *materially stronger evidence class*: the **unmodified JavaScript template** from the exact LogMate Worker generator, instead of a manually simplified Worker. It still uses a synthetic manifest and synthetic server and is **not** a NORMAL compiled LogMate Web build.
+
+### 24.1 History/problem → design principle → standard → actual source
+
+**History/problem.** AppCache-style coarse implicit caching was replaced by explicit Service Worker request handling, enabling intentional offline shells and version control. This flexibility also means the author must distinguish navigation, client assignment, private shell assets, public document dependencies and arbitrary same-origin GETs. A Worker can control a public page even when it declines to intercept that page's navigation. A cached verified app shell and an online public document have different freshness contracts.
+
+**Standards/source:**
+- [W3C Service Workers Candidate Recommendation Draft, 2026-09-17](https://www.w3.org/TR/service-workers/) defines FetchEvent client identity, navigation replacement identity, interception and Cache Storage. Draft/implementation variance remains CHANGE WATCH.
+- [MDN FetchEvent.resultingClientId](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent/resultingClientId) documents the new navigation client ID and its absence for subresources. [MDN fetch event](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/fetch_event) explains that a request goes to network if the handler does not call respondWith; once respondWith is called, the Worker chooses the response.
+- Exact read-only product source: [LogMate tool/pwa_precache.dart, main@2f78e731, blob 90a67954](https://github.com/yhappcom/logmate/blob/2f78e731/tool/pwa_precache.dart). The generator's shell inventory is recursively built from build/web; whether a given resource is present in the *actual deployed* build must be checked against that artifact.
+- Public page source at the same ref: account-deletion and support both request /public.css plus version-query favicon/touch icons; the Auth Action page instead uses inline styling and a Roboto font under /assets/assets/fonts/. The fixture's synthetic /auth/action/ CSS is deliberately **not** an exact Auth Action asset graph. firebase.json declares a global no-store header but does not override a Worker-generated response.
+
+**Exact code-order fact (source-level):** for same-origin GET, the generated fetch handler first excludes reserved auth/__ paths and non-root navigations, then calls respondWith. On a **subresource** it reads control.clientBuilds[event.clientId]; it next resolves versionFor(control, buildId) and returns HTTP **503** if no version is assigned. **Only after that** does it test whether the path belongs to the manifest's shell/fonts/notices and, if not, forward to network. This order means an unassigned controlled public client can receive 503 for **any non-reserved same-origin GET subresource or fetch**, even one absent from the private shell manifest. This is a conditional **source-derived behavior**, not proof that a real product page makes a particular API call or that deployed users have seen 503.
+
+### 24.2 Distinguish five independent authorities [A → E TRANSFER]
+
+| Authority | What it establishes | What it does not establish |
+| --- | --- | --- |
+| HTTPS secure origin and Worker registration scope | Whether a Worker can control a client | Which build that client is assigned; whether an EFB MDM policy allows installation |
+| FetchEvent navigation bypass | Public/legal/auth document can use normal network navigation | CSS/font/icon/fetch dependencies of the resulting controlled client also bypass |
+| clientId/resultingClientId and control.clientBuilds | Version identity for mapped app clients | Every new tab or public navigation automatically inherits a valid app-build assignment |
+| Manifest + SHA-256-verified CacheStorage bytes | Byte-level integrity for version-pinned app shell | Public page freshness, CSS compatibility with newer network HTML, local IndexedDB durability |
+| HTTP no-store and server/Hosting response | HTTP cache semantics for network-served resources | Override of Worker respondWith, eviction protection or successful account deletion |
+
+**Consequence:** simply changing the fallback from 503 to unrestricted fetch for all GETs would destroy the old-client verified-byte contract. Conversely, applying the app-shell version pin to public HTML/CSS can silently create a stale-public-content combination even when both responses are 200. Separate **resource ownership** from **cache availability**.
+
+### 24.3 New executable provenance and negative controls [VALIDATION — IN PROGRESS]
+
+New research-only [pwa_exact_worker_source_probe.py](handoffs/pwa_exact_worker_source_probe.py) is intentionally **different** from the reduced six-case fixture. On GitHub-hosted Chrome it downloads the exact public source at pinned LogMate commit 2f78e731, verifies the Git blob SHA-1 against 90a67954af618a4e18199fa92555491c56167c17, extracts the literal Dart-generated JavaScript template, substitutes a tiny SHA-256-manifest with index.html/public.css and zero fonts, and serves it on a loopback HTTP origin. The script does not patch the fetch handler, inject a synthetic public-asset bypass, or download private LogMate assets. It deliberately preserves source install/activate/CacheStorage/verifiedResponse/clientBuilds behavior. This increases mechanism fidelity but **does not** reproduce the complete production manifest, 724 fonts, actual Flutter bootstrap, Hosting rewrites, network failures or iPadOS.
+
+The workflow [.github/workflows/stage8_pwa_public_route_worker.yml](../.github/workflows/stage8_pwa_public_route_worker.yml) now runs both the prior reduced six-case fixture and this new exact-template fixture. Fourteen **assertions**, not fourteen distinct real product user journeys, cover:
+
+| Probe | Falsifiable expectation | Evidence meaning |
+| --- | --- | --- |
+| P01 | Direct public HTML/CSS before Worker registration renders CSS | Network baseline; avoids blaming the server |
+| P02–P04 | Root controlled navigation assigns a build and serves verified v1 public.css bytes | Positive Worker installation, control and app-client assignment |
+| P05 | After the server replaces public.css with v2, assigned root still receives verified cached v1 | Byte-pinning/freshness counterexample, not a defect by itself |
+| P06–P07 | Controlled root→public document returns HTML while CSS may be absent | Navigation/subresource split under actual generator |
+| P08 | Unlisted same-origin public asset GET from unassigned client returns 503 | Missing version is checked before manifest membership |
+| P09 | Synthetic same-origin /api/ping GET from unassigned client returns 503 | Generic request fan-out; **no claim LogMate hosts such an API** |
+| P10 | Reserved /__/health GET bypasses to network | Distinguishes explicit reserved path from broad GET interception |
+| P11–P12 | Independent controlled public tab gets HTML but CSS 503 | New-client identity boundary |
+| P13–P14 | Reserved auth-like document navigates, while synthetic CSS dependency remains intercepted | The actual Auth Action uses fonts/icons; transfer requires exact asset graph |
+
+**Verdict discipline:** Until the new run's checkout, job log and per-case observations are inspected, this remains **VALIDATION IN PROGRESS**. If the source download, SHA pin, install/activation or assertion fails, record the actual failing layer; a green workflow wrapper without the exact-template step is not admission. The previous §23 six-case result remains valid only for its reduced Worker. If the new test passes, call it **pinned-source-template + synthetic-manifest Chrome**, never production/LogMate NORMAL/Safari PASS.
+
+### 24.4 Failure-mode analysis and integrated judgment [SYNTHESIS / MINTTAP DIRECTION — recommendation, not product authorization]
+
+1. **Unassigned-client fan-out:** a controlled public document can suffer CSS, icons, fonts or a future same-origin GET failure even when the resource is not in the app manifest. Inventorying only currently visible CSS is therefore insufficient. A public-resource ownership policy must include nested CSS imports, URL fonts, future imagery and reserved auth dependencies.
+2. **Assigned-client stale-public bytes:** if a public stylesheet is included in the app shell manifest and the server deploys a newer stylesheet at the same URL, an assigned root client intentionally continues receiving the verified older bytes. That is correct for private shell pinning but not necessarily for independently deployed public/legal pages. A resource should not simultaneously be governed by contradictory freshness authorities without explicit release coordination.
+3. **Reserved path boundary:** the current source exempts auth/__ URL paths, but a reserved **document** can still request a non-reserved **asset**. Auth Action's real Roboto URL and icon requests require separate treatment; do not transfer the fixture's CSS result to those bytes.
+4. **Offline failure contract:** public pages currently use network navigation bypass. Their availability while offline must be treated as OPEN, not inferred from the offline root app. For an EFB iPad, public support/deletion may reasonably require online access, but the user must receive a truthful recoverable state and the offline flight ledger must not be cleared as a repair.
+5. **Update/rollback:** the real Worker avoids skipWaiting and retains old verified caches; a quick global network fallback, cache deletion or forced activation is not a safe generic CSS fix. Require old/new tab, waiting/activation, version mapping, missing byte, stale catalogue and IndexedDB/37-store preservation oracles.
+6. **Security:** same-origin script privilege and CacheStorage mutability remain distinct from owner-locked IndexedDB and remote Auth/Receipt authority. Do not treat a CSS-503 fix as a security boundary fix or treat HTTP 200 as successful deletion.
+
+**Decision options, ranked by evidence burden:** (i) Engineering audits actual public asset graph and explicitly excludes public-owned resources from private build assignment, with negative tests proving pinned app shell remains verified; (ii) evaluate non-overlapping Worker scope/origin only with Hosting, OAuth, install, canonical URL, backup/restore and MDM migration evidence; (iii) introduce a separate public-resource version catalogue only if an actual offline-public requirement justifies its complexity. No option is approved by this research alone.
+
+### 24.5 Cross-track transfer and release packet [DEPENDENCY / TRANSFER VALIDATION / CONTRADICTION / OPEN]
+
+- **E (lead):** exact served origin/registration scope, Worker update and route ownership, auth-helper availability, rollback without deleting CacheStorage/IndexedDB, incident evidence; Stage 8 gate stays ACTIVE.
+- **A:** W3C fetch/client IDs and CacheStorage mechanics canonical; Chromium lab result is not Safari/WebKit or OS/MDM capability proof.
+- **B:** account deletion/support task must be reachable, styled/usable and truthful. §21's tracked-source **Settings deletion entry absent** remains an independent contradiction; page availability does not close W-030. Design Studio W034/W121/CD127 requires actual state/semantic evidence, not another visual manifest.
+- **C:** capture status for HTML, CSS, icons, font, same-origin GET, computed style, keyboard focus, first frame, assistive technology, offline/reload and v1→v2. A CSS failure is not automatically a WCAG violation; a CSS PASS is not accessibility PASS.
+- **D:** canonical served deletion/support URLs, indexing and Store URL truth; Marketing D8 claims HOLD. Do not infer completed account deletion from link visit or email composition.
+- **Software Engineering:** exact NORMAL build/Worker/Hosting fixes and execution belong to product Engineering; M006 bounded macOS Safari lifecycle evidence cannot stand in for installed iPad/EFB.
+- **Validation blockers:** real compiled NORMAL app, actual deployed domain/headers and asset graph, real Auth Action, two-tab upgrade/rollback, 37-store readback, Safari Home Screen and managed EFB device. Product/peer repositories remain read-only.
+
+**Stop-check:** a stronger evidence rung was attempted rather than another speculative public-route primer: exact generator source pin, manifest/byte validation, root/client control, server freshness change, unlisted GET and reserved path were composed into one fail-closed browser packet. Next is to **admit or reject actual CI observations** and then hand off to Engineering for exact compiled/deployed/physical-device evidence. No production gate promotion on a synthetic fixture.
