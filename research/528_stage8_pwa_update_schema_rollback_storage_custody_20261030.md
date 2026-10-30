@@ -818,3 +818,22 @@ Use exact build SHA, cache entry path, worker/client IDs, browser/iPadOS/MDM pro
 ## 63. Integrated checkpoint [OPEN]
 
 The cache catalogue's mutable expected digest (§51) and missing shell repair path (§59) are **different defects to falsify**: the former concerns release authority under same-origin write capability; the latter concerns non-destructive availability after shell cache loss. Source review established the exact branch differences; neither has been reproduced in LogMate or physical EFB. The five-case reduced Chrome workflow is committed but hosted execution **UNVERIFIED**. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**; no LogMate/peer modifications.
+
+
+## 64. Hosted MT01–MT05 reduced Chrome probe adjudicated [VALIDATION — PASS SYNTHETIC ONLY]
+
+**Supersedes the earlier “hosted UNVERIFIED” execution state in §§54, 58 and 63.** The exact **push** GitHub Actions [run 41001409500](https://github.com/yhappcom/web-manager/actions/runs/41001409500) completed successfully on **2026-10-30 04:11 UTC**, checkout \`9893de4d2097e10d2ea391d046de173eb9a6c0b8\`, job **123886412243**, Chrome **156.0.8078.47**, Python 3.13 / Playwright 1.57.0. GitHub connector job steps and **decoded job logs** were independently inspected. All **5/5 expected-outcome checks PASS**:
+
+| Case | Observed status | Decisive log evidence | Interpretation |
+| --- | --- | --- | --- |
+| MT01 TRUSTED_CATALOGUE | **200** | \`servedReplacement:false\` | Trusted control/body baseline |
+| MT02 BODY_ONLY_TAMPER | **503** | \`servedReplacement:false\` | Fail-closed with **equal-length** altered bytes, isolating SHA rather than length |
+| MT03 CATALOGUE_AND_BODY_TAMPER | **200** | \`servedReplacement:true\` | **Unsafe negative control**: coherently changed expected digest and asset are accepted by the reduced source-aligned Worker |
+| MT04 UNVERIFIED_FLAG_WITH_MATCHING_BYTES | **200** | \`catalogueVerifiedFlag:false\` | Fetch path does not consult promotion's verified flag |
+| MT05 MALFORMED_CONTROL_FAIL_CLOSED | **503** | \`servedReplacement:false\` | Unparseable control returns unmapped fail-closed result |
+
+The prior run [41001309677](https://github.com/yhappcom/web-manager/actions/runs/41001309677) also completed successfully but its mutated body had a different length; the **later corrected run** is the meaningful SHA-specific control. Artifact **12953098157**, \`pwa-mutable-catalogue-evidence\`, listed size 478 bytes, upload digest \`sha256:ef296953b8da87f8c2c416794fead024c8d0dffaa5edfc23d90dc6eed47183f1\`; **ZIP bytes were not independently downloaded/rehashed**. The log is sufficient to adjudicate the named synthetic checks, not artifact-byte provenance.
+
+**Scope:** The fixture intentionally ports only \`readControl → versionFor → verifiedResponse\` into a disposable loopback Service Worker. It does **not** execute the exact generated LogMate worker, full precache/activation, real Sembast, Firebase, Auth, old/new version overlap, Safari, installed Home Screen, managed EFB or external \`.lbk\` custody. **MT03 expected success is evidence of a reduced trust-root weakness, not a “secure PASS.”** No reachable LogMate XSS, production attack, actual exploit or pilot data loss has been demonstrated.
+
+**Gate:** **PASS SYNTHETIC 5/5** for the reduced mutable-catalogue mechanism; **TR01–TR10 and SR01–SR08 PRODUCT-LAB NOT RUN**. Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. Next decisive Engineering handoff combines exact generated-worker TR02/TR04/TR07, SR02/SR04 shell-vs-font repair, FC01–FC05 first adoption and CW03/CW04 mixed-version, while 529 owner/37-store custody remains P0. Product/peer repos unchanged.
