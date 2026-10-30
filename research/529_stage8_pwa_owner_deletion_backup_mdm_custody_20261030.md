@@ -924,3 +924,99 @@ Engineering [S007](https://github.com/yhappcom/software-engineering-studio/blob/
 This continuation resolves a previously untested assumption: **local phase-transaction atomicity plus same-request replay does not itself guarantee a single external deletion executor**. The controlled two-driver model shows duplicate invocation attempts are compatible with the inspected guards. The next evidence must be an exact LogMate two-driver barrier test and real receipt/idempotency contract, combined with already-P0 A-delete→B startup, 37-store wipe and independent Files custody. A further generic concurrency primer would not close this blocker.
 
 **Stage 8 ACTIVE · Native W-012 component PASS (historical) · Production validation OPEN · PWA release HOLD.** LogMate, Design Studio, Marketing and Software Engineering remain READ ONLY.
+
+
+---
+
+## 76. Stage 8 continuation — deletion intent versus already-open ledger writers [SOURCE / 2026-10-30]
+
+**Adjacent decisive question:** Does recording \`localLocked\` revoke mutation authority in an already-open repository session, even if SessionGate blocks a *new* startup? The exact read-only LogMate \`main@9cc0cd432a317d5dfebbe90e318fb219e53e024a\` source reveals a separate local write-admission boundary.
+
+[Repository request](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1007-L1038) validates an existing bound owner and writes \`AccountDeletionPhase.localLocked\` to the deletion-state store. It does **not** set \`LocalOwnerAccessLock.lockedByExplicitSignOut\` or change the owner-access record. [Create Flight draft](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L600-L637) and [finalize Flight draft save](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L806-L855) begin their own database transactions, call \`_requireReadyCapability\` and \`_requireUnlockedBoundOwner\`, and do not read deletion phase in those entry guards.
+
+[Helper \`_requireReadyCapability\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart) checks schema/migration review status, not deletion. [Helper \`_requireUnlockedBoundOwner\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart) checks a bound unlocked owner, not deletion. [\`_readCapability\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart) decodes the schema marker and does not consult deletion state. Source blob \`021d9001\` was independently re-read for these helpers.
+
+**STATIC CONDITIONAL:** after a successful \`requestAccountDeletion(A,k)\` commits \`localLocked\`, if owner access remains unlocked and capability is ready, the inspected Flight draft creation entry guards do **not** reject the operation *because of deletion state*. The same applies to the inspected finalize-save entry guards, subject to their many additional draft/revision/identity checks. This is **not** proof that a real UI permits an in-flight save, that all mutation methods share the gap, or that data survives terminal wipe. A second client or already-mounted Home screen is a plausible test fixture, not an observed user incident.
+
+## 77. Startup gate is not the repository mutation gate [PRINCIPLE / CONTRADICTION]
+
+The [account-required startup resolver](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/logbook/local_ledger_access_coordinator.dart#L167-L211) checks deletion state *before* owner binding and routes non-none deletion to a locked screen. That is a **navigation/readiness gate**. It does not prove an already-open repository object re-runs startup routing before each transaction. A local write-admission invariant must be enforced at the actual mutation transaction boundary, including callers already holding a repository reference.
+
+This differs from §65's two-driver remote saga race: one issue is duplicate **deletion executor** authority; this issue is surviving **ordinary ledger writer** authority. It also differs from 29/37 terminal wipe: a correct wipe at the end does not retroactively guarantee no writes were accepted after deletion was requested.
+
+## 78. Minimal guard projection [MODEL / REPLICATION — NOT DART EXECUTION]
+
+An independent static Boolean projection was executed from the inspected \`createFlightEntryDraft\` guards, using \`migration != reviewRequired && owner == unlocked\`. It deliberately leaves out draft uniqueness and other later checks and is **not a Dart, Sembast or browser test**.
+
+| Durable deletion phase | Capability | Owner access | Entry guard permits? |
+| --- | --- | --- | --- |
+| \`none\` | READY | unlocked | yes |
+| \`localLocked\` | READY | unlocked | **yes** |
+| \`localLocked\` | READY | explicitly signed-out lock | no |
+| \`localLocked\` | reviewRequired | unlocked | no |
+| \`firebaseIdentityDeleted\` | READY | unlocked | **yes** |
+
+Three model assertions passed: deletion phase alone does not gate the draft entry, explicit owner sign-out lock does, and even the pre-wipe \`firebaseIdentityDeleted\` phase is not consulted by that guard. The last row is especially sensitive: **do not infer a real post-identity successful save**, because repository/session availability and other constraints have not been executed. The model isolates a missing predicate, not end-to-end success.
+
+## 79. Temporal ordering and recoverability [SYNTHESIS / FAILURE MODES]
+
+- **T0** existing A Home screen and unlocked owner access; a draft editor may hold a repository reference.
+- **T1** deletion intent transaction writes \`localLocked\`; owner-access record is not changed by this method.
+- **T2** a previously opened context invokes \`createFlightEntryDraft\` with a unique draft; the inspected entry checks READY and unlocked owner, not \`localLocked\`. The separate transaction may admit the draft, subject to other checks.
+- **T3** provider/remote/Firebase saga may proceed; ordinary writes during a pending deletion can conflict with what the user believes "access immediately revoked" means.
+- **T4** terminal wipe drops selected stores and reinitializes. Any write before this may be removed by wipe, but this is not a substitute for denying writes after intent. The previously identified eight retained stores require independent parity verification.
+- **T5** after wipe, the fresh owner state may independently prevent further writes; do not use that later property to claim the earlier T1–T4 window is safe.
+
+W3C [IndexedDB transaction serialization](https://www.w3.org/TR/IndexedDB/#transaction-concept) protects each overlapping write transaction from interleaved partial DB changes. It does not insert a deletion-state predicate into application code. **The correct invariant is transaction-time owner + deletion admission**, with Engineering choosing the implementation; a cross-tab event, navigation redirect or disabled UI control alone is not sufficient authority.
+
+## 80. Acceptance contract for active and suspended writers [MINTTAP DIRECTION — NOT APPROVED]
+
+- **W1:** once deletion intent commits, all subsequent normal ledger mutations in that local DB must fail closed in their own transaction, including drafts, records, custom values, settings and Sync staging where applicable.
+- **W2:** a transaction that begins *before* deletion intent and overlaps it must have an explicit serializable outcome: either it commits before intent or it is rejected after intent; no unclassified after-intent write.
+- **W3:** a suspended/background tab or installed PWA must not silently continue writing on a stale Home screen after deletion intent; if it resumes, it must observe durable local authority before mutation.
+- **W4:** remote Sync outbound queues must not publish newly accepted deleted-owner operations; backend authority remains separately enforced.
+- **W5:** in-flight export and independent Files backups must be classified separately: blocking new exports after intent does not retroactively revoke user-owned Files already saved.
+- **W6:** after terminal wipe, the 37-store registry and nested Sync owner evidence must satisfy agreed erasure policy; no post-wipe stale writer may recreate A data.
+- **W7:** loss of network or EFB background suspension does not imply remote erasure; local lock and remote status are distinct.
+- **W8:** authorized B onboarding after A deletion must not inherit A's stale writer capability, cache identity or Sync evidence.
+
+These are proposed Engineering acceptance criteria, not permission to clear all browser storage or delete external Files.
+
+## 81. Exact product mutation-barrier tests [VALIDATION — RW01–RW14 DEFINED NOT RUN]
+
+Use disposable A/B UIDs, synthetic flights, two independently held repository sessions and barriers before/after the deletion intent commit. Distinguish \`FAIL PRODUCT\`, \`PASS EXACT NATIVE\`, \`PASS EXACT WEB\`, \`PASS DEVICE\`, \`NON-EXECUTION\`, and \`OPEN\`.
+
+| ID | Test | Oracle |
+| --- | --- | --- |
+| RW01 | A unlocked, no deletion; create valid draft | Positive control succeeds |
+| RW02 | A request deletion commits localLocked; same session creates valid unique draft | Must fail closed due to deletion state; source currently lacks this guard |
+| RW03 | Separate already-open repository instance creates draft after localLocked | Must fail closed even without UI reroute |
+| RW04 | Finalize previously valid draft after localLocked | No Flight record/revision/outbox commit |
+| RW05 | Record create/update/delete and custom-value mutation after localLocked | Each entry denies, not merely the draft path |
+| RW06 | Settings/configuration mutation after localLocked | No normal mutable owner data changed |
+| RW07 | Sync operation staging/ack/retry after localLocked | No new deleted-owner outbound publication |
+| RW08 | One mutation transaction races deletion intent transaction | Defined serial ordering; no post-intent successful mutation |
+| RW09 | Suspended tab resumes after another tab requests deletion | Durable guard denies stale Home write |
+| RW10 | Mixed old/new PWA build, one context lacks any new UI lock | Repository/backend policy denies, not client UI alone |
+| RW11 | After remote erase but before Firebase identity delete, old tab attempts write | Denied; no rehydration of deleted-owner remote state |
+| RW12 | After identity delete but before local wipe, old tab attempts write | Denied; safe recovery without deleted-UID reauth |
+| RW13 | After terminal wipe, stale repository instance attempts write | Denied; no recreation of A owner data |
+| RW14 | Verified B normal startup after A completion; independent LBK readback | Clean B, 37-store and Files custody proved separately |
+
+The first decisive subset is **RW01–RW04 + RW08 + RW12**, combined with DL05/DL06 and RC01/RC02. All RW tests **DEFINED NOT RUN**. No exact product failure, security exploit, real user write, or post-deletion data persistence is asserted.
+
+## 82. Track ownership, cross-domain handoff and evidence discipline [DEPENDENCY / TRANSFER VALIDATION]
+
+- **E (lead):** owns web-origin/local-custody security requirement and phase-versus-write-authority threat model.
+- **A:** owns IndexedDB/Service Worker/same-origin tab mechanics; a background tab's state must not be inferred from a foreground route.
+- **C:** owns exact dual-session barrier/fault-injection and mutation-surface coverage; historical W-012 restore PASS is unrelated to this deletion lock.
+- **B:** owns truthful pending/recovery information architecture; a locked screen is not sufficient to promise that all already-open editors are blocked.
+- **D:** owns public deletion claim boundaries and privacy-safe instrumentation; no "instant all-device erasure" copy.
+
+[Engineering S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) explicitly requires **immediate normal local access revocation after voluntary deletion intent**. This new source gap is a direct implementation acceptance dependency, not a proposal for Web Manager to edit LogMate. Design Studio W121 and Marketing D9 require exact runtime and truthful claims. All peer/product repositories remain read-only.
+
+## 83. Integrated checkpoint and escalation [OPEN / DECISION]
+
+The combined §§65–83 identify **two distinct source-conditional safety boundaries** not closed by W-012: (a) duplicate authorized deletion drivers may repeat external *invocation attempts*, and (b) \`localLocked\` alone is not consulted by inspected ordinary Flight draft mutation entry guards while owner access remains unlocked. Neither is a remotely proven exploit or shipped incident. The latter has a direct source-path counterexample and warrants **P0 Engineering exact dual-session mutation tests** alongside A-delete→B startup and 37-store wipe parity.
+
+If Engineering shows an additional universal repository wrapper intercepts all mutation methods or the exact compiled product rejects RW02/RW03, revise this finding with that runtime evidence. Until then, **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**. The next work is exact runtime/product and managed-device evidence, not another generic security primer.
