@@ -795,3 +795,132 @@ Escalate a **confirmed exact-build** phase-skip/terminal lock/owner-data-retenti
 This integrated continuation answers the adjacent question left by §§46–54: approved Native B1 restore proof does **not** validate deletion phase admission, restart liveness or remote identity/receipt recovery. Source-level review now identifies (1) forward-skip acceptance in the local phase API, (2) two decodable but unhandled phases, (3) an absorbing \`retryableIncomplete\` state if explicitly written, (4) an informational locked screen without a resume control, and (5) a distinct remote-success/local-ack ambiguity. These findings are **conditional/source-only**, with positive normal coordinator sequencing explicitly preserved.
 
 **Priority order:** Engineering exact A→delete→B startup and 37-store wipe parity; DL05/DL06 phase-negative controls and DL08–DL14 interruption/recovery; independent Files LBK readback/restore; then browser IndexedDB, Worker and physical managed EFB transfer. Further generic state-machine prose or another synthetic-only test would not resolve these release blockers. **Stage 8 ACTIVE · Native W-012 component PASS (historical) · Production validation OPEN · PWA release HOLD.** Monitor Firebase/Auth, Apple/WebKit, Google Play and OWASP guidance for change; recheck the actual deployed build before asserting policy compliance or incident.
+
+
+---
+
+## 65. Stage 8 continuation — duplicate deletion drivers and cross-context saga exclusivity [SOURCE / 2026-10-30]
+
+**Adjacent question after §§55–64:** even if phase transitions become strictly adjacent and restart has a working recovery action, what prevents two *authorized* invocations of the same deletion request from performing the same irreversible external steps concurrently? This is distinct from an unauthorized phase jump, a stale completed(A) marker, 29/37 wipe parity and crash-after-remote-ack ambiguity.
+
+Read-only exact LogMate \`main@9cc0cd432a317d5dfebbe90e318fb219e53e024a\`: [coordinator](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/account_deletion_coordinator.dart), [repository deletion methods](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1007-L1125), [phase enum](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/domain/account_deletion_state.dart). Coordinator blob \`8e844e88\`, repository blob \`021d9001\`, phase blob \`499037bd\`. Product repository READ ONLY.
+
+**SOURCE:** \`request(A,k)\` awaits \`requestAccountDeletion(A,k)\` then unconditionally calls \`resume()\`. Repository treats same UID/request replay as idempotent *local request admission*, returning the existing state; it does not create a single-flight lease for the subsequent external saga. \`resume()\` reads a phase once, then awaits external reauth, provider revoke, remote erase, Firebase identity delete and separate local wipe; after each external step it advances a durable phase. No in-flight guard, process-wide mutex, lease token, fencing epoch or compare-and-swap against the **expected prior phase** appears in these inspected methods. This is a scoped observation; all other call sites and deployed build behavior remain unverified.
+
+**Positive control:** normal single-driver ordering awaits each successful external step before advancing the corresponding phase; local repository transactions protect each individual phase write and terminal wipe. Do not mislabel that ordering as absent.
+
+## 66. Why a database transaction does not serialize the external deletion saga [HISTORY / PRINCIPLE / STANDARD]
+
+A durable local transaction is an atomicity boundary for database operations, not for a network provider operation awaited *outside* the transaction. Two drivers can both read \`localLocked\`, await reauthentication independently, and later write the same next phase in separate serialized transactions. The repository guard permits equal-phase writes, so the second driver's stale phase advance can succeed. Even a future adjacent-only transition rule is insufficient unless it also specifies how same-phase replay and **one active external executor** are controlled.
+
+[W3C IndexedDB 3.0 transaction model](https://www.w3.org/TR/IndexedDB/#transaction-concept) says overlapping readwrite transactions serialize access to the same object-store scope. It does **not** make a Dart multi-await saga atomic across remote services. [MDN Web Locks](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) provides cooperative same-origin cross-tab/worker coordination on supporting secure-context browsers; it is **not** a server-authoritative deletion receipt, does not cover an unmodified client that ignores the lock, and must not be assumed to span separately isolated installed PWA containers or native devices. Both checked 2026-10-30. General race/workflow testing: [OWASP WSTG](https://wstg.owasp.org/latest/) and [OWASP concurrent workflow order bypass](https://owasp.github.io/www-project-top-10-for-business-logic-abuse/docs/the-top-10/workflow-order-bypass.html). The latter is a general failure class, **not evidence of a LogMate exploit**.
+
+## 67. Deterministic two-driver counterexample [MODEL / REPLICATION — NOT PRODUCT EXECUTION]
+
+A small independent in-memory JavaScript model was executed during this research. It mirrors only the observed phase-index predicate, the normal coordinator step order, two stale local phase snapshots and a controlled interleaving. It is **not Dart execution, Firebase/provider behavior, browser/WebKit evidence or proof of a reachable UI race**.
+
+Schedule: A and B both read \`localLocked\` for the *same UID/request k*. Both invoke reauth; A writes \`reauthenticated\`, then B writes the same phase (allowed). Both invoke provider revoke, then each writes \`providerRevoked\`; repeat for remote erasure and Firebase identity deletion. A performs terminal wipe and writes \`completed\`; B's later wipe is rejected by the terminal precondition.
+
+| Model oracle | Deterministic outcome | Evidence limit |
+| --- | --- | --- |
+| Reauthentication port invocation attempts | 2 | Does not establish two successful authentications |
+| Provider revocation port invocation attempts | 2 | Adapter behavior/idempotency unknown |
+| Remote erase port invocation attempts | 2 with same \`k\` | API takes \`idempotencyKey\`, server enforcement unverified |
+| Firebase identity deletion port invocation attempts | 2 | Second may fail; no double successful deletion claimed |
+| Local terminal wipe attempts accepted | 1; second rejected after \`completed\` | This interleaving protects the final local phase but not duplicate earlier calls |
+| Final modeled phase | \`completed\` | Model is an existence counterexample, not observed product state |
+
+Three explicit model assertions passed: duplicate external *invocation attempts*, one accepted local wipe, and terminal completed. This demonstrates that **the inspected local guard does not itself guarantee at-most-once external invocation under overlapping authorized drivers**. It does not show that such overlap occurs in the shipped UI, nor that a provider executes a duplicate destructive effect. A different interleaving may fail earlier; this is why exact-build barrier tests are needed.
+
+## 68. Three independent concurrency planes [SYNTHESIS / DEPENDENCY]
+
+1. **Single runtime, repeated invocation:** duplicate request callbacks, programmatic \`resume()\`, or two coordinator instances sharing a repository could overlap. Whether the current UI actually calls either path twice is OPEN. A UI-disabled button alone cannot prove repository exclusivity.
+2. **Same-origin multiple browser contexts:** Safari tabs or an installed PWA may share some origin storage while having independent JS event loops. Browser locking and shared IndexedDB behavior must be verified for the exact deployment/browser; no assumed global single-flight. Web Locks are cooperative and not a substitute for backend idempotency.
+3. **Separate installed containers / native device:** WebKit installation isolation and device-local storage mean even a correct same-origin browser lock cannot establish one worldwide deletion executor. Remote idempotency/status authority must tolerate two devices acting on the same UID. Offline EFB copies cannot be presumed to receive a deletion broadcast.
+
+These planes require separate tests. Do not infer PWA-to-native unattended sync, universal erasure, background execution or cross-install Web Locks from a generic standards description.
+
+## 69. Failure-first step matrix: at-most-once attempt is not exactly-once effect [SYNTHESIS / CONTRADICTION]
+
+| Boundary | Current source contract | Concurrency or crash question | Required authoritative evidence |
+| --- | --- | --- | --- |
+| Local request admission | Same UID/request \`k\` returns existing state | Two callers proceed into \`resume()\` | One logical deletion job / executor lease or safe concurrent replay |
+| Reauthentication | Returns UID; coordinator checks equality | Two prompts; cancellation of one while other advances | Exact-UID continuity, prompt UX and consent semantics |
+| Provider revocation | \`revokeForDeletion(uid)\` | Duplicate revocation; token may already be revoked | Provider-specific accepted/already-revoked contract, not guessed success |
+| Remote erase | \`eraseAllUserData(uid,k)\` | Two calls same key, timeout and retry | Server receipt/status query and durable idempotency, including crash |
+| Firebase identity delete | \`deleteCurrentIdentity(uid)\` | Second invocation after first succeeds, local phase still old | Firebase emulator and real-provider boundary tests; reconcile absent identity without false completion |
+| Local wipe | One Sembast transaction and terminal marker | Race with second driver or another tab editing | 37-store exact snapshot and write-denial across active clients |
+
+The Firebase [Web manage-users guide](https://firebase.google.com/docs/auth/web/manage-users) documents sensitive account deletion and recent sign-in requirements; it does **not** guarantee that two app-level deletion calls are a safe exactly-once distributed transaction. Distinguish **at-most-once local executor**, **at-least-once retried request**, **idempotent remote effect** and **authoritative completion receipt**; conflating these terms creates false assurance.
+
+## 70. Safety and liveness acceptance invariants [MINTTAP DIRECTION — NOT APPROVED IMPLEMENTATION]
+
+- **S1:** same UID/request is a single logical deletion, regardless of callbacks, tabs, retries or devices; duplicate attempts do not create conflicting provider/remote state.
+- **S2:** no external phase advances from stale observations without checking the expected durable predecessor and appropriate receipt; a locally stored phase is not a remote attestation.
+- **S3:** no second active executor performs an unsafe non-idempotent provider step merely because the same request key is reused; any lease is crash-recoverable and fenced.
+- **S4:** after identity removal or ambiguous acknowledgement, recovery does not require impossible reauthentication of the already-deleted UID to complete local sanitization.
+- **S5:** local deletion locks **all** active writers before any user-data wipe; already-open tabs must not silently recreate deleted-owner data.
+- **S6:** final completion proves the agreed 37-store, remote/provider and owner-custody boundaries; external Files and offline other-device copies have separately disclosed scope.
+- **L1:** a dead owner of a local lease cannot permanently strand the user; takeover is authorized by durable state and receipts.
+- **L2:** A completed deletion cannot indefinitely block a verified new B owner on a clean ledger.
+- **L3:** errors, offline waits and unsupported browser capabilities lead to truthful recoverable states, not automatic origin-wide reset.
+
+These are acceptance **requirements to propose to Engineering S007**, not authorization to implement a Web Locks-only fix, auto-delete files, clear Cache Storage or change account-deletion policy.
+
+## 71. Executable concurrency and recovery packet [VALIDATION — RC01–RC16 DEFINED NOT RUN]
+
+All cases require an Engineering-approved disposable exact build, synthetic UIDs/records and instrumented fake ports first; then Firebase Emulator/provider sandbox and browser/physical-device transfer where applicable. Capture ordered events, request key, UID pseudonym, phase before/after, number of port invocations and authoritative receipts. Never log raw tokens, emails, LBK contents or sensitive Auth URLs.
+
+| ID | Case | Falsifiable oracle |
+| --- | --- | --- |
+| RC01 | Two \`request(A,k)\` calls at localLocked barrier | One logical job; no unsafe duplicate provider calls |
+| RC02 | Two \`resume()\` calls after same phase read | At most one active external executor, or demonstrably safe idempotent effects |
+| RC03 | Second driver enters after first \`reauthenticated\` | No stale backward/duplicate step; expected-phase guard |
+| RC04 | Duplicate provider revoke, first succeeds, second returns already-revoked | Documented accepted recovery, no false failure or token retention |
+| RC05 | Two remote erase calls with same \`k\` | One durable remote erasure receipt and consistent status |
+| RC06 | Same UID, different \`k\` from another device | Reconcile/reject without orphaned data or double erase |
+| RC07 | Firebase delete succeeds; second delete fails | Reconcile identity state; no permanently locked local ledger |
+| RC08 | Crash after lease acquisition, before first side effect | Safe recovery/takeover without skipping required phase |
+| RC09 | Crash after remote side effect, before local phase write | Receipt query and safe replay, no false completion |
+| RC10 | Crash after Firebase delete, before local phase write | Safe post-identity local sanitization |
+| RC11 | Two tabs: one deleting, one already on Home with pending write | Write denied after lock; no recreation of deleted-owner stores |
+| RC12 | One tab closes or is suspended while holding a browser lock | Recoverable takeover, no permanent lock |
+| RC13 | Old deployed PWA version ignores a newly introduced lock | Safe mixed-version behavior; no unilateral-lock assurance |
+| RC14 | Two installed Home Screen copies or Safari + installed copy | Record actual storage/lock isolation; do not assume shared authority |
+| RC15 | Native device and offline managed EFB attempt same UID deletion | Remote receipt reconciliation on reconnect; no guaranteed instant offline wipe |
+| RC16 | Terminal A deletion then verified B onboarding + Files custody | B clean startup, 37-store wipe, independently reopened LBK, no foreign Sync evidence |
+
+Existing DL01–DL20, MC01–MC20, W-012 Native restore and Worker FC/CW tests remain distinct. **No RC product test executed.** A synthetic model is not a substitute for exact two-driver barrier injection.
+
+## 72. Operational evidence and privacy-preserving diagnostics [DEPENDENCY / TRACK D]
+
+Record a minimal causal trace: \`build SHA\`, runtime type, container/install class, pseudonymous UID, pseudonymous request ID, phase transition, executor generation, remote receipt ID/hash, result classification, and monotonic relative timestamps. For multi-device testing, collect time skew and per-device event order; do not assume wall-clock ordering across disconnected iPads. Keep raw identity credentials, OAuth codes, full Firebase tokens, logbook data and export files out of analytics and CI logs.
+
+A successful HTTP response or client callback is not enough: operator/remote receipt must prove the claimed boundary. For public deletion support, report \`request received\`, \`verification needed\`, \`remote processing\`, \`local device pending\`, \`completed on this device\` as distinct states; do not publish "deleted everywhere" without all-device authority. Track D owns claim/measurement constraints, B owns recovery content requirements, and Engineering owns receipt implementation.
+
+## 73. Cross-track allocation and specialist transfer [DEPENDENCY / TRANSFER VALIDATION]
+
+| Track | Evidence maturity and pressure | This bundle |
+| --- | --- | --- |
+| E lead | Phase graph/source strong; concurrent external side effects and real receipts OPEN; highest P0 risk | Defines saga-exclusivity contract, cross-container authority and RC negative tests |
+| A | IndexedDB/Worker standards mature; installed Safari/MDM runtime OPEN | Explains why DB atomicity and cooperative Web Locks do not equal distributed saga exclusivity |
+| C | Native W-012 restore historical PASS; no deletion concurrency PASS | Owns two-driver barrier, fault injection, provenance and separate browser/device oracles |
+| B | W121 pre-runtime design saturated; exact recovery UX OPEN | Consumes truthful pending/lease-expired/retry states; no speculative new visual candidate |
+| D | Marketing D9 release claims HOLD | Limits completion language and defines minimal privacy-safe status evidence |
+
+Engineering [S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) owns provider/server orchestration and code-level implementation; Design Studio [W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md) demands executable proof; Marketing D9 holds PWA release and account-deletion claims. No peer/product repository writes.
+
+## 74. Falsification, scope and change watch [CONTRADICTION / CHANGE WATCH]
+
+- If the actual production entry point enforces a global one-driver guard or every external port is demonstrably idempotent, narrow this finding to the inspected coordinator/repository API and remove any product-risk implication not supported by that evidence.
+- If only one \`resume()\` can ever be called in the deployed UI, RC01/RC02 still test defense in depth and future restart/multi-context paths; do not assert current user reachability.
+- If Sembast/Web adapters enforce broader synchronization than inspected, rerun exact two-driver barriers rather than transferring the in-memory model.
+- If the server owns deletion job state and durable receipts, treat that as a positive boundary only after observing the actual request-key/UID receipt behavior; a port interface alone is not backend proof.
+- Recheck W3C IndexedDB, Web Locks/browser support, WebKit installed-container policy, Firebase provider behavior and Apple/Google deletion policy on release; support is CHANGE WATCH, not timeless.
+- **No demonstrated remote exploit, unauthorized account deletion, duplicated successful provider operation, production user-data loss, real WebKit failure or new Native/PWA PASS.**
+
+## 75. Adjacent-question checkpoint [OPEN / DECISION]
+
+This continuation resolves a previously untested assumption: **local phase-transaction atomicity plus same-request replay does not itself guarantee a single external deletion executor**. The controlled two-driver model shows duplicate invocation attempts are compatible with the inspected guards. The next evidence must be an exact LogMate two-driver barrier test and real receipt/idempotency contract, combined with already-P0 A-delete→B startup, 37-store wipe and independent Files custody. A further generic concurrency primer would not close this blocker.
+
+**Stage 8 ACTIVE · Native W-012 component PASS (historical) · Production validation OPEN · PWA release HOLD.** LogMate, Design Studio, Marketing and Software Engineering remain READ ONLY.
