@@ -478,3 +478,115 @@ The PS11 code push at exact checkout [0737279342bb81d83072e81da3ada86ee05d2eed](
 **Scope and contradiction controls:** PS11 is **not** an ungraceful browser kill, sudden OS crash, hardware flush test, quota eviction, WebKit/iPadOS, installed Home Screen, MDM Web Clip, Firebase UID, LogMate v16→v17 or external .lbk backup test. The temporary profile was intentionally disposable. The result strengthens the synthetic persistence evidence ladder by one step without changing the production release gate. **PS01–PS11: 11/11 HOSTED CHROME SYNTHETIC PASS in the exact PS11 run.** Earlier PS01–PS10 have three separately inspected successful runs. Product validation OPEN; PWA release HOLD.
 
 **Next adjacent high-value boundary:** a forced-process-termination or disk-pressure synthetic experiment could challenge the next platform-level oracle, but its outcome cannot substitute for Engineering-approved exact LogMate binaries and physical managed EFB custody. Given the now-confirmed package-level concurrency and graceful persistence behavior, the highest-value next work is **actual LogMate old/new Web build compatibility, Owner/Replica/Outbox, independent 37-store Files backup/restore, and physical Safari/Home Screen/MDM acceptance**. Do not continue adding redundant package primers merely to increase research-file count. Track E retains the release gate; A owns browser interpretation; C owns independent product/device execution; B and D consume truthful UX and public-claim boundaries.
+
+
+---
+
+## 35. Stage 8 renewed prerequisite: exact LogMate-owned worker, not a missing generic Flutter worker [SOURCE / CONTRADICTION, 2026-10-30]
+
+**Material source correction:** The current [Flutter Web FAQ](https://docs.flutter.dev/platform-integration/web/faq) and [initialization guide](https://docs.flutter.dev/platform-integration/web/initialization) say that newer Flutter versions no longer generate/manage an offline caching worker by default. That general rule must **not** be turned into a claim that LogMate lacks an offline worker. Pinned [LogMate main@9cc0cd43 Makefile](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/Makefile) explicitly builds with \`--pwa-strategy=none --no-web-resources-cdn\`, then executes \`tool/precache_flutter_web.dart\` and \`tool/verify_pwa_artifact.dart\`. The [bootstrap](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/flutter_bootstrap.js) registers \`logmate_service_worker.js\` with scoped registration and \`updateViaCache:'none'\`. The worker is **generated in build/web** by [tool/pwa_precache.dart](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/pwa_precache.dart); its absence from tracked \`web/\` is intentional, not evidence of no worker.
+
+The [artifact verifier](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/verify_pwa_artifact.dart) requires a generated worker, a schema-v2 offline manifest, 724 font records, 148 font-notice records, a versioned fallback path, shell/CanvasKit bytes and SHA-256 parity. It checks the development acceptance-harness marker is absent from a normal build. This is meaningful **source/build-assertion evidence**, not proof that the exact currently served deployment ran that Makefile target, nor proof of Safari offline re-entry. [LogMate MASTER §Stage 7](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/MASTER.md) records bounded earlier artifact validation and keeps physical Safari/Home Screen/EFB acceptance OPEN.
+
+**Ownership:** Track A owns lifecycle and browser mechanics; Track E owns release/custody consequences. Do not confuse a manifest's \`display:standalone\` or worker registration source with an installed, controlled, offline-runnable managed PWA.
+
+## 36. Why the update protocol exists and what it actually guarantees [SOURCE / SYNTHESIS]
+
+**History/problem:** AppCache coupled opaque resource selection to manifest-driven updates and suffered update/coherency limitations. Modern service workers separate lifecycle, programmable fetch, Cache Storage and client control. The [Service Workers standard](https://www.w3.org/TR/service-workers/) and [MDN lifecycle guide](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers) distinguish an installing candidate, a waiting worker and an active worker controlling existing clients. Installing a new worker is not equivalent to activating it; \`skipWaiting()\` changes that transition.
+
+**Exact LogMate source:** The generated worker:
+- builds an \`appBuildId\` from a SHA-256 description of the generated shell and uses a separate \`fontSetId\`;
+- downloads and verifies candidate shell, fonts and notices, with six concurrent font requests and three fetch attempts, before the install event can resolve;
+- maintains \`logmate-offline-control-v2\` with \`currentBuildId\`, \`previousBuildId\`, \`candidateBuildId\`, \`versions\` and \`clientBuilds\`;
+- hashes cached response bytes again at serve time and reconstructs a response from the verified bytes rather than performing a second cache lookup;
+- deliberately omits \`skipWaiting()\` and automatic cache deletion; \`ROLLBACK_TO_PREVIOUS\` explicitly returns \`NOT_ROLLED_BACK\` until independently proven schema/data compatibility exists;
+- intercepts same-origin GET only, excludes \`auth/\` and \`__/\`, and handles root app navigation rather than every unknown URL as a shell fallback.
+
+**Interpretation:** These are substantive defenses against incomplete candidate promotion, cross-build asset mixing and auth-route interception. They **do not** make Cache Storage a transaction database, ensure successful quota allocation, guarantee data schema compatibility, or prove offline availability on a managed iPad. A verified asset set and a verified local ledger are independent proofs.
+
+## 37. New P0-adjacent hypothesis: active/waiting workers can lose shared control-catalogue updates [SOURCE / STATIC INTERLEAVING MODEL / OPEN]
+
+**Source chain:** [Bootstrap](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/flutter_bootstrap.js) preferentially posts \`START_PRECACHE\` to \`registration.waiting\` while the existing \`registration.active\` may continue serving open clients. [Generated worker template](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/pwa_precache.dart) defines a **per-worker-global** \`let controlMutation = Promise.resolve()\` and \`updateControl(change)\`: read one JSON record from Cache Storage, mutate the snapshot, then \`cache.put()\` the entire record. It serializes mutations **within that one worker instance**. It does not contain an inter-worker compare-and-swap, transaction, version precondition or lock shared between an active old worker and an installing/waiting new worker.
+
+**Normative prerequisite:** The Service Worker lifecycle permits a new worker to install/wait while an old worker still controls clients. [MDN waiting property](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/waiting) and [Service Workers standard](https://www.w3.org/TR/service-workers/) establish separate worker states. [Cache.put()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/put) replaces a matching key/value pair; it does not advertise a read-modify-write CAS operation. **This is a concurrency-risk hypothesis, not an observed WebKit or Chromium race.** Exact scheduling and survival of each worker must be exercised.
+
+**Concrete possible interleaving (MODEL, not browser execution):**
+
+1. Old active worker reads control record C0 to assign \`clientBuilds[client-42]=v1\` on a navigation.
+2. New installing/waiting worker separately reads the same C0 to remember candidate v2.
+3. Old worker writes C1 with the client mapping.
+4. New worker writes C2 derived from C0 with candidate v2 but **without** the new client mapping.
+
+A minimal standalone JavaScript object-copy model of these four steps was executed locally: expected client assignment \`v1\`, final client assignment \`null\`. Reversing the last two writes can instead discard the new candidate metadata. This demonstrates a **possible lost-update interleaving under independent read-modify-put actors**, not that browsers actually schedule this sequence or that LogMate users have encountered it.
+
+**Consequence if reproduced:** An old client's later subresource lookup can fail to resolve \`clientBuilds[event.clientId]\` and return the worker's explicit **503 "Offline version is not assigned; reload required"**; candidate metadata may be forgotten or re-created. The fail-closed response avoids silently serving the wrong build but can impair offline availability. This is a release-blocking *question* for a pilot logbook, not a confirmed vulnerability, account disclosure or data loss. The existing 11/11 Chrome Sembast tests did not run the owned service worker and cannot adjudicate it.
+
+**Engineering handoff, not code authorization:** Reproduce using exact old/new generated worker artifacts and controlled interleaving of old-worker navigation and new-worker install/waiting \`START_PRECACHE\`. Record both worker script/build IDs, cache-control snapshots and every client-to-build assignment. Investigate a single-writer or transactional coordination design only after reproducing; a worker-local promise is insufficient evidence of cross-worker serialization.
+
+## 38. Cache-Control, explicit precache, authentication and the trust boundary [SOURCE / CONTRADICTION]
+
+The pinned [Firebase Hosting configuration](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/firebase.json) applies \`Cache-Control: no-cache, no-store, must-revalidate\` to \`**\`. [MDN HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching) explains that \`no-store\` restricts HTTP caches. That header is **not evidence that the application's explicit Cache API precache is absent**: the owned worker deliberately fetches resources with \`cache:'no-store'\`, validates bytes and calls \`Cache.put()\` into named Cache Storage. [MDN Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache) and [Cache.put](https://developer.mozilla.org/en-US/docs/Web/API/Cache/put) document this distinct programmable storage path. Do not infer universal WebKit acceptance of every response/header combination without runtime observation.
+
+**Scope and policy:** \`updateViaCache:'none'\` is a worker-script update setting, not a guarantee that all shell assets are freshly loaded. Conversely, the all-path Hosting header is a broad configuration, not evidence of actual served headers or deployed revision. The generated worker intentionally excludes auth action and Firebase \`__/\` routes from fetch interception; it does not prove those routes cannot be included in the *build-shell inventory* (the generator recursively enumerates build files except explicit generated/legacy/font paths). Exact artifact inspection must verify which auth/support assets are packaged, their cacheability, their response privacy and their cost.
+
+**Security invariant:** Worker integrity is a same-origin code-trust problem, not an identity authorization check. A valid shell SHA does not authorize A's ledger for B; account deletion/owner checks live in the application and server saga. Avoid a universal \`Clear-Site-Data\` reset to repair a worker catalogue: it can destroy the only offline ledger, while independently installed Home Screen copies and external Files remain outside that one-context action (see study 529).
+
+## 39. Failure-mode matrix: release upgrade, offline readiness and storage pressure [SYNTHESIS / OPEN]
+
+| Scenario | Source-supported behavior | Missing independent oracle |
+| --- | --- | --- |
+| First install, full online resource set | Install event waits for candidate shell/fonts/notices and verifies SHA/size | Actual controlled offline reload on fresh Safari/Home Screen origin |
+| Candidate asset missing/hash wrong | Install rejects candidate; old worker may remain active | Real old-shell availability after failed update; no silent blank page |
+| Active old + waiting new | Old serves clients; waiting can receive precache messages | Cross-worker control-catalogue lost-update interleaving; client map durability |
+| Same-font subsequent build | Reuses verified named font cache; shell build ID changes | Byte provenance and no unexpected re-download/quota spike |
+| Quota exhausted during full precache | Candidate may fail; code avoids automatic deletion of prior versions | Old usable shell and Sembast survive pressure; browser eviction independent |
+| Repeated upgrades | Worker retains old caches and catalogue entries without automatic cleanup | Growth/quota budget, stale \`clientBuilds\`, safe GC contract with open clients |
+| Old JS against v17 local DB | Worker pins assets by client, not schema compatibility | Old/new reader/writer/Replica/Outbox matrix and fail-closed downgrade |
+| Offline root bookmark/re-entry | Root navigation is eligible for cached shell if assigned | Exact Safari tab vs installed copy, URL/base path, no Firebase first-frame gate |
+| Auth route or Firebase internal URL | Worker bypasses fetch interception | Actual served auth routing and no stale action response/credential capture |
+| Multiple installed copies / MDM Web Clip | Separate storage custody possible | Per-container worker/cache/ledger, managed Files and revocation acceptance |
+
+**Operational judgment:** retaining every verified cache is defensible as a *temporary* anti-data-loss choice, not a complete storage lifecycle. An explicit safe GC protocol must distinguish an open old-build client, a verified previous rollback candidate, incomplete candidate, active Sembast schema and low-storage signals. Deleting old caches merely to free space without that proof can convert an update into a blank/offline failure. No new cleanup policy is authorized here.
+
+## 40. Exact validation plan CW01–CW14 [VALIDATION DEFINED / NOT RUN]
+
+All cases require immutable **old and new compiled LogMate Web builds**, actual generated worker JS and manifest SHA, \`firebase.json\` served-header capture, Flutter version, secure origin, browser/OS build, cache-control catalogue before/after, \`navigator.serviceWorker.controller\`/registration states, IndexedDB owner/capability/Replica/Outbox snapshots and redacted synthetic flight canaries. Use disposable accounts and separate test origins; never run destructive experiments on real pilot records.
+
+| ID | Exercise | PASS/FAIL distinguishing observation |
+| --- | --- | --- |
+| CW01 | Clean install online then root offline relaunch | Controlled worker, verified full shell and actual Flutter UI offline |
+| CW02 | Hash mismatch or unavailable shell during new install | New worker rejected; old controller and old data remain usable |
+| CW03 | Old active + new installing/waiting; overlap old navigation and candidate write | No lost \`clientBuilds\`/candidate; no unexplained 503 or wrong-version asset |
+| CW04 | Same overlap with waiting-worker \`START_PRECACHE\` and two open tabs | Cross-worker writes remain coherent across repeated forced orderings |
+| CW05 | Kill/restart worker between control read and write | Explicit recoverable catalogue, no false READY; no unrelated data wipe |
+| CW06 | Old tab kept open while new deployment served | Old JS/assets stay coherent, old reader vs new DB handled safely |
+| CW07 | Close last old tab; activate new worker | Candidate only promotes after verification; no mixed old/new response |
+| CW08 | Candidate install fails under quota pressure | Old shell survives or failure clearly diagnosed; data custody independently checked |
+| CW09 | Repeated upgrades and large font set | Quantified storage growth, bounded retention and documented cleanup authority |
+| CW10 | Wrong URL/auth/\`__/\`/missing resource | No private auth fallback into cached root; correct 404/route and no credential caching |
+| CW11 | Verify actual Hosting response headers and build route | Distinguish source config, deployed CDN and explicit Cache API behavior |
+| CW12 | Same UID v16→v17 then attempted old build | No silent schema rollback, owner/Replica/Outbox corruption or unreviewed repair |
+| CW13 | Safari tab vs installed Home Screen #1/#2 | Independent control, update, cache and ledger evidence per installation |
+| CW14 | Enrolled managed EFB offline, forced close, blocked Files export | User-facing recovery, independent external backup, no false persistence claim |
+
+**Execution order:** CW03/CW04 are the highest-value *new* code-level falsification, then CW01/CW02/CW06/CW07, then CW08/CW09/CW10/CW11; CW12–CW14 integrate Engineering's owner/schema and real MDM gates. Model-only JS interleaving is **not** a PASS/FAIL result for CW03. No CW01–CW14 product or physical-browser test was executed in this study.
+
+## 41. Five-track allocation and specialist handoff [DEPENDENCY / TRANSFER VALIDATION]
+
+| Track | Relative maturity | This bundle's ownership / consumption |
+| --- | --- | --- |
+| **E — lead** | Stage 8 account deletion + release integrity high risk; real deployment absent | Cross-worker shared catalogue and release atomicity, cache lifecycle, auth-route trust, recovery and data custody |
+| **A — strong prerequisite** | SW lifecycle/cache/IDB mechanics and pinned Chrome Sembast 11/11; WebKit unknown | Own active/waiting semantics, Cache API and exact source/runtime differentiation; validate CW03/CW04 platform premise |
+| **C — execution gate** | Strong synthetic package provenance, weak owned-worker/product/device evidence | Own falsification, old/new worker integration, quota/503, independent browser/VoiceOver and test classification |
+| **B — downstream** | Design Studio W121 Stage 3 practice; task/runtime evidence absent | Design truthful update pending/failed, offline repair, saved vs restored, account deletion vs external Files states |
+| **D — downstream** | Marketing D8/D9 public claims HOLD | Measure update failure/recovery without UID/flight data; do not promise universal offline installation or seamless upgrade |
+
+**Transfer:** [Engineering D003](https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D003_schema_evolution_migration_rollback_compatibility.md) owns generic old-reader/schema compatibility, not WebKit. [Engineering S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) owns account deletion implementation, not worker cache metadata. [Design Studio W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md) explicitly prefers execution over further visual manifests. [Marketing STATUS](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) keeps unsupported PWA and custody claims on HOLD. No peer/product repository writes.
+
+## 42. Checkpoint, contradiction and stop rule [MINTTAP DIRECTION / OPEN]
+
+**New information gain:** The exact product does have a custom generated, SHA-verifying full-precache worker despite Flutter's default-worker deprecation. Its per-instance promise queue protects one worker's control mutations but does not, from source alone, prove cross-worker catalogue serialization during active/waiting overlap. This is a new, focused **conditional availability/coherency hazard** that the Sembast-only PS01–PS11 suite cannot see. It does not supersede the higher-severity account-deletion/owner isolation concerns in study 529; both are independent release gates.
+
+**Next major target:** Engineering-owned CW03/CW04 exact old/new worker interleaving, plus 529 MC10/MC14 owner deletion/retry and independent 37-store Files readback; then real Safari/Home Screen/managed EFB. No new product runtime, served-header observation or physical device test occurred. No confirmed vulnerability, data loss, or user incident is claimed. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+**Adjacent-question check:** Current source generator, lifecycle, cache headers, verification, failure matrix, multi-worker lost-update hypothesis, reproducible falsification packet and cross-track transfer have been integrated. More source-only variants without an exact old/new generated artifact would be lower information gain; stop at this checkpoint rather than invent a runtime PASS.
