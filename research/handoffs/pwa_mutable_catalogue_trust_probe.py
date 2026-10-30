@@ -4,7 +4,7 @@ import hashlib, http.server, json, os, socketserver, threading
 from playwright.sync_api import sync_playwright
 
 GOOD = "window.__catalogueMarker = 'TRUSTED';"
-BAD = "window.__catalogueMarker = 'REPLACED';"
+BAD = "window.__catalogueMarker = 'ALTERED';"
 sha = lambda s: hashlib.sha256(s.encode()).hexdigest()
 OUT = os.getenv("EVIDENCE_OUT", "/tmp/pwa-mutable-catalogue.json")
 CHROME = os.getenv("CHROMIUM_PATH", "/usr/bin/google-chrome")
