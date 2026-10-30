@@ -571,3 +571,95 @@ Falsification examples: a captured EX02 mixed-version manifest would contradict 
 **New reusable finding:** 37-store export is transaction-scoped and owner/deletion gated, but it performs all row cloning, digest computation and final serialization inside the transaction; this creates a **source-derived conditional large-export transaction/workload risk** distinct from the previously identified restore-ingestion risk. Restore has meaningful fresh-stage semantics, destination Replica preservation and Sync authority downgrade; these are strengths, not device/durability proofs. EX01–EX14 are **DEFINED NOT RUN**. No product incident or performance regression is claimed.
 
 **Gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. Reviewed primary W3C IndexedDB, MDN and Apple deployment guidance 2026-10-30; browser/MDM behavior remains CHANGE WATCH. Further static expansion now has lower value than exact product A→B, EX02/EX08/EX11, RI fault tests and physical iPad execution. This is the meaningful evidence boundary; no additional synthetic primer is warranted in this run.
+
+
+---
+
+## 46. Evidence reconciliation: approved W-012 native restore proof already exists [SOURCE / CORRECTION — 2026-10-30]
+
+**Material correction to the evidence inventory, not a new test execution.** Earlier §§1–45 correctly held PWA, physical iPad, external Files custody and account A→B lifecycle OPEN, but their broad "no product execution" language was incomplete for the **native B1 restore component**. The canonical LogMate repository already contains approved, merged W-012 execution evidence. This run inspected its exact source, command metadata, final review, merged PR and current repository code.
+
+Primary repository evidence:
+- [W-012 final evidence and approved closure](https://github.com/yhappcom/logmate/blob/main/docs/evidence/w012-empty-destination-backup-2026-10-27.md): final 2026-10-28 decision **COMPLETE / PASS for approved Native B1 empty-destination restore**, explicitly not PWA/device/Files/entire Backup acceptance.
+- [Exact test summary](https://github.com/yhappcom/logmate/blob/main/docs/evidence/w012-backup-fix-2026-10-27/test-summary.json) and [provenance](https://github.com/yhappcom/logmate/blob/main/docs/evidence/w012-backup-fix-2026-10-27/provenance.json): clean test source **63e7c1a49ae86e64f3eb4bb0c0e3e799244b6d33**, macOS 26.4, Flutter 3.47.5 / Dart 3.13.4; **70 focused PASS**, **900 full-suite PASS / 1 browser-only SKIP / 0 FAIL**. Focused 70 are included in 900, not additive.
+- [Focused](https://github.com/yhappcom/logmate/blob/main/docs/evidence/w012-backup-fix-2026-10-27/fix-final-focused.meta.json) and [full-suite](https://github.com/yhappcom/logmate/blob/main/docs/evidence/w012-backup-fix-2026-10-27/fix-final-full-suite.meta.json) command metadata record clean source, exact commands, stdout SHA-256 and exit code 0. These are **historical execution artifacts inspected now**, not a fresh execution or independent rehash of reporter bytes.
+- [PR #30](https://github.com/yhappcom/logmate/pull/30) **MERGED** at 2026-10-28T07:10:06Z, merge SHA **1c4fb1baea98a6195679a64c7088ee1cced5caa0**. Current main **9cc0cd432a317d5dfebbe90e318fb219e53e024a** contains the test and restore implementation; repository source blob **021d9001ae1240a824c5df570fb679597edc3875** retains the HOLD collision guard. Final review says code/test trees did not change after verified source, with docs-only changes; no test rerun claimed at merge.
+- [Native semantic test](https://github.com/yhappcom/logmate/blob/main/test/repository/logbook/w012_backup_semantic_verification_test.dart) uses temporary **Sembast file** databases and synthetic UIDs, not browser IndexedDB, Firebase, installed PWA or pilot records.
+
+**Correct label:** VALIDATION — HISTORICAL EXACT-SOURCE NATIVE COMPONENT PASS (W-012); PRODUCTION PWA / FILES / MDM / A→B — OPEN. "Product code was never tested" is false; "the complete LogMate PWA/managed EFB recovery journey has been tested" is also false.
+
+## 47. What the approved regression actually falsified [SOURCE / REPLICATION]
+
+The initial W-012 native tests at source 766faf5 observed **39 PASS / 2 FAIL**: B01 restored recovery HOLD overwritten by colliding later Cursor key; B02 digest-valid foreign-owner nested Sync Binding accepted. These were native file-DB test failures with synthetic persistence-seam inputs, **not** user incidents. User-approved minimal repository changes then established a fail-closed boundary:
+
+1. **B01 collision:** before writing a derived restored:store:key HOLD, restore checks existence and throws FormatException on collision. Regression requires **all 37 destination stores and source bytes unchanged**, including close/reopen, then allows a clean-file retry. No silent merge, new schema or new key design.
+2. **B02 nested owner:** container, source Replica, v2 State, known Sync envelope Owner and nested source references, Binding canonical payload/digest and immutable record/revision references are validated. Matching-owner control succeeds; foreign-owner complete Binding fails without partial publication. This is known-envelope validation, not proof of future server schema coverage.
+3. **Fresh staging:** six Sync evidence stores and abnormal initial Sync State are rejected before importing into a supposedly empty destination. This is not a nonempty merge policy.
+4. **Restore trust downgrade:** destination Replica remains independent; Owner locked; source Cursor/Applied evidence becomes recovery HOLD, while current apply authority is cleared and Sync State unbound/unverified. Receipt/Head retention is **not** authenticated server acknowledgment.
+5. **Failure and persistence:** fault seam inside the transaction verifies rollback and native file close/reopen **before retry**; normal retry and reopen also PASS. No sudden OS power loss or WebKit eviction simulation.
+
+**CONTRADICTION RESOLVED:** prior §2 "restore has stronger nested Sync checks" now has approved Native B1 regression execution as well as source support. But W-012 tests **restore**, not terminal deletion or B startup. It cannot resolve the separate deletion hazard.
+
+## 48. Exact boundary map: completed versus still unproved [TRANSFER VALIDATION]
+
+| Capability / existing acceptance | Current best evidence | Adjudication |
+| --- | --- | --- |
+| W-012 v1/v2 fresh-stage restore, 37-store atomic reject/retry, known nested Owner/Sync, locked destination and independent Replica | 2026-10-27 exact-source native file-DB execution; 70 focused PASS, 900 suite PASS / 1 SKIP; approved 2026-10-28 | **Native component PASS**, not a new run |
+| OC08 / EX10 / EX11 / RI restore semantics in native file DB | Substantial overlap with W-012, including rollback and reopen | **Reuse bounded historical evidence**, not redundant native tests |
+| OC08 on actual browser IndexedDB and installed iPad PWA | Native sembast_io differs from sembast_web; browser-only reopen test SKIPPED in W-012 | **OPEN** |
+| OC01–OC06 / SL01–SL12 A-delete→B normal startup, stale Sync and completed-A marker | Static source and three in-memory coordinator unit-test definitions; **no A→B lifecycle execution evidence inspected** | **OPEN / P0** |
+| OC07 / EX08 external LBK Files independent readback | Native encoded string/fixture and file-DB reopen are not browser Download/Share/Files save and independent byte readback | **OPEN / P0** |
+| RI01–RI16 large/untrusted input, OS kill and quota | W-012 normal/fault fixture tests do not measure browser heap or crash durability | **OPEN** |
+| OC11–OC16 managed Safari/Home Screen/Web Clip, MDM and VoiceOver | No enrolled device or policy-profile evidence | **OPEN** |
+| Remote Auth/Apple revocation/Manual Sync and server receipts | W-012 uses synthetic UID and persistence-seam data | **OPEN** |
+
+**Evidence hierarchy:** historical exact-source native execution is stronger than source prediction for its covered function, but cannot transfer across the storage adapter, browser lifecycle, external file boundary, identity provider or managed-device policy. W-012 is not a complete EFB user journey.
+
+## 49. Independent deletion-test coverage gap [SOURCE / NEGATIVE COVERAGE]
+
+Current LogMate [account_deletion_coordinator_test.dart](https://github.com/yhappcom/logmate/blob/main/test/application/account_deletion_coordinator_test.dart) defines **three** in-memory cases: same-UID saga order, remote-failure resumability and reauthenticated-UID mismatch rejection. They use fake reauth/revoke/remote/identity ports and sembast_memory. They do **not** create a second UID after completed A, re-enter account-required startup, check all 37 stores after wipe, run B's subsequent deletion, save an external LBK file or exercise real provider acknowledgments. Their presence is useful implementation evidence; source inspection is not new execution.
+
+**Priority distinction:** W-012 fix addresses **restore-time foreign Owner**, whereas Stage 8 P0 source trace concerns **terminal deletion and normal next-owner startup**. Treating the former as resolving the latter conflates separate trust boundaries. No product deletion fix authorized.
+
+## 50. Platform dependency: native file DB versus PWA container [SOURCE / SYNTHESIS]
+
+W-012 calls sembast_io and closes/reopens native temporary file databases. PWA uses browser-origin storage and a Service Worker-controlled shell. [W3C IndexedDB](https://www.w3.org/TR/IndexedDB/) defines transaction semantics but not user-selected external Files retention, power-loss survival or cross-container migration. [WebKit storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) documents quota/eviction; [Apple Managed Open In](https://support.apple.com/en-gb/guide/deployment/depaa73a4973/1/web/1.0) can restrict managed-to-unmanaged file transfer. Actual EFB MDM policy is UNKNOWN.
+
+A valid restore string in memory, a committed transaction, a browser Download/Share event, a user-controlled file that survives origin eviction, and successful re-import into a fresh installed container are **five separate acceptance facts**. Only the native repository/fixture portion has W-012 historical PASS. Physical Safari tab, Home Screen and managed Web Clip must be tested separately; no unattended PWA-native sync or permanent storage is inferred.
+
+## 51. Reuse-first executable acceptance [MINTTAP DIRECTION / VALIDATION DEFINED]
+
+Engineering should **reuse** W-012 approved native semantic oracles and fixtures rather than reimplementing the same tests in Web Manager. Next minimum independent chain, exact compiled Web build, synthetic A/B UIDs, no real user data:
+
+1. **P0 deletion:** A with nonempty Sync canaries; actual coordinator deletion; close/reopen; B through **normal startup**; require clean B or explicit recoverable safe refusal, no A data; B deletion. Record phases, 37-store inventories and redacted fingerprints; test ambiguous Firebase success separately.
+2. **P0 Files custody:** export B 37-store LBK through shipped UI; select permitted destination; independently reopen bytes from Files and compare digest; restore in a different fresh browser/installed container with same verified UID; assert locked owner, new Replica, recovery HOLD, known nested-owner rejection. MDM-denied destination must be **POLICY DENIED**, never BACKUP SAVED.
+3. **P1 portability/failure:** use W-012 native baseline as control; repeat semantic cases under sembast_web in Chrome and WebKit, two tabs, quota, cancellation, restart and low-storage. Keep OS crash and physical EFB separate.
+4. **P1 accessibility/claims:** distinguish "export prepared", "saved to Files", "independently verified", "restore accepted", "owner locked" and "manual sync complete"; intermediate states cannot be advertised as backup-safe or account-fully-erased.
+
+Record source SHA, compiled Web hash, 37-store registry, canaries, browser/OS/MDM, active Worker version, file destination, redacted hash and failure classification. Web Manager owns web trust/acceptance; Engineering owns product execution and fixes.
+
+## 52. Five-track and peer transfer [DEPENDENCY / TRANSFER VALIDATION]
+
+| Track | Evidence maturity / pressure | Nonduplicative responsibility |
+| --- | --- | --- |
+| **E lead P0** | Native W-012 proof now acknowledged; deletion/Files/MDM still release-blocking | Evidence ledger, distinct deletion/restore/file trust, release gate |
+| **A dependency** | Native/browser storage distinction sourced; Chrome synthetic Worker/IDB checks; WebKit product OPEN | sembast_web, installed-container, Worker and storage-lifetime environments |
+| **C verifier** | Historical exact-source Native W-012 900/1; no product WebKit/MDM | Reuse native oracles; independent browser, fault, accessibility and readback controls |
+| **B transfer** | Design Studio W121 Stage 3 runtime/AT/human gate OPEN | Recovery and deletion IA must reflect actual custody milestones |
+| **D transfer** | Marketing D8/D9 production claims HOLD | No "automatic backup", "fully deleted on every device", "seamless EFB sync" or "permanent offline data" claim |
+
+Engineering [S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) owns provider/deletion orchestration; [D003](https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D003_schema_evolution_migration_rollback_compatibility.md) owns general migration/rollback. Design Studio [W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md) says no more pre-runtime visual manifests without executable evidence. Web Manager's contribution is **evidence reconciliation and nonduplicative acceptance**, not an implementation or design primer. Peer and product repos read-only.
+
+## 53. Failure-first decision and falsification [CONTRADICTION / OPEN]
+
+- If exact A→B startup reaches clean B without reset, the static DeletionLocked prediction must be revisited against that build and phase evidence. W-012 cannot decide it.
+- If external Files readback fails or managed iPad cannot reselect the file, a valid in-app LBK checksum does **not** close backup custody.
+- If WebKit IndexedDB restore fails while native W-012 succeeds, report **adapter/runtime transfer failure**, not contradiction of historical native result.
+- If deployed build differs from LogMate source 9cc0cd43, neither static deletion trace nor older W-012 execution is silently the deployed runtime.
+- If browser known Sync Owner/HOLD cases pass, that closes only the tested context, not alternate installed copy, MDM, real Firebase or background execution.
+
+**Release decision:** **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD** unchanged. **Native B1 empty-destination restore component already W-012 COMPLETE/PASS** on pinned historical source. P0 deletion, Files and managed iPad remain incomplete.
+
+## 54. Adjacent-question checkpoint [OPEN / CHANGE WATCH]
+
+This bundle resolved an evidence omission by reconciling approved W-012 native execution, initial failing counterexamples, corrected regression, source/command metadata, merged PR, current code, deletion test coverage and WebKit/MDM transfer limits. It eliminates duplicate native study and narrows the next experiment to **A-delete→B startup plus independent Files/installed PWA**. The adjacent question "does approved restore proof also cover account deletion?" was answered **no** by inspecting distinct tests. Further advancement requires Engineering-approved exact Web build and physical-device/file evidence, not another static W-012 rewrite. Watch WebKit/Apple deployment and Firebase deletion policy as CHANGE WATCH.
