@@ -476,3 +476,98 @@ The order remains **P0 owner/deletion before resource-limit optimization**: (1) 
 **No gate change:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. The meaningful checkpoint adds RI01–RI16 to the existing 529 owner/Files validation program; it does not displace the P0 A→B deletion blocker. LogMate, Design Studio, Marketing and Engineering remain read-only.
 
 **Adjacent-question check:** input selection, full decode, recursive canonicalization, digest allocation, nested Sync validation, transaction atomicity, quota, OS/MDM file custody, legitimate-scale contradiction, accessible recovery and cross-track ownership were integrated. The next decisive question is **measured exact-product resource behavior with Engineering approval**, not more static codec speculation. Stop at this evidence boundary rather than inventing a numeric limit or claiming a device PASS.
+
+
+---
+
+## 37. Stage 8 continuation — export snapshot, restore publication and external durability are different proofs [SOURCE / 2026-10-30]
+
+**New adjacent question and bottleneck.** The prior §§28–36 identified untrusted restore-input resource pressure, but a complete EFB recovery contract must also ask whether **creating** a large legitimate backup can block active ledger work, whether the export represents a coherent 37-store state, and whether a successful transaction or checksum proves a durable user-controlled file. This section examines the other direction of the same custody boundary. No production data, user backup, physical iPad or live account was touched. LogMate main remains [9cc0cd43](https://github.com/yhappcom/logmate/commit/9cc0cd432a317d5dfebbe90e318fb219e53e024a) (read-only).
+
+**SOURCE:** [sembast_logbook_repository.dart lines 420–556](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L420-L556), [lines 5830–6139](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L5830-L6139), [whole_ledger_backup.dart](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/whole_ledger_backup.dart), and [Engineering S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md). Standards checked 2026-10-30: [W3C IndexedDB 3.0](https://www.w3.org/TR/IndexedDB/), [MDN IDBTransaction](https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction), [MDN durability](https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction/durability), [Apple Managed Open In](https://support.apple.com/guide/deployment/manage-organizational-data-depaa73a4973/web).
+
+## 38. Export source path — stronger than a loose collection of files, weaker than durable custody [SOURCE / REPLICATION]
+
+1. Export is one **Sembast database transaction**, not 37 independent public API calls. It first checks READY capability, exact matching **unlocked** local owner UID and no deletion lock. It then traverses the full **30 base + 7 Sync store registry** and materializes each store's rows within that transaction.
+2. Every row's value is cloned into a new in-memory export structure. The manifest records store names, key types and counts, the source replica ID, source capability and owner UID. The snapshot digest is calculated over an unsigned canonical JSON encoding, and a final signed-by-nobody (digest-bearing) JSON string is encoded.
+3. This is a **transaction-scoped, internally coherent snapshot design**, substantially stronger than independently reading each store between user edits. However, a static read of the call site alone does not prove every actual browser cross-tab retry/scheduling behavior, how much memory is allocated, or what happens under a browser kill.
+4. The SHA-256 is **unkeyed** and is correctly documented by the source as integrity-only, not authentication. The manifest's UID is a claim checked against the verified owner supplied by the caller, not proof of the file author's identity or an independent remote account authorization.
+5. Export returns a **String**. File selection, destination selection, browser download/share, MDM egress, Files persistence and independent readback belong to callers/OS and remain **OPEN**. A successful return of that String is not an external backup receipt.
+
+**New source-derived conditional pressure:** the 37-store reads, cloning, canonical serialization, full-buffer UTF-8 SHA computation and final JSON encoding all occur **inside the export transaction callback**. A large legitimate ledger can therefore extend the transaction's work and memory lifetime. This is not evidence of a measured writer stall, browser failure or data loss. It makes **export performance under concurrent local edits** a distinct release test, not merely a restore-parser test. The full-buffer SHA implementation creates a UTF-8 byte array and a padded copy; do not infer a fixed multiplier of peak heap without instrumentation.
+
+## 39. Restore publication path — guarded staging, not universal crash durability [SOURCE / SYNTHESIS]
+
+- Decode and registry/owner/digest/Sync evidence checks happen **before** the destination write transaction. This can consume CPU and memory but should not mutate destination stores in the reviewed method before the transaction starts.
+- Within one Sembast transaction, the code requires an empty staging destination, drops/replaces registry stores, retains the destination's independently generated Replica ID, replaces restored owner access with a **locked matching owner**, and downgrades imported Sync authority.
+- The empty-stage guard is **not** simply “all 37 stores have zero rows.” It checks a defined set of active, draft and Sync stores for emptiness; separately checks initial structure, baseline, configuration, unbound owner, not-started local entry and the default unbound/unverified Sync State. Structural default rows are intentionally allowed. Counting only the explicit store names would misrepresent the semantic guard.
+- Imported source Cursor and Applied Identity rows are moved into **recovery holds** and cleared from the destination's active apply-authority stores; the source Sync State is preserved as nested restored evidence while the destination Sync State becomes unbound/unverified with the destination Replica ID. The code rejects a recovery-hold key collision rather than silently overwriting evidence.
+- After all writes, the transaction reads capability, Replica, owner and deletion state and validates restored references/aggregate manifest. There is a test-only fault callback inside the transaction after multiple writes. **A transaction abort is expected to roll back staged changes**, but a complete browser commit does not independently prove power-loss persistence, storage non-eviction or Files custody. Actual package/browser fault behavior must be executed.
+
+**CONTRADICTION resolved:** the restore code has meaningful empty-stage and Sync downgrade protections; “restore blindly trusts a matching checksum” is false. Equally, “checksum + transaction = user backup safely stored on the iPad” is false. Sembast transaction semantics, IndexedDB durability hints, browser storage retention and externally saved Files are four distinct evidence levels. The IndexedDB standard's `strict`/`relaxed`/`default` durability values are **hints** with platform-dependent implementation, not a substitute for independent readback or a guaranteed physical flush.
+
+## 40. Threat and failure model with concrete counterexamples [SYNTHESIS]
+
+| Scenario | Source-supported invariant | Still unproved |
+| --- | --- | --- |
+| User edits a flight during export | 37 stores are read within one repository transaction; a coherent snapshot is intended | Cross-tab observable version, retries, export latency and edit blocking under exact Sembast Web |
+| Large valid 10-year ledger | Registry/count/owner checks and canonical digest are available | Peak heap, CPU, transaction duration, browser watchdog, available disk and battery impact |
+| Source account deleted after a backup was created | The external file may survive independently; remote deletion does not erase user-held Files | Product disclosure/retention, MDM policy and file-owner handling |
+| Restore to occupied ledger | Active data and semantic staging checks reject nonfresh targets | All possible malformed structural states and exact browser rollback |
+| Restore from old replica | Destination Replica is retained; source apply evidence downgraded into holds | User reconciliation UI and later server/peer authority after reconnect |
+| Restore interrupted during store writes | One transaction and fault seam exist | Real browser termination, quota abort, process restart and physical durability |
+| Files share/download reports success | Browser may have handed off a Blob | Independently reopenable byte-identical file in permitted destination |
+| New PWA build opens restored ledger | Capability and aggregate checks exist | Old/new worker/schema compatibility and safe activation on physical Safari |
+
+**Trust ordering:** owner authorization → coherent local snapshot → verified independent file custody → fresh destination → atomic logical restore → local reopening → remote/peer reconciliation. Reordering these can turn a backup demonstration into a false safety claim. No generic PWA platform feature guarantees all eight stages.
+
+## 41. Export and restore acceptance suite EX01–EX14 [VALIDATION — DEFINED, NOT RUN]
+
+| ID | Fixture and action | Required oracle |
+| --- | --- | --- |
+| EX01 | Small disposable A-owned READY ledger, 37-store export | One manifest, exact registry/counts, owner A, source Replica, reproducible checksum |
+| EX02 | Concurrent local edit while export is in progress | Snapshot is coherent before/after a clear serialization point; no mixed revisions; record actual retry/block time |
+| EX03 | Two browser tabs exporting/editing same logical ledger | No silent mixed snapshot; record tab/transaction order and whether operation retries |
+| EX04 | Legitimate long-history scale ladder from redacted synthetic distributions | Record bytes, records, export duration, peak JS heap where available, CPU, failures and completion semantics |
+| EX05 | Export when owner locked or deletion pending | Fail closed; no externally labeled “complete backup” receipt |
+| EX06 | Induce low storage/memory during export | No incorrect success claim; existing ledger unchanged and still openable |
+| EX07 | Export String returned but user cancels save/share | UI reports not independently saved; no destructive transition enabled |
+| EX08 | Save to a user-chosen Files location, close app and reopen file independently | Byte length and SHA match; same-UID fresh-stage restore actually works |
+| EX09 | Safari tab vs installed Home Screen vs managed Web Clip | Record actual file picker/save/readback behavior separately, including MDM restrictions |
+| EX10 | Restore to occupied, structurally altered and completed-deletion destination variants | Explicit reject/accept oracle for **each** semantic state; no unapproved owner bypass |
+| EX11 | Inject afterStoreWritesForTesting failure in exact repository | Transaction abort; original staging state and Replica preserved on reopen |
+| EX12 | Imported Cursor/Applied Identity, Hold collision, mismatched Sync owner | No fabricated apply authority; preserve or reject evidence per source contract |
+| EX13 | Restore completes, browser/process exits and restarts; later offline reopen | Compare transaction success, process persistence and independent Files recovery separately |
+| EX14 | Restored B-owned ledger, user offline, then native sync permitted later | No automatic assumption of peer discovery/remote authority; explicit review and idempotent apply receipt required |
+
+Every run needs pinned source/build, browser/OS, test UID (never real UID), synthetic corpus seed, 37-store counts/digest, storage context, expected/actual results, retry/fault trace and a negative-control case. Mark **NOT RUN** until execution occurs. A lab-only Chromium PASS is not a Safari/MDM or shipped-product PASS.
+
+## 42. PWA and managed-EFB operational decision [MINTTAP DECISION / OPEN]
+
+**Decision for evidence governance, not a production code change:** a “Backup complete” UI state is admissible only when a file is independently retained and readable under the actual platform/MDM policy, with a supported restore path. A repository-export String, Web Share resolution, browser download initiation, IndexedDB transaction completion or checksum display **alone** cannot establish that claim. For pilots, do not recommend deletion, device replacement or origin migration based on an unverified in-app backup. The user may retain the backup after account deletion; the product must distinguish in-scope local deletion from external copies and explain custody accurately.
+
+No fixed maximum file size or timeout is selected. Engineering should derive operational budgets from representative legitimate flight-history distributions and exact target-device measurements, then enforce them at both acquisition and codec boundaries without rejecting ordinary large histories.
+
+## 43. Five-track integration and relative bottleneck [TRANSFER VALIDATION]
+
+| Track | Evidence maturity | Next nonduplicative work |
+| --- | --- | --- |
+| **E lead** | Strong static owner/deletion/backup trust model; runtime and operator proof absent | Own EX gate, release/incident definitions, deletion vs external-custody disclosure, safe rollback |
+| **A** | Browser transaction/File/Worker mechanics sourced; iPad install/MDM uncertain | Distinguish browser storage, Files destination, installed contexts, service-worker/schema activation |
+| **C** | Synthetic Chrome transaction evidence, but no exact export workload or device AT | Measure EX02–EX06, EX11–EX13 and user-facing responsiveness/VoiceOver on physical devices |
+| **B** | Design Studio W121 execution gate; no verified backup recovery journey | Define cancel/save/reopen/fail/retry/locked states; no speculative design promotion |
+| **D** | Marketing D9 product-claim HOLD; acquisition evidence separate | Require provenance for backup/install claims; aggregate only privacy-safe state transitions |
+
+**Engineering handoff:** S007 owns deletion saga and implementation, D003 owns schema evolution. Web Manager specifies browser/MDM trust and acceptance, not their implementation. Design Studio owns interaction/accessibility evidence, Marketing owns claims and acquisition strategy. No peer/product writes.
+
+## 44. Adjudication, priority and falsification [OPEN / DEPENDENCY]
+
+The P0 sequence is unchanged: **A deletion → signed-out restart → B normal startup**, then **37-store independent Files readback and same-UID fresh-stage restore**, then EX/RI fault/scale tests, then exact Worker and physical managed EFB. This continuation strengthens the second step by showing that source snapshot and restore have real transaction guards, while external durability and performance remain unverified. Do not let a new export-performance hypothesis displace the higher-severity owner-isolation blocker.
+
+Falsification examples: a captured EX02 mixed-version manifest would contradict the transaction-coherence expectation; an EX11 half-published store would contradict rollback expectation; a successful save/share with failed EX08 independent readback disproves the backup-complete claim; EX12 retained applied authority after restore would contradict intended Sync downgrade. Each requires exact-product evidence before changing gate status.
+
+## 45. Checkpoint and adjacent-question stop test [OPEN / CHANGE WATCH]
+
+**New reusable finding:** 37-store export is transaction-scoped and owner/deletion gated, but it performs all row cloning, digest computation and final serialization inside the transaction; this creates a **source-derived conditional large-export transaction/workload risk** distinct from the previously identified restore-ingestion risk. Restore has meaningful fresh-stage semantics, destination Replica preservation and Sync authority downgrade; these are strengths, not device/durability proofs. EX01–EX14 are **DEFINED NOT RUN**. No product incident or performance regression is claimed.
+
+**Gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. Reviewed primary W3C IndexedDB, MDN and Apple deployment guidance 2026-10-30; browser/MDM behavior remains CHANGE WATCH. Further static expansion now has lower value than exact product A→B, EX02/EX08/EX11, RI fault tests and physical iPad execution. This is the meaningful evidence boundary; no additional synthetic primer is warranted in this run.
