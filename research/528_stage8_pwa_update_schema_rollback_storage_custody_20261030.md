@@ -676,3 +676,94 @@ Avoid “clear all site data,” unregistering every worker or deleting old cach
 ## 50. Adjacent-question checkpoint [OPEN / STOP]
 
 The additional first-adoption path was not covered by the prior active/waiting race hypothesis, and the Web Locks mixed-version limitation materially changes how a potential mitigation should be evaluated. Both have been integrated with exact source branches, primary standards, negative controls, falsification, privacy-safe diagnostics and five-track dependencies. **Next decisive evidence requires an actual generated-worker browser execution** and Engineering-approved product fixtures, not another model-only 503 claim. No FC01–FC10 was run; no new production/runtime PASS is claimed.
+
+
+## 51. Cache-catalogue trust root: why a valid SHA-256 is not automatically an authenticated release [SOURCE / SYNTHESIS]
+
+**Source provenance (2026-10-30):** read-only LogMate \`main@9cc0cd432a317d5dfebbe90e318fb219e53e024a\`, [\`tool/pwa_precache.dart\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/pwa_precache.dart) blob \`90a67954af618a4e18199fa92555491c56167c17\`; [\`web/flutter_bootstrap.js\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/flutter_bootstrap.js) blob \`a70625e8\`; [\`tool/verify_pwa_artifact.dart\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/verify_pwa_artifact.dart); [\`test/tool/pwa_precache_test.dart\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/test/tool/pwa_precache_test.dart). No product write.
+
+The generated worker embeds \`const OFFLINE_MANIFEST = ...\` as a build-time SHA/length inventory and downloads candidate bytes with \`crypto.subtle.digest('SHA-256')\`. That gives meaningful protection against **accidental byte corruption, missing assets and mismatched network bytes relative to a trusted manifest**. But the **fetch path does not look up the expected digest in its embedded \`OFFLINE_MANIFEST\`**. It executes:
+
+1. \`readControl()\` from Cache Storage \`logmate-offline-control-v2\` at \`/__logmate_offline_control_v2.json\`;
+2. \`buildId = control.clientBuilds[event.clientId]\` for a subresource, or \`control.currentBuildId\` on root navigation;
+3. \`versionFor(control, buildId) = control.versions[buildId]?.manifest\`;
+4. \`verifiedResponse(cache, item)\` compares the cached response bytes against **\`item.bytes\` and \`item.sha256\` from that stored manifest**.
+
+\`readControl\` checks \`schemaVersion === 2\` and truthiness of \`versions\` and \`clientBuilds\`, but does **not** authenticate that a stored manifest equals a build-approved manifest. The \`fetch\` path does not check \`control.versions[buildId].verified\` before serving an otherwise matching response. \`promoteInControl\` *does* check the flag and inspect readiness when invoked normally; these are different paths and must not be conflated.
+
+[MDN CacheStorage](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage) and [Window.caches](https://developer.mozilla.org/en-US/docs/Web/API/Window/caches) confirm that Cache Storage is available to **same-origin window scripts as well as workers**. [MDN SubtleCrypto.digest](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest) describes a digest, not an authenticated signature. A hash of asset bytes against an expected hash kept in equally mutable same-origin storage proves **self-consistency**, not that the expectation came from the approved release. This is a trust-root question, not evidence that SHA-256 is broken.
+
+## 52. Distinct mutation and attack models [CONTRADICTION / SECURITY JUDGMENT]
+
+| Scenario / actor | Source-path prediction | Security meaning |
+| --- | --- | --- |
+| Corrupt cached asset body, leave trusted catalogue intact | Length/digest mismatch → 503 repair | Positive integrity control for accidental body mutation |
+| Corrupt catalogue JSON so parsing fails | \`emptyControl()\` → unmapped 503 | Fail-closed availability loss; not silent recovery |
+| Coherently replace stored manifest's expected digest/length **and** its named asset cache body, preserve current-build lookup | \`verifiedResponse\` can return replacement bytes because both inputs agree | **Conditional mutable-root bypass of intended release provenance**, requiring same-origin cache write or equivalent; no product exploit shown |
+| Flip stored \`verified\` to false but leave current-build mapping and matching bytes | Fetch does not consult flag; bytes can still be served | Promotion gate and serving gate are not the same invariant |
+| Foreign-origin attacker page without same-origin execution | Same-origin storage isolation blocks direct cache mutation | No unauthenticated cross-origin exploit established |
+| Same-origin compromised script, e.g. an XSS on another same-origin path | Can access Cache Storage; may also already access same-origin IndexedDB | Incremental *persistence/release-authenticity* risk must be assessed **without** calling this a new unauthenticated data-access vulnerability |
+| Compromised origin deployment/worker script | Build-time embedded manifest may itself be malicious | Requires separate deployment/signing/CSP/supply-chain trust; local digest alone cannot prove operator intent |
+
+**Important boundary:** this is a **static source-level conditional**. It does not establish a reachable LogMate XSS, an attacker, a compromised release, persistent code execution, actual user-data disclosure or any observed browser result. An attacker able to run arbitrary same-origin JavaScript already has extensive authority over that origin; the novel concern is that a later Worker might continue serving coherent poisoned cached assets after the initial injection has ended. That persistence is a **hypothesis requiring runtime and lifecycle testing**, not a demonstrated incident.
+
+This finding is complementary to [523 §26](523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md): that study demonstrated in **synthetic Chrome** that cached response headers can be changed while body SHA stays valid. Here the **expected body SHA itself** is read from writable control metadata. Together they require separating (a) bytes, (b) expected digest provenance, (c) response security headers and (d) active-client/build authority.
+
+## 53. Why simple fixes can make mixed-version or offline operation worse [SYNTHESIS / DEPENDENCY]
+
+A tempting rule, “always compare against this worker's embedded \`OFFLINE_MANIFEST\`,” would protect the current worker's own build but could **incorrectly reject legitimate old-client manifests** when an old active client needs an older verified asset set. The code deliberately stores \`versions[buildId]\` for mixed-version service. A safe authority design needs a *release trust chain* for every retained version, not merely a current-build equality check.
+
+Similarly, \`verified === true\` in writable JSON is not a cryptographic authority: a same-origin writer can change it. New-worker-only Web Locks (§45) address cooperative mutation ordering, **not malicious or corrupted catalogue provenance**, and cannot coordinate a deployed old worker that does not take the lock. \`Cache-Control: no-store\` affects HTTP caching, **not** same-origin \`caches.open(...).put(...)\` calls. \`Clear-Site-Data: "storage"\` is an unacceptable default “repair” when the same origin may contain the only offline flight ledger and worker shell.
+
+Possible Engineering-owned design families (NOT approved): version manifests authenticated by an independent release authority (for example, a signed manifest checked with a separately rooted public key), an immutable worker-owned manifest lineage with verified migration/old-client compatibility, or a narrowed origin/permission architecture that minimizes same-origin untrusted scripts. Each has limitations: deployment key rotation, offline old-version authorization, signature/metadata canonicalization, WebKit support, initial trust bootstrapping, cache eviction, upgrade rollback, and the already-installed worker. Do not assume a signing scheme is necessary or sufficient until threat model and exact runtime are adjudicated.
+
+## 54. Source-derived reduced Chrome probe and evidence limits [VALIDATION DEFINED / NOT YET VERIFIED]
+
+Created research-only [\`pwa_mutable_catalogue_trust_probe.py\`](handoffs/pwa_mutable_catalogue_trust_probe.py) with [GitHub Actions workflow](../.github/workflows/stage8_pwa_mutable_catalogue.yml). It reproduces the **relevant source control lookup + digest comparison** in a disposable local-origin Service Worker, deliberately **not** the full generated LogMate worker, Firebase, Sembast, a real PWA build or managed EFB.
+
+| ID | Synthetic test | Expected observation (not yet a PASS claim) |
+| --- | --- | --- |
+| MT01 | Trusted manifest + matching cached body | 200 trusted body |
+| MT02 | Change body only; leave expected SHA | 503 fail-closed |
+| MT03 | Change expected digest/length and cached body coherently | 200 replacement body — *unsafe negative control* |
+| MT04 | Set \`verified:false\`, retain current build and matching body | 200 matching body — demonstrates fetch/promotion difference |
+| MT05 | Replace control record with malformed JSON | 503 unmapped fail-closed |
+
+**Execution provenance:** Python source compiled in isolated local environment; Chromium navigation there is blocked by \`ERR_BLOCKED_BY_ADMINISTRATOR\` before fixture execution, so local result = **NON-EXECUTION**. The workflow has been committed, but **no hosted job/log/artifact has yet been independently adjudicated**. A future 5/5 expected-outcome result would validate only the reduced mechanism, **not LogMate exploitability or production integrity**. An expected unsafe MT03 success is a *negative control* and must not be described as a security PASS.
+
+## 55. Exact LogMate falsification plan before any security promotion [VALIDATION DEFINED / OPEN]
+
+Use an Engineering-approved, immutable **compiled** LogMate Web worker + synthetic, disposable browser profile. Record worker/source/build hashes, origin/scope, exact Cache Storage names, browser version, controlled client IDs, response status/body/hash and headers; never include real pilot records or UID in evidence. Independent controls:
+
+- **TR01** normal first install and controlled navigation, with untouched catalogue, shell, font and notices;
+- **TR02** body-only tamper, expected digest unchanged; assert no replacement script served;
+- **TR03** catalogue-only digest tamper, cached body unchanged; assert no unexpected acceptance;
+- **TR04** coherent catalogue+asset mutation with same-origin disposable script; determine whether replacement is served, and whether it survives reload/Worker restart; no external payloads;
+- **TR05** \`verified:false\` on mapped version, compare fetch behavior with promotion;
+- **TR06** malformed, missing or type-corrupted control records; distinguish clean 503 from unhandled fetch failure;
+- **TR07** old active/new waiting with legitimate **different** embedded manifests; validate old-client continuity while rejecting untrusted catalogue mutation;
+- **TR08** header-only mutation and CSP/MIME policy from 523 §26, with exact served Hosting headers;
+- **TR09** same-origin public/info/Auth page access versus truly separate origin and isolated Safari/Home Screen containers; no cross-origin or global-iPad assumption;
+- **TR10** offline, quota, eviction and worker restart, then non-destructive shell repair and **independently saved/re-read** 37-store \`.lbk\` backup; never erase a sole ledger to pass the test.
+
+No TR test has run. Classify **STATIC / MODEL / PASS SYNTHETIC / FAIL SYNTHETIC / PASS PRODUCT-LAB / FAIL PRODUCT / PASS DEVICE-MDM / NON-EXECUTION** distinctly. Product acceptance must be tied to exact generated worker, not a hand-ported probe.
+
+## 56. Five-track integration and external specialist boundaries [TRANSFER VALIDATION]
+
+- **E — Stage 8 lead:** owns cache metadata trust root, same-origin threat model, release provenance, XSS persistence and recovery/incident requirements. Still prioritizes 529 owner deletion/37-store custody as P0; this is an additional PWA integrity question.
+- **A — platform prerequisite:** owns CacheStorage window/worker visibility, origin versus path isolation, Worker lifecycle and fetch/client mapping. The source's per-client old-build requirement constrains any new trust-root design.
+- **C — independent quality validator:** owns MT01–MT05 hosted adjudication, TR01–TR10 exact-worker Chrome/Safari/MDM, accessibility and false-green controls. A 200 poisoned response is a test *finding*, not product PASS.
+- **B — web task/UX:** consumes Design Studio [W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md): preserve truthful offline repair/update state and a user-readable non-destructive recovery path; do not design from speculative runtime.
+- **D — discovery/claims:** consumes Marketing [D9 current queue](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md); no “tamper-proof,” “guaranteed offline” or “safe unattended updates” claim without product/device proof. Avoid analytics containing resource bodies, Firebase UID or flight metadata.
+
+Engineering owns any changes to [LogMate](https://github.com/yhappcom/logmate), release signing/verification architecture, code and exact test harness. Software Engineering [S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) and [D003](https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D003_schema_evolution_migration_rollback_compatibility.md) remain complementary owner/scheme dependencies. No other repository modified.
+
+## 57. Release authority versus availability: operational decision [MINTTAP DIRECTION / OPEN]
+
+**No immediate implementation authorization** from static review. Treat this as a **new trust-root gap to falsify** alongside §43 first-adopted-client mapping and §35 mixed-version catalogue race. Release readiness has at least four independent predicates: (1) every served byte matches an *authorized* release manifest, (2) every active client resolves a compatible build, (3) response security headers remain enforced, and (4) local owner ledger and independently exported backup survive failed updates and repair. Passing one does not imply the others.
+
+Priority remains: 529 MC06/MC10/MC14/MC16 owner/erasure; 528 FC01–FC05 first claim; **TR01–TR08 trust root and header controls**; CW03/CW04 old/new interleaving; physical Safari/Home Screen/managed EFB and Files readback. These can share a single Engineering-approved exact-worker fixture rather than spawning independent product test silos. A security fail-closed 503 can still be an availability failure for an offline EFB.
+
+## 58. Adjacent-question checkpoint [OPEN]
+
+After first-claim and mixed-worker ordering (§§35–50), the next independent issue is the **authority of the manifest used at serve time**. Source inspection confirms the stored manifest is mutable within the origin and is the digest expectation read on fetch; current \`verified\` flag is not checked there. This changes the release threat model beyond merely locking catalogue writes. The reduced Chrome fixture and hosted CI are committed but execution **UNVERIFIED**. No real LogMate compromise, bypass, production failure or external backup loss is asserted. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
