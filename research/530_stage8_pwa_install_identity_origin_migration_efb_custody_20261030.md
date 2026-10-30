@@ -287,3 +287,51 @@ This bundle integrated history restoration, HTTP/Cache API/bfcache boundaries, c
 ## 25. Gate and handoff [MINTTAP DIRECTION / CHANGE WATCH]
 
 **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** Highest bottleneck remains **529 account A terminal deletion / 37-store parity / B startup / RW/RC write admission**; history restoration is a new **cross-track validation dimension**, not a substitute for it. Then independently retained Files backup, Safari Home Screen/managed Web Clip custody and physical offline operation. Recheck Chrome bfcache/no-store eligibility, Safari 26.x behavior and MDM policy at actual release; never infer production state from an old source pin.
+
+
+## 26–34. Service-worker update and offline rollback custody: source-grounded cross-track checkpoint (2026-10-31)
+
+**Evidence boundary:** SOURCE = read-only LogMate `main` `web/flutter_bootstrap.js` and `tool/pwa_precache.dart` inspected 2026-10-31. The generated `logmate_service_worker.js` is **not a source-tree file**; its JS template is emitted by `_workerSource(manifest)` in the Dart generator. Therefore source conclusions are about generation logic, **not** proof of served build bytes or installed-worker behavior. Prior 529 deletion parity and 530 history tests remain unexecuted.
+
+### 26. Historical failure and explicit ownership [HISTORY / PRINCIPLE / A]
+AppCache bundled application-shell update and offline caching into an opaque declarative mechanism with confusing update timing. Service workers separate registration, install, waiting, activate, control and fetch handling, but create their own multi-version and multi-client consistency problem. The safety target is **verified executable shell + compatible local data + recoverable owner state**, not merely “new worker active.” Standard: [W3C Service Workers](https://www.w3.org/TR/service-workers/); platform lifecycle explanation: [web.dev lifecycle](https://web.dev/articles/service-worker-lifecycle). Treat WebKit lifecycle behavior as independently testable, not a Chromium guarantee.
+
+### 27. Exact LogMate update admission [SOURCE / A+E]
+The bootstrap registers the generated worker at a base-path-derived scope, `updateViaCache:'none'`, calls `registration.update()`, and posts `START_PRECACHE` to waiting/active/controller. It does **not** await registration before starting the Flutter engine. It posts `PROMOTE_VERIFIED_CANDIDATE` on `ready` and `controllerchange` (controllerchange listener uses `once:true`). The generator emits an install path that hashes shell/fonts/notices, a waiting-worker strategy with **no `skipWaiting()`**, an activate path with `clients.claim()`, and an explicit verified-candidate promotion path. It intentionally does **not** clean up old caches; rollback message currently returns `NOT_ROLLED_BACK`. These are deliberate guardrails, not proof of end-to-end atomic update.
+
+### 28. Three independent authorities [SYNTHESIS / E]
+(A) The worker's verified `appBuildId` and cache catalogue certify bytes of an offline package; (B) `databaseCapability` in the generated manifest is a build-time declared compatibility marker; (C) actual open local database schema, dirty edits, owner/deletion phase and Sync outbox are runtime facts. Neither A nor B alone proves C. A verified previous shell may be **incompatible with a newly migrated DB**. Accordingly the existing fail-closed `ROLLBACK_TO_PREVIOUS` behavior is appropriate absent a separately validated downgrade protocol. The `clients.claim()` call is not equivalent to a product-level session/owner reauthorization.
+
+### 29. Update consistency matrix [DEPENDENCY / A→E/C]
+- **Old tab + waiting new worker:** old tab may continue with old JS while candidate cache downloads; no `skipWaiting` reduces involuntary controller replacement, but old-tab mutation authority must still be checked at repository write time.
+- **All old clients closed:** waiting worker can activate; verify that the first new navigation receives a self-consistent app shell and that DB migration/owner guard succeeds before write admission.
+- **Failed candidate digest:** existing verified shell should remain available; test both online and offline navigation and observe actual `currentBuildId`.
+- **Storage pressure mid-download:** retained previous versions and 724 font resources increase quota pressure; no claim of eviction or exact storage footprint without measured bytes/OS data.
+- **Interrupted install/activate:** verify cache catalogue, shell response and local DB separately after force close/reopen; `event.waitUntil` does not guarantee persistence against process termination.
+- **Old browser tab + account A deletion in another context:** a valid cached shell is not an authorization token; a stale owner view must fail transaction-time writes irrespective of update state.
+
+### 30. Fetch/cache and credential separation [SECURITY / E]
+The generator's `download()` uses `fetch(new Request(item.path,{cache:'no-store',credentials:'same-origin'}))`, checks HTTP status, exact byte count and SHA-256, and stores verified responses. This is **resource integrity** for enumerated shell artifacts, not a general guarantee about auth endpoints, all navigations, user-data backup or response privacy. Need to verify actual fetch routing for non-GET, cross-origin, auth action URLs, deep links, range requests and offline errors against the generated output. Cache Storage and IndexedDB have different purposes; neither should be treated as an independent export. Explicit cache retention needs a measured, consent-aware maintenance strategy that never deletes user records to make room for fonts.
+
+### 31. EFB operational fault model [TRANSFER VALIDATION / B+C+E]
+For a managed company iPad, test separately: Home Screen launch allowed by MDM; worker install/activation; first full precache; offline relaunch; old/new shell consistency; Files export/readback permission; IndexedDB durability after OS pressure; screen rotation and VoiceOver recovery. Airplane mode is not equivalent to disabling every local network path. Native↔PWA unattended synchronization remains **OPEN**: no inference from Service Worker background capability, `clients.claim`, push or background sync to direct device-to-device transport. Avoid a UI promise of “automatic sync” before device/network/policy evidence.
+
+### 32. Acceptance packet SW01–SW16 [VALIDATION DEFINED, NOT RUN]
+| IDs | Scenario / oracle | Ownership |
+|---|---|---|
+| SW01–02 | Fresh HTTPS install and complete verified shell; offline cold launch with no network | A/C |
+| SW03–04 | Old controlled tab open while new worker waits; close last tab then activate, observe version and DB schema | A/E |
+| SW05–06 | Tamper/truncate one shell/font asset; candidate rejected, old verified shell still usable | A/C |
+| SW07–08 | Kill browser during precache and during activation; reopen with catalogue, byte and DB consistency checks | A/E |
+| SW09–10 | Quota exhaustion with retained caches; no unconsented IndexedDB or backup erasure | C/E |
+| SW11–12 | Auth/deletion during old tab and history restore; repository writes rejected after deletion intent | E/B |
+| SW13–14 | Deliberate schema incompatibility; rollback request fails closed, safe user recovery copy available | E/B |
+| SW15–16 | Safari Home Screen + managed EFB and Chromium independent results; Files export/reopen/restore | A/C/E |
+
+**Required artifacts:** exact source SHA, built worker/manifest hashes, served HTTPS headers, browser+OS build, installation mode, controlled client count, SW state transitions, current/previous build IDs, DB capability/schema and owner-phase canaries, sanitized console/Network trace, export checksum, and operator-observed Files reopen. No simulated model can close the production gate.
+
+### 33. Cross-track ownership and release judgment [MINTTAP DECISION / DEPENDENCY]
+Track A owns lifecycle/fetch/installation facts. Track E owns version/DB/owner security and deployment/rollback release gates. Track C owns offline resilience, quota, accessibility and device matrix. Track B owns explicit “update pending / safely close / export first / recover” states, consuming Design Studio interaction evidence. Track D owns privacy-minimized install/update/offline-success telemetry, not acquisition promises; Marketing D9 retains product-claim HOLD. Software Engineering S007 owns executable product tests and implementation decisions. **Do not elevate a green SW digest check into user-data durability or release PASS.**
+
+### 34. Contradiction and next-adjacent-question audit [CONTRADICTION / OPEN / CHANGE WATCH]
+**Resolved:** “No `skipWaiting` means updates never activate” is false: normal waiting activation after old clients release is possible. “`clients.claim()` proves old owner invalidation” is false. “No cache cleanup guarantees safe rollback” is false because cached bytes do not establish schema compatibility. “Generated worker file missing from source means offline worker missing in build” is false: generator emits it. **OPEN:** inspect and execute the *generated* worker from an exact production-equivalent build, including fetch-routing and catalogue concurrency, before claiming runtime correctness. Browser/OS support and MDM policy remain CHANGE WATCH. The adjacent high-value work is now executable product acceptance, not another speculative static-only SW primer. Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD unchanged.
