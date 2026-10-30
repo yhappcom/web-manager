@@ -590,3 +590,89 @@ All cases require immutable **old and new compiled LogMate Web builds**, actual 
 **Next major target:** Engineering-owned CW03/CW04 exact old/new worker interleaving, plus 529 MC10/MC14 owner deletion/retry and independent 37-store Files readback; then real Safari/Home Screen/managed EFB. No new product runtime, served-header observation or physical device test occurred. No confirmed vulnerability, data loss, or user incident is claimed. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
 
 **Adjacent-question check:** Current source generator, lifecycle, cache headers, verification, failure matrix, multi-worker lost-update hypothesis, reproducible falsification packet and cross-track transfer have been integrated. More source-only variants without an exact old/new generated artifact would be lower information gain; stop at this checkpoint rather than invent a runtime PASS.
+
+
+---
+
+## 43. Stage 8 follow-up: first-install \`clients.claim()\` versus client-build assignment [SOURCE / NEW STATIC CONDITIONAL, 2026-10-30]
+
+**Independent adjacent finding, distinct from §§37–42's cross-worker race.** At pinned [LogMate main@9cc0cd43 \`tool/pwa_precache.dart\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/pwa_precache.dart), the generated worker's \`activate\` handler verifies/promotes the candidate, then calls \`await self.clients.claim()\`. Its \`fetch\` handler writes \`control.clientBuilds[clientId]\` **only on a root navigation fetch**. For every intercepted non-navigation same-origin GET it instead reads \`control.clientBuilds[event.clientId]\`; absent mapping leads to \`versionFor(control, undefined) === null\` and an explicit **503** before deciding whether the URL is an approved cached asset or should fall through to network.
+
+[MDN \`Clients.claim()\`](https://developer.mozilla.org/en-US/docs/Web/API/Clients/claim) states that claim immediately adopts in-scope documents which were initially loaded over the network, firing \`controllerchange\`. [MDN service-worker lifecycle](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers) confirms that the first successful installation activates without waiting for already-open uncontrolled pages to close. The [FetchEvent \`clientId\`](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent/clientId) and [\`resultingClientId\`](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent/resultingClientId) properties distinguish subresource requests from navigations.
+
+**Exact possible path, static source reasoning (NOT product/browser execution):**
+1. User opens LogMate root with no registered worker; the initial document and its early subresources are network-loaded, so the worker did not see a root navigation and did not assign that page's client ID.
+2. Bootstrap registers the generated worker. The install handler downloads/verifies shell/fonts/notices, and first activation publishes \`currentBuildId\`.
+3. \`activate\` calls \`clients.claim()\`, adopting the already-open document. The page's \`controllerchange\` handler posts \`PROMOTE_VERIFIED_CANDIDATE\` and \`START_PRECACHE\`, **neither of which assigns the adopted page's client ID**.
+4. If that adopted page subsequently requests a same-origin GET (e.g. lazy font, asset, favicon or a non-reserved route) without a new root navigation, the worker reads an absent client mapping and responds 503. The network fallback for non-inventory resources is **after** the mapping check, so even an otherwise fetchable same-origin GET can be blocked.
+
+This is a **conditional first-adoption availability hazard**. The exact request timing and whether a real Flutter client makes such a request after claim are unverified; **no observed 503, broken font, failed product session or user incident is asserted**. A later controlled root navigation can assign the client and avoid this particular path. It is not the same as the two-worker stale-snapshot race: it can arise with a single correctly serialized worker and an otherwise complete verified cache.
+
+**Falsification:** Fresh profile/secure origin, network load, hold the initial page open, await first activation/controllerchange, then issue a deterministic same-origin GET from the *same page* before reloading. Record \`controller\`, client ID, \`clientBuilds\`, \`currentBuildId\`, response status and requested path. Repeat a controlled root navigation and confirm the mapping appears. Separate a missing client mapping from a missing or corrupt asset and from ordinary HTTP 404.
+
+## 44. Invariant refinement: adopted client, navigation client, candidate and data version [SYNTHESIS / EXPERT JUDGMENT]
+
+A valid offline release needs **four independent proofs**: (a) verified resource bytes and a live worker; (b) a resolvable version for every controlled client that may request an intercepted resource; (c) cross-worker catalogue consistency; and (d) application data-schema/owner compatibility. None implies the others.
+
+| Situation | Required invariant | Current evidence | Risk if missing |
+| --- | --- | --- | --- |
+| First network-loaded page adopted via \`claim()\` | Adopted client's next intercepted GET has an authorized build or explicit recoverable bypass | Source has no mapping assignment in \`claim\`/controllerchange message path | Conditional 503 despite complete precache |
+| Root navigation under controller | \`event.clientId\` and \`resultingClientId\` map to one verified build | Source writes both IDs through \`updateControl\` | Cross-worker stale-snapshot overwrite remains OPEN |
+| Old active + new waiting | Both workers' catalogue mutations preserve each other's changes | Worker-local \`controlMutation\` only; model interleaving in §37 | Lost mapping/candidate, conditional 503 |
+| Client with missing mapping requests non-inventory GET | Non-inventory network path does not silently bypass required auth/security, but no unjustified blanket 503 | Current manifest lookup precedes network fallback | Broad availability impact, not proven confidentiality failure |
+| New shell with old local DB | Release compatibility or explicit fail-closed recovery | SHA-verification is not schema/owner proof | Unsafe downgrade or blocked ledger if not validated |
+
+**Negative control:** a page that is already controlled when its root navigation is intercepted is not a reproduction of first-adoption. **Second negative control:** a successful GET from an unrelated new tab does not establish the original adopted page's client mapping. Capture the *same client ID* before/after claim and after explicit navigation.
+
+## 45. Cross-worker coordination options: Web Locks is a candidate, not an approved patch [SOURCE / DEPENDENCY / CHANGE WATCH]
+
+The [W3C Web Locks Working Draft, 2025-09-24](https://www.w3.org/TR/web-locks/) defines cooperative named locks across windows/workers sharing a storage bucket; [MDN Web Locks](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) documents \`WorkerNavigator.locks\`, secure-context requirements, exclusive access and lock release on callback completion. These are **mechanism options**, not proof that LogMate's exact iPad/Safari/MDM containers support or share a lock manager. Installed Home Screen copies may have different storage buckets; Web Locks must not be construed as device-global coordination or cross-device synchronization.
+
+**Critical mixed-version contradiction:** Adding \`navigator.locks.request('logmate-control', ...)\` to **only the new worker** does not serialize writes from the **already deployed old active worker** that never requests that lock. A unilateral lock retrofit cannot prove the old/new transition safe. A future architecture needs a protocol for **mixed old/new writers** (e.g. one authoritative writer, versioned immutable per-build records plus carefully specified publication, or a tested compatibility migration), not merely an in-process mutex or a new-worker-only Web Lock. Any proposal must cover worker termination, retries, partial writes, queue starvation, scope/storage-bucket partitioning, and the first-adopted client path separately.
+
+The Cache API's \`put\` replaces a matching response; it is not a compare-and-swap transaction over a read/modify/write JSON catalogue ([Service Workers specification](https://www.w3.org/TR/service-workers/), [MDN Cache.put](https://developer.mozilla.org/en-US/docs/Web/API/Cache/put)). **Do not authorize code changes or assert a preferred design before actual CW03/CW04 and first-adoption evidence.** Engineering owns implementation selection and compatibility validation.
+
+## 46. Release experiment matrix extension FC01–FC10 [VALIDATION DEFINED — NOT RUN]
+
+Use the exact generated LogMate worker from an immutable approved Web build, not a generic synthetic SW. Capture source/build hashes, HTTP headers, secure origin, Chrome/Safari version, registration/controller lifecycle, client IDs, Cache Storage catalogue before/after, response status/body, and application-owned IndexedDB/Replica/Outbox *without user data*. Run destructive scenarios only with disposable profiles/fixtures.
+
+| ID | Scenario | Independent oracle |
+| --- | --- | --- |
+| FC01 | Fresh install; keep original network-loaded page open; wait for \`clients.claim\` | Page becomes controlled; record client ID and catalogue without reload |
+| FC02 | Same adopted page requests a known cached shell/font asset after claim | Exact status/body/hash; no unjustified 503; missing mapping diagnosed |
+| FC03 | Same adopted page requests non-inventory same-origin GET | Correct network/404 behavior versus worker 503; no private auth caching |
+| FC04 | Reload root under worker and repeat FC02/FC03 | Both navigation client IDs assigned; distinguish first-adoption only |
+| FC05 | First install with two pre-existing uncontrolled tabs | Both adopted clients' post-claim GETs adjudicated independently |
+| FC06 | Hold old active client, install new waiting worker; overlap navigation and candidate writes | Shared control catalogue never loses client/candidate mapping (CW03/CW04) |
+| FC07 | Pause/terminate one worker during read/modify/write | Recoverable catalogue, no false READY or forced data wipe |
+| FC08 | New-worker-only Web Lock experiment with old worker not cooperating | Demonstrate that lock adoption is not sufficient mixed-version evidence |
+| FC09 | Safari tab, Home Screen copy 1/2, managed Web Clip | Independent first-adoption and update behavior per actual container |
+| FC10 | Keyboard/VoiceOver, offline post-claim asset failure and recovery | Truthful state/reload guidance; no data-destructive repair shortcut |
+
+**Ordering:** FC01–FC05 are the fastest *new* falsification of a source-specific invariant; FC06–FC08 are cross-worker coordination; FC09–FC10 require physical Apple/MDM and interaction evidence. For every case record \`NOT RUN / NON-EXECUTION / FAIL PRODUCT / PASS PRODUCT / PASS DEVICE-MDM\`, with exact provenance. A single 503 may be the **expected fail-closed response** but still fail the *availability requirement*; classify security integrity and user-task readiness separately. A missing browser trace is NON-EXECUTION, not PASS.
+
+## 47. Operational diagnostics and incident triage [SYNTHESIS / TRACK C+E]
+
+For any offline blank/503 report, classify before repair: (1) uncontrolled first page; (2) controlled but unmapped client; (3) missing/overwritten catalogue; (4) manifest present but unverified asset; (5) storage quota/eviction; (6) old JS versus new DB schema; (7) auth/owner gate; (8) MDM/Files restriction. Log client/build IDs, worker state, **redacted** resource path class, response category, and cache readiness without Firebase UID, flight data, crew names or backup bytes. A generic \`offline=false\` or \`serviceWorker.ready\` signal is not an offline-readiness oracle.
+
+Avoid “clear all site data,” unregistering every worker or deleting old caches as first-line recovery: those actions may remove the only offline ledger or usable rollback resources. A supported recovery design must distinguish *repairable shell* from *ledger custody* and require independent external Files readback before any destructive operation. The current source has no approved automatic rollback to infer.
+
+## 48. Cross-track maturity reallocation and peer evidence [TRANSFER VALIDATION / CONTRADICTION]
+
+- **E (lead):** highest Stage 8 risk remains account deletion/owner custody (study 529) and release integrity (528); owns authorization, incident and release gates. First-adoption availability is a separate PWA release-blocking *question*.
+- **A:** owns \`clients.claim\`, \`controllerchange\`, FetchEvent IDs, worker lifecycle, storage-bucket and Web Locks semantics; source-to-platform dependency now precise.
+- **C:** owns FC01–FC10 execution, 503/404 classification, exact Chrome/Safari/MDM and accessibility oracles; 11/11 Sembast-only synthetic PASS cannot close this gap.
+- **B:** consumes [Design Studio W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md) rather than creating new visual primers; truthful first-install “available offline”/“reload required”/Files-custody states need real task evidence.
+- **D:** consumes [Marketing D9](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md); do not claim offline-first reliability, seamless updates, unattended EFB sync or managed iPad compatibility without FC/CW/OC acceptance.
+
+[Engineering D003](https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D003_schema_evolution_migration_rollback_compatibility.md) owns reader/writer/schema compatibility; it does not prove a client-to-build map or a WebKit runtime. All product/peer repositories remain **read-only**. No production bug, user data loss or observed 503 has been established.
+
+## 49. Acceptance hierarchy and go/no-go [MINTTAP DIRECTION / OPEN]
+
+**P0 owner deletion and 37-store backup isolation (529) remain first by severity.** Within the PWA release-integrity lane, run **FC01–FC05 before broad new synthetic package tests**, then CW03/CW04/FC06–FC08 on exact old/new workers, then physical Safari/Home Screen/MDM and offline Files custody. These are test priorities, not permissions to modify LogMate. A worker-level fix must not weaken SHA validation, serve a new build to an old client, bypass auth routes or assume the current Sembast schema is backward compatible.
+
+**Evidence gates:** source-branch trace = STATIC; model interleaving = MODEL; browser-controlled exact generated worker = PRODUCT-LAB; enrolled managed iPad = DEVICE-MDM; independent .lbk saved/re-read/restored = EXTERNAL-CUSTODY. No upward promotion by analogy. Stage 8 remains **ACTIVE**, product validation **OPEN**, PWA release **HOLD**.
+
+## 50. Adjacent-question checkpoint [OPEN / STOP]
+
+The additional first-adoption path was not covered by the prior active/waiting race hypothesis, and the Web Locks mixed-version limitation materially changes how a potential mitigation should be evaluated. Both have been integrated with exact source branches, primary standards, negative controls, falsification, privacy-safe diagnostics and five-track dependencies. **Next decisive evidence requires an actual generated-worker browser execution** and Engineering-approved product fixtures, not another model-only 503 claim. No FC01–FC10 was run; no new production/runtime PASS is claimed.
