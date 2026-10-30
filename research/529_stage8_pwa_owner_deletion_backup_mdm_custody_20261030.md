@@ -363,3 +363,116 @@ A destructive "repair" must never silently erase the sole remaining offline flig
 **Remaining blockers:** no approved exact compiled deletion fixture, no live Firebase/operator receipts, no independently retained `.lbk` Files readback, no multiple installed physical iPad/MDM execution, no actual shipped Settings or served deletion-page capture. No new product test, server call, account deletion, or device test performed. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
 
 **Adjacent-question check:** authenticated session storage, independent WebKit containers, remote revocation versus offline owner continuity, operator mailto request and exact acceptance were integrated. Further promotion requires actual Engineering/product/device/operator evidence; another synthetic Sembast primer would not reduce the current P0 uncertainty.
+
+
+---
+
+## 28. Stage 8 continuation — untrusted LBK ingestion is a resource and custody boundary [SOURCE / 2026-10-30]
+
+**Scope and priority.** This continues the same P0 owner-deletion/37-store external-backup study, rather than starting a new file or another Sembast primer. The prior A-deletion → B-startup → independent Files readback/restore gate remains the highest-severity unknown. A closely adjacent question is whether a syntactically valid, owner-matching, checksum-matching but adversarially large or deeply structured LBK can be safely rejected without destabilizing a managed offline iPad or mutating its sole ledger. The answer cannot be inferred from the existing checksum/37-store correctness checks.
+
+**Exact read-only source pins:** LogMate main [9cc0cd43](https://github.com/yhappcom/logmate/commit/9cc0cd432a317d5dfebbe90e318fb219e53e024a); [whole_ledger_backup.dart](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/whole_ledger_backup.dart) blob 711f7845; [sembast_logbook_repository.dart](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart) blob 021d9001, especially lines 422–556 and 5830–6085. No product code was changed, no actual LBK file opened, and no real user data processed.
+
+**Historical/design principle:** a portable backup intentionally crosses the browser origin's storage boundary and may be reintroduced later from Files, another device, email or a transfer. That portability is its value and also why the parser must treat the imported bytes as untrusted, regardless of filename, file type, apparent owner UID or an unkeyed digest. The file can be corrupted, stale, wrong-owner or intentionally crafted. A checksum detects accidental changes relative to its embedded digest; it is not an authenticated release signature or a permission grant.
+
+## 29. Exact parse-to-commit sequence and what each gate actually establishes [SOURCE / REPLICATION]
+
+| Phase | Pinned source behavior | Security/availability implication |
+| --- | --- | --- |
+| Input acquisition | restoreWholeLedgerBackup receives an already materialized String | Any file-selection, byte-length or MIME preflight in a caller is **not established** by this repository source; the full string exists before this method starts |
+| JSON decode | WholeLedgerBackup.decode invokes jsonDecode(source), builds root/manifest/store maps, and materializes each row list | Whole-input parse and object materialization precede owner/digest/registry checks |
+| Canonicalization | _validateLbkContainer constructs a new unsigned manifest and calls WholeLedgerBackup(...).encode(); _canonical recursively maps/sorts nested maps and lists | The entire candidate is traversed again to recompute digest; this is not a streaming verifier |
+| Digest | lbkSha256 utf8-encodes the canonical String, copies it into a padded byte List and processes 64-byte blocks | More full-size allocations/work before the transaction; digest equality cannot authenticate a maliciously recomputed candidate |
+| Manifest/rows | Requires exact 30-store legacy or 37-store sync-aware registry, counts matching row lengths, allowed key types, no duplicate keys, owner and replica consistency | Strong **structural** checks, but no explicit total byte, per-store row, aggregate row or depth budget in these reviewed methods |
+| Sync owner metadata | _validateLbkSyncEvidence checks Sync State, revision links, nested ownerUid, canonicalPayload JSON and payloadDigest | Stronger owner/reference validation; nested canonicalPayload is parsed and hashed separately; traversal follows known metadata keys, not arbitrary user text |
+| Restore transaction | _requireEmptyLbkDestination, store drops/writes, fresh destination replica preservation, locked owner, reset Sync trust, postwrite capability/reference validation | Semantic failure inside the transaction is designed to roll back; not proof of power-loss persistence, quota recovery, memory safety or external Files custody |
+
+**Important correction against overclaiming:** the source contains meaningful checks. It is **not** an unrestricted blind import, arbitrary-code execution, path traversal, ZIP decompression, or a demonstrated exploit. The reviewed codec is JSON, not a ZIP archive. The exact caller may impose a limit elsewhere; none is proven or disproven by this repository-level inspection. The absence of a size/depth budget **in these reviewed functions** is a static validation gap, not proof that a particular iPad can be crashed.
+
+## 30. Cost and failure-mode model [SYNTHESIS / CONTRADICTION]
+
+Let B be the length of the supplied encoded LBK text, R the aggregate number of store rows, P the aggregate length of nested canonicalPayload strings, and H the maximum nesting depth. The implementation materializes decoded JSON, store-row lists, a canonicalized representation and UTF-8/padded digest buffers. Its expected total work grows with input and nested payloads; multiple live representations can coexist. **No measured peak heap, exact multiplier, time complexity guarantee, Dart VM recursion limit or iPadOS memory threshold is claimed.**
+
+The structural registry fixes the **number of store categories** (30/37), not the number of rows, maximum string length, nested JSON depth or total bytes. An attacker could recompute the unkeyed snapshotDigest for a large candidate; that does not bypass owner/reference checks but can force parsing and digest work before the checks finish. An owner-matching canonicalPayload can also be very large, and its nested JSON is decoded and hashed during Sync validation. The iterative pending-map traversal avoids one form of recursive call-stack growth for recognized Sync envelopes, but _canonical itself is recursive and JSON parsing occurs earlier.
+
+**Counterexamples:**
+- A 37/37 registry match is not a memory-budget PASS.
+- A checksum match is not an authenticated origin or a safe-size PASS.
+- A malformed file rejected after jsonDecode is not necessarily cheap to reject.
+- A large *legitimate* pilot history must not be silently truncated or declared corrupt merely to satisfy an arbitrary low limit.
+- A transaction rollback after a validation exception is not evidence that the browser process survived an out-of-memory termination or that the external Files copy is independently durable.
+- A small synthetic Chrome import does not establish managed Safari/MDM acceptance.
+- A preflight based solely on filename extension, MIME type or manifest count can be spoofed; the trust boundary is the actual bytes and validated semantics.
+
+## 31. Authoritative standards and implementation distinction [SOURCE / CHANGE WATCH]
+
+- [OWASP File Upload Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html), checked 2026-10-30, recommends content/type validation and explicit size limits for untrusted file processing. This is general security guidance, **not** a prescribed LogMate numeric threshold and not proof of a product exploit.
+- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html), checked 2026-10-30, treats internal and externally supplied data as untrusted across receiving boundaries; extension and MIME alone are insufficient.
+- [Dart JsonDecoder](https://api.dart.dev/dart-convert/JsonDecoder-class.html) documents building object graphs from JSON and FormatException for invalid syntax; it does **not** promise bounded application memory or a safe maximum backup size.
+- [MDN FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader), checked 2026-10-30, describes user-selected file access, not automatic arbitrary Files access or durable save/readback. Browser File/Blob metadata can support a UI preflight, but platform-specific picker, readback and memory behavior still require tests.
+- [W3C IndexedDB](https://www.w3.org/TR/IndexedDB/) governs transaction behavior; it does not guarantee browser-process survival under memory pressure, OS crash persistence, or external backup durability.
+- [Apple Managed Open In](https://support.apple.com/en-gb/guide/deployment/depaa73a4973/1/web/1.0) and [WebKit storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) remain separate policy/storage dependencies. A managed Files destination may be prohibited even when the JSON parser is correct.
+
+**Platform separation:** JSON codec/owner validation is Dart product logic; File API is a web standard/browser surface; Safari Home Screen and Web Clip container behavior is WebKit/Apple OS policy; MDM restrictions depend on the actual airline enrollment; FlutterFire/Sembast durability is an implementation question. None can substitute for another layer's evidence.
+
+## 32. Engineering acceptance contract: fail early, fail non-destructively, preserve legitimate scale [MINTTAP DIRECTION / DEPENDENCY]
+
+**Recommended release contract, not an authorized code change:**
+1. Determine a justified input-size and aggregate-row budget from real but privacy-safe representative corpus size distributions, platform memory measurements and supported device classes. Do **not** invent a universal 10 MB or N-record limit.
+2. When the user selects a file, check available file byte length **before** fully decoding when that browser/file path exposes it; also enforce a repository-level decoded-input budget so alternate callers cannot bypass UI checks.
+3. Enforce bounded nesting/metadata depth and bounded nested canonicalPayload parsing, while preserving valid long flight histories and user-authored text. Validate exact owner, format, store registry, key uniqueness, references and digest before any persistent write.
+4. Keep the destination empty-stage and new-replica/locked-owner transaction invariant. On invalid input, oversized input, unsupported format, quota failure or interruption, do not silently overwrite the active ledger, erase the sole copy, partially publish capability or claim a successful restore.
+5. Separate **file selected**, **file read**, **checksum verified**, **owner/reference validated**, **staging restored**, **reopened and reconciled**, and **independent external copy retained**. Each needs a distinct observable result.
+6. A rejected large but legitimate file should have a safe escalation/recovery path, not an instruction to clear site data, disable security checks or share an unredacted LBK with support.
+7. Run both instrumented and uninstrumented controls and measure browser heap/elapsed time, tab termination, quota errors, app responsiveness and VoiceOver state. Do not log UID, raw flight records, backup contents or token-bearing URLs.
+
+**Ownership:** Engineering S007/D003 and the product team own codec/resource limits and executable migration/restore implementation. Web E owns trust and non-destructive operational acceptance; A owns browser File/Blob and storage mechanics; C independently measures quality and faults; B owns truthful recovery/task-state content with Design Studio W121; D owns privacy-preserving event definitions and prohibits unsupported claims. This is a transfer contract, not a Web Manager implementation.
+
+## 33. Resource and identity adversarial acceptance matrix [VALIDATION DEFINED / NOT RUN]
+
+| ID | Exact product scenario | Decisive oracle |
+| --- | --- | --- |
+| RI01 | Genuine small 37-store LBK | Same-UID empty-stage restore, new replica, locked owner, correct Sync trust, full 37-store semantics |
+| RI02 | Large **legitimate** synthetic pilot history | Supported maximum established by measured device budget, no silent record truncation or false corruption |
+| RI03 | File just below/at/above proposed byte budget | Deterministic preflight and repository-level agreement, no data mutation on rejection |
+| RI04 | Many rows in one permitted store with correct count/digest | Bounded parsing/write behavior and truthful rejection or supported restore |
+| RI05 | Deep nested metadata with recomputed checksum | Bounded depth/stack/memory behavior; no false digest-authentication inference |
+| RI06 | Large canonicalPayload and many Sync bindings with valid matching UID | Bounded nested JSON/digest work; owner/reference correctness |
+| RI07 | Foreign owner in nested restoredSourceState or canonicalPayload | Fail closed before publishing, original active ledger untouched |
+| RI08 | Valid outer checksum but malformed nested canonicalPayload | Explicit invalid-file error, no partial staging state |
+| RI09 | Wrong owner, duplicate key, registry count mismatch, unknown store | Correct differentiated rejection without mutation |
+| RI10 | Quota exhaustion after some staging writes | Transaction rollback/reopen evidence, no half-published destination |
+| RI11 | Browser process termination during decode vs inside transaction | Distinguish non-execution, recoverable staging, physical durability; no unsupported OS-crash guarantee |
+| RI12 | File selected in Safari tab, Home Screen copy and managed Web Clip | File read capability, container identity and MDM transfer limits observed separately |
+| RI13 | Files export saved and read back independently before destructive transition | Byte/hash match plus same-UID empty-stage restore, not merely an in-memory digest |
+| RI14 | VoiceOver, large text and cancel while validation takes time | Accessible pending/failure/success states, no false "backup safe" or irreversible action |
+| RI15 | A deleted, B attempts import of A or B-crafted LBK | B startup/owner gate adjudicated first; no foreign-owner rebind or A Sync resurrection |
+| RI16 | Old/new PWA shell and v16/v17 logical schema during restore | Reader/writer/schema/Worker compatibility, no unsafe rollback or silent version upgrade |
+
+**Evidence label per case:** DEFINED NOT RUN, NON-EXECUTION, PASS/FAIL PRODUCT-LAB, PASS/FAIL DEVICE-MDM, and separately operator/Files receipts. A synthetic JSON parser exercise can be used as a negative control but cannot promote the exact LogMate gate. Never run these on production pilot records.
+
+## 34. Cross-track relative-depth and gate reassessment [SYNTHESIS / TRANSFER VALIDATION]
+
+| Track | Current stage/depth | Pressure and allocation |
+| --- | --- | --- |
+| E (lead) | Stage 8 security source analysis mature, exact deletion/backup/runtime proof absent | Highest severity: A→B owner isolation, external backup integrity and resource-safe restore; owns RI acceptance and incident response |
+| A | Browser File/Blob/IndexedDB/Service Worker standards sourced; installed Safari/MDM execution absent | Resolve preflight portability, storage namespace and file readback, not repeat JSON parser primer |
+| C | Chrome PS/MT synthetic coverage strong; real product memory, performance, AT and iPad weak | RI02–RI14 fault/scale/device validation; test both measurement perturbation and uninstrumented behavior |
+| B | Design Studio W121 Stage 3 execution-priority; no physical recovery task proof | Distinct progress/error/retry/restore states, safe copy and VoiceOver acceptance; no new speculative visual design |
+| D | Marketing D9 product claims HOLD; no verified PWA install/backup funnels | Minimal aggregate event taxonomy, no raw UID or file metadata, and no "guaranteed backup" claims |
+
+**Cross-domain contradiction:** source-level stronger owner validation can still be preceded by expensive parsing; a secure rejection can be an availability failure. A usable Files selection interface is not an independently durable backup. A healthy Worker shell does not imply the Sembast restore is safe. Conversely, a failed malformed-file import is not automatically a user-data-loss event; preserve before/after state and failure class.
+
+## 35. Practical validation order and incident criteria [MINTTAP DIRECTION / OPEN]
+
+The order remains **P0 owner/deletion before resource-limit optimization**: (1) Engineering-approved A-delete → signed-out restart → normal B startup (MC10/SL01), (2) full 37-store A Sync canaries, B export, independently saved/reopened Files copy and same-UID empty-stage restore (OC01–OC09), (3) RI01/RI07/RI09/RI10 correctness and failure isolation, (4) RI02–RI06 measured scale/resource budget, (5) managed Safari/Home Screen/Web Clip RI11–RI14, (6) exact Worker FC/TR/SR/CW/VW release tests. Run tests on disposable identities only.
+
+**Escalate as a product incident only on observed product evidence**: wrong-owner data becomes accessible, a completed deletion retains in-scope user data, a valid user backup is destroyed/irrecoverably truncated, or a recovery path overwrites an existing ledger. A source-level absent bound is a conditional reliability/security review item, not an observed incident. A browser tab killed by a crafted test is a lab failure with precise artifact provenance, not evidence of remote compromise.
+
+## 36. Checkpoint and adjacent-question check [OPEN / CHANGE WATCH]
+
+**New reusable finding:** the pinned LBK restore sequence fully decodes and canonicalizes untrusted JSON and recomputes an unkeyed digest **before** transaction-level empty-stage restore; nested Sync payloads are decoded and hashed again. The reviewed codec/repository functions have no explicit byte/row/depth resource budget, while owner/registry/digest/reference checks are substantive. This is a **STATIC CONDITIONAL ingestion/availability gap**, not a reproduced exploit, a proven managed-iPad failure or evidence that the caller lacks preflight.
+
+**No gate change:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. The meaningful checkpoint adds RI01–RI16 to the existing 529 owner/Files validation program; it does not displace the P0 A→B deletion blocker. LogMate, Design Studio, Marketing and Engineering remain read-only.
+
+**Adjacent-question check:** input selection, full decode, recursive canonicalization, digest allocation, nested Sync validation, transaction atomicity, quota, OS/MDM file custody, legitimate-scale contradiction, accessible recovery and cross-track ownership were integrated. The next decisive question is **measured exact-product resource behavior with Engineering approval**, not more static codec speculation. Stop at this evidence boundary rather than inventing a numeric limit or claiming a device PASS.
