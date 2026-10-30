@@ -161,3 +161,129 @@ Use disposable test identities and synthetic flight canaries; capture exact Git 
 **Unresolved:** actual LogMate hosting origin/base path; whether any iPad installations exist; iPadOS/Safari version; airline MDM and Files restrictions; installed IDB partition; actual cookie/auth behavior; offline readiness; physical landscape; exact Files readback; A→B deletion and all 37 stores; approved origin migration plan. Do not infer these from standards. Recheck Safari 26.x, Chrome origin migration rollout, manifest id handling, Apple Managed Open In and current policy at any release decision.
 
 **Gate:** Stage 8 ACTIVE · PWA release HOLD · Production validation OPEN. Next high-information-gain step is Engineering-approved populated 37-store deletion and B-startup, followed by installed-iPad identity/container and independent Files custody. No filler primer or speculative UI change is warranted until execution evidence changes.
+
+
+---
+
+## 15. History restoration is a fourth PWA state plane [HISTORY / PRINCIPLE / SOURCE — 2026-10-31]
+
+**Problem:** An offline-first PWA already separates (1) the HTTP cache, (2) explicit Service Worker Cache Storage and (3) IndexedDB/local ledger. A fourth plane is **back/forward cache (bfcache)**: a browser may freeze and later restore an entire *document and JavaScript heap* rather than run a new navigation, Worker fetch, Flutter bootstrap or cold-start owner check. This is not a second copy of the database, a Service Worker cache hit or a normal SPA route transition. A fifth independent plane is an already-running background tab or installed Web App instance. These distinctions matter when owner A signs out, deletion starts, or owner B authenticates elsewhere.
+
+- **[SOURCE, WHATWG HTML](https://html.spec.whatwg.org/multipage/nav-history-apis.html):** \`PageTransitionEvent.persisted\` distinguishes a newly loaded document from one reused through session history; \`pagehide.persisted=true\` is only an *intention* to preserve, not proof of subsequent restoration.
+- **[SOURCE, web.dev](https://web.dev/articles/bfcache):** \`pageshow.persisted=true\` is the positive restore observation; the old JS heap can resume without rerunning startup. \`freeze\`/\`resume\` events are Chromium-specific and not a cross-engine replacement for \`pageshow\`. Browser history restoration is not the same as Flutter Navigator's in-document route history.
+- **[SOURCE, MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/pageshow_event) / [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API):** \`pageshow\`, \`pagehide\` and \`visibilitychange\` describe different transitions. A hidden tab becoming visible does not necessarily navigate or trigger \`pageshow\`; a mobile foreground transition does not guarantee network reachability.
+
+**Operational invariant:** after any history restore or foreground transition, *cached view identity*, *current authenticated identity*, *durable local owner/deletion phase*, *remote authority*, and *write eligibility* are distinct checks. An event listener alone is not authorization; all mutations need an authoritative admission guard. Conversely, a transient offline remote validation failure should not automatically destroy an approved offline owner's ledger. These are constraints for Engineering's contract, not authorization to change it.
+
+## 16. \`no-store\` is not a universal history/privacy lock [SOURCE / CHANGE WATCH]
+
+The pinned [LogMate \`firebase.json\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/firebase.json) has one \`**\` Hosting header rule: \`Cache-Control: no-cache, no-store, must-revalidate\`. It is a *source configuration*, not a measurement of a particular deployed response. The meanings of these cache systems must not be collapsed:
+
+| Plane | What the broad header establishes | What it does **not** establish |
+| --- | --- | --- |
+| Browser/shared **HTTP cache** | \`no-store\` instructs compliant HTTP caches not to store the response; \`no-cache\` alone would permit storage with revalidation | Existing cache eviction, offline shell readiness, IndexedDB erasure |
+| Explicit **Cache API / Service Worker** | Nothing about a Worker application's own \`Cache.put\` admission by itself | A no-store response is necessarily absent from named Cache Storage; Worker code must enforce sensitive-route exclusions |
+| **bfcache** document/heap | May affect eligibility in browser-specific ways | All engines always discard a \`no-store\` document or always re-run app startup |
+| **IndexedDB** / app local state | No account-erasure guarantee | All 37 LogMate stores cleared, backup removed, old tab invalidated |
+| External **Files** backup | No impact on an independently saved file | Backup deletion or custody verified |
+
+**[SOURCE, Chrome, updated 2025-09-09](https://developer.chrome.com/docs/web-platform/bfcache-ccns):** Chrome progressively enabled bfcache for \`Cache-Control: no-store\` documents when safe, with exclusions for changes in cookies/authentication, certain live connections and sensitive no-store subresource requests, plus a shorter three-minute timeout. This is **conditional Chrome behavior**, not proof that any LogMate page will enter bfcache. The [Chrome Enterprise policy](https://chromeenterprise.google/policies/allow-back-forward-cache-for-cache-control-no-store-page-enabled/) can change this outcome on managed Chrome. Other browsers, including WebKit, need independent evidence; do not backport Chrome's policy.
+
+**[SOURCE, MDN HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching)** describes HTTP cache directives; the [W3C Service Worker explainer](https://github.com/w3c/ServiceWorker/blob/main/explainer.md) explicitly says Cache API freshness headers are ignored. [LogMate's project-owned generated Worker](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/pwa_precache.dart) deliberately fetches shell assets and stores verified bytes in Cache Storage (already owned by integrated research 528). This is **not a contradiction**: HTTP cache bypass and explicit offline caching are separate operations.
+
+**MINTTAP DIRECTION:** do not loosen headers to chase a speculative bfcache score, nor claim the existing blanket \`no-store\` proves sensitive information cannot be revisited. Test per-route served headers, Worker inventory and actual history restoration before a security/performance trade-off. Auth-action bearer-code \`Referrer-Policy\` remains a *separate* 527 issue.
+
+## 17. Exact LogMate lifecycle and ownership call graph [SOURCE / STATIC REVIEW]
+
+Read-only pin, LogMate \`main@9cc0cd432a317d5dfebbe90e318fb219e53e024a\`:
+
+1. [\`web/index.html\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/index.html) loads \`flutter_bootstrap.js\` after \`<base href="$FLUTTER_BASE_HREF">\`. The [bootstrap](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/flutter_bootstrap.js) registers \`logmate_service_worker.js\` at base-path scope with \`updateViaCache:'none'\`; it handles Worker \`controllerchange\`, not a top-level \`pageshow\`/visibility-to-owner authorization handshake in that file.
+2. [\`SessionGate\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/app/session_gate.dart#L97-L155) runs \`_resolveStartup(...)\` in \`initState\`. Its \`didChangeAppLifecycleState(resumed)\` branch, **when startup has already resolved and its decision requires remote validation**, calls \`_runBackgroundRemoteSessionValidation()\`; it does **not** directly rerun \`_startupResolver()\` or explicitly reread the durable account-deletion phase in that branch.
+3. [\`AccountDeletionCoordinator\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/account_deletion_coordinator.dart) and [repository](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1007-L1125) implement a multi-step deletion saga and local phase. Earlier 529 RW §§76–83 already identified the separate local mutation guard question; do not duplicate or promote it to a runtime incident.
+4. [\`AccountDeletionLockedScreen\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/screens/session_recovery_screens.dart) displays a deletion lock when the startup resolver returns that decision. It is not evidence that a *different, already-rendered document* has been invalidated.
+
+**Precise source-level gap:** the inspected bootstrap and resumed SessionGate branch do not demonstrate a cross-document history-restore → local deletion-phase recheck → immediate sensitive-view suppression protocol. Flutter's own lifecycle mapping, Firebase Auth callbacks, other widgets and actual compiled browser behavior may add protections; absence of a \`pageshow\` listener in this one file does **not** prove data exposure. An owner deletion in one installed WebKit container also does not by itself update a separate Safari container. **OPEN:** full app-wide lifecycle search, exact compiled Web execution and cross-container owner tests.
+
+## 18. Reproduction model: what would actually constitute a privacy failure [SYNTHESIS / CONTRADICTION]
+
+Distinguish **stale pixels**, **stale in-memory objects**, **live read access**, **write access** and **foreign-owner disclosure**. They are not equivalent:
+
+| Sequence / branch | Possible observation | Security conclusion without execution |
+| --- | --- | --- |
+| A page navigates away and later receives \`pageshow.persisted=true\` | Previous A DOM/heap may be restored before app revalidation | Conditional sensitive-view window; **not proven LogMate** |
+| A signs out in *same* document and returns via Flutter Navigator | Soft navigation; no bfcache required | Must test app's own state guard; bfcache theory alone irrelevant |
+| A deletes account in tab 1; tab 2 remains open | Tab 2 can retain its prior Flutter state unless coordinated | 529 RW admission/owner-check tests; no automatic cross-tab proof |
+| A is deleted in Safari tab; separate Home Screen app exists | Separate WebKit storage/credential containers can diverge | No automatic all-container erasure; remote authority and local custody must be tested |
+| Old view displays stale A data but all reads/writes reject | Residual display privacy issue possible | Not the same as ongoing data mutation or B receiving A records |
+| B logs in on a genuinely new independent origin/container | No A local database inherited merely by equal product branding | Does not prove old A container erased |
+| Offline page resumes with A still legitimate | Remote verification may be unavailable | Must preserve safe offline access while preventing owner/phase mismatch |
+
+**Failure oracle:** a test must capture the exact owner/phase at navigation and restore, the first rendered frame before/after the gate, redacted canary visibility, read/write rejection and remote validation outcome. No real pilot data, auth token, user UID or credential in diagnostic logs. Merely observing \`pageshow.persisted=true\` is not a product failure.
+
+## 19. Browser/OS matrix and capability boundaries [SOURCE / CHANGE WATCH]
+
+- **WHATWG / general Web:** \`pageshow.persisted\`, \`pagehide\` and visibility semantics are platform concepts. Browser bfcache admission/eviction and event timing differ. A Service Worker registration cannot guarantee that history restore triggers its \`fetch\` handler.
+- **Chromium:** Chrome's 2025 no-store bfcache change makes relying on no-store for logout erasure invalid as a universal rule. Chrome's eviction on cookie/auth changes is conditional, and Firebase session state may not correspond to a same-origin cookie change. Do not assert that this specific app is eligible without a real run.
+- **Safari/WebKit:** the [WebKit 17.2 cookie-copy statement](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/) says no other local storage is copied and later app/browser data are not shared. [Safari 26 Home Screen behavior](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/) broadens app-style launches, not cross-container revocation. Whether Safari's page cache retains a particular no-store LogMate route on iPadOS 26 is **OPEN**.
+- **Managed EFB:** MDM may restrict install, file movement, browser access or enterprise settings; none are inferable from an ordinary Safari lab. A no-store response, cookie copy or icon does not grant an airline-approved offline logbook.
+
+## 20. Exact acceptance packet — HR01–HR22 [VALIDATION DEFINED / NOT RUN]
+
+Use disposable synthetic A/B accounts and flight canaries, approved test backend, exact compiled Web commit/artifact hash, actual served HTTPS headers, browser/OS/MDM version, manifest and Worker hashes, isolated profiles and redacted trace. Classify **NOT RUN / NON-EXECUTION / FAIL PRODUCT / PASS PRODUCT / PASS DEVICE-MDM**.
+
+| ID | Test | Required observation / negative control |
+| --- | --- | --- |
+| HR01 | Exact served \`/\`, \`/auth/action\`, static font, SW, manifest | Real \`Cache-Control\`, \`Referrer-Policy\`, \`Vary\` and Worker scope; source config alone insufficient |
+| HR02 | Cold A startup online | First frame owner/phase gate; no stale data before decision |
+| HR03 | A navigates away and back in same browser | \`pageshow.persisted\`, network/Worker fetch, Flutter startup invocation and owner guard distinguished |
+| HR04 | No-store vs no-cache in **isolated synthetic** page | bfcache eligibility and HTTP-cache behavior separately measured, no production header change |
+| HR05 | A signs out in another tab while original A view is hidden | First frame on return, owner state, read/write denial, stale pixels |
+| HR06 | A deletion begins in tab 1; tab 2 foregrounds | Phase recheck and write barrier; reuse 529 RW01–RW14 |
+| HR07 | A deletion completes; browser Back | No actionable A view, no A canary exposure; record history eligibility |
+| HR08 | A deletion completes; tab 2 remains visible | Cross-tab notification vs durable guard; no assumption that event alone revokes writes |
+| HR09 | A deletion completes; B attempts normal startup | 529 completed-marker/37-store P0 oracles, no premature B PASS |
+| HR10 | B startup on independent clean profile | Control that rejects false inherited-A claims |
+| HR11 | Offline A legitimate foreground restore | No destructive remote-auth failure; local owner/phase consistency |
+| HR12 | Offline A after local deletion lock | No A write; recoverable status, no false completion |
+| HR13 | Frozen document vs background tab \`visibilitychange\` | Separate event paths; no reliance on one event firing universally |
+| HR14 | Flutter Navigator soft back | Do not misclassify as bfcache; in-app route guards checked |
+| HR15 | Worker update during history navigation | Controller, shell/schema version, old client and cache consistency; reuse 528 |
+| HR16 | Auth Action one-time code Back/Forward | Code not re-exposed or logged; AA01–AA14 route/header oracles |
+| HR17 | Two same-origin installed Home Screen copies | Separate owner/Replica/IDB and old-view status |
+| HR18 | Safari tab ↔ Home Screen app | Cookie copy vs independent local storage; deletion not presumed global |
+| HR19 | Managed Web Clip vs Safari | Actual airline MDM policy, history/offline/Files constraints |
+| HR20 | VoiceOver/large text on restored locked state | Sensitive view suppressed, focus/announcement accurate, recovery discoverable |
+| HR21 | Analytics on \`pageshow.persisted\` | Privacy-safe page-view de-duplication, no UID/flight content or token |
+| HR22 | bfcache disabled / blocked by policy | Ordinary reload control still enforces owner/deletion gates |
+
+**Ordering:** HR05–HR09 are P0 **only after Engineering's existing 529 exact A/B/37-store fixture is available**. HR01/HR03/HR04/HR13/HR15 are platform and quality dependencies; HR17–HR20 require actual iPad/MDM. This packet is a targeted extension, not a replacement for 529 WP/RC/RW or 530 II cases.
+
+## 21. B/C/D transfer and operating trade-offs [DEPENDENCY / TRANSFER VALIDATION]
+
+- **A owns:** HTML history events, browser cache vs Cache API, Safari/Chromium lifecycle, first/second installed container distinctions. No duplicate HTTP primer.
+- **E owns:** security decision that no-store, Worker install and initial Firebase auth do not independently revoke old-page authority; cross-context owner/deletion lifecycle, served header policy and incident response. Engineering S007 owns implementation and tests.
+- **B owns:** first-frame suppression, truthful “signed out / deletion pending / deleted / offline” task states, recovery navigation; Design Studio W121 owns visual/accessibility interaction execution evidence, not another pre-runtime design manifest.
+- **C owns:** exact browser matrix, bfcache eligibility, first-frame trace, foreground/offline interruption, VoiceOver and cross-platform PASS provenance. An isolated synthetic Chrome PASS cannot promote exact LogMate.
+- **D owns:** privacy-aware \`pageshow\` measurement, avoiding duplicate SPA route/page-view counting; Marketing D9 owns public claims. No install/backup/deletion claims until actual oracles pass.
+
+**Performance tension:** blanket no-store can increase repeat network cost, yet bfcache restoration may avoid a reload in eligible Chromium; allowing history restoration can preserve stale UI. Optimizing hit rate is subordinate to owner/deletion safety. **Analytics tension:** a bfcache restore may not run ordinary initial pageview JS; blindly firing an additional pageview for every Flutter soft navigation double counts. Define the semantic event contract before instrumentation.
+
+## 22. Attempted independent browser lab and evidence integrity [VALIDATION / NON-EXECUTION]
+
+On 2026-10-31 an isolated Python HTTP server + Playwright attempted three synthetic Chrome history cases (\`no-store\`, \`no-cache\`, ordinary cache) in container Chromium **144.0.7559.96**. Navigation to \`http://127.0.0.1:<ephemeral>/no-store\` failed with **\`net::ERR_BLOCKED_BY_ADMINISTRATOR\` before the test page loaded**. No \`pageshow\`, network trace, bfcache eligibility or HTTP-cache result was produced. This is **NON-EXECUTION / environment policy**, not a browser defect, LogMate FAIL, or proof of either cache behavior. Do not count it as a passed synthetic test.
+
+An approved HTTPS test origin or CI runner that permits test navigation is required for HR03/HR04. A successful synthetic browser run would remain LAB evidence, not an exact compiled LogMate or managed iPad result.
+
+## 23. Falsification and release decision [CONTRADICTION / OPEN]
+
+This finding narrows or disappears if exact product execution demonstrates that an already-rendered A view is suppressed and its reads/writes rejected on **every** history/foreground/cross-tab transition before owner-invalid pixels or operations become observable, including when offline. It strengthens if an old A view survives a verified deletion, displays a redacted synthetic canary or admits a write; classify display, read, write and cross-owner results separately.
+
+**Do not prescribe** unconditional reload on every foreground event, global \`Clear-Site-Data\`, forced \`skipWaiting\`, broad Worker cache removal, a new \`id\`/origin, or blanket auth denial when offline. Each can disrupt legitimate offline pilot data or old-client schema compatibility. Any proposed fix needs Engineering ownership, offline-first policy, migration/rollback and cross-engine proof.
+
+## 24. Adjacent high-value questions checked [SYNTHESIS / OPEN]
+
+This bundle integrated history restoration, HTTP/Cache API/bfcache boundaries, current Chrome no-store change, exact LogMate bootstrap and SessionGate resume branch, cross-tab owner lifecycle, installed WebKit containers, managed EFB, UX/AT, analytics and falsifiable release oracles. **Next adjacent step cannot responsibly be promoted without an approved executable origin and exact Engineering 529 fixture**. Further source-only rewording would add less information than HR05–HR09 execution. No LogMate, Design Studio, Marketing or Engineering repository changes.
+
+## 25. Gate and handoff [MINTTAP DIRECTION / CHANGE WATCH]
+
+**Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** Highest bottleneck remains **529 account A terminal deletion / 37-store parity / B startup / RW/RC write admission**; history restoration is a new **cross-track validation dimension**, not a substitute for it. Then independently retained Files backup, Safari Home Screen/managed Web Clip custody and physical offline operation. Recheck Chrome bfcache/no-store eligibility, Safari 26.x behavior and MDM policy at actual release; never infer production state from an old source pin.
