@@ -1020,3 +1020,149 @@ The first decisive subset is **RW01–RW04 + RW08 + RW12**, combined with DL05/D
 The combined §§65–83 identify **two distinct source-conditional safety boundaries** not closed by W-012: (a) duplicate authorized deletion drivers may repeat external *invocation attempts*, and (b) \`localLocked\` alone is not consulted by inspected ordinary Flight draft mutation entry guards while owner access remains unlocked. Neither is a remotely proven exploit or shipped incident. The latter has a direct source-path counterexample and warrants **P0 Engineering exact dual-session mutation tests** alongside A-delete→B startup and 37-store wipe parity.
 
 If Engineering shows an additional universal repository wrapper intercepts all mutation methods or the exact compiled product rejects RW02/RW03, revise this finding with that runtime evidence. Until then, **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**. The next work is exact runtime/product and managed-device evidence, not another generic security primer.
+
+
+---
+
+## 84. Stage 8 continuation — terminal deletion is not a complete 37-store erasure [SOURCE / 2026-10-30]
+
+**Decisive adjacent question after §§65–83:** when the deletion saga reaches the local terminal wipe, does the implementation actually erase every store whose content is admitted to a whole-ledger backup, including owner-linked Sync evidence and the local replica identity? This is more precise than the previously recorded 29-versus-37 count and is separate from the already-open writer problem.
+
+Read-only exact source: LogMate [main@9cc0cd432a317d5dfebbe90e318fb219e53e024a](https://github.com/yhappcom/logmate/commit/9cc0cd432a317d5dfebbe90e318fb219e53e024a), [Sembast repository](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart), blob **021d9001ae1240a824c5df570fb679597edc3875**; [account deletion coordinator](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/account_deletion_coordinator.dart), blob **8e844e888b39d3b5e1648aeb84be26e6582ed60f**. The owner/Sync, export, terminal-wipe, reinitialization, current-schema reopen and B-binding paths were examined together. No product code was changed.
+
+**SOURCE finding:** the 37-store Sync-aware LBK registry includes 30 ordinary stores (including replica) and seven Sync stores. The terminal wipe's explicit drop list includes **29 stores**. The eight omitted names are one replica store plus all seven Sync stores. The wipe reinitializes ordinary schema/owner records and writes completed(A), but does not itself drop or clear those eight stores. This is a **source-level store-parity gap**, not an executed proof that a real device retained nonempty A data or that B could see it.
+
+## 85. Exact registry-set comparison and reproducibility [SOURCE / REPLICATION]
+
+A read-only JavaScript inspection of the exact source blob extracted the LBK registry entries, resolved each wipe-list store symbol to its declared StoreRef name, and performed a set difference. The first quick regular expression undercounted a multiline registry declaration as 29; correcting the expression to accept whitespace after the constructor parenthesis produced **30 + 7 = 37**, avoiding a false count. The 29 wipe symbols resolved without an unknown symbol.
+
+| Set | Exact count | Interpretation |
+| --- | ---: | --- |
+| Base LBK registry | 30 | Includes 29 wiped stores plus local replica |
+| Sync extension | 7 | All seven absent from terminal wipe list |
+| Full Sync-aware LBK registry | 37 | Export/restore custody universe |
+| Terminal wipe drop list | 29 | All 29 are members of base registry |
+| Difference | **8** | Replica plus seven Sync stores |
+
+Exact omitted store names: **logmate_local_replica_v1**, **logmate_sync_state_v1**, **logmate_sync_operation_bindings_v1**, **logmate_sync_receipts_v1**, **logmate_sync_applied_identities_v1**, **logmate_sync_applied_cursor_v1**, **logmate_sync_record_heads_v1**, **logmate_sync_holds_v1**.
+
+Reproduction algorithm: (1) parse each _LbkStoreDefinition in _lbkStoreRegistry and _syncLbkStoreRegistry, including multiline entries; (2) parse StoreRef declarations and resolve the 29 wipe-list symbols to names; (3) assert uniqueness and calculate registry minus wipe; (4) inspect all writes made by _initializeFreshDatabase and _publishCurrentCapability before claiming post-wipe contents. **This is source parsing and manual control-flow review, NOT a Dart/Sembast transaction test.**
+
+## 86. Crucial correction: reinitialization rewrites one field, not the retained Sync evidence [SOURCE / CONTRADICTION]
+
+A naive conclusion would be: “Sync State still says owner A after the wipe, so reopening must fail.” The actual code has a **countervailing write**. Terminal wipe calls _initializeFreshDatabase → _writeReadyMigration → _publishCapabilityV7 → _writeOwnerAccess(unbound). That helper checks whether Sync State already exists; if so it copies the existing map and changes only its ownerUid to null. The same initialization calls _publishCurrentCapability → _ensureLocalReplicaIdentity and _ensureSyncState; **both return without replacing an existing valid replica or existing Sync State**.
+
+Consequently, for an initially valid owner-A database with a present Sync State:
+- the terminal transaction **does not drop** the replica or seven Sync stores;
+- the retained Sync State **ownerUid changes from A to null** when fresh unbound owner access is published;
+- its **originReplicaId, streamBindingStatus and remoteBaselineStatus are not reset by that helper**;
+- existing binding, receipt, applied-identity, cursor, head and hold rows are not deleted by the inspected terminal path;
+- the retained replica ID remains the same because _ensureLocalReplicaIdentity returns when it exists.
+
+The current-schema _prepareDatabase path calls _validateSyncState, which checks that Sync State ownerUid matches unbound owner access and its originReplicaId matches the local replica. The described A→unbound rewrite **can satisfy those two checks**. Thus “reopen must fail due to owner mismatch” is **not supported**. Neither does a successful reopen prove that the other six Sync stores were sanitized.
+
+This is a meaningful distinction between **metadata owner relabeling** and **actual evidence deletion**. It also shows why testing only readOwnerAccess()==unbound or deletion.phase==completed cannot establish data erasure.
+
+## 87. Conditional B-binding provenance boundary [SOURCE / SECURITY SYNTHESIS]
+
+The repository createOwnedLedger(B) and bindOwner(B) methods, when invoked against an unbound owner, call _writeOwnerAccess(B), which rewrites the retained Sync State ownerUid to B. The helper does **not** clear old Sync operation bindings, receipts, applied IDs, cursor, heads or holds. The source therefore admits a **conditional state transition** in which the top-level Sync State says B while retained subordinate rows may still contain A evidence.
+
+**Reachability caveat:** the account-required startup resolver checks deletion state first. After completed(A), normal verified B startup returns LocalLedgerDeletionLocked rather than calling createOwnedLedger(B); signed-out startup may show authentication required. Thus the inspected **normal startup currently blocks the B transition**. It is incorrect to claim an observed B cross-account leak or normal B access. The risk is an alternate caller, future recovery code, migration, direct repository API or changed gate bypassing this barrier; it requires exact runtime negative tests. Conversely, relying on the startup block as the permanent erasure policy would leave B onboarding/liveness unresolved and the eight-store retention untouched.
+
+Do not automatically reinterpret an old A receipt as B's remote authority; nested owner UID, operation identity and authenticated remote receipt must remain distinct from a mutable top-level owner field. This is a trust-boundary acceptance requirement, not a claim that the future Manual Sync publisher is implemented.
+
+## 88. Failure-domain and residual-evidence matrix [SYNTHESIS / SECURITY]
+
+| Retained class | Possible source contents | Source-proven post-wipe behavior | Acceptance oracle |
+| --- | --- | --- | --- |
+| Local replica identity (1) | Stable 64-hex local replica identifier | Not dropped; ensure-existing preserves it | Decide whether deletion requires rotation, and verify new-account identity isolation |
+| Sync State (1) | Owner UID, origin replica, binding and remote-baseline status | Existing map copied with ownerUid=null; other fields retained | Reset or remove prior remote trust state, preserve only explicitly approved non-user metadata |
+| Operation bindings (1) | Owner-linked operation IDs, canonical payloads and revision refs | Not dropped | Zero old-A rows/bytes after completed(A) |
+| Receipts (1) | Sync receipt evidence | Not dropped | No A receipt survives or is reclassified as B proof |
+| Applied identities (1) | Deduplication/operation identities | Not dropped | No A applied identity survives |
+| Applied cursor (1) | Remote progress marker | Not dropped | No A cursor can be consumed by B |
+| Record heads (1) | Record-level remote/head evidence | Not dropped | No A head or payload reference survives |
+| Holds (1) | Deferred/conflict/recovery evidence | Not dropped | No A hold survives in local deleted-account state |
+
+**Nonempty-data qualification:** the code establishes absence of deletion calls; it does not establish that all stores contain rows for every user. The positive control must seed synthetic owner-A canaries into each applicable store using valid domain fixtures, not simply assert an empty test database. Existing Sync invariants may prevent arbitrary raw fixtures; Engineering owns valid setup and test adapters. A source-level absence of drop plus nonempty precondition makes retention a serious falsifiable risk, but no real user content or incident is evidenced.
+
+## 89. Existing tests and evidence maturity [SOURCE / COVERAGE AUDIT]
+
+Read-only [account_deletion_coordinator_test.dart](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/test/application/account_deletion_coordinator_test.dart) has three in-memory Sembast tests: same-UID ordered saga, retry after remote failure, and reauth UID mismatch. The terminal positive test asserts completed phase, external call order and unbound owner access. It does **not** assert all 37 store contents, a newly rotated replica, nested Sync provenance, file DB close/reopen, B normal startup or installed-PWA storage.
+
+The separate [W-012 Native B1](https://github.com/yhappcom/logmate/blob/main/docs/evidence/w012-empty-destination-backup-2026-10-27.md) historical 70 focused PASS / 900 full-suite PASS + 1 browser-only SKIP validates a **different operation**: empty-destination backup restore and rollback. The [sync_replica_identity_safety_test.dart](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/test/repository/logbook/sync_replica_identity_safety_test.dart) tests replica preservation across reopen and destination replacement on restore, **not account deletion**. Do not transfer either positive result to deletion parity.
+
+**Evidence classification:** source/registry-set REPLICATION = checked; synthetic state projection = diagnostic only; exact Sembast terminal wipe with populated Sync stores = **NOT RUN**; actual compiled Web, Files custody, Safari/managed EFB and cross-device erasure = **OPEN**.
+
+## 90. Security and PWA boundaries: transaction success is not storage erasure [HISTORY / PRINCIPLE / STANDARD]
+
+IndexedDB transactions provide atomic logical database changes; they do not invent missing application drop operations, guarantee irreversible byte-level physical sanitization, clear separately installed Home Screen app containers, or delete user-exported Files. The [W3C IndexedDB 3.0 Working Draft of 2026-10-29](https://www.w3.org/TR/2026/WD-IndexedDB-3-20261029/) specifies rollback/atomic commit semantics for requests in a transaction; **the Working Draft status and exact Web/Sembast adapter must not be confused with a verified LogMate runtime result**.
+
+[WebKit storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) distinguishes origin quotas, eviction and standalone Web App behavior; [MDN storage quotas](https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria) distinguishes best-effort/persistent storage and browser-managed eviction. None proves a managed company iPad will permit installation, independent file export, background device-to-device sync, remote deletion while offline, or synchronized erasure across browser/native/PWA containers. **No blanket Clear-Site-Data or all-origin storage reset is authorized**: it can destroy unrelated local work, installed sessions and user-controlled recovery evidence. The accepted policy must specify which exact owner-bound stores to erase, what minimal deletion tombstone is retained, and which user-exported files remain under user control.
+
+Security principle: **completion evidence is the postcondition over the full owner-data inventory**, not the success return of one method. Reopening and checking a top-level owner field is necessary but insufficient. The remote service must provide its own deletion receipt; a local completed marker is not remote proof.
+
+## 91. Engineering-ready terminal-wipe parity packet [VALIDATION — WP01–WP20 DEFINED NOT RUN]
+
+Use disposable synthetic A and B identities, valid Sync operation fixtures, a known 37-store inventory, independent file-backed Sembast close/reopen and a separate compiled-Web/IndexedDB run. Capture only counts, hashed canary IDs and state classification, never real UID, tokens, flight content or user LBK bytes.
+
+| ID | Failure-first experiment | Required oracle |
+| --- | --- | --- |
+| WP01 | Exact source registry inventory versus terminal wipe set | 37 recognized; each owner-linked store explicitly disposed or documented retained |
+| WP02 | A with valid nonempty operation bindings and receipts; terminal wipe | Both zero A canaries, not just unbound owner |
+| WP03 | A with applied identities and cursor; terminal wipe | No old applied/cursor evidence |
+| WP04 | A with record heads and holds; terminal wipe | No A head/hold evidence |
+| WP05 | A with bound/verified Sync State; terminal wipe | Owner unbound, trust unbound/unverified, no A remote authority |
+| WP06 | A local replica before/after terminal wipe | Owner-approved rotation or explicit documented retention rationale; no B reuse by accident |
+| WP07 | Terminal wipe then close/reopen exact Native file DB | Valid schema, no A data, stable deletion tombstone |
+| WP08 | B verified normal startup after completed(A) | No dead-end lock; B onboarding only after accepted deletion transition |
+| WP09 | Explicit alternate B bind attempt against completed(A) | Must reject or prove full old-A Sync isolation |
+| WP10 | B after approved recovery/transition; seed new B operations | B state cannot inherit A receipt/cursor/hold authority |
+| WP11 | Inject failure after N store drops within terminal transaction | Atomic rollback, no false completed, retry possible |
+| WP12 | Kill process after local commit before UI acknowledgement | Reopen recognizes truthful completion and permits safe B continuation |
+| WP13 | Delete request while old A editor is open | Reuse RW01–RW04/RW08/RW12; no post-intent writes |
+| WP14 | Duplicate concurrent deletion drivers | Reuse RC01/RC02/RC07/RC10; one logical remote saga |
+| WP15 | Full 37-store pre/post canary inventory including nested Sync payload | Zero A references, no unexpected retained owner data |
+| WP16 | Export LBK before deletion, then delete local ledger | Explicit user-owned external Files artifact remains separate from local erasure claim |
+| WP17 | Actual compiled Web IndexedDB, tab and installed container | Each independently checked; no inferred shared storage |
+| WP18 | Offline managed EFB iPad during remote deletion | Local lock only where observed; no unproven remote instant wipe |
+| WP19 | Low-quota/eviction/interrupted deletion on WebKit | No false completed, loss of tombstone or unrelated-file destruction |
+| WP20 | Accessibility/UX and public deletion page after real execution | Truthful pending/partial/completed wording and recovery, no unsupported all-device claim |
+
+**Priority P0 subset:** WP01–WP10, WP15 with populated stores; combine DL05/DL06, RW02/RW04/RW08, RC01/RC02 and SL01 A-delete→normal B startup. Native first, compiled Web second, Safari/MDM after independent container evidence. A failed fixture setup or CI before test runner = **NON-EXECUTION**, not product PASS/FAIL.
+
+## 92. Recovery policy alternatives and contradictions [SYNTHESIS / MINTTAP DIRECTION — NOT APPROVED IMPLEMENTATION]
+
+1. **Drop all 37 recognized stores, then rebuild**: strong logical parity, but must explicitly decide whether deletion tombstone/receipt belongs outside owner data and how fresh replica/Sync state is created. A blanket database/origin wipe is not equivalent.
+2. **Selective scrub of the eight retained stores**: potentially smaller change, but needs a per-row ownership proof and negative tests for nested canonical payloads, mixed owners, old schema and new Sync stores. An unkeyed row or retained receipt is not automatically safe.
+3. **Preserve replica ID by policy**: may be useful for same-device diagnostics, but crosses the account-deletion trust boundary; needs owner/legal/privacy approval, no cross-owner linkability and explicit B proof. Current source preservation is **not itself an approved decision**.
+4. **Rely on B startup lock**: avoids some immediate exposure, but makes deletion completion liveness fail and leaves retained A evidence. It is not a data-erasure substitute.
+5. **Rewrite Sync State ownerUid only**: already observed source behavior; top-level metadata changes without subordinate-row erasure, so not a sufficient policy.
+6. **Erase all browser origin storage or issue Clear-Site-Data**: may remove unrelated data, Service Worker shell and user-controlled recovery, cannot reach separate installed containers or external Files reliably, and is not authorized by current S007 decision.
+7. **Delete local first, remote later**: may eliminate local A evidence sooner but can strand server deletion without credentials; requires a durable server-authoritative saga and truthful pending state, not a silent reorder.
+
+Engineering [S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) already establishes immediate local access revocation and deletion of **all** device-local LogMate user data. This research does **not** choose an implementation, loosen that policy or modify the product.
+
+## 93. Five-track allocation and specialist transfers [DEPENDENCY / TRANSFER VALIDATION]
+
+| Track | Relative depth / bottleneck | Owned contribution |
+| --- | --- | --- |
+| **E — lead (highest P0)** | Strong static source and security policy; terminal parity/remote receipt/production still OPEN | Own 37-store erasure invariant, replica/Sync trust boundaries, completion semantics, incident and rollback admission |
+| **A — platform dependency** | Browser origin/IDB/SW mechanics mature; exact Safari/MDM still OPEN | Explain transaction atomicity versus logical store scope and independent installed containers |
+| **C — execution verifier** | W-012 Native restore PASS only; deletion canary, fault and device runs OPEN | WP01–WP20 source-pinned test packet, positive/negative controls and reproducible provenance |
+| **B — UX/IA consumer** | Design Studio W121 pre-runtime saturation; recovery task still OPEN | Distinguish local completed, remote pending, failed cleanup, B onboarding and Files ownership without new visual primer |
+| **D — discovery/claims consumer** | Marketing D9 claim HOLD; operator status evidence OPEN | Public deletion status/claim language and privacy-safe counts, not actual user data in analytics |
+
+**External owners:** Engineering S007 implements deletion state machine, store parity, remote receipts and exact Dart tests; Design Studio W121/CD127 owns interaction/accessible recovery evidence; Marketing D9 owns launch and claims HOLD. Web Manager coordinates web/PWA container and public deletion request semantics, not the Engineering implementation. Peer and LogMate repositories remain read-only.
+
+## 94. Falsification and release gate [CONTRADICTION / OPEN / CHANGE WATCH]
+
+A later exact product test could show all seven Sync stores empty in the tested account, or a higher-level cleanup mechanism outside the inspected repository that clears them. That would narrow the **runtime retention** finding but would not change the **29-versus-37 terminal method parity** until code or policy changes. Conversely, seeded nonempty canaries surviving completed(A) would promote the conditional source risk to an **exact Native product failure** only when a provenance-bearing Dart/Sembast test actually executes.
+
+A future version may change the registry, schema, B-startup route, Sync admission or backend receipts. Recheck the source SHA and repeat the set-difference oracle before any release conclusion. Recheck W3C IndexedDB, WebKit storage, Firebase and Apple/Google deletion policy at the release decision; browser support and enterprise MDM rules are **CHANGE WATCH**.
+
+**Gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. There is **no** exact populated-store terminal-wipe run, actual user exposure, remote deletion failure, Safari/managed EFB test, independently saved Files proof or production incident in this study.
+
+## 95. Adjacent-question checkpoint [OPEN / DECISION]
+
+The eight-store inventory, post-wipe ownerUid rewrite, preserved replica and Sync metadata, current-schema reopen predicate, conditional B relabeling, existing test coverage, transaction/eviction boundaries and Engineering handoff were traced as one integrated domain bundle. This resolves a critical ambiguity: **a successful terminal phase and unbound owner can coexist with retained Sync evidence, and the fresh-initialization helper does not clear it**. The next information gain is not another generic privacy primer or static store count. It is an Engineering-authorized, exact-source **populated 37-store terminal wipe + reopen + B-startup** test, combined with RW/RC concurrency and external Files custody, followed by compiled-Web and physical EFB validation. Stop at this substantive checkpoint; do not claim production proof.
