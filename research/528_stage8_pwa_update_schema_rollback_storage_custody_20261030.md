@@ -941,3 +941,108 @@ Run only with Engineering-approved **exact generated** old/new LogMate Web build
 **No gate promotion.** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. This source review identifies a missing explicit `clientBuilds`/version retirement policy and defines a falsifiable safe-GC contract; it **does not** demonstrate a production memory leak, quota incident, Safari failure, account exposure or a new browser PASS. The priority order remains: (1) Engineering-owned 529 A-delete/B-startup/37-store Files custody, (2) exact Worker FC/TR/SR/CW combined validation, (3) LC01–LC14 retention/low-quota and managed-iPad recovery, (4) approved operational maintenance policy only after measurements. The latest product/peer repositories were read-only; no fixes or deployments authorized.
 
 **Adjacent-question check:** the client-identity lifecycle, safe-retirement concurrency, quota implications, compatibility/rollback contradiction and cross-track UX/claims dependencies were examined together. Further theoretical GC design now has lower information gain than exact-worker or managed-device runtime evidence; stop at this meaningful checkpoint rather than inventing an implementation or repeating generic PWA primers.
+
+
+---
+
+## 73. Stage 8 new bottleneck: verification work is a release-availability cost, not only a SHA correctness question [SOURCE / 2026-10-30]
+
+**Read-only source pin:** LogMate main [9cc0cd432a317d5dfebbe90e318fb219e53e024a](https://github.com/yhappcom/logmate/commit/9cc0cd432a317d5dfebbe90e318fb219e53e024a), [tool/pwa_precache.dart](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/pwa_precache.dart) blob 90a67954af618a4e18199fa92555491c56167c17, [web/flutter_bootstrap.js](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/flutter_bootstrap.js) blob a70625e8bda32aafd5dd23822c017d05229f0e63. This is a **new source-path accounting question**, separate from the mutable digest trust root (§51), missing shell repair (§59), first claim (§43), and stale client IDs (§65). No exact generated-worker browser benchmark was run.
+
+The original AppCache problem was stale, implicit, difficult-to-recover cache authority; the owned Service Worker improves explicit per-byte verification. However **checking all cached bytes repeatedly is not free**. The relevant distinction is (a) verify a fetched resource when serving it, (b) verify the entire candidate before promotion, (c) repeat whole-corpus checks for status/repair even when no version changed. A trustworthy release gate must preserve (a)/(b) while measuring and budgeting (c). Do not assume that removing verification is an acceptable optimization.
+
+## 74. Exact source call graph and reproducible static predicates [SOURCE / REPLICATION]
+
+The current worker template has these independently checked branches:
+
+| Function/event | Exact work in pinned source | Source-only observation |
+| --- | --- | --- |
+| valid(cache,item) | Cache.match; if found, Response.arrayBuffer; length and SHA-256 digest | Whole item read; missing item short-circuits before digest |
+| check(name,items) | Sequential loop calling valid for **every** item | No early exit on first invalid item |
+| inspect(manifest) | check(shell), check(fonts), check(fontNotices) | Full corpus scan, three categories |
+| status() | inspect(embedded candidate); inspect(stored served manifest) when present | Same-build candidate and served may be scanned twice |
+| promoteInControl() | inspect(stored manifest) if manifest exists and verified flag is true | Full scan occurs **inside updateControl mutation callback** |
+| PROMOTE_VERIFIED_CANDIDATE | updateControl(promoteInControl), then reply with status() | A successful steady-state request can perform **three** full inspections |
+| START_PRECACHE / REPAIR_CACHE | cacheGroup(fonts), cacheGroup(notices), inspect(candidate), then updateControl | Valid cached fonts/notices are read/hashed again even with zero downloads |
+| bootstrap serviceWorker.ready | Calls promoteVerifiedCandidate() and start() | Both messages sent on a normal ready page, not only when a version changed |
+| bootstrap controllerchange | Repeats both calls once | Another possible verification burst per page |
+| updateControl | Always writes control JSON after callback | Successful no-op promotion and precache can still write control metadata |
+
+**Static replication:** checked 13/13 source predicates against the two exact pinned blobs: builder requires 724 fonts; notice builder requires 144 OFL.txt notices; check calls valid for all entries; status checks candidate and served; promotion checks manifest and replies with status; precache validates fonts/notices and inspects candidate; ready/controllerchange send both messages; digest consumes Response.arrayBuffer. **13/13 STATIC SOURCE PATTERNS, NOT 13 browser tests.** The source also includes at least six required shell files, but the actual generated shell count/total bytes is **UNKNOWN** here.
+
+## 75. Conditional steady-state lower-bound accounting [SYNTHESIS / DIAGNOSTIC EXERCISE]
+
+Let F=724 fonts, N>=144 notice files, S=actual generated shell entries, and M=S+F+N. Under **one stable already-installed build**, currentBuildId equals the candidate, all cache entries exist and verify, the stored verified flag is true, both bootstrap messages are delivered and complete, and neither worker is interrupted:
+
+- PROMOTE: inspect in promoteInControl = M; status candidate = M; status served = M. **3M item read/hash checks**.
+- START_PRECACHE: cacheGroup fonts = F; cacheGroup notices = N; inspect candidate = M. **S+2F+2N checks**.
+- Combined steady-state ready cycle: **4S+5F+5N** item checks. With F=724 and N>=144, **at least 4,340 font/notice read-and-digest checks plus 4S shell checks**, conditional on the stated state. This is an **operation-count lower bound, not measured latency, memory peak, bytes, battery use, or guaranteed scheduling order**.
+- Both message paths also call updateControl/writeControl, so a successful same-worker steady-state cycle can produce **two CacheStorage control-record writes** even when no release changes. With waiting/active workers, routing and concurrency differ; this formula must not be projected unmodified to that case.
+
+If entries are absent or corrupt, valid can return early or a download can occur; if currentBuildId is absent or differs, the number and identity of inspections change. Concurrent messages may overlap; per-Worker controlMutation does not serialize the two workers (§35). Do **not** multiply this formula by page count to assert a measured device workload.
+
+## 76. Event lifetime, whole-buffer hashing and lock amplification [SOURCE / DEPENDENCY]
+
+[W3C Service Workers §2.1.1 and ExtendableEvent](https://www.w3.org/TR/service-workers/) (consulted 2026-10-30) permits user agents to terminate workers under abnormal/overlong work and describes event-lifetime promises; waitUntil extends event lifetime but is **not an unlimited execution guarantee**. [MDN SubtleCrypto.digest](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest) explicitly says digest does **not support streaming input**: the whole input must be available. [MDN Cache.match](https://developer.mozilla.org/en-US/docs/Web/API/Cache/match) establishes per-response lookup, not an atomic multi-resource snapshot.
+
+In this implementation, valid/verifiedResponse use Response.arrayBuffer and digest for each cached object. check loops sequentially; cacheGroup can run up to CONCURRENCY=6 workers. A successful promoteInControl executes inspect **while updateControl holds its worker-local mutation queue**. Therefore a root navigation seeking to assign clientBuilds in that same worker may wait behind full-corpus verification; the exact wait and user impact remain **UNMEASURED**. This is an operational coupling between integrity validation and first-navigation availability, not proof of an observed 503, freeze, watchdog kill or energy regression.
+
+An expensive GET_STATUS/VERIFY_CACHE can also perform candidate+served full scans. GET_STATUS should not be treated as a constant-cost health ping. Nor does a quick serviceWorker.ready imply that the worker's expensive verification, app DB readiness, offline task readiness or external Files custody has completed.
+
+## 77. Counterexamples and trade-offs [CONTRADICTION / EXPERT JUDGMENT]
+
+1. **“SHA is fast, so repeated scans are harmless”** is unsupported without actual asset sizes, disk/cache state, device and thermal conditions. The 724-file count is not a time or battery measurement.
+2. **“Cache one READY boolean forever”** weakens the per-response corruption check and does not authenticate the mutable stored manifest (§51). A cache hit is not release authority.
+3. **“Skip promotion checks after first launch”** may reduce work but needs a separate trustworthy version/manifest provenance, repair and lifecycle protocol; old/new worker coexistence remains (§35).
+4. **“Parallelize every hash”** may increase peak memory and contention on a managed iPad; concurrency=6 in cacheGroup is not evidence that check/inspect should use the same or larger fanout.
+5. **“Use a streaming digest instead”** is not a drop-in SubtleCrypto.digest feature; any alternative must be separately specified, supported and verified across WebKit/Chromium.
+6. **“Hash every item for every status poll”** is defensible as an explicit deep diagnostic, but not automatically as a cheap routine heartbeat.
+7. **“No visible spinner means no performance issue”** confuses worker-background CPU/IO and user-visible task readiness; first navigation and low-power/offline transitions require separate measurement.
+8. **“Fast Chrome synthetic means EFB safe”** fails the device/MDM and physical storage evidence gates; the current PS/MT synthetic checks do not execute this full verification path.
+
+**MINTTAP DIRECTION, NOT A FIX APPROVAL:** Engineering should evaluate a **cheap, provenance-safe health snapshot versus explicit deep verification** without sacrificing per-response SHA checking, trusted build authorization, old-client compatibility or data durability. Any release design must be evaluated against the prior R1–R8 invariants (§69), not just a faster green READY badge.
+
+## 78. Measurement contract: preserve task and custody truth [VALIDATION DEFINED / NOT RUN]
+
+A test is admissible only with the **exact generated LogMate Worker**, its actual generated manifest, immutable compiled build hash, Chrome/Safari engine and OS version, device class, power/network state, controlled/waiting Worker identity, installed container/MDM scope, and synthetic-only ledger canaries. Collect aggregated timings/counts and asset classes, **not UID, flight data, token-bearing URLs or backup bytes**.
+
+| ID | Case | Decisive oracle |
+| --- | --- | --- |
+| VW01 | Stable current-build reload; both ready messages complete | Count cache.match, arrayBuffer, digest, bytes hashed, control writes and duration **per message**; compare 4S+5F+5N model |
+| VW02 | One message only, then both; repeat | Isolate PROMOTE 3M and START S+2F+2N; determine overlap and duplicate work |
+| VW03 | First install / no served build | Distinguish different branch counts and user-ready from Worker-ready |
+| VW04 | Old active + new waiting build | Record routing, candidate/served identities, shared catalogue contention; reuse CW03/CW04 |
+| VW05 | Navigation during promoteInControl inspection | Measure controlMutation wait, navigation response and 503/200 outcomes |
+| VW06 | Missing one shell vs one font | Distinguish SR02/SR04 repair success and added verification cost |
+| VW07 | Offline steady-state page open and repeated GET_STATUS | Measure no-network work and cache/CPU cost; no false READY |
+| VW08 | Worker termination mid-scan and restart | No false success, missing reply or destructive reset; W3C event-lifetime boundary |
+| VW09 | Low-storage / quota / repeated generations | Measure catalogue writes, full scan, cache sizes and DB health; reuse LC07/LC12 |
+| VW10 | Safari tab vs installed Home Screen vs managed Web Clip | Separate WebKit containers, launch latency, actual feature support and policy |
+| VW11 | Large-text/VoiceOver recovery task while verification pending | Accessible progress/error/timeout, no false offline-ready claim |
+| VW12 | Before/after any Engineering optimization | Same manifest trust, per-response byte/hash, old-build pinning, owner/37-store/Files custody and rollback negative controls |
+
+**Classify:** STATIC SOURCE / MODEL / NON-EXECUTION / PASS or FAIL PRODUCT-LAB / PASS or FAIL DEVICE-MDM; do not label an instrumentation-only reduced probe PRODUCT. Browser devtools wrappers may perturb timing: run both instrumented and uninstrumented controls (lesson from PS10). **No VW01–VW12 executed in this cycle.**
+
+## 79. Five-track integration and external specialist boundaries [TRANSFER VALIDATION]
+
+| Track | Stage/gate and depth | Owner or consuming dependency |
+| --- | --- | --- |
+| **E — lead** | Stage 8 security/privacy source maturity high; production/MDM and recovery OPEN | Decide whether release verification blocks control writes/navigation, preserve R1–R8, require non-destructive failure and incident budget; 529 deletion/37-store P0 remains above this performance P1 |
+| **A — source owner** | Service Worker lifecycle, Cache API, crypto and browser semantics sourced; exact WebKit runtime OPEN | Own verification call graph, event-lifetime/platform differences, old/new routing; hand evidence to E/C |
+| **C — verifier** | Chrome PS/MT synthetic evidence exists; exact worker energy/latency/AT OPEN | VW01–VW12 independent metrics, uninstrumented control, user-task readiness and low-quota failures |
+| **B — UX transfer** | [Design Studio W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md) says pre-runtime spec saturated | Distinguish ready-to-view, ready-to-edit, offline-ready, verification-pending and backup-safe states; do not produce a new visual manifest |
+| **D — claims transfer** | [Marketing D9](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) holds offline/retention claims | Do not advertise “instant startup”, “zero-cost verification”, “guaranteed offline” or unattended EFB sync without product/physical evidence |
+
+[Engineering D003](https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D003_schema_evolution_migration_rollback_compatibility.md) owns binary/schema compatibility and any optimization implementation. [Engineering S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) owns the higher-severity account-deletion saga. Web Manager owns **web-runtime verification cost and release-gate interpretation**, not engineering code changes. Peer repositories and LogMate remain read-only.
+
+## 80. Release decision, evidence maturity and practical order [MINTTAP DIRECTION / OPEN]
+
+**New material conclusion:** the owned worker's normal ready path can rehash thousands of assets and write the shared control catalogue even without a new build. The 13/13 source-pattern audit and conditional 4S+5F+5N accounting are **static**, not measured CPU, battery, latency, Safari failure or a confirmed LogMate defect. No PWA gate promotion.
+
+**Execution priority:** (1) Engineering-owned 529 A-delete → normal B startup, 37-store external Files readback and same-UID restore; (2) one exact generated-worker fixture combining FC first-claim, TR mutable-root, SR shell/font repair, CW mixed workers and **VW01/VW02/VW05** verification-work measurement; (3) LC quota/retirement and VW08 termination; (4) physical managed EFB Safari/Home Screen/MDM and VoiceOver. Avoid additional generic hashing primers before exact-runtime results.
+
+**Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** No production attack, performance regression, battery issue, observed 503, managed-iPad result, or product-level PASS is claimed. A cheap health/status contract and an exact-worker timing budget are **OPEN**, not a prescribed implementation.
+
+## 81. Adjacent-question and stop checkpoint [OPEN / CHANGE WATCH]
+
+The verification call graph, source-derived lower bound, controlMutation contention, Service Worker event lifetime, whole-buffer hashing, integrity-vs-latency contradiction, instrumentation perturbation, cross-track handoffs and release decision were integrated together. The adjacent high-value question—whether repeated verification can block first-navigation client mapping—was traced to the exact callback/queue; its **runtime magnitude cannot be settled by static reading**. Further claims now require exact generated-worker instrumentation and physical device evidence. The next distinct domain is P0 owner deletion/37-store custody, not another speculative optimization or synthetic-only primer.
