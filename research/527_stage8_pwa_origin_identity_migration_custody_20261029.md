@@ -258,3 +258,105 @@ The twelve logged checks, each using only disposable local synthetic values, are
 **Software Engineering:** owns code changes, exact build, fixture provenance and product test execution. LogMate's approved 2026-10-17 manual-delta contract preserves .lbk-first transfer and user-initiated Sync; the Web Manager cannot silently change it. Peer repositories read-only.
 
 **Adjacent-question completion check:** the run resolved the previously unverified hosted fixture result, audited its negative controls and noncoverage, derived a release-safe migration sequence and cross-track acceptance boundary. Further claims about live HTTPS subdomains, real Auth provider behavior or managed EFB are blocked on distinct deployment/device/Engineering evidence, not more generic browser theory. Reopen on new evidence; do not manufacture a second redundant primer.
+
+
+---
+
+## 13. Auth-action URL bearer-code custody — why this is the next Stage 8 trust boundary [HISTORY / PROBLEM / SOURCE]
+
+**2026-10-30 continuation; E owns the security/operational finding, A owns browser referrer semantics, C owns independent falsification, B owns recovery-state continuity, D owns privacy-safe discovery/measurement.** Earlier §§1–12 studied origin moves and same-origin script authority. A separate high-value issue arises **without any origin migration**: Firebase email action links deliver a short-lived action code as a URL query parameter. A page that consumes this code also loads resources. Browser referrer defaults and HTTP deployment headers determine whether that code is copied into *other requests*.
+
+Read-first baseline: AGENTS, SPECIALIST_TRACKS, LEARNING_ROADMAP, STATUS, research index, 523/527/528/529, recent Web Manager commits; LogMate main@9cc0cd432a317d5dfebbe90e318fb219e53e024a, Design Studio WEB_STATUS W121, Marketing D9, Engineering S007. **No LogMate, Design Studio, Marketing or Engineering changes.**
+
+**Source inventory (read-only, 2026-10-30):**
+- [LogMate Auth Action HTML](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/auth/action/index.html), blob 39d06a633ab7bee719b3401bc3ac744f8ba175d0, ~660 lines: same-origin favicon and Apple touch icon in head, inline CSS with a same-origin Roboto font, an inline ES module importing Firebase JS 11.10.0 from gstatic, then URLSearchParams(location.search) reads 'mode' and 'oobCode'. verifyEmail/recoverEmail call applyActionCode; resetPassword verifies and later consumes the same code. No Referrer-Policy meta tag or history.replaceState invocation in this inspected file. These are **source facts, not deployed-response facts**.
+- [LogMate firebase.json](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/firebase.json): Hosting custom headers specify only a wildcard Cache-Control no-cache/no-store/must-revalidate; rewrites cover /auth, /auth/ and /auth/action to the action HTML. **No explicit Referrer-Policy, CSP or frame-ancestors declaration in this configuration.** A CDN, alternate Hosting config, actual deployed response or installed Worker may alter effective behavior; all remain OPEN.
+- [Auth Action's three modes](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/auth/action/index.html): reset, email verification and email recovery share the URL-code delivery surface. The page does not deliberately display the code as text. A Firebase Web API key embedded in client HTML is configuration, **not** itself a password-reset token or proof of a leaked secret.
+
+**Authority:** [W3C Referrer Policy](https://w3c.github.io/webappsec-referrer-policy/), [MDN Referrer-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy), [OWASP Forgot Password](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html) (URL-token section), [Firebase Hosting full config](https://firebase.google.com/docs/hosting/full-config), [MDN CSP script-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src), [MDN frame-ancestors](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/frame-ancestors), [MDN History.replaceState](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). Rechecked 2026-10-30; Firebase Hosting page updated 2026-10-21.
+
+## 14. Standards-to-browser threat model: same-origin is not token-safe by default [SOURCE / SYNTHESIS]
+
+The modern default 'strict-origin-when-cross-origin' sends **full origin/path/query to same-origin resources**, but generally only the origin to an HTTPS cross-origin resource; fragment is not sent as referrer. Therefore an Auth Action document opened as /auth/action?mode=resetPassword&oobCode=... can attach that query to requests for its own favicon/font or other same-origin assets. The external gstatic ES module is **not automatically a full-query referrer leak under this default**; claiming that it receives the token without a contrary policy or separate mechanism would be false. Same-origin receipt is a *trust-boundary/logging expansion*, not automatically exfiltration to an attacker.
+
+The initial **document request URL** necessarily contains the action code before any response policy can run. A Referrer-Policy header limits *subsequent* requests, not that initial request URL, previously sent email links, browser/email-provider history or already recorded access logs. Cache-Control no-store does not change Referer formation. CSP does not replace a referrer policy. A later history.replaceState may reduce the visible/history URL and future referrers but cannot undo requests started during HTML parsing, module import resolution or prior Worker interception. A late JavaScript-only fix is insufficient as a sole early-resource control.
+
+**OWASP** explicitly recommends a 'no-referrer' policy on password-reset pages to avoid referrer leakage. A scoped HTTP response policy is preferable as the first mitigation candidate because it applies before resource discovery; a correctly placed early HTML meta policy is a fallback candidate that requires parser-order tests. This is an **engineering proposal**, not an authorized LogMate patch.
+
+## 15. Browser synthetic negative-control evidence [VALIDATION — HOSTED SYNTHETIC PASS]
+
+A disposable two-origin HTTP fixture was added at [stage8_auth_action_referrer_probe.py](https://github.com/yhappcom/web-manager/blob/main/research/handoffs/stage8_auth_action_referrer_probe.py) with a [SHA-pinned Actions workflow](https://github.com/yhappcom/web-manager/blob/main/.github/workflows/stage8_auth_action_referrer_probe.yml). The test uses **only a conspicuously fake action-code sentinel**, never Firebase, an actual user, real email links, LogMate HTML, a live hostname or production credentials.
+
+**Exact execution:** [Actions 41031375926](https://github.com/yhappcom/web-manager/actions/runs/41031375926), checkout b28e2019e5dad81b0ba8c0b17ef586186ef334d8, job 123981657323, Ubuntu 24.04, Python 3.13.17, Playwright 1.57.0, Chrome 156.0.8078.47, **6/6 explicit assertions PASS**. The job log's bounded JSON and artifact 12965896869 were inspected; the ZIP upload digest was logged but archive bytes were not independently downloaded/rehash-verified. An earlier local Chromium attempt returned **ERR_BLOCKED_BY_ADMINISTRATOR** before navigation; this was **NON-EXECUTION**, not a browser security failure.
+
+| Fixture policy | Same-origin resource Referer | Cross-origin resource Referer | Evidence |
+| --- | --- | --- | --- |
+| No policy (browser default) | Full synthetic action URL, including fake code | Origin only | PASS, expected unsafe same-origin negative control |
+| Referrer-Policy: no-referrer | Absent | Absent | PASS, both controls |
+| Referrer-Policy: strict-origin | Origin only | Origin only | PASS, no query in either |
+
+This verifies **a synthetic Chrome behavior consistent with the standard**, not actual LogMate header delivery, real token exposure, Firebase password reset, Safari/WebKit, managed EFB, any server log capture, or an attack. No production finding is promoted to CONFIRMED. Source-level configuration plus standards supports a **conditional exposure path**.
+
+## 16. Policy scope and Hosting rewrite order [SOURCE / OPERATIONAL JUDGMENT]
+
+Firebase Hosting matches custom-header patterns against the **initial requested URL path before rewrite processing**. Thus a rule targeting only /auth/action/index.html can miss requests originally made to /auth, /auth/ or /auth/action that are rewritten to that file. The response-policy design must explicitly cover all supported public action entry URLs and any slash/canonical aliases, then test the **actual served headers** for each. A global no-referrer policy would also suppress useful public-site attribution; Track D should assess that trade-off instead of copying a security rule across every marketing page.
+
+A candidate scoped control is Referrer-Policy: no-referrer on Auth Action documents, paired with safe URL cleanup after parsing the code and **after preserving the in-memory value required for completion**. Engineering must validate reload/back/forward, expired code, email verification, email recovery, password-reset validation and retry semantics. Do not put the action code in history.state, localStorage, analytics, exception text or CSP reports. This is a proposed acceptance contract, not a production code change.
+
+## 17. CSP and clickjacking are separate security controls [DEPENDENCY / CONTRADICTION]
+
+The current action HTML has an inline style block and inline type=module code importing versioned Firebase modules from gstatic. A blanket 'script-src self' or 'style-src self' would block these unless an appropriate hash/nonce or other validated mechanism is provided; the PWA bootstrap, Flutter-generated runtime, font loading, Firebase helper origins and Worker requests have **different** dependency graphs. Do not ship a single strict global CSP without actual browser/provider regressions. A static action HTML may use a source-verified inline hash strategy; a per-request nonce needs a genuinely dynamic response and cannot be a hard-coded static token. This is a design evaluation, not an approved policy string.
+
+The 'frame-ancestors' directive limits who can embed the document and is **HTTP-header-only** (not supported in a meta CSP). It does not stop URL-query referrer propagation or replace owner authorization. A CSP report endpoint may itself become a sensitive URL/identifier sink; use synthetic values and verify report redaction before enabling reporting. COOP/COEP hardening must not break Firebase popup/redirect opener semantics. Strict security headers that strand email recovery or offline PWA are **release regressions**, not security wins.
+
+## 18. Cross-track transfer and prioritized risk [TRANSFER VALIDATION]
+
+| Track | Evidence maturity | Nonduplicative ownership |
+| --- | --- | --- |
+| **E lead** | Source + primary standards + hosted synthetic Chrome; actual HTTPS headers/logs unknown | Own Auth Action bearer-code threat, route-scoped policy, deployment/rollback, log retention and incident criteria |
+| **A** | W3C referrer semantics and Chrome fixture PASS; WebKit/Worker effective policy OPEN | Browser parsing order, Service Worker intercepted resource/request.referrer, Safari/Home Screen behavior |
+| **C** | 6/6 synthetic assertions; exact Auth Action, real network, AT and device OPEN | Independent header and HAR negative controls, Auth end-to-end regression, focus/error/VoiceOver checks |
+| **B** | Design Studio W121 Stage 3 runtime gate still OPEN | Link expired/retry/recover/reset states, do not expose tokens in UI; preserve keyboard/focus semantics |
+| **D** | Marketing D9 product claims HOLD | Avoid token-bearing analytics/search/referrer/CSP-report telemetry; separate public attribution from sensitive action routes |
+
+Engineering S007 owns account/provider lifecycle implementation. Web Manager owns the web response/header/trust and release-gate specification. Existing **P0 529 A-delete→B normal startup and independent 37-store Files custody remains above this P1 Auth Action privacy hardening** unless real exposure is observed. No inference that action-code leakage grants direct access to offline flight data: a successful reset and subsequent authentication are distinct gates.
+
+## 19. Exact product/browser acceptance packet AA01–AA14 [VALIDATION — DEFINED NOT RUN]
+
+| ID | Required exact-build test | Pass/fail oracle |
+| --- | --- | --- |
+| AA01 | GET each /auth, /auth/, /auth/action, /auth/action/ alias with synthetic query | Record redirect/rewrite chain and **effective response** Referrer-Policy; no unexpected query-bearing redirect target |
+| AA02 | Same-origin favicon, Apple icon, Roboto font from Auth Action | No synthetic code in Referer, Worker logs, access logs or telemetry |
+| AA03 | Firebase gstatic module import and transitive requests | No query-bearing referrer; no secret in error/report output |
+| AA04 | HTTP response policy vs early HTML meta vs late history cleanup | Earliest asset request protected; late cleanup cannot be sole mitigation |
+| AA05 | Verify-email and recover-email with disposable codes | End-to-end success/expired/retry states, no code in UI/analytics |
+| AA06 | Reset password: verify, policy check, confirm, return to app | Complete flow and invalid/expired/network failure states with no code propagation |
+| AA07 | Browser reload/back/forward after URL cleanup | No stale code disclosure or loss of legitimate recovery action |
+| AA08 | Auth Action opened in Safari tab and installed Home Screen | Effective referrer/headers and provider behavior measured independently |
+| AA09 | Managed EFB Web Clip with MDM network/open-in policy | Actual install/navigation/redirect/file restrictions recorded, not inferred |
+| AA10 | Existing active Worker controls action page and asset GET | No token in Worker logs/caches; no 503/blocked font/icon caused by security policy |
+| AA11 | CSP Report-Only candidate on action vs Flutter root | Inline modules/fonts/provider calls and violations classified without false production claim |
+| AA12 | CSP enforcement candidate, frame-ancestors, popup/redirect | Auth and offline runtime survive; denied embedding tested; no unsafe broad allowlist |
+| AA13 | Preview/production deployment and rollback | Source config vs served headers vs CDN/edge vs Worker responses pinned; rollback retains safe policy |
+| AA14 | Privacy/retention/incident negative controls | No real code in HAR artifact, issue, CI, CSP report, search analytics or support ticket; authorized logs reviewed under retention controls |
+
+Each AA run requires build/commit, exact URL alias (with **fake** code for header tests), browser/OS/installed context, network capture, response headers, controller state, request-referrer redaction, provider outcome and negative control. **Do not store real one-time codes in public artifacts.** If provider success needs real disposable credentials, Engineering must use a protected test environment and publish only redacted verdicts.
+
+## 20. Counterexamples and what would falsify the conclusion [CONTRADICTION / OPEN]
+
+- If the deployed Auth Action already serves Referrer-Policy: no-referrer, source-only risk does **not** imply a current leak; the production observation supersedes this conditional concern.
+- If the browser does not request a same-origin asset in a particular navigation (cache hit, Worker response, favicon suppression), that specific Referer transfer may not occur; the default browser rule remains relevant to other requests.
+- If an asset server logs no Referer, that does not prove no request carried it; independently capture request headers at a controlled endpoint.
+- If a browser's action URL is stripped after the initial navigation, the initial URL may still have reached hosting logs. A post-load history rewrite is not a retroactive log scrub.
+- If a CSP policy is syntactically strict but prevents Firebase reset or offline cold start, it is not an acceptable release. Test usability and recoverability as security properties.
+- If a synthetic Chrome fixture passes, that does not establish WebKit, Firebase, real deployed hosting, MDM or production Auth outcomes.
+
+## 21. MintTap direction and release gate [MINTTAP DIRECTION / OPEN]
+
+**Recommended order:** (1) Engineering-owned P0 account deletion A→B and 37-store independent Files proof; (2) verify actual Auth Action HTTPS response headers and same-origin asset Referer on all aliases with synthetic query; (3) scope a no-referrer header and safe URL cleanup with provider/browser regression; (4) only then expand CSP/frame-ancestors/COOP hardening by executable route, never by copy-paste across PWA and public pages. This does **not** authorize edits to LogMate or declare a production incident.
+
+**Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** New evidence is **Chrome 156 synthetic 6/6 PASS**, and a newly identified **source/standard-supported conditional Auth Action query-referrer exposure**. Real code leakage, deployed headers, provider flows, Safari/managed iPad and user harm remain **OPEN**.
+
+## 22. Adjacent-question checkpoint [OPEN / CHANGE WATCH]
+
+The directly adjacent questions were completed in one integrated bundle: token origin/history, default same/cross-origin referrer semantics, a hosted browser negative control, scoped Hosting rewrite matching, HTML parser timing, CSP/module/inline-style compatibility, frame-ancestors and reporting, Worker/public-route interaction, UX/analytics transfer and exact-product acceptance. Further decisive progress requires live served headers, protected Auth test accounts and Engineering-approved exact build; these cannot be inferred from another generic primer. Watch W3C/MDN, Firebase Hosting, Firebase Auth SDK and WebKit behavior for changes. The current high-value handoff is AA01–AA04/AA10 without real tokens, followed by protected AA05–AA06.
