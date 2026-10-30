@@ -335,3 +335,38 @@ Track A owns lifecycle/fetch/installation facts. Track E owns version/DB/owner s
 
 ### 34. Contradiction and next-adjacent-question audit [CONTRADICTION / OPEN / CHANGE WATCH]
 **Resolved:** “No `skipWaiting` means updates never activate” is false: normal waiting activation after old clients release is possible. “`clients.claim()` proves old owner invalidation” is false. “No cache cleanup guarantees safe rollback” is false because cached bytes do not establish schema compatibility. “Generated worker file missing from source means offline worker missing in build” is false: generator emits it. **OPEN:** inspect and execute the *generated* worker from an exact production-equivalent build, including fetch-routing and catalogue concurrency, before claiming runtime correctness. Browser/OS support and MDM policy remain CHANGE WATCH. The adjacent high-value work is now executable product acceptance, not another speculative static-only SW primer. Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD unchanged.
+
+
+### 35. Exact artifact-build provenance and the two distinct test binaries [SOURCE / ENGINEERING DEPENDENCY; 2026-10-31]
+
+Re-read current LogMate [Makefile](https://github.com/yhappcom/logmate/blob/main/Makefile) (blob `42485938e7bcbad6e473b047bf01690954ccbbc3`), [bootstrap](https://github.com/yhappcom/logmate/blob/main/web/flutter_bootstrap.js) (blob `a70625e8bda32aafd5dd23822c017d05229f0e63`) and [worker generator](https://github.com/yhappcom/logmate/blob/main/tool/pwa_precache.dart) (blob `90a67954af618a4e18199fa92555491c56167c17`). The actual project defines **two different build contracts**:
+
+- `make build-pwa`: `flutter build web --output build/web --pwa-strategy=none --no-web-resources-cdn --no-wasm-dry-run`, then `dart run tool/precache_flutter_web.dart --build-root build/web`, then `dart run tool/verify_pwa_artifact.dart --build-root build/web`.
+- `make build-pwa-acceptance`: same chain, but Flutter receives `--dart-define=LOGMATE_PERSISTENCE_ACCEPTANCE=true`, and verification requires `--require-acceptance-harness`.
+
+**SYNTHESIS:** A test on the acceptance-harness build cannot by itself establish the identical runtime behavior of the ordinary release build. The compile-time flag may change the attack surface or execution path. Conversely, release build testing alone may lack safe seeded-data instrumentation. Both must have separate artifact SHA, source commit, command transcript and served HTTPS deployment identity; a source-only worker inspection is not an artifact test. **OPEN:** no output artifact or device run was produced in this Web Manager cycle.
+
+### 36. Bootstrap sequencing as an observable race, not an assumed defect [SOURCE / FAILURE MODEL]
+
+The bootstrap launches `registerLogMateOfflineWorker()` asynchronously and immediately starts the Flutter engine. It does **not** await registration, worker activation, candidate precache or controller assignment before app startup. Its `navigator.serviceWorker.ready` handler posts `PROMOTE_VERIFIED_CANDIDATE` and `START_PRECACHE`; its one-shot `controllerchange` listener repeats these. The source intentionally avoids a blanket first-paint dependency on offline readiness.
+
+**CONTRADICTION:** “The first screen rendered” is not evidence that a cold offline relaunch will work. Equally, “worker not yet controlling the first page” does not prove an implementation bug: the app can run online before offline preparation completes. A first-install test must distinguish **app rendered**, **registration exists**, **worker active/controlling**, **complete cache verified**, **network removed**, and **fresh process offline relaunch**. Record all six separately, and never silently label the first as the last.
+
+### 37. Two-build acceptance and controlled failure-injection sequence [VALIDATION DEFINED NOT RUN]
+
+1. **Reproducibility gate:** pin LogMate commit and toolchain, build ordinary and acceptance artifacts separately, retain each generated `logmate_service_worker.js`, offline manifest, verification output and SHA-256; reject unpinned mutable test URLs.
+2. **Served-asset gate:** serve each build over HTTPS from isolated test origins, capture final response headers and SW registration scope; compare served worker and manifest bytes to built artifacts. A local `file://` run cannot validate this.
+3. **First-install gate:** on clean profile record all six readiness stages in §36. Disconnect network only after separately observing complete verified precache, then terminate and relaunch; verify owner-safe task readiness, not merely an icon or shell pixels.
+4. **Two-version gate:** keep old controlled client open, deploy version B, observe waiting/activation and client-build mapping, then close/reopen. Capture old/new JS, manifest and DB capability. Never infer DB rollback safety from retained cache bytes.
+5. **Fault gate:** independently corrupt shell and font entries, exhaust quota, interrupt precache, interrupt browser process, and retry; distinguish expected fail-closed 503, successful verified old shell, and a user-visible recovery route. Do not clear IndexedDB to make an asset test pass.
+6. **Owner gate:** seed all 37 stores with synthetic owner-A canaries in Engineering-approved harness; test deletion intent, old tab, bfcache, fresh startup B and write denial with exact repository calls. Only then extend to installed Safari and managed EFB. The normal release artifact still needs noninstrumented regression evidence.
+7. **Files custody gate:** export an independent file, close browser, reopen it from the actual Files destination, validate checksum/owner/37-store completeness and restore on an empty permitted target. In-app “export success” is not external custody proof.
+8. **Evidence gate:** classify `PASS`, `FAIL`, `NON-EXECUTION`, `NOT RUN` separately for Chromium, Safari tab, Safari Home Screen and managed iPad. Preserve negative controls and anonymized traces; avoid pilot or crew data.
+
+**MINTTAP DECISION:** keep PWA release HOLD. Do not change `skipWaiting`, Cache Storage retention, `id`, hosting headers or schema rollback policy on static theory. These are Engineering-owned implementation choices pending exact-runtime evidence.
+
+### 38. Cross-track bottleneck reallocation and stop decision [DEPENDENCY / TRANSFER VALIDATION]
+
+Track **E** remains P0 for owner deletion, 37-store parity and durable independent backup; **A** owns the precise registration/activation/fetch/installed-container semantics in §§35–37. **C** owns the six-stage readiness oracle, quota interruption and accessibility/physical-device evidence; **B** consumes Design Studio W121 for honest offline-ready/update/recovery states; **D** consumes Marketing D9's product-claim HOLD and requires privacy-minimized, version-attributed success measurement rather than an install count. Software Engineering owns exact builds and source modifications. This transfer does not assert Design Studio Stage 3 PASS or product execution.
+
+**Adjacent-question audit:** source commands and asynchronous bootstrap ordering were resolved here. The next question—whether the *generated served worker* actually meets the six readiness and two-version oracles—cannot be resolved by another source-only primer. It requires an Engineering-approved build/HTTPS/browser execution environment. Existing Native W-012 PASS remains valid only for its native scope; browser, Files and managed EFB remain OPEN. Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD.
