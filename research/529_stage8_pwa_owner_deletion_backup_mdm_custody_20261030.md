@@ -663,3 +663,135 @@ Engineering [S007](https://github.com/yhappcom/software-engineering-studio/blob/
 ## 54. Adjacent-question checkpoint [OPEN / CHANGE WATCH]
 
 This bundle resolved an evidence omission by reconciling approved W-012 native execution, initial failing counterexamples, corrected regression, source/command metadata, merged PR, current code, deletion test coverage and WebKit/MDM transfer limits. It eliminates duplicate native study and narrows the next experiment to **A-delete→B startup plus independent Files/installed PWA**. The adjacent question "does approved restore proof also cover account deletion?" was answered **no** by inspecting distinct tests. Further advancement requires Engineering-approved exact Web build and physical-device/file evidence, not another static W-012 rewrite. Watch WebKit/Apple deployment and Firebase deletion policy as CHANGE WATCH.
+
+
+---
+
+## 55. Stage 8 continuation — deletion-phase admission and recovery liveness are separate from wipe parity [SOURCE / 2026-10-30]
+
+**New question:** even after the known 29/37 wipe mismatch and completed(A)→B startup refusal are repaired, can the *durable deletion phase machine itself* admit an unsupported transition or strand an interrupted user? The exact LogMate \`main@9cc0cd432a317d5dfebbe90e318fb219e53e024a\` source answers part of this question. This is a **source-derived internal state-contract gap**, not a remotely exploitable endpoint, observed product failure or permission to change the approved deletion policy.
+
+Read-only primary source: [phase enum](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/domain/account_deletion_state.dart), [repository request/advance/wipe](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1007-L1125), [coordinator](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/account_deletion_coordinator.dart), [codec](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/account_deletion_state_codec.dart), [startup resolver](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/logbook/local_ledger_access_coordinator.dart#L167-L211), [SessionGate](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/app/session_gate.dart#L538-L573) and [locked screen](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/screens/session_recovery_screens.dart). Blob anchors at inspection: repository \`021d9001\`, enum \`499037bd\`, coordinator \`8e844e88\`, codec \`07c0f8cf\`, SessionGate \`5bcd6bf2\`, screen \`035ca07f\`. Product source remains **READ ONLY**.
+
+Authoritative conceptual transfer: [OWASP Business Logic Security](https://cheatsheetseries.owasp.org/cheatsheets/Business_Logic_Security_Cheat_Sheet.html) recommends explicit validated workflow transitions; [Firebase Web Manage Users](https://firebase.google.com/docs/auth/web/manage-users) confirms recent-login sensitivity for identity deletion; [Apple account deletion](https://developer.apple.com/help/app-review/guideline-reference/5-1-1-account-deletion) and [Google Play deletion requirements](https://support.google.com/googleplay/android-developer/answer/13327111?hl=en) govern user-facing access and transparency. Checked 2026-10-30. **Important distinction:** OWASP server-side authorization is not supplied by a local enum check. A local repository phase is a *local consistency guard*, not proof of remote erasure or authenticated server admission.
+
+## 56. Exact transition graph: coordinator discipline versus repository permissiveness [SOURCE / REPLICATION]
+
+The **normal coordinator** drives \`localLocked → reauthenticated → providerRevoked → remoteDataErased → firebaseIdentityDeleted → completed\`, performing reauthentication, provider revoke, remote erasure and Firebase identity deletion before advancing each corresponding durable phase. \`request()\` directly creates \`localLocked\`; it does not first persist \`requested\`. The terminal \`completed\` transition is performed by the separate local-wipe method, not by \`advanceAccountDeletion\`. This ordering is a positive protection.
+
+The **repository transition guard** rejects \`none\`, rejects \`completed\` as a requested next phase and rejects only a next phase whose enum index is **less** than the current phase index. It checks the exact stored UID/request ID. It does **not** require the next phase to be the single authorized successor. Consequently, a same-UID/request caller *inside the application* can request forward jumps such as \`localLocked → firebaseIdentityDeleted\` without passing through the coordinator's external actions. If such a phase is durably written, \`wipeLocalUserDataAndCompleteDeletion\` accepts it as its phase prerequisite. This is a **defense-in-depth admission gap at the local repository API**. It does not imply an untrusted web visitor can call the Dart method, that Firebase data was actually deleted, or that the shipped UI exposes the path.
+
+Static guard projection (independently enumerated from the predicate, **NOT Dart runtime execution**):
+
+| Current phase | Next phases admitted by repository \`advance\` | Normal coordinator successor |
+| --- | --- | --- |
+| \`localLocked\` | same; \`reauthenticated\`, \`providerRevoked\`, \`remoteDataErased\`, \`firebaseIdentityDeleted\`, \`retryableIncomplete\` | \`reauthenticated\` after same-UID reauth |
+| \`reauthenticated\` | same; \`providerRevoked\`, \`remoteDataErased\`, \`firebaseIdentityDeleted\`, \`retryableIncomplete\` | \`providerRevoked\` after provider action |
+| \`providerRevoked\` | same; \`remoteDataErased\`, \`firebaseIdentityDeleted\`, \`retryableIncomplete\` | \`remoteDataErased\` after remote erasure |
+| \`remoteDataErased\` | same; \`firebaseIdentityDeleted\`, \`retryableIncomplete\` | \`firebaseIdentityDeleted\` after identity deletion |
+| \`firebaseIdentityDeleted\` | same; \`retryableIncomplete\` | separate atomic local wipe → \`completed\` |
+| \`retryableIncomplete\` | same only | **no coordinator branch** |
+| \`completed\` | none | terminal; next-account lifecycle unresolved |
+
+The same-phase write is consistent with a limited idempotent retry, but does not authorize arbitrary forward jumps. The enum-index shortcut also makes adding/reordering future phases a **schema/behavior compatibility risk**: ordering in a declaration is not a stable authorization contract. **No arbitrary phase change is known to be invoked by production UI.**
+
+## 57. Encodable but unhandled states and an absorbing retry dead end [SOURCE / CONTRADICTION]
+
+The enum includes \`requested\` and \`retryableIncomplete\`. The v1 deletion codec recognizes every enum name and accepts either of these as a persisted non-\`none\` state when UID and request ID are strings. Yet \`AccountDeletionCoordinator.resume()\` contains no action for either phase: its sequential branches handle only \`localLocked\`, \`reauthenticated\`, \`providerRevoked\`, \`remoteDataErased\` and \`firebaseIdentityDeleted\`. It returns unchanged for \`requested\`, \`retryableIncomplete\` and \`completed\`.
+
+The current repository permits a caller to advance \`firebaseIdentityDeleted → retryableIncomplete\`, but then forbids moving backward to \`firebaseIdentityDeleted\`; \`resume()\` also does nothing. This yields a **source-reachable through explicit repository API calls, but not demonstrated through current coordinator** locked terminal-like state. A decoded historical/externally seeded \`requested\` state is likewise locked without an implemented resume branch. No such persisted state has been observed in a user DB, and normal coordinator \`request()\` does not create it.
+
+The relevant distinction is **valid codec input ≠ valid executable saga state**. Rejecting unknown phases is good, but accepting known phases that no current coordinator can resolve is not sufficient for recovery. An explicit versioned migration/recovery policy is required before treating them as valid live states. Do not simply clear them: a partially completed remote erasure may be irreversible and may require reconciliation rather than restart.
+
+## 58. UI and startup liveness: durable lock without a visible resume route [SOURCE / TRANSFER VALIDATION]
+
+The normal account-required resolver reads deletion phase before local owner. Every non-\`none\` state except the special \`completed + signedOut\` branch becomes \`LocalLedgerDeletionLocked\`. SessionGate renders \`AccountDeletionLockedScreen(phase: state.phase.name)\`. That screen has informational text and **no resume, retry, support, switch-account or deletion-status callback**. The currently inspected Settings screen has Sign out but no deletion action; its public deletion page says to use Settings. These are **source-level UI/call-graph observations**, not proof of the exact deployed binary or of all external support mechanisms.
+
+| Durable phase after restart | Current normal startup | Coordinator direct \`resume()\` if externally invoked | User-visible path in inspected locked screen |
+| --- | --- | --- | --- |
+| \`localLocked\` | DeletionLocked | tries same-UID reauth | information only |
+| \`reauthenticated\` | DeletionLocked | tries provider revoke | information only |
+| \`providerRevoked\` | DeletionLocked | tries remote erase | information only |
+| \`remoteDataErased\` | DeletionLocked | tries Firebase identity delete | information only |
+| \`firebaseIdentityDeleted\` | DeletionLocked | tries local wipe | information only |
+| \`requested\` / \`retryableIncomplete\` | DeletionLocked | unchanged | information only |
+| \`completed\` + signed-in B | DeletionLocked(A) | unchanged | information only |
+| \`completed\` + signed out | AuthenticationRequired | unchanged | authentication entry, but marker remains |
+
+**CONTRADICTION:** the product spec says "restart resumes while locked", and the coordinator contains a resumable function, but the inspected SessionGate locked branch does not invoke it or expose a resume action. This is an **integration/operability gap to test**, not proof there is no other production trigger anywhere. A standalone callable coordinator does not establish that the shipped UI wires it into restart. A successful automatic resume also cannot be assumed safe without real provider/remote idempotency and user consent policy.
+
+## 59. Remote proof is not implied by a local phase or an offline browser [SOURCE / SECURITY BOUNDARY]
+
+The repository's local wipe checks \`phase == firebaseIdentityDeleted\` and exact stored UID/request ID; it does not independently query Firebase or require a signed server receipt. The normal coordinator obtains the phase after awaiting the identity port, which is the intended caller discipline. Thus **local phase provenance** matters: an arbitrary forward write to that phase would not establish that the external account was removed. Conversely, identity deletion may succeed remotely while the local phase write fails; the next retry can encounter an already-deleted identity, as §16 described. These are different error directions and require different negative controls.
+
+A managed EFB PWA can be offline during a deletion initiated elsewhere. The browser cannot be assumed to receive remote revocation, execute a background task or erase every independent installed container immediately. A local completed marker on one origin/container is not a global deletion receipt. Do not present a single \`completed\` string as proof of all-device erasure, external Files disposal or provider revocation. Use explicit per-boundary evidence, with Engineering owning remote authority and Web E/A owning installed-container/custody constraints.
+
+## 60. Recovery policy alternatives and their failure modes [SYNTHESIS / MINTTAP DIRECTION — NOT APPROVED]
+
+**Option 1 — strict adjacent transition contract:** repository accepts only the current phase's authorized next phase, plus carefully specified same-request replay. Benefits: catches accidental phase jumps and enum reorder mistakes. Limitation: it cannot prove an external side effect occurred; provider/remote receipts and adapter idempotency remain separate.
+
+**Option 2 — durable server-side deletion receipt and local reconciliation:** remote erasure and identity deletion use exact UID/request receipts that can be queried after ambiguous success, including when the original Firebase identity is gone. Benefits: process-death recovery. Costs: privileged service ownership, minimal retained deletion metadata, security and privacy review, server-side idempotency. This is Engineering S007 territory, not an approved backend change.
+
+**Option 3 — explicit terminal marker migration/acknowledgement:** after A completion, a narrowly scoped verified transition permits B to begin on a clean local database without treating A's completion receipt as B's authority. Benefits: resolves normal B liveness. Failure: clearing the marker too early or with undropped Sync evidence could expose A state. Must first close 37-store wipe parity and retained evidence policy.
+
+**Option 4 — blanket origin reset:** tempting for a shared-device PWA but can destroy the only offline logbook and is not guaranteed to erase separate installed contexts or user-owned Files. **Not an approved workaround** (§10).
+
+None of these alternatives should silently modify the approved deletion order, retain a usable deleted-owner archive or enable automatic PWA-native synchronization. Engineering must propose and validate the actual state protocol; Web Manager records acceptance and cross-container consequences.
+
+## 61. Exact executable acceptance: phase admission, restart, liveness and remote ambiguity [VALIDATION — DEFINED NOT RUN]
+
+Use an Engineering-approved disposable exact LogMate test build and a fresh Sembast file/IndexedDB database; synthetic A/B UIDs, synthetic nested Sync canaries, no real pilot data. Reuse W-012 Native B1 oracles where they cover 37-store rollback; **do not count those restore tests as deletion tests**.
+
+| ID | Test | Required oracle |
+| --- | --- | --- |
+| DL01 | \`none → request(A,k)\` | only \`localLocked\`, correct owner/request, no external action before intent |
+| DL02 | Same \`request(A,k)\` replay | idempotent current phase; no second destructive side effect |
+| DL03 | Different request/UID while active | fail closed; no phase or owner mutation |
+| DL04 | Normal ordered coordinator success | each phase after its external action, 37-store terminal wipe, source/receipt provenance |
+| DL05 | Explicit \`localLocked → firebaseIdentityDeleted\` repository call | **Current source predicts admission**; negative test must expose contract gap, not treat it as approved success |
+| DL06 | Explicit \`firebaseIdentityDeleted → retryableIncomplete\` | **Current source predicts admission**; resume no-op and return transition blocked; confirm fail-closed recovery handling |
+| DL07 | Persist/decode \`requested\` and \`retryableIncomplete\` | supported/rejected migration policy, not silent permanent lock |
+| DL08 | Crash before/after provider revoke | same-UID safe retry or authoritative reconciliation, no duplicate harmful effect |
+| DL09 | Remote erase accepted but phase write interrupted | exact UID/idempotency status query; no unverified advance |
+| DL10 | Firebase identity deleted but local phase write interrupted | no need to reauth deleted UID for safe local completion; no false remote success |
+| DL11 | Local wipe transaction abort | original phase/stores intact; retry does not corrupt 37-store registry |
+| DL12 | A terminal complete → signed out → verified B normal startup | clean B onboarding or explicit approved recovery, not A locked screen indefinitely |
+| DL13 | A terminal complete → B explicit bind alternate path | no foreign Sync export; B later deletion works; test separately from normal startup |
+| DL14 | Restart from each in-progress phase through actual SessionGate | automatic resume or discoverable authorized action; no silent dead-end |
+| DL15 | No network on managed iPad during deletion | truthful pending/locked state; no claimed remote erasure or background sync |
+| DL16 | Other Safari/Home Screen/Web Clip copy remains offline | no assumption of immediate cross-container deletion; custody/status disclosure |
+| DL17 | External LBK previously saved by A | deletion scope and user-owned file retention explained; no automatic file erase claim |
+| DL18 | Expired reauth/Apple revocation cancellation | no identity delete before required provider proof; recovery remains possible |
+| DL19 | Large text, VoiceOver and keyboard on pending/completed/error | accessible status, recovery route and no ambiguous "all data gone" copy |
+| DL20 | Public deletion route and in-app Settings in exact shipped build | functional, discoverable and consistent with served policy and operator process |
+
+Classify \`PASS SOURCE PREDICATE\`, \`PASS EXACT NATIVE\`, \`PASS EXACT WEB\`, \`PASS DEVICE-MDM\`, \`FAIL PRODUCT\`, \`NON-EXECUTION\` and \`OPEN\` separately. **All DL01–DL20 are DEFINED, NOT EXECUTED in this research.** If DL05/DL06 demonstrate the predicted behavior in exact runtime, they are **negative security/operability controls**, not approval or production exploit evidence.
+
+## 62. Cross-track balance, prerequisites and peer ownership [DEPENDENCY / TRANSFER VALIDATION]
+
+| Track | Current relative depth | Incremental responsibility |
+| --- | --- | --- |
+| **E — lead** | Strong source/standards and Native W-012 boundary, weak exact deletion/provider execution; P0 bottleneck | Phase/receipt/rollback/terminal-owner policy, no global-erasure claims, exact release or incident criteria |
+| **A — dependency** | Browser origin/IndexedDB/Worker and Chrome synthetic mature; Safari/MDM product unknown | Phase persistence on actual browser storage, restart/other installed contexts, offline/online transition |
+| **C — verifier** | Historical Native W-012 900 PASS + 1 SKIP, Chrome synthetic; deletion-phase exact tests absent | DL01–DL14 negative/positive exact-build oracles; interrupted-process and AT/device provenance |
+| **B — consumer** | Design Studio W121 pre-runtime saturation; no exact deletion recovery usability evidence | Status/action information architecture; no premature visual-spec duplication |
+| **D — consumer** | Marketing D8/D9 claims held; public deletion-route parity source-known | Store/search/support route accuracy and privacy-safe completion measurement, not marketing acquisition theory |
+
+[Engineering S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) already owns general saga design and provider adapters. [Design Studio W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md) requires executable product evidence rather than more speculative UI manifests. Marketing's D8/D9 hold is compatible with these findings. No peer or product repository is modified.
+
+## 63. Falsification and operational escalation [CONTRADICTION / VALIDATION]
+
+- If exact source or a newer build enforces adjacency in another repository layer, the predicted DL05 jump must be reclassified. Current inspected \`advanceAccountDeletion\` itself does not enforce it.
+- If an actual startup integration invokes \`resume()\` outside the inspected SessionGate branch, the "no visible resume route" finding narrows to UX/discoverability and still requires crash/identity/MDM tests. Do not infer absence globally from one widget.
+- If \`requested\` and \`retryableIncomplete\` are deliberately retired legacy states with an approved migration path, inspect and validate that migration before classifying them as product dead ends.
+- If a server-authoritative receipt exists outside this repo, it can strengthen remote proof, but it does not change local 29/37 wipe parity or completed(A)→B resolver semantics by itself.
+- If a managed iPad cannot access an external backup destination, record **POLICY DENIED** and user-safe recovery. Do not advise wiping local data based on a backup that was never independently retained.
+- An untrusted actor calling an internal repository method is **not established**. No exploit, deployed security incident, actual unauthorized deletion, production UI policy violation or user data loss is claimed.
+
+Escalate a **confirmed exact-build** phase-skip/terminal lock/owner-data-retention failure to Engineering before a PWA release decision. A phase graph static observation alone changes the test priority, **not the production gate**.
+
+## 64. Adjacent-question checkpoint and next decisive evidence [OPEN / CHANGE WATCH]
+
+This integrated continuation answers the adjacent question left by §§46–54: approved Native B1 restore proof does **not** validate deletion phase admission, restart liveness or remote identity/receipt recovery. Source-level review now identifies (1) forward-skip acceptance in the local phase API, (2) two decodable but unhandled phases, (3) an absorbing \`retryableIncomplete\` state if explicitly written, (4) an informational locked screen without a resume control, and (5) a distinct remote-success/local-ack ambiguity. These findings are **conditional/source-only**, with positive normal coordinator sequencing explicitly preserved.
+
+**Priority order:** Engineering exact A→delete→B startup and 37-store wipe parity; DL05/DL06 phase-negative controls and DL08–DL14 interruption/recovery; independent Files LBK readback/restore; then browser IndexedDB, Worker and physical managed EFB transfer. Further generic state-machine prose or another synthetic-only test would not resolve these release blockers. **Stage 8 ACTIVE · Native W-012 component PASS (historical) · Production validation OPEN · PWA release HOLD.** Monitor Firebase/Auth, Apple/WebKit, Google Play and OWASP guidance for change; recheck the actual deployed build before asserting policy compliance or incident.
