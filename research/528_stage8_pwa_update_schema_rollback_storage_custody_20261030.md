@@ -767,3 +767,54 @@ Priority remains: 529 MC06/MC10/MC14/MC16 owner/erasure; 528 FC01–FC05 first c
 ## 58. Adjacent-question checkpoint [OPEN]
 
 After first-claim and mixed-worker ordering (§§35–50), the next independent issue is the **authority of the manifest used at serve time**. Source inspection confirms the stored manifest is mutable within the origin and is the digest expectation read on fetch; current \`verified\` flag is not checked there. This changes the release threat model beyond merely locking catalogue writes. The reduced Chrome fixture and hosted CI are committed but execution **UNVERIFIED**. No real LogMate compromise, bypass, production failure or external backup loss is asserted. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+
+## 59. \`REPAIR_CACHE\` shell omission: a separate offline availability blocker [SOURCE / CONTRADICTION]
+
+The same pinned [\`tool/pwa_precache.dart\`](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/tool/pwa_precache.dart) shows an **asymmetry between initial installation and later repair**:
+
+- \`install\` explicitly calls \`await cacheGroup(shellCache(OFFLINE_MANIFEST), OFFLINE_MANIFEST.shell)\` before \`precacheCandidate(...)\`.
+- \`precacheCandidate\`, which services \`START_PRECACHE\` and \`REPAIR_CACHE\`, calls \`cacheGroup\` for **fonts and font notices**, then \`inspect(OFFLINE_MANIFEST)\`. It **does not call \`cacheGroup\` for shell resources**.
+- \`inspect\` checks shell + fonts + notices and can return \`ready:false\` if a shell resource is missing/corrupt.
+- \`verifiedResponse\` refuses missing/incorrect shell bytes with 503, but it does not itself repair them.
+
+**Source-level conclusion:** after a successful installation, if a shell asset disappears or fails its digest, a \`REPAIR_CACHE\` message alone has **no code path that re-downloads that shell asset**. Font/notice repair can work independently, but the shell remains unavailable until some other operation restores it (for example, a separately verified new installation). This is **not proof that a real browser has evicted an individual shell entry**, nor proof of an observed LogMate outage. It is a precise **repair-contract coverage gap** that matters for storage pressure, iPad EFB offline continuity and the truthful meaning of \`REPAIR_REQUIRED\`.
+
+A cache can be removed or modified by same-origin code and browser storage management; [MDN Cache](https://developer.mozilla.org/en-US/docs/Web/API/Cache) explicitly assigns cache maintenance to the application. A repair button or message named \`REPAIR_CACHE\` should not be counted as a shell-recovery mechanism without a successful exact runtime test. A new install may also require network access, which is not guaranteed on a company EFB iPad.
+
+## 60. Status, promotion and serving have different trust predicates [SOURCE / SYNTHESIS]
+
+The source defines three separate computations:
+
+1. \`status().candidate = inspect(OFFLINE_MANIFEST)\`: checks the **worker-embedded** candidate manifest against cached bytes; its \`state\` is derived primarily from this candidate and an in-memory \`state\`.
+2. \`status().served = inspect(versionFor(control, control.currentBuildId))\`: checks the **mutable stored manifest** selected by control JSON. It can therefore report internally self-consistent bytes even if the manifest provenance is untrusted (§51).
+3. \`promoteInControl(control, buildId)\`: checks the stored \`verified\` flag and \`inspect(storedManifest)\`, whereas \`fetch\` serves matching bytes without checking that flag.
+
+Thus **\`READY\` is not a proof that every adopted client is mapped**, that every old-build manifest is authorized, that the currently served response headers are safe, or that the local ledger is usable. A coherent stored-manifest mutation could make \`served.ready\` look healthy while \`candidate.ready\` is false, and a first-adopted client (§43) can receive 503 even when the candidate itself is READY. This is a **source-derived possibility**, not a measured browser state.
+
+**No blind recovery:** do not force \`skipWaiting\`, clear all site data, delete old caches or rewrite the ledger merely to turn \`status().state\` green. Distinguish **candidate integrity, served-build authorization, per-client mapping, shell repairability, Owner/DB compatibility and external Files custody**.
+
+## 61. New acceptance SR01–SR08 for recovery truth [VALIDATION DEFINED / NOT RUN]
+
+| ID | Scenario | Distinct oracle |
+| --- | --- | --- |
+| SR01 | Install exact compiled worker with all assets intact | Candidate/served/cache and offline reload baseline |
+| SR02 | Remove **one shell** cache entry in disposable test profile, send \`REPAIR_CACHE\` | Confirm whether shell bytes are actually re-fetched; current source predicts no |
+| SR03 | Alter one shell entry's bytes without changing stored digest, send \`REPAIR_CACHE\` | Confirm 503 and repair state; no data reset |
+| SR04 | Remove one **font** entry, send \`REPAIR_CACHE\` while online | Compare successful font recovery with SR02 |
+| SR05 | Remove one **notice** entry, send \`REPAIR_CACHE\` | Confirm notice recovery and total readiness |
+| SR06 | SR02/SR03 while offline, then regain permitted connectivity | Show truthful user recovery path and no loss of Sembast/Outbox |
+| SR07 | Candidate/served metadata coherent tamper (§51) while embedded manifest remains unchanged | Compare \`status\`, \`promoteInControl\` and actual fetch; no false integrity PASS |
+| SR08 | Old client open, new candidate waiting; shell corruption/repair under quota pressure | Retain last runnable old build; no destructive GC or wrong-version bytes |
+
+Use exact build SHA, cache entry path, worker/client IDs, browser/iPadOS/MDM provenance, request status and sanitized event timeline. Test with synthetic flight canaries and a separately read-back \`.lbk\`; never damage production profiles. The reduced MT01–MT05 probe **does not cover** SR01–SR08 or actual repair behavior. All SR cases are **NOT RUN**.
+
+## 62. Cross-track operational consequences [TRANSFER VALIDATION / MINTTAP DIRECTION]
+
+**E** owns whether a release's \`REPAIR_CACHE\` contract is complete and whether recovery can occur without erasing an offline ledger. **A** owns the distinction between install, message-driven repair, worker activation, per-client fetch and browser eviction. **C** owns the exact SR02/SR04 contrast and failure-state classification (503 integrity protection can coexist with failed availability). **B** owns truthful “offline ready,” “repair required” and “network needed” language only after runtime evidence, consuming Design Studio W121. **D** holds all unattended-update/offline-recovery claims until actual product/device evidence. Engineering owns any source change; Web Manager does not patch LogMate.
+
+**Priority refinement:** 529 Owner/37-store custody remains P0. Within the PWA release lane, combine **FC01–FC05 first-claim**, **SR02/SR04 shell-versus-font repair**, **TR02/TR04/TR07 trust-root**, and **CW03/CW04 mixed-version** in one immutable Engineering-approved browser fixture. This avoids redundant primers and yields independent availability, integrity, version-compatibility and data-custody evidence.
+
+## 63. Integrated checkpoint [OPEN]
+
+The cache catalogue's mutable expected digest (§51) and missing shell repair path (§59) are **different defects to falsify**: the former concerns release authority under same-origin write capability; the latter concerns non-destructive availability after shell cache loss. Source review established the exact branch differences; neither has been reproduced in LogMate or physical EFB. The five-case reduced Chrome workflow is committed but hosted execution **UNVERIFIED**. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**; no LogMate/peer modifications.
