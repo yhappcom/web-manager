@@ -250,3 +250,116 @@ Every result requires source commit, compiled artifact hash, environment, redact
 **Material correction:** normal B startup is blocked by completed(A) **before** owner binding. Prior second-delete rejection remains an alternate-path conditional. Current public deletion instructions disagree with Settings source, and identity-delete acknowledgement failure is an untested saga window. These are **P0 source-based validation priorities, not deployed incidents**.
 
 **Adjacent-question check:** audited real SessionGate composition, startup resolver, recovery screen, Settings, public page, coordinator, existing tests, current Google/Apple/Firebase primary sources, Design Studio W121, Marketing D8/D9 and Engineering S007/Q006. Further promotion needs Engineering-approved exact product runtime and enrolled iPad/MDM/file evidence, not another synthetic primer. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** No product or peer repository writes.
+
+
+---
+
+## 20. New security boundary: account identity, local ledger and installed-container custody are not one deletion domain [SOURCE / SYNTHESIS, 2026-10-30]
+
+**Problem/history.** The web platform scopes persistent state to an origin *within a browser storage container*. An application account is a server-side identity, while a PWA installation may be an independent local container. Deleting an identity, clearing a Sembast store, removing a Service Worker, and deleting a user-exported file therefore have different authorities, failure modes and observability. This is especially consequential for an offline EFB, where a second device or installation may not be reachable when deletion is requested elsewhere.
+
+**Pinned product source:** LogMate \`yhappcom/logmate\` \`main@9cc0cd432a317d5dfebbe90e318fb219e53e024a\`, declared \`1.0.0+1\` (source version, **not** deployed build). \`sembast_database_opener_web.dart\` opens \`logmate_ledger\` through \`sembast_web\`. \`auth_engine.dart\` uses \`FirebaseAuth.instance\`, Firebase session reload and guarded sign-out; \`provider_auth_engine.dart\` likewise uses \`FirebaseAuth.instance\`. In those two complete files there is no explicit \`setPersistence\` or \`instanceFor(...persistence...)\`. This bounded absence does **not** prove every initialization path, SDK internal storage detail, or deployed configuration.
+
+**Primary platform authority:** [Firebase Flutter Auth getting started — Persisting authentication state](https://firebase.google.com/docs/auth/flutter/start) (checked 2026-10-30) says FlutterFire Web stores Auth state in IndexedDB by default and supports configurable persistence. [Firebase Web Auth persistence](https://firebase.google.com/docs/auth/web/auth-state-persistence) describes LOCAL/SESSION/NONE and cross-tab synchronization for the JS SDK. These are related but not interchangeable SDK contracts: **do not infer a specific FlutterFire runtime persistence choice solely from the JS default**. [WebKit Tracking Prevention](https://webkit.org/tracking-prevention/) says Home Screen web-app data is isolated from Safari; [WebKit Safari 17.2](https://webkit.org/blog/14787/webkit-features-in-safari-17-2/) says cookies can be copied once on installation, while other website storage is not copied and later state is not shared. [WebKit iOS/iPadOS 16.4 web-app identity](https://webkit.org/blog/13878/) explicitly allows multiple installed copies of a web app.
+
+| Custody plane | Owner/authority | What source establishes | What deletion of A in one active instance does **not** establish |
+| --- | --- | --- | --- |
+| Firebase Auth identity/session | Firebase remote identity; each SDK session/container | Product uses FirebaseAuth; FlutterFire Web documents IndexedDB persistence | Erasure of local Sembast DB, other installed Auth sessions or files |
+| LogMate Sembast ledger | Browser container and product repository | Web database name \`logmate_ledger\`; terminal path explicitly drops 29 of 37 registered stores | Removal of all 37 stores or a second container's ledger |
+| Service Worker / Cache Storage | Origin-scoped browser runtime, per storage container | Worker source caches versioned shell and may retain historical builds | That caches contain personal flights, or that an account delete unregisters Worker; both need exact observation |
+| External \`.lbk\`, print, share | User/Files destination and applicable MDM | Public deletion page explicitly excludes exported/printed/shared copies | Revocation or automatic removal of independent copies |
+| Server operational/identity data | Firebase/Admin/operator authority | Tracked \`firestore.rules\` denies direct client read/write; \`functions/index.js\` documents retired lookup callable; \`functions/README.md\` documents operator read-only report | Existence/nonexistence of deployed remote deletion coordinator or successful remote erasure |
+| Safari tab, Home Screen install #1/#2, managed Web Clip | Browser/OS/MDM container and user/operator | WebKit documents storage isolation and multiple installs | Cross-container immediate erasure, shared login, shared Files permission or uniform MDM policy |
+
+**CONTRADICTION:** "37 stores can be serialized" is a *repository-backup scope*, not a universal account-deletion inventory. "Firebase identity deleted" is a remote authority event, not proof that all offline containers have erased the same UID's ledger. "Safari origin is the same" does not imply Home Screen storage sharing. Conversely, isolated storage does not by itself demonstrate an actual leak: stale bytes, authenticated UI access, and third-party disclosure require separate oracles.
+
+## 21. Remote revocation versus offline-first continuity: an unavoidable availability/privacy trade-off [SOURCE / SYNTHESIS]
+
+Pinned [SessionGate](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/app/session_gate.dart#L44-L70) sets an initial remote-validation budget of **1500 ms**. [Lines 268–296](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/app/session_gate.dart#L268-L296) explicitly preserve an established local owner's startup decision after timeout and handle late validation. [Lines 313–345](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/app/session_gate.dart#L313-L345) preserve the local decision when remote authority is temporarily unreachable or indeterminate, while authoritative rejection triggers guarded Firebase-session clearing. In contrast, [fresh unbound ledger preflight lines 203–260](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/app/session_gate.dart#L203-L260) fails closed before binding an unverified restored UID. These **different policies are deliberate in source**; do not collapse them into "Firebase offline auth always allowed".
+
+**Counterexample:** EFB installation #1 already has owner A and goes offline. On another online device, A requests and completes remote account deletion. The offline EFB cannot learn that remote fact until an authorized communication channel becomes available. Its previously established local state may remain available under the source's offline-continuity policy. A subsequent successful server rejection can alter Auth/session access but does not, by itself, prove independent EFB file/DB erasure. This is a *conditional offline authority model*, **not an observed deletion bypass**.
+
+**Operational judgment:** No web implementation can truthfully promise instantaneous deletion of every disconnected copy. The product must define and disclose whether "account deleted" means (1) remote identity/data deletion accepted, (2) initiating-device local erasure committed, (3) other enrolled devices eventually reconcile, or (4) user-controlled external copies excluded. For managed EFB, offline availability and immediate remote revocation cannot both be guaranteed without a pre-agreed expiration/lease mechanism, whose flight-safety and usability consequences would require a separate product decision. No such lease is authorized or observed here.
+
+## 22. Same-origin cross-tab, separate installed web app and native phone are three different replication problems [SOURCE / DEPENDENCY]
+
+- **Same browser profile and origin:** Firebase's Web Auth persistence docs describe cross-tab propagation for LOCAL sessions; Sembast's Chrome package probe PS01–PS11 establishes only its own bounded transaction behavior. Neither guarantees that LogMate's actual deletion saga closes every open tab atomically. A tab with an in-flight edit, old JS bundle or retained Sembast handle needs explicit test.
+- **Safari tab versus Home Screen app:** WebKit's isolated storage plus one-time cookie copying means sign-out/deletion in Safari is not evidence of a wipe in the installed app. Even a new installation of the same manifest can be another independent state holder. Browser deletion of site data, removal of an icon and a managed Web Clip policy must be tested as distinct actions.
+- **PWA versus native phone:** Firebase UID may be shared while local persistence, filesystem custody, app lifecycle and sync state are not. Remote identity revocation can invalidate future server access but cannot erase an unreachable native SQLite/Sembast or Files copy. A future PWA↔native peer transport does not change this authority boundary; it would need authenticated, replay-safe, consented state reconciliation.
+- **Server/operator:** Tracked Firebase \`firestore.rules\` rejects direct client Firestore access; tracked \`functions/index.js\` does not implement a callable account-deletion coordinator. This **cannot** establish absence of deployed Admin functions, external operator workflows or cloud resources. An operator inventory and actual request/receipt trace are mandatory before a "remote data erased" claim.
+
+**Failure modes:** delete on tab A while tab B is editing; delete while installed copy #2 is offline; stale A Firebase Auth restored in one container but no A Sembast ledger in another; A Sembast ledger present but no Firebase session; provider deletion succeeds but local acknowledgement fails; server erasure succeeds but another device's Sync outbox later reconnects. Treat each as a different authority/ordering test, not one generic "clear storage" test.
+
+## 23. Public deletion request is a human service boundary, not a demonstrated deletion API [SOURCE / POLICY WATCH]
+
+The exact [LogMate account-deletion page](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/account-deletion/index.html#L20-L55) offers an external **mailto** request to \`support@minttap.app\` from an associated email, with subsequent identity verification and completion notice. It does **not** contain an authenticated web deletion form or live request-status API in that page source. That is not automatically noncompliant: the acceptability of a support-mediated request depends on current policy, accessibility, processing and actual operational fulfillment. The mailbox's delivery, verification process, retention policy, response SLA and operator workflow are **UNKNOWN**.
+
+The same page correctly excludes user-exported files from automatic deletion, but its Settings deletion instructions conflict with the pinned Settings widget (529 §15). This matters more than visual polish: an external request that can be initiated but cannot be securely verified or fulfilled is not a completed deletion service. [Google Play account deletion requirements](https://support.google.com/googleplay/android-developer/answer/13327111), [Apple in-app deletion support](https://developer.apple.com/support/offering-account-deletion-in-your-app) and [Firebase Flutter account deletion](https://firebase.google.com/docs/auth/flutter/manage-users) must be rechecked against the **actual shipped** app, served URL, store operator declarations and authenticated request evidence, not merely source copy.
+
+**MINTTAP DIRECTION — recommended, not implemented:** Web B owns truthful entry/status/recovery content; Web E owns secure request intake, privacy/retention, proof of completion and incident handling; Engineering S007 owns provider/remote/local saga implementation; Marketing D8/D9 owns no premature public claims. Do not ask for passwords, Firebase tokens, full pilot records or unredacted backups by email. Preserve the legitimate need to verify an account request without treating possession of a possibly stale email address as sufficient authority by itself.
+
+## 24. Destructive recovery shortcuts and false PASS oracles [CONTRADICTION / VALIDATION]
+
+| Shortcut / green signal | Why insufficient | Stronger acceptance oracle |
+| --- | --- | --- |
+| Firebase \`currentUser == null\` | Session absence != identity/data erasure | Remote UID status + authorized data deletion receipt + local store disposition |
+| Sembast 29-store terminal drop | Eight registered Replica/Sync stores not explicitly dropped; other containers outside transaction | Full 37-store owner-aware inventory and same-UID/foreign-UID negative controls |
+| \`Clear-Site-Data: "storage"\` | Destructive to offline ledger/Worker in targeted context, not all installed contexts or external Files | Approved explicit container-by-container erasure contract with backup/incident handling |
+| Same-origin sign-out in Safari | Installed Home Screen storage is isolated | Separate Safari/Home Screen #1/#2/managed Web Clip test with independent canaries |
+| New PWA install opens logged out | No Auth session says nothing about old offline ledger elsewhere | Verify old container's independent data, permissions and eventual server rejection |
+| Remote delete request acknowledged | Request receipt != terminal server/provider/local completion | Per-stage idempotency and reconciliation receipts, including ambiguous network outcomes |
+| \`.lbk\` digest matches | Byte integrity != owner authority, restore compatibility or independently saved file | Files readback hash + 37-store manifest + same-UID empty-target restore + wrong-UID reject |
+| Hosted Chrome synthetic 11/11 | Pinned package, not exact product or managed WebKit | Exact compiled LogMate, Safari/Home Screen, MDM, offline and human/AT evidence |
+
+A destructive "repair" must never silently erase the sole remaining offline flight record merely to make the account-deletion state machine appear healthy. At the same time, the product must not label account deletion "completed" while it knowingly retains the initiating owner's user data in a store that its own deletion contract requires to erase. Engineering must resolve the invariant, not Web Manager invent a data retention policy.
+
+## 25. MC01–MC20 executable cross-container/authority acceptance [VALIDATION DEFINED / NOT RUN]
+
+**Provenance required per case:** exact LogMate source and compiled artifact SHA, FlutterFire and Sembast lock versions, server/environment IDs, test UID fingerprints only, browser engine/build/iPadOS version, installation identity/manifest, MDM profile, connectivity timeline, before/after 37-store fingerprints and independent file hash, operator remote receipts, screenshot/AT result, and explicit \`NOT RUN / NON-EXECUTION / FAIL PRODUCT / PASS PRODUCT / PASS DEVICE-MDM\`. Use disposable identities and synthetic flight canaries; never export real pilot PII into CI.
+
+| ID | Scenario | Distinguishing oracle |
+| --- | --- | --- |
+| MC01 | A in Safari tab; second same-origin tab open; delete in first | Cross-tab Auth propagation, in-flight edit behavior, ledger access after receipt |
+| MC02 | A in installed Home Screen #1; A in Safari tab | One-container deletion does not masquerade as second-container wipe |
+| MC03 | A in two separately installed Home Screen copies | Distinct local canaries, deletion/launch status per install |
+| MC04 | A in managed Web Clip and personal Safari | MDM isolation/managed-data transfer policy, no assumed shared Files |
+| MC05 | A offline EFB; delete A remotely on native phone | Local access while offline recorded; eventual server rejection and custody adjudicated separately |
+| MC06 | Existing A offline versus fresh/unbound restored A offline | Established-owner continuation vs fresh-owner fail-closed difference |
+| MC07 | Firebase Auth cleared; Sembast A ledger persists | No foreign UID access; no false local-erasure PASS |
+| MC08 | Sembast wiped; Firebase Auth A persists | New owner admission and stale identity reconciliation, no automatic unsafe bind |
+| MC09 | A terminal delete while another tab edits | No post-delete A write, false completion or mixed owner rows |
+| MC10 | A completed marker; sign out; B sign in same DB | Actual DeletionLocked/repair state and no B ledger creation before adjudication |
+| MC11 | Alternate B binding; second delete request | Exact typed rejection/acceptance, no cross-UID replay |
+| MC12 | A seeded nested Sync; B export then restore | 37-store owner checks and explicit foreign-owner refusal |
+| MC13 | A empty Sync control; B export/restore | Distinguish owner-mismatch from unrelated restore failure |
+| MC14 | Remote deletion succeeds, local phase write fails | Idempotent reconciliation, no duplicate destructive side effect |
+| MC15 | Provider revoke succeeds, Firebase identity delete fails | Correct resumable provider phase and same UID |
+| MC16 | Auth identity deleted, device crashes before local wipe | Restart locked; no false "all local data erased" |
+| MC17 | Files backup exported before deletion | User-owned copy remains explicitly excluded; readback and retention claims truthful |
+| MC18 | MDM blocks external Files destination | Explicit failure and recovery, never mark backup saved |
+| MC19 | Manual email deletion request, no app installed | Identity verification, durable request/receipt, actual operator completion and accessibility |
+| MC20 | App store listing + served page + exact shipped Settings | Discoverable in-app and external paths, content and operator truth parity |
+
+**Negative controls:** wrong UID, deleted UID offline, no Firebase session but residual ledger, same origin/different installed container, stale Sync receipt, duplicate request ID, crash after remote success, no file permission, storage eviction, unsupported WebKit capability, shared/managed iPad policy. **No MC case executed in this research.**
+
+## 26. Five-track and peer allocation after custody-plane decomposition [SYNTHESIS / TRANSFER VALIDATION]
+
+| Track | Current evidence maturity | Next value / dependency |
+| --- | --- | --- |
+| **E — primary** | Stage 8 source-level account saga, terminal-wipe and multi-container authority model; no product execution | Define deletion completion receipts, per-container custody, safe operator runbook and escalation; Engineering S007 implementation dependency |
+| **A — prerequisite** | Firebase/WebKit primary sources and source-based browser-origin map; Chrome package 11/11 synthetic | Actual FlutterFire Web persistence, Safari vs installed copies, Service Worker and storage namespace observation |
+| **C — independent verifier** | Hosted package evidence strong, exact deletion/device weak | MC01–MC20 failure injection, immutable artifact and UID/MDM provenance, VoiceOver, no false PASS |
+| **B — UX/task transfer** | Design Studio W121 says pre-runtime spec saturated | Distinct remote account, active local store, other offline devices, external Files and support-request states; execute before polishing |
+| **D — claims/measurement transfer** | Marketing D8/D9 claim HOLD | Separate request initiation, terminal completion, recoverability and acquisition/Store copy; never instrument PII/UID in public analytics |
+
+**Engineering transfer:** [S007 account-deletion saga](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) owns provider revocation, remote erasure, local disposition and resumability. [D003 migration protocol](https://github.com/yhappcom/software-engineering-studio/blob/main/research/data/D003_schema_evolution_migration_rollback_compatibility.md) owns validation/publication lessons; neither is an implementation claim. [Design Studio W121](https://github.com/yhappcom/design-studio/blob/main/research/web/121-stage3-evidence-saturation-and-execution-priority-gate.md) requires exact runtime, not another speculative UI manifest. [Marketing D8/D9 current queue](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md) maintains claim HOLD. No peer repository is modified.
+
+## 27. Checkpoint, release gate and adjacent-question review [MINTTAP DIRECTION / OPEN]
+
+**New material conclusion:** a 37-store Sembast wipe, Firebase account deletion and a PWA install's complete local erasure are three different events. In the offline EFB scenario, remote deletion cannot instantly reach every disconnected installed copy. The source intentionally favors established-owner offline continuity while requiring remote acceptance before a fresh owner bind. Any public completion promise must state its scope and excluded external copies accurately.
+
+**Priority order:** (1) Engineering-approved MC06/MC10/MC14/MC16 on exact LogMate source and compiled Web, to adjudicate startup/ack and offline authority; (2) MC01–MC05 on separate Safari/Home Screen/managed contexts; (3) MC07–MC13 owner/37-store/backup; (4) MC17–MC20 external Files, operator and Store truth. This order avoids falsely treating container isolation as global erasure or treating a Firebase Auth success as product erasure.
+
+**Remaining blockers:** no approved exact compiled deletion fixture, no live Firebase/operator receipts, no independently retained \`.lbk\` Files readback, no multiple installed physical iPad/MDM execution, no actual shipped Settings or served deletion-page capture. No new product test, server call, account deletion, or device test performed. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
+
+**Adjacent-question check:** authenticated session storage, independent WebKit containers, remote revocation versus offline owner continuity, operator mailto request and exact acceptance were integrated. Further promotion requires actual Engineering/product/device/operator evidence; another synthetic Sembast primer would not reduce the current P0 uncertainty.
