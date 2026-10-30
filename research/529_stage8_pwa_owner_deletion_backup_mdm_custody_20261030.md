@@ -159,3 +159,94 @@ After owner isolation, run OC11–OC16 on physical Safari tab, Home Screen PWA a
 ## 13. Adjacent-question checkpoint
 
 The added source trace resolves a material ambiguity in §7: the completed A marker is written **after** fresh initialization, while B's new deletion requires none or exact same-request replay. The browser-header analysis rejects a tempting but destructive global reset shortcut. Further material advancement now depends on Engineering-owned executable product fixtures and enrolled-device evidence rather than another generic package-level primer. No LogMate/Design Studio/Marketing/Engineering writes.
+
+---
+
+## 14. Material correction: completed-A blocks normal B startup before binding [SOURCE / CONTRADICTION, 2026-10-30]
+
+The earlier conditional finding, "if B binds, B second deletion rejects a new request," remains valid for an alternate explicit binding path. It is **not the first normal account-required startup failure**.
+
+1. [Terminal repository transaction](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1071-L1125) drops 29 stores, initializes fresh state, then **writes completed(A, requestA) back**.
+2. [Account-required resolver lines 167–211](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/logbook/local_ledger_access_coordinator.dart#L167-L211) reads deletion **before** owner. With completed(A) and signed out, it returns AuthenticationRequired; with completed(A) and signed in B, it returns DeletionLocked **before** the createOwnedLedger(B) branch.
+3. [Real SessionGate composition](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/app/session_gate.dart#L118-L137) uses that resolver. [Render branch](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/app/session_gate.dart#L538-L573) displays [AccountDeletionLockedScreen](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/screens/session_recovery_screens.dart#L5-L37), which says "Account deletion completed" but has no new-account or recovery action.
+4. [Explicit owner-completion service](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/logbook/local_ledger_auth_access_service.dart) and [repository bind/create](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/repository/logbook/sembast_logbook_repository.dart#L1674-L1720) are distinct caller paths; those repository methods do not themselves inspect completed(A). The earlier B second-delete guard is therefore a **separate conditional alternate-path hazard**, not evidence normal B startup succeeds.
+
+| Durable marker and auth | Normal resolver result | Scope |
+| --- | --- | --- |
+| completed(A), signed out | AuthenticationRequired | Source-level branch |
+| completed(A), signed in verified B | DeletionLocked(A) | B owner creation not reached via normal resolver |
+| completed(A), auth unavailable | DeletionLocked(A) | No automatic repair |
+| completed(A), B bound by alternate explicit path | DeletionLocked(A) on next startup | Separate B second-delete guard can reject; conditional |
+| none, independent fresh B DB | Normal B creation path available | Control, not an authorized reset workaround |
+
+**Test gap:** [startup coordinator tests](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/test/application/logbook/local_ledger_access_coordinator_test.dart) do not cover completed(A) followed by B account-required startup. [SessionGate widget tests](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/test/session_gate_test.dart#L109-L123) test localLocked deletion screen, not completed(A) plus B. This is a **focused coverage gap**, not a claim about all tests. No exact compiled product, live deletion or user incident has been observed.
+
+## 15. Public deletion instructions contradict current Settings source [SOURCE / POLICY WATCH]
+
+[Public account-deletion page source lines 22–30](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/web/account-deletion/index.html#L22-L30) instructs the user to open Settings and choose an account-deletion option. The [current SettingsScreen lines 25–66](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/screens/settings_screen.dart#L25-L66) instead offers Import (no-op), optional Previous Total setup and Sign out, **without a deletion action**. The [startup/auth product specification](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/docs/specs/startup-and-auth-entry-spec.md) also records deployed deletion/revocation adapters and Settings confirmation UI as OPEN. Existing [coordinator tests](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/test/application/account_deletion_coordinator_test.dart) use fake external ports.
+
+This is a **repository-source claim/implementation contradiction**, not proof the static page is deployed, the app has passed store review, or a real user was denied deletion.
+
+- [Google Play account-deletion policy](https://support.google.com/googleplay/android-developer/answer/13327111?hl=en) and [User Data policy](https://support.google.com/googleplay/android-developer/answer/10144311?hl=en) require both in-app and external web-request paths for in-scope account-creating apps. An email/form external request may be permissible; it does not establish an in-app action. Actual Play Console URL, served page, functioning support queue and retention disclosures are UNKNOWN.
+- [Apple developer deletion guidance](https://developer.apple.com/support/offering-account-deletion-in-your-app/) requires in-app initiation for account-creating App Store apps, permits proportionate reauthentication and notes limited regulated-industry exceptions; Sign in with Apple requires token revocation. No exception or approval is presumed for LogMate.
+- The public page asks for email from the associated address. Apple relay or inaccessible mailboxes could make this impractical; verify a secure alternate identity-proof route rather than assuming a failure or accepting an arbitrary email as UID authority.
+
+**MINTTAP DIRECTION:** public statements of in-app deletion availability, complete local erasure, every installed copy erased, automatic external-backup deletion or store compliance remain **HOLD** until exact shipped UI, served page, operator process and Console evidence agree. Web Manager does not patch product UI or legal copy.
+
+## 16. Identity-delete success before local acknowledgement [SOURCE / FAILURE ANALYSIS]
+
+[AccountDeletionCoordinator lines 62–92](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/lib/application/account_deletion_coordinator.dart#L62-L92) awaits the external identity-delete port and **then** persists firebaseIdentityDeleted. If remote identity deletion succeeds but a process crash or local phase-write failure occurs before that second operation, durable phase may remain remoteDataErased. Resume calls deleteCurrentIdentity(A) again. The abstract port has no specified already-deleted/ambiguous-success reconciliation.
+
+[Firebase client delete docs](https://firebase.google.com/docs/auth/web/manage-users) require recent sign-in; [Firebase JS API](https://firebase.google.com/docs/reference/js/auth) describes deletion as signing out. [Firebase Identity Toolkit REST](https://firebase.google.com/docs/reference/rest/auth) distinguishes USER_NOT_FOUND from INVALID_ID_TOKEN. [Firebase Admin SDK](https://firebase.google.com/docs/auth/admin/manage-users) supports privileged UID deletion but reports error for an unknown UID. These are **generic API facts**, not evidence which concrete adapter LogMate ships. An arbitrary error must not be treated as successful deletion.
+
+| External/local boundary | Ambiguous-success window | Required proof |
+| --- | --- | --- |
+| Provider revoke then phase advance | Revoke may succeed while phase remains reauthenticated | Same-provider retry/reconciliation without cross-UID effect |
+| Remote data erase then phase advance | Remote erasure may succeed while phase remains providerRevoked | Exact UID/idempotency key and server receipt |
+| Firebase identity delete then phase advance | Identity may be absent while phase remains remoteDataErased | Independently verify exact UID absent; finish local cleanup without reauth to deleted UID |
+| Local wipe commit | Transaction abort vs completed marker and 37 stores | Phase/store/Sync invariant, safe retry and B liveness |
+
+[Existing coordinator tests](https://github.com/yhappcom/logmate/blob/9cc0cd432a317d5dfebbe90e318fb219e53e024a/test/application/account_deletion_coordinator_test.dart) cover fake-port normal success, remote failure before advancement and reauth UID mismatch, **not** identity-delete success followed by phase-persistence failure. No concrete adapter, exact Firebase runtime or product fault test was run.
+
+**PROPOSED OPERATIONAL CONTRACT, not implementation authorization:** distinguish remote-data-erased, identity-deleted, local-wiped and separately installed-context completion receipts. Reconcile ambiguous remote outcomes using exact UID/request identity and minimal durable evidence; never retain raw credentials, assume an unknown-UID error proves success, or require reauth to an already-deleted UID for local cleanup. Engineering owns adapter and fault-injection implementation.
+
+## 17. PWA cross-container deletion and honest recovery [SYNTHESIS / DEPENDENCY]
+
+Firebase UID deletion changes **remote identity authority**, not every offline iPad's origin-private bytes. Safari tab, Home Screen web app, managed Web Clip and native device can have distinct storage and network states. A device disconnected during deletion may retain data until an approved local lifecycle/admission process runs; actual LogMate behavior is **OPEN**. Blanket Clear-Site-Data is not a safe substitute for owner-aware local deletion because it can erase an unsaved offline ledger and Worker. Independently exported LBK files remain user-controlled copies.
+
+User-visible states must distinguish request accepted, remote erasure, identity deletion, active-device wipe, other offline-container **unverified**, external backup **user-retained**, and failed/blocked recovery. No analytics should include raw UID, flight records or backup payload. Track E owns trust/receipt/incident policy; A owns browser container semantics; C owns real device, interruption and accessibility verification; B owns web task/state requirements with Design Studio W121; D owns truthful store/search claims with Marketing D8/D9. Engineering S007/D003/Q006 owns implementation and executable regression.
+
+## 18. Product-first acceptance packet [VALIDATION DEFINED — NOT RUN]
+
+Extend OC01–OC16 with SL01–SL12 using disposable test UIDs, synthetic A-owned Sync canaries, exact approved build and test backend. No production pilot data or real account deletion.
+
+| ID | Test | Independent oracle |
+| --- | --- | --- |
+| SL01 | Complete A; restart signed out | AuthenticationRequired; no A ledger exposure |
+| SL02 | Sign in B on same DB after completed A | Resolver/UI result before owner mutation; DeletionLocked reachability |
+| SL03 | Alternate verified owner completion then B deletion | Binding and new-request guard independently observed |
+| SL04 | Fresh independent B DB control | B initialization without A state |
+| SL05 | Identity remote success; fail local phase write | Verified exact-UID absence, safe local completion without reauth loop |
+| SL06 | Revoke/remote erase success; fail phase write | Idempotent/reconciled exact-UID retry and receipts |
+| SL07 | Crash/abort around terminal local transaction | 37-store/Replica/Sync classification; no false completed |
+| SL08 | A empty/seeded Sync, B export and empty-stage restore | No foreign-owner data; valid 37-store same-UID restore or explicit refusal |
+| SL09 | Compiled Settings versus served public page | Actual deletion route, accurate instructions, keyboard/VoiceOver |
+| SL10 | External request without app/associated email access | Secure usable request path and truthful completion |
+| SL11 | Safari tab, Home Screen and enrolled managed Web Clip offline | Separate container/MDM/Files evidence, not presumed global wipe |
+| SL12 | Exact app build + served URL + Play/App Store operator data | In-app/external claim parity; no presumed compliance |
+
+Every result requires source commit, compiled artifact hash, environment, redacted UID/request fingerprint, before/after state, exact failure injection, browser/iPadOS/MDM, and verdict NOT RUN / NON-EXECUTION / FAIL PRODUCT / PASS PRODUCT / PASS DEVICE-MDM. If an adapter cannot be invoked, SL05 is NON-EXECUTION, not PASS.
+
+## 19. Five-track checkpoint [SYNTHESIS / OPEN]
+
+| Track | Evidence and allocation |
+| --- | --- |
+| **E lead** | Stage 8 source evidence stronger; terminal-marker policy, identity acknowledgement and public deletion trust P0 |
+| **A dependency** | Browser/Worker/storage foundation and Chrome package synthetic validated; Safari/managed container still OPEN |
+| **C verifier** | Package CI provenance strong; actual product deletion/startup/Files/VoiceOver SL01–SL12 OPEN |
+| **B transfer** | Design Studio W121 requires exact execution, not another pre-runtime visual spec; honest recovery UX |
+| **D transfer** | Marketing D8/D9 claims HOLD; source public-page/Settings parity must be reconciled before claims |
+
+**Material correction:** normal B startup is blocked by completed(A) **before** owner binding. Prior second-delete rejection remains an alternate-path conditional. Current public deletion instructions disagree with Settings source, and identity-delete acknowledgement failure is an untested saga window. These are **P0 source-based validation priorities, not deployed incidents**.
+
+**Adjacent-question check:** audited real SessionGate composition, startup resolver, recovery screen, Settings, public page, coordinator, existing tests, current Google/Apple/Firebase primary sources, Design Studio W121, Marketing D8/D9 and Engineering S007/Q006. Further promotion needs Engineering-approved exact product runtime and enrolled iPad/MDM/file evidence, not another synthetic primer. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.** No product or peer repository writes.
