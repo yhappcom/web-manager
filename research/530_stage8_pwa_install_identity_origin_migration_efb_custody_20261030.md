@@ -411,3 +411,51 @@ The pinned [browser test](https://github.com/yhappcom/logmate/blob/93c1e9dd0c74b
 **Five-track transfer:** C owns reproducible Chrome test provenance; A owns IndexedDB versus SW/cache/container distinctions; E owns owner-erasure and release gate; B consumes bounded reopen behavior for recovery UX; D and Marketing cannot advertise offline or EFB reliability from this test. Engineering owns exact current-HEAD product testing. **Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD** unchanged.
 
 **Next falsification:** rerun on exact current HEAD, separately seed 37 A-owned stores and verify terminal wipe/reopen/B startup plus stale-writer denial, independently save/read back Files backup, then execute installed Safari/managed-iPad offline tests. Do not use a flight delete/restore PASS as an account-erasure oracle.
+
+
+## 43. 2026-11-05 — Service Worker update-check freshness is not application/offline freshness [SOURCE / SYNTHESIS / TRANSFER]
+
+**Scope and ownership.** Track A owns browser update mechanics; E consumes the deployment/rollback trust boundary, C the observability and independent acceptance, B the truthful readiness/update UX, D the acquisition/claim boundary. This section extends §§26–38 without rewriting their exact LogMate worker analysis. Product source references remain pinned to the historical SHA stated above; **current main runtime is not inspected or validated here**.
+
+### History → standard → implementation
+
+The AppCache failure mode was implicit, coarse application caching. Service Workers separate (1) a browser registration and its update check, (2) installing/waiting/active workers, (3) which worker controls a document, (4) explicit Cache Storage resource contents, and (5) application-owned IndexedDB and backup custody. The separations matter more than a single “updated” flag.
+
+Current reference checks (2026-11-05):
+- [MDN, ServiceWorkerRegistration.updateViaCache](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/updateViaCache): `none` bypasses the **HTTP cache for worker script and imported script update requests**; `imports` is the default, not a blanket app-resource policy. The API is secure-context constrained.
+- [MDN, ServiceWorkerRegistration.update()](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update): explicit update checks the worker script and may install a byte-different candidate; a fetch older than 24 hours bypasses browser caches. This is **not a promise of immediate activation or fresh application assets**.
+- [MDN, Using Service Workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers): waiting worker can coexist with active worker and its clients; `skipWaiting()` changes lifecycle timing and may introduce mixed-client risks.
+- [MDN, PWA caching](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Caching): Cache API entries are explicit request/response storage, distinct from the browser HTTP cache. A Service Worker can install even without a Home Screen PWA install.
+- [WebKit, Safari 26.0](https://webkit.org/blog/17333/webkit-features-in-safari-26-0/): Home Screen web-app presentation is possible independently of manifest/worker offline guarantees. This is a platform-specific behavior, not a W3C offline guarantee.
+
+**Critical distinction:** `register({updateViaCache:'none'})` plus `registration.update()` does not bypass, invalidate, atomically refresh or validate **Cache Storage** entries, nor does it guarantee worker control, correct per-client build mapping, an authenticated asset catalogue, schema compatibility, sufficient quota, owner revocation, or an independent Files backup. A successful script update check can return unchanged bytes, install a waiting worker, or fail while a previous active worker remains. “Checked for update,” “candidate downloaded,” “candidate verified,” “new worker controlling,” “cold offline relaunch successful,” and “ledger data safe” are different claims.
+
+### Failure-mode matrix [SYNTHESIS / DIAGNOSTIC]
+
+| Case | What a superficial check sees | What must be separately observed |
+| --- | --- | --- |
+| New worker bytes but an old client remains | `updatefound` or waiting worker | active/waiting/controller identities, old-client continuity, old/new schema admission |
+| Worker script HTTP-cache bypass | successful `registration.update()` | actual shell/font/notice Cache Storage hashes and requested resource bytes |
+| Candidate verified but no new controller | precache/verification success | controlled navigation, `controllerchange`, first-load versus subsequent-load behavior |
+| Offline icon launch after online first paint | installed icon and earlier render | actual cold relaunch with network blocked, correct controlled navigation, all required resources present |
+| Quota/eviction between verification and relaunch | prior “offline ready” UI | cold restart after storage pressure, explicit repair/recovery, durable owner ledger/Files readback |
+| Old tab persists after account-deletion intent | deletion screen visible in another tab | **transaction-time** read/write denial and independent A→B normal startup, not merely UI refresh |
+| HTTP `no-store` response header | network cache bypass | explicit SW Cache Storage and IndexedDB contents, bfcache/history restoration separately |
+
+The matrix is a **test-design synthesis**, not observed LogMate behavior or a browser compatibility result.
+
+### Evidence protocol and release judgment [VALIDATION DEFINED NOT RUN]
+
+Run the following as a single exact-source two-version acceptance, after Engineering approval, with **synthetic non-personal ledger records** and no changes to product code from this study:
+
+1. Record commit/build SHA, generated worker and manifest digests, served HTTPS response digests, browser/OS/device/MDM state, installation mode and storage partition. Capture `registration.scope`, `updateViaCache`, active/waiting/installing script URLs and `navigator.serviceWorker.controller` at every transition.
+2. Start version V1 online. Record separately first paint, worker registration, verified full cache inventory, controlled reload and cold offline launch. Repeat after closing **all** controlled documents. A pass at first paint is not a pass at cold offline.
+3. Serve V2 while V1 tab remains open. Trigger an explicit update and record waiting versus active and client-build mapping; test both interrupted V2 download and intact V2. No forced `skipWaiting` policy change is assumed.
+4. Observe HTTP-cache bypass separately from Cache Storage: use uniquely versioned sentinel resource bytes, verify actual response body/digest, and compare cached entries under online, offline and corrupted-entry conditions. Do not infer app-resource freshness from `updateViaCache`.
+5. Kill/restart during candidate verification and while two tabs are active. Reopen offline, check fail-closed versus usable V1 and inspect any old/new worker control-store mutation. Re-run with quota pressure and a missing shell asset. Distinguish legitimate availability failure from a privacy breach.
+6. Seed A-owned synthetic rows in the full 37-store export registry, request deletion with an old tab open, attempt stale-tab writes and readbacks, close/reopen, and attempt normal B startup. Verify all stores including Replica/Sync and independently reopen a saved Files backup; do not use Worker cache integrity as a ledger-erasure oracle.
+7. Repeat the supported subset on Safari iPadOS Home Screen and on an actual managed EFB, recording airline/MDM permission and Files egress restrictions. Do not infer WebKit results from Chrome. Native↔PWA synchronization requires a separately verified connectivity, authority, conflict and custody protocol.
+
+**Release rule [MINTTAP DECISION / OPEN]:** retain **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD**. No offline reliability, unattended background sync, data durability or managed-EFB support claim is permitted from install UI, `update()`, CI build, or synthetic browser tests alone. The P0 owner-erasure/old-writer/independent-Files gates from 529 remain ahead of promotional PWA work. Track B must show “offline ready” only from observed resource and data prerequisites, not a worker-registration event. Track D/Marketing must not transfer a laboratory success into a Store/site claim.
+
+**CHANGE WATCH:** Browser update scheduling, Safari/iPadOS installation behavior, enterprise management and quota/eviction rules require version-pinned retesting. **TRANSFER VALIDATION:** C should carry exact-controller/cache/owner evidence back to E and A; Design Studio W121 governs the runtime UX evidence, and Software Engineering owns product implementation and execution. No peer/product repository mutation or production experiment was performed.
