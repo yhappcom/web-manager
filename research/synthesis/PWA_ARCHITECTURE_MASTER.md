@@ -627,3 +627,72 @@ A practical **falsifiable** acceptance rule is: for every durable write path (dr
 **A platform** owns picker and download feature detection, user activation and browser differences. **E security** owns custody, owner-fenced export, integrity, restore admission and release gate. **C quality** owns large-file, low-quota, interruption, accessibility and physical-device tests. **B UX** distinguishes preparing, save initiated, file verified and restore verified; never labels click as backup complete. **D discovery/analytics** separates initiated from verified backup in privacy-safe aggregates and prevents unsupported offline claims.
 
 **DEPENDENCY / TRANSFER VALIDATION:** Engineering owns LogMate Flutter Web file adapter, owner transactions and schema; Design Studio W121 owns accessibility execution; Marketing D9 keeps PWA/offline claims on HOLD. **MINTTAP DECISION:** prioritize independently saved and re-read Files artifacts over browser-only persistence as a product acceptance criterion, without authorizing implementation changes. **OPEN:** deployed adapter, MDM policy, installed iPad behavior, file readback, owner-bound restore. **CHANGE WATCH:** Safari/iPadOS file UX, Chromium picker support and managed Web Clip policy. **Gate unchanged:** Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD.
+
+
+---
+
+## 17. Offline EFB PWA ↔ native mobile: transport discovery, signaling and custody admission (2026-11-08)
+
+**Ownership:** E security/operations owns authorization and durable transfer acceptance; A browser/platform owns transport capability; C executable reliability; B pairing and failure UX; D truthful claims. This section is a connected *architecture decision and falsification packet*, not a new transport implementation, device test, or permission to use a company network.
+
+### 17.1 HISTORY / PROBLEM → PRINCIPLE
+
+An offline PWA is a locally executing web origin, **not** a native iPad process with general access to Bluetooth, Bonjour/Multipeer Connectivity, local sockets or persistent background execution. A native mobile application may have OS capabilities that the installed PWA cannot call. “Both devices have radios” does not imply they share a permitted application transport. Even if a channel transfers bytes, that does not prove the receiver is the intended ledger owner, that the sender's state is current, or that the import survived restart.
+
+Separate six gates: **(1) distribution/install permission, (2) device discovery, (3) signaling/session establishment, (4) permitted reachable transport, (5) authenticated owner/epoch and idempotent transaction admission, (6) durable post-restart receipt and recoverability.** An online bootstrap or one-time pairing does not automatically solve subsequent offline reachability. A company EFB policy may prohibit personal hotspots, ad-hoc Wi-Fi, Bluetooth discovery, local-network browsing or installation; these remain independent operator facts.
+
+### 17.2 SOURCE — standards versus actual browser/OS behavior
+
+- **WebRTC data channel (cross-browser web mechanism):** MDN [RTCDataChannel](https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel) and [Using data channels](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Using_data_channels) describe arbitrary bidirectional data transfer on an RTCPeerConnection, DTLS encryption, message-size and buffered-send considerations. A *signaling path* must exchange offers/answers and ICE information; see [WebRTC connectivity](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Connectivity). Signaling need not be a hosted server in principle: an authorized out-of-band channel could carry negotiation material. **But** out-of-band signaling, ICE candidate reachability, WebKit behavior, NAT/firewall, local-network policy, page suspension and native interoperability must each pass on actual devices. Do not infer unattended/offline automatic discovery or sync from API existence.
+- **Web Bluetooth:** MDN [Web Bluetooth](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API) labels it *Limited availability*, requires secure context and explicit user activation/permission, and does not expose it to Web Workers. This is BLE GATT peripheral access, not an arbitrary iOS native-peer sync protocol; iPadOS Safari/Home Screen support cannot be assumed. Do not propose Web Bluetooth as the default LogMate EFB channel.
+- **Apple OS permission boundary:** Apple [Local Network Privacy](https://support.apple.com/en-us/102229) documents iOS/iPadOS app permission for local-network interactions, but this does **not** establish a universal Safari PWA permission API, guarantee EFB MDM allowlisting or authorize hotspot use. An OS-level prompt and an MDM network rule are separate admission conditions.
+- **Service Worker / background:** Service Worker fetch and lifecycle features do not grant a continuously running local discovery agent or indefinite WebRTC session. Any background wakeup, push, sync or notification capability is platform- and permission-specific. A foreground-only, explicitly initiated transfer is the conservative baseline for feasibility testing, not an approved product UX.
+- **Cryptography and custody:** WebRTC DTLS encrypts the channel, but transport encryption alone is not *product* pairing authorization, verified Firebase UID, owner/epoch admission, conflict resolution or remote receipt. Never equate successful connection with permission to import or overwrite a flight record. Source of product owner rules remains Engineering/LogMate, not Web Manager.
+
+**CHANGE WATCH:** WebKit/iPadOS WebRTC constraints, Web Bluetooth availability, local-network prompts, MDM profiles, private relay/VPN, network isolation, worker/background lifecycle, native OS entitlement and browser permission changes. Record exact OS build, Safari engine, PWA installation mode and policy, not merely “iPad supported.”
+
+### 17.3 Architecture alternatives and decision thresholds
+
+| Option | Possible role | Independent prerequisites | Failure/false-positive to reject |
+| --- | --- | --- | --- |
+| Authorized internet relay / backend | Store-and-forward after connectivity | User-approved server/data policy, auth, remote owner fence, EFB network access | Online login is not cockpit offline sync; server access may be unavailable |
+| WebRTC data channel to native mobile | Experimental foreground peer transfer | Authorized signaling (online or out-of-band), native WebRTC stack, ICE reachability, network/MDM permission, pairing | DTLS or connected event does not prove ledger owner, unattended wakeup or durable commit |
+| Native mobile HTTPS local endpoint, PWA fetch | Experimental LAN transfer | Same reachable network, browser mixed-content/private-network policy, TLS/trust, local-network permissions, native listener, MDM approval | A localhost/native listener is not automatically accessible from another device or secure-origin PWA |
+| Web Bluetooth / BLE | Capability investigation only | Actual Safari support, GATT design, OS/device permissions, MDM, throughput | BLE presence is not generic peer discovery or an iPad PWA entitlement |
+| Files export/import | Explicit user-mediated custody and recovery | Actual iPad Files save/readback, format integrity, owner admission, physical-device permissions | A Blob download/selection is not an unattended device-to-device sync |
+| QR/visual out-of-band | Potential *pairing metadata* exchange | Camera/UI/MDM permission, human action, nonce expiry | QR is not suitable proof of bulk reliable flight-record transfer or automatic sync |
+
+**SYNTHESIS:** No currently cited source proves an unattended, automatic, offline, native↔managed-iPad PWA sync route. The architecture should preserve **manual, verifiable backup/restore as an independent recovery plane** and keep peer transfer an experiment until device/MDM and owner-admission evidence exists. A one-time pairing token must be scoped, revocable, bound to owner/device/session and never treated as a perpetual authorization for deleted/replaced owners.
+
+### 17.4 Failure model and operational decision
+
+Sequence a candidate transfer as **capability detection → operator-permitted discovery/signaling → explicit user-approved pairing → authenticated device/session binding → immutable source snapshot with schema/version/owner epoch → chunked transfer with bounds/backpressure/checksum → receiver staging and validation → owner/epoch/idempotency check at write transaction → durable commit → cold-restart receipt and reconciliation**. Transfer interruption, repeated chunk, replayed receipt, concurrent edits, schema mismatch, owner deletion and restored older backup must not bypass owner fence. A hash can detect accidental byte differences but cannot authenticate the sender; channel encryption is not proof of ledger ownership. Pairing UI should distinguish *connected*, *transfer received*, *import validated* and *sync committed*. Privacy-safe analytics should not log flight data, identifiers or pairing secrets.
+
+**MINTTAP DECISION (research recommendation, NOT owner approval):** Do not market automatic offline PWA↔native sync, direct Bluetooth sync, background sync, hotspot-free peer sync or MDM compatibility as delivered. Engineering should first choose a minimal **authorized foreground** candidate and test the physical managed iPad. If policy forbids all usable local channels, this is a real product architecture blocker requiring owner decision, not a web-standard workaround.
+
+### 17.5 SY01–SY20 falsifiable acceptance matrix — DEFINED, NOT RUN
+
+| ID | Test / observable oracle |
+| --- | --- |
+| SY01 | Record physical iPad model, iPadOS build, Safari/Home Screen/Web Clip mode, MDM restrictions and network operator authorization |
+| SY02 | Compare actual foreground API presence/permissions across Safari tab, installed PWA, managed Web Clip and native mobile |
+| SY03 | Test WebRTC offer/answer and ICE exchange over explicitly authorized signaling; no inference from constructor existence |
+| SY04 | With all internet paths disabled, test whether approved local signaling/ICE/transport can establish a channel |
+| SY05 | With hotspot disabled by policy, test only explicitly permitted LAN alternatives; do not bypass policy |
+| SY06 | Test corporate Wi-Fi client isolation, VPN, proxy, firewall and captive-network conditions separately |
+| SY07 | Distinguish local-network permission prompt, denial, MDM block and transport timeout in logs/UI |
+| SY08 | Confirm WebRTC DTLS connected does not permit unpaired/incorrect-owner ledger write |
+| SY09 | Native-to-PWA and PWA-to-native payload transfer, schema/version negotiation and maximum message/chunk size |
+| SY10 | Backpressure and memory bound under large flight-log payload; no unbounded bufferedAmount |
+| SY11 | Kill/foreground/background PWA during transfer; no assumed unattended resume |
+| SY12 | Airplane mode, screen lock, tab eviction and Worker V1→V2 transition; explicit resumability or safe abort |
+| SY13 | Wrong UID, revoked pairing, owner deletion, stale epoch and restored old ledger reject admission |
+| SY14 | Concurrent device edits and duplicate transfer yield deterministic conflict/idempotency outcome |
+| SY15 | Interrupted/duplicated/out-of-order/corrupt chunks rejected or resumed without partial ledger mutation |
+| SY16 | Receiver's post-commit cold restart shows same record counts, owner binding and transaction receipt |
+| SY17 | Actual Files export→fresh-context readback→restore independently succeeds when peer path fails |
+| SY18 | No secrets, raw flight details, emails or tokens in URLs, signaling logs, analytics or QR payload |
+| SY19 | Accessible pairing, permission-denied, offline, retry, cancellation and failure messaging with screen reader |
+| SY20 | Compare permitted network/device modes and document PASS/FAIL/INCONCLUSIVE/NON-EXECUTION per exact build |
+
+**DEPENDENCY / TRANSFER VALIDATION:** Track A must supply browser/platform capability proof; E retains security and admission contract; C owns real device, interruption and reliability tests; B/Design Studio W121 owns accessible pairing/recovery; D/Marketing D9 owns truthful acquisition claims. Software Engineering owns native/Web implementation and test environment, Product/MDM operator owns authorization. **OPEN:** real managed-iPad policy, usable transport, native listener/WebRTC interoperability, one-time pairing semantics, owner-fenced transaction and physical Files custody. **Gate:** Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD.
