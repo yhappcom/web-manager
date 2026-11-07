@@ -696,3 +696,56 @@ Sequence a candidate transfer as **capability detection → operator-permitted d
 | SY20 | Compare permitted network/device modes and document PASS/FAIL/INCONCLUSIVE/NON-EXECUTION per exact build |
 
 **DEPENDENCY / TRANSFER VALIDATION:** Track A must supply browser/platform capability proof; E retains security and admission contract; C owns real device, interruption and reliability tests; B/Design Studio W121 owns accessible pairing/recovery; D/Marketing D9 owns truthful acquisition claims. Software Engineering owns native/Web implementation and test environment, Product/MDM operator owns authorization. **OPEN:** real managed-iPad policy, usable transport, native listener/WebRTC interoperability, one-time pairing semantics, owner-fenced transaction and physical Files custody. **Gate:** Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD.
+
+
+## 18. WebRTC ICE privacy, relay dependence and genuinely offline EFB transfer — 2026-11-08 (A owns; E/C/B/D transfer)
+
+**HISTORY / PROBLEM:** The preceding §17 established a conditional WebRTC candidate but left a critical conflation: a browser can expose RTCPeerConnection and successfully encrypt a data channel while having **no permitted discovery/signaling path or usable ICE candidate pair** on a company-managed iPad. Even an established connection does not imply the chosen path is local, internet-independent or approved by corporate network policy. The distinction matters more than adding another transport to a feature list.
+
+**SOURCE — IETF, dated:** [RFC 8828 (January 2021)](https://www.rfc-editor.org/rfc/rfc8828.html) describes ICE's host, server-reflexive and relay address disclosure, multi-interface/VPN/proxy privacy concerns, and four IP handling modes; applications should plan for reduced host-candidate visibility and TURN where reachable. This is **protocol/privacy guidance**, not proof of an iPadOS 2026 default. [RFC 8827 (January 2021)](https://www.rfc-editor.org/rfc/rfc8827.html) is the WebRTC security architecture; DTLS transport authentication does not itself authorize a LogMate ledger owner. [RFC 8841 (January 2021)](https://www.rfc-editor.org/rfc/rfc8841.html) negotiates SCTP message size, not persistent storage or end-to-end record admission. [MDN WebRTC data channels, checked 2026-11-08](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Using_data_channels) explains DTLS encryption, negotiated message-size limits, buffering and head-of-line blocking.
+
+**SOURCE — browser-specific, historical:** [WebKit's 2017 ICE candidate restrictions](https://webkit.org/blog/7763/a-closer-look-into-webrtc/) document a privacy policy that could withhold host candidates without media-capture permission. It is **historical WebKit evidence, not current iPadOS 26 behavior**. [W3C WebRTC issue #3109, opened 2026-05-18](https://github.com/w3c/webrtc-pc/issues/3109) reports a macOS local-network prompt from mDNS ICE; it is an issue report, **not** an iPadOS normative rule or confirmation of a LogMate prompt. Do not demand camera/microphone permission as an unapproved workaround for host-candidate restrictions. Browser implementation and MDM policy remain **CHANGE WATCH**.
+
+### 18.1 Independent failure domains and operational interpretation
+
+| Boundary | Necessary observable | Invalid inference |
+| --- | --- | --- |
+| WebRTC API availability | Construct peer connection in authorized secure page | Constructor means LAN reachable |
+| Signaling | Authorized offer/answer/ICE exchange with authenticated peer | WebRTC includes automatic discovery or server-free signaling |
+| ICE candidate gathering | Redacted type host/srflx/relay, errors, gathering completion | No host means device lacks Wi-Fi or an MDM block is proven |
+| Candidate selection | Selected local/remote candidate types and transport, redacted network topology | DTLS connected means offline direct LAN |
+| TURN/STUN | Reachable relay/discovery server and declared internet dependency | TURN success proves no-internet sync |
+| Network policy | Explicit allowed SSID, client isolation, VPN/proxy, MDM and local-network controls | General Safari capability implies company EFB permission |
+| App identity | Fresh pairing challenge bound to verified owner UID, device, epoch, expiration and purpose | ICE/DTLS fingerprint equals LogMate account owner |
+| Durable receipt | Receiver staging, bounded chunks, owner-fenced atomic commit and cold-restart readback | DataChannel sent/ACK means data permanently stored |
+
+**SYNTHESIS:** For a *strict no-internet* claim, test with **all external signaling, STUN, TURN and internet routes blocked**, while preserving only an operator-approved local path. Offline-loaded app shell cannot generate signaling by itself. A manually exchanged QR offer/answer is a potential foreground signaling experiment, not evidence that local host candidates or native compatibility will work. A TURN relay may be useful for connected sync but cannot be represented as direct, local or internet-independent unless the actual relay is itself locally reachable under an approved offline topology; even then it is **relayed**, not direct peer-to-peer. ICE host candidates may be withheld or obfuscated for privacy; never log raw IP addresses, candidate SDP, local hostnames, tokens or pairing secrets in analytics.
+
+**CONTRADICTION:** A platform-level recommendation to provide TURN fallback improves online connection probability but conflicts with the EFB's potential *no-internet* requirement. This is resolved by defining two distinct acceptance profiles: **LOCAL-OFFLINE** (no external signaling/relay/network; approved local discovery, pair and durable receipt) and **CONNECTED** (documented permitted signaling/TURN and cost/privacy controls). Success in one profile never promotes the other.
+
+**MINTTAP DECISION — research recommendation only:** Maintain manual independent Files export/restore as a separate recovery plane. Do not select WebRTC, enable capture permission, bypass MDM, or promise unattended native↔PWA synchronization without operator approval and physical device evidence. Engineering owns the native peer and owner-fenced commit; Web A owns protocol/browser distinctions, E owns trust and incident/privacy, C owns device/transport/fault testing, B/Design W121 owns explicit pairing and failure UX, D/Marketing D9 owns acquisition-claim evidence. **No product approval or code change.**
+
+### 18.2 IP01–IP18 exact acceptance packet — DEFINED, NOT RUN
+
+| ID | Test and falsifiable oracle |
+| --- | --- |
+| IP01 | Pin exact iPad model/iPadOS build, Safari tab/Home Screen/Web Clip, native peer version, MDM restrictions and operator authorization |
+| IP02 | Check API availability without treating it as connectivity; distinguish secure-context/API failure |
+| IP03 | Establish a **CONNECTED** baseline with explicitly authorized signaling and document candidate type selected, not raw address |
+| IP04 | Repeat with all internet, STUN and TURN blocked, but authorized local network retained; prove or falsify **LOCAL-OFFLINE** |
+| IP05 | Test fully disconnected airplane mode; classify absence of transport as expected, not a parser failure |
+| IP06 | Test corporate Wi-Fi client isolation separately from candidate privacy restriction |
+| IP07 | Compare Safari tab, Home Screen and managed Web Clip host/srflx/relay availability; mark each exact build |
+| IP08 | If host candidates absent, diagnose privacy restriction, mDNS resolution and topology without seeking camera/mic permission |
+| IP09 | Verify local signaling mechanism, user gesture, QR payload minimization, replay protection and expiration |
+| IP10 | Verify native WebRTC stack can negotiate SDP/ICE/DTLS/SCTP with actual PWA; no inferred interoperability |
+| IP11 | Record redacted selected candidate pair and prove whether any relay or external route was used |
+| IP12 | Test VPN/proxy and dual-stack IPv4/IPv6 under approved policies; avoid IP-address identity binding |
+| IP13 | Test negotiated maximum message size, bounded chunk size, bufferedAmount backpressure and large-ledger transfer |
+| IP14 | Kill/lock/evict browser during offer/ICE and during chunks; safe abort/resume with no partial ledger mutation |
+| IP15 | Wrong UID, stale owner epoch, revoked pairing and old-tab replay cannot pass receiver transaction admission |
+| IP16 | Disconnect immediately after sender ACK but before durable commit; receiver cold restart proves actual receipt state |
+| IP17 | Collect only privacy-safe categorical telemetry (mode, phase, candidate class, error code); redact raw SDP/IP/UID/flight data |
+| IP18 | Demonstrate independent Files backup→fresh-context restore when both local and connected transfer fail |
+
+**VALIDATION:** Protocol and browser documentation inspected; **no live EFB, no peer handshake, no candidate trace, no LogMate integration test**. Engineering/MDM-controlled execution remains OPEN. **CHANGE WATCH:** current Safari/iPadOS ICE policy, mDNS/local-network prompts, installed PWA vs managed Web Clip, native WebRTC stack, company LAN restrictions. **Gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
