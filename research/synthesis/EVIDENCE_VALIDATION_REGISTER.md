@@ -44,6 +44,8 @@
 
 | **EV20 current Hosting/Worker/Auth source / A+E** | [PWA Master `8](PWA_ARCHITECTURE_MASTER.md) directly rechecked LogMate `main@f4bcd2f7b7e77039e29653baa1cc93797673885b`: wildcard Firebase Hosting `no-cache, no-store, must-revalidate`, custom worker registration/`updateViaCache:'none'`, manifest without explicit `id`/`scope`, Auth action rewrites/`noindex` and public deletion copy | **S**, six exact file blobs; **NO** served headers, worker artifact, installed client, real Auth, deletion or EFB run | New **P1 served-route/header/cache/identity packet OPEN**; does not supersede P0 deletion/Files |
 
+**EV21 WebKit retention distinction / A→E/C/B/D (2026-11-07):** WebKit [Tracking Prevention](https://webkit.org/tracking-prevention/) documents the first-party **Home Screen Web App exemption from ITP's seven-day script-storage cap** and storage isolation from Safari. WebKit [Storage Policy](https://webkit.org/blog/14403/updates-to-storage-policy/) separately documents quota, best-effort eviction and heuristic persistence. **SOURCE/SYNTHESIS**, **not** a managed Web Clip exception, physical iPad PASS, quota guarantee or independent backup. [PWA Master §10 WK01–WK16](PWA_ARCHITECTURE_MASTER.md) defines the exact **NOT RUN** test packet. **P1-iPad remains U.**
+
 ## 3. Falsification, conflicts and supersession log
 
 1. **Roadmap current-stage conflict:** old [LEARNING_ROADMAP.md](../../LEARNING_ROADMAP.md) Stage-1 return is historical; later [research index](../README.md) sequential Stage 1–12 PASS supersedes. Applied Stage 8 ACTIVE concerns product application. Do not regress proficiency or declare security launch PASS.
