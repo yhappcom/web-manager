@@ -749,3 +749,51 @@ Sequence a candidate transfer as **capability detection → operator-permitted d
 | IP18 | Demonstrate independent Files backup→fresh-context restore when both local and connected transfer fail |
 
 **VALIDATION:** Protocol and browser documentation inspected; **no live EFB, no peer handshake, no candidate trace, no LogMate integration test**. Engineering/MDM-controlled execution remains OPEN. **CHANGE WATCH:** current Safari/iPadOS ICE policy, mDNS/local-network prompts, installed PWA vs managed Web Clip, native WebRTC stack, company LAN restrictions. **Gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
+
+
+## 19. Service Worker command-channel trust and build-artifact boundary (2026-11-08)
+
+**HISTORY / PROBLEM:** Programmable Service Workers replace AppCache's coarse update model. Page-to-worker commands are useful for prefetch and controlled activation, but message delivery is not authenticated product-owner authority. A stale same-origin tab may still send commands after a user/account transition. Same-origin script injection can send the same commands; origin checks alone do not defeat XSS.
+
+**SOURCE / STANDARD (checked 2026-11-08):** [Service Workers specification](https://w3c.github.io/ServiceWorker/) defines ExtendableMessageEvent with data, origin, source and ports; [MDN message event](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/message_event) documents page-to-worker messaging; [MDN source](https://developer.mozilla.org/en-US/docs/Web/API/ExtendableMessageEvent/source) identifies the sender, which may be Client, ServiceWorker or MessagePort. These interfaces do not authenticate Firebase UID, ledger owner epoch or a durable receipt.
+
+**SOURCE / LOGMATE read-only:** [web/flutter_bootstrap.js](https://github.com/yhappcom/logmate/blob/main/web/flutter_bootstrap.js), blob a70625e8bda32aafd5dd23822c017d05229f0e63, registers logmate_service_worker.js with base-path scope and updateViaCache none. It sends versioned START_PRECACHE (api 1) and PROMOTE_VERIFIED_CANDIDATE (api 2) commands to waiting/active/controller. The source path web/logmate_service_worker.js returned 404 on main during this inspection. This **does not prove** a normal-build or deployed worker is missing: generation during build is possible. The receiving handler, generated build artifact and served SHA remain **UNKNOWN**. A sender comment asserting verified-candidate guarding is not a receiver test.
+
+### 19.1 Trust and operational judgment
+
+| Boundary | Required oracle | Invalid inference |
+| --- | --- | --- |
+| Command schema | Allowlisted api/type, bounded payload, reject malformed/unknown commands | Any same-origin command is safe |
+| Sender and scope | Validate event source/client and intended scope for sensitive operations | Same origin equals authenticated account |
+| Worker version | Identify waiting, active and controller recipients independently | One postMessage implies current controller accepted it |
+| Cache promotion | Independently verified full candidate inventory before catalogue promotion | PROMOTE command or ACK proves offline readiness |
+| Account mutation | Verified UID/epoch and transaction-time write fence | Worker message authorizes erasure, restore or sync |
+| Storage custody | CacheStorage, IndexedDB/Sembast, remote ledger and Files tested separately | Worker replacement deletes all 37 stores or creates backup |
+| Telemetry | Anonymous command type/version/phase/error | Logging raw payloads, tokens or flight data is acceptable |
+
+**SYNTHESIS / CONTRADICTION:** START_PRECACHE can help offline preparation but cannot prove usable offline ledger; PROMOTE_VERIFIED_CANDIDATE can help update continuity but cannot prove schema rollback, owner deletion or Files recovery. Verify sender/schema and idempotence, but do not claim that a same-origin check blocks XSS. A compromised same-origin script may send permitted messages. Browser/deployment script integrity, CSP and incident response remain separate controls. The authenticated data plane must enforce UID/epoch and transactional authorization independently.
+
+**TRANSFER VALIDATION:** A owns browser lifecycle/message semantics; E owns deployment integrity, security and incident handling; C owns race/fault testing; B/Design Studio W121 owns accessible preparing/verified/update-waiting/offline-error UI; D/Marketing D9 owns truthful offline/install claims. Engineering owns generated worker, exact normal build and real owner-fenced store mutations. No product change authorized.
+
+### 19.2 WM01–WM16 acceptance packet — DEFINED NOT RUN
+
+| ID | Falsifiable scenario |
+| --- | --- |
+| WM01 | Pin product SHA/build command, generated worker SHA and actual served response; distinguish source-path 404 from build-artifact absence |
+| WM02 | Inspect entire receiving message handler, schema, sender checks and cache verification before promotion |
+| WM03 | Reject missing, malformed, oversized and unknown api/type without state change or secret logging |
+| WM04 | Send messages from V1, V2, restored and wrong-path same-origin tabs; verify intended routing |
+| WM05 | Address waiting, active and controller separately; record exact recipient/version and no false ACK |
+| WM06 | Try promotion before full shell/font/notice verification and during partial corruption; no promotion |
+| WM07 | Duplicate and reorder commands; idempotent state after worker termination/restart |
+| WM08 | Interrupt after download but before catalogue commit; known-good offline recovery |
+| WM09 | Handle null/non-WindowClient source without unchecked URL dereference |
+| WM10 | Old owner A tab messages cannot bypass B UID/epoch transaction fence or revive erased stores |
+| WM11 | Compare worker ready/status message with actual cold offline navigation/resource readback |
+| WM12 | Isolated same-origin injected-script simulation; origin checks alone must not be credited as XSS protection |
+| WM13 | Verify no raw payload, email, token, UID, URL or flight data in console/crash/analytics |
+| WM14 | Root/subpath deployment, manifest scope and auth callbacks remain correctly bounded |
+| WM15 | Compare exact Safari tab, Home Screen and managed Web Clip builds under operator-approved MDM |
+| WM16 | Re-run V1/V2 rollback, terminal deletion and independent Files restore after messaging faults |
+
+**VALIDATION / OPEN:** Standards and pinned bootstrap inspected. Generated/served worker not inspected; WM01–WM16 not run; no physical iPad, account, backup or release evidence. **CHANGE WATCH:** WebKit/Chromium lifecycle differences and generated worker build changes. **MINTTAP DECISION:** no release or worker-activation approval. Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
