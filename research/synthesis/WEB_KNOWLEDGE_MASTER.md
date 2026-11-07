@@ -56,8 +56,8 @@ This **E → A → C → B → D** ranking is a **current allocation**, not perm
 - **COMPETENCY PASS ≠ production PASS.** Sequential and generic PWA gates remain PASS; browser/devices/product validation remains separately OPEN.
 - **Synthetic runtime PASS ≠ exact product runtime PASS.** Synthetic Chrome/Node/Firestore outcomes can establish a mechanism, not a LogMate deployed defect or absence of one.
 - **Authentication ≠ owner authority ≠ backup ≠ Sync.** UID identity, local-owner state, independent Files custody, remote accepted receipt and reconciliation must each be observed.
-- **SW script freshness ≠ CacheStorage freshness ≠ controller activation ≠ offline readiness.** See [530 `43–44](../530_stage8_pwa_install_identity_origin_migration_efb_custody_20261030.md).
-- **37-store exported registry ≠ 29 explicit terminal-wipe stores.** [529 `96](../529_stage8_pwa_owner_deletion_backup_mdm_custody_20261030.md) reconfirmed a source-level omission at a changed LogMate source blob, not a proven runtime leak.
+- **SW script freshness ≠ CacheStorage freshness ≠ controller activation ≠ offline readiness.** See [530 §43–44](../530_stage8_pwa_install_identity_origin_migration_efb_custody_20261030.md).
+- **37-store exported registry ≠ 29 explicit terminal-wipe stores.** [529 §96](../529_stage8_pwa_owner_deletion_backup_mdm_custody_20261030.md) reconfirmed a source-level omission at a changed LogMate source blob, not a proven runtime leak.
 - **Design Studio Stage 3 PRACTICE ≠ Web Manager Stage 3 competency PASS.** Different domain gates, different test scopes: [Design W121](https://github.com/yhappcom/design-studio/blob/main/progress/WEB_STATUS.md).
 
 **CHANGE WATCH:** Always pin source SHA, browser/OS/MDM version, policy date, test artifact, actual delivery URL and negative controls when material. Keep prior original records for provenance; modify this synthesis only when an actual contradiction, meaningful new evidence or authority decision changes it.
