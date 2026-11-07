@@ -41,6 +41,9 @@
 | **EV18 Marketing / D** | [Marketing STATUS](https://github.com/yhappcom/marketing-manager/blob/main/STATUS.md): product/advertising/Store claims held pending current account-side evidence | Peer-source status; unrelated CrewConnex parser evidence cannot clear PWA gates | Claims HOLD; no inferred ads/Sync/managed EFB |
 | **EV19 Engineering / E+C** | [Engineering S007](https://github.com/yhappcom/software-engineering-studio/blob/main/research/systems/S007_account_deletion_reauthentication_revocation_saga.md) establishes immediately blocked local user access and required erasure of all local LogMate account data; runtime OPEN | Approved general Engineering handoff, not product patch | Engineering owns implementation + exact tests |
 
+
+| **EV20 current Hosting/Worker/Auth source / A+E** | [PWA Master `8](PWA_ARCHITECTURE_MASTER.md) directly rechecked LogMate `main@f4bcd2f7b7e77039e29653baa1cc93797673885b`: wildcard Firebase Hosting `no-cache, no-store, must-revalidate`, custom worker registration/`updateViaCache:'none'`, manifest without explicit `id`/`scope`, Auth action rewrites/`noindex` and public deletion copy | **S**, six exact file blobs; **NO** served headers, worker artifact, installed client, real Auth, deletion or EFB run | New **P1 served-route/header/cache/identity packet OPEN**; does not supersede P0 deletion/Files |
+
 ## 3. Falsification, conflicts and supersession log
 
 1. **Roadmap current-stage conflict:** old [LEARNING_ROADMAP.md](../../LEARNING_ROADMAP.md) Stage-1 return is historical; later [research index](../README.md) sequential Stage 1–12 PASS supersedes. Applied Stage 8 ACTIVE concerns product application. Do not regress proficiency or declare security launch PASS.
