@@ -797,3 +797,66 @@ Sequence a candidate transfer as **capability detection → operator-permitted d
 | WM16 | Re-run V1/V2 rollback, terminal deletion and independent Files restore after messaging faults |
 
 **VALIDATION / OPEN:** Standards and pinned bootstrap inspected. Generated/served worker not inspected; WM01–WM16 not run; no physical iPad, account, backup or release evidence. **CHANGE WATCH:** WebKit/Chromium lifecycle differences and generated worker build changes. **MINTTAP DECISION:** no release or worker-activation approval. Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
+
+
+## 20. Connectivity is not sync authority: foreground/offline recovery state contract (2026-11-08)
+
+**HISTORY / PROBLEM — B-owned cross-track application:** A connected network interface has never been equivalent to a reachable service. Captive portals, DNS failure, TLS interception, restricted corporate LANs, local-only Wi-Fi, suspended tabs, stale auth and interrupted responses create materially different states. In an EFB PWA, displaying "online" or "synced" from a browser hint would misrepresent a pilot's logbook custody. This domain builds on §15 (coordination), §17–18 (peer reachability) and §19 (worker commands), rather than re-teaching those mechanisms.
+
+**SOURCE / current platform (checked 2026-11-08):** [MDN Navigator.onLine](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine) explicitly calls the flag inherently unreliable: a LAN can be "online" without internet, and OS/browser heuristics differ. [MDN Background Synchronization API](https://developer.mozilla.org/en-US/docs/Web/API/Background_Synchronization_API) marks one-shot background sync **Limited availability**, requires secure contexts and describes deferred worker execution, not guaranteed delivery. [MDN Periodic Background Synchronization](https://developer.mozilla.org/en-US/docs/Web/API/Web_Periodic_Background_Synchronization_API) is experimental/limited and browser-scheduled rather than a precise timer. [web.dev network reliability](https://web.dev/explore/reliable) separates offline resource caching from reliable end-to-end user tasks. These are generic platform statements; no Safari managed-iPad feature or LogMate runtime was tested.
+
+### 20.1 State and authority model [SYNTHESIS / E trust consumes A facts]
+
+| Observable | Permitted inference | Must NOT infer |
+| --- | --- | --- |
+| navigator.onLine true / online event | Browser heuristic says network may be usable; schedule bounded retry | Internet, backend, peer, Firebase, auth or Sync reachable |
+| navigator.onLine false / offline event | Useful warning hint; local editing may still be possible | All LAN peer routes necessarily unavailable |
+| Successful same-origin fetch | That specific response was obtained; may be SW cache unless bypass/control recorded | Fresh backend, authenticated owner or complete sync |
+| Explicit authenticated backend request | This endpoint responded for this request and credential | All pending records accepted or durable receipt |
+| Outbox queued in IDB | Local pending work exists if readback succeeds | Remote commit or durable external backup |
+| Remote accepted receipt with owner/epoch/version | Server accepted specified operations under recorded authority | Other device reconciled, all local writes durable, Files backup exists |
+| Native/PWA peer channel open | Transport is currently negotiated | Same account, allowed policy, durable receiving transaction |
+| Cold restart + owner-scoped readback | Data remains in that tested container after restart | Survival after MDM wipe, origin migration or storage eviction |
+| Fresh-context Files reopen and guarded restore | Independently recoverable artifact under tested permissions | Continuous automatic synchronization |
+
+**MINTTAP DIRECTION — proposed state vocabulary, not approved UI copy:** `Saved on this device` requires local transaction/readback; `Waiting to sync` requires a nonempty durable outbox; `Connecting` requires an actual attempt; `Syncing` requires accepted in-flight operation; `Synced to account` requires owner/epoch/version-scoped remote receipt and reconciled pending set; `Backup verified` requires independent Files reopen/restore. `Offline ready` requires cold offline shell/resource and owner-ledger readback; a worker registration or online event is insufficient. Separate `Cannot reach service`, `Sign in required`, `Account changed`, `Conflict needs review`, `Storage unavailable` and `Backup needed` rather than collapsing all into "offline".
+
+**Operational security:** A connectivity probe should not leak account identifiers, one-time auth action codes, raw URLs with query/fragment, IP addresses or flight records to telemetry. Avoid unauthenticated GET "health" as an authorization oracle; a health endpoint can be reachable while account-scoped writes are denied. Probes should have bounded timeout/backoff, avoid uncontrolled background battery/radio use, and never silently switch to an unapproved relay/hotspot in managed EFB mode. A success toast must be causally tied to the actual durable receipt, not to the initiation of a request or worker message.
+
+### 20.2 Reconnection, concurrency and release logic [A → E/C/B/D]
+
+1. **Local write:** validate current local owner epoch at the transactional admission point; persist record + outbox intent atomically where supported; read back. If storage fails, show failure and preserve original source data; never claim "saved".
+2. **Attempt:** only when a user-approved channel is available, determine the *target* (account backend versus local native peer), check current credential/owner and bounded request semantics. `online` is merely a retry hint.
+3. **Retry:** use stable operation IDs, deduplication, bounded exponential backoff/jitter and server/receiver idempotency. Retries after ambiguous ACK loss must not double-create flight entries. Do not assume SW background delivery; foreground resume is a required fallback.
+4. **Admit:** receiver verifies UID/owner epoch, record version and conflict policy at commit time, not only during initial pairing. Deletion or A→B owner transition invalidates old queued work before any remote/local replay.
+5. **Receipt:** distinguish HTTP transport completion, application acceptance, durable commit and post-restart reconciliation. Do not erase outbox solely on HTTP 200 without the required application receipt.
+6. **Recover:** support interrupted sync, browser termination, SW update, network change, account switch, and independent Files restore with a truthful accessible state. User-triggered retry must remain possible when background API is absent.
+
+**Cross-track handoff:** B owns language, navigation, focus/announcement and recovery task structure; A owns online/offline events, SW, storage and browser variance; E owns owner/epoch/receipt and privacy; C owns fault-injection, screen-reader/keyboard and cold-restart oracles; D owns prohibition of unverified "automatic sync", "offline safe" or "fully backed up" claims. Design Studio W121 supplies execution-level UX checks, Engineering S007 owns actual deletion/owner transactions, Marketing owns public claims. No independent sixth specialist.
+
+### 20.3 RC01–RC20 integrated acceptance packet [VALIDATION DEFINED, NOT RUN]
+
+| ID | Falsifiable test |
+| --- | --- |
+| RC01 | LAN connected but internet blocked: onLine true must not yield remote-ready/synced claim |
+| RC02 | Captive portal, DNS failure, TLS failure and HTTP 503 distinguished from user-offline |
+| RC03 | SW-cached 200 versus genuine network response identified without private data exposure |
+| RC04 | Endpoint reachable but Firebase session expired: auth-required state, no outbox loss |
+| RC05 | Correct UID but revoked owner epoch: queued old-owner writes denied |
+| RC06 | A→B switch with old tab, old worker and delayed response: no stale receipt promotion |
+| RC07 | Transaction storage/quota failure: no false "saved locally" state |
+| RC08 | App killed after outbox commit but before send: pending survives cold restart |
+| RC09 | Send accepted but response lost: replay same operation ID produces one durable result |
+| RC10 | HTTP 200 without application receipt: outbox remains pending |
+| RC11 | Receipt arrives after account deletion: no unauthorized local revival |
+| RC12 | Sync operation conflicts with newer record version: explicit review/merge state |
+| RC13 | Worker Background Sync unavailable: foreground resume/retry remains functional |
+| RC14 | Worker Background Sync supported but suspended/throttled: no guaranteed timing claim |
+| RC15 | Safari tab, Home Screen and managed Web Clip tested separately with pinned OS/MDM |
+| RC16 | LOCAL-OFFLINE peer reachable but cloud unreachable: peer receipt not labeled cloud synced |
+| RC17 | CONNECTED relay available but company policy denies it: no automatic fallback |
+| RC18 | VoiceOver/keyboard/zoom and slow network: status and retry accessible, no misleading progress |
+| RC19 | Logs/analytics contain only categorical phase/error; no UID/email/SDP/flight payload |
+| RC20 | Fresh Files artifact reopen/guarded restore and cold offline owner readback independently verified |
+
+**VALIDATION / OPEN:** Source-level generic research and a proposed state machine only. RC01–RC20 **not executed** on LogMate, served PWA, native peer, Safari or managed EFB. **CHANGE WATCH:** iPadOS/WebKit background scheduling, storage containers, enterprise network policy and actual Firebase/API contracts. **Gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. No product/peer changes.
