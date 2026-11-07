@@ -411,8 +411,10 @@ At the end of each stage, the Web Manager should be able to:
 
 If these cannot be done, the stage is not complete even if research files exist.
 
-## Current position
+## Current position — updated 2026-11-07
 
-Existing 001–026 research gives meaningful partial credit across Stages 2, 5, 6, 8, 10 and 11, with especially strong prior work in launch requirements, governance, privacy/support architecture, SEO/localization/accessibility baselines and technical operations.
+**Sequential knowledge curriculum:** Stages **1–12 PASS** (generic competency gates), with Stage 1–12 source spans 027–082 and PWA foundation 073/074 PASS. See [research index](research/README.md) and [Web Knowledge Master](research/synthesis/WEB_KNOWLEDGE_MASTER.md). Those gates are not actual MintTap website/PWA production certification.
 
-However, the curriculum will now deliberately return to **Stage 1 Web Foundations** and fill missing first-principles knowledge before continuing upward in sequence. Earlier advanced studies remain retained and will later be revisited from the stronger conceptual foundation.
+**Active applied specialization:** **Stage 8 Security / Privacy / Trust ACTIVE**, focused on PWA owner/data erasure, independent Files custody, Service Worker update/version safety and actual managed-EFB evidence. **Production validation OPEN; PWA release HOLD.** The historical Stage 1 restart described in this roadmap before sequential completion is superseded; it remains a record of the earlier learning plan, not today's gate.
+
+**Before selecting new work:** read [Research Gaps & Scheduled Learning Protocol](research/synthesis/RESEARCH_GAPS_AND_SCHEDULE.md), inspect [Evidence Register](research/synthesis/EVIDENCE_VALIDATION_REGISTER.md) and the owning source study. Keep fundamentals available for genuine prerequisite gaps, without redoing completed primers merely to create activity.
