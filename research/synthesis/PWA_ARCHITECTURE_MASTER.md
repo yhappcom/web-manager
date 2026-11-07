@@ -860,3 +860,62 @@ Sequence a candidate transfer as **capability detection → operator-permitted d
 | RC20 | Fresh Files artifact reopen/guarded restore and cold offline owner readback independently verified |
 
 **VALIDATION / OPEN:** Source-level generic research and a proposed state machine only. RC01–RC20 **not executed** on LogMate, served PWA, native peer, Safari or managed EFB. **CHANGE WATCH:** iPadOS/WebKit background scheduling, storage containers, enterprise network policy and actual Firebase/API contracts. **Gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. No product/peer changes.
+
+
+## 21. Offline authentication persistence is not owner authorization (2026-11-08)
+
+**HISTORY / PROBLEM — E owns trust, A supplies browser mechanics:** Offline-first applications must let an authorized local user resume work without claiming that an unavailable identity provider has revalidated them. Firebase Auth persistence, local logbook custody, cached network responses and the authority to upload changes are four different contracts. This complements §15 concurrency, §19 Worker messaging and §20 reconnect receipts; it does not reassert those findings.
+
+**SOURCE (checked 2026-11-08):** [Firebase Auth web state persistence](https://firebase.google.com/docs/auth/web/auth-state-persistence) defines LOCAL, SESSION and NONE, explains cross-tab behavior and explicitly distinguishes Auth persistence from Firestore offline data persistence. [FlutterFire firebase_auth Persistence enum](https://pub.dev/documentation/firebase_auth/latest/firebase_auth/Persistence.html) additionally exposes INDEXED_DB; exact plugin/version selection matters. [MDN PWA caching](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Caching) and [MDN Service Workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers) explain independently managed resource caches and intercepted fetches. These are **generic platform/provider facts**, not LogMate configuration or iPad runtime observations.
+
+### 21.1 Distinct security predicates [SYNTHESIS]
+
+| Predicate | Evidence required | Counterexample / forbidden inference |
+| --- | --- | --- |
+| Auth SDK remembers prior user | Exact SDK instance, persistence choice, resolved currentUser and account state | LOCAL session state is not a fresh server-side entitlement check |
+| Local owner ledger readable | Exact container, owner/replica namespace, transaction readback and lifecycle | Remembered Firebase UID does not grant access to every local record |
+| Local edit admitted offline | App-specific owner epoch + deletion/revocation fence checked in same write admission transaction | Offline JWT or cached screen cannot override local terminal deletion |
+| Remote mutation authorized | Server verifies current token, UID, owner epoch, operation ID, version and applicable security rules at commit | Previously valid offline session cannot pre-authorize future uploads |
+| Cached response safe to reuse | Explicit classification, owner partition, freshness and invalidation policy; inspect actual Worker | Cache hit is not authenticated live response; HTTP no-store alone does not prove SW/IDB erasure |
+| Sign-out/deletion completed | Distinguish SDK sign-out, local ledger wipe, queued operations, remote account deletion and Files artifact | Clearing an Auth persistence key is not an erasure proof |
+| Offline user can recover | Exact product policy for unlock/reauth, non-destructive recovery, external backup and restricted iPad | Network unavailability must not silently reset, cross-link or discard flight data |
+
+**Operational judgment / proposed product requirements (NOT approved implementation):** Use separate UI states for `Known local owner`, `Local access requires verification`, `Remote session needs sign-in`, `Local write blocked after deletion intent` and `Pending sync requires authorization`. Whether an offline local unlock can be supported is a product security decision requiring explicit threat model for a shared/managed EFB; do not invent an offline credential or assume biometric APIs. On account A→B transition, never infer that SDK cross-tab synchronization fences every open editor or queued write. Transactional owner epoch checks remain required. An offline user may need an accessible non-destructive export/recovery route even when cloud authentication is expired, but any export must satisfy actual custody/authorization policy.
+
+### 21.2 Failure modes, policy boundaries and cross-track transfer
+
+1. **Persistence mismatch:** SESSION/NONE/LOCAL/INDEXED_DB have distinct restart and tab semantics; the actual FlutterFire plugin, initialization path and WebKit container must be inspected. Provider documentation for JS SDK does not establish the app's Dart configuration.
+2. **Revocation delay:** a previously authenticated offline session may remain locally visible when remote revocation cannot be queried; deny remote replay until live server admission, and separate any local-only entitlement from cloud identity.
+3. **Shared managed iPad:** Home Screen, Safari tab and managed Web Clip can differ in storage context. Test separately; no universal cross-container sign-out or cache purge is assumed.
+4. **Cached account response:** ensure no account-scoped API/HTML/token response is served from a stale public cache; audit Worker match/fetch strategy and CacheStorage names in generated/served build.
+5. **Sign-out vs deletion:** sign-out can preserve user-owned offline records under an explicitly approved custody model; terminal deletion must instead prove all required stores and queued intents removed. Do not substitute one for the other.
+6. **Reauthentication UX:** preserve unsynced edits when remote sign-in is required, prevent duplicate uploads, and make user-visible local/remote scope explicit without revealing email, UID or token in telemetry.
+7. **Storage pressure / reset:** Auth persistence, application IndexedDB, CacheStorage and external Files can fail or be evicted independently; verify each with a cold restart and independently reopened artifact.
+8. **Policy / privacy:** shared-device access controls, corporate MDM restrictions and permitted retention are product/operator facts, not determined by Firebase SDK defaults.
+
+**Cross-track allocation:** E owns trust boundary and release gates; A owns persistence/container mechanics; C owns cross-browser fault and cold-start oracle; B owns truthful sign-in/offline/recovery flows using Design Studio W121; D owns consent-safe analytics and blocks “offline authenticated”, “fully synced” and “securely backed up” claims absent matching evidence. Engineering owns exact FlutterFire/Sembast/server implementation; Marketing owns public claim approval. No duplication of those disciplines.
+
+### 21.3 AU01–AU18 exact-product validation packet [DEFINED NOT RUN]
+
+| ID | Acceptance question |
+| --- | --- |
+| AU01 | Pin exact LogMate main SHA, firebase_auth dependency/version and initialization persistence choice |
+| AU02 | Compare first sign-in, cold reopen and explicit sign-out under each actually supported persistence mode |
+| AU03 | Separate Safari tab, Home Screen PWA and approved managed Web Clip containers |
+| AU04 | Offline cold launch with valid prior account but unreachable Firebase: no false remote-auth assertion |
+| AU05 | Expired token with cached local records: no automatic remote-success or data loss |
+| AU06 | Revoked account while device offline, then reconnect: receiver denies stale unauthorized replay |
+| AU07 | Account A→B in second tab while A editor remains open: transaction fence prevents A write into B |
+| AU08 | SESSION versus LOCAL cross-tab changes checked against actual plugin behavior, not assumed JS defaults |
+| AU09 | Worker cache contains no account-specific auth response accessible to another owner |
+| AU10 | Sign-out does not falsely report terminal account deletion or verified Files erasure |
+| AU11 | Terminal deletion covers full store registry and pending outbox, then cold-reopen negative canaries |
+| AU12 | App restart after quota/IDB error distinguishes lost Auth state from lost local ledger |
+| AU13 | Remote login required during pending sync: outbox remains intact and owner-bound |
+| AU14 | Sign-in completes for different UID: old outbox not replayed under new UID |
+| AU15 | Network restored with old cached 200: explicit server receipt/owner/version required for sync success |
+| AU16 | Screen reader, keyboard and low-connectivity sign-in/recovery tasks preserve accessible status |
+| AU17 | Crash/telemetry/analytics contain no token, email, raw auth URL, UID or flight data |
+| AU18 | Independently reopened Files backup restores in fresh authorized context after browser data reset |
+
+**VALIDATION / OPEN:** AU01–AU18 are **not run**. No exact current FlutterFire persistence, deployed cache, managed iPad, remote admission, offline unlock policy or product behavior verified in this section. **DEPENDENCY:** Engineering-approved disposable account/runtime and physical EFB operator; Q01–Q03 remain P0. **CHANGE WATCH:** Firebase Auth SDK/FlutterFire versions, Safari/WebKit storage partitioning, MDM rules. **MINTTAP DECISION:** no new policy approval; Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
