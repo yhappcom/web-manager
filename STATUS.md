@@ -1,3 +1,15 @@
+# Current Web Manager state — integrated checkpoint (2026-11-07)
+
+**Canonical:** `main`, [Web Knowledge Master](research/synthesis/WEB_KNOWLEDGE_MASTER.md), [PWA Architecture Master](research/synthesis/PWA_ARCHITECTURE_MASTER.md), [Evidence & Validation Register](research/synthesis/EVIDENCE_VALIDATION_REGISTER.md), [MintTap Product Application](research/synthesis/MINTTAP_PRODUCT_APPLICATION.md), [Research Gaps & Scheduled Learning Protocol](research/synthesis/RESEARCH_GAPS_AND_SCHEDULE.md). Original numbered research and all historical STATUS entries remain preserved below.
+
+**Curriculum:** sequential Stages 1–12 knowledge competency PASS; strategic PWA foundations 073/074 PASS; **applied Stage 8 Security/Privacy/Trust ACTIVE**. Competency PASS is not production proof. **Production validation OPEN; PWA release HOLD.** Current relative track allocation: **E → A → C → B → D**; re-rank by evidence and real product value.
+
+**Known release bottleneck:** 529 `96 current inspected LogMate Sembast blob `f2b8b0eb681f5d960532dac5c87b29cf85a459b8` retains 37 export vs 29 explicit delete stores; old-owner writer/duplicate-driver/A→B and independent Files custody still require **Engineering-controlled exact runtime** tests. [530 ``43–44](research/530_stage8_pwa_install_identity_origin_migration_efb_custody_20261030.md) separates Worker script freshness, actual controlling client, cached shell and browser persistence from independent restored data; managed-iPad ST01–ST12 **NOT RUN**. Historical native restore, hosted research-browser/CI and Safari acceptance-partial PASS are **bounded**; they do not close NORMAL served/PWA/physical- EFB gates. No new runtime tests were performed by this integration.
+
+**Scheduled study discipline:** one substantial integrated bundle per hourly trigger, not hourly micro-files or repetitive unchanged P0 reports. After two unchanged P0 evidence checks, record the Engineering handoff and pivot to a genuinely adjacent A/C/B/D/E question. Weekly synthesis/freshness work fits an existing hourly run; no schedule change was made by this commit. Update masters/index/STATUS only when evidence, gate, contradiction or major research domain materially changes. See [protocol](research/synthesis/RESEARCH_GAPS_AND_SCHEDULE.md).
+
+---
+
 ## 2026-11-05 Stage 8 — update-check freshness boundary (530 §43)
 - Current MDN/WebKit source reconciliation: `updateViaCache:'none'` and `registration.update()` govern worker script update checks, **not** app Cache Storage freshness, activation, cold offline readiness, owner erasure or independent Files custody. [530 §43](research/530_stage8_pwa_install_identity_origin_migration_efb_custody_20261030.md) adds version-pinned V1→V2/interrupt/quota/controller/old-tab/37-store/managed-iPad acceptance; **DEFINED NOT RUN**. A owns platform; E P0 custody; C/B/D consume. **Stage 8 ACTIVE · Production OPEN · PWA release HOLD**. No product/peer writes.
 
