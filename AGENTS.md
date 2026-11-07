@@ -16,6 +16,18 @@ The Web Manager must integrate web-platform mechanics, information/content archi
 
 Both curriculum and specialist model are mandatory. The roadmap determines progression; specialist tracks determine ownership, depth, dependencies and balanced allocation.
 
+## Integrated knowledge and hourly-cycle entrypoints (2026-11-07)
+
+Keep original research, experiments, CI provenance and historical STATUS entries immutable unless a specific correction is evidence-backed. The five [research synthesis masters](research/synthesis/WEB_KNOWLEDGE_MASTER.md) provide current navigation and adjudication, **not replacement authority**:
+- [Web Knowledge Master](research/synthesis/WEB_KNOWLEDGE_MASTER.md) — completed sequential curriculum and five-track ownership;
+- [PWA Architecture Master](research/synthesis/PWA_ARCHITECTURE_MASTER.md) — cross-track browser, security, offline and managed-EFB architecture;
+- [Evidence & Validation Register](research/synthesis/EVIDENCE_VALIDATION_REGISTER.md) — source-pinned evidence, synthetic versus product PASS, contradictions and release gates;
+- [MintTap Product Application](research/synthesis/MINTTAP_PRODUCT_APPLICATION.md) — website and LogMate product transfer with authority boundaries;
+- [Research Gaps & Scheduled Learning Protocol](research/synthesis/RESEARCH_GAPS_AND_SCHEDULE.md) — active P0/P1/P2 queue, pivot/anti-duplication and reporting rules.
+
+Each hourly activation must read the required original governance/index/current evidence **and** relevant synthesis; identify the source-owning track; check for actual new primary facts or independently answerable adjacent questions. **Do not re-report the same blocked P0 test every hour**. After two consecutive unchanged, inaccessible P0 evidence checks, preserve its OPEN state and pivot to the next independent high-information-gain topic or cross-track transfer. New integrated research commits require a material finding, not a scheduling tick. No curriculum PASS, synthetic CI success or source-level security concern alone authorizes a product release, policy change or LogMate repository edit.
+
+
 ## Five specialist tracks
 A. **Web Platform & Browser** — DNS/HTTP/TLS, browser, HTML/CSS/JS platform, origin/storage/cache/network mechanics.  
 B. **Web UX, IA & Content Architecture** — journeys, IA/navigation, page/content systems, responsive information hierarchy and web task structure.  
