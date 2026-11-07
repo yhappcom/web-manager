@@ -1,6 +1,6 @@
 # 531 — MintTap Web Manager Integrated Knowledge, Evidence, Decisions and Research Operating Master
 
-**Consolidation checkpoint:** 2026-11-07 KST. **Canonical source:** `yhappcom/web-manager` `main@4f5903f411b8c3a353ea4edb552c7bea6c4a2e33`. **Authority:** this document is a navigational synthesis and operating control, **not** a replacement for the primary studies, product MASTER, standards, or execution logs. Historical studies remain intact. **Status:** CONSOLIDATED RESEARCH / Stage 8 applied security ACTIVE / product and physical managed-EFB validation OPEN / PWA release HOLD.
+**Consolidation checkpoint:** 2026-11-07 KST. **Original consolidation baseline:** `yhappcom/web-manager` `main@4f5903f411b8c3a353ea4edb552c7bea6c4a2e33`. **Later integration:** five focused synthesis masters and roadmap correction on 2026-11-07 (see links below). This document is a historical synthesis, not a newer authoritative snapshot than current `STATUS.md`. **Authority:** this document is a navigational synthesis and operating control, **not** a replacement for the primary studies, product MASTER, standards, or execution logs. Historical studies remain intact. **Status:** CONSOLIDATED RESEARCH / Stage 8 applied security ACTIVE / product and physical managed-EFB validation OPEN / PWA release HOLD.
 
 ## 1. Scope, provenance and how to read this master
 
@@ -94,7 +94,7 @@ The sequential Stage 1–12 **curriculum competency gates are PASS** (studies 02
 ## 8. Research debt and contradiction watch
 
 - **STATUS/index volume:** historically accumulated `STATUS.md` and `research/README.md` are large chronological ledgers. This master supplies a stable entry point; future maintenance may refactor the front-page current snapshot **without deleting primary evidence**. Avoid wholesale rewrite during concurrent automation.
-- **Roadmap stale position:** `LEARNING_ROADMAP.md` tail still says return to Stage 1; `research/README.md` and STATUS record Stage 1–12 competency PASS and applied Stage 8 ACTIVE. Treat the roadmap tail as **historical startup note**, not current gate. Consider a narrowly scoped future correction only after owner/gate review.
+- **Roadmap stale position — RESOLVED 2026-11-07:** `LEARNING_ROADMAP.md` tail was corrected in commit [`c275785`](https://github.com/yhappcom/web-manager/commit/c275785be18c944a9e2c28f2b0f85c98b0dbe81f). It now explicitly records Stage 1–12 competency PASS and applied Stage 8 ACTIVE; do not continue treating this as unresolved debt.
 - **Historical vs current product:** exact artifact hashes and SHA matter. A historical CI success does not prove current deployed behavior; re-pin current LogMate HEAD before runtime acceptance.
 - **Policy/version watch:** Apple/WebKit storage/install/MDM, Service Worker updates, Firebase Auth/Apple revoke, Google Play deletion, W3C IndexedDB/manifest, accessibility and analytics consent need release-time current-source checks.
 - **Cross-specialist responsibility:** Engineering S007 for implementation, Design Studio W121 for visual/accessibility runtime, Marketing for public claims, Web Manager for web/PWA trust and release conditions. Transfer rather than duplicate.
@@ -104,3 +104,9 @@ The sequential Stage 1–12 **curriculum competency gates are PASS** (studies 02
 **Integration outcome:** unified five-track ownership, curriculum-versus-product gate, PWA state-machine taxonomy, bounded evidence register, 37/29 P0 risk, execution packets, external specialist handoffs and delta-driven hourly research method. **No new product runtime, managed-iPad PASS or release approval** occurred during consolidation.
 
 **Next high-value target:** Engineering-authorized exact current LogMate source-pin and seeded 37-store terminal-wipe/reopen/A→B/old-writer canary campaign (529 WP01–WP20 P0 subset), then independently saved Files readback and compiled-Web/managed-iPad transfer. If execution access is unavailable, study only genuinely new adjacent evidence or changes; do not repackage the same open risk as fresh progress.
+
+## 10. Post-consolidation canonical navigation correction (2026-11-07) [SOURCE / CONTRADICTION RESOLVED]
+
+The first synthesis preceded a second, more granular integration. The **current navigation set** is [Web Knowledge Master](synthesis/WEB_KNOWLEDGE_MASTER.md), [PWA Architecture Master](synthesis/PWA_ARCHITECTURE_MASTER.md), [Evidence & Validation Register](synthesis/EVIDENCE_VALIDATION_REGISTER.md), [MintTap Product Application](synthesis/MINTTAP_PRODUCT_APPLICATION.md) and [Research Gaps & Scheduled Learning Protocol](synthesis/RESEARCH_GAPS_AND_SCHEDULE.md). [AGENTS](../AGENTS.md), [research index](README.md) and [STATUS](../STATUS.md) were updated to point to those documents. This 531 synthesis remains a preserved broad integration checkpoint and must not override more recent exact-source corrections in the focused masters.
+
+**Evidence freshness rule:** “latest main” must be confirmed from the repository branch HEAD at the start of each run; GitHub API listing caches and individual file refs can differ during rapid writes. Do not imply the historical 531 baseline SHA is current. **Release gate remains Stage 8 ACTIVE / production validation OPEN / PWA release HOLD.**
