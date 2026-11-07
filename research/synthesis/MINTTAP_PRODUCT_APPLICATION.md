@@ -43,8 +43,8 @@ The [Product Truth Record](../004-store-website-content-synchronization.md) is u
 | Background tasks | No universal WebKit/MDM promise | Feature-, installed-mode-, power-, network- and policy-specific evidence |
 | PWA updates | Worker lifecycle separate from shell/data state | V1/V2 old-tab, cache integrity/repair and schema/owner compatibility |
 | PWA backup | Origin persistence not an independent copy | User-allowed Files egress, saved LBK, fresh-context readback/restore, owner authority |
-| Account deletion | [529 `96](../529_stage8_pwa_owner_deletion_backup_mdm_custody_20261030.md) shows **37 export stores/29 explicit wipe stores** at its pinned updated source | Populated 37-store deletion, stale-tab writer fence, remote receipt, A→B normal startup |
-| Public deletion guidance | Pinned [523 `21](../523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) finds mismatch between public Settings deletion instruction and inspected actual UI | Current served page, current UI, operator request/retry/status path |
+| Account deletion | [529 §96](../529_stage8_pwa_owner_deletion_backup_mdm_custody_20261030.md) shows **37 export stores/29 explicit wipe stores** at its pinned updated source | Populated 37-store deletion, stale-tab writer fence, remote receipt, A→B normal startup |
+| Public deletion guidance | Pinned [523 §21](../523_stage8_pwa_remote_admission_receipt_owner_boundary_20261028.md) finds mismatch between public Settings deletion instruction and inspected actual UI | Current served page, current UI, operator request/retry/status path |
 
 **Critical safety boundary:** Even if a managed iPad allows Home Screen web apps, it does not establish the airline permits persistence, background communication, hotspot use, file export or any radio/peer link on a flight deck. Neither an iOS simulator nor a synthetic Chrome run resolves company-specific rules. Use test-owned, disposable devices and synthetic ledger data; never run deletion/quota/profile-removal destructive probes on operational crew EFBs.
 
