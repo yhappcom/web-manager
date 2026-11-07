@@ -501,3 +501,65 @@ A deployment can show a valid standalone icon yet fail its offline startup or re
 **VALIDATION:** Record exact repository SHA and compiled artifact hashes, deployed URL/response headers, browser/OS version, registration and controller, manifest-derived IDs, network trace, cache inventory, expected vs observed status, and privacy-safe synthetic query values. Mark PASS/FAIL/INCONCLUSIVE/NON-EXECUTION. Only actual served/installed product evidence can close the corresponding release gate; source and standards are not product PASS.
 
 **DEPENDENCY / TRANSFER:** Engineering owns exact LogMate build, Firebase Hosting deploy and authentication integration; A supplies URL/scope mechanics; E owns route trust and rollback; C/Design Studio W121 supplies runtime, accessibility and cross-browser evidence; B owns honest install/offline/auth recovery; D/Marketing D9 owns website/Store claim integrity. **MINTTAP DECISION:** do not recommend moving Worker, widening scope or changing manifest IDs before capturing current installed identity and migration impact. **OPEN:** generated worker and served auth response, current production base-href, managed iPad, independent Files and owner-deletion. **CHANGE WATCH:** browser manifest identity behavior, Apple WebKit installed container and company MDM policy. **Gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
+
+
+## 15. Cross-context coordination, IndexedDB durability, and owner fencing — 2026-11-08
+
+**RESEARCH CLASSIFICATION:** SOURCE / SYNTHESIS / DEPENDENCY / TRANSFER VALIDATION / OPEN / CHANGE WATCH. **Owner:** E security/operations; A browser concurrency mechanics; C fault validation; B honest conflict/recovery UX; D privacy-safe observability. This adds a missing *coordination-versus-authorization* boundary to [§9 lifecycle LC01–LC12](#9-bfcache-and-page-lifecycle-owner-boundary) and [§14 deployment BP01–BP14](#14-pwa-base-path-manifest-identity-and-worker-scope-2026-11-07). It does not supersede [529 P0 old-writer](../529_stage8_pwa_owner_deletion_backup_mdm_custody_20261030.md) or Engineering S007.
+
+### 15.1 History/problem → distinct primitives
+
+Two tabs may edit the same local logbook, a Service Worker may update concurrently, and a restored tab may hold stale Auth/owner state. The old failure pattern is treating one browser signal as a universal mutex or authorization decision. Separate five mechanisms:
+
+| Mechanism | Actual guarantee / role | Non-guarantee / failure mode |
+| --- | --- | --- |
+| **Web Locks** | [MDN Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) describes cooperative, named exclusive/shared locks among eligible same-origin browsing/worker contexts in a secure context; useful to serialize a sync leader or migration coordinator | Not a server lease, user identity, permanent lock, or guarantee that *all* app code participates. A crashed/frozen context and separate storage partition/device must not be assumed to share coordination. Never hold a lock across arbitrary user interaction or await unbounded network operations. |
+| **BroadcastChannel** | [MDN Broadcast Channel API](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API) conveys messages among contexts sharing an origin **and storage partition**, including workers where available | Best-effort event notification, not durable queue, persisted revocation, security fence, device-to-device transport, or proof that a hidden/frozen tab received a message. Storage partition can isolate otherwise same-origin frames; installed Home Screen/Safari containers need direct testing. |
+| **IndexedDB transaction** | [MDN IDB transactions](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB) provides transaction-scoped read/write atomicity for included stores, subject to app adapter/schema behavior | Does not make a preceding in-memory owner check atomic with a later write. Read the durable owner/deletion epoch and write dependent data within an appropriate atomic transaction, or prove an equivalent adapter-enforced fence. |
+| **IDB durability hint** | [MDN IDBTransaction.durability](https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction/durability) and [IDBDatabase.transaction](https://developer.mozilla.org/en-US/docs/Web/API/IDBDatabase/transaction) distinguish strict, relaxed, default hints | A hint is not an independent export, power-loss guarantee, quota immunity, backup, or a promise that Sembast/Flutter actually requests strict durability. Physical abrupt-loss/restore evidence remains required. |
+| **Server/remote admission** | Authoritative authenticated UID, deletion phase/epoch, replay/idempotency and version checks at remote write/sync boundary | A local Web Lock, BroadcastChannel event, Service Worker message, or installed app identity cannot authorize a remote mutation. |
+
+**SOURCE / platform reality:** MDN labels Web Locks broadly available since March 2022 and secure-context-only; BroadcastChannel broadly available but partition-bound. Exact iPadOS, managed Web Clip, private browsing and installed-container behavior is **CHANGE WATCH / U**, not inferred from baseline badges. IndexedDB durability was Baseline 2024, but older managed OS versions may differ. The browser is not obligated to keep background tabs or workers running for an entire sync.
+
+### 15.2 Operational model: coordination must never replace a durable owner fence
+
+**SYNTHESIS:** Use an epoch-bearing durable ownership state, e.g. {ownerUid, generation, deletionPhase, schemaVersion}, and validate it at the *actual mutation boundary*; this is a **test contract**, not a proposed LogMate schema change. An old tab A may have read generation 7 before deletion; tab B may commit deletion intent generation 8; tab A's later write must be rejected even if A never receives a BroadcastChannel notification. A lock may reduce collisions but must not be the sole reason a write is admitted. The same applies to an old Service Worker, a restored bfcache page, and a reopened offline client.
+
+A practical **falsifiable** acceptance rule is: for every durable write path (draft, import, Sync/Replica, settings, backup metadata, restore, account switch), capture the owner/epoch/phase read and the write commit point; demonstrate that deletion-intent and owner changes cannot interleave so as to admit stale A writes. For writes spanning stores or remote operations, define which boundary is atomic, which is compensating/idempotent, and how recovery detects partial completion. Do not assert that generic IndexedDB transactions automatically cover a Dart Sembast adapter's entire multi-store mutation; inspect the exact adapter.
+
+**Security vs UX:** A visible “Account deleted” message is not proof that other contexts have stopped writing. Broadcast a non-sensitive invalidation notice as a UX accelerator, but on resume/reload, re-read durable state. Do not put emails, tokens, auth action codes or full logbook records in channel names/messages, lock names or analytics. Offline old-owner data may remain viewable only under an explicit product policy; authorization to write/merge is separate.
+
+**Storage/partition transfer:** A Safari tab, installed Home Screen web app, and MDM Web Clip may not share the same data container, so same-origin channel/lock tests within one container do not establish cross-container revocation. A native mobile app is an entirely different OS/application storage and process domain. Coordination across devices requires an independently validated authenticated transport and remote admission contract; local browser APIs are not direct PWA↔native synchronization.
+
+### 15.3 Failure matrix CC01–CC16 — **DEFINED, NOT RUN**
+
+| ID | Stimulus / boundary | Falsifiable oracle |
+| --- | --- | --- |
+| CC01 | Two same-origin tabs request exclusive Web Lock for sync | Only one cooperating holder runs critical section; queued contender eventually resumes |
+| CC02 | Tab holding lock freezes, closes, crashes or is discarded | No permanent corruption/deadlock; retry and lease/epoch handling explicitly observed |
+| CC03 | A holds sync lock; B commits deletion intent | A's subsequent local/remote write denied by durable owner/phase, irrespective of lock |
+| CC04 | BroadcastChannel deletion notice delivered to active tab | UI invalidates safely; no PII in message; no mutation until durable recheck |
+| CC05 | BroadcastChannel message missed during bfcache/frozen tab | On pageshow/resume, stale tab rechecks durable state; cannot write old owner |
+| CC06 | Installed Home Screen app vs Safari tab vs managed Web Clip | Identify separate storage partitions/contexts empirically; no assumed shared channel or lock |
+| CC07 | Two browser tabs vs native mobile | No claim of cross-device Web Lock/BroadcastChannel; remote sync authority tested independently |
+| CC08 | Owner generation changes between read and write | Atomic fence or equivalent adapter contract rejects stale write |
+| CC09 | Sembast/IndexedDB transaction abort, quota exception, schema migration | No partial owner-data admission; precise commit/rollback evidence |
+| CC10 | Two deletion drivers / duplicate requests | Exactly-once *effects* via idempotent state, even with at-least-once retries; no premature completed claim |
+| CC11 | Service Worker V1 and V2, old page still controlled | No stale worker message can override owner phase or schema; worker/cache not ledger authority |
+| CC12 | Abrupt process/power termination around transaction completion | Measure committed state on cold restart; durability hint not substituted for physical backup |
+| CC13 | Storage pressure / browser eviction | Recover only from independently saved and re-read Files artifact; no data-survival claim |
+| CC14 | Lock API unavailable / unsupported secure context / partition | Safe fallback or explicit disabled concurrent operation; no unsafe unlocked mutation |
+| CC15 | Background sync interrupted offline / remote conflict | Pending state preserved or safely failed; remote UID/epoch/idempotency prevents replay after deletion |
+| CC16 | Account A deletion then B normal startup with two stale contexts | Zero A writes/Sync/Replica resurrection; B remains isolated; redacted event evidence |
+
+**VALIDATION packet:** record exact LogMate SHA and store inventory, adapter transaction code, test context origin/storage partition, browser/iPadOS version, worker/controller hash, owner-generation transitions, ordered timestamps for read/intent/commit, transaction outcome, remote receipt, restart observation and Files readback. Classify PASS/FAIL/INCONCLUSIVE/NON-EXECUTION. Test fixtures must be disposable and non-personal; source reasoning cannot close P0.
+
+### 15.4 Cross-track and product handoff
+
+- **A platform:** verify Web Locks/BroadcastChannel feature detection, partition boundaries, lifecycle interruption, worker compatibility, and standards-versus-WebKit/Chromium differences. No browser feature support implies an MDM policy exception.
+- **E security:** define owner fence, deletion phase, idempotency, transaction and remote admission evidence. Locks/channels are optional coordination, not authority.
+- **C quality:** execute CC01–CC16 with fault injection, interrupted transactions, accessible recovery, exact build hashes and independent physical-iPad runs; connect Design Studio W121 runtime gate.
+- **B UX:** distinguish “sync pending”, “locally saved”, “independently backed up”, “deleted”, and “remote confirmed” in user-facing state; avoid success copy on only a channel event or optimistic UI.
+- **D discovery/analytics:** collect aggregate privacy-safe event classes (lock contention, stale epoch denied, failed restore, actual completion) without identity/email, and prevent marketing claims from exceeding observed evidence.
+
+**DEPENDENCY / TRANSFER VALIDATION:** Engineering S007 owns deletion saga, exact LogMate store/adapter transactions and native↔PWA sync. Marketing D9 keeps offline/PWA claims on HOLD. Design Studio W121 requires runtime accessibility. **MINTTAP DECISION:** no new LogMate code change, no blanket recommendation to adopt Web Locks, no assumption of direct device-to-device background sync. **OPEN:** exact transaction/fence implementation, current physical device capability, multi-context runtime evidence, independent Files restore, old-writer P0. **CHANGE WATCH:** WebKit storage partition/installed PWA behavior, IndexedDB durability implementation, OS-managed lifecycle. **Gate:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
