@@ -1,3 +1,17 @@
+# Integrated research entrypoints — 2026-11-07
+
+**Read this before the chronological study log.** This research index retains historical evidence and dates; the current integrated navigation layer is:
+
+1. [Web Knowledge Master](synthesis/WEB_KNOWLEDGE_MASTER.md) — 12 completed generic curriculum gates, five-track ownership, original-source dependencies.
+2. [PWA Architecture Master](synthesis/PWA_ARCHITECTURE_MASTER.md) — SW/update, storage, offline, security, iPadOS/MDM, native transfer boundaries.
+3. [Evidence & Validation Register](synthesis/EVIDENCE_VALIDATION_REGISTER.md) — exact source/CI bounds, historical PASS vs OPEN, corrections and release admission.
+4. [MintTap Product Application](synthesis/MINTTAP_PRODUCT_APPLICATION.md) — company website structure, Store/web truth and LogMate EFB requirements.
+5. [Research Gaps & Scheduled Learning Protocol](synthesis/RESEARCH_GAPS_AND_SCHEDULE.md) — P0/P1/P2 queue, dynamic track allocation, hourly anti-duplication/pivot and weekly maintenance.
+
+**Evidence gates:** sequential Stages 1–12 PASS = knowledge competency; applied Stage 8 ACTIVE; production validation OPEN; PWA release HOLD. Integration did **not** execute new product/device tests, settle the 37-vs-29 deletion issue, approve PWA, or mutate LogMate/Design/Marketing/Engineering. Original numbered studies, synthetic experiments and CI run references remain canonical for provenance. [AGENTS](../AGENTS.md) now requires using these masters as navigation and reopening exact original studies for material claims.
+
+---
+
 ## 2026-11-06 Stage 8 — WebKit persistent storage versus independent EFB custody
 - **[530 §44](530_stage8_pwa_install_identity_origin_migration_efb_custody_20261030.md):** WebKit/MDN primary-source reconciliation: granted StorageManager persistence, estimated quota, completed IndexedDB transaction and independently verified Files restore are four different evidentiary claims. Safari/Home Screen/managed iPad persistence-mode and 37-store cold-relaunch/quota/profile-removal/Files ST01–ST12 **DEFINED NOT RUN**; no production device PASS. A platform owner, E custody P0, C device oracles, B/D truthful state/claims. **Stage 8 ACTIVE · Production OPEN · PWA release HOLD**. Product and peers read-only.
 
