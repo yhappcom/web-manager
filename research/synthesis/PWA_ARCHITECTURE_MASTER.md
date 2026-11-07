@@ -563,3 +563,67 @@ A practical **falsifiable** acceptance rule is: for every durable write path (dr
 - **D discovery/analytics:** collect aggregate privacy-safe event classes (lock contention, stale epoch denied, failed restore, actual completion) without identity/email, and prevent marketing claims from exceeding observed evidence.
 
 **DEPENDENCY / TRANSFER VALIDATION:** Engineering S007 owns deletion saga, exact LogMate store/adapter transactions and native↔PWA sync. Marketing D9 keeps offline/PWA claims on HOLD. Design Studio W121 requires runtime accessibility. **MINTTAP DECISION:** no new LogMate code change, no blanket recommendation to adopt Web Locks, no assumption of direct device-to-device background sync. **OPEN:** exact transaction/fence implementation, current physical device capability, multi-context runtime evidence, independent Files restore, old-writer P0. **CHANGE WATCH:** WebKit storage partition/installed PWA behavior, IndexedDB durability implementation, OS-managed lifecycle. **Gate:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
+
+
+---
+
+## 16. User-visible Files backup custody: picker, download, external artifact and recoverable ledger (2026-11-08)
+
+### 16.1 History, source, and platform contract
+
+**HISTORY / FAILURE MODEL:** Offline PWA storage is origin/container-managed. An independent file is a separate failure domain only after bytes leave the browser container and can be read in a new context. File picker availability, download initiation, an in-memory Blob, an origin-private file, an OS Files document and successful re-import are distinct states. This is particularly consequential for company-managed iPads.
+
+**SOURCE / PLATFORM checked 2026-11-08:**
+- [MDN showSaveFilePicker](https://developer.mozilla.org/en-US/docs/Web/API/Window/showSaveFilePicker) and [showOpenFilePicker](https://developer.mozilla.org/en-US/docs/Web/API/Window/showOpenFilePicker): limited browser availability, secure context, transient user activation, cancellation and permission errors.
+- [Web Platform DX file system access](https://web-platform-dx.github.io/web-features-explorer/features/file-system-access/): Chromium supports powerful user-visible picker entry points; Safari/iOS Safari do not. This does NOT establish that ordinary HTML file input, browser download, or Files share UI is impossible in Safari.
+- [MDN File System API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API): origin-private file system (OPFS) and user-visible file handles are different custody models. OPFS is not an independently saved Files document.
+- [MDN blob URL](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/blob): a Blob URL can initiate download, but creation or navigation does not prove that a file was durably saved or independently restorable.
+- [MDN FileSystemFileHandle](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle): file permission lifecycle can change; a retained handle is not an unconditional unattended write authorization.
+- [WebKit storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) and [tracking prevention](https://webkit.org/tracking-prevention/): browser persistence/ITP exceptions do not guarantee an external Files readback.
+
+**PRODUCT BOUNDARY:** Existing [298](../298_pwa_durable_local_state_device_backup_restore_failure_domain_contract.md), [529](../529_stage8_pwa_owner_deletion_backup_mdm_custody_20261030.md), [530](../530_stage8_pwa_install_identity_origin_migration_efb_custody_20261030.md) and EV21 already require independent backup. This study does NOT claim LogMate currently uses powerful file pickers, that its Flutter Web adapter has been executed, or that MDM allows Files transfer. These remain OPEN.
+
+### 16.2 Security and durability state machine
+
+1. **Snapshot requested:** accept explicit user action; check owner, epoch and deletion phase at capture.
+2. **Snapshot materialized:** deterministic versioned serialization, record count, size and integrity metadata; in-memory/OPFS state is not independent custody.
+3. **External save initiated:** feature-detected picker, HTML download or platform share flow; handle cancellation, denied access, quota and memory errors.
+4. **External save observed:** record destination evidence where platform permits; browser JavaScript often cannot attest final Files persistence from download dispatch alone.
+5. **Fresh-context readback:** independently select saved artifact in a new context; check actual bytes, hash, schema, owner and counts.
+6. **Restore validated:** disposable clean container, preview, duplicate/owner gate, record parity, restart and separate Sync/Replica admission.
+7. **Custody survival:** only authorized non-production tests may examine browser eviction, Home Screen removal, MDM profile removal and device replacement.
+
+**SYNTHESIS:** A download click may succeed while the user cancels saving, MDM blocks Files access, a provider writes elsewhere, or the file is corrupt. OPFS persistence remains browser-managed. A checksum detects some corruption, not authenticity or account ownership. A restore file can be syntactically valid yet wrong-owner, outdated, oversized or malicious. Actual adapter transaction and schema checks belong to Engineering.
+
+**CONTRADICTION:** PWA can create a Blob does not entail independent iPad Files backup. Browser storage persisted does not entail survival of MDM uninstall. Download started does not entail recoverable ledger. Powerful picker unsupported in Safari does not entail every Safari export/import mechanism is impossible.
+
+### 16.3 BF01–BF18 falsifiable acceptance — DEFINED, NOT RUN
+
+| ID | Scenario | Required oracle |
+| --- | --- | --- |
+| BF01 | Chromium HTTPS save picker with user activation | Feature and written bytes verified |
+| BF02 | Safari/iPadOS lacks powerful picker | Tested fallback or explicit unavailable state |
+| BF03 | Picker canceled or permission denied | No backup-complete claim or ledger mutation |
+| BF04 | Async delay loses transient activation | Safe retry, no unattended access claim |
+| BF05 | Blob URL/download | Distinguish dispatch from saved file and fresh readback |
+| BF06 | Large export / low memory / quota | No partial success or deadlock |
+| BF07 | Offline export | Complete local snapshot only when owner data available |
+| BF08 | Offline import via ordinary file input | Actual selected bytes parsed |
+| BF09 | Safari tab vs Home Screen app | Separate Files chooser/download behaviors observed |
+| BF10 | Managed Web Clip and MDM | Authorized physical device observation |
+| BF11 | Files provider read-only/unavailable/full | Recoverable error, no success claim |
+| BF12 | New container selects saved artifact | Byte/hash/schema/count parity |
+| BF13 | Corrupt/truncated/oversized/old-version artifact | Rejection before ledger mutation |
+| BF14 | Wrong-owner/stale-epoch restore | No unauthorized rebind or resurrection |
+| BF15 | Duplicate import/partial failure | Transaction and undo behavior verified |
+| BF16 | Browser eviction/Home Screen removal | Recovery only from independently saved file |
+| BF17 | MDM removal/device transfer | Operator-authorized, no destructive live-user action |
+| BF18 | Restored ledger then Sync/Replica | Separate remote owner/idempotency admission |
+
+**VALIDATION:** capture source/build SHA, OS/browser/MDM version, installation mode and origin, format/schema, artifact byte count/hash, gesture and save route, actual destination, new-context readback, import result, owner/epoch, count parity, cold restart and remote receipt. Classify PASS/FAIL/INCONCLUSIVE/NON-EXECUTION. Desktop Chromium evidence cannot promote managed-iPad PASS.
+
+### 16.4 Cross-track integration and operational judgment
+
+**A platform** owns picker and download feature detection, user activation and browser differences. **E security** owns custody, owner-fenced export, integrity, restore admission and release gate. **C quality** owns large-file, low-quota, interruption, accessibility and physical-device tests. **B UX** distinguishes preparing, save initiated, file verified and restore verified; never labels click as backup complete. **D discovery/analytics** separates initiated from verified backup in privacy-safe aggregates and prevents unsupported offline claims.
+
+**DEPENDENCY / TRANSFER VALIDATION:** Engineering owns LogMate Flutter Web file adapter, owner transactions and schema; Design Studio W121 owns accessibility execution; Marketing D9 keeps PWA/offline claims on HOLD. **MINTTAP DECISION:** prioritize independently saved and re-read Files artifacts over browser-only persistence as a product acceptance criterion, without authorizing implementation changes. **OPEN:** deployed adapter, MDM policy, installed iPad behavior, file readback, owner-bound restore. **CHANGE WATCH:** Safari/iPadOS file UX, Chromium picker support and managed Web Clip policy. **Gate unchanged:** Stage 8 ACTIVE / Production validation OPEN / PWA release HOLD.
