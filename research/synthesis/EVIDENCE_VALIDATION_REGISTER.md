@@ -54,6 +54,9 @@ LogMate's owner-approved identifier-first flow maps the unauthenticated `createA
 
 **Acceptance:** [PWA Master §11 EL01–EL14](PWA_ARCHITECTURE_MASTER.md) requires authorized disposable-project protected/unprotected response-shape tests, exact app fail-closed/no-write behavior, stale request and bfcache controls, HTTP referrer/telemetry, rate-limit evidence and accessible fallback; no real-user enumeration. **Cross-team:** Engineering Auth/S007 owns implementation/provider setting; Web E/A owns privacy/PWA mechanics; B/C/Design W121 owns UX/error validation; D/Marketing D9 owns truthful claims. **Gate remains Stage 8 ACTIVE / production OPEN / PWA HOLD.**
 
+
+**EV22a — Browser URL / Identity Toolkit request-body transfer (2026-11-07):** The same pinned LogMate source constructs Web `continueUri` from `Uri.base` without query/fragment stripping and includes it in `accounts:createAuthUri` JSON. This is a **SOURCE** observation and **M** potential URL-state disclosure model, **not** an observed sensitive URL, log leak or product incident. Browser `Referer` and JSON request body are distinct trust boundaries. [PWA Master §11.4 URL01–URL05](PWA_ARCHITECTURE_MASTER.md) defines synthetic-route/body and served-network oracles, **NOT RUN**. Engineering must determine whether normalization preserves approved Auth routing; E/A/C own security/platform/browser evidence, B/D own recovery/telemetry implications. Release gate unchanged.
+
 ## 3. Falsification, conflicts and supersession log
 
 1. **Roadmap current-stage conflict:** old [LEARNING_ROADMAP.md](../../LEARNING_ROADMAP.md) Stage-1 return is historical; later [research index](../README.md) sequential Stage 1–12 PASS supersedes. Applied Stage 8 ACTIVE concerns product application. Do not regress proficiency or declare security launch PASS.
