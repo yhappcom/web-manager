@@ -36,6 +36,10 @@ Every scheduled run:
 
 **Blocking precedence:** Q01–Q03 are current release safety bottlenecks. They are **not** a reason to idle all five tracks. When direct P0 test is outside Web Manager's authorization, issue a precise Engineering handoff with fixture, expected oracle, and owner; then pursue Q04–Q11 with fresh evidence. A negative exact test may change priority; user-authorized live work supersedes autonomous curriculum.
 
+### Q12 — Identifier-first Email enumeration/availability compatibility (2026-11-07)
+
+**Priority P1, E lead + A/B/C/D transfer; Engineering Auth execution owner.** New exact-source/primary-provider contradiction, not a repeated deletion P0 audit. LogMate [approved Email contract](https://github.com/yhappcom/logmate/blob/main/docs/specs/startup-and-auth-entry-spec.md) requires pre-auth `createAuthUri.registered`; [Google enumeration protection](https://docs.cloud.google.com/identity-platform/docs/admin/email-enumeration-protection) discourages enumeration-dependent routing and may change response fields. **UNKNOWN:** live Firebase setting/response, production rate-limit controls, actual PWA/native routing. **Next decisive evidence:** authorized disposable existing/new emails in protected and unprotected test projects; record exact response field presence and status (not real addresses), run source-pinned app integration with missing-field/429/offline/stale response, and validate bfcache/Worker/Referrer/telemetry and accessible retry. See [PWA Master `11 EL01–EL14](PWA_ARCHITECTURE_MASTER.md), [EV22](EVIDENCE_VALIDATION_REGISTER.md). Do **not** disable enumeration protection, change the owner-approved flow or assert a production vulnerability based on source alone. If operator access is blocked, hand off precise acceptance and pivot to another independently testable Stage 8/Track B/C/D question.
+
 ## 4. Per-run substantial integrated packet (8–12 older blocks as a heuristic, not a checklist quota)
 
 A good cycle selects *one connected failure domain* and investigates:
