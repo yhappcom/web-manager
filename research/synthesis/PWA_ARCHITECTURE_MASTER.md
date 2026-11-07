@@ -919,3 +919,65 @@ Sequence a candidate transfer as **capability detection → operator-permitted d
 | AU18 | Independently reopened Files backup restores in fresh authorized context after browser data reset |
 
 **VALIDATION / OPEN:** AU01–AU18 are **not run**. No exact current FlutterFire persistence, deployed cache, managed iPad, remote admission, offline unlock policy or product behavior verified in this section. **DEPENDENCY:** Engineering-approved disposable account/runtime and physical EFB operator; Q01–Q03 remain P0. **CHANGE WATCH:** Firebase Auth SDK/FlutterFire versions, Safari/WebKit storage partitioning, MDM rules. **MINTTAP DECISION:** no new policy approval; Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
+
+
+## 22. CSP policy rollout across PWA document, Worker and Auth action surfaces (2026-11-08)
+
+**HISTORY / PROBLEM — E owns security policy; A owns browser enforcement:** A site-wide Content Security Policy is often proposed as a single security switch. For a Flutter Web PWA with a separately fetched Service Worker, an auth-action document and dynamically loaded engine resources, that model is incomplete: policy is attached to **responses and execution contexts**, not to the brand or repository. A stringent untested policy can block first paint, Worker installation, offline recovery, Firebase network requests or legitimate authentication, while a permissive policy may not meaningfully reduce XSS risk. This section is an independent Stage 8 deployment-security dependency, not another owner-deletion audit.
+
+**SOURCE — primary/current, checked 2026-11-08:**
+- [MDN CSP response-header reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy): fetch-directive fallbacks, multiple policy intersection and independently delivered Worker response policies.
+- [MDN worker-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/worker-src): controls Worker/SharedWorker/ServiceWorker script source; absent worker-src falls back through child-src, script-src, default-src.
+- [MDN require-trusted-types-for](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/require-trusted-types-for): typed DOM injection-sink enforcement; MDN now labels cross-browser Baseline 2026, **not** evidence that an older managed iPad or a particular Flutter build is compatible.
+- [W3C CSP Level 3](https://www.w3.org/TR/CSP3/): normative directive model. Browser support, report delivery and enforcement must be measured per actual runtime.
+
+**Exact product SOURCE (read-only, 2026-11-08; product commit must be pinned separately for execution):** LogMate `firebase.json` blob `9ac0972e26749215c4a718360c66315c6caf3cc8` has wildcard `Cache-Control: no-cache, no-store, must-revalidate` but **no declared CSP response header in that file**. `web/index.html` blob `01be77585ac40bf11e80777177a4ab08e4885671` loads `flutter_bootstrap.js` and manifest relative to `$FLUTTER_BASE_HREF`. `web/flutter_bootstrap.js` blob `a70625e8bda32aafd5dd23822c017d05229f0e63` registers `logmate_service_worker.js` using the resolved base URL, calls `registration.update()`, posts two update commands, and loads Flutter engine with a versioned font fallback URL. **No conclusion about deployed CSP headers, generated Worker script, third-party scripts, app-network endpoints, or security effectiveness follows from these three files alone.** Firebase Hosting config can differ from final served headers via deploy target, proxy/CDN or other infrastructure.
+
+### 22.1 Five distinct policy boundaries [SYNTHESIS]
+
+| Boundary | Enforcement / failure mode | Decisive evidence |
+| --- | --- | --- |
+| Top-level app document | `script-src` / `style-src` / `connect-src` / `font-src` / `img-src` may block Flutter bootstrap, renderer, fonts, auth and APIs | Actual HTTPS document headers + runtime violation/console/resource trace |
+| Worker registration | Document's `worker-src` and fallback govern permitted Worker script source | Normal/installed app `register()` result, worker script URL, scope and policy |
+| Worker execution | Worker script response's **own** CSP governs its internal fetch/execution, not automatically the document's CSP | Worker script response headers + install/activate/fetch/candidate-cache traces |
+| Auth action/rewrite | `/auth`, `/auth/`, `/auth/action` and final action HTML can have different served headers and query handling | Per-route status/redirect/header capture with synthetic one-time code, no real token |
+| Offline cached shell / update | Old document/Worker and new server policy may coexist; an offline shell may not see newly deployed policy until replacement | V1/V2 version-pinned cold start, old tab, offline reload, rollback, cache catalogue and auth negative controls |
+
+**Important nuance:** CSP is a defense-in-depth restriction on execution/resource loading, not authentication, authorization, storage erasure, account deletion or a guarantee of XSS absence. `worker-src 'self'` may be appropriate in principle for a same-origin worker but must not be shipped as an untested blanket rule. CSP `Report-Only` reports violations without enforcement; it is a diagnostic stage, not a security PASS. Multiple enforced CSP headers are restrictive in combination; an additional permissive header does not undo an existing restrictive one. A meta CSP is not equivalent to response-header delivery for all directives or early requests. Trusted Types is a separate sink discipline; enabling it without auditing Flutter/third-party DOM sinks may break legitimate execution.
+
+### 22.2 Proposed staged admission [MINTTAP DECISION — research recommendation, NOT approved deployment]
+
+1. **Inventory:** capture exact normal/acceptance build, served HTTPS routes and resources, including Worker JS, Flutter JS/WASM, fonts, Firebase Auth/API calls, WebSocket/connect endpoints, analytics/consent scripts and auth-action redirects. Avoid inventing an allowlist from static filenames.
+2. **Report-only lab:** test a candidate least-privilege policy on a disposable staging origin with privacy-minimized reports. Keep an explicit inventory of violations and justified exceptions; do not send URL query strings, account IDs, flight data or auth codes to reporting endpoints.
+3. **Negative controls:** intentionally disallow the Worker script, one required font and one API endpoint *in isolated test environments* to verify telemetry and accessible failure/recovery UI. Do not run these tests against production/operational EFBs.
+4. **Cross-context rollout:** separately verify document, Worker script and auth action response policies. Test browser support and policy compatibility on pinned Chromium, Safari tab, installed Home Screen and authorized managed Web Clip; test both online and cold offline after V1→V2.
+5. **Progressive enforcement:** move only source-proven, runtime-tested directives from report-only to enforced staging, then a controlled release. Explicit rollback must restore a working shell/Worker without discarding IndexedDB or user Files. Preserve independent owner-deletion and Files custody gates.
+6. **Trusted Types decision:** test current Flutter renderer and every DOM-writing dependency under `require-trusted-types-for 'script'` before considering enforcement; browser support does not establish product compatibility. Track older OS versions separately.
+7. **Incident observability:** record aggregate directive/resource category, build ID, platform family and failure phase, with query/fragment/token/UID/flight data redacted; sampling and retention require privacy review. Reports can be blocked or lost and are not exhaustive.
+
+### 22.3 CP01–CP18 falsifiable validation packet [DEFINED NOT RUN]
+
+| ID | Acceptance / negative control |
+| --- | --- |
+| CP01 | Pin exact deployed build, origin and response headers for app HTML, Worker JS, auth action and font assets |
+| CP02 | Distinguish CSP absent in source firebase.json from CSP absent on served HTTPS; no inference without capture |
+| CP03 | `worker-src` deny negative control blocks test Worker registration and reports the correct directive |
+| CP04 | `worker-src 'self'` candidate permits actual same-origin Worker registration at root and subpath |
+| CP05 | Worker script response CSP independently permits required install/activate/fetch operations |
+| CP06 | `script-src` candidate preserves Flutter bootstrap, engine/WASM and relevant lazy-load paths |
+| CP07 | `style-src`, `font-src`, `img-src` preserve offline fallback fonts, icons and accessible error UI |
+| CP08 | `connect-src` permits intended Firebase/auth/API endpoints but blocks an intentionally forbidden test endpoint |
+| CP09 | `/auth`, `/auth/`, `/auth/action` rewrite/redirect have correct policy, status and no real-token reporting |
+| CP10 | Enforced versus report-only modes show expected differences; reports do not imply user-data access |
+| CP11 | Multiple CSP headers tested for intersection; permissive second header cannot override restrictive first |
+| CP12 | Trusted Types candidate tested on exact Flutter renderer/dependencies, with isolated DOM-sink negative control |
+| CP13 | Chrome and pinned Safari/iPadOS behavior tested independently, including unsupported/older versions |
+| CP14 | V1 controlled old tab plus V2 Worker policy update: no dead shell, wrong account or silent data loss |
+| CP15 | Offline cold launch under previously cached shell and post-update rollback both preserve local owner ledger |
+| CP16 | CSP-blocked API/auth yields truthful accessible retry, not false 'offline' or 'synced' state |
+| CP17 | Violation telemetry strips query, fragment, auth code, email, UID, SDP and flight data |
+| CP18 | Independent Files reopen/restore and 37-store terminal deletion remain separate required P0 proofs |
+
+**TRANSFER VALIDATION:** A provides response/context/Worker fallback semantics; E owns policy design, privacy, staged deployment and rollback; C owns lab/runtime/assistive-technology and fault tests; B owns blocked-resource, sign-in and offline recovery tasks (Design Studio W121 remains visual/accessibility execution dependency); D owns privacy-safe observability and public claim restraint (Marketing D9 remains HOLD). Engineering owns exact Flutter/Hosting policy implementation and tests. No peer/product repository write.
+
+**OPEN / DEPENDENCY:** CP01–CP18 NOT RUN; actual delivered headers, generated Worker and exact Flutter CSP/Trusted Types compatibility unknown. Company-managed iPad policy and installed PWA behavior unknown. Q01–Q03 P0 owner-deletion, old-writer and Files custody remain unchanged. **CHANGE WATCH:** CSP/Trusted Types browser versions, Flutter renderer, Firebase Hosting delivery and OS/MDM updates. **Gate:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.
