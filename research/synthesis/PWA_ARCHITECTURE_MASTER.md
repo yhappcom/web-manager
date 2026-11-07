@@ -171,3 +171,60 @@ All require attributable timestamp, source/build, browser/OS, fixture data, actu
 **NEW INTEGRATION:** The lifecycle test packet closes a *test-design gap* between the existing 529 old-writer source hypothesis and the 530 worker/storage acceptance plans: restored JS heap, hidden-tab resume, process discard and remote account change require independent tests with a **transaction-time fence oracle**. This is a new **VALIDATION DEFINED / NOT RUN** item, **not** a new product defect, production test PASS or change to the P0 deletion priority. Run LC01–LC09 with Engineering-owned exact LogMate source first; LC10–LC12 need Design Studio, physical browser/device and MDM permission. If current app is SPA-only and never traverses full documents, LC01 is a browser boundary/regression test rather than a presumed current user path; LC03/LC04/LC09 still apply. Do not infer iPadOS bfcache/freeze behavior from Chromium docs.
 
 **Current gate unchanged:** Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD. No LogMate, Design Studio, Marketing or Engineering repository was changed. **Next material evidence:** exact old-owner mutation canary and observed page lifecycle on a served NORMAL PWA, followed by Files custody and managed WebKit tests.
+
+
+## 10. 2026-11-07 — WebKit Home Screen ITP exemption ≠ durable managed-EFB storage [A lead; E/C/B/D transfer]
+
+**Research question:** Does a Home Screen PWA on iPad escape Safari's seven-day script-storage deletion rule, and does that make a pilot ledger durable? **SOURCE:** WebKit [Tracking Prevention](https://webkit.org/tracking-prevention/) (checked 2026-11-07) explicitly exempts the **first-party domain of Home Screen web applications** from ITP's **seven-day cap** on script-writeable storage. The same primary source says Home Screen web-app data is **isolated from Safari**. Its general ITP rule includes IndexedDB, LocalStorage, Service Worker registration and cache. Thus “every iOS PWA always loses IDB after seven idle days” is false as a blanket statement; **a managed Web Clip has not been established to be the same installed context**. An ITP exemption is **not** a guarantee against quota pressure, eviction for other reasons, profile removal, device failure or loss of the sole copy.
+
+**Separate SOURCE:** WebKit [Updates to Storage Policy](https://webkit.org/blog/14403/updates-to-storage-policy/) (published **2023-08-10**, rechecked 2026-11-07) distinguishes per-origin quota, overall quota, origin-level eviction, `estimate()`, `persisted()` and `persist()`. Starting Safari 17/iPadOS 17, browser apps have **up to 60% disk per origin / 80% overall**, non-browser apps **up to 15% / 20%**; standalone Home Screen Web Apps have the **browser-app quota tier**. These are **upper bounds**, not reserved space. A quota-consuming write can throw `QuotaExceededError`. Persistent-mode grant is heuristic (Home Screen mode is one factor), not automatic; default origin storage is best-effort. Quota pressure and system pressure are independent of ITP's seven-day interaction rule. Browser-app vs managed Web Clip effective quota class is **OPEN** until exact container evidence exists.
+
+### 10.1 Mechanism/context matrix — distinguish the authority of each claim
+
+| Context | ITP seven-day rule | Quota/persistence | Custody and proof boundary |
+| --- | --- | --- | --- |
+| Ordinary Safari first-party tab | General interaction-based ITP rule documented; actual applicability and timing require observation | Browser quota tier, best-effort unless persisted | Not assumed to share IDB with Home Screen |
+| Safari Private Browsing | WebKit describes per-tab ephemeral private sessions | Never rely on persistent ledger | Reject as sole logbook data home |
+| User-added Home Screen standalone | **First-party ITP seven-day exemption** documented | Browser-app quota tier; `persist()` result still heuristic | Website data isolated from Safari; must independently test cold offline and backup |
+| Managed Web Clip / company MDM | **UNKNOWN** if equivalent to Home Screen exception | **UNKNOWN** effective quota, persistent-mode grant and profile removal | Operator permission, container identity and Files egress must be tested |
+| Third-party iframe/embedded context | WebKit partitions and makes third-party IDB/LocalStorage ephemeral | Partitioned storage/quota distinct | Cannot be assumed to reach first-party flight ledger |
+| Native app | Not governed by PWA ITP claim | Separate OS/database semantics | Manual Sync/backup must be explicitly authorized and implemented |
+
+**SYNTHESIS — four independent predicates:** `ITP_exempt` ≠ `persistent_mode` ≠ `quota_available` ≠ `independent_restorable_backup`. Installed icon, `persisted()===true` and an IDB transaction commit each prove different things. None proves managed-EFB permission or a second independent copy. Also, a Safari ledger cannot be assumed present after Home Screen installation just because the URL is identical; WebKit explicitly documents website-data isolation.
+
+**Counterexamples / falsification:**
+1. **False pessimism:** all installed iPad PWAs must lose IDB after seven idle days — contradicted by the Home Screen first-party exemption.
+2. **False optimism:** ITP-exempt Home Screen installation guarantees records indefinitely — quota/eviction/profile/device loss remain.
+3. **False equivalence:** managed Web Clip icon means user-added Home Screen container — no such mapping established by these sources.
+4. **False backup:** a successful `persist()` call is an independent LBK backup — it is not.
+5. **False migration:** Safari and Home Screen automatically share origin data — contrary to WebKit's documented isolation.
+6. **False validation:** moving the device clock forward eight days proves actual inactivity retention — not a controlled elapsed-time test.
+
+### 10.2 Physical acceptance packet WK01–WK16 [VALIDATION DEFINED, NOT RUN]
+
+| ID | Controlled action / evidence oracle |
+| --- | --- |
+| WK01 | Record exact iPadOS, Safari/WebKit, app origin/manifest id, installed mode, MDM profile, product build/hash and test-owner authorization |
+| WK02 | Normal Safari tab: seed synthetic owner A ledger, record `persisted()`/`estimate()`/SW/IDB and process-death reopen |
+| WK03 | User-added Home Screen: same-origin **independent** seed; test whether Safari data is visible; never silently merge owners |
+| WK04 | Managed Web Clip if policy permits: repeat container/storage/`persist()` observations independently |
+| WK05 | Ordinary Safari tab 0/1/8/15 days of real elapsed inactivity, interaction diary, cold readback of IDB/SW/cache |
+| WK06 | Home Screen 0/1/8/15 days, same controls; compare ITP exemption claim to observed outcome |
+| WK07 | Managed Web Clip real elapsed inactivity under pinned MDM policy; record BLOCKED rather than invent support |
+| WK08 | `persist()` grant and deny branches, including accessible UI and user-data preservation |
+| WK09 | Safe bounded quota pressure on disposable device: catch `QuotaExceededError`; no success message for failed commit |
+| WK10 | Interrupted SW install, owner edit, kill/restart; distinguish shell/worker/ledger and last committed record |
+| WK11 | Managed profile removal/reinstall **only on approved disposable device**; observe effect on data/recovery |
+| WK12 | Private Browsing ledger attempt: identify non-durable context and prevent unsupported retention promise |
+| WK13 | Export owned synthetic LBK to policy-permitted **independent Files** destination; read back and verify artifact |
+| WK14 | Fresh empty container/device guarded LBK restore: compare owner, all stores, Replica/Sync and negative rollback |
+| WK15 | Cold offline followed by **manual** native↔PWA Sync; require authenticated remote receipt/ACK, no hotspot assumption |
+| WK16 | B/C/D accessible offline, storage, backup, install, delete and recovery copy: prohibit “permanent offline storage” claim |
+
+**Evidence minimum:** source/build SHA, real OS/browser/container/MDM, elapsed time, synthetic canary inventory, positive/negative controls, independent readback, exact outcome and reviewer. A policy page is **SOURCE**, not WK PASS. Real idle time is not replaceable by system-clock adjustment. No destructive probe on an operational EFB.
+
+### 10.3 Transfer and decision
+
+- **A** owns WebKit ITP/storage/container mechanics; **E** owns owner deletion, independent Files custody and operational recovery; **C** owns physical controlled WK test provenance; **B** owns truthful accessible offline/backup/error states with Design Studio W121; **D** owns no unverified Store/website claims and Marketing D9 handoff.
+- **MINTTAP DIRECTION / OPEN:** A physical managed-iPad matrix must distinguish ordinary Safari, user-added Home Screen and managed Web Clip, while independently verifying backup/restoration. This does **not** change LogMate's Manual Sync contract or approve company EFB deployment.
+- **CHANGE WATCH:** WebKit's ITP, quota, installed app and MDM policies are version-specific. Recheck first-party source and real device before release. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD** unchanged.
