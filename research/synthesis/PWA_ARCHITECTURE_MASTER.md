@@ -1264,3 +1264,54 @@ Cross-origin opener relationships permit limited window references even under th
 ### 29.5 Operational judgment and handoff
 
 **MINTTAP DIRECTION — proposed, not owner-approved deployment:** separate **public discoverability contract** (semantic HTML, canonical URLs, truthful support/Store information, valid status codes) from **private offline application contract** (authenticated owner authority, durable local ledger, independent Files restore, controlled SW scope). Do not implement crawler-specific deceptive content; render the same public claims to users and crawlers, with implementation fallback only. Prefer one clear canonical host and route policy, then validate the exact deployed responses before Search Console submission. **DEPENDENCY:** Web Manager D owns reusable crawl/index and canonical research; A owns SW/navigation mechanics; E owns hosting/security; B owns IA/content; C owns independent testing; Design W121 owns visual/accessibility execution; Marketing owns actual public claims; Engineering and product own private runtime; domain/hosting operator owns served evidence. **OPEN:** live host, exact deployment configuration, robots/sitemap, real Search Console, public page HTML, physical iPad, production authentication. **CHANGE WATCH:** Google Search rendering/indexing guidance, hosting route precedence, WebKit/Chromium SW lifecycle and app-domain migrations. **Release gate unchanged: Stage 8 ACTIVE / production OPEN / PWA HOLD.**
+
+## 30. Stage 8 — partitioned browser state, federated sign-in and owner-safe PWA admission (2026-11-08)
+
+**Novel boundary / HISTORY:** Traditional third-party cookies allowed cross-site tracking; modern browsers restrict or partition third-party state. The security improvement can break legacy iframe-based single sign-on, but neither granting cookie access nor successfully returning from OAuth establishes authorization to mutate an offline pilot logbook. Earlier §21 covered auth persistence versus owner authority and §23 covered COOP/COEP popup mechanics; this section specifically owns **partitioned versus unpartitioned browser identity state and embed permissions**. Track A owns browser primitives; E owns trust/CSRF/owner fencing; C owns negative controls; B owns explicit sign-in/recovery UX; D owns privacy and truthful support claims.
+
+### 30.1 SOURCE — dated browser/platform evidence (checked 2026-11-08)
+
+- [MDN Storage Access API](https://developer.mozilla.org/en-US/docs/Web/API/Storage_Access_API): HTTPS-only third-party embedded content may request access to unpartitioned cookies when blocked; permission activation is context-sensitive and browser semantics differ. Access is not a universal iframe SSO guarantee, and access to a cookie is not proof of a valid current owner.
+- [WebKit Storage Access API updates](https://webkit.org/blog/11545/updates-to-the-storage-access-api/): Safari's earlier model requires prior first-party interaction and cookies for third-party storage access. This is dated historical vendor evidence, **not** a blanket statement of all 2026 Safari/iPadOS versions or managed-device policy.
+- [MDN CHIPS / Partitioned cookies](https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/Third-party_cookies/Partitioned_cookies): `Partitioned` with `Secure` opts a cookie into a top-level-site keyed jar; a typical cross-site embedded cookie additionally needs `SameSite=None`. CHIPS provides scoped embed continuity, **not** a shared login session across unrelated sites. MDN currently labels CHIPS Baseline 2025, but old Safari/managed OS builds and specific auth libraries require independent checks.
+- [MDN Set-Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie): `SameSite=Lax` generally limits cross-site subrequests while permitting qualifying top-level safe navigation; `SameSite=None` requires `Secure`; `HttpOnly` prevents ordinary JS cookie reads but does not prevent a browser from attaching cookies to requests. Explicit cookie attributes do not replace CSRF, state/nonce, PKCE or server-side session checks.
+- **DEPENDENCY:** OAuth/OIDC redirect versus popup and Firebase provider behavior must be validated against the **exact** product auth adapter, IdP, allowed redirect origin, browser version and deployment configuration. No assumption that WebKit Home Screen, managed Web Clip and Safari tab share cookies, local IndexedDB or an identical sign-in surface.
+
+### 30.2 Independent authority matrix
+
+| State | What it can prove | What it cannot prove |
+| --- | --- | --- |
+| Top-level first-party IdP cookie | Session exists in that IdP's browser context | App owner identity, embedded access, PWA local ledger authority |
+| Embedded partitioned cookie | Embed may retain site-scoped state under one top-level site | Cross-top-level SSO or another device's session |
+| Storage Access API granted | Specific third-party context may access unpartitioned state per browser policy | Universal future permission, offline authentication or owner write rights |
+| OAuth redirect/popup returned | Browser navigation returned to a callback route | State/nonce/PKCE checked, Firebase token verified, local owner bound |
+| Server token validated | Identity claim valid for intended audience/issuer/time | Unsent local flight ownership or restored replica provenance |
+| Owner/epoch fenced local transaction | Current owner and deletion epoch admitted exact write | Remote ACK or independent Files backup |
+| Owner-specific remote receipt | Remote operation accepted under matching authority | Independent recovery from device loss |
+
+**SYNTHESIS:** Account A signing out and B signing in while A's PWA tab/Worker/IDB transaction remains open is a high-severity **cross-context owner-fence** test even if all cookies are perfectly configured. A cookie partition or Storage Access grant is not a database isolation primitive. A callback must not be cached as a successful offline shell, and neither a shared device session nor an IdP account chooser can silently adopt an unverified local ledger. This complements §21/§23/§29 rather than reopening those primers.
+
+### 30.3 Failure analysis and operational choices
+
+1. Embedded IdP frame denied third-party state: sign-in may fail or require top-level navigation; never present an automatic retry loop that writes flight data.
+2. Storage Access permission granted in one iframe but absent in another or after Home Screen relaunch: **auth continuity differs from ledger continuity**.
+3. Partitioned cookie established under `minttap.app` then page served from a different canonical top-level site: the partition key changes, so apparent logout does not imply data deletion or remote revocation.
+4. OAuth callback opened under a different origin/installation container: redirect can complete yet local replica identity may be inaccessible. Recovery must be explicit and owner-verified.
+5. `SameSite=None; Secure` on an auth cookie does not make a cross-site request CSRF-safe; validate state/nonce/PKCE and backend anti-CSRF controls separately.
+6. Cookie blocked or expired while device offline: cached UI and IndexedDB may remain available; display limited offline ownership status rather than claiming live reauthentication.
+7. A→B transition after popup success while old tab resumes from bfcache: reject old owner writes before mutation, not merely after a BroadcastChannel notification.
+8. IdP popup blocked by managed iPad policy: alternate approved full-page flow requires callback-route, app-state and pending-write preservation.
+9. Cookie policy differs across WebKit, Chromium and managed Web Clip; a Chrome synthetic PASS does not promote iPad support.
+10. Analytics and support screenshots must not expose auth callback codes, tokens, session identifiers or account details; `noindex` does not prevent leaks in logs.
+
+**MINTTAP DIRECTION — proposed, not approved:** Prefer a first-party application boundary and an explicit standards-compliant top-level federated sign-in path over depending on invisible third-party iframe cookies. Evaluate actual provider SDK behavior before choosing redirect/popup. Keep offline ledger read/write admission separate from cookie/IdP session state; do not silently merge owners. Do not change cookie policy, IdP configuration, PWA scope, hosting or account behavior from this research alone.
+
+### 30.4 PA01–PA24 acceptance matrix — DEFINED, NOT RUN
+
+**Browser and IdP (A/E/C):** PA01 exact product SHA/served origin/IdP SDK; PA02 same-site versus cross-site cookie baseline; PA03 `Lax` callback navigation versus POST; PA04 `None;Secure` and HTTPS; PA05 `HttpOnly` JS negative control; PA06 CHIPS top-level site A/B partition isolation; PA07 unsupported/older-browser `Partitioned` fallback; PA08 embedded Storage Access denied; PA09 granted access in same iframe; PA10 new iframe/new tab permission activation; PA11 Safari first-party interaction prerequisite; PA12 managed Safari tab/Home Screen/Web Clip parity; PA13 redirect versus popup and popup-blocked alternative; PA14 callback state/nonce/PKCE invalid/replay negative controls.
+
+**Owner and recovery (E/C/B):** PA15 token audience/issuer/expiry and revoked session; PA16 offline token expiration with retained ledger; PA17 A→B stale tab/bfcache/Worker owner fence; PA18 callback cache and SW navigation fallback cannot expose token; PA19 origin migration and new replica binding; PA20 failed sign-in preserves local unsent edits without cross-owner disclosure; PA21 duplicate callback/idempotent remote operation; PA22 no unauthorized write on wrong owner, stale epoch or revoked session.
+
+**Privacy and public claims (D/C):** PA23 redacted URL/referrer/analytics/diagnostic canary check; PA24 user-facing auth/offline/restore copy and screen-reader focus against Design W121, Marketing claims and actual runtime. Every case must record source/served SHA, OS/browser/container, IdP configuration, synthetic account IDs, expected and observed cookies/requests, owner/ledger negative controls, and PASS/FAIL/NON-EXECUTION. **No actual managed-device or product test was executed here.**
+
+**OPEN / CHANGE WATCH / handoff:** Engineering must inspect exact Flutter Web/Firebase auth adapter and local owner-fence source, hosting must provide redirect/callback configuration, MDM operator must authorize real iPad mode testing, Design W121 must validate failure/recovery interactions, Marketing must avoid unverified "automatic sign-in/sync" promises. Recheck MDN/WebKit compatibility against deployed versions. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD.**
