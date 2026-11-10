@@ -230,6 +230,29 @@ All require attributable timestamp, source/build, browser/OS, fixture data, actu
 - **CHANGE WATCH:** WebKit's ITP, quota, installed app and MDM policies are version-specific. Recheck first-party source and real device before release. **Stage 8 ACTIVE · Production validation OPEN · PWA release HOLD** unchanged.
 
 
+
+### 10.4 Managed Safari restriction is a launch-path decision, not PWA permission (2026-11-10)
+
+**SOURCE (Apple first party, checked 2026-11-10):** [Apple Deployment: Web Clips payload](https://support.apple.com/en-nz/guide/deployment/depbc7c7808/web) states that when Safari is **hidden but not restricted**, a Web Clip URL opens in Safari and the user can open additional tabs; when Safari is **hidden and restricted**, the Web Clip **must open full-screen** because Safari cannot open extra tabs. The payload supports managed `com.apple.webClip.managed`, and MDM vendors may expose different configuration controls. [WebKit storage policy](https://webkit.org/blog/14403/updates-to-storage-policy/) grants standalone Home Screen web apps the browser-app quota tier, but does **not** identify every MDM Web Clip as an equivalent installed storage container. This is a source-specific launch distinction, not an observation of MintTap's fleet.
+
+**HISTORY → PRINCIPLE → OPERATION:** Managed Web Clips solve controlled launch and Home Screen distribution, **not** necessarily durable origin data, allowed external Files export, guaranteed background runtime, App Store restriction bypass or direct native↔PWA connectivity. An EFB operator may hide or restrict Safari independently of its Web Clip payload. Hence the web app cannot equate “icon present”, “launch succeeded”, “worker registered”, “persistent storage granted”, and “independently recoverable ledger”.
+
+**A-owned launch matrix (source-to-test, not a platform compatibility certification):**
+
+| MDM/Safari condition | Apple-documented launch expectation | Unproven application conditions |
+| --- | --- | --- |
+| Safari visible, Web Clip allowed | Web Clip can target a URL | Full-screen selection, effective container and persistent storage |
+| Safari hidden, not restricted | Web Clip URL opens in Safari; additional tabs possible | Cold offline, independent ledger, cookie/IDB sharing with other contexts |
+| Safari hidden **and restricted** | Full-screen Web Clip required; extra Safari tabs unavailable | Whether exact managed mode supports the app's worker, Files workflow, authentication and backup |
+| Managed Web Clip disallowed or policy unknown | No authorized install/launch conclusion | Operator permission and usable alternative delivery path |
+
+**E-owned deployment gate:** Before any EFB launch claim, collect the actual MDM payload and restrictions **without secrets**, device enrollment/channel, iPadOS version, Safari restriction/visibility, Web Clip URL/full-screen flag, exact installed-context identity, source/build hash, and operator authorization. Never suggest circumventing company restrictions. A successful user-added Home Screen test does not validate a managed Web Clip. Apple documentation is not evidence of an individual company's configuration.
+
+**C/B/D transfer and diagnostic packet MC01–MC12 (DEFINED NOT RUN):** MC01 operator-approved disposable device and profile provenance; MC02 Safari visible launch; MC03 hidden-not-restricted launch; MC04 hidden-restricted full-screen launch; MC05 deny/remove Web Clip policy branch; MC06 cold offline launch per mode; MC07 SW controller/Cache Storage/IDB persistence per mode; MC08 `persisted()` and bounded quota failure per mode; MC09 auth session and owner A/B separation; MC10 independent Files export/readback and fresh-context restore; MC11 keyboard/VoiceOver/error recovery with Safari UI unavailable; MC12 native Manual Sync network/receipt proof without assuming hotspot or background execution. Report operator BLOCKED, exact product FAIL, exact product PASS, and generic source expectations separately. The UI must not offer unavailable Safari controls or promise an unverified Files destination. Discovery and public claims remain HOLD until the matching mode passes.
+
+**CONTRADICTION / OPEN / CHANGE WATCH:** A managed icon is not evidence of the standalone Home Screen storage exception or a 60%-of-disk guaranteed allocation. The Apple launch behavior and WebKit quota tiers concern **different layers**. The exact LogMate EFB profile, Files restrictions, storage container, WebKit release and sync transport remain OPEN. Recheck Apple Deployment and WebKit at acceptance time. Stage 8 ACTIVE; production validation OPEN; PWA release HOLD.
+
+
 ## 11. Identifier-first email entry versus enumeration protection — exact LogMate Auth/PWA boundary (2026-11-07)
 
 **Owner:** E Security/Trust (lead); A HTTP/Firebase/platform transfer; B identifier-first task and recovery UX; C evidence/oracles; D site/Store/privacy claim integrity. **Classification:** SOURCE (pinned read-only product source), STANDARD/PROVIDER PRIMARY (Google), SYNTHESIS, PRODUCT DECISION (already approved by LogMate owner), OPEN/VALIDATION. This is **not** a product vulnerability finding, a Firebase Console observation, a provider-config change or an authorization to redesign approved onboarding.
